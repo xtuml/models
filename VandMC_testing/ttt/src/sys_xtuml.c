@@ -11,7 +11,11 @@
 #include "c3_classes.h"
 
 
-/* No containers allocated.  */
+/*
+ * Allocate the storage for the pool of container nodes.
+ */
+static Escher_ObjectSet_s node1_FreeList;
+static Escher_SetElement_s node1s[ SYS_MAX_CONTAINERS ];
 
 /*
  * Initialize the node1 instances by linking them into a collection.
@@ -22,7 +26,14 @@
 void
 Escher_SetFactoryInit( const i_t n1_size )
 {
-  /* Set factory initialization optimized out.  */
+  u2_t i;
+  node1_FreeList.head = &node1s[ 0 ];
+  /* Build the collection (linked list) of node1 instances.  */
+  for ( i = 0; i < ( n1_size - 1 ); i++ ) {
+    node1s[ i ].next = &node1s[ i + 1 ];
+    node1s[ i ].object = 0;
+  }
+  node1s[ n1_size - 1 ].next = 0;
 }
 
 /*
@@ -31,19 +42,73 @@ Escher_SetFactoryInit( const i_t n1_size )
  * before the copy operation occurs freeing any nodes in that set.
  * The new set will use containoids from the free list.
  */
-/* Set copy code optimized out.  */
+void 
+Escher_CopySet( Escher_ObjectSet_s * to_set,
+                Escher_ObjectSet_s * const from_set )
+{
+  const Escher_SetElement_s * slot;
+
+  /* May be copying into an existing set, release target collection nodes.  */
+  Escher_ClearSet( to_set );
+
+  for ( slot = from_set->head; ( slot != 0 ); slot = slot->next ) {
+    Escher_SetInsertElement( to_set, slot->object ); 
+  }
+}
 
 /*
  * Release all nodes in the given set back to the free pool.
  */
-/* Set clearing code optimized out.  */
+void
+Escher_ClearSet( Escher_ObjectSet_s * set )
+{
+  if ( set->head != 0 ) {                                    /* empty set  */
+    Escher_SetElement_s * slot;
+    for ( slot = set->head; ( slot->next != 0 ); slot = slot->next ); /* Find end.  */
+    Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
+    slot->next = node1_FreeList.head;     /* Tie string to free list.      */
+    node1_FreeList.head = set->head;      /* Point free list to head.      */
+    Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
+    Escher_InitSet( set );                /* Zero set out.  */
+  }
+}
 
 /*
  * Insert a single element into the set in no particular order.
  * The element is a data item.  A container node will be allocated
  * to link in the element.
  */
-/* Set insertion code optimized out.  */
+void
+Escher_SetInsertElement(
+  Escher_ObjectSet_s * set,
+  void * const substance
+)
+{
+  Escher_SetElement_s * slot;
+  Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
+  if ( 0 == node1_FreeList.head ) {
+    Escher_SetElement_s * new_mem = ( Escher_SetElement_s *) Escher_malloc( 10 * sizeof( Escher_SetElement_s ) );
+
+    if ( 0 == new_mem ) {
+      UserNodeListEmptyCallout(); /* Bad news!  No more heap space.  */
+    } else {
+      u1_t i;
+      for ( i = 0; i < 10 - 1; i++ ) {
+        new_mem[ i ].next = (Escher_SetElement_s *) &(new_mem[ i + 1 ]);
+      }
+      new_mem[ 10 - 1 ].next = 0;
+      node1_FreeList.head = new_mem;
+      Escher_SetInsertElement( set, substance );
+    }
+  } else {
+    slot = node1_FreeList.head; /* Extract node from free list head. */
+    node1_FreeList.head = node1_FreeList.head->next;
+    slot->object = substance;
+    slot->next = set->head;     /* Insert substance at list front.   */
+    set->head = slot;
+  }
+  Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
+}
 
 /*
  * Insert a block of objects into the given set in sequence.  Link the
@@ -115,7 +180,24 @@ Escher_SetRemoveNode(
  * used when some knowledge of the linking mechanism is required (as
  * in extent management).
  */
-/* Set remove element code optimized out.  */
+void
+Escher_SetRemoveElement(
+  Escher_ObjectSet_s * set,
+  const void * const d
+)
+{
+  Escher_SetElement_s * t;
+  if ( set->head != 0 ) {                     /* empty set */
+    t = Escher_SetRemoveNode( set, d );
+    /* Return node to architecture collection (free list).             */
+    if ( t != 0 ) {
+      Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
+      t->next = node1_FreeList.head;
+      node1_FreeList.head = t;
+      Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
+    }
+  }
+}
 
 /*
  * Return a pointer to the found element when the set contains the 
@@ -304,9 +386,33 @@ Escher_strget( void )
 }
 
 
+/*----------------------------------------------------------------------------
+ * This routine provides a central connection to ANSI-standard system-level
+ * memory allocation.  MC-3020 is optimized for static memory allocation
+ * and only uses dynamic memory allocation when enabled with marking.
+ * Dynamic memory allocation can be used in conjunction with static
+ * allocation providing protection against unexpected memory "overflows"
+ * conditions.
+ *--------------------------------------------------------------------------*/
+
+#include <stdlib.h>
+/*
+ * Allocate memory from the system heap.
+ */
+void * 
+Escher_malloc( const u4_t b )
+{
+  void * new_mem = 0;
+  size_t bytes = ( size_t ) b;
+
+  new_mem = malloc( bytes );
+
+  return new_mem;
+}
+
 /* xtUML class info for all of the components (collections, sizes, etc.) */
 Escher_Extent_t * const * const domain_class_info[ SYSTEM_DOMAIN_COUNT ] = {
-  0,
+  &c1_class_info[0],
   &c2_class_info[0],
   &c3_class_info[0]
 };
@@ -328,7 +434,17 @@ Escher_CreateInstance(
   node = dci->inactive.head;
 
   if ( 0 == node ) {
-    UserObjectPoolEmptyCallout( domain_num, class_num );
+    Escher_SetElement_s * container =
+      ( Escher_SetElement_s *) Escher_malloc( 10 * sizeof( Escher_SetElement_s ) );
+    Escher_iHandle_t pool = ( Escher_iHandle_t ) Escher_malloc( 10 * dci->size );
+    if ( ( 0 == container ) || ( 0 == pool ) ) {
+      UserObjectPoolEmptyCallout( domain_num, class_num );
+    } else {
+      Escher_memset( pool, 0, 10 * dci->size );
+      dci->inactive.head = Escher_SetInsertBlock( 
+        container, (const u1_t *) pool, dci->size, 10 );
+      node = dci->inactive.head;
+    }
   }
 
   dci->inactive.head = dci->inactive.head->next;
@@ -410,6 +526,7 @@ static const Escher_ClassNumber_t * const class_thread_assignment[ SYSTEM_DOMAIN
  * size of any xtUML event in the system.  */
 typedef union {
   Escher_xtUMLEvent_t mc_event_base;
+  c1_DomainEvents_u mc_events_in_domain_c1;
   c2_DomainEvents_u mc_events_in_domain_c2;
   c3_DomainEvents_u mc_events_in_domain_c3;
 } Escher_systemxtUMLevents_t;
@@ -454,7 +571,19 @@ Escher_xtUMLEvent_t * Escher_AllocatextUMLEvent( void )
   Escher_xtUMLEvent_t * event = 0;
   Escher_mutex_lock( SEMAPHORE_FLAVOR_FREELIST );
   if ( free_event_list == 0 ) {
-    UserEventFreeListEmptyCallout();   /* Bad news!  No more events.  */
+    Escher_xtUMLEvent_t * new_mem = (Escher_xtUMLEvent_t *) Escher_malloc( 10 * sizeof( Escher_systemxtUMLevents_t ) );
+
+    if ( 0 == new_mem ) {
+      UserEventFreeListEmptyCallout();   /* Bad news!  No more heap space.  */
+    } else {
+      u1_t i;
+      for ( i = 0; i < 10 - 1; i++ ) {
+        new_mem[ i ].next = (Escher_xtUMLEvent_t *) &(new_mem[ i + 1 ]);
+      }
+      new_mem[ 10 - 1 ].next = 0;
+      free_event_list = new_mem;
+      event = Escher_AllocatextUMLEvent();
+    }
   } else {
     event = free_event_list;       /* Grab front of the free list.  */
     free_event_list = event->next; /* Unlink from front of free list.  */
@@ -577,7 +706,7 @@ static void * ooa_loop( void * thread )
    */
   static const EventTaker_t * DomainClassDispatcherTable[ 3 ] =
     {
-      0,
+      c1_EventDispatcher,
       c2_EventDispatcher,
       c3_EventDispatcher,
     };

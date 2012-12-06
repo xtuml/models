@@ -112,6 +112,7 @@ c_t * Escher_stradd( const c_t *, const c_t * );
    that invoked the compiler (C library) supplied strcmp.  */
 c_t Escher_strcmp( const c_t *, const c_t * );
 c_t * Escher_strget( void );
+void * Escher_malloc( const u4_t );
 
 Escher_iHandle_t Escher_CreateInstance( const Escher_DomainNumber_t, const Escher_ClassNumber_t );
 void Escher_DeleteInstance( Escher_iHandle_t, const Escher_DomainNumber_t, const Escher_ClassNumber_t );

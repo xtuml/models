@@ -59,7 +59,13 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'test',
 	'',
-	's = "tic function test";
+	'create object instance ping of PING;
+create object instance pong of PONG;
+relate ping to pong across R1;
+ping.i = 0;
+pong.s = "pong";
+
+s = "tic function test";
 send toss::s1( sp1:1 );
 
 
