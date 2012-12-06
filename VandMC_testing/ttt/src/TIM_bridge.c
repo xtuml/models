@@ -481,19 +481,20 @@ timer_cancel(
   ETimer_t * const t
 )
 {
-  bool rc = false;
+  bool rc; Escher_xtUMLEvent_t * e;
   #ifdef ESCHER_TASKING_POSIX
   Escher_mutex_lock( SEMAPHORE_FLAVOR_TIMER );
   #endif
-  if ( timer_find_and_delete( t ) == true ) {
-    if ( t->event != 0 ) {
-      Escher_DeletextUMLEvent( t->event );
-      rc = true;
-    }
-  }
+  rc = timer_find_and_delete( t );
+  e = t->event;
   #ifdef ESCHER_TASKING_POSIX
   Escher_mutex_unlock( SEMAPHORE_FLAVOR_TIMER );
   #endif
+  if ( true == rc ) {
+    if ( 0 != e ) {
+      Escher_DeletextUMLEvent( e );
+    }
+  }
   return ( rc );
 }
 

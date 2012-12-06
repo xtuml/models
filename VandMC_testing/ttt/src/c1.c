@@ -20,7 +20,7 @@
  * To Provider Message:  s1
  */
 void
-c1_catch_s1( i_t p_sp1)
+c1_catch_s1( const i_t p_sp1)
 {
 COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 0, 0, p_sp1 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; c1_PONG * pong=0; 
@@ -81,7 +81,7 @@ COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 0, 1 );
  * To Provider Message:  o2
  */
 i_t
-c1_burn_o2( i_t p_op2)
+c1_burn_o2( const i_t p_op2)
 {
 COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 1, 0, p_op2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
@@ -150,7 +150,7 @@ COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 1, 2 );
  * To Provider Message:  s1
  */
 void
-c1_toss_s1( i_t p_sp1)
+c1_toss_s1( const i_t p_sp1)
 {
 COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 2, 0, p_sp1 );
   c2_catch_s1(  p_sp1 );
@@ -174,7 +174,7 @@ COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 2, 1 );
  * To Provider Message:  o2
  */
 i_t
-c1_lase_o2( i_t p_op2)
+c1_lase_o2( const i_t p_op2)
 {
 COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 3, 0, p_op2 );
 return   c3_burn_o2(  p_op2 );
