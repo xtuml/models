@@ -14,60 +14,54 @@
 #include "c1_classes.h"
 
 /*
- * Interface:  i2
- * Required Port:  lase
- * To Provider Message:  o2
- */
-i_t
-c1_lase_o2( i_t p_op2)
-{
-COMP_MSG_START_TRACE( "%d,%d", c1_DOMAIN_ID, p_op2 );
-return   c3_burn_o2(  p_op2 );
-}
-
-/*
- * Interface:  i2
- * Required Port:  lase
- * To Provider Message:  o3
- */
-void
-c1_lase_o3()
-{
-  c3_burn_o3();
-}
-
-/*
- * Interface:  i2
- * Required Port:  lase
- * To Provider Message:  o4
- */
-i_t
-c1_lase_o4()
-{
-return   c3_burn_o4();
-}
-
-/*
  * Interface:  i1
- * Required Port:  toss
+ * Provided Port:  catch
  * To Provider Message:  s1
  */
 void
-c1_toss_s1( i_t p_sp1)
+c1_catch_s1( i_t p_sp1)
 {
-COMP_MSG_START_TRACE( "%d,%d", c1_DOMAIN_ID, p_sp1 );
-  c2_catch_s1(  p_sp1 );
+  c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
+  /* ASSIGN s = 'tic catch' */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic catch'" );
+  Escher_strcpy( s, "tic catch" );
+  /* IF ( ( 3 != PARAM.sp1 ) ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( ( 3 != PARAM.sp1 ) )" );
+  if ( ( 3 != p_sp1 ) ) {
+    /* LOG::LogFailure( message:'tic catch did not get 3' ) */
+    XTUML_OAL_STMT_TRACE( 2, "LOG::LogFailure( message:'tic catch did not get 3' )" );
+    c1_LOG_LogFailure( "tic catch did not get 3" );
+  }
+  else {
+    i_t r; 
+    /* ASSIGN r = lase::o2(op2:1) */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN r = lase::o2(op2:1)" );
+    r = c1_lase_o2( 1 );
+    /* IF ( ( 3 != r ) ) */
+    XTUML_OAL_STMT_TRACE( 2, "IF ( ( 3 != r ) )" );
+    if ( ( 3 != r ) ) {
+      /* LOG::LogFailure( message:'tic catch did not get 3 returned from lase' ) */
+      XTUML_OAL_STMT_TRACE( 3, "LOG::LogFailure( message:'tic catch did not get 3 returned from lase' )" );
+      c1_LOG_LogFailure( "tic catch did not get 3 returned from lase" );
+    }
+  }
 }
 
 /*
  * Interface:  i1
- * Required Port:  toss
+ * Provided Port:  catch
  * To Provider Message:  s2
  */
 void
-c1_toss_s2()
+c1_catch_s2()
 {
-  c2_catch_s2();
+  c_t s[ESCHER_SYS_MAX_STRING_LEN]; i_t r; 
+  /* ASSIGN s = 'tic catch s2' */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic catch s2'" );
+  Escher_strcpy( s, "tic catch s2" );
+  /* ASSIGN r = lase::o2(op2:1) */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN r = lase::o2(op2:1)" );
+  r = c1_lase_o2( 1 );
 }
 
 /*
@@ -78,7 +72,6 @@ c1_toss_s2()
 i_t
 c1_burn_o2( i_t p_op2)
 {
-COMP_MSG_START_TRACE( "%d,%d", c1_DOMAIN_ID, p_op2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
   /* ASSIGN s = 'tic burn' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic burn'" );
@@ -139,54 +132,57 @@ c1_burn_o4()
 
 /*
  * Interface:  i1
- * Provided Port:  catch
+ * Required Port:  toss
  * To Provider Message:  s1
  */
 void
-c1_catch_s1( i_t p_sp1)
+c1_toss_s1( i_t p_sp1)
 {
-COMP_MSG_START_TRACE( "%d,%d", c1_DOMAIN_ID, p_sp1 );
-  c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
-  /* ASSIGN s = 'tic catch' */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic catch'" );
-  Escher_strcpy( s, "tic catch" );
-  /* IF ( ( 3 != PARAM.sp1 ) ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( ( 3 != PARAM.sp1 ) )" );
-  if ( ( 3 != p_sp1 ) ) {
-    /* LOG::LogFailure( message:'tic catch did not get 3' ) */
-    XTUML_OAL_STMT_TRACE( 2, "LOG::LogFailure( message:'tic catch did not get 3' )" );
-    c1_LOG_LogFailure( "tic catch did not get 3" );
-  }
-  else {
-    i_t r; 
-    /* ASSIGN r = lase::o2(op2:1) */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN r = lase::o2(op2:1)" );
-    r = c1_lase_o2( 1 );
-    /* IF ( ( 3 != r ) ) */
-    XTUML_OAL_STMT_TRACE( 2, "IF ( ( 3 != r ) )" );
-    if ( ( 3 != r ) ) {
-      /* LOG::LogFailure( message:'tic catch did not get 3 returned from lase' ) */
-      XTUML_OAL_STMT_TRACE( 3, "LOG::LogFailure( message:'tic catch did not get 3 returned from lase' )" );
-      c1_LOG_LogFailure( "tic catch did not get 3 returned from lase" );
-    }
-  }
+  c2_catch_s1(  p_sp1 );
 }
 
 /*
  * Interface:  i1
- * Provided Port:  catch
+ * Required Port:  toss
  * To Provider Message:  s2
  */
 void
-c1_catch_s2()
+c1_toss_s2()
 {
-  c_t s[ESCHER_SYS_MAX_STRING_LEN]; i_t r; 
-  /* ASSIGN s = 'tic catch s2' */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic catch s2'" );
-  Escher_strcpy( s, "tic catch s2" );
-  /* ASSIGN r = lase::o2(op2:1) */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN r = lase::o2(op2:1)" );
-  r = c1_lase_o2( 1 );
+  c2_catch_s2();
+}
+
+/*
+ * Interface:  i2
+ * Required Port:  lase
+ * To Provider Message:  o2
+ */
+i_t
+c1_lase_o2( i_t p_op2)
+{
+return   c3_burn_o2(  p_op2 );
+}
+
+/*
+ * Interface:  i2
+ * Required Port:  lase
+ * To Provider Message:  o3
+ */
+void
+c1_lase_o3()
+{
+  c3_burn_o3();
+}
+
+/*
+ * Interface:  i2
+ * Required Port:  lase
+ * To Provider Message:  o4
+ */
+i_t
+c1_lase_o4()
+{
+return   c3_burn_o4();
 }
 
 /*

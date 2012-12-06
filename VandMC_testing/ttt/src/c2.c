@@ -22,7 +22,6 @@
 void
 c2_catch_s1( i_t p_sp1)
 {
-COMP_MSG_START_TRACE( "%d,%d", c2_DOMAIN_ID, p_sp1 );
   { c2_TAC_A_CBevent1 * e = (c2_TAC_A_CBevent1 *) Escher_NewxtUMLEvent( (void *) 0, &c2_TAC_A_CBevent1c );
     e->p_sp1 = p_sp1;
     Escher_SendEvent( (Escher_xtUMLEvent_t *) e );
@@ -42,70 +41,12 @@ c2_catch_s2()
 
 /*
  * Interface:  i2
- * Required Port:  lase
- * To Provider Message:  o2
- */
-i_t
-c2_lase_o2( i_t p_op2)
-{
-COMP_MSG_START_TRACE( "%d,%d", c2_DOMAIN_ID, p_op2 );
-return   c1_burn_o2(  p_op2 );
-}
-
-/*
- * Interface:  i2
- * Required Port:  lase
- * To Provider Message:  o3
- */
-void
-c2_lase_o3()
-{
-  c1_burn_o3();
-}
-
-/*
- * Interface:  i2
- * Required Port:  lase
- * To Provider Message:  o4
- */
-i_t
-c2_lase_o4()
-{
-return   c1_burn_o4();
-}
-
-/*
- * Interface:  i1
- * Required Port:  toss
- * To Provider Message:  s1
- */
-void
-c2_toss_s1( i_t p_sp1)
-{
-COMP_MSG_START_TRACE( "%d,%d", c2_DOMAIN_ID, p_sp1 );
-  c3_catch_s1(  p_sp1 );
-}
-
-/*
- * Interface:  i1
- * Required Port:  toss
- * To Provider Message:  s2
- */
-void
-c2_toss_s2()
-{
-  c3_catch_s2();
-}
-
-/*
- * Interface:  i2
  * Provided Port:  burn
  * To Provider Message:  o2
  */
 i_t
 c2_burn_o2( i_t p_op2)
 {
-COMP_MSG_START_TRACE( "%d,%d", c2_DOMAIN_ID, p_op2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; i_t p; 
   /* ASSIGN s = 'tac burn' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tac burn'" );
@@ -154,6 +95,61 @@ c2_burn_o4()
   /* RETURN 999 */
   XTUML_OAL_STMT_TRACE( 1, "RETURN 999" );
   return 999;
+}
+
+/*
+ * Interface:  i1
+ * Required Port:  toss
+ * To Provider Message:  s1
+ */
+void
+c2_toss_s1( i_t p_sp1)
+{
+  c3_catch_s1(  p_sp1 );
+}
+
+/*
+ * Interface:  i1
+ * Required Port:  toss
+ * To Provider Message:  s2
+ */
+void
+c2_toss_s2()
+{
+  c3_catch_s2();
+}
+
+/*
+ * Interface:  i2
+ * Required Port:  lase
+ * To Provider Message:  o2
+ */
+i_t
+c2_lase_o2( i_t p_op2)
+{
+return   c1_burn_o2(  p_op2 );
+}
+
+/*
+ * Interface:  i2
+ * Required Port:  lase
+ * To Provider Message:  o3
+ */
+void
+c2_lase_o3()
+{
+  c1_burn_o3();
+}
+
+/*
+ * Interface:  i2
+ * Required Port:  lase
+ * To Provider Message:  o4
+ */
+i_t
+c2_lase_o4()
+{
+return   c1_burn_o4();
 }
 
 /*

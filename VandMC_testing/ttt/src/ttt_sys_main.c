@@ -47,6 +47,7 @@ main( int argc, char ** argv )
 {
   UserInitializationCallout();
   Escher_SetFactoryInit( SYS_MAX_CONTAINERS );
+  Escher_InitializeThreading();
   InitializeOoaEventPool();
   ApplicationLevelInitialization();
   UserPreOoaInitializationCallout();
@@ -57,5 +58,6 @@ main( int argc, char ** argv )
   Escher_xtUML_run(); /* This is the primary event dispatch loop.  */
   UserPreShutdownCallout();
   UserPostShutdownCallout();
+  Escher_thread_shutdown();
   return 0;
 }

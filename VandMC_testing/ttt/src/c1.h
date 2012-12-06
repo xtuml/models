@@ -13,16 +13,16 @@ extern	"C"	{
 #endif
 
 #include "ttt_sys_types.h"
-i_t c1_lase_o2( i_t );
-void c1_lase_o3( void );
-i_t c1_lase_o4( void );
-void c1_toss_s1( i_t );
-void c1_toss_s2( void );
+void c1_catch_s1( i_t );
+void c1_catch_s2( void );
 i_t c1_burn_o2( i_t );
 void c1_burn_o3( void );
 i_t c1_burn_o4( void );
-void c1_catch_s1( i_t );
-void c1_catch_s2( void );
+void c1_toss_s1( i_t );
+void c1_toss_s2( void );
+i_t c1_lase_o2( i_t );
+void c1_lase_o3( void );
+i_t c1_lase_o4( void );
 
 
 #ifdef	__cplusplus

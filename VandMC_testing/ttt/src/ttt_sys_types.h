@@ -113,7 +113,7 @@ typedef unsigned char bool;
 #define ESCHER_SYS_MAX_TRANSIENT_EXTENT 0
 #define SYS_MAX_CONTAINERS ( ESCHER_SYS_MAX_ASSOCIATION_EXTENT + ESCHER_SYS_MAX_TRANSIENT_EXTENT )
 #define ESCHER_SYS_MAX_SELF_EVENTS 0
-#define ESCHER_SYS_MAX_NONSELF_EVENTS 7
+#define ESCHER_SYS_MAX_NONSELF_EVENTS 11
 #define ESCHER_SYS_MAX_XTUML_EVENTS ( ESCHER_SYS_MAX_SELF_EVENTS + ESCHER_SYS_MAX_NONSELF_EVENTS )
 #define ESCHER_SYS_MAX_XTUML_TIMERS 0
 #define ESCHER_SYS_MAX_INTERLEAVED_BRIDGES 0
@@ -305,7 +305,8 @@ void Escher_SendSelfEvent( Escher_xtUMLEvent_t * );
  */
 
 
-#define NUM_OF_XTUML_CLASS_THREADS 1
+#define ESCHER_TASKING_POSIX 1
+#define NUM_OF_XTUML_CLASS_THREADS 4
 #define NUM_OF_TOTAL_THREADS NUM_OF_XTUML_CLASS_THREADS
 #define SEMAPHORE_FLAVOR_IQUEUE    0
 #define SEMAPHORE_FLAVOR_SQUEUE    1
@@ -408,10 +409,10 @@ void Escher_thread_shutdown( void );
  * Component message start tracing:
  */
 /* To suppress component message start tracing, uncomment the following macro */
-/* #define COMP_MSG_START_TRACE( component_number, arg_format, args... ) */
+/* #define COMP_MSG_START_TRACE( arg_format, component_number, port_number, message_number, args... ) */
 
 #ifndef COMP_MSG_START_TRACE
-#define COMP_MSG_START_TRACE( arg_format, component_number, args... ) do {   XTUML_SOURCE_PROLOGUE;   printf( arg_format, component_number, ## args );   printf( "\n" );   XTUML_TRACE_FLUSH( 0 ); } while (0)
+#define COMP_MSG_START_TRACE( arg_format, component_number, port_number, message_number, args... ) do {   XTUML_SOURCE_PROLOGUE;   printf( "component %d port %d message %d " arg_format "\n", component_number, port_number, message_number, ## args );   XTUML_TRACE_FLUSH( 0 ); } while (0)
 #endif
 
 /*

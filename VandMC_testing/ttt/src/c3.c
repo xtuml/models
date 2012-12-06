@@ -14,6 +14,31 @@
 #include "c3_classes.h"
 
 /*
+ * Interface:  i1
+ * Provided Port:  catch
+ * To Provider Message:  s1
+ */
+void
+c3_catch_s1( i_t p_sp1)
+{
+  { c3_TOE_A_CBevent1 * e = (c3_TOE_A_CBevent1 *) Escher_NewxtUMLEvent( (void *) 0, &c3_TOE_A_CBevent1c );
+    e->p_sp1 = p_sp1;
+    Escher_SendEvent( (Escher_xtUMLEvent_t *) e );
+  }
+
+}
+
+/*
+ * Interface:  i1
+ * Provided Port:  catch
+ * To Provider Message:  s2
+ */
+void
+c3_catch_s2()
+{
+}
+
+/*
  * Interface:  i2
  * Provided Port:  burn
  * To Provider Message:  o2
@@ -21,7 +46,6 @@
 i_t
 c3_burn_o2( i_t p_op2)
 {
-COMP_MSG_START_TRACE( "%d,%d", c3_DOMAIN_ID, p_op2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; i_t p; 
   /* ASSIGN s = 'toe burn' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'toe burn'" );
@@ -74,28 +98,24 @@ c3_burn_o4()
 
 /*
  * Interface:  i1
- * Provided Port:  catch
+ * Required Port:  toss
  * To Provider Message:  s1
  */
 void
-c3_catch_s1( i_t p_sp1)
+c3_toss_s1( i_t p_sp1)
 {
-COMP_MSG_START_TRACE( "%d,%d", c3_DOMAIN_ID, p_sp1 );
-  { c3_TOE_A_CBevent1 * e = (c3_TOE_A_CBevent1 *) Escher_NewxtUMLEvent( (void *) 0, &c3_TOE_A_CBevent1c );
-    e->p_sp1 = p_sp1;
-    Escher_SendEvent( (Escher_xtUMLEvent_t *) e );
-  }
-
+  c1_catch_s1(  p_sp1 );
 }
 
 /*
  * Interface:  i1
- * Provided Port:  catch
+ * Required Port:  toss
  * To Provider Message:  s2
  */
 void
-c3_catch_s2()
+c3_toss_s2()
 {
+  c1_catch_s2();
 }
 
 /*
@@ -106,7 +126,6 @@ c3_catch_s2()
 i_t
 c3_lase_o2( i_t p_op2)
 {
-COMP_MSG_START_TRACE( "%d,%d", c3_DOMAIN_ID, p_op2 );
 return   c2_burn_o2(  p_op2 );
 }
 
@@ -130,29 +149,6 @@ i_t
 c3_lase_o4()
 {
 return   c2_burn_o4();
-}
-
-/*
- * Interface:  i1
- * Required Port:  toss
- * To Provider Message:  s1
- */
-void
-c3_toss_s1( i_t p_sp1)
-{
-COMP_MSG_START_TRACE( "%d,%d", c3_DOMAIN_ID, p_sp1 );
-  c1_catch_s1(  p_sp1 );
-}
-
-/*
- * Interface:  i1
- * Required Port:  toss
- * To Provider Message:  s2
- */
-void
-c3_toss_s2()
-{
-  c1_catch_s2();
 }
 
 /*
