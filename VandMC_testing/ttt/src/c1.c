@@ -8,7 +8,8 @@
  *--------------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"
-#include "c1_LOG_bridge.h"
+#include "ARCH_bridge.h"
+#include "LOG_bridge.h"
 #include "c3.h"
 #include "c2.h"
 #include "c1_classes.h"
@@ -21,6 +22,7 @@
 void
 c1_catch_s1( i_t p_sp1)
 {
+COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 0, 0, p_sp1 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
   /* ASSIGN s = 'tic catch' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic catch'" );
@@ -30,7 +32,7 @@ c1_catch_s1( i_t p_sp1)
   if ( ( 3 != p_sp1 ) ) {
     /* LOG::LogFailure( message:'tic catch did not get 3' ) */
     XTUML_OAL_STMT_TRACE( 2, "LOG::LogFailure( message:'tic catch did not get 3' )" );
-    c1_LOG_LogFailure( "tic catch did not get 3" );
+    LOG_LogFailure( "tic catch did not get 3" );
   }
   else {
     i_t r; 
@@ -42,7 +44,7 @@ c1_catch_s1( i_t p_sp1)
     if ( ( 3 != r ) ) {
       /* LOG::LogFailure( message:'tic catch did not get 3 returned from lase' ) */
       XTUML_OAL_STMT_TRACE( 3, "LOG::LogFailure( message:'tic catch did not get 3 returned from lase' )" );
-      c1_LOG_LogFailure( "tic catch did not get 3 returned from lase" );
+      LOG_LogFailure( "tic catch did not get 3 returned from lase" );
     }
   }
 }
@@ -55,6 +57,7 @@ c1_catch_s1( i_t p_sp1)
 void
 c1_catch_s2()
 {
+COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 0, 1 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; i_t r; 
   /* ASSIGN s = 'tic catch s2' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic catch s2'" );
@@ -72,19 +75,20 @@ c1_catch_s2()
 i_t
 c1_burn_o2( i_t p_op2)
 {
+COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 1, 0, p_op2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
   /* ASSIGN s = 'tic burn' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic burn'" );
   Escher_strcpy( s, "tic burn" );
   /* LOG::LogInfo( message:s ) */
   XTUML_OAL_STMT_TRACE( 1, "LOG::LogInfo( message:s )" );
-  c1_LOG_LogInfo( s );
+  LOG_LogInfo( s );
   /* IF ( ( 3 != PARAM.op2 ) ) */
   XTUML_OAL_STMT_TRACE( 1, "IF ( ( 3 != PARAM.op2 ) )" );
   if ( ( 3 != p_op2 ) ) {
     /* LOG::LogFailure( message:'tic burn did not get 3' ) */
     XTUML_OAL_STMT_TRACE( 2, "LOG::LogFailure( message:'tic burn did not get 3' )" );
-    c1_LOG_LogFailure( "tic burn did not get 3" );
+    LOG_LogFailure( "tic burn did not get 3" );
   }
   else {
     /*  SEND toss::s1(sp1:1) */
@@ -104,6 +108,7 @@ c1_burn_o2( i_t p_op2)
 void
 c1_burn_o3()
 {
+COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 1, 1 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
   /* ASSIGN s = 'tic burn o3' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic burn o3'" );
@@ -121,6 +126,7 @@ c1_burn_o3()
 i_t
 c1_burn_o4()
 {
+COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 1, 2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
   /* ASSIGN s = 'tic.burn::o4' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic.burn::o4'" );
@@ -138,6 +144,7 @@ c1_burn_o4()
 void
 c1_toss_s1( i_t p_sp1)
 {
+COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 2, 0, p_sp1 );
   c2_catch_s1(  p_sp1 );
 }
 
@@ -149,6 +156,7 @@ c1_toss_s1( i_t p_sp1)
 void
 c1_toss_s2()
 {
+COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 2, 1 );
   c2_catch_s2();
 }
 
@@ -160,6 +168,7 @@ c1_toss_s2()
 i_t
 c1_lase_o2( i_t p_op2)
 {
+COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 3, 0, p_op2 );
 return   c3_burn_o2(  p_op2 );
 }
 
@@ -171,6 +180,7 @@ return   c3_burn_o2(  p_op2 );
 void
 c1_lase_o3()
 {
+COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 3, 1 );
   c3_burn_o3();
 }
 
@@ -182,6 +192,7 @@ c1_lase_o3()
 i_t
 c1_lase_o4()
 {
+COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 3, 2 );
 return   c3_burn_o4();
 }
 

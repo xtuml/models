@@ -8,7 +8,8 @@
  *--------------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"
-#include "c3_LOG_bridge.h"
+#include "ARCH_bridge.h"
+#include "LOG_bridge.h"
 #include "c3_classes.h"
 
 
@@ -45,7 +46,7 @@ c3_TOE_A_CB_act1( c3_TOE_A * self, const Escher_xtUMLEvent_t * const event )
   if ( ( 2 != rcvd_evt->p_sp1 ) ) {
     /* LOG::LogFailure( message:'toe signal did not get 2' ) */
     XTUML_OAL_STMT_TRACE( 2, "LOG::LogFailure( message:'toe signal did not get 2' )" );
-    c3_LOG_LogFailure( "toe signal did not get 2" );
+    LOG_LogFailure( "toe signal did not get 2" );
   }
   else {
     /*  SEND toss::s1(sp1:3) */
@@ -67,7 +68,7 @@ c3_TOE_A_CB_act2( c3_TOE_A * self, const Escher_xtUMLEvent_t * const event )
   if ( ( 2 != rcvd_evt->p_sp1 ) ) {
     /* LOG::LogFailure( message:'toe signal did not get 2' ) */
     XTUML_OAL_STMT_TRACE( 2, "LOG::LogFailure( message:'toe signal did not get 2' )" );
-    c3_LOG_LogFailure( "toe signal did not get 2" );
+    LOG_LogFailure( "toe signal did not get 2" );
   }
   else {
     /*  SEND toss::s1(sp1:3) */

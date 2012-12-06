@@ -8,7 +8,8 @@
  *--------------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"
-#include "c3_LOG_bridge.h"
+#include "ARCH_bridge.h"
+#include "LOG_bridge.h"
 #include "c2.h"
 #include "c1.h"
 #include "c3_classes.h"
@@ -21,6 +22,7 @@
 void
 c3_catch_s1( i_t p_sp1)
 {
+COMP_MSG_START_TRACE( "%d", c3_DOMAIN_ID, 0, 0, p_sp1 );
   { c3_TOE_A_CBevent1 * e = (c3_TOE_A_CBevent1 *) Escher_NewxtUMLEvent( (void *) 0, &c3_TOE_A_CBevent1c );
     e->p_sp1 = p_sp1;
     Escher_SendEvent( (Escher_xtUMLEvent_t *) e );
@@ -36,6 +38,7 @@ c3_catch_s1( i_t p_sp1)
 void
 c3_catch_s2()
 {
+COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 0, 1 );
 }
 
 /*
@@ -46,13 +49,14 @@ c3_catch_s2()
 i_t
 c3_burn_o2( i_t p_op2)
 {
+COMP_MSG_START_TRACE( "%d", c3_DOMAIN_ID, 1, 0, p_op2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; i_t p; 
   /* ASSIGN s = 'toe burn' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'toe burn'" );
   Escher_strcpy( s, "toe burn" );
   /* LOG::LogInfo( message:s ) */
   XTUML_OAL_STMT_TRACE( 1, "LOG::LogInfo( message:s )" );
-  c3_LOG_LogInfo( s );
+  LOG_LogInfo( s );
   /* ASSIGN p = PARAM.op2 */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN p = PARAM.op2" );
   p = p_op2;
@@ -61,7 +65,7 @@ c3_burn_o2( i_t p_op2)
   if ( ( 1 != p_op2 ) ) {
     /* LOG::LogFailure( message:'toe burn did not get 1' ) */
     XTUML_OAL_STMT_TRACE( 2, "LOG::LogFailure( message:'toe burn did not get 1' )" );
-    c3_LOG_LogFailure( "toe burn did not get 1" );
+    LOG_LogFailure( "toe burn did not get 1" );
   }
   else {
     /* RETURN ( lase::o2(2) + 1 ) */
@@ -81,6 +85,7 @@ c3_burn_o2( i_t p_op2)
 void
 c3_burn_o3()
 {
+COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 1, 1 );
 }
 
 /*
@@ -91,6 +96,7 @@ c3_burn_o3()
 i_t
 c3_burn_o4()
 {
+COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 1, 2 );
   /* RETURN 999 */
   XTUML_OAL_STMT_TRACE( 1, "RETURN 999" );
   return 999;
@@ -104,6 +110,7 @@ c3_burn_o4()
 void
 c3_toss_s1( i_t p_sp1)
 {
+COMP_MSG_START_TRACE( "%d", c3_DOMAIN_ID, 2, 0, p_sp1 );
   c1_catch_s1(  p_sp1 );
 }
 
@@ -115,6 +122,7 @@ c3_toss_s1( i_t p_sp1)
 void
 c3_toss_s2()
 {
+COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 2, 1 );
   c1_catch_s2();
 }
 
@@ -126,6 +134,7 @@ c3_toss_s2()
 i_t
 c3_lase_o2( i_t p_op2)
 {
+COMP_MSG_START_TRACE( "%d", c3_DOMAIN_ID, 3, 0, p_op2 );
 return   c2_burn_o2(  p_op2 );
 }
 
@@ -137,6 +146,7 @@ return   c2_burn_o2(  p_op2 );
 void
 c3_lase_o3()
 {
+COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 3, 1 );
   c2_burn_o3();
 }
 
@@ -148,6 +158,7 @@ c3_lase_o3()
 i_t
 c3_lase_o4()
 {
+COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 3, 2 );
 return   c2_burn_o4();
 }
 

@@ -51,8 +51,8 @@ typedef struct c2_TAC_A_CB c2_TAC_A_CB;
 
 
 
-#include "c2_ARCH_bridge.h"
-#include "c2_LOG_bridge.h"
+#include "ARCH_bridge.h"
+#include "LOG_bridge.h"
 #include "c2.h"
 #include "c2_TAC_A_class.h"
 

@@ -47,7 +47,8 @@ extern void c1_test( void );
 
 
 
-#include "c1_LOG_bridge.h"
+#include "ARCH_bridge.h"
+#include "LOG_bridge.h"
 #include "c1.h"
 
 

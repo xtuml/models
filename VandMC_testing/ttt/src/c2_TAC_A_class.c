@@ -8,8 +8,8 @@
  *--------------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"
-#include "c2_ARCH_bridge.h"
-#include "c2_LOG_bridge.h"
+#include "ARCH_bridge.h"
+#include "LOG_bridge.h"
 #include "c2_classes.h"
 
 
@@ -46,7 +46,7 @@ c2_TAC_A_CB_act1( c2_TAC_A * self, const Escher_xtUMLEvent_t * const event )
   if ( ( 1 != rcvd_evt->p_sp1 ) ) {
     /* LOG::LogFailure( message:'tac signal did not get 1' ) */
     XTUML_OAL_STMT_TRACE( 2, "LOG::LogFailure( message:'tac signal did not get 1' )" );
-    c2_LOG_LogFailure( "tac signal did not get 1" );
+    LOG_LogFailure( "tac signal did not get 1" );
   }
   else {
     c2_TAC_A * a=0; 
@@ -72,10 +72,10 @@ c2_TAC_A_CB_act1( c2_TAC_A * self, const Escher_xtUMLEvent_t * const event )
       if ( ( a->count > 200000 ) ) {
         /* LOG::LogSuccess( message:'test passed' ) */
         XTUML_OAL_STMT_TRACE( 4, "LOG::LogSuccess( message:'test passed' )" );
-        c2_LOG_LogSuccess( "test passed" );
+        LOG_LogSuccess( "test passed" );
         /* ARCH::shutdown(  ) */
         XTUML_OAL_STMT_TRACE( 4, "ARCH::shutdown(  )" );
-        c2_ARCH_shutdown();
+        ARCH_shutdown();
       }
       else {
         /* ASSIGN a.count = ( a.count + 1 ) */
@@ -102,7 +102,7 @@ c2_TAC_A_CB_act2( c2_TAC_A * self, const Escher_xtUMLEvent_t * const event )
   if ( ( 1 != rcvd_evt->p_sp1 ) ) {
     /* LOG::LogFailure( message:'tac signal did not get 1' ) */
     XTUML_OAL_STMT_TRACE( 2, "LOG::LogFailure( message:'tac signal did not get 1' )" );
-    c2_LOG_LogFailure( "tac signal did not get 1" );
+    LOG_LogFailure( "tac signal did not get 1" );
   }
   else {
     /*  SEND toss::s1(sp1:2) */

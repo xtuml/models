@@ -51,7 +51,8 @@ typedef struct c3_TOE_A_CB c3_TOE_A_CB;
 
 
 
-#include "c3_LOG_bridge.h"
+#include "ARCH_bridge.h"
+#include "LOG_bridge.h"
 #include "c3.h"
 #include "c3_TOE_A_class.h"
 
