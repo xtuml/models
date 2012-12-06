@@ -20,7 +20,7 @@
  * To Provider Message:  s1
  */
 void
-c2_catch_s1( i_t p_sp1)
+c2_catch_s1( const i_t p_sp1)
 {
 COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 0, 0, p_sp1 );
   { c2_TAC_A_CBevent1 * e = (c2_TAC_A_CBevent1 *) Escher_NewxtUMLEvent( (void *) 0, &c2_TAC_A_CBevent1c );
@@ -47,7 +47,7 @@ COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 0, 1 );
  * To Provider Message:  o2
  */
 i_t
-c2_burn_o2( i_t p_op2)
+c2_burn_o2( const i_t p_op2)
 {
 COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 1, 0, p_op2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; i_t p; 
@@ -108,7 +108,7 @@ COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 1, 2 );
  * To Provider Message:  s1
  */
 void
-c2_toss_s1( i_t p_sp1)
+c2_toss_s1( const i_t p_sp1)
 {
 COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 2, 0, p_sp1 );
   c3_catch_s1(  p_sp1 );
@@ -132,7 +132,7 @@ COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 2, 1 );
  * To Provider Message:  o2
  */
 i_t
-c2_lase_o2( i_t p_op2)
+c2_lase_o2( const i_t p_op2)
 {
 COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 3, 0, p_op2 );
 return   c1_burn_o2(  p_op2 );
