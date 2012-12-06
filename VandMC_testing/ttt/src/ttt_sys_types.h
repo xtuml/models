@@ -28,9 +28,9 @@
  * PersistLinkCacheDepth:  128
  *
  * Component Name:  c1
- * MaxObjExtent:  0
+ * MaxObjExtent:  20
  * MaxRelExtent:  0
- * MaxSelectExtent:  0
+ * MaxSelectExtent:  10
  * MaxSelfEvents:  0
  * MaxNonSelfEvents:  2
  * MaxPriorityEvents:  0
@@ -44,7 +44,7 @@
  * Component Name:  c2
  * MaxObjExtent:  10
  * MaxRelExtent:  0
- * MaxSelectExtent:  0
+ * MaxSelectExtent:  10
  * MaxSelfEvents:  0
  * MaxNonSelfEvents:  2
  * MaxPriorityEvents:  0
@@ -58,7 +58,7 @@
  * Component Name:  c3
  * MaxObjExtent:  10
  * MaxRelExtent:  0
- * MaxSelectExtent:  0
+ * MaxSelectExtent:  10
  * MaxSelfEvents:  0
  * MaxNonSelfEvents:  2
  * MaxPriorityEvents:  0
@@ -110,7 +110,7 @@ typedef unsigned char bool;
 #define ESCHER_PERSIST_INST_CACHE_DEPTH 128
 #define ESCHER_PERSIST_LINK_CACHE_DEPTH 128
 #define ESCHER_SYS_MAX_ASSOCIATION_EXTENT 0
-#define ESCHER_SYS_MAX_TRANSIENT_EXTENT 0
+#define ESCHER_SYS_MAX_TRANSIENT_EXTENT 30
 #define SYS_MAX_CONTAINERS ( ESCHER_SYS_MAX_ASSOCIATION_EXTENT + ESCHER_SYS_MAX_TRANSIENT_EXTENT )
 #define ESCHER_SYS_MAX_SELF_EVENTS 0
 #define ESCHER_SYS_MAX_NONSELF_EVENTS 11
