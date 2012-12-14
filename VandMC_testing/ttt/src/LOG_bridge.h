@@ -6,7 +6,7 @@
  *
  * External Entity:  Logging (LOG)
  * 
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #ifndef LOG_BRIDGE_H
@@ -20,10 +20,10 @@ extern	"C"	{
 void LOG_LogSuccess( c_t[ESCHER_SYS_MAX_STRING_LEN] );
 void LOG_LogFailure( c_t[ESCHER_SYS_MAX_STRING_LEN] );
 void LOG_LogInfo( c_t[ESCHER_SYS_MAX_STRING_LEN] );
-void LOG_LogDate( Escher_Date_t, c_t[ESCHER_SYS_MAX_STRING_LEN] );
-void LOG_LogTime( c_t[ESCHER_SYS_MAX_STRING_LEN], Escher_TimeStamp_t );
-void LOG_LogReal( c_t[ESCHER_SYS_MAX_STRING_LEN], r_t );
-void LOG_LogInteger( i_t );
+void LOG_LogDate( const Escher_Date_t, c_t[ESCHER_SYS_MAX_STRING_LEN] );
+void LOG_LogTime( c_t[ESCHER_SYS_MAX_STRING_LEN], const Escher_TimeStamp_t );
+void LOG_LogReal( c_t[ESCHER_SYS_MAX_STRING_LEN], const r_t );
+void LOG_LogInteger( const i_t );
 
 #ifdef	__cplusplus
 }

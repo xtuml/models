@@ -2,7 +2,7 @@
  * File:  sys_xtuml.c
  *
  * Description:
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"
@@ -11,7 +11,11 @@
 #include "c3_classes.h"
 
 
-/* No containers allocated.  */
+/*
+ * Allocate the storage for the pool of container nodes.
+ */
+static Escher_ObjectSet_s node1_FreeList;
+static Escher_SetElement_s node1s[ SYS_MAX_CONTAINERS ];
 
 /*
  * Initialize the node1 instances by linking them into a collection.
@@ -22,7 +26,14 @@
 void
 Escher_SetFactoryInit( const i_t n1_size )
 {
-  /* Set factory initialization optimized out.  */
+  u2_t i;
+  node1_FreeList.head = &node1s[ 0 ];
+  /* Build the collection (linked list) of node1 instances.  */
+  for ( i = 0; i < ( n1_size - 1 ); i++ ) {
+    node1s[ i ].next = &node1s[ i + 1 ];
+    node1s[ i ].object = 0;
+  }
+  node1s[ n1_size - 1 ].next = 0;
 }
 
 /*
@@ -31,19 +42,69 @@ Escher_SetFactoryInit( const i_t n1_size )
  * before the copy operation occurs freeing any nodes in that set.
  * The new set will use containoids from the free list.
  */
-/* Set copy code optimized out.  */
+void 
+Escher_CopySet( Escher_ObjectSet_s * to_set,
+                Escher_ObjectSet_s * const from_set )
+{
+  const Escher_SetElement_s * slot;
+
+  /* May be copying into an existing set, release target collection nodes.  */
+  Escher_ClearSet( to_set );
+
+  for ( slot = from_set->head; ( slot != 0 ); slot = slot->next ) {
+    Escher_SetInsertElement( to_set, slot->object ); 
+  }
+}
 
 /*
  * Release all nodes in the given set back to the free pool.
  */
-/* Set clearing code optimized out.  */
+void
+Escher_ClearSet( Escher_ObjectSet_s * set )
+{
+  if ( set->head != 0 ) {                                    /* empty set  */
+    Escher_SetElement_s * slot;
+    for ( slot = set->head; ( slot->next != 0 ); slot = slot->next ); /* Find end.  */
+    slot->next = node1_FreeList.head;     /* Tie string to free list.      */
+    node1_FreeList.head = set->head;      /* Point free list to head.      */
+    Escher_InitSet( set );                /* Zero set out.  */
+  }
+}
 
 /*
  * Insert a single element into the set in no particular order.
  * The element is a data item.  A container node will be allocated
  * to link in the element.
  */
-/* Set insertion code optimized out.  */
+void
+Escher_SetInsertElement(
+  Escher_ObjectSet_s * set,
+  void * const substance
+)
+{
+  Escher_SetElement_s * slot;
+  if ( 0 == node1_FreeList.head ) {
+    Escher_SetElement_s * new_mem = ( Escher_SetElement_s *) Escher_malloc( 10 * sizeof( Escher_SetElement_s ) );
+
+    if ( 0 == new_mem ) {
+      UserNodeListEmptyCallout(); /* Bad news!  No more heap space.  */
+    } else {
+      u1_t i;
+      for ( i = 0; i < 10 - 1; i++ ) {
+        new_mem[ i ].next = (Escher_SetElement_s *) &(new_mem[ i + 1 ]);
+      }
+      new_mem[ 10 - 1 ].next = 0;
+      node1_FreeList.head = new_mem;
+      Escher_SetInsertElement( set, substance );
+    }
+  } else {
+    slot = node1_FreeList.head; /* Extract node from free list head. */
+    node1_FreeList.head = node1_FreeList.head->next;
+    slot->object = substance;
+    slot->next = set->head;     /* Insert substance at list front.   */
+    set->head = slot;
+  }
+}
 
 /*
  * Insert a block of objects into the given set in sequence.  Link the
@@ -115,7 +176,22 @@ Escher_SetRemoveNode(
  * used when some knowledge of the linking mechanism is required (as
  * in extent management).
  */
-/* Set remove element code optimized out.  */
+void
+Escher_SetRemoveElement(
+  Escher_ObjectSet_s * set,
+  const void * const d
+)
+{
+  Escher_SetElement_s * t;
+  if ( set->head != 0 ) {                     /* empty set */
+    t = Escher_SetRemoveNode( set, d );
+    /* Return node to architecture collection (free list).             */
+    if ( t != 0 ) {
+      t->next = node1_FreeList.head;
+      node1_FreeList.head = t;
+    }
+  }
+}
 
 /*
  * Return a pointer to the found element when the set contains the 
@@ -304,9 +380,33 @@ Escher_strget( void )
 }
 
 
+/*----------------------------------------------------------------------------
+ * This routine provides a central connection to ANSI-standard system-level
+ * memory allocation.  MC-3020 is optimized for static memory allocation
+ * and only uses dynamic memory allocation when enabled with marking.
+ * Dynamic memory allocation can be used in conjunction with static
+ * allocation providing protection against unexpected memory "overflows"
+ * conditions.
+ *--------------------------------------------------------------------------*/
+
+#include <stdlib.h>
+/*
+ * Allocate memory from the system heap.
+ */
+void * 
+Escher_malloc( const u4_t b )
+{
+  void * new_mem = 0;
+  size_t bytes = ( size_t ) b;
+
+  new_mem = malloc( bytes );
+
+  return new_mem;
+}
+
 /* xtUML class info for all of the components (collections, sizes, etc.) */
 Escher_Extent_t * const * const domain_class_info[ SYSTEM_DOMAIN_COUNT ] = {
-  0,
+  &c1_class_info[0],
   &c2_class_info[0],
   &c3_class_info[0]
 };
@@ -324,18 +424,26 @@ Escher_CreateInstance(
   Escher_SetElement_s * node;
   Escher_iHandle_t instance;
   Escher_Extent_t * dci = *(domain_class_info[ domain_num ] + class_num);
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
   node = dci->inactive.head;
 
   if ( 0 == node ) {
-    UserObjectPoolEmptyCallout( domain_num, class_num );
+    Escher_SetElement_s * container =
+      ( Escher_SetElement_s *) Escher_malloc( 10 * sizeof( Escher_SetElement_s ) );
+    Escher_iHandle_t pool = ( Escher_iHandle_t ) Escher_malloc( 10 * dci->size );
+    if ( ( 0 == container ) || ( 0 == pool ) ) {
+      UserObjectPoolEmptyCallout( domain_num, class_num );
+    } else {
+      Escher_memset( pool, 0, 10 * dci->size );
+      dci->inactive.head = Escher_SetInsertBlock( 
+        container, (const u1_t *) pool, dci->size, 10 );
+      node = dci->inactive.head;
+    }
   }
 
   dci->inactive.head = dci->inactive.head->next;
   instance = (Escher_iHandle_t) node->object;
   instance->current_state = dci->initial_state;
   Escher_SetInsertInstance( &dci->active, node );
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
   return instance;
 }
 
@@ -351,13 +459,11 @@ Escher_DeleteInstance(
 {
   Escher_SetElement_s * node;
   Escher_Extent_t * dci = *(domain_class_info[ domain_num ] + class_num);
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
   node = Escher_SetRemoveNode( &dci->active, instance );
   node->next = dci->inactive.head;
   dci->inactive.head = node;
   /* Initialize storage to zero.  */
   Escher_memset( instance, 0, dci->size );
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
 }
 
 
@@ -387,21 +493,6 @@ Escher_ClassFactoryInit(
 
 
 bool Escher_run_flag = true; /* Turn this off to exit dispatch loop(s).  */
-/* Map the classes to the tasks/threads for each domain.  */
-static const Escher_ClassNumber_t c1_task_numbers[ c1_STATE_MODELS ] = {
-  c1_TASK_NUMBERS
-};
-static const Escher_ClassNumber_t c2_task_numbers[ c2_STATE_MODELS ] = {
-  c2_TASK_NUMBERS
-};
-static const Escher_ClassNumber_t c3_task_numbers[ c3_STATE_MODELS ] = {
-  c3_TASK_NUMBERS
-};
-static const Escher_ClassNumber_t * const class_thread_assignment[ SYSTEM_DOMAIN_COUNT ] = {
-  &c1_task_numbers[0],
-  &c2_task_numbers[0],
-  &c3_task_numbers[0]
-};
 
 /* Structure:  Escher_systemxtUMLevents
  * _Super-union_ of all xtUML events in the system. For translation
@@ -410,6 +501,7 @@ static const Escher_ClassNumber_t * const class_thread_assignment[ SYSTEM_DOMAIN
  * size of any xtUML event in the system.  */
 typedef union {
   Escher_xtUMLEvent_t mc_event_base;
+  c1_DomainEvents_u mc_events_in_domain_c1;
   c2_DomainEvents_u mc_events_in_domain_c2;
   c3_DomainEvents_u mc_events_in_domain_c3;
 } Escher_systemxtUMLevents_t;
@@ -434,9 +526,7 @@ InitializeOoaEventPool( void )
   static Escher_systemxtUMLevents_t Escher_xtUML_event_pool[ ESCHER_SYS_MAX_XTUML_EVENTS ];
   u2_t i;
   Escher_run_flag = true; /* Default running enabled.  */
-  for ( i = 0; i < NUM_OF_XTUML_CLASS_THREADS; i++ ) {
-    non_self_event_queue[ i ].head = 0; non_self_event_queue[ i ].tail = 0;
-  }
+  non_self_event_queue[ 0 ].head = 0; non_self_event_queue[ 0 ].tail = 0;
   /* String events together into a singly linked list. */
   free_event_list = (Escher_xtUMLEvent_t *) &Escher_xtUML_event_pool[ 0 ];
   for ( i = 0; i < ESCHER_SYS_MAX_XTUML_EVENTS - 1; i++ ) {
@@ -452,14 +542,24 @@ InitializeOoaEventPool( void )
 Escher_xtUMLEvent_t * Escher_AllocatextUMLEvent( void )
 {
   Escher_xtUMLEvent_t * event = 0;
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_FREELIST );
   if ( free_event_list == 0 ) {
-    UserEventFreeListEmptyCallout();   /* Bad news!  No more events.  */
+    Escher_xtUMLEvent_t * new_mem = (Escher_xtUMLEvent_t *) Escher_malloc( 10 * sizeof( Escher_systemxtUMLevents_t ) );
+
+    if ( 0 == new_mem ) {
+      UserEventFreeListEmptyCallout();   /* Bad news!  No more heap space.  */
+    } else {
+      u1_t i;
+      for ( i = 0; i < 10 - 1; i++ ) {
+        new_mem[ i ].next = (Escher_xtUMLEvent_t *) &(new_mem[ i + 1 ]);
+      }
+      new_mem[ 10 - 1 ].next = 0;
+      free_event_list = new_mem;
+      event = Escher_AllocatextUMLEvent();
+    }
   } else {
     event = free_event_list;       /* Grab front of the free list.  */
     free_event_list = event->next; /* Unlink from front of free list.  */
   }
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_FREELIST );
   return event;
 }
 
@@ -499,10 +599,8 @@ Escher_ModifyxtUMLEvent( Escher_xtUMLEvent_t * event,
 void
 Escher_DeletextUMLEvent( Escher_xtUMLEvent_t * event )
 {
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_FREELIST );
   event->next = free_event_list;
   free_event_list = event;
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_FREELIST );
 }
 
 /*
@@ -523,21 +621,16 @@ Escher_DeletextUMLEvent( Escher_xtUMLEvent_t * event )
 void
 Escher_SendEvent( Escher_xtUMLEvent_t * event )
 {
-  u1_t t = *( class_thread_assignment[ GetEventDestDomainNumber( event ) ]
-    + GetEventDestObjectNumber( event ) );
-  xtUMLEventQueue_t * q = &non_self_event_queue[ t ];
+  xtUMLEventQueue_t * q = &non_self_event_queue[ 0 ];
   event->next = 0;
   /* Append the event to the tail end of the queue.  */
   /* No need to maintain prev pointers when not prioritizing.  */
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_IQUEUE );
   if ( q->tail == 0 ) {
     q->head = event;
   } else {
     q->tail->next = event;
   }
   q->tail = event;
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_IQUEUE );
-  Escher_nonbusy_wake( t );
 }
 
 /*
@@ -546,12 +639,11 @@ Escher_SendEvent( Escher_xtUMLEvent_t * event )
  * indicates that the queue is empty.  Otherwise the handle to the
  * event will be returned.
  */
-static Escher_xtUMLEvent_t * DequeueOoaNonSelfEvent( const u1_t );
-static Escher_xtUMLEvent_t * DequeueOoaNonSelfEvent( const u1_t t )
+static Escher_xtUMLEvent_t * DequeueOoaNonSelfEvent( void );
+static Escher_xtUMLEvent_t * DequeueOoaNonSelfEvent( void )
 {
   Escher_xtUMLEvent_t * event;
-  xtUMLEventQueue_t * q = &non_self_event_queue[ t ];
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_IQUEUE );
+  xtUMLEventQueue_t * q = &non_self_event_queue[ 0 ];
   /* Assign the event from the head of the queue.  */
   event = q->head;
   /* If the list is not empty, bump the head.  */
@@ -564,39 +656,33 @@ static Escher_xtUMLEvent_t * DequeueOoaNonSelfEvent( const u1_t t )
   } else {
     UserNonSelfEventQueueEmptyCallout();
   }
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_IQUEUE );
   return event;
 }
 /*
  * Loop on the event queues dispatching events for this thread.
  */
-static void * ooa_loop( void * );
-static void * ooa_loop( void * thread )
+static void ooa_loop( void );
+static void ooa_loop( void )
 {
   /* class dispatch table
    */
   static const EventTaker_t * DomainClassDispatcherTable[ 3 ] =
     {
-      0,
+      c1_EventDispatcher,
       c2_EventDispatcher,
       c3_EventDispatcher,
     };
   Escher_xtUMLEvent_t * event;
-  u1_t t = *( (u1_t *) thread );
   /* Start consuming events and dispatching background processes.  */
   while ( true == Escher_run_flag ) {
-    event = DequeueOoaNonSelfEvent(t); /* Instance next.  */
+    event = DequeueOoaNonSelfEvent(); /* Instance next.  */
     if ( 0 != event ) {
       ( *( DomainClassDispatcherTable[ GetEventDestDomainNumber( event ) ] )[ GetEventDestObjectNumber( event ) ] )( event );
       Escher_DeletextUMLEvent( event );
     } else {
-      Escher_nonbusy_wait( t );
     }
-    if ( t == 0 ) {   /* Is this the default task/thread?  */
-      UserBackgroundProcessingCallout();
-    }
+    UserBackgroundProcessingCallout();
   }
-  return 0;
 }
 
 /*
@@ -604,12 +690,5 @@ static void * ooa_loop( void * thread )
  */
 void Escher_xtUML_run( void )
 {
-  void * vp;
-  u1_t i;
-  /* Create threads in reverse order saving thread 0 for default.  */
-  for ( i = NUM_OF_XTUML_CLASS_THREADS - 1; i > 0; i-- ) {
-    Escher_thread_create( ooa_loop, i );
-  }
-  i = 0;
-  vp = ooa_loop( (void *) &i );
+  ooa_loop();
 }

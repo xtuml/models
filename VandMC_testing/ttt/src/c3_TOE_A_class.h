@@ -4,7 +4,7 @@
  * Class:       a  (TOE_A)
  * Component:   c3
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #ifndef C3_TOE_A_CLASS_H

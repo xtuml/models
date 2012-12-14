@@ -4,7 +4,7 @@
  * UML Component Port Messages
  * Component/Module Name:  c1
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"
@@ -20,13 +20,21 @@
  * To Provider Message:  s1
  */
 void
-c1_catch_s1( i_t p_sp1)
+c1_catch_s1( const i_t p_sp1)
 {
-COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 0, 0, p_sp1 );
-  c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
+  COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 0, 0, p_sp1 );
+  c_t s[ESCHER_SYS_MAX_STRING_LEN]; c1_PONG * pong=0; 
   /* ASSIGN s = 'tic catch' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic catch'" );
   Escher_strcpy( s, "tic catch" );
+  /* SELECT any pong FROM INSTANCES OF PONG */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any pong FROM INSTANCES OF PONG" );
+  pong = (c1_PONG *) Escher_SetGetAny( &pG_c1_PONG_extent.active );
+  /* GENERATE PONG1:back() TO pong */
+  XTUML_OAL_STMT_TRACE( 1, "GENERATE PONG1:back() TO pong" );
+  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( pong, &c1_PONGevent1c );
+    Escher_SendEvent( e );
+  }
   /* IF ( ( 3 != PARAM.sp1 ) ) */
   XTUML_OAL_STMT_TRACE( 1, "IF ( ( 3 != PARAM.sp1 ) )" );
   if ( ( 3 != p_sp1 ) ) {
@@ -57,7 +65,7 @@ COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 0, 0, p_sp1 );
 void
 c1_catch_s2()
 {
-COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 0, 1 );
+  COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 0, 1 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; i_t r; 
   /* ASSIGN s = 'tic catch s2' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic catch s2'" );
@@ -73,9 +81,9 @@ COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 0, 1 );
  * To Provider Message:  o2
  */
 i_t
-c1_burn_o2( i_t p_op2)
+c1_burn_o2( const i_t p_op2)
 {
-COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 1, 0, p_op2 );
+  COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 1, 0, p_op2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
   /* ASSIGN s = 'tic burn' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic burn'" );
@@ -108,7 +116,7 @@ COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 1, 0, p_op2 );
 void
 c1_burn_o3()
 {
-COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 1, 1 );
+  COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 1, 1 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
   /* ASSIGN s = 'tic burn o3' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic burn o3'" );
@@ -126,7 +134,7 @@ COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 1, 1 );
 i_t
 c1_burn_o4()
 {
-COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 1, 2 );
+  COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 1, 2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
   /* ASSIGN s = 'tic.burn::o4' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic.burn::o4'" );
@@ -142,9 +150,9 @@ COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 1, 2 );
  * To Provider Message:  s1
  */
 void
-c1_toss_s1( i_t p_sp1)
+c1_toss_s1( const i_t p_sp1)
 {
-COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 2, 0, p_sp1 );
+  COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 2, 0, p_sp1 );
   c2_catch_s1(  p_sp1 );
 }
 
@@ -156,7 +164,7 @@ COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 2, 0, p_sp1 );
 void
 c1_toss_s2()
 {
-COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 2, 1 );
+  COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 2, 1 );
   c2_catch_s2();
 }
 
@@ -166,9 +174,9 @@ COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 2, 1 );
  * To Provider Message:  o2
  */
 i_t
-c1_lase_o2( i_t p_op2)
+c1_lase_o2( const i_t p_op2)
 {
-COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 3, 0, p_op2 );
+  COMP_MSG_START_TRACE( "%d", c1_DOMAIN_ID, 3, 0, p_op2 );
 return   c3_burn_o2(  p_op2 );
 }
 
@@ -180,7 +188,7 @@ return   c3_burn_o2(  p_op2 );
 void
 c1_lase_o3()
 {
-COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 3, 1 );
+  COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 3, 1 );
   c3_burn_o3();
 }
 
@@ -192,7 +200,7 @@ COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 3, 1 );
 i_t
 c1_lase_o4()
 {
-COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 3, 2 );
+  COMP_MSG_START_TRACE( "", c1_DOMAIN_ID, 3, 2 );
 return   c3_burn_o4();
 }
 
@@ -217,7 +225,22 @@ c1_setup()
 void
 c1_test()
 {
-  c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
+  c1_PING * ping; c1_PONG * pong; c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
+  /* CREATE OBJECT INSTANCE ping OF PING */
+  XTUML_OAL_STMT_TRACE( 1, "CREATE OBJECT INSTANCE ping OF PING" );
+  ping = (c1_PING *) Escher_CreateInstance( c1_DOMAIN_ID, c1_PING_CLASS_NUMBER );
+  /* CREATE OBJECT INSTANCE pong OF PONG */
+  XTUML_OAL_STMT_TRACE( 1, "CREATE OBJECT INSTANCE pong OF PONG" );
+  pong = (c1_PONG *) Escher_CreateInstance( c1_DOMAIN_ID, c1_PONG_CLASS_NUMBER );
+  /* RELATE ping TO pong ACROSS R1 */
+  XTUML_OAL_STMT_TRACE( 1, "RELATE ping TO pong ACROSS R1" );
+  c1_PING_R1_Link( pong, ping );
+  /* ASSIGN ping.i = 0 */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN ping.i = 0" );
+  ping->i = 0;
+  /* ASSIGN pong.s = 'pong' */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN pong.s = 'pong'" );
+  Escher_strcpy( pong->s, "pong" );
   /* ASSIGN s = 'tic function test' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tic function test'" );
   Escher_strcpy( s, "tic function test" );
@@ -234,6 +257,13 @@ Escher_Extent_t * const c1_class_info[ c1_MAX_CLASS_NUMBERS ] = {
 };
 #endif
 
+/*
+ * Array of pointers to the class event dispatcher method.
+ * Index is the (model compiler enumerated) number of the state model.
+ */
+const EventTaker_t c1_EventDispatcher[ c1_STATE_MODELS ] = {
+  c1_class_dispatchers
+};
 
 void c1_execute_initialization()
 {
