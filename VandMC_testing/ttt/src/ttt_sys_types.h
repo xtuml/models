@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------
  * File:  ttt_sys_types.h
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *
  *
  * System Name:  
@@ -113,7 +113,7 @@ typedef unsigned char bool;
 #define ESCHER_SYS_MAX_TRANSIENT_EXTENT 30
 #define SYS_MAX_CONTAINERS ( ESCHER_SYS_MAX_ASSOCIATION_EXTENT + ESCHER_SYS_MAX_TRANSIENT_EXTENT )
 #define ESCHER_SYS_MAX_SELF_EVENTS 0
-#define ESCHER_SYS_MAX_NONSELF_EVENTS 11
+#define ESCHER_SYS_MAX_NONSELF_EVENTS 7
 #define ESCHER_SYS_MAX_XTUML_EVENTS ( ESCHER_SYS_MAX_SELF_EVENTS + ESCHER_SYS_MAX_NONSELF_EVENTS )
 #define ESCHER_SYS_MAX_XTUML_TIMERS 0
 #define ESCHER_SYS_MAX_INTERLEAVED_BRIDGES 0
@@ -305,8 +305,7 @@ void Escher_SendSelfEvent( Escher_xtUMLEvent_t * );
  */
 
 
-#define ESCHER_TASKING_POSIX 1
-#define NUM_OF_XTUML_CLASS_THREADS 4
+#define NUM_OF_XTUML_CLASS_THREADS 1
 #define NUM_OF_TOTAL_THREADS NUM_OF_XTUML_CLASS_THREADS
 #define SEMAPHORE_FLAVOR_IQUEUE    0
 #define SEMAPHORE_FLAVOR_SQUEUE    1

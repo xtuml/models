@@ -6,7 +6,7 @@
  *
  * External Entity:  Logging (LOG)
  * 
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #ifndef LOG_BRIDGE_H
