@@ -4,7 +4,7 @@
  * UML Component Port Messages
  * Component/Module Name:  c2
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"
@@ -20,9 +20,9 @@
  * To Provider Message:  s1
  */
 void
-c2_catch_s1( i_t p_sp1)
+c2_catch_s1( const i_t p_sp1)
 {
-COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 0, 0, p_sp1 );
+  COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 0, 0, p_sp1 );
   { c2_TAC_A_CBevent1 * e = (c2_TAC_A_CBevent1 *) Escher_NewxtUMLEvent( (void *) 0, &c2_TAC_A_CBevent1c );
     e->p_sp1 = p_sp1;
     Escher_SendEvent( (Escher_xtUMLEvent_t *) e );
@@ -38,7 +38,7 @@ COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 0, 0, p_sp1 );
 void
 c2_catch_s2()
 {
-COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 0, 1 );
+  COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 0, 1 );
 }
 
 /*
@@ -47,9 +47,9 @@ COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 0, 1 );
  * To Provider Message:  o2
  */
 i_t
-c2_burn_o2( i_t p_op2)
+c2_burn_o2( const i_t p_op2)
 {
-COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 1, 0, p_op2 );
+  COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 1, 0, p_op2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; i_t p; 
   /* ASSIGN s = 'tac burn' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'tac burn'" );
@@ -85,7 +85,7 @@ COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 1, 0, p_op2 );
 void
 c2_burn_o3()
 {
-COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 1, 1 );
+  COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 1, 1 );
 }
 
 /*
@@ -96,7 +96,7 @@ COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 1, 1 );
 i_t
 c2_burn_o4()
 {
-COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 1, 2 );
+  COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 1, 2 );
   /* RETURN 999 */
   XTUML_OAL_STMT_TRACE( 1, "RETURN 999" );
   return 999;
@@ -108,9 +108,9 @@ COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 1, 2 );
  * To Provider Message:  s1
  */
 void
-c2_toss_s1( i_t p_sp1)
+c2_toss_s1( const i_t p_sp1)
 {
-COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 2, 0, p_sp1 );
+  COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 2, 0, p_sp1 );
   c3_catch_s1(  p_sp1 );
 }
 
@@ -122,7 +122,7 @@ COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 2, 0, p_sp1 );
 void
 c2_toss_s2()
 {
-COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 2, 1 );
+  COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 2, 1 );
   c3_catch_s2();
 }
 
@@ -132,9 +132,9 @@ COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 2, 1 );
  * To Provider Message:  o2
  */
 i_t
-c2_lase_o2( i_t p_op2)
+c2_lase_o2( const i_t p_op2)
 {
-COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 3, 0, p_op2 );
+  COMP_MSG_START_TRACE( "%d", c2_DOMAIN_ID, 3, 0, p_op2 );
 return   c1_burn_o2(  p_op2 );
 }
 
@@ -146,7 +146,7 @@ return   c1_burn_o2(  p_op2 );
 void
 c2_lase_o3()
 {
-COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 3, 1 );
+  COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 3, 1 );
   c1_burn_o3();
 }
 
@@ -158,7 +158,7 @@ COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 3, 1 );
 i_t
 c2_lase_o4()
 {
-COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 3, 2 );
+  COMP_MSG_START_TRACE( "", c2_DOMAIN_ID, 3, 2 );
 return   c1_burn_o4();
 }
 

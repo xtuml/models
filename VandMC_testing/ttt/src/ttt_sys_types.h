@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------
  * File:  ttt_sys_types.h
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *
  *
  * System Name:  
@@ -28,9 +28,9 @@
  * PersistLinkCacheDepth:  128
  *
  * Component Name:  c1
- * MaxObjExtent:  0
+ * MaxObjExtent:  20
  * MaxRelExtent:  0
- * MaxSelectExtent:  0
+ * MaxSelectExtent:  10
  * MaxSelfEvents:  0
  * MaxNonSelfEvents:  2
  * MaxPriorityEvents:  0
@@ -44,7 +44,7 @@
  * Component Name:  c2
  * MaxObjExtent:  10
  * MaxRelExtent:  0
- * MaxSelectExtent:  0
+ * MaxSelectExtent:  10
  * MaxSelfEvents:  0
  * MaxNonSelfEvents:  2
  * MaxPriorityEvents:  0
@@ -58,7 +58,7 @@
  * Component Name:  c3
  * MaxObjExtent:  10
  * MaxRelExtent:  0
- * MaxSelectExtent:  0
+ * MaxSelectExtent:  10
  * MaxSelfEvents:  0
  * MaxNonSelfEvents:  2
  * MaxPriorityEvents:  0
@@ -110,10 +110,10 @@ typedef unsigned char bool;
 #define ESCHER_PERSIST_INST_CACHE_DEPTH 128
 #define ESCHER_PERSIST_LINK_CACHE_DEPTH 128
 #define ESCHER_SYS_MAX_ASSOCIATION_EXTENT 0
-#define ESCHER_SYS_MAX_TRANSIENT_EXTENT 0
+#define ESCHER_SYS_MAX_TRANSIENT_EXTENT 30
 #define SYS_MAX_CONTAINERS ( ESCHER_SYS_MAX_ASSOCIATION_EXTENT + ESCHER_SYS_MAX_TRANSIENT_EXTENT )
 #define ESCHER_SYS_MAX_SELF_EVENTS 0
-#define ESCHER_SYS_MAX_NONSELF_EVENTS 11
+#define ESCHER_SYS_MAX_NONSELF_EVENTS 7
 #define ESCHER_SYS_MAX_XTUML_EVENTS ( ESCHER_SYS_MAX_SELF_EVENTS + ESCHER_SYS_MAX_NONSELF_EVENTS )
 #define ESCHER_SYS_MAX_XTUML_TIMERS 0
 #define ESCHER_SYS_MAX_INTERLEAVED_BRIDGES 0
@@ -305,8 +305,7 @@ void Escher_SendSelfEvent( Escher_xtUMLEvent_t * );
  */
 
 
-#define ESCHER_TASKING_POSIX 1
-#define NUM_OF_XTUML_CLASS_THREADS 4
+#define NUM_OF_XTUML_CLASS_THREADS 1
 #define NUM_OF_TOTAL_THREADS NUM_OF_XTUML_CLASS_THREADS
 #define SEMAPHORE_FLAVOR_IQUEUE    0
 #define SEMAPHORE_FLAVOR_SQUEUE    1

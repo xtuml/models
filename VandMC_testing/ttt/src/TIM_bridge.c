@@ -29,7 +29,7 @@
  * asynchronously based upon the duration of the next most pending
  * timer.
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *-------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"
@@ -381,9 +381,6 @@ timer_start(
 )
 {
   ETimer_t * t;
-  #ifdef ESCHER_TASKING_POSIX
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_TIMER );
-  #endif
   t = inanimate;
   if ( t != 0 ) {
     inanimate = inanimate->next;
@@ -396,10 +393,6 @@ timer_start(
     t->expiration = ETimer_msec_time() + duration + 1UL;
     timer_insert_sorted( t );
   }
-  #ifdef ESCHER_TASKING_POSIX
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_TIMER );
-  Escher_nonbusy_wake( 0 ); /* Wake default task to service timers.  */
-  #endif
   return ( t );
 }
 
@@ -481,19 +474,14 @@ timer_cancel(
   ETimer_t * const t
 )
 {
-  bool rc = false;
-  #ifdef ESCHER_TASKING_POSIX
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_TIMER );
-  #endif
-  if ( timer_find_and_delete( t ) == true ) {
-    if ( t->event != 0 ) {
-      Escher_DeletextUMLEvent( t->event );
-      rc = true;
+  bool rc; Escher_xtUMLEvent_t * e;
+  rc = timer_find_and_delete( t );
+  e = t->event;
+  if ( true == rc ) {
+    if ( 0 != e ) {
+      Escher_DeletextUMLEvent( e );
     }
   }
-  #ifdef ESCHER_TASKING_POSIX
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_TIMER );
-  #endif
   return ( rc );
 }
 
@@ -540,46 +528,6 @@ ETimer_msec_time( void )
 
 
 
-/*=====================================================================
- * Return remaining duration in timespec format.
- *===================================================================*/
-void *
-TIM_duration_until_next_timer_pop( void * ts_in )
-{
-  struct timespec * ts = ( struct timespec * ) ts_in;
-#if ESCHER_SYS_MAX_XTUML_TIMERS > 0
-  ETimer_time_t t = 0UL;
-  #ifdef ESCHER_TASKING_POSIX
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_TIMER );
-  #endif
-  if ( animate != 0 ) {
-    t = animate->expiration;
-  }
-  #ifdef ESCHER_TASKING_POSIX
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_TIMER );
-  #endif
-  if ( t == 0 ) {
-    ts = 0;   /* Return zero to indicate no timers ticking.  */
-  } else {
-    ETimer_time_t tnow = ETimer_msec_time();
-    ts->tv_sec = systyme.time;      /* Load current time.  */
-    ts->tv_nsec = systyme.millitm;  /* Stay milliseconds for now.  */
-    if ( t > tnow ) {
-      t -= tnow;
-      ts->tv_sec += t / 1000;       /* Add the interval.   */
-      ts->tv_nsec += t % 1000;
-      if ( ts->tv_nsec >= 1000 ) {
-        ts->tv_sec++; ts->tv_nsec -= 1000;
-      }
-    }
-    ts->tv_nsec *= 1000;            /* Now convert to nanoseconds.  */
-  }
-#else
-  ts = 0;   /* Return zero to indicate no timers (ticking).  */
-#endif   /* if ESCHER_SYS_MAX_XTUML_TIMERS > 0 */
-  return ts;
-}
-
 /*---------------------------------------------------------------------
  * Initialize the tick mechanism and the timer instances.
  *-------------------------------------------------------------------*/
@@ -615,17 +563,11 @@ TIM_tick( void )
   /*-----------------------------------------------------------------*/
   /* Check to see if there are timers in the ticking timers list.    */
   /*-----------------------------------------------------------------*/
-  #ifdef ESCHER_TASKING_POSIX
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_TIMER );
-  #endif
   if ( animate != 0 ) {
     if ( animate->expiration <= ETimer_msec_time() ) {
       timer_fire( animate );
     }
   }
-  #ifdef ESCHER_TASKING_POSIX
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_TIMER );
-  #endif
 #endif   /* if ESCHER_SYS_MAX_XTUML_TIMERS > 0 */
 }
 

@@ -4,7 +4,7 @@
  * Class:       a  (TAC_A)
  * Component:   c2
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #ifndef C2_TAC_A_CLASS_H
