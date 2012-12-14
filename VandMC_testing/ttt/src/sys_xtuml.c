@@ -2,7 +2,7 @@
  * File:  sys_xtuml.c
  *
  * Description:
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"
@@ -65,10 +65,8 @@ Escher_ClearSet( Escher_ObjectSet_s * set )
   if ( set->head != 0 ) {                                    /* empty set  */
     Escher_SetElement_s * slot;
     for ( slot = set->head; ( slot->next != 0 ); slot = slot->next ); /* Find end.  */
-    Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
     slot->next = node1_FreeList.head;     /* Tie string to free list.      */
     node1_FreeList.head = set->head;      /* Point free list to head.      */
-    Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
     Escher_InitSet( set );                /* Zero set out.  */
   }
 }
@@ -85,7 +83,6 @@ Escher_SetInsertElement(
 )
 {
   Escher_SetElement_s * slot;
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
   if ( 0 == node1_FreeList.head ) {
     Escher_SetElement_s * new_mem = ( Escher_SetElement_s *) Escher_malloc( 10 * sizeof( Escher_SetElement_s ) );
 
@@ -107,7 +104,6 @@ Escher_SetInsertElement(
     slot->next = set->head;     /* Insert substance at list front.   */
     set->head = slot;
   }
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
 }
 
 /*
@@ -191,10 +187,8 @@ Escher_SetRemoveElement(
     t = Escher_SetRemoveNode( set, d );
     /* Return node to architecture collection (free list).             */
     if ( t != 0 ) {
-      Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
       t->next = node1_FreeList.head;
       node1_FreeList.head = t;
-      Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
     }
   }
 }
@@ -430,7 +424,6 @@ Escher_CreateInstance(
   Escher_SetElement_s * node;
   Escher_iHandle_t instance;
   Escher_Extent_t * dci = *(domain_class_info[ domain_num ] + class_num);
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
   node = dci->inactive.head;
 
   if ( 0 == node ) {
@@ -451,7 +444,6 @@ Escher_CreateInstance(
   instance = (Escher_iHandle_t) node->object;
   instance->current_state = dci->initial_state;
   Escher_SetInsertInstance( &dci->active, node );
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
   return instance;
 }
 
@@ -467,13 +459,11 @@ Escher_DeleteInstance(
 {
   Escher_SetElement_s * node;
   Escher_Extent_t * dci = *(domain_class_info[ domain_num ] + class_num);
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
   node = Escher_SetRemoveNode( &dci->active, instance );
   node->next = dci->inactive.head;
   dci->inactive.head = node;
   /* Initialize storage to zero.  */
   Escher_memset( instance, 0, dci->size );
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
 }
 
 
@@ -503,21 +493,6 @@ Escher_ClassFactoryInit(
 
 
 bool Escher_run_flag = true; /* Turn this off to exit dispatch loop(s).  */
-/* Map the classes to the tasks/threads for each domain.  */
-static const Escher_ClassNumber_t c1_task_numbers[ c1_STATE_MODELS ] = {
-  c1_TASK_NUMBERS
-};
-static const Escher_ClassNumber_t c2_task_numbers[ c2_STATE_MODELS ] = {
-  c2_TASK_NUMBERS
-};
-static const Escher_ClassNumber_t c3_task_numbers[ c3_STATE_MODELS ] = {
-  c3_TASK_NUMBERS
-};
-static const Escher_ClassNumber_t * const class_thread_assignment[ SYSTEM_DOMAIN_COUNT ] = {
-  &c1_task_numbers[0],
-  &c2_task_numbers[0],
-  &c3_task_numbers[0]
-};
 
 /* Structure:  Escher_systemxtUMLevents
  * _Super-union_ of all xtUML events in the system. For translation
@@ -551,9 +526,7 @@ InitializeOoaEventPool( void )
   static Escher_systemxtUMLevents_t Escher_xtUML_event_pool[ ESCHER_SYS_MAX_XTUML_EVENTS ];
   u2_t i;
   Escher_run_flag = true; /* Default running enabled.  */
-  for ( i = 0; i < NUM_OF_XTUML_CLASS_THREADS; i++ ) {
-    non_self_event_queue[ i ].head = 0; non_self_event_queue[ i ].tail = 0;
-  }
+  non_self_event_queue[ 0 ].head = 0; non_self_event_queue[ 0 ].tail = 0;
   /* String events together into a singly linked list. */
   free_event_list = (Escher_xtUMLEvent_t *) &Escher_xtUML_event_pool[ 0 ];
   for ( i = 0; i < ESCHER_SYS_MAX_XTUML_EVENTS - 1; i++ ) {
@@ -569,7 +542,6 @@ InitializeOoaEventPool( void )
 Escher_xtUMLEvent_t * Escher_AllocatextUMLEvent( void )
 {
   Escher_xtUMLEvent_t * event = 0;
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_FREELIST );
   if ( free_event_list == 0 ) {
     Escher_xtUMLEvent_t * new_mem = (Escher_xtUMLEvent_t *) Escher_malloc( 10 * sizeof( Escher_systemxtUMLevents_t ) );
 
@@ -588,7 +560,6 @@ Escher_xtUMLEvent_t * Escher_AllocatextUMLEvent( void )
     event = free_event_list;       /* Grab front of the free list.  */
     free_event_list = event->next; /* Unlink from front of free list.  */
   }
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_FREELIST );
   return event;
 }
 
@@ -628,10 +599,8 @@ Escher_ModifyxtUMLEvent( Escher_xtUMLEvent_t * event,
 void
 Escher_DeletextUMLEvent( Escher_xtUMLEvent_t * event )
 {
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_FREELIST );
   event->next = free_event_list;
   free_event_list = event;
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_FREELIST );
 }
 
 /*
@@ -652,21 +621,16 @@ Escher_DeletextUMLEvent( Escher_xtUMLEvent_t * event )
 void
 Escher_SendEvent( Escher_xtUMLEvent_t * event )
 {
-  u1_t t = *( class_thread_assignment[ GetEventDestDomainNumber( event ) ]
-    + GetEventDestObjectNumber( event ) );
-  xtUMLEventQueue_t * q = &non_self_event_queue[ t ];
+  xtUMLEventQueue_t * q = &non_self_event_queue[ 0 ];
   event->next = 0;
   /* Append the event to the tail end of the queue.  */
   /* No need to maintain prev pointers when not prioritizing.  */
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_IQUEUE );
   if ( q->tail == 0 ) {
     q->head = event;
   } else {
     q->tail->next = event;
   }
   q->tail = event;
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_IQUEUE );
-  Escher_nonbusy_wake( t );
 }
 
 /*
@@ -675,12 +639,11 @@ Escher_SendEvent( Escher_xtUMLEvent_t * event )
  * indicates that the queue is empty.  Otherwise the handle to the
  * event will be returned.
  */
-static Escher_xtUMLEvent_t * DequeueOoaNonSelfEvent( const u1_t );
-static Escher_xtUMLEvent_t * DequeueOoaNonSelfEvent( const u1_t t )
+static Escher_xtUMLEvent_t * DequeueOoaNonSelfEvent( void );
+static Escher_xtUMLEvent_t * DequeueOoaNonSelfEvent( void )
 {
   Escher_xtUMLEvent_t * event;
-  xtUMLEventQueue_t * q = &non_self_event_queue[ t ];
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_IQUEUE );
+  xtUMLEventQueue_t * q = &non_self_event_queue[ 0 ];
   /* Assign the event from the head of the queue.  */
   event = q->head;
   /* If the list is not empty, bump the head.  */
@@ -693,14 +656,13 @@ static Escher_xtUMLEvent_t * DequeueOoaNonSelfEvent( const u1_t t )
   } else {
     UserNonSelfEventQueueEmptyCallout();
   }
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_IQUEUE );
   return event;
 }
 /*
  * Loop on the event queues dispatching events for this thread.
  */
-static void * ooa_loop( void * );
-static void * ooa_loop( void * thread )
+static void ooa_loop( void );
+static void ooa_loop( void )
 {
   /* class dispatch table
    */
@@ -711,21 +673,16 @@ static void * ooa_loop( void * thread )
       c3_EventDispatcher,
     };
   Escher_xtUMLEvent_t * event;
-  u1_t t = *( (u1_t *) thread );
   /* Start consuming events and dispatching background processes.  */
   while ( true == Escher_run_flag ) {
-    event = DequeueOoaNonSelfEvent(t); /* Instance next.  */
+    event = DequeueOoaNonSelfEvent(); /* Instance next.  */
     if ( 0 != event ) {
       ( *( DomainClassDispatcherTable[ GetEventDestDomainNumber( event ) ] )[ GetEventDestObjectNumber( event ) ] )( event );
       Escher_DeletextUMLEvent( event );
     } else {
-      Escher_nonbusy_wait( t );
     }
-    if ( t == 0 ) {   /* Is this the default task/thread?  */
-      UserBackgroundProcessingCallout();
-    }
+    UserBackgroundProcessingCallout();
   }
-  return 0;
 }
 
 /*
@@ -733,12 +690,5 @@ static void * ooa_loop( void * thread )
  */
 void Escher_xtUML_run( void )
 {
-  void * vp;
-  u1_t i;
-  /* Create threads in reverse order saving thread 0 for default.  */
-  for ( i = NUM_OF_XTUML_CLASS_THREADS - 1; i > 0; i-- ) {
-    Escher_thread_create( ooa_loop, i );
-  }
-  i = 0;
-  vp = ooa_loop( (void *) &i );
+  ooa_loop();
 }

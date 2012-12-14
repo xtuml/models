@@ -2,7 +2,7 @@
  * File:  ttt_sys_main.c
  *
  * Description:  main, system initialization (and idle loop)
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"
@@ -47,7 +47,6 @@ main( int argc, char ** argv )
 {
   UserInitializationCallout();
   Escher_SetFactoryInit( SYS_MAX_CONTAINERS );
-  Escher_InitializeThreading();
   InitializeOoaEventPool();
   ApplicationLevelInitialization();
   UserPreOoaInitializationCallout();
@@ -58,6 +57,5 @@ main( int argc, char ** argv )
   Escher_xtUML_run(); /* This is the primary event dispatch loop.  */
   UserPreShutdownCallout();
   UserPostShutdownCallout();
-  Escher_thread_shutdown();
   return 0;
 }

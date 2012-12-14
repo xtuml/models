@@ -4,7 +4,7 @@
  * Class:       ping  (PING)
  * Component:   c1
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #ifndef C1_PING_CLASS_H

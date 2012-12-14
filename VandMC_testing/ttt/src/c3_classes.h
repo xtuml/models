@@ -4,7 +4,7 @@
  * This file defines the object type identification numbers for all classes
  * in the component:  c3
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #ifndef C3_CLASSES_H

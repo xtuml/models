@@ -4,7 +4,7 @@
  * Class:       pong  (PONG)
  * Component:   c1
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #ifndef C1_PONG_CLASS_H

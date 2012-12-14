@@ -6,7 +6,7 @@
  *
  * External Entity:  Architecture (ARCH)
  * 
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"

@@ -4,7 +4,7 @@
  * Class:       a  (TOE_A)
  * Component:   c3
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * 
  *--------------------------------------------------------------------------*/
 
 #include "ttt_sys_types.h"
