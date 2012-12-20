@@ -336,10 +336,13 @@ void Escher_thread_shutdown( void );
 #define SYSTEM_DOMAIN_COUNT 3
 /* xtUML domain identification numbers */
 #define c1_DOMAIN_ID 0
+#define c1_DOMAIN_ID_text "c1"
 #include "c1_classes.h"
 #define c2_DOMAIN_ID 1
+#define c2_DOMAIN_ID_text "c2"
 #include "c2_classes.h"
 #define c3_DOMAIN_ID 2
+#define c3_DOMAIN_ID_text "c3"
 #include "c3_classes.h"
 
 /*----------------------------------------------------------------------------
