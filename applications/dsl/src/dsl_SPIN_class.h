@@ -4,7 +4,7 @@
  * Class:       spin  (SPIN)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_SPIN_CLASS_H
@@ -21,15 +21,15 @@ extern	"C"	{
 struct dsl_SPIN {
 
   /* application analysis class attributes */
-  i_t RPM;  /* - RPM */
+  /* - RPM */  /* OPTIMIZED OUT */
 
   /* relationship storage */
   dsl_STEP * STEP_R11;
 };
-i_t dsl_SPIN_op_load(  dsl_PROGRAM *, dsl_STEP * );
+i_t dsl_SPIN_op_load(  const dsl_PROGRAM *, const dsl_STEP * );
 bool dsl_SPIN_op_run( dsl_SPIN * );
 
-void dsl_SPIN_R11_Link( dsl_STEP *, dsl_SPIN * );
+/* Note:  STEP<-R11->SPIN never related (or note needed).  */
 /* Note:  No STEP<-R11->SPIN unrelate accessor needed.  */
 
 

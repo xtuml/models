@@ -4,34 +4,18 @@
  * Class:       spin reverse  (SPINREVERSE)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "dsl_sys_types.h"
-#include "ARCH_bridge.h"
-#include "LOG_bridge.h"
-#include "TIM_bridge.h"
 #include "dsl_classes.h"
 
 /*
  * class operation:  load
  */
 i_t
-dsl_SPINREVERSE_op_load( dsl_PROGRAM * p_program, dsl_STEP * p_step)
+dsl_SPINREVERSE_op_load( const dsl_PROGRAM * p_program, const dsl_STEP * p_step)
 {
-  dsl_STEP * step; dsl_PROGRAM * program; dsl_SPINREVERSE * spinreverse; 
-  /* LOG::LogInfo( message:'loading stop spin' ) */
-  LOG_LogInfo( "loading stop spin" );
-  /* ASSIGN step = PARAM.step */
-  step = p_step;
-  /* ASSIGN program = PARAM.program */
-  program = p_program;
-  /* CREATE OBJECT INSTANCE spinreverse OF SPINREVERSE */
-  spinreverse = (dsl_SPINREVERSE *) Escher_CreateInstance( dsl_DOMAIN_ID, dsl_SPINREVERSE_CLASS_NUMBER );
-  /* RELATE spinreverse TO step ACROSS R11 */
-  dsl_SPINREVERSE_R11_Link( step, spinreverse );
-  /* RETURN 1 */
-  return 1;
 
 }
 
@@ -41,29 +25,7 @@ dsl_SPINREVERSE_op_load( dsl_PROGRAM * p_program, dsl_STEP * p_step)
 bool
 dsl_SPINREVERSE_op_run( dsl_SPINREVERSE * self)
 {
-  /* LOG::LogInfo( message:'reverse the spin' ) */
-  LOG_LogInfo( "reverse the spin" );
-  /* RETURN FALSE */
-  return FALSE;
 
-}
-
-
-/*
- * RELATE STEP TO SPINREVERSE ACROSS R11
- */
-void
-dsl_SPINREVERSE_R11_Link( dsl_STEP * supertype, dsl_SPINREVERSE * subtype )
-{
-  if ( (supertype == 0) || (subtype == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "SPINREVERSE", "dsl_SPINREVERSE_R11_Link" );
-    return;
-  }
-  /* Optimized linkage for SPINREVERSE->STEP[R11] */
-  subtype->STEP_R11 = supertype;
-  /* Optimized linkage for STEP->SPINREVERSE[R11] */
-  supertype->R11_subtype = subtype;
-  supertype->R11_object_id = dsl_SPINREVERSE_CLASS_NUMBER;
 }
 
 

@@ -4,7 +4,7 @@
  * This file defines the object type identification numbers for all classes
  * in the component:  client_application
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef CLIENT_APPLICATION_CLASSES_H
@@ -46,9 +46,6 @@ extern void client_application_test1( void );
 
 
 
-#include "ARCH_bridge.h"
-#include "LOG_bridge.h"
-#include "TIM_bridge.h"
 #include "client_application.h"
 
 

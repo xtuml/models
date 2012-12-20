@@ -6,7 +6,6 @@
  *
  * External Entity:  Logging (LOG)
  * 
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
  *--------------------------------------------------------------------------*/
 
 #include "dsl_sys_types.h"

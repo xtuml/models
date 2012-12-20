@@ -2,7 +2,7 @@
  * File:  sys_xtuml.c
  *
  * Description:
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "dsl_sys_types.h"
@@ -10,11 +10,7 @@
 #include "client_application_classes.h"
 
 
-/*
- * Allocate the storage for the pool of container nodes.
- */
-static Escher_ObjectSet_s node1_FreeList;
-static Escher_SetElement_s node1s[ SYS_MAX_CONTAINERS ];
+/* No containers allocated.  */
 
 /*
  * Initialize the node1 instances by linking them into a collection.
@@ -25,14 +21,7 @@ static Escher_SetElement_s node1s[ SYS_MAX_CONTAINERS ];
 void
 Escher_SetFactoryInit( const i_t n1_size )
 {
-  u2_t i;
-  node1_FreeList.head = &node1s[ 0 ];
-  /* Build the collection (linked list) of node1 instances.  */
-  for ( i = 0; i < ( n1_size - 1 ); i++ ) {
-    node1s[ i ].next = &node1s[ i + 1 ];
-    node1s[ i ].object = 0;
-  }
-  node1s[ n1_size - 1 ].next = 0;
+  /* Set factory initialization optimized out.  */
 }
 
 /*
@@ -41,57 +30,19 @@ Escher_SetFactoryInit( const i_t n1_size )
  * before the copy operation occurs freeing any nodes in that set.
  * The new set will use containoids from the free list.
  */
-void 
-Escher_CopySet( Escher_ObjectSet_s * to_set,
-                Escher_ObjectSet_s * const from_set )
-{
-  const Escher_SetElement_s * slot;
-
-  /* May be copying into an existing set, release target collection nodes.  */
-  Escher_ClearSet( to_set );
-
-  for ( slot = from_set->head; ( slot != 0 ); slot = slot->next ) {
-    Escher_SetInsertElement( to_set, slot->object ); 
-  }
-}
+/* Set copy code optimized out.  */
 
 /*
  * Release all nodes in the given set back to the free pool.
  */
-void
-Escher_ClearSet( Escher_ObjectSet_s * set )
-{
-  if ( set->head != 0 ) {                                    /* empty set  */
-    Escher_SetElement_s * slot;
-    for ( slot = set->head; ( slot->next != 0 ); slot = slot->next ); /* Find end.  */
-    slot->next = node1_FreeList.head;     /* Tie string to free list.      */
-    node1_FreeList.head = set->head;      /* Point free list to head.      */
-    Escher_InitSet( set );                /* Zero set out.  */
-  }
-}
+/* Set clearing code optimized out.  */
 
 /*
  * Insert a single element into the set in no particular order.
  * The element is a data item.  A container node will be allocated
  * to link in the element.
  */
-void
-Escher_SetInsertElement(
-  Escher_ObjectSet_s * set,
-  void * const substance
-)
-{
-  Escher_SetElement_s * slot;
-  if ( 0 == node1_FreeList.head ) {
-    UserNodeListEmptyCallout(); /* Bad news!  No more nodes.         */
-  } else {
-    slot = node1_FreeList.head; /* Extract node from free list head. */
-    node1_FreeList.head = node1_FreeList.head->next;
-    slot->object = substance;
-    slot->next = set->head;     /* Insert substance at list front.   */
-    set->head = slot;
-  }
-}
+/* Set insertion code optimized out.  */
 
 /*
  * Insert a block of objects into the given set in sequence.  Link the
@@ -163,22 +114,7 @@ Escher_SetRemoveNode(
  * used when some knowledge of the linking mechanism is required (as
  * in extent management).
  */
-void
-Escher_SetRemoveElement(
-  Escher_ObjectSet_s * set,
-  const void * const d
-)
-{
-  Escher_SetElement_s * t;
-  if ( set->head != 0 ) {                     /* empty set */
-    t = Escher_SetRemoveNode( set, d );
-    /* Return node to architecture collection (free list).             */
-    if ( t != 0 ) {
-      t->next = node1_FreeList.head;
-      node1_FreeList.head = t;
-    }
-  }
-}
+/* Set remove element code optimized out.  */
 
 /*
  * Return a pointer to the found element when the set contains the 
@@ -464,7 +400,6 @@ typedef struct {
 /* Pointer to head of list of available event nodes.  */
 static Escher_xtUMLEvent_t * free_event_list = 0;
 static xtUMLEventQueue_t non_self_event_queue[ NUM_OF_XTUML_CLASS_THREADS ];
-static xtUMLEventQueue_t self_event_queue[ NUM_OF_XTUML_CLASS_THREADS ];
 
 /*
  * Link the event skeleton nodes together on the free list ready
@@ -478,7 +413,6 @@ InitializeOoaEventPool( void )
   u2_t i;
   Escher_run_flag = true; /* Default running enabled.  */
   non_self_event_queue[ 0 ].head = 0; non_self_event_queue[ 0 ].tail = 0;
-  self_event_queue[ 0 ].head = 0; self_event_queue[ 0 ].tail = 0;
   /* String events together into a singly linked list. */
   free_event_list = (Escher_xtUMLEvent_t *) &Escher_xtUML_event_pool[ 0 ];
   for ( i = 0; i < ESCHER_SYS_MAX_XTUML_EVENTS - 1; i++ ) {
@@ -598,52 +532,6 @@ static Escher_xtUMLEvent_t * DequeueOoaNonSelfEvent( void )
   }
   return event;
 }
-
-/*
- * Send an event on the self queue.  No prioritization occurs on
- * this queue.
- */
-void
-Escher_SendSelfEvent( Escher_xtUMLEvent_t * event )
-{
-  xtUMLEventQueue_t * q = &self_event_queue[ 0 ];
-  event->next = 0;
-  /* Append the event to the tail end of the queue.  */
-  /* No need to maintain prev pointers for self directed events.  */
-  if ( q->tail == 0 ) {
-    q->head = event;
-  } else {
-    q->tail->next = event;
-  }
-  q->tail = event;
-}
-
-/*
- * Drag an event from the self queue if there is one.  This routine
- * also serves as the IsQueueEmpty routine.  A null return code 
- * indicates that the queue is empty.  Otherwise the handle to the
- * event will be returned.
- */
-static Escher_xtUMLEvent_t * DequeueOoaSelfEvent( void );
-static Escher_xtUMLEvent_t * DequeueOoaSelfEvent( void )
-{
-  Escher_xtUMLEvent_t * event;
-  xtUMLEventQueue_t * q = &self_event_queue[ 0 ];
-  /* Assign the event from the head of the queue.  */
-  event = q->head;
-  /* If the list is not empty, bump the head.  */
-  if ( event != 0 ) {
-    q->head = event->next;               /* bump */
-    /* If empty, nullify tail.  No need to maintain prev pointers
-       for the self queue.  They are not used.  */
-    if ( q->head == 0 ) {
-      q->tail = 0;
-    }
-  } else {
-    UserSelfEventQueueEmptyCallout();
-  }
-  return event;
-}
 /*
  * Loop on the event queues dispatching events for this thread.
  */
@@ -660,10 +548,7 @@ static void ooa_loop( void )
   Escher_xtUMLEvent_t * event;
   /* Start consuming events and dispatching background processes.  */
   while ( true == Escher_run_flag ) {
-    event = DequeueOoaSelfEvent(); /* Self first.  */
-    if ( 0 == event ) {
-      event = DequeueOoaNonSelfEvent(); /* Instance next.  */
-    }
+    event = DequeueOoaNonSelfEvent(); /* Instance next.  */
     if ( 0 != event ) {
       ( *( DomainClassDispatcherTable[ GetEventDestDomainNumber( event ) ] )[ GetEventDestObjectNumber( event ) ] )( event );
       Escher_DeletextUMLEvent( event );

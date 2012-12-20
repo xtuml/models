@@ -4,7 +4,7 @@
  * Class:       cook stop  (COOKSTOP)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_COOKSTOP_CLASS_H
@@ -25,10 +25,10 @@ struct dsl_COOKSTOP {
   /* relationship storage */
   dsl_STEP * STEP_R11;
 };
-i_t dsl_COOKSTOP_op_load(  dsl_PROGRAM *, dsl_STEP * );
+i_t dsl_COOKSTOP_op_load(  const dsl_PROGRAM *, const dsl_STEP * );
 bool dsl_COOKSTOP_op_run( dsl_COOKSTOP * );
 
-void dsl_COOKSTOP_R11_Link( dsl_STEP *, dsl_COOKSTOP * );
+/* Note:  STEP<-R11->COOKSTOP never related (or note needed).  */
 /* Note:  No STEP<-R11->COOKSTOP unrelate accessor needed.  */
 
 

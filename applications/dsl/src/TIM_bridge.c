@@ -29,7 +29,7 @@
  * asynchronously based upon the duration of the next most pending
  * timer.
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *-------------------------------------------------------------------*/
 
 #include "dsl_sys_types.h"
@@ -474,11 +474,12 @@ timer_cancel(
   ETimer_t * const t
 )
 {
-  bool rc = false;
-  if ( timer_find_and_delete( t ) == true ) {
-    if ( t->event != 0 ) {
-      Escher_DeletextUMLEvent( t->event );
-      rc = true;
+  bool rc; Escher_xtUMLEvent_t * e;
+  rc = timer_find_and_delete( t );
+  e = t->event;
+  if ( true == rc ) {
+    if ( 0 != e ) {
+      Escher_DeletextUMLEvent( e );
     }
   }
   return ( rc );

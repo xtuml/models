@@ -4,7 +4,7 @@
  * Class:       needle down  (NEEDLEDOWN)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_NEEDLEDOWN_CLASS_H
@@ -25,10 +25,10 @@ struct dsl_NEEDLEDOWN {
   /* relationship storage */
   dsl_ASCMD * ASCMD_R31;
 };
-i_t dsl_NEEDLEDOWN_op_load(  dsl_ASCMD *, dsl_PROGRAM * );
+i_t dsl_NEEDLEDOWN_op_load(  const dsl_ASCMD *, const dsl_PROGRAM * );
 bool dsl_NEEDLEDOWN_op_run( dsl_NEEDLEDOWN * );
 
-void dsl_NEEDLEDOWN_R31_Link( dsl_ASCMD *, dsl_NEEDLEDOWN * );
+/* Note:  ASCMD<-R31->NEEDLEDOWN never related (or note needed).  */
 /* Note:  No ASCMD<-R31->NEEDLEDOWN unrelate accessor needed.  */
 
 

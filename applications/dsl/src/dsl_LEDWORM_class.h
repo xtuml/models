@@ -4,7 +4,7 @@
  * Class:       worm around  (LEDWORM)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_LEDWORM_CLASS_H
@@ -21,15 +21,15 @@ extern	"C"	{
 struct dsl_LEDWORM {
 
   /* application analysis class attributes */
-  i_t direction;  /* - direction */
+  /* - direction */  /* OPTIMIZED OUT */
 
   /* relationship storage */
   dsl_LEDCMD * LEDCMD_R21;
 };
-i_t dsl_LEDWORM_op_load(  dsl_LEDCMD *, dsl_PROGRAM * );
+i_t dsl_LEDWORM_op_load(  const dsl_LEDCMD *, const dsl_PROGRAM * );
 bool dsl_LEDWORM_op_run( dsl_LEDWORM * );
 
-void dsl_LEDWORM_R21_Link( dsl_LEDCMD *, dsl_LEDWORM * );
+/* Note:  LEDCMD<-R21->LEDWORM never related (or note needed).  */
 /* Note:  No LEDCMD<-R21->LEDWORM unrelate accessor needed.  */
 
 

@@ -13,7 +13,7 @@
  * additional functionality (if necessary) to be performed at these
  * callout points.
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "dsl_sys_types.h"

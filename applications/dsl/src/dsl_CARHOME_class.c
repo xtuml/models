@@ -4,32 +4,18 @@
  * Class:       carousel home  (CARHOME)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "dsl_sys_types.h"
-#include "ARCH_bridge.h"
-#include "LOG_bridge.h"
-#include "TIM_bridge.h"
 #include "dsl_classes.h"
 
 /*
  * class operation:  load
  */
 i_t
-dsl_CARHOME_op_load( dsl_ASCMD * p_ascmd, dsl_PROGRAM * p_program)
+dsl_CARHOME_op_load( const dsl_ASCMD * p_ascmd, const dsl_PROGRAM * p_program)
 {
-  dsl_ASCMD * ascmd; dsl_CARHOME * carhome; 
-  /* LOG::LogInfo( message:'loading carousel home' ) */
-  LOG_LogInfo( "loading carousel home" );
-  /* ASSIGN ascmd = PARAM.ascmd */
-  ascmd = p_ascmd;
-  /* CREATE OBJECT INSTANCE carhome OF CARHOME */
-  carhome = (dsl_CARHOME *) Escher_CreateInstance( dsl_DOMAIN_ID, dsl_CARHOME_CLASS_NUMBER );
-  /* RELATE carhome TO ascmd ACROSS R31 */
-  dsl_CARHOME_R31_Link( ascmd, carhome );
-  /* RETURN 1 */
-  return 1;
 
 }
 
@@ -39,35 +25,7 @@ dsl_CARHOME_op_load( dsl_ASCMD * p_ascmd, dsl_PROGRAM * p_program)
 bool
 dsl_CARHOME_op_run( dsl_CARHOME * self)
 {
-  dsl_ASCMD * ascmd = 0; /* ascmd (ASCMD) */
- 
-  /* LOG::LogInfo( message:'carousel home' ) */
-  LOG_LogInfo( "carousel home" );
-  /* SELECT one ascmd RELATED BY self->ASCMD[R31] */
-  ascmd = self->ASCMD_R31;
-  /* GENERATE ascmd.completion_event */
-  Escher_SendEvent( (Escher_xtUMLEvent_t *) ascmd->completion_event );
-  /* RETURN FALSE */
-  return FALSE;
 
-}
-
-
-/*
- * RELATE ASCMD TO CARHOME ACROSS R31
- */
-void
-dsl_CARHOME_R31_Link( dsl_ASCMD * supertype, dsl_CARHOME * subtype )
-{
-  if ( (supertype == 0) || (subtype == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "CARHOME", "dsl_CARHOME_R31_Link" );
-    return;
-  }
-  /* Optimized linkage for CARHOME->ASCMD[R31] */
-  subtype->ASCMD_R31 = supertype;
-  /* Optimized linkage for ASCMD->CARHOME[R31] */
-  supertype->R31_subtype = subtype;
-  supertype->R31_object_id = dsl_CARHOME_CLASS_NUMBER;
 }
 
 

@@ -4,7 +4,7 @@
  * Class:       delay  (DELAY)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_DELAY_CLASS_H
@@ -22,16 +22,16 @@ struct dsl_DELAY {
 
   /* application analysis class attributes */
   i_t location;  /* * location (R2) */
-  i_t milliseconds;  /* - milliseconds */
-  i_t seconds;  /* - seconds */
+  /* - milliseconds */  /* OPTIMIZED OUT */
+  /* - seconds */  /* OPTIMIZED OUT */
 
   /* relationship storage */
   dsl_INSTRUCTION * INSTRUCTION_R2;
 };
-i_t dsl_DELAY_op_load(  dsl_INSTRUCTION *, dsl_PROGRAM * );
-void dsl_DELAY_op_run( dsl_DELAY *, Escher_xtUMLEvent_t * );
+i_t dsl_DELAY_op_load(  const dsl_INSTRUCTION *, const dsl_PROGRAM * );
+void dsl_DELAY_op_run( dsl_DELAY *, const Escher_xtUMLEvent_t * );
 
-void dsl_DELAY_R2_Link( dsl_INSTRUCTION *, dsl_DELAY * );
+/* Note:  INSTRUCTION<-R2->DELAY never related (or note needed).  */
 /* Note:  No INSTRUCTION<-R2->DELAY unrelate accessor needed.  */
 
 

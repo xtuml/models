@@ -4,7 +4,7 @@
  * Class:       carousel next  (CARNEXT)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_CARNEXT_CLASS_H
@@ -25,10 +25,10 @@ struct dsl_CARNEXT {
   /* relationship storage */
   dsl_ASCMD * ASCMD_R31;
 };
-i_t dsl_CARNEXT_op_load(  dsl_ASCMD *, dsl_PROGRAM * );
+i_t dsl_CARNEXT_op_load(  const dsl_ASCMD *, const dsl_PROGRAM * );
 bool dsl_CARNEXT_op_run( dsl_CARNEXT * );
 
-void dsl_CARNEXT_R31_Link( dsl_ASCMD *, dsl_CARNEXT * );
+/* Note:  ASCMD<-R31->CARNEXT never related (or note needed).  */
 /* Note:  No ASCMD<-R31->CARNEXT unrelate accessor needed.  */
 
 

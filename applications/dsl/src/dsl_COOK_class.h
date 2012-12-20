@@ -4,7 +4,7 @@
  * Class:       cook  (COOK)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_COOK_CLASS_H
@@ -21,15 +21,15 @@ extern	"C"	{
 struct dsl_COOK {
 
   /* application analysis class attributes */
-  i_t power_level;  /* - power_level */
+  /* - power_level */  /* OPTIMIZED OUT */
 
   /* relationship storage */
   dsl_STEP * STEP_R11;
 };
-i_t dsl_COOK_op_load(  dsl_PROGRAM *, dsl_STEP * );
+i_t dsl_COOK_op_load(  const dsl_PROGRAM *, const dsl_STEP * );
 bool dsl_COOK_op_run( dsl_COOK * );
 
-void dsl_COOK_R11_Link( dsl_STEP *, dsl_COOK * );
+/* Note:  STEP<-R11->COOK never related (or note needed).  */
 /* Note:  No STEP<-R11->COOK unrelate accessor needed.  */
 
 

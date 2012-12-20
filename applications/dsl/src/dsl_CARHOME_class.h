@@ -4,7 +4,7 @@
  * Class:       carousel home  (CARHOME)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_CARHOME_CLASS_H
@@ -25,10 +25,10 @@ struct dsl_CARHOME {
   /* relationship storage */
   dsl_ASCMD * ASCMD_R31;
 };
-i_t dsl_CARHOME_op_load(  dsl_ASCMD *, dsl_PROGRAM * );
+i_t dsl_CARHOME_op_load(  const dsl_ASCMD *, const dsl_PROGRAM * );
 bool dsl_CARHOME_op_run( dsl_CARHOME * );
 
-void dsl_CARHOME_R31_Link( dsl_ASCMD *, dsl_CARHOME * );
+/* Note:  ASCMD<-R31->CARHOME never related (or note needed).  */
 /* Note:  No ASCMD<-R31->CARHOME unrelate accessor needed.  */
 
 

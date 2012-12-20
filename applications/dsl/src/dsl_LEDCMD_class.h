@@ -4,7 +4,7 @@
  * Class:       LED command  (LEDCMD)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_LEDCMD_CLASS_H
@@ -21,7 +21,7 @@ extern	"C"	{
 struct dsl_LEDCMD {
 
   /* application analysis class attributes */
-  i_t opcode;  /* - opcode */
+  /* - opcode */  /* OPTIMIZED OUT */
   i_t location;  /* * location (R2) */
 
   /* relationship storage */
@@ -29,25 +29,17 @@ struct dsl_LEDCMD {
   void * R21_subtype;
   Escher_ClassNumber_t R21_object_id;
 };
-i_t dsl_LEDCMD_op_load(  dsl_INSTRUCTION *, dsl_PROGRAM * );
-bool dsl_LEDCMD_op_run( dsl_LEDCMD *, Escher_xtUMLEvent_t * );
+i_t dsl_LEDCMD_op_load(  const dsl_INSTRUCTION *, const dsl_PROGRAM * );
+bool dsl_LEDCMD_op_run( dsl_LEDCMD *, const Escher_xtUMLEvent_t * );
 
-void dsl_LEDCMD_R2_Link( dsl_INSTRUCTION *, dsl_LEDCMD * );
+/* Note:  INSTRUCTION<-R2->LEDCMD never related (or note needed).  */
 /* Note:  No INSTRUCTION<-R2->LEDCMD unrelate accessor needed.  */
 
 /* Accessors to LEDCMD[R21] subtypes */
-#define dsl_LEDSOFF_R21_From_LEDCMD( LEDCMD ) \
-   ( (((LEDCMD)->R21_object_id) == dsl_LEDSOFF_CLASS_NUMBER) ? \
-     ((dsl_LEDSOFF *)((LEDCMD)->R21_subtype)) : (0) )
-#define dsl_LEDSON_R21_From_LEDCMD( LEDCMD ) \
-   ( (((LEDCMD)->R21_object_id) == dsl_LEDSON_CLASS_NUMBER) ? \
-     ((dsl_LEDSON *)((LEDCMD)->R21_subtype)) : (0) )
-#define dsl_LEDWALK_R21_From_LEDCMD( LEDCMD ) \
-   ( (((LEDCMD)->R21_object_id) == dsl_LEDWALK_CLASS_NUMBER) ? \
-     ((dsl_LEDWALK *)((LEDCMD)->R21_subtype)) : (0) )
-#define dsl_LEDWORM_R21_From_LEDCMD( LEDCMD ) \
-   ( (((LEDCMD)->R21_object_id) == dsl_LEDWORM_CLASS_NUMBER) ? \
-     ((dsl_LEDWORM *)((LEDCMD)->R21_subtype)) : (0) )
+/* Note:  LEDCMD->LEDSOFF[R21] not navigated */
+/* Note:  LEDCMD->LEDSON[R21] not navigated */
+/* Note:  LEDCMD->LEDWALK[R21] not navigated */
+/* Note:  LEDCMD->LEDWORM[R21] not navigated */
 
 
 

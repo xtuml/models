@@ -4,7 +4,7 @@
  * Class:       autosampler command  (ASCMD)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_ASCMD_CLASS_H
@@ -21,34 +21,26 @@ extern	"C"	{
 struct dsl_ASCMD {
 
   /* application analysis class attributes */
-  i_t opcode;  /* - opcode */
+  /* - opcode */  /* OPTIMIZED OUT */
   i_t location;  /* * location (R2) */
-  Escher_xtUMLEvent_t * completion_event;  /* - completion_event */
+  /* - completion_event */  /* OPTIMIZED OUT */
 
   /* relationship storage */
   dsl_INSTRUCTION * INSTRUCTION_R2;
   void * R31_subtype;
   Escher_ClassNumber_t R31_object_id;
 };
-i_t dsl_ASCMD_op_load(  dsl_INSTRUCTION *, dsl_PROGRAM * );
-bool dsl_ASCMD_op_run( dsl_ASCMD *, Escher_xtUMLEvent_t * );
+i_t dsl_ASCMD_op_load(  const dsl_INSTRUCTION *, const dsl_PROGRAM * );
+bool dsl_ASCMD_op_run( dsl_ASCMD *, const Escher_xtUMLEvent_t * );
 
-void dsl_ASCMD_R2_Link( dsl_INSTRUCTION *, dsl_ASCMD * );
+/* Note:  INSTRUCTION<-R2->ASCMD never related (or note needed).  */
 /* Note:  No INSTRUCTION<-R2->ASCMD unrelate accessor needed.  */
 
 /* Accessors to ASCMD[R31] subtypes */
-#define dsl_CARHOME_R31_From_ASCMD( ASCMD ) \
-   ( (((ASCMD)->R31_object_id) == dsl_CARHOME_CLASS_NUMBER) ? \
-     ((dsl_CARHOME *)((ASCMD)->R31_subtype)) : (0) )
-#define dsl_CARNEXT_R31_From_ASCMD( ASCMD ) \
-   ( (((ASCMD)->R31_object_id) == dsl_CARNEXT_CLASS_NUMBER) ? \
-     ((dsl_CARNEXT *)((ASCMD)->R31_subtype)) : (0) )
-#define dsl_NEEDLEUP_R31_From_ASCMD( ASCMD ) \
-   ( (((ASCMD)->R31_object_id) == dsl_NEEDLEUP_CLASS_NUMBER) ? \
-     ((dsl_NEEDLEUP *)((ASCMD)->R31_subtype)) : (0) )
-#define dsl_NEEDLEDOWN_R31_From_ASCMD( ASCMD ) \
-   ( (((ASCMD)->R31_object_id) == dsl_NEEDLEDOWN_CLASS_NUMBER) ? \
-     ((dsl_NEEDLEDOWN *)((ASCMD)->R31_subtype)) : (0) )
+/* Note:  ASCMD->CARHOME[R31] not navigated */
+/* Note:  ASCMD->CARNEXT[R31] not navigated */
+/* Note:  ASCMD->NEEDLEUP[R31] not navigated */
+/* Note:  ASCMD->NEEDLEDOWN[R31] not navigated */
 
 
 

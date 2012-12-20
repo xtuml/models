@@ -4,30 +4,18 @@
  * Class:       whileloop  (WHILELOOP)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "dsl_sys_types.h"
-#include "ARCH_bridge.h"
-#include "LOG_bridge.h"
-#include "TIM_bridge.h"
 #include "dsl_classes.h"
 
 /*
  * class operation:  load
  */
 i_t
-dsl_WHILELOOP_op_load( dsl_INSTRUCTION * p_instruction, dsl_PROGRAM * p_program)
+dsl_WHILELOOP_op_load( const dsl_INSTRUCTION * p_instruction, const dsl_PROGRAM * p_program)
 {
-  dsl_INSTRUCTION * instruction; dsl_WHILELOOP * whileloop; 
-  /* ASSIGN instruction = PARAM.instruction */
-  instruction = p_instruction;
-  /* CREATE OBJECT INSTANCE whileloop OF WHILELOOP */
-  whileloop = (dsl_WHILELOOP *) Escher_CreateInstance( dsl_DOMAIN_ID, dsl_WHILELOOP_CLASS_NUMBER );
-  /* RELATE whileloop TO instruction ACROSS R2 */
-  dsl_WHILELOOP_R2_Link( instruction, whileloop );
-  /* RETURN 1 */
-  return 1;
 
 }
 
@@ -37,28 +25,7 @@ dsl_WHILELOOP_op_load( dsl_INSTRUCTION * p_instruction, dsl_PROGRAM * p_program)
 void
 dsl_WHILELOOP_op_run( dsl_WHILELOOP * self)
 {
-  /* LOG::LogInfo( message:'while' ) */
-  LOG_LogInfo( "while" );
 
-}
-
-
-/*
- * RELATE INSTRUCTION TO WHILELOOP ACROSS R2
- */
-void
-dsl_WHILELOOP_R2_Link( dsl_INSTRUCTION * supertype, dsl_WHILELOOP * subtype )
-{
-  if ( (supertype == 0) || (subtype == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "WHILELOOP", "dsl_WHILELOOP_R2_Link" );
-    return;
-  }
-  subtype->location = supertype->location;
-  /* Optimized linkage for WHILELOOP->INSTRUCTION[R2] */
-  subtype->INSTRUCTION_R2 = supertype;
-  /* Optimized linkage for INSTRUCTION->WHILELOOP[R2] */
-  supertype->R2_subtype = subtype;
-  supertype->R2_object_id = dsl_WHILELOOP_CLASS_NUMBER;
 }
 
 

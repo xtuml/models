@@ -4,7 +4,7 @@
  * Class:       LEDs on  (LEDSON)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_LEDSON_CLASS_H
@@ -25,10 +25,10 @@ struct dsl_LEDSON {
   /* relationship storage */
   dsl_LEDCMD * LEDCMD_R21;
 };
-i_t dsl_LEDSON_op_load(  dsl_LEDCMD *, dsl_PROGRAM * );
+i_t dsl_LEDSON_op_load(  const dsl_LEDCMD *, const dsl_PROGRAM * );
 bool dsl_LEDSON_op_run( dsl_LEDSON * );
 
-void dsl_LEDSON_R21_Link( dsl_LEDCMD *, dsl_LEDSON * );
+/* Note:  LEDCMD<-R21->LEDSON never related (or note needed).  */
 /* Note:  No LEDCMD<-R21->LEDSON unrelate accessor needed.  */
 
 

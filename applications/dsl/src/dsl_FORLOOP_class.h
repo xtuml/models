@@ -4,7 +4,7 @@
  * Class:       forloop  (FORLOOP)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_FORLOOP_CLASS_H
@@ -22,21 +22,21 @@ struct dsl_FORLOOP {
 
   /* application analysis class attributes */
   i_t location;  /* * location (R2) */
-  i_t count;  /* - count */
-  i_t counter;  /* - counter */
-  i_t branch_offset;  /* - branch_offset */
+  /* - count */  /* OPTIMIZED OUT */
+  /* - counter */  /* OPTIMIZED OUT */
+  /* - branch_offset */  /* OPTIMIZED OUT */
 
   /* relationship storage */
   dsl_INSTRUCTION * INSTRUCTION_R2;
-  dsl_INSTRUCTION * INSTRUCTION_R6;
+  /* Note:  No storage needed for FORLOOP->INSTRUCTION[R6] */
 };
-i_t dsl_FORLOOP_op_load(  dsl_INSTRUCTION *, dsl_PROGRAM * );
+i_t dsl_FORLOOP_op_load(  const dsl_INSTRUCTION *, const dsl_PROGRAM * );
 bool dsl_FORLOOP_op_run( dsl_FORLOOP * );
 void dsl_FORLOOP_op_resolve_branches( dsl_FORLOOP * );
 
-void dsl_FORLOOP_R2_Link( dsl_INSTRUCTION *, dsl_FORLOOP * );
+/* Note:  INSTRUCTION<-R2->FORLOOP never related (or note needed).  */
 /* Note:  No INSTRUCTION<-R2->FORLOOP unrelate accessor needed.  */
-void dsl_FORLOOP_R6_Link( dsl_INSTRUCTION *, dsl_FORLOOP * );
+/* xtUML WARNING:  INSTRUCTION<-R6->FORLOOP never related!  */
 /* Note:  INSTRUCTION<-R6->FORLOOP unrelate accessor not needed */
 
 

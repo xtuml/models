@@ -4,32 +4,18 @@
  * Class:       needle up  (NEEDLEUP)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "dsl_sys_types.h"
-#include "ARCH_bridge.h"
-#include "LOG_bridge.h"
-#include "TIM_bridge.h"
 #include "dsl_classes.h"
 
 /*
  * class operation:  load
  */
 i_t
-dsl_NEEDLEUP_op_load( dsl_ASCMD * p_ascmd, dsl_PROGRAM * p_program)
+dsl_NEEDLEUP_op_load( const dsl_ASCMD * p_ascmd, const dsl_PROGRAM * p_program)
 {
-  dsl_ASCMD * ascmd; dsl_NEEDLEUP * needleup; 
-  /* LOG::LogInfo( message:'loading needled up' ) */
-  LOG_LogInfo( "loading needled up" );
-  /* ASSIGN ascmd = PARAM.ascmd */
-  ascmd = p_ascmd;
-  /* CREATE OBJECT INSTANCE needleup OF NEEDLEUP */
-  needleup = (dsl_NEEDLEUP *) Escher_CreateInstance( dsl_DOMAIN_ID, dsl_NEEDLEUP_CLASS_NUMBER );
-  /* RELATE needleup TO ascmd ACROSS R31 */
-  dsl_NEEDLEUP_R31_Link( ascmd, needleup );
-  /* RETURN 1 */
-  return 1;
 
 }
 
@@ -39,35 +25,7 @@ dsl_NEEDLEUP_op_load( dsl_ASCMD * p_ascmd, dsl_PROGRAM * p_program)
 bool
 dsl_NEEDLEUP_op_run( dsl_NEEDLEUP * self)
 {
-  dsl_ASCMD * ascmd = 0; /* ascmd (ASCMD) */
- 
-  /* LOG::LogInfo( message:'needle up' ) */
-  LOG_LogInfo( "needle up" );
-  /* SELECT one ascmd RELATED BY self->ASCMD[R31] */
-  ascmd = self->ASCMD_R31;
-  /* GENERATE ascmd.completion_event */
-  Escher_SendEvent( (Escher_xtUMLEvent_t *) ascmd->completion_event );
-  /* RETURN FALSE */
-  return FALSE;
 
-}
-
-
-/*
- * RELATE ASCMD TO NEEDLEUP ACROSS R31
- */
-void
-dsl_NEEDLEUP_R31_Link( dsl_ASCMD * supertype, dsl_NEEDLEUP * subtype )
-{
-  if ( (supertype == 0) || (subtype == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "NEEDLEUP", "dsl_NEEDLEUP_R31_Link" );
-    return;
-  }
-  /* Optimized linkage for NEEDLEUP->ASCMD[R31] */
-  subtype->ASCMD_R31 = supertype;
-  /* Optimized linkage for ASCMD->NEEDLEUP[R31] */
-  supertype->R31_subtype = subtype;
-  supertype->R31_object_id = dsl_NEEDLEUP_CLASS_NUMBER;
 }
 
 

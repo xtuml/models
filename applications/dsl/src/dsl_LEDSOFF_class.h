@@ -4,7 +4,7 @@
  * Class:       LEDs off  (LEDSOFF)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_LEDSOFF_CLASS_H
@@ -25,10 +25,10 @@ struct dsl_LEDSOFF {
   /* relationship storage */
   dsl_LEDCMD * LEDCMD_R21;
 };
-i_t dsl_LEDSOFF_op_load(  dsl_LEDCMD *, dsl_PROGRAM * );
+i_t dsl_LEDSOFF_op_load(  const dsl_LEDCMD *, const dsl_PROGRAM * );
 bool dsl_LEDSOFF_op_run( dsl_LEDSOFF * );
 
-void dsl_LEDSOFF_R21_Link( dsl_LEDCMD *, dsl_LEDSOFF * );
+/* Note:  LEDCMD<-R21->LEDSOFF never related (or note needed).  */
 /* Note:  No LEDCMD<-R21->LEDSOFF unrelate accessor needed.  */
 
 

@@ -4,7 +4,7 @@
  * Class:       cooking step  (STEP)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_STEP_CLASS_H
@@ -22,35 +22,25 @@ struct dsl_STEP {
 
   /* application analysis class attributes */
   i_t location;  /* * location (R2) */
-  i_t opcode;  /* - opcode */
+  /* - opcode */  /* OPTIMIZED OUT */
 
   /* relationship storage */
   dsl_INSTRUCTION * INSTRUCTION_R2;
   void * R11_subtype;
   Escher_ClassNumber_t R11_object_id;
 };
-i_t dsl_STEP_op_load(  dsl_INSTRUCTION *, dsl_PROGRAM * );
-bool dsl_STEP_op_run( dsl_STEP *, Escher_xtUMLEvent_t * );
+i_t dsl_STEP_op_load(  const dsl_INSTRUCTION *, const dsl_PROGRAM * );
+bool dsl_STEP_op_run( dsl_STEP *, const Escher_xtUMLEvent_t * );
 
-void dsl_STEP_R2_Link( dsl_INSTRUCTION *, dsl_STEP * );
+/* Note:  INSTRUCTION<-R2->STEP never related (or note needed).  */
 /* Note:  No INSTRUCTION<-R2->STEP unrelate accessor needed.  */
 
 /* Accessors to STEP[R11] subtypes */
-#define dsl_DEFROST_R11_From_STEP( STEP ) \
-   ( (((STEP)->R11_object_id) == dsl_DEFROST_CLASS_NUMBER) ? \
-     ((dsl_DEFROST *)((STEP)->R11_subtype)) : (0) )
-#define dsl_COOK_R11_From_STEP( STEP ) \
-   ( (((STEP)->R11_object_id) == dsl_COOK_CLASS_NUMBER) ? \
-     ((dsl_COOK *)((STEP)->R11_subtype)) : (0) )
-#define dsl_SPIN_R11_From_STEP( STEP ) \
-   ( (((STEP)->R11_object_id) == dsl_SPIN_CLASS_NUMBER) ? \
-     ((dsl_SPIN *)((STEP)->R11_subtype)) : (0) )
-#define dsl_SPINREVERSE_R11_From_STEP( STEP ) \
-   ( (((STEP)->R11_object_id) == dsl_SPINREVERSE_CLASS_NUMBER) ? \
-     ((dsl_SPINREVERSE *)((STEP)->R11_subtype)) : (0) )
-#define dsl_COOKSTOP_R11_From_STEP( STEP ) \
-   ( (((STEP)->R11_object_id) == dsl_COOKSTOP_CLASS_NUMBER) ? \
-     ((dsl_COOKSTOP *)((STEP)->R11_subtype)) : (0) )
+/* Note:  STEP->DEFROST[R11] not navigated */
+/* Note:  STEP->COOK[R11] not navigated */
+/* Note:  STEP->SPIN[R11] not navigated */
+/* Note:  STEP->SPINREVERSE[R11] not navigated */
+/* Note:  STEP->COOKSTOP[R11] not navigated */
 
 
 

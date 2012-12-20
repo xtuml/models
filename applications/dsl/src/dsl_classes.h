@@ -4,7 +4,7 @@
  * This file defines the object type identification numbers for all classes
  * in the component:  dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_CLASSES_H
@@ -115,9 +115,6 @@ typedef struct dsl_ASCMD dsl_ASCMD;
 
 
 
-#include "ARCH_bridge.h"
-#include "LOG_bridge.h"
-#include "TIM_bridge.h"
 #include "dsl.h"
 #include "dsl_PROGRAM_class.h"
 #include "dsl_INSTRUCTION_class.h"
@@ -147,8 +144,6 @@ typedef struct dsl_ASCMD dsl_ASCMD;
  * roll-up of all events (with their parameters) for domain dsl
  */
 typedef union {
-  dsl_PROGRAM_Events_u dsl_PROGRAM_Events_u_namespace;
-  dsl_INSTRUCTION_Events_u dsl_INSTRUCTION_Events_u_namespace;
 } dsl_DomainEvents_u;
 #ifdef	__cplusplus
 }

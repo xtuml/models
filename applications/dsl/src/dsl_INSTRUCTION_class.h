@@ -4,7 +4,7 @@
  * Class:       instruction  (INSTRUCTION)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_INSTRUCTION_CLASS_H
@@ -22,14 +22,14 @@ struct dsl_INSTRUCTION {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
   i_t location;  /* * location */
-  i_t opcode;  /* - opcode */
-  i_t length;  /* - length */
+  /* - opcode */  /* OPTIMIZED OUT */
+  /* - length */  /* OPTIMIZED OUT */
 
   /* relationship storage */
   /* Note:  No storage needed for INSTRUCTION->PROGRAM[R1] */
   void * R2_subtype;
   Escher_ClassNumber_t R2_object_id;
-  dsl_PROGRAM * PROGRAM_R3;
+  /* Note:  No storage needed for INSTRUCTION->PROGRAM[R3] */
   dsl_INSTRUCTION * INSTRUCTION_R4_follows;
   dsl_INSTRUCTION * INSTRUCTION_R4;
   dsl_INSTRUCTION * INSTRUCTION_R5;
@@ -40,27 +40,13 @@ struct dsl_INSTRUCTION {
 
 
 /* Accessors to INSTRUCTION[R2] subtypes */
-#define dsl_OPIF_R2_From_INSTRUCTION( INSTRUCTION ) \
-   ( (((INSTRUCTION)->R2_object_id) == dsl_OPIF_CLASS_NUMBER) ? \
-     ((dsl_OPIF *)((INSTRUCTION)->R2_subtype)) : (0) )
-#define dsl_FORLOOP_R2_From_INSTRUCTION( INSTRUCTION ) \
-   ( (((INSTRUCTION)->R2_object_id) == dsl_FORLOOP_CLASS_NUMBER) ? \
-     ((dsl_FORLOOP *)((INSTRUCTION)->R2_subtype)) : (0) )
-#define dsl_DELAY_R2_From_INSTRUCTION( INSTRUCTION ) \
-   ( (((INSTRUCTION)->R2_object_id) == dsl_DELAY_CLASS_NUMBER) ? \
-     ((dsl_DELAY *)((INSTRUCTION)->R2_subtype)) : (0) )
-#define dsl_STEP_R2_From_INSTRUCTION( INSTRUCTION ) \
-   ( (((INSTRUCTION)->R2_object_id) == dsl_STEP_CLASS_NUMBER) ? \
-     ((dsl_STEP *)((INSTRUCTION)->R2_subtype)) : (0) )
-#define dsl_WHILELOOP_R2_From_INSTRUCTION( INSTRUCTION ) \
-   ( (((INSTRUCTION)->R2_object_id) == dsl_WHILELOOP_CLASS_NUMBER) ? \
-     ((dsl_WHILELOOP *)((INSTRUCTION)->R2_subtype)) : (0) )
-#define dsl_LEDCMD_R2_From_INSTRUCTION( INSTRUCTION ) \
-   ( (((INSTRUCTION)->R2_object_id) == dsl_LEDCMD_CLASS_NUMBER) ? \
-     ((dsl_LEDCMD *)((INSTRUCTION)->R2_subtype)) : (0) )
-#define dsl_ASCMD_R2_From_INSTRUCTION( INSTRUCTION ) \
-   ( (((INSTRUCTION)->R2_object_id) == dsl_ASCMD_CLASS_NUMBER) ? \
-     ((dsl_ASCMD *)((INSTRUCTION)->R2_subtype)) : (0) )
+/* Note:  INSTRUCTION->OPIF[R2] not navigated */
+/* Note:  INSTRUCTION->FORLOOP[R2] not navigated */
+/* Note:  INSTRUCTION->DELAY[R2] not navigated */
+/* Note:  INSTRUCTION->STEP[R2] not navigated */
+/* Note:  INSTRUCTION->WHILELOOP[R2] not navigated */
+/* Note:  INSTRUCTION->LEDCMD[R2] not navigated */
+/* Note:  INSTRUCTION->ASCMD[R2] not navigated */
 
       
 /*
@@ -69,10 +55,10 @@ struct dsl_INSTRUCTION {
  *  Participant INSTRUCTION  formalizer
  */
 /* Navigation phrase:  R4.'follows' */
-void dsl_INSTRUCTION_R4_Link_follows( dsl_INSTRUCTION *, dsl_INSTRUCTION * );
+/* Note:  R4.'follows' never related (or not needed).  */
 /* Note:  R4.'follows' never unrelated (or not needed).  */
 /* Navigation phrase:  R4.'' */
-void dsl_INSTRUCTION_R4_Link( dsl_INSTRUCTION *, dsl_INSTRUCTION * );
+/* Note:  R4.'' never related (or not needed).  */
 /* Note:  R4.'' never unrelated (or not needed).  */
       
 /*
@@ -81,10 +67,10 @@ void dsl_INSTRUCTION_R4_Link( dsl_INSTRUCTION *, dsl_INSTRUCTION * );
  *  Participant INSTRUCTION branches to formalizer
  */
 /* Navigation phrase:  R5.'' */
-void dsl_INSTRUCTION_R5_Link( dsl_INSTRUCTION *, dsl_INSTRUCTION * );
+/* Note:  R5.'' never related (or not needed).  */
 /* Note:  R5.'' never unrelated (or not needed).  */
 /* Navigation phrase:  R5.'branches to' */
-void dsl_INSTRUCTION_R5_Link_branches_to( dsl_INSTRUCTION *, dsl_INSTRUCTION * );
+/* Note:  R5.'branches to' never related (or not needed).  */
 /* Note:  R5.'branches to' never unrelated (or not needed).  */
 
 
@@ -93,49 +79,24 @@ extern Escher_Extent_t pG_dsl_INSTRUCTION_extent;
 
 /*
  * instance event:  INSTRUCTION1:'load'
+ * warning:  Event is not used in application - no code generated.
  */
-typedef struct {
-  EVENT_BASE_ATTRIBUTE_LIST         /* base attributes of all event classes */
-  dsl_INSTRUCTION * p_previous_instruction; /* previous_instruction */
-} dsl_INSTRUCTIONevent1;
-extern const Escher_xtUMLEventConstant_t dsl_INSTRUCTIONevent1c;
 
 /*
  * instance event:  INSTRUCTION2:'done'
+ * warning:  Event is not used in application - no code generated.
  */
-typedef struct {
-  EVENT_BASE_ATTRIBUTE_LIST         /* base attributes of all event classes */
-  dsl_INSTRUCTION * p_next; /* next */
-} dsl_INSTRUCTIONevent2;
-extern const Escher_xtUMLEventConstant_t dsl_INSTRUCTIONevent2c;
 
 /*
  * instance event:  INSTRUCTION3:'run'
+ * warning:  Event is not used in application - no code generated.
  */
-typedef struct {
-  EVENT_BASE_ATTRIBUTE_LIST         /* base attributes of all event classes */
-  /* Note:  no supplemental data for this event */
-} dsl_INSTRUCTIONevent3;
-extern const Escher_xtUMLEventConstant_t dsl_INSTRUCTIONevent3c;
 
 /*
  * instance event:  INSTRUCTION4:'loaded'
+ * warning:  Event is not used in application - no code generated.
  */
-typedef struct {
-  EVENT_BASE_ATTRIBUTE_LIST         /* base attributes of all event classes */
-  /* Note:  no supplemental data for this event */
-} dsl_INSTRUCTIONevent4;
-extern const Escher_xtUMLEventConstant_t dsl_INSTRUCTIONevent4c;
 
-/*
- * union of events targeted towards 'INSTRUCTION' state machine
- */
-typedef union {
-  dsl_INSTRUCTIONevent1 instruction11;  
-  dsl_INSTRUCTIONevent2 instruction22;  
-  dsl_INSTRUCTIONevent3 instruction33;  
-  dsl_INSTRUCTIONevent4 instruction44;  
-} dsl_INSTRUCTION_Events_u;
 
 /*
  * enumeration of state model states for class
@@ -146,10 +107,6 @@ typedef union {
 /*
  * enumeration of state model event numbers
  */
-#define DSL_INSTRUCTIONEVENT1NUM 0  /* INSTRUCTION1:'load' */
-#define DSL_INSTRUCTIONEVENT2NUM 1  /* INSTRUCTION2:'done' */
-#define DSL_INSTRUCTIONEVENT3NUM 2  /* INSTRUCTION3:'run' */
-#define DSL_INSTRUCTIONEVENT4NUM 3  /* INSTRUCTION4:'loaded' */
 extern void dsl_INSTRUCTION_Dispatch( Escher_xtUMLEvent_t * );
 
 #ifdef	__cplusplus

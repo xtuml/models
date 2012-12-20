@@ -4,7 +4,7 @@
  * Class:       if  (OPIF)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_OPIF_CLASS_H
@@ -22,15 +22,15 @@ struct dsl_OPIF {
 
   /* application analysis class attributes */
   i_t location;  /* * location (R2) */
-  i_t condition;  /* - condition */
+  /* - condition */  /* OPTIMIZED OUT */
 
   /* relationship storage */
   dsl_INSTRUCTION * INSTRUCTION_R2;
 };
-i_t dsl_OPIF_op_load(  dsl_INSTRUCTION *, dsl_PROGRAM * );
+i_t dsl_OPIF_op_load(  const dsl_INSTRUCTION *, const dsl_PROGRAM * );
 void dsl_OPIF_op_run( dsl_OPIF * );
 
-void dsl_OPIF_R2_Link( dsl_INSTRUCTION *, dsl_OPIF * );
+/* Note:  INSTRUCTION<-R2->OPIF never related (or note needed).  */
 /* Note:  No INSTRUCTION<-R2->OPIF unrelate accessor needed.  */
 
 

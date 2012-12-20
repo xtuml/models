@@ -4,7 +4,7 @@
  * Class:       whileloop  (WHILELOOP)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_WHILELOOP_CLASS_H
@@ -22,17 +22,17 @@ struct dsl_WHILELOOP {
 
   /* application analysis class attributes */
   i_t location;  /* * location (R2) */
-  i_t condition;  /* - condition */
-  i_t branch_offset;  /* - branch_offset */
+  /* - condition */  /* OPTIMIZED OUT */
+  /* - branch_offset */  /* OPTIMIZED OUT */
 
   /* relationship storage */
   dsl_INSTRUCTION * INSTRUCTION_R2;
   /* Note:  No storage needed for WHILELOOP->INSTRUCTION[R7] */
 };
-i_t dsl_WHILELOOP_op_load(  dsl_INSTRUCTION *, dsl_PROGRAM * );
+i_t dsl_WHILELOOP_op_load(  const dsl_INSTRUCTION *, const dsl_PROGRAM * );
 void dsl_WHILELOOP_op_run( dsl_WHILELOOP * );
 
-void dsl_WHILELOOP_R2_Link( dsl_INSTRUCTION *, dsl_WHILELOOP * );
+/* Note:  INSTRUCTION<-R2->WHILELOOP never related (or note needed).  */
 /* Note:  No INSTRUCTION<-R2->WHILELOOP unrelate accessor needed.  */
 /* xtUML WARNING:  INSTRUCTION<-R7->WHILELOOP never related!  */
 /* Note:  INSTRUCTION<-R7->WHILELOOP unrelate accessor not needed */

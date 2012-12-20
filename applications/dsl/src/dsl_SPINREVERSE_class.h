@@ -4,7 +4,7 @@
  * Class:       spin reverse  (SPINREVERSE)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef DSL_SPINREVERSE_CLASS_H
@@ -25,10 +25,10 @@ struct dsl_SPINREVERSE {
   /* relationship storage */
   dsl_STEP * STEP_R11;
 };
-i_t dsl_SPINREVERSE_op_load(  dsl_PROGRAM *, dsl_STEP * );
+i_t dsl_SPINREVERSE_op_load(  const dsl_PROGRAM *, const dsl_STEP * );
 bool dsl_SPINREVERSE_op_run( dsl_SPINREVERSE * );
 
-void dsl_SPINREVERSE_R11_Link( dsl_STEP *, dsl_SPINREVERSE * );
+/* Note:  STEP<-R11->SPINREVERSE never related (or note needed).  */
 /* Note:  No STEP<-R11->SPINREVERSE unrelate accessor needed.  */
 
 

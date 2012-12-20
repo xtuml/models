@@ -4,34 +4,18 @@
  * Class:       cook stop  (COOKSTOP)
  * Component:   dsl
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "dsl_sys_types.h"
-#include "ARCH_bridge.h"
-#include "LOG_bridge.h"
-#include "TIM_bridge.h"
 #include "dsl_classes.h"
 
 /*
  * class operation:  load
  */
 i_t
-dsl_COOKSTOP_op_load( dsl_PROGRAM * p_program, dsl_STEP * p_step)
+dsl_COOKSTOP_op_load( const dsl_PROGRAM * p_program, const dsl_STEP * p_step)
 {
-  dsl_STEP * step; dsl_PROGRAM * program; dsl_COOKSTOP * cookstop; 
-  /* LOG::LogInfo( message:'stop cooking' ) */
-  LOG_LogInfo( "stop cooking" );
-  /* ASSIGN step = PARAM.step */
-  step = p_step;
-  /* ASSIGN program = PARAM.program */
-  program = p_program;
-  /* CREATE OBJECT INSTANCE cookstop OF COOKSTOP */
-  cookstop = (dsl_COOKSTOP *) Escher_CreateInstance( dsl_DOMAIN_ID, dsl_COOKSTOP_CLASS_NUMBER );
-  /* RELATE cookstop TO step ACROSS R11 */
-  dsl_COOKSTOP_R11_Link( step, cookstop );
-  /* RETURN 1 */
-  return 1;
 
 }
 
@@ -41,29 +25,7 @@ dsl_COOKSTOP_op_load( dsl_PROGRAM * p_program, dsl_STEP * p_step)
 bool
 dsl_COOKSTOP_op_run( dsl_COOKSTOP * self)
 {
-  /* LOG::LogInfo( message:'stop cooking' ) */
-  LOG_LogInfo( "stop cooking" );
-  /* RETURN FALSE */
-  return FALSE;
 
-}
-
-
-/*
- * RELATE STEP TO COOKSTOP ACROSS R11
- */
-void
-dsl_COOKSTOP_R11_Link( dsl_STEP * supertype, dsl_COOKSTOP * subtype )
-{
-  if ( (supertype == 0) || (subtype == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "COOKSTOP", "dsl_COOKSTOP_R11_Link" );
-    return;
-  }
-  /* Optimized linkage for COOKSTOP->STEP[R11] */
-  subtype->STEP_R11 = supertype;
-  /* Optimized linkage for STEP->COOKSTOP[R11] */
-  supertype->R11_subtype = subtype;
-  supertype->R11_object_id = dsl_COOKSTOP_CLASS_NUMBER;
 }
 
 
