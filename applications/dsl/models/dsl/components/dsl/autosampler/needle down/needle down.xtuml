@@ -1,0 +1,104 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("1600b8e8-4d67-4cca-81ac-3c9cbdd2394e",
+	'needle down',
+	34,
+	'NEEDLEDOWN',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("00aba3b2-a5fb-428f-9fcc-47f5c32b65b7",
+	"1600b8e8-4d67-4cca-81ac-3c9cbdd2394e",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'LOG::LogInfo( message:"loading needle down" );
+ascmd = param.ascmd;
+create object instance needledown of NEEDLEDOWN;
+relate needledown to ascmd across R31;
+return 1;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("358266de-47b6-4227-9e65-f3f7f0f63df1",
+	"00aba3b2-a5fb-428f-9fcc-47f5c32b65b7",
+	'ascmd',
+	"b737d57a-910c-4cdd-8740-f05f6dec2cf6",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("b737d57a-910c-4cdd-8740-f05f6dec2cf6",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<autosampler command>',
+	'',
+	'',
+	'../autosampler.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("d550478b-f0c6-4ba8-83f1-a88b3c23f471",
+	"00aba3b2-a5fb-428f-9fcc-47f5c32b65b7",
+	'program',
+	"8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	0,
+	'',
+	"358266de-47b6-4227-9e65-f3f7f0f63df1",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_TFR
+	VALUES ("7b30859f-ffd0-40dc-82ca-132d54efc605",
+	"1600b8e8-4d67-4cca-81ac-3c9cbdd2394e",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'LOG::LogInfo( message:"needle down:  sampling..." );
+select one ascmd related by self->ASCMD[R31];
+generate ascmd.completion_event;
+return false;',
+	1,
+	'',
+	"00aba3b2-a5fb-428f-9fcc-47f5c32b65b7");
+INSERT INTO O_NBATTR
+	VALUES ("acafa429-7ba9-4ea0-9ba4-71ddd5af3c45",
+	"1600b8e8-4d67-4cca-81ac-3c9cbdd2394e");
+INSERT INTO O_BATTR
+	VALUES ("acafa429-7ba9-4ea0-9ba4-71ddd5af3c45",
+	"1600b8e8-4d67-4cca-81ac-3c9cbdd2394e");
+INSERT INTO O_ATTR
+	VALUES ("acafa429-7ba9-4ea0-9ba4-71ddd5af3c45",
+	"1600b8e8-4d67-4cca-81ac-3c9cbdd2394e",
+	"00000000-0000-0000-0000-000000000000",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"1600b8e8-4d67-4cca-81ac-3c9cbdd2394e");
+INSERT INTO O_ID
+	VALUES (1,
+	"1600b8e8-4d67-4cca-81ac-3c9cbdd2394e");
+INSERT INTO O_ID
+	VALUES (2,
+	"1600b8e8-4d67-4cca-81ac-3c9cbdd2394e");
+INSERT INTO PE_PE_PROXY
+	VALUES ("1600b8e8-4d67-4cca-81ac-3c9cbdd2394e",
+	1,
+	"199e523a-d024-46ec-b7f8-dec883f5492d",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../autosampler.xtuml');

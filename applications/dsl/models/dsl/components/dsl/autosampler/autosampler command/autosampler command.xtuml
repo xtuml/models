@@ -1,0 +1,214 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a",
+	'autosampler command',
+	30,
+	'ASCMD',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("b7ed2537-2dfc-40b6-929d-78d3598fddc8",
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'instruction = param.instruction;
+program = param.program;
+create object instance ascmd of ASCMD;
+relate ascmd to instruction across R2;
+ascmd.opcode = instruction.opcode;
+length = 1;
+if ( opcarhome == ascmd.opcode )
+  length = CARHOME::load( ascmd:ascmd, program:program );
+elif ( opcarnext == ascmd.opcode )
+  length = CARNEXT::load( ascmd:ascmd, program:program );
+elif ( opneedleup == ascmd.opcode )
+  length = NEEDLEUP::load( ascmd:ascmd, program:program );
+elif ( opneedledown == ascmd.opcode )
+  length = NEEDLEDOWN::load( ascmd:ascmd, program:program );
+else
+  LOG::LogFailure( message:"warning:  opcode not recognized" );
+end if;
+return length;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("cc021fdf-810d-482b-87fd-87745a027068",
+	"b7ed2537-2dfc-40b6-929d-78d3598fddc8",
+	'instruction',
+	"fdc2359e-aa6d-4cd6-904e-90a164469ef2",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("fdc2359e-aa6d-4cd6-904e-90a164469ef2",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<instruction>',
+	'',
+	'',
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("720cc0b6-9698-4cde-9532-79356fcd0ae6",
+	"b7ed2537-2dfc-40b6-929d-78d3598fddc8",
+	'program',
+	"8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	0,
+	'',
+	"cc021fdf-810d-482b-87fd-87745a027068",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_TFR
+	VALUES ("f53f7a27-6edb-4630-9938-e1e28869a611",
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'rv = false;
+self.completion_event = param.completion_event;
+if ( opcarhome == self.opcode )
+  select one sub related by self->CARHOME[R31];
+  rv = sub.run();
+elif ( opcarnext == self.opcode )
+  select one sub related by self->CARNEXT[R31];
+  rv = sub.run();
+elif ( opneedleup == self.opcode )
+  select one sub related by self->NEEDLEUP[R31];
+  rv = sub.run();
+elif ( opneedledown == self.opcode )
+  select one sub related by self->NEEDLEDOWN[R31];
+  rv = sub.run();
+else
+  LOG::LogFailure( message:"warning:  attempt to run invalid opcode" );
+end if;
+return rv;',
+	1,
+	'',
+	"b7ed2537-2dfc-40b6-929d-78d3598fddc8");
+INSERT INTO O_TPARM
+	VALUES ("98821e19-be80-4e8c-a93f-d433ea72de41",
+	"f53f7a27-6edb-4630-9938-e1e28869a611",
+	'completion_event',
+	"ba5eda7a-def5-0000-0000-00000000000a",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e5b2f311-c22a-4389-860a-27a0f7cd7711",
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a");
+INSERT INTO O_BATTR
+	VALUES ("e5b2f311-c22a-4389-860a-27a0f7cd7711",
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a");
+INSERT INTO O_ATTR
+	VALUES ("e5b2f311-c22a-4389-860a-27a0f7cd7711",
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a",
+	"00000000-0000-0000-0000-000000000000",
+	'opcode',
+	'',
+	'',
+	'opcode',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	0,
+	"b20754b4-7faa-4231-a675-423898873a7a",
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"8aacaff4-8032-4c51-aeb2-ebc1894226c4",
+	"64d9d140-cbcb-4b5c-8958-525c2c2f35ef",
+	"2f38fff7-d264-4791-b0ef-728853a6607d",
+	"1a3a757a-2ea3-49f1-8e08-26ba8133f630",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'instruction',
+	'location',
+	'R2');
+INSERT INTO R_RGO_PROXY
+	VALUES ("a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a",
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"8aacaff4-8032-4c51-aeb2-ebc1894226c4",
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	0,
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"64d9d140-cbcb-4b5c-8958-525c2c2f35ef",
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("2f38fff7-d264-4791-b0ef-728853a6607d",
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a",
+	"b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	1,
+	'location');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	'../../virtual machine/instruction/instruction.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("2f38fff7-d264-4791-b0ef-728853a6607d",
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a",
+	"e5b2f311-c22a-4389-860a-27a0f7cd7711",
+	'location',
+	'',
+	'',
+	'location',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("99909a99-5647-4a1e-9fb2-369cadcdd17e",
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a");
+INSERT INTO O_BATTR
+	VALUES ("99909a99-5647-4a1e-9fb2-369cadcdd17e",
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a");
+INSERT INTO O_ATTR
+	VALUES ("99909a99-5647-4a1e-9fb2-369cadcdd17e",
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a",
+	"2f38fff7-d264-4791-b0ef-728853a6607d",
+	'completion_event',
+	'',
+	'',
+	'completion_event',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000a",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a");
+INSERT INTO O_OIDA
+	VALUES ("2f38fff7-d264-4791-b0ef-728853a6607d",
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a",
+	0,
+	'location');
+INSERT INTO O_ID
+	VALUES (1,
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a");
+INSERT INTO O_ID
+	VALUES (2,
+	"a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a");
+INSERT INTO PE_PE_PROXY
+	VALUES ("a3570ec5-5851-46e7-b3f8-6ae4b2b2de9a",
+	1,
+	"199e523a-d024-46ec-b7f8-dec883f5492d",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../autosampler.xtuml');

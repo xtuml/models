@@ -1,0 +1,105 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("a052b4ba-ac32-414e-a77f-8ea4ec0d7b8b",
+	'cook',
+	13,
+	'COOK',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("469cfea2-95d0-4a35-9703-ffb55b7a8ccf",
+	"a052b4ba-ac32-414e-a77f-8ea4ec0d7b8b",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'LOG::LogInfo( message:"loading cook" );
+step = param.step;
+program = param.program;
+create object instance cook of COOK;
+relate cook to step across R11;
+cook.power_level = program.store[ program.PC + 1 ];
+return 2;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("10a8fe1d-96f3-498f-bcf1-1dcdd831ff40",
+	"469cfea2-95d0-4a35-9703-ffb55b7a8ccf",
+	'step',
+	"3148caaa-6356-40b3-a675-1c47bb2697b6",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("3148caaa-6356-40b3-a675-1c47bb2697b6",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<cooking step>',
+	'',
+	'',
+	'../DSL_oven.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("0f7e0c5e-9126-4abc-868c-3878debba03f",
+	"469cfea2-95d0-4a35-9703-ffb55b7a8ccf",
+	'program',
+	"8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	0,
+	'',
+	"10a8fe1d-96f3-498f-bcf1-1dcdd831ff40",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_TFR
+	VALUES ("ca809480-0826-42f5-be98-c3c46b00f8da",
+	"a052b4ba-ac32-414e-a77f-8ea4ec0d7b8b",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'LOG::LogInfo( message:"cook" );
+return false;',
+	1,
+	'',
+	"469cfea2-95d0-4a35-9703-ffb55b7a8ccf");
+INSERT INTO O_NBATTR
+	VALUES ("38f99617-beca-46df-989f-36910cae1a4c",
+	"a052b4ba-ac32-414e-a77f-8ea4ec0d7b8b");
+INSERT INTO O_BATTR
+	VALUES ("38f99617-beca-46df-989f-36910cae1a4c",
+	"a052b4ba-ac32-414e-a77f-8ea4ec0d7b8b");
+INSERT INTO O_ATTR
+	VALUES ("38f99617-beca-46df-989f-36910cae1a4c",
+	"a052b4ba-ac32-414e-a77f-8ea4ec0d7b8b",
+	"00000000-0000-0000-0000-000000000000",
+	'power_level',
+	'',
+	'',
+	'power_level',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"a052b4ba-ac32-414e-a77f-8ea4ec0d7b8b");
+INSERT INTO O_ID
+	VALUES (1,
+	"a052b4ba-ac32-414e-a77f-8ea4ec0d7b8b");
+INSERT INTO O_ID
+	VALUES (2,
+	"a052b4ba-ac32-414e-a77f-8ea4ec0d7b8b");
+INSERT INTO PE_PE_PROXY
+	VALUES ("a052b4ba-ac32-414e-a77f-8ea4ec0d7b8b",
+	1,
+	"81e8a444-b2be-41b6-b411-3bde1eb1817c",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../DSL_oven.xtuml');
