@@ -1,0 +1,202 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("d04b3184-c9b9-46a6-aa55-abeae1fdbe48",
+	'cooking step',
+	11,
+	'STEP',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("1591cec3-c54b-4fc7-8898-4cd6f64364f2",
+	"d04b3184-c9b9-46a6-aa55-abeae1fdbe48",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'instruction = param.instruction;
+program = param.program;
+create object instance step of STEP;
+relate step to instruction across R2;
+step.opcode = instruction.opcode;
+length = 1;
+if ( opdefrost == step.opcode )
+  length = DEFROST::load( step:step, program:program );
+elif ( opcook == step.opcode )
+  length = COOK::load( step:step, program:program );
+elif ( opspin == step.opcode )
+  length = SPIN::load( step:step, program:program );
+elif ( opspinreverse == step.opcode )
+  length = SPINREVERSE::load( step:step, program:program );
+elif ( opcookstop == step.opcode )
+  length = COOKSTOP::load( step:step, program:program );
+else
+  LOG::LogFailure( message:"warning:  opcode not recognized" );
+end if;
+return length;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("f9facc0e-ad89-4479-a8cf-f4c76ca3e46f",
+	"1591cec3-c54b-4fc7-8898-4cd6f64364f2",
+	'instruction',
+	"fdc2359e-aa6d-4cd6-904e-90a164469ef2",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("fdc2359e-aa6d-4cd6-904e-90a164469ef2",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<instruction>',
+	'',
+	'',
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("66eff890-b52d-430c-b122-2caac9d59215",
+	"1591cec3-c54b-4fc7-8898-4cd6f64364f2",
+	'program',
+	"8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	0,
+	'',
+	"f9facc0e-ad89-4479-a8cf-f4c76ca3e46f",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_TFR
+	VALUES ("5735a60f-91f8-4e14-b9a2-b1bee981eb40",
+	"d04b3184-c9b9-46a6-aa55-abeae1fdbe48",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'e = param.completion_event;
+rv = false;
+if ( opdefrost == self.opcode )
+  select one sub related by self->DEFROST[R11];
+  rv = sub.run();
+elif ( opcook == self.opcode )
+  select one sub related by self->COOK[R11];
+  rv = sub.run();
+elif ( opspin == self.opcode )
+  select one sub related by self->SPIN[R11];
+  rv = sub.run();
+elif ( opspinreverse == self.opcode )
+  select one sub related by self->SPINREVERSE[R11];
+  rv = sub.run();
+elif ( opcookstop == self.opcode )
+  select one sub related by self->COOKSTOP[R11];
+  rv = sub.run();
+else
+  LOG::LogFailure( message:"warning:  attempt to run invalid opcode" );
+end if;
+generate e;
+return rv;',
+	1,
+	'',
+	"1591cec3-c54b-4fc7-8898-4cd6f64364f2");
+INSERT INTO O_TPARM
+	VALUES ("c6e15ad4-e883-411e-aead-84b991ca60cb",
+	"5735a60f-91f8-4e14-b9a2-b1bee981eb40",
+	'completion_event',
+	"ba5eda7a-def5-0000-0000-00000000000a",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_REF
+	VALUES ("d04b3184-c9b9-46a6-aa55-abeae1fdbe48",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	0,
+	"b20754b4-7faa-4231-a675-423898873a7a",
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"54069842-e361-42a0-b48a-1cd5bd906d97",
+	"64d9d140-cbcb-4b5c-8958-525c2c2f35ef",
+	"20e25db9-3876-4b4d-a658-24f50a7ba6b6",
+	"8567351e-c581-47e0-adb8-c90078797acb",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'instruction',
+	'location',
+	'R2');
+INSERT INTO R_RGO_PROXY
+	VALUES ("d04b3184-c9b9-46a6-aa55-abeae1fdbe48",
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"54069842-e361-42a0-b48a-1cd5bd906d97",
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	0,
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"64d9d140-cbcb-4b5c-8958-525c2c2f35ef",
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("20e25db9-3876-4b4d-a658-24f50a7ba6b6",
+	"d04b3184-c9b9-46a6-aa55-abeae1fdbe48",
+	"b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	1,
+	'location');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	'../../virtual machine/instruction/instruction.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("20e25db9-3876-4b4d-a658-24f50a7ba6b6",
+	"d04b3184-c9b9-46a6-aa55-abeae1fdbe48",
+	"00000000-0000-0000-0000-000000000000",
+	'location',
+	'',
+	'',
+	'location',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("4d8a4f66-f69a-4dba-9c53-b80369ce9633",
+	"d04b3184-c9b9-46a6-aa55-abeae1fdbe48");
+INSERT INTO O_BATTR
+	VALUES ("4d8a4f66-f69a-4dba-9c53-b80369ce9633",
+	"d04b3184-c9b9-46a6-aa55-abeae1fdbe48");
+INSERT INTO O_ATTR
+	VALUES ("4d8a4f66-f69a-4dba-9c53-b80369ce9633",
+	"d04b3184-c9b9-46a6-aa55-abeae1fdbe48",
+	"20e25db9-3876-4b4d-a658-24f50a7ba6b6",
+	'opcode',
+	'',
+	'',
+	'opcode',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"d04b3184-c9b9-46a6-aa55-abeae1fdbe48");
+INSERT INTO O_OIDA
+	VALUES ("20e25db9-3876-4b4d-a658-24f50a7ba6b6",
+	"d04b3184-c9b9-46a6-aa55-abeae1fdbe48",
+	0,
+	'location');
+INSERT INTO O_ID
+	VALUES (1,
+	"d04b3184-c9b9-46a6-aa55-abeae1fdbe48");
+INSERT INTO O_ID
+	VALUES (2,
+	"d04b3184-c9b9-46a6-aa55-abeae1fdbe48");
+INSERT INTO PE_PE_PROXY
+	VALUES ("d04b3184-c9b9-46a6-aa55-abeae1fdbe48",
+	1,
+	"81e8a444-b2be-41b6-b411-3bde1eb1817c",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../DSL_oven.xtuml');

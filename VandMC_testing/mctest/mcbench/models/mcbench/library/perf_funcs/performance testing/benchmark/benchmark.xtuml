@@ -1,0 +1,2128 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("714912cd-1c00-4de0-a374-bfca682d873d",
+	'benchmark',
+	1,
+	'BENCHMARK',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("01ec0a41-073d-42cf-8cb0-d462b2af741a",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'create_instance',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 1000;
+if ( 1 == param.phase )               // setup
+elif ( 2 == param.phase )             // run
+
+  // Create a bunch.
+  i = iterations;
+  while ( 0 < i )
+    create object instance a of A;
+    create object instance a of A;
+    create object instance a of A;
+    create object instance a of A;
+    create object instance a of A;
+    create object instance a of A;
+    create object instance a of A;
+    create object instance a of A;
+    create object instance a of A;
+    create object instance a of A;
+    i = i - 1;
+  end while;
+  
+elif ( 3 == param.phase )             // unrun
+
+  // Now delete them (while not on the clock).
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+  
+elif ( 4 == param.phase )             // cleanup
+
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+  
+elif ( 5 == param.phase )             // report
+
+  i = 10 * iterations * param.count;
+  ::report( message:"create instance", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"75427476-fe27-4055-929c-7151b743fbba");
+INSERT INTO O_TPARM
+	VALUES ("84252352-f13c-4b72-8c6d-dd48702eea99",
+	"01ec0a41-073d-42cf-8cb0-d462b2af741a",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"b5e5e26f-0823-415f-a672-87c7ddc0023d",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("b5e5e26f-0823-415f-a672-87c7ddc0023d",
+	"01ec0a41-073d-42cf-8cb0-d462b2af741a",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"28c07d36-2abe-431e-addb-aeeb30c20e61",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("960afcd6-3e79-4f95-a4e3-e8c3e1b35ece",
+	"01ec0a41-073d-42cf-8cb0-d462b2af741a",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("28c07d36-2abe-431e-addb-aeeb30c20e61",
+	"01ec0a41-073d-42cf-8cb0-d462b2af741a",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"960afcd6-3e79-4f95-a4e3-e8c3e1b35ece",
+	'');
+INSERT INTO O_TFR
+	VALUES ("d58bb729-607f-4036-9b60-df47958b4cea",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'delete_instance',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+if ( 1 == param.phase )               // setup
+
+  // Create a bunch.
+  i = iterations;
+  while ( 0 < i )
+    create object instance a of A;
+    i = i - 1;
+  end while;
+  
+elif ( 2 == param.phase )             // run
+
+  // Delete instances.
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+  
+elif ( 3 == param.phase )             // unrun
+
+  // Create a bunch.
+  i = iterations;
+  while ( 0 < i )
+    create object instance a of A;
+    i = i - 1;
+  end while;
+  
+elif ( 4 == param.phase )             // cleanup
+
+  // Delete instances.
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+
+elif ( 5 == param.phase )             // report
+
+  i = ( iterations * param.count );
+  ::report( message:"select then delete instance", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"01ec0a41-073d-42cf-8cb0-d462b2af741a");
+INSERT INTO O_TPARM
+	VALUES ("c22e7fe9-2884-4f41-975f-7e12c04c6164",
+	"d58bb729-607f-4036-9b60-df47958b4cea",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"69d77ee9-ca34-4b18-b9ab-111632443b02",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("69d77ee9-ca34-4b18-b9ab-111632443b02",
+	"d58bb729-607f-4036-9b60-df47958b4cea",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"48eae92e-d381-43c9-9539-b9c3cfa772ee",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("8f788790-5d90-481e-9e1d-40b1ac83cfb2",
+	"d58bb729-607f-4036-9b60-df47958b4cea",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("48eae92e-d381-43c9-9539-b9c3cfa772ee",
+	"d58bb729-607f-4036-9b60-df47958b4cea",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"8f788790-5d90-481e-9e1d-40b1ac83cfb2",
+	'');
+INSERT INTO O_TFR
+	VALUES ("67a1326e-51fa-4529-86b4-c29a98a975af",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'generate_event',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 300;
+if ( 1 == param.phase )               // setup
+
+  create object instance a of A;
+  
+elif ( 2 == param.phase )             // run
+
+  // Create a bunch of events.
+  select any a from instances of A;
+  a.generate_ignored_event_to_self( count:iterations );
+  
+elif ( 3 == param.phase )             // unrun
+
+  // The self events will flush by themselves here.
+  
+elif ( 4 == param.phase )             // cleanup
+
+  select any a from instances of A;
+  delete object instance a;
+
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"generate event", count:i, duration:param.duration );
+
+else
+
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"e2739873-cac2-4220-889b-e1ea304372ae");
+INSERT INTO O_TPARM
+	VALUES ("0a64541f-05d2-4b1a-a363-d016e827553a",
+	"67a1326e-51fa-4529-86b4-c29a98a975af",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"f33bc012-665f-4c43-a937-03652afbcdc0",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("f33bc012-665f-4c43-a937-03652afbcdc0",
+	"67a1326e-51fa-4529-86b4-c29a98a975af",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"34dc4102-5a7c-44b5-8c53-a2a004c7c12d",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("83f17ed1-138f-4804-941c-c4d73cf7c988",
+	"67a1326e-51fa-4529-86b4-c29a98a975af",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("34dc4102-5a7c-44b5-8c53-a2a004c7c12d",
+	"67a1326e-51fa-4529-86b4-c29a98a975af",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"83f17ed1-138f-4804-941c-c4d73cf7c988",
+	'');
+INSERT INTO O_TFR
+	VALUES ("e2739873-cac2-4220-889b-e1ea304372ae",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'generate_and_dispatch_event',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'if ( 1 == param.phase )               // setup
+
+  create object instance a of A;
+  a.odometer = 0;
+  create object instance b of B;
+  relate a to b across R1;
+  
+elif ( 2 == param.phase )             // run
+
+  select any a from instances of A;
+  generate A1:e() to a;
+
+elif ( 3 == param.phase )             // unrun
+
+  // Return false to avoid looping.
+  return false;
+  
+elif ( 4 == param.phase )             // cleanup
+
+  select any a from instances of A;
+  generate A3:stop() to a;
+  
+elif ( 5 == param.phase )             // report
+
+  select any a from instances of A;
+  odometer_reading = a.odometer * param.count;
+  ::report( message:"generate and dispatch event",
+    count:odometer_reading,
+    duration:999 );  // Hard-code duration due to no looping.
+  delete object instance a;
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"a5bd103b-1ca0-45ca-95b7-7790a426b68d");
+INSERT INTO O_TPARM
+	VALUES ("bc26edf6-2d2d-46af-8626-ab2b25cbe338",
+	"e2739873-cac2-4220-889b-e1ea304372ae",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"afd1c2dd-5e12-41b1-ab22-4ffe77753218",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("afd1c2dd-5e12-41b1-ab22-4ffe77753218",
+	"e2739873-cac2-4220-889b-e1ea304372ae",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"5c2d9efd-cb31-4950-9676-e61385375ab8",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("864ade1c-3953-41dd-82ec-450804e94f3b",
+	"e2739873-cac2-4220-889b-e1ea304372ae",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("5c2d9efd-cb31-4950-9676-e61385375ab8",
+	"e2739873-cac2-4220-889b-e1ea304372ae",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"864ade1c-3953-41dd-82ec-450804e94f3b",
+	'');
+INSERT INTO O_TFR
+	VALUES ("5ada2b11-cf9f-4345-a8b4-7550d5ae565f",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'select_one_related',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 100;
+if ( 1 == param.phase )               // setup
+
+  create object instance a of A;
+  create object instance b of B;
+  relate a to b across R1;
+  
+elif ( 2 == param.phase )             // run
+
+  select any a from instances of A;
+  i = iterations;
+  while ( i > 0 )
+    select one b related by a->B[R1];
+    i = i - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  select any a from instances of A;
+  select any b from instances of B;
+  if ( ( not_empty a ) and ( not_empty b ) )
+    unrelate a from b across R1;
+    delete object instance a;
+    delete object instance b;
+  end if;
+  
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"select one related", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"97a91061-49c7-4eed-9c0a-d73bfdea5e2a");
+INSERT INTO O_TPARM
+	VALUES ("a2b29134-9bcb-408a-9b55-25801a40509d",
+	"5ada2b11-cf9f-4345-a8b4-7550d5ae565f",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"ccaf404b-329d-40db-aa0e-0802d97e3174",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("ccaf404b-329d-40db-aa0e-0802d97e3174",
+	"5ada2b11-cf9f-4345-a8b4-7550d5ae565f",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"540cce96-6277-400d-b5dd-879bf0a8bdb8",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("8efa0dbf-4b03-4556-9041-c496d4b43e56",
+	"5ada2b11-cf9f-4345-a8b4-7550d5ae565f",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("540cce96-6277-400d-b5dd-879bf0a8bdb8",
+	"5ada2b11-cf9f-4345-a8b4-7550d5ae565f",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"8efa0dbf-4b03-4556-9041-c496d4b43e56",
+	'');
+INSERT INTO O_TFR
+	VALUES ("12c630f2-b45d-47a7-a468-4665124f0e3c",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'select_any_from',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+if ( 1 == param.phase )               // setup
+
+  create object instance a of A;
+  
+elif ( 2 == param.phase )             // run
+
+  i = iterations;
+  while ( i > 0 )
+    select any a0 from instances of A;
+    select any a1 from instances of A;
+    select any a2 from instances of A;
+    select any a3 from instances of A;
+    select any a4 from instances of A;
+    select any a5 from instances of A;
+    select any a6 from instances of A;
+    select any a7 from instances of A;
+    select any a8 from instances of A;
+    select any a9 from instances of A;
+    i = i - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  select any a from instances of A;
+  delete object instance a;
+  
+elif ( 5 == param.phase )             // report
+
+  i = 10 * iterations * param.count;
+  ::report( message:"select any from instances of", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"7645aa3e-7199-48e1-8753-e295270d04f7");
+INSERT INTO O_TPARM
+	VALUES ("8e81c8da-0ec8-41f6-897a-ca7222988d49",
+	"12c630f2-b45d-47a7-a468-4665124f0e3c",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"3a03c27c-d062-405f-b36c-2c6aa8f815d0",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("3a03c27c-d062-405f-b36c-2c6aa8f815d0",
+	"12c630f2-b45d-47a7-a468-4665124f0e3c",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"6e67c11b-7995-40e2-814c-4c4046903e8e",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("6463e179-3e0f-47b3-828d-df7c8582e492",
+	"12c630f2-b45d-47a7-a468-4665124f0e3c",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("6e67c11b-7995-40e2-814c-4c4046903e8e",
+	"12c630f2-b45d-47a7-a468-4665124f0e3c",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"6463e179-3e0f-47b3-828d-df7c8582e492",
+	'');
+INSERT INTO O_TFR
+	VALUES ("19660fcf-ca0e-43c1-b03c-25ed986965f8",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'relate_one',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+if ( 1 == param.phase )               // setup
+
+  create object instance a of A;
+  create object instance b of B;
+  
+elif ( 2 == param.phase )             // run
+
+  select any a from instances of A;
+  select any b from instances of B;
+  i = iterations;
+  while ( i > 0 )
+    relate a to b across R1;
+    relate a to b across R1;
+    relate a to b across R1;
+    relate a to b across R1;
+    relate a to b across R1;
+    relate a to b across R1;
+    relate a to b across R1;
+    relate a to b across R1;
+    relate a to b across R1;
+    relate a to b across R1;
+    i = i - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  select any a from instances of A;
+  select any b from instances of B;
+  unrelate a from b across R1;
+  delete object instance a;
+  delete object instance b;
+  
+elif ( 5 == param.phase )             // report
+
+  i = 10 * iterations * param.count;
+  ::report( message:"relate one", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"a23533a5-8749-4a48-a1ea-c101b0cf0707");
+INSERT INTO O_TPARM
+	VALUES ("048ee071-0386-410f-b7a1-45226e3c1e3e",
+	"19660fcf-ca0e-43c1-b03c-25ed986965f8",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"889ff166-98ec-4244-80a7-058a8529a0ac",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("889ff166-98ec-4244-80a7-058a8529a0ac",
+	"19660fcf-ca0e-43c1-b03c-25ed986965f8",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"90a4ccbe-86ad-4a69-a7d5-233e929dd52a",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("a99f8027-5ca0-4203-84d3-ee5f08606fcf",
+	"19660fcf-ca0e-43c1-b03c-25ed986965f8",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("90a4ccbe-86ad-4a69-a7d5-233e929dd52a",
+	"19660fcf-ca0e-43c1-b03c-25ed986965f8",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"a99f8027-5ca0-4203-84d3-ee5f08606fcf",
+	'');
+INSERT INTO O_TFR
+	VALUES ("4070e6d2-c00f-4ad7-bd7c-38173965e373",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'relate_one_to_many',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+if ( 1 == param.phase )               // setup
+
+  create object instance c of C;
+  create object instance d of D;
+  // Traverse the relationship so code is generated.
+  select one c1 related by d->C[R2];
+  select any d1 related by c->D[R2];
+  
+elif ( 2 == param.phase )             // run
+
+  select any c from instances of C;
+  select any d from instances of D;
+  i = iterations;
+  while ( 0 < i )
+    relate c to d across R2; unrelate c from d across R2;
+    relate c to d across R2; unrelate c from d across R2;
+    relate c to d across R2; unrelate c from d across R2;
+    relate c to d across R2; unrelate c from d across R2;
+    relate c to d across R2; unrelate c from d across R2;
+    relate c to d across R2; unrelate c from d across R2;
+    relate c to d across R2; unrelate c from d across R2;
+    relate c to d across R2; unrelate c from d across R2;
+    relate c to d across R2; unrelate c from d across R2;
+    relate c to d across R2; unrelate c from d across R2;
+    i = i - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  select any c from instances of C;
+  select any d from instances of D;
+  unrelate c from d across R2;
+  delete object instance c;
+  delete object instance d;
+  
+elif ( 5 == param.phase )             // report
+
+  i = 10 * iterations * param.count;
+  ::report( message:"relate/unrelate one to many", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"19660fcf-ca0e-43c1-b03c-25ed986965f8");
+INSERT INTO O_TPARM
+	VALUES ("9243e68e-4cd8-4303-bde1-4d87fbc2bfdf",
+	"4070e6d2-c00f-4ad7-bd7c-38173965e373",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"5485c506-3fac-4fde-aeb1-2addd94cce01",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("5485c506-3fac-4fde-aeb1-2addd94cce01",
+	"4070e6d2-c00f-4ad7-bd7c-38173965e373",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"173ad4ae-2bd6-43bd-8004-38c8c4e282ab",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("098fb3f7-b388-4a7b-9fc3-66cad9542d87",
+	"4070e6d2-c00f-4ad7-bd7c-38173965e373",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("173ad4ae-2bd6-43bd-8004-38c8c4e282ab",
+	"4070e6d2-c00f-4ad7-bd7c-38173965e373",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"098fb3f7-b388-4a7b-9fc3-66cad9542d87",
+	'');
+INSERT INTO O_TFR
+	VALUES ("7645aa3e-7199-48e1-8753-e295270d04f7",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'relate_one_using',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+if ( 1 == param.phase )               // setup
+
+  create object instance e of E;
+  create object instance f of F;
+  create object instance g of G;
+  
+elif ( 2 == param.phase )             // run
+
+  select any e from instances of E;
+  select any f from instances of F;
+  select any g from instances of G;
+  i = iterations;
+  while ( 0 < i )
+    relate e to f across R3 using g;
+    i = i - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+
+  select any e from instances of E;
+  select one f related by e->F[R3];
+  select one g related by e->G[R3];
+  unrelate e from f across R3 using g;
+
+elif ( 4 == param.phase )             // cleanup
+
+  select any e from instances of E;
+  delete object instance e;
+  more = true;
+  while ( more )
+    select any f from instances of F;
+    if ( not_empty f )
+      delete object instance f;
+    else
+      more = false;
+    end if;
+  end while;
+  more = true;
+  while ( more )
+    select any g from instances of G;
+    if ( not_empty g )
+      delete object instance g;
+    else
+      more = false;
+    end if;
+  end while;
+  
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"relate one to many using", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"4070e6d2-c00f-4ad7-bd7c-38173965e373");
+INSERT INTO O_TPARM
+	VALUES ("5e537a82-70dd-473c-b9a2-5a088941b7fa",
+	"7645aa3e-7199-48e1-8753-e295270d04f7",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"fc14f411-97ca-4221-a244-ddc5d7930cdd",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("fc14f411-97ca-4221-a244-ddc5d7930cdd",
+	"7645aa3e-7199-48e1-8753-e295270d04f7",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"ff3e2496-d015-4dc6-bbef-cc5e3821d86e",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("ecab3b2c-d8a8-43bb-8829-ad2ad358bac8",
+	"7645aa3e-7199-48e1-8753-e295270d04f7",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("ff3e2496-d015-4dc6-bbef-cc5e3821d86e",
+	"7645aa3e-7199-48e1-8753-e295270d04f7",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"ecab3b2c-d8a8-43bb-8829-ad2ad358bac8",
+	'');
+INSERT INTO O_TFR
+	VALUES ("75427476-fe27-4055-929c-7151b743fbba",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'cardinality_10000',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+if ( 1 == param.phase )               // setup
+
+  // Create a bunch.
+  i = iterations;
+  while ( 0 < i )
+    create object instance a of A;
+    i = i - 1;
+  end while;
+  
+elif ( 2 == param.phase )             // run
+
+  select many as from instances of A;
+  i = iterations;
+  while ( 0 < i )
+    j = cardinality as;
+    i = i - 1;
+  end while;
+  
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"cardinality 10000", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"88166d50-392f-4167-8465-f7c6d0261b1d");
+INSERT INTO O_TPARM
+	VALUES ("51c82577-7ba5-46ed-b1ba-66ddaa2ea3d9",
+	"75427476-fe27-4055-929c-7151b743fbba",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"bf8cbb9c-849a-43bc-b3f0-fe8c5659d158",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("bf8cbb9c-849a-43bc-b3f0-fe8c5659d158",
+	"75427476-fe27-4055-929c-7151b743fbba",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"50ced2ad-7503-42e2-90a1-30c6f30d97b4",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("acddbc47-70b3-4677-a63b-670646e87bcd",
+	"75427476-fe27-4055-929c-7151b743fbba",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("50ced2ad-7503-42e2-90a1-30c6f30d97b4",
+	"75427476-fe27-4055-929c-7151b743fbba",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"acddbc47-70b3-4677-a63b-670646e87bcd",
+	'');
+INSERT INTO O_TFR
+	VALUES ("88166d50-392f-4167-8465-f7c6d0261b1d",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'cardinality_1000',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 1000;
+if ( 1 == param.phase )               // setup
+
+  // Create a bunch.
+  i = iterations;
+  while ( 0 < i )
+    create object instance a of A;
+    i = i - 1;
+  end while;
+  
+elif ( 2 == param.phase )             // run
+
+  select many as from instances of A;
+  i = iterations;
+  while ( 0 < i )
+    j = cardinality as;
+    i = i - 1;
+  end while;
+  
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"cardinality 1000", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"13d6c02d-d098-403d-884d-cdf19633a90c");
+INSERT INTO O_TPARM
+	VALUES ("abec6767-d1d1-4f01-917f-02fba6aeafd5",
+	"88166d50-392f-4167-8465-f7c6d0261b1d",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"d49bc8a7-bb46-48c6-954f-e04091b0f238",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("d49bc8a7-bb46-48c6-954f-e04091b0f238",
+	"88166d50-392f-4167-8465-f7c6d0261b1d",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"77a00e13-b26c-43fc-8524-cc21aa6f9267",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("bb9a96cb-78ab-40f6-a749-f0fb2cbc1594",
+	"88166d50-392f-4167-8465-f7c6d0261b1d",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("77a00e13-b26c-43fc-8524-cc21aa6f9267",
+	"88166d50-392f-4167-8465-f7c6d0261b1d",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"bb9a96cb-78ab-40f6-a749-f0fb2cbc1594",
+	'');
+INSERT INTO O_TFR
+	VALUES ("13d6c02d-d098-403d-884d-cdf19633a90c",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'cardinality_100',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 100;
+if ( 1 == param.phase )               // setup
+
+  // Create a bunch.
+  i = iterations;
+  while ( 0 < i )
+    create object instance a of A;
+    i = i - 1;
+  end while;
+  
+elif ( 2 == param.phase )             // run
+
+  select many as from instances of A;
+  i = iterations;
+  while ( 0 < i )
+    j = cardinality as;
+    i = i - 1;
+  end while;
+  
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"cardinality 100", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"886ed066-1d28-4f79-a71e-351b52aa2cc3");
+INSERT INTO O_TPARM
+	VALUES ("ff936488-3640-489f-99fe-c513983397ef",
+	"13d6c02d-d098-403d-884d-cdf19633a90c",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"4ff061f2-784b-41a0-8e52-7012bbe994c5",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("4ff061f2-784b-41a0-8e52-7012bbe994c5",
+	"13d6c02d-d098-403d-884d-cdf19633a90c",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"1605dc76-eb75-4b3d-bdf6-37ff004d2793",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("9e4c281d-e756-4b19-96a3-a3e2a79d4b09",
+	"13d6c02d-d098-403d-884d-cdf19633a90c",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("1605dc76-eb75-4b3d-bdf6-37ff004d2793",
+	"13d6c02d-d098-403d-884d-cdf19633a90c",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"9e4c281d-e756-4b19-96a3-a3e2a79d4b09",
+	'');
+INSERT INTO O_TFR
+	VALUES ("886ed066-1d28-4f79-a71e-351b52aa2cc3",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'cardinality_10',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10;
+if ( 1 == param.phase )               // setup
+
+  // Create a bunch.
+  i = iterations;
+  while ( 0 < i )
+    create object instance a of A;
+    i = i - 1;
+  end while;
+  
+elif ( 2 == param.phase )             // run
+
+  select many as from instances of A;
+  i = iterations;
+  while ( 0 < i )
+    j = cardinality as;
+    i = i - 1;
+  end while;
+  
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"cardinality 10", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"ac43f5b1-f6a1-4f86-b33b-f7343a330b0d");
+INSERT INTO O_TPARM
+	VALUES ("24e5ffb2-ccd3-47ee-b5a2-34fcbb398d89",
+	"886ed066-1d28-4f79-a71e-351b52aa2cc3",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"35809195-b6f5-4480-a490-40c6c23bb31e",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("35809195-b6f5-4480-a490-40c6c23bb31e",
+	"886ed066-1d28-4f79-a71e-351b52aa2cc3",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"87297058-0751-4671-8ab4-4c9910b05f38",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("caf0a913-1af9-4521-bca3-70bce3faae37",
+	"886ed066-1d28-4f79-a71e-351b52aa2cc3",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("87297058-0751-4671-8ab4-4c9910b05f38",
+	"886ed066-1d28-4f79-a71e-351b52aa2cc3",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"caf0a913-1af9-4521-bca3-70bce3faae37",
+	'');
+INSERT INTO O_TFR
+	VALUES ("97a91061-49c7-4eed-9c0a-d73bfdea5e2a",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'select_any_where_10000',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+if ( 1 == param.phase )               // setup
+
+  i = 10000;
+  while ( 0 < i )
+    create object instance a of A;
+    a.ID = i;
+    i = i - 1;
+  end while;
+  
+elif ( 2 == param.phase )             // run
+
+  i = 10000;
+  while ( i > 0 )
+    select any a from instances of A where ( selected.ID == i );
+    i = i - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+  
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"select any where 10000", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"220a90c5-be3c-4f6e-be1f-f10aae14795f");
+INSERT INTO O_TPARM
+	VALUES ("535e9a6e-ba40-483b-a224-f88dd36ace86",
+	"97a91061-49c7-4eed-9c0a-d73bfdea5e2a",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"70e0ef19-3191-4f02-ba5c-b6a6eab0aed6",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("70e0ef19-3191-4f02-ba5c-b6a6eab0aed6",
+	"97a91061-49c7-4eed-9c0a-d73bfdea5e2a",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"601378df-5b50-4cab-a4ac-f9598d85316a",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("bb8981a1-465e-495c-85ed-139e163815b9",
+	"97a91061-49c7-4eed-9c0a-d73bfdea5e2a",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("601378df-5b50-4cab-a4ac-f9598d85316a",
+	"97a91061-49c7-4eed-9c0a-d73bfdea5e2a",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"bb8981a1-465e-495c-85ed-139e163815b9",
+	'');
+INSERT INTO O_TFR
+	VALUES ("220a90c5-be3c-4f6e-be1f-f10aae14795f",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'select_any_where_1000',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 5000;
+if ( 1 == param.phase )               // setup
+
+  i = 100;
+  while ( 0 < i )
+    create object instance a of A;
+    a.ID = i;
+    i = i - 1;
+  end while;
+  
+elif ( 2 == param.phase )             // run
+
+  j = 5;
+  while ( 0 < j )
+    i = 1000;
+    while ( i > 0 )
+      select any a from instances of A where ( selected.ID == i );
+      i = i - 1;
+    end while;
+    j = j - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+  
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"select any where 1000", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"622b3f9b-a286-4a66-b3e6-bb6b5e5e58a6");
+INSERT INTO O_TPARM
+	VALUES ("039f1e9f-6e31-42b9-ae02-f223317368da",
+	"220a90c5-be3c-4f6e-be1f-f10aae14795f",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"9d535236-5a81-4ded-8ae2-812f0a50699c",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("9d535236-5a81-4ded-8ae2-812f0a50699c",
+	"220a90c5-be3c-4f6e-be1f-f10aae14795f",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"2e5f5507-0abd-4553-a705-26dc6ce485e5",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("974afa21-690c-489e-8bb3-9b3a172ce3cc",
+	"220a90c5-be3c-4f6e-be1f-f10aae14795f",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("2e5f5507-0abd-4553-a705-26dc6ce485e5",
+	"220a90c5-be3c-4f6e-be1f-f10aae14795f",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"974afa21-690c-489e-8bb3-9b3a172ce3cc",
+	'');
+INSERT INTO O_TFR
+	VALUES ("622b3f9b-a286-4a66-b3e6-bb6b5e5e58a6",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'select_any_where_100',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 5000;
+if ( 1 == param.phase )               // setup
+
+  i = 100;
+  while ( 0 < i )
+    create object instance a of A;
+    a.ID = i;
+    i = i - 1;
+  end while;
+  
+elif ( 2 == param.phase )             // run
+
+  j = 50;
+  while ( 0 < j )
+    i = 100;
+    while ( i > 0 )
+      select any a from instances of A where ( selected.ID == i );
+      i = i - 1;
+    end while;
+    j = j - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+  
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"select any where 100", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"67b7e1fa-5e69-4d4c-909f-c7b06c11f5bb");
+INSERT INTO O_TPARM
+	VALUES ("9ba16046-15d4-4a17-9bee-9e64da3ef825",
+	"622b3f9b-a286-4a66-b3e6-bb6b5e5e58a6",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"a731f3fd-962a-4cd1-bc90-d6e904f0da4c",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("a731f3fd-962a-4cd1-bc90-d6e904f0da4c",
+	"622b3f9b-a286-4a66-b3e6-bb6b5e5e58a6",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"5908f9cf-08ef-499a-9dd6-22a898872285",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("6e7892e2-f5d8-4803-8a1b-e777089daea9",
+	"622b3f9b-a286-4a66-b3e6-bb6b5e5e58a6",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("5908f9cf-08ef-499a-9dd6-22a898872285",
+	"622b3f9b-a286-4a66-b3e6-bb6b5e5e58a6",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"6e7892e2-f5d8-4803-8a1b-e777089daea9",
+	'');
+INSERT INTO O_TFR
+	VALUES ("67b7e1fa-5e69-4d4c-909f-c7b06c11f5bb",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'select_any_where_10',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 5000;
+if ( 1 == param.phase )               // setup
+
+  i = 10;
+  while ( 0 < i )
+    create object instance a of A;
+    a.ID = i;
+    i = i - 1;
+  end while;
+  
+elif ( 2 == param.phase )             // run
+
+  j = 500;
+  while ( 0 < j )
+    i = 10;
+    while ( i > 0 )
+      select any a from instances of A where ( selected.ID == i );
+      i = i - 1;
+    end while;
+    j = j - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+  
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"select any where 10", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"12c630f2-b45d-47a7-a468-4665124f0e3c");
+INSERT INTO O_TPARM
+	VALUES ("dda1783c-9f37-45bd-99d2-19fce6b0080f",
+	"67b7e1fa-5e69-4d4c-909f-c7b06c11f5bb",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"d30b72e2-1f48-46ea-900c-3dfe7be3a59d",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("d30b72e2-1f48-46ea-900c-3dfe7be3a59d",
+	"67b7e1fa-5e69-4d4c-909f-c7b06c11f5bb",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"0815dce8-3950-465d-987f-2ab81270118a",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("ed723de0-48bd-40fd-b8f9-9bcaddd45499",
+	"67b7e1fa-5e69-4d4c-909f-c7b06c11f5bb",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("0815dce8-3950-465d-987f-2ab81270118a",
+	"67b7e1fa-5e69-4d4c-909f-c7b06c11f5bb",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"ed723de0-48bd-40fd-b8f9-9bcaddd45499",
+	'');
+INSERT INTO O_TFR
+	VALUES ("a23533a5-8749-4a48-a1ea-c101b0cf0707",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'read_attribute',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+if ( 1 == param.phase )               // setup
+
+  create object instance a of A;
+  
+elif ( 2 == param.phase )             // run
+
+  select any a from instances of A;
+  i = iterations;
+  while ( i > 0 )
+    j = a.odometer;
+    j = a.odometer;
+    j = a.odometer;
+    j = a.odometer;
+    j = a.odometer;
+    j = a.odometer;
+    j = a.odometer;
+    j = a.odometer;
+    j = a.odometer;
+    j = a.odometer;
+    i = i - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  select any a from instances of A;
+  delete object instance a;
+  
+elif ( 5 == param.phase )             // report
+
+  i = 10 * iterations * param.count;
+  ::report( message:"read attribute", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"67a1326e-51fa-4529-86b4-c29a98a975af");
+INSERT INTO O_TPARM
+	VALUES ("99216a43-3539-4c9a-b028-0073f9dd9c44",
+	"a23533a5-8749-4a48-a1ea-c101b0cf0707",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"04d162f0-6e29-4be9-898a-f1df82bdbb4f",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("04d162f0-6e29-4be9-898a-f1df82bdbb4f",
+	"a23533a5-8749-4a48-a1ea-c101b0cf0707",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"066a9e04-1e52-4905-b0a7-cee2ff649ecc",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("7e44064b-bf86-4bbc-b382-91d69eb6df07",
+	"a23533a5-8749-4a48-a1ea-c101b0cf0707",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("066a9e04-1e52-4905-b0a7-cee2ff649ecc",
+	"a23533a5-8749-4a48-a1ea-c101b0cf0707",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"7e44064b-bf86-4bbc-b382-91d69eb6df07",
+	'');
+INSERT INTO O_TFR
+	VALUES ("2f920a4a-501d-4192-ab47-b31a07cfe935",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'write_attribute',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+if ( 1 == param.phase )               // setup
+
+  create object instance a of A;
+  
+elif ( 2 == param.phase )             // run
+
+  select any a from instances of A;
+  i = iterations;
+  while ( i > 0 )
+    a.odometer = 0;
+    a.odometer = 0;
+    a.odometer = 0;
+    a.odometer = 0;
+    a.odometer = 0;
+    a.odometer = 0;
+    a.odometer = 0;
+    a.odometer = 0;
+    a.odometer = 0;
+    a.odometer = 0;
+    i = i - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+  select any a from instances of A;
+  delete object instance a;
+  
+elif ( 5 == param.phase )             // report
+
+  i = 10 * iterations * param.count;
+  ::report( message:"write attribute", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"5ada2b11-cf9f-4345-a8b4-7550d5ae565f");
+INSERT INTO O_TPARM
+	VALUES ("91fe9515-d28d-4ea5-abd8-033ba05c0035",
+	"2f920a4a-501d-4192-ab47-b31a07cfe935",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"73699196-a85d-4aef-b979-90807c5911d3",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("73699196-a85d-4aef-b979-90807c5911d3",
+	"2f920a4a-501d-4192-ab47-b31a07cfe935",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"41cc09ba-1eb0-482c-93fc-853c1e9a040b",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("fdd0c331-c511-4665-85a8-c33e05b1807e",
+	"2f920a4a-501d-4192-ab47-b31a07cfe935",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("41cc09ba-1eb0-482c-93fc-853c1e9a040b",
+	"2f920a4a-501d-4192-ab47-b31a07cfe935",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"fdd0c331-c511-4665-85a8-c33e05b1807e",
+	'');
+INSERT INTO O_TFR
+	VALUES ("ac43f5b1-f6a1-4f86-b33b-f7343a330b0d",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'bridge_void_void',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+if ( 1 == param.phase )               // setup
+elif ( 2 == param.phase )             // run
+
+  i = iterations;
+  while ( i > 0 )
+    TESTLOOP::bridge_void_void();
+    TESTLOOP::bridge_void_void();
+    TESTLOOP::bridge_void_void();
+    TESTLOOP::bridge_void_void();
+    TESTLOOP::bridge_void_void();
+    TESTLOOP::bridge_void_void();
+    TESTLOOP::bridge_void_void();
+    TESTLOOP::bridge_void_void();
+    TESTLOOP::bridge_void_void();
+    TESTLOOP::bridge_void_void();
+    i = i - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+elif ( 5 == param.phase )             // report
+
+  i = 10 * iterations * param.count;
+  ::report( message:"bridge void void", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;',
+	1,
+	'',
+	"2369d2b4-2a91-4cdc-b1ae-e58fed370b14");
+INSERT INTO O_TPARM
+	VALUES ("35f70fd4-db33-463e-87ef-f80c960e3b64",
+	"ac43f5b1-f6a1-4f86-b33b-f7343a330b0d",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"31db6e7b-d56e-478b-9703-3ef1d246bd85",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("31db6e7b-d56e-478b-9703-3ef1d246bd85",
+	"ac43f5b1-f6a1-4f86-b33b-f7343a330b0d",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"2e606a01-b8f6-40bc-bef7-1de450cbe96d",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("72503111-59b2-44b0-a01e-1993701dcb52",
+	"ac43f5b1-f6a1-4f86-b33b-f7343a330b0d",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("2e606a01-b8f6-40bc-bef7-1de450cbe96d",
+	"ac43f5b1-f6a1-4f86-b33b-f7343a330b0d",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"72503111-59b2-44b0-a01e-1993701dcb52",
+	'');
+INSERT INTO O_TFR
+	VALUES ("2369d2b4-2a91-4cdc-b1ae-e58fed370b14",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'bridge_void_integer',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+if ( 1 == param.phase )               // setup
+elif ( 2 == param.phase )             // run
+
+  i = iterations;
+  while ( i > 0 )
+    TESTLOOP::bridge_void_integer( i:i );
+    TESTLOOP::bridge_void_integer( i:i );
+    TESTLOOP::bridge_void_integer( i:i );
+    TESTLOOP::bridge_void_integer( i:i );
+    TESTLOOP::bridge_void_integer( i:i );
+    TESTLOOP::bridge_void_integer( i:i );
+    TESTLOOP::bridge_void_integer( i:i );
+    TESTLOOP::bridge_void_integer( i:i );
+    TESTLOOP::bridge_void_integer( i:i );
+    TESTLOOP::bridge_void_integer( i:i );
+    i = i - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+elif ( 5 == param.phase )             // report
+
+  i = 10 * iterations * param.count;
+  ::report( message:"bridge void integer", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"1a0f15f4-a1f0-4b34-bc28-21c22db45fe2");
+INSERT INTO O_TPARM
+	VALUES ("3de1b718-26ca-4077-b5c8-7978b2aafd88",
+	"2369d2b4-2a91-4cdc-b1ae-e58fed370b14",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"c1d24f3f-1634-4673-a1c3-2a3c739b4251",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("c1d24f3f-1634-4673-a1c3-2a3c739b4251",
+	"2369d2b4-2a91-4cdc-b1ae-e58fed370b14",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"1f4cc396-495f-455b-b401-a06182bc4505",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("04fc4278-a1b4-46c5-a0f9-63eccd8cb132",
+	"2369d2b4-2a91-4cdc-b1ae-e58fed370b14",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("1f4cc396-495f-455b-b401-a06182bc4505",
+	"2369d2b4-2a91-4cdc-b1ae-e58fed370b14",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"04fc4278-a1b4-46c5-a0f9-63eccd8cb132",
+	'');
+INSERT INTO O_TFR
+	VALUES ("1a0f15f4-a1f0-4b34-bc28-21c22db45fe2",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'bridge_integer_integer',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 10000;
+j = 0;
+if ( 1 == param.phase )               // setup
+elif ( 2 == param.phase )             // run
+
+  i = iterations;
+  while ( i > 0 )
+    j = TESTLOOP::bridge_integer_integer( i:i );
+    j = TESTLOOP::bridge_integer_integer( i:i );
+    j = TESTLOOP::bridge_integer_integer( i:i );
+    j = TESTLOOP::bridge_integer_integer( i:i );
+    j = TESTLOOP::bridge_integer_integer( i:i );
+    j = TESTLOOP::bridge_integer_integer( i:i );
+    j = TESTLOOP::bridge_integer_integer( i:i );
+    j = TESTLOOP::bridge_integer_integer( i:i );
+    j = TESTLOOP::bridge_integer_integer( i:i );
+    j = TESTLOOP::bridge_integer_integer( i:i );
+    i = i - 1;
+  end while;
+
+elif ( 3 == param.phase )             // unrun
+elif ( 4 == param.phase )             // cleanup
+
+elif ( 5 == param.phase )             // report
+
+  i = 10 * iterations * param.count;
+  ::report( message:"bridge integer integer", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("0b9272e4-464c-40fe-852d-1d0e9fd01da5",
+	"1a0f15f4-a1f0-4b34-bc28-21c22db45fe2",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"da84e503-a9ec-485e-8fd9-69b2a1de2ce5",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("da84e503-a9ec-485e-8fd9-69b2a1de2ce5",
+	"1a0f15f4-a1f0-4b34-bc28-21c22db45fe2",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"3467eecb-a5bf-4380-9cfb-ff7159769c1a",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("4209dc73-fd8e-490a-b6c6-79df3ab66637",
+	"1a0f15f4-a1f0-4b34-bc28-21c22db45fe2",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("3467eecb-a5bf-4380-9cfb-ff7159769c1a",
+	"1a0f15f4-a1f0-4b34-bc28-21c22db45fe2",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"4209dc73-fd8e-490a-b6c6-79df3ab66637",
+	'');
+INSERT INTO O_TFR
+	VALUES ("a5bd103b-1ca0-45ca-95b7-7790a426b68d",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	'delete_many',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'iterations = 5000;
+if ( 1 == param.phase )               // setup
+
+  // Create a bunch.
+  i = iterations;
+  while ( 0 < i )
+    create object instance a of A;
+    i = i - 1;
+  end while;
+  
+elif ( 2 == param.phase )             // run
+
+  // Delete instances.
+  select many as from instances of A;
+  for each a in as
+    delete object instance a;
+  end for;
+  
+elif ( 3 == param.phase )             // unrun
+
+  // Create a bunch.
+  i = iterations;
+  while ( 0 < i )
+    create object instance a of A;
+    i = i - 1;
+  end while;
+  
+elif ( 4 == param.phase )             // cleanup
+
+  more = true;
+  while ( more )
+    select any a from instances of A;
+    if ( empty a )
+      more = false;
+    else
+      delete object instance a;
+    end if;
+  end while;
+
+elif ( 5 == param.phase )             // report
+
+  i = iterations * param.count;
+  ::report( message:"select many delete 5000 instances", count:i, duration:param.duration );
+
+else
+end if;
+
+// Allow normal test looping.
+return true;
+',
+	1,
+	'',
+	"d58bb729-607f-4036-9b60-df47958b4cea");
+INSERT INTO O_TPARM
+	VALUES ("531695a5-6194-40ac-b6c9-cedd04fdb714",
+	"a5bd103b-1ca0-45ca-95b7-7790a426b68d",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"98bc3405-c409-42cf-8fb5-b07d580508f9",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("98bc3405-c409-42cf-8fb5-b07d580508f9",
+	"a5bd103b-1ca0-45ca-95b7-7790a426b68d",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"e857de25-38f3-4dcb-a712-9fdc34d4f675",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("53f751ea-c2c5-4b74-8cb1-350f8d75bdcf",
+	"a5bd103b-1ca0-45ca-95b7-7790a426b68d",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("e857de25-38f3-4dcb-a712-9fdc34d4f675",
+	"a5bd103b-1ca0-45ca-95b7-7790a426b68d",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"53f751ea-c2c5-4b74-8cb1-350f8d75bdcf",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("a2a3737b-0382-4cab-a2ae-e5e93f8fe394",
+	"714912cd-1c00-4de0-a374-bfca682d873d");
+INSERT INTO O_BATTR
+	VALUES ("a2a3737b-0382-4cab-a2ae-e5e93f8fe394",
+	"714912cd-1c00-4de0-a374-bfca682d873d");
+INSERT INTO O_ATTR
+	VALUES ("a2a3737b-0382-4cab-a2ae-e5e93f8fe394",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	"306a7039-3cfd-4baa-8525-9f8386ca7535",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("b7c679f0-a21d-4475-81cc-3fc467dc1f2c",
+	"714912cd-1c00-4de0-a374-bfca682d873d");
+INSERT INTO O_BATTR
+	VALUES ("b7c679f0-a21d-4475-81cc-3fc467dc1f2c",
+	"714912cd-1c00-4de0-a374-bfca682d873d");
+INSERT INTO O_ATTR
+	VALUES ("b7c679f0-a21d-4475-81cc-3fc467dc1f2c",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	"00000000-0000-0000-0000-000000000000",
+	'test_number',
+	'',
+	'',
+	'test_number',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("306a7039-3cfd-4baa-8525-9f8386ca7535",
+	"714912cd-1c00-4de0-a374-bfca682d873d");
+INSERT INTO O_BATTR
+	VALUES ("306a7039-3cfd-4baa-8525-9f8386ca7535",
+	"714912cd-1c00-4de0-a374-bfca682d873d");
+INSERT INTO O_ATTR
+	VALUES ("306a7039-3cfd-4baa-8525-9f8386ca7535",
+	"714912cd-1c00-4de0-a374-bfca682d873d",
+	"b7c679f0-a21d-4475-81cc-3fc467dc1f2c",
+	'duration',
+	'',
+	'',
+	'duration',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"714912cd-1c00-4de0-a374-bfca682d873d");
+INSERT INTO O_ID
+	VALUES (1,
+	"714912cd-1c00-4de0-a374-bfca682d873d");
+INSERT INTO O_ID
+	VALUES (2,
+	"714912cd-1c00-4de0-a374-bfca682d873d");
+INSERT INTO PE_PE_PROXY
+	VALUES ("714912cd-1c00-4de0-a374-bfca682d873d",
+	1,
+	"97be34d7-2929-4054-a04e-ef938421bdf1",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../performance testing.xtuml');

@@ -1,0 +1,191 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8",
+	'delay',
+	5,
+	'DELAY',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("e0b04989-2969-413f-809d-e8ad0ccb78f9",
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'instruction = param.instruction;
+program = param.program;
+create object instance delay of DELAY;
+relate delay to instruction across R2;
+low = program.store[ program.PC + 1 ];
+high = program.store[ program.PC + 2 ];
+delay.milliseconds = ( high * 256 ) + low;
+low = program.store[ program.PC + 3 ];
+high = program.store[ program.PC + 4 ];
+delay.seconds = ( high * 256 ) + low;
+return 5;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("4a2fabff-28be-43ae-8dac-8662c958eb83",
+	"e0b04989-2969-413f-809d-e8ad0ccb78f9",
+	'instruction',
+	"fdc2359e-aa6d-4cd6-904e-90a164469ef2",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("fdc2359e-aa6d-4cd6-904e-90a164469ef2",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<instruction>',
+	'',
+	'',
+	'../virtual machine.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("fe57b8c1-f4a5-4260-b4c5-99cd4bc518f4",
+	"e0b04989-2969-413f-809d-e8ad0ccb78f9",
+	'program',
+	"8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	0,
+	'',
+	"4a2fabff-28be-43ae-8dac-8662c958eb83",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../virtual machine.xtuml');
+INSERT INTO O_TFR
+	VALUES ("5c412a33-bb4b-4ad5-945d-199049cfe646",
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo( message:"delay" );
+t = TIM::timer_start( microseconds:  self.milliseconds * 1000, event_inst:param.completion_event );',
+	1,
+	'',
+	"e0b04989-2969-413f-809d-e8ad0ccb78f9");
+INSERT INTO O_TPARM
+	VALUES ("eb0d7272-a9c0-4495-9359-11922d9cfe14",
+	"5c412a33-bb4b-4ad5-945d-199049cfe646",
+	'completion_event',
+	"ba5eda7a-def5-0000-0000-00000000000a",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_REF
+	VALUES ("bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	0,
+	"b20754b4-7faa-4231-a675-423898873a7a",
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"62efdda2-6cbb-4c04-a91a-e4b4d5adb9b9",
+	"64d9d140-cbcb-4b5c-8958-525c2c2f35ef",
+	"308cdb17-6b69-4aeb-bfe8-85c954289744",
+	"d6a9a78a-7db4-43dc-b8a9-d122f3c85222",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'instruction',
+	'location',
+	'R2');
+INSERT INTO R_RGO_PROXY
+	VALUES ("bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8",
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"62efdda2-6cbb-4c04-a91a-e4b4d5adb9b9",
+	'../virtual machine.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	0,
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"64d9d140-cbcb-4b5c-8958-525c2c2f35ef",
+	'../virtual machine.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("308cdb17-6b69-4aeb-bfe8-85c954289744",
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8",
+	"b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	1,
+	'location');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	'../instruction/instruction.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("308cdb17-6b69-4aeb-bfe8-85c954289744",
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8",
+	"00000000-0000-0000-0000-000000000000",
+	'location',
+	'',
+	'',
+	'location',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("3590dcda-69be-4d13-9a89-68db707558d3",
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8");
+INSERT INTO O_BATTR
+	VALUES ("3590dcda-69be-4d13-9a89-68db707558d3",
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8");
+INSERT INTO O_ATTR
+	VALUES ("3590dcda-69be-4d13-9a89-68db707558d3",
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8",
+	"308cdb17-6b69-4aeb-bfe8-85c954289744",
+	'milliseconds',
+	'',
+	'',
+	'milliseconds',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("0f229f1e-a6f0-425c-82c4-74a4b379a925",
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8");
+INSERT INTO O_BATTR
+	VALUES ("0f229f1e-a6f0-425c-82c4-74a4b379a925",
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8");
+INSERT INTO O_ATTR
+	VALUES ("0f229f1e-a6f0-425c-82c4-74a4b379a925",
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8",
+	"3590dcda-69be-4d13-9a89-68db707558d3",
+	'seconds',
+	'',
+	'',
+	'seconds',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8");
+INSERT INTO O_OIDA
+	VALUES ("308cdb17-6b69-4aeb-bfe8-85c954289744",
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8",
+	0,
+	'location');
+INSERT INTO O_ID
+	VALUES (1,
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8");
+INSERT INTO O_ID
+	VALUES (2,
+	"bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8");
+INSERT INTO PE_PE_PROXY
+	VALUES ("bc87a50b-d7ad-400e-af5a-a5f16b5c0ee8",
+	1,
+	"29302e88-9412-4bb6-8fe3-e59b85d440a1",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../virtual machine.xtuml');

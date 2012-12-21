@@ -1,0 +1,135 @@
+-- BP 7.1 content: Package syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO EP_PKG
+	VALUES ("9301e24f-b9a5-4e87-8269-969024ba91f6",
+	"00000000-0000-0000-0000-000000000000",
+	"efcfc98b-d05d-4348-a9dd-0c5bc9534dfc",
+	'fun',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("5b03aea4-dab3-4afa-a08e-dfe62be7e7f4",
+	112,
+	"9301e24f-b9a5-4e87-8269-969024ba91f6",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'3.6.0',
+	'dsl::components::client_application::fun');
+INSERT INTO DIM_DIA
+	VALUES ("5b03aea4-dab3-4afa-a08e-dfe62be7e7f4",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO PE_PE
+	VALUES ("661aeaaa-9070-4654-822c-f93aed73537b",
+	1,
+	"9301e24f-b9a5-4e87-8269-969024ba91f6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("661aeaaa-9070-4654-822c-f93aed73537b",
+	"00000000-0000-0000-0000-000000000000",
+	'test1',
+	'',
+	'/*
+op[20] = 0;
+op[0] = opspin;
+op[1] = opdefrost;
+op[2] = opdelay;
+op[3] = 0;
+op[4] = 20; // 5 seconds
+op[5] = 0;
+op[6] = 0;
+op[7] = opcook;
+op[8] = 5; // power level
+op[9] = opfor;
+op[10] = 3; // 3 iterations
+op[11] = 0;
+op[12] = 2; // number of instructions in loop body
+op[13] = 0;
+op[14] = opdelay;
+op[15] = 0;
+op[16] = 16; // 4 seconds
+op[17] = 0;
+op[18] = 0;
+op[19] = opspinreverse;
+op[20] = opcookstop;
+send VM::load( data:op, length:21, name:"test1" );
+*/
+/*
+// LED blinking
+op[22] = 0;
+op[0] = opLEDsoff;
+op[1] = opfor;
+op[2] = 3; // 3 iterations
+op[3] = 0;
+op[4] = 6; // number of opcodes in loop block
+op[5] = 0;
+op[6] = opLEDson;
+op[7] = opdelay;
+op[8] = 0;
+op[9] = 8; // 2 seconds
+op[10] = 0;
+op[11] = 0;
+op[12] = opLEDsoff;
+op[13] = opdelay;
+op[14] = 0;
+op[15] = 8; // 2 seconds
+op[16] = 0;
+op[17] = 0;
+op[18] = opwalk;
+op[19] = 0; // clockwise
+op[20] = opworm;
+op[21] = 1; // counter-clockwise
+send VM::load( data:op, length:22, name:"test1" );
+*/
+
+// running the autosampler through 5 samples
+op[16] = 0;
+op[0] = opneedleup;
+op[1] = opcarhome;
+op[2] = opfor;
+op[3] = 5; // 5 samples
+op[4] = 0;
+op[5] = 4; // number of opcodes in loop block
+op[6] = 0;
+op[7] = opneedleup;
+op[8] = opcarnext;
+op[9] = opneedledown;
+op[10] = opdelay;
+op[11] = 0;
+op[12] = 20; // 5 seconds
+op[13] = 0;
+op[14] = 0;
+op[15] = opneedleup;
+op[16] = opcarhome;
+send VM::load( data:op, length:17, name:"test1" );
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE_PROXY
+	VALUES ("9301e24f-b9a5-4e87-8269-969024ba91f6",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"ae2f16fa-cc38-4e56-8bbb-2720f6312de8",
+	7,
+	'../client_application.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("efcfc98b-d05d-4348-a9dd-0c5bc9534dfc",
+	'dsl',
+	1,
+	'../../../dsl.xtuml');

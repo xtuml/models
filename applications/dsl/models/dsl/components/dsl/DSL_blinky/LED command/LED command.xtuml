@@ -1,0 +1,197 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("2802d7e4-772d-4db9-810f-874eb0234899",
+	'LED command',
+	20,
+	'LEDCMD',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("72f6464f-cc32-4b43-9322-73fb56002977",
+	"2802d7e4-772d-4db9-810f-874eb0234899",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'instruction = param.instruction;
+program = param.program;
+create object instance ledcmd of LEDCMD;
+relate ledcmd to instruction across R2;
+ledcmd.opcode = instruction.opcode;
+length = 1;
+if ( opLEDsoff == ledcmd.opcode )
+  length = LEDSOFF::load( ledcmd:ledcmd, program:program );
+elif ( opLEDson == ledcmd.opcode )
+  length = LEDSON::load( ledcmd:ledcmd, program:program );
+elif ( opwalk == ledcmd.opcode )
+  length = LEDWALK::load( ledcmd:ledcmd, program:program );
+elif ( opworm == ledcmd.opcode )
+  length = LEDWORM::load( ledcmd:ledcmd, program:program );
+else
+  LOG::LogFailure( message:"warning:  opcode not recognized" );
+end if;
+return length;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("3ab46f98-4dcf-44b3-adec-0ffb8b1170b7",
+	"72f6464f-cc32-4b43-9322-73fb56002977",
+	'instruction',
+	"fdc2359e-aa6d-4cd6-904e-90a164469ef2",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("fdc2359e-aa6d-4cd6-904e-90a164469ef2",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<instruction>',
+	'',
+	'',
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("f2036045-2743-43dd-8960-e013391ad662",
+	"72f6464f-cc32-4b43-9322-73fb56002977",
+	'program',
+	"8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	0,
+	'',
+	"3ab46f98-4dcf-44b3-adec-0ffb8b1170b7",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_TFR
+	VALUES ("3a4ae9fb-7d58-420f-8b2e-62f95a895cc8",
+	"2802d7e4-772d-4db9-810f-874eb0234899",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'e = param.completion_event;
+rv = false;
+if ( opLEDson == self.opcode )
+  select one sub related by self->LEDSON[R21];
+  rv = sub.run();
+elif ( opLEDsoff == self.opcode )
+  select one sub related by self->LEDSOFF[R21];
+  rv = sub.run();
+elif ( opwalk == self.opcode )
+  select one sub related by self->LEDWALK[R21];
+  rv = sub.run();
+elif ( opworm == self.opcode )
+  select one sub related by self->LEDWORM[R21];
+  rv = sub.run();
+else
+  LOG::LogFailure( message:"warning:  attempt to run invalid opcode" );
+end if;
+generate e;
+return rv;',
+	1,
+	'',
+	"72f6464f-cc32-4b43-9322-73fb56002977");
+INSERT INTO O_TPARM
+	VALUES ("6d6cf2be-1c7e-49a3-a31e-9202288d38fc",
+	"3a4ae9fb-7d58-420f-8b2e-62f95a895cc8",
+	'completion_event',
+	"ba5eda7a-def5-0000-0000-00000000000a",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("385ce03a-64ba-4b8c-8aa0-c807d215f5f3",
+	"2802d7e4-772d-4db9-810f-874eb0234899");
+INSERT INTO O_BATTR
+	VALUES ("385ce03a-64ba-4b8c-8aa0-c807d215f5f3",
+	"2802d7e4-772d-4db9-810f-874eb0234899");
+INSERT INTO O_ATTR
+	VALUES ("385ce03a-64ba-4b8c-8aa0-c807d215f5f3",
+	"2802d7e4-772d-4db9-810f-874eb0234899",
+	"00000000-0000-0000-0000-000000000000",
+	'opcode',
+	'',
+	'',
+	'opcode',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("2802d7e4-772d-4db9-810f-874eb0234899",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	0,
+	"b20754b4-7faa-4231-a675-423898873a7a",
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"b93e97ce-aee5-48b7-9c54-b8a30880625f",
+	"64d9d140-cbcb-4b5c-8958-525c2c2f35ef",
+	"72786efa-f1e3-4a69-b668-0715251f6d83",
+	"6cfbede4-44ee-4a89-ac86-d3dfa37d64aa",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'instruction',
+	'location',
+	'R2');
+INSERT INTO R_RGO_PROXY
+	VALUES ("2802d7e4-772d-4db9-810f-874eb0234899",
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"b93e97ce-aee5-48b7-9c54-b8a30880625f",
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	0,
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"64d9d140-cbcb-4b5c-8958-525c2c2f35ef",
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("72786efa-f1e3-4a69-b668-0715251f6d83",
+	"2802d7e4-772d-4db9-810f-874eb0234899",
+	"b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	1,
+	'location');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	'../../virtual machine/instruction/instruction.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("72786efa-f1e3-4a69-b668-0715251f6d83",
+	"2802d7e4-772d-4db9-810f-874eb0234899",
+	"385ce03a-64ba-4b8c-8aa0-c807d215f5f3",
+	'location',
+	'',
+	'',
+	'location',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"2802d7e4-772d-4db9-810f-874eb0234899");
+INSERT INTO O_OIDA
+	VALUES ("72786efa-f1e3-4a69-b668-0715251f6d83",
+	"2802d7e4-772d-4db9-810f-874eb0234899",
+	0,
+	'location');
+INSERT INTO O_ID
+	VALUES (1,
+	"2802d7e4-772d-4db9-810f-874eb0234899");
+INSERT INTO O_ID
+	VALUES (2,
+	"2802d7e4-772d-4db9-810f-874eb0234899");
+INSERT INTO PE_PE_PROXY
+	VALUES ("2802d7e4-772d-4db9-810f-874eb0234899",
+	1,
+	"3779f99b-bce1-4c4c-a59a-37b90fce0083",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../DSL_blinky.xtuml');

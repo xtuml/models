@@ -22,7 +22,8 @@
 void
 c3_catch_s1( const i_t p_sp1)
 {
-  COMP_MSG_START_TRACE( "%d", c3_DOMAIN_ID, 0, 0, p_sp1 );
+  /* <message compname="c3" compnum="2" portname="catch" portnum="0" msgname="s1" msgnum="0"/> */
+  COMP_MSG_START_TRACE( "%d", 2, 0, 0, p_sp1 );
   { c3_TOE_A_CBevent1 * e = (c3_TOE_A_CBevent1 *) Escher_NewxtUMLEvent( (void *) 0, &c3_TOE_A_CBevent1c );
     e->p_sp1 = p_sp1;
     Escher_SendEvent( (Escher_xtUMLEvent_t *) e );
@@ -38,7 +39,8 @@ c3_catch_s1( const i_t p_sp1)
 void
 c3_catch_s2()
 {
-  COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 0, 1 );
+  /* <message compname="c3" compnum="2" portname="catch" portnum="0" msgname="s2" msgnum="1"/> */
+  COMP_MSG_START_TRACE( "", 2, 0, 1 );
 }
 
 /*
@@ -49,7 +51,8 @@ c3_catch_s2()
 i_t
 c3_burn_o2( const i_t p_op2)
 {
-  COMP_MSG_START_TRACE( "%d", c3_DOMAIN_ID, 1, 0, p_op2 );
+  /* <message compname="c3" compnum="2" portname="burn" portnum="1" msgname="o2" msgnum="0"/> */
+  COMP_MSG_START_TRACE( "%d", 2, 1, 0, p_op2 );
   c_t s[ESCHER_SYS_MAX_STRING_LEN]; i_t p; 
   /* ASSIGN s = 'toe burn' */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN s = 'toe burn'" );
@@ -85,7 +88,8 @@ c3_burn_o2( const i_t p_op2)
 void
 c3_burn_o3()
 {
-  COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 1, 1 );
+  /* <message compname="c3" compnum="2" portname="burn" portnum="1" msgname="o3" msgnum="1"/> */
+  COMP_MSG_START_TRACE( "", 2, 1, 1 );
 }
 
 /*
@@ -96,7 +100,8 @@ c3_burn_o3()
 i_t
 c3_burn_o4()
 {
-  COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 1, 2 );
+  /* <message compname="c3" compnum="2" portname="burn" portnum="1" msgname="o4" msgnum="2"/> */
+  COMP_MSG_START_TRACE( "", 2, 1, 2 );
   /* RETURN 999 */
   XTUML_OAL_STMT_TRACE( 1, "RETURN 999" );
   return 999;
@@ -110,7 +115,8 @@ c3_burn_o4()
 void
 c3_toss_s1( const i_t p_sp1)
 {
-  COMP_MSG_START_TRACE( "%d", c3_DOMAIN_ID, 2, 0, p_sp1 );
+  /* <message compname="c3" compnum="2" portname="toss" portnum="2" msgname="s1" msgnum="0"/> */
+  COMP_MSG_START_TRACE( "%d", 2, 2, 0, p_sp1 );
   c1_catch_s1(  p_sp1 );
 }
 
@@ -122,7 +128,8 @@ c3_toss_s1( const i_t p_sp1)
 void
 c3_toss_s2()
 {
-  COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 2, 1 );
+  /* <message compname="c3" compnum="2" portname="toss" portnum="2" msgname="s2" msgnum="1"/> */
+  COMP_MSG_START_TRACE( "", 2, 2, 1 );
   c1_catch_s2();
 }
 
@@ -134,7 +141,8 @@ c3_toss_s2()
 i_t
 c3_lase_o2( const i_t p_op2)
 {
-  COMP_MSG_START_TRACE( "%d", c3_DOMAIN_ID, 3, 0, p_op2 );
+  /* <message compname="c3" compnum="2" portname="lase" portnum="3" msgname="o2" msgnum="0"/> */
+  COMP_MSG_START_TRACE( "%d", 2, 3, 0, p_op2 );
 return   c2_burn_o2(  p_op2 );
 }
 
@@ -146,7 +154,8 @@ return   c2_burn_o2(  p_op2 );
 void
 c3_lase_o3()
 {
-  COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 3, 1 );
+  /* <message compname="c3" compnum="2" portname="lase" portnum="3" msgname="o3" msgnum="1"/> */
+  COMP_MSG_START_TRACE( "", 2, 3, 1 );
   c2_burn_o3();
 }
 
@@ -158,7 +167,8 @@ c3_lase_o3()
 i_t
 c3_lase_o4()
 {
-  COMP_MSG_START_TRACE( "", c3_DOMAIN_ID, 3, 2 );
+  /* <message compname="c3" compnum="2" portname="lase" portnum="3" msgname="o4" msgnum="2"/> */
+  COMP_MSG_START_TRACE( "", 2, 3, 2 );
 return   c2_burn_o4();
 }
 
