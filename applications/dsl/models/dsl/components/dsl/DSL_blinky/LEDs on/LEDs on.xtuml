@@ -1,0 +1,85 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("b7897ca7-6f7d-43f9-8fff-c91699973f72",
+	'LEDs on',
+	22,
+	'LEDSON',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("a52fbad6-76bc-423b-bec4-f718c3609e2f",
+	"b7897ca7-6f7d-43f9-8fff-c91699973f72",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'LOG::LogInfo( message:"loading LEDs on" );
+ledcmd = param.ledcmd;
+create object instance ledson of LEDSON;
+relate ledson to ledcmd across R21;
+return 1;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("8073a702-db1b-4190-823f-e3d52a2375a0",
+	"a52fbad6-76bc-423b-bec4-f718c3609e2f",
+	'ledcmd',
+	"3c69672e-e50b-41b4-914e-fe65ce4c9052",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("3c69672e-e50b-41b4-914e-fe65ce4c9052",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<LED command>',
+	'',
+	'',
+	'../DSL_blinky.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("2f78a5ac-a0dc-4618-8798-ec53ac6bdfd6",
+	"a52fbad6-76bc-423b-bec4-f718c3609e2f",
+	'program',
+	"8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	0,
+	'',
+	"8073a702-db1b-4190-823f-e3d52a2375a0",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_TFR
+	VALUES ("3a93819a-341c-411c-a961-946929c7e40e",
+	"b7897ca7-6f7d-43f9-8fff-c91699973f72",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'LOG::LogInfo( message:"LEDs on" );
+// Invokde LEDDisplayAllOn() here.
+return false;',
+	1,
+	'',
+	"a52fbad6-76bc-423b-bec4-f718c3609e2f");
+INSERT INTO O_ID
+	VALUES (0,
+	"b7897ca7-6f7d-43f9-8fff-c91699973f72");
+INSERT INTO O_ID
+	VALUES (1,
+	"b7897ca7-6f7d-43f9-8fff-c91699973f72");
+INSERT INTO O_ID
+	VALUES (2,
+	"b7897ca7-6f7d-43f9-8fff-c91699973f72");
+INSERT INTO PE_PE_PROXY
+	VALUES ("b7897ca7-6f7d-43f9-8fff-c91699973f72",
+	1,
+	"3779f99b-bce1-4c4c-a59a-37b90fce0083",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../DSL_blinky.xtuml');

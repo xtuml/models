@@ -1,0 +1,179 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("567b72eb-7c36-42f8-9ce8-e17aef9ca79c",
+	'Transformer',
+	5,
+	'TRAN',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("fe619950-291e-4004-b53d-a73b9af9645e",
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c",
+	'ret_int',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'return param.i;',
+	1,
+	'',
+	"251febca-fa68-4251-81c2-fb068fa73b25");
+INSERT INTO O_TPARM
+	VALUES ("1b81e932-a0e6-4fd9-aa4e-e94c9a24d589",
+	"fe619950-291e-4004-b53d-a73b9af9645e",
+	'i',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("c0aa8610-7051-4f62-b69c-b0e607631737",
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c",
+	'ret_string',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'// See if we can interfere with string allocation by looping up
+// a pass/return of a string.
+i = 9;
+while ( i > 0 )
+  localstring = "abc";
+  str = TRAN::ret_string2( s:localstring );
+  i = i - 1;
+end while;
+return param.s;
+',
+	1,
+	'',
+	"e1c15e6d-f977-4df7-ba0d-aa144e12083d");
+INSERT INTO O_TPARM
+	VALUES ("1da23d41-5caa-4a89-8b6f-704d0f720d83",
+	"c0aa8610-7051-4f62-b69c-b0e607631737",
+	's',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("251febca-fa68-4251-81c2-fb068fa73b25",
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c",
+	'ret_bool',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'return param.b;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("865c25ae-cd14-4cf7-8a64-5d088af4cf8b",
+	"251febca-fa68-4251-81c2-fb068fa73b25",
+	'b',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("e1c15e6d-f977-4df7-ba0d-aa144e12083d",
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c",
+	'ret_real',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'return param.r;',
+	1,
+	'',
+	"fe619950-291e-4004-b53d-a73b9af9645e");
+INSERT INTO O_TPARM
+	VALUES ("81d81654-6524-480b-ba72-0e735e13b606",
+	"e1c15e6d-f977-4df7-ba0d-aa144e12083d",
+	'r',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("42dde20a-1345-48ba-a673-72e8d0bfc476",
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c",
+	'ret_string2',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	's = param.s + "xyz";
+return s;',
+	1,
+	'',
+	"c0aa8610-7051-4f62-b69c-b0e607631737");
+INSERT INTO O_TPARM
+	VALUES ("bb1bd999-7fc0-45e0-b417-6e98263ecce5",
+	"42dde20a-1345-48ba-a673-72e8d0bfc476",
+	's',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("61e1cf98-450b-45f3-a9b3-421ea781d209",
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c",
+	'ret_string3',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	's = TRAN::ret_string2( s: TRAN::ret_string( s:param.s ) );
+return s;',
+	1,
+	'',
+	"42dde20a-1345-48ba-a673-72e8d0bfc476");
+INSERT INTO O_TPARM
+	VALUES ("b3ca2b96-2b78-4060-9837-1d1744e9cebd",
+	"61e1cf98-450b-45f3-a9b3-421ea781d209",
+	's',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("0414c2a9-02d2-4a89-aebb-a2fee2063fca",
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c");
+INSERT INTO O_BATTR
+	VALUES ("0414c2a9-02d2-4a89-aebb-a2fee2063fca",
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c");
+INSERT INTO O_ATTR
+	VALUES ("0414c2a9-02d2-4a89-aebb-a2fee2063fca",
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c",
+	"00000000-0000-0000-0000-000000000000",
+	'tran_id',
+	'',
+	'',
+	'tran_id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c");
+INSERT INTO O_OIDA
+	VALUES ("0414c2a9-02d2-4a89-aebb-a2fee2063fca",
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c",
+	0,
+	'tran_id');
+INSERT INTO O_ID
+	VALUES (1,
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c");
+INSERT INTO O_ID
+	VALUES (2,
+	"567b72eb-7c36-42f8-9ce8-e17aef9ca79c");
+INSERT INTO PE_PE_PROXY
+	VALUES ("567b72eb-7c36-42f8-9ce8-e17aef9ca79c",
+	1,
+	"b5badb4f-109c-4c37-b380-2a46ea364cf7",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../ex2.xtuml');

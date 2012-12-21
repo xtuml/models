@@ -1,0 +1,110 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("0d4df304-9840-4eaf-ae82-d2d2439764c6",
+	'worm around',
+	24,
+	'LEDWORM',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("2c2a3799-61bf-45bf-b995-401293032c14",
+	"0d4df304-9840-4eaf-ae82-d2d2439764c6",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'LOG::LogInfo( message:"loading LED worm" );
+ledcmd = param.ledcmd;
+program = param.program;
+create object instance ledworm of LEDWORM;
+relate ledworm to ledcmd across R21;
+ledworm.direction = program.store[ program.PC + 1 ];
+return 2;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("dda7819c-136d-41f9-9177-69115adfc4b4",
+	"2c2a3799-61bf-45bf-b995-401293032c14",
+	'ledcmd',
+	"3c69672e-e50b-41b4-914e-fe65ce4c9052",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("3c69672e-e50b-41b4-914e-fe65ce4c9052",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<LED command>',
+	'',
+	'',
+	'../DSL_blinky.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("eb5aebea-dabe-4144-ac50-b8e77e5e5149",
+	"2c2a3799-61bf-45bf-b995-401293032c14",
+	'program',
+	"8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	0,
+	'',
+	"dda7819c-136d-41f9-9177-69115adfc4b4",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../../virtual machine/virtual machine.xtuml');
+INSERT INTO O_TFR
+	VALUES ("d452faec-6a87-4100-9dd6-1ae57bf16336",
+	"0d4df304-9840-4eaf-ae82-d2d2439764c6",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'if ( 0 == self.direction )
+  // LEDDisplayWormCW
+  LOG::LogInfo( message:"LEDs worm clockwise" );
+else
+  // LEDDisplayWormCCW
+  LOG::LogInfo( message:"LEDs worm counter-clockwise" );
+end if;
+return false;',
+	1,
+	'',
+	"2c2a3799-61bf-45bf-b995-401293032c14");
+INSERT INTO O_NBATTR
+	VALUES ("671bb3e4-f1d1-4124-8789-01a173322046",
+	"0d4df304-9840-4eaf-ae82-d2d2439764c6");
+INSERT INTO O_BATTR
+	VALUES ("671bb3e4-f1d1-4124-8789-01a173322046",
+	"0d4df304-9840-4eaf-ae82-d2d2439764c6");
+INSERT INTO O_ATTR
+	VALUES ("671bb3e4-f1d1-4124-8789-01a173322046",
+	"0d4df304-9840-4eaf-ae82-d2d2439764c6",
+	"00000000-0000-0000-0000-000000000000",
+	'direction',
+	'',
+	'',
+	'direction',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"0d4df304-9840-4eaf-ae82-d2d2439764c6");
+INSERT INTO O_ID
+	VALUES (1,
+	"0d4df304-9840-4eaf-ae82-d2d2439764c6");
+INSERT INTO O_ID
+	VALUES (2,
+	"0d4df304-9840-4eaf-ae82-d2d2439764c6");
+INSERT INTO PE_PE_PROXY
+	VALUES ("0d4df304-9840-4eaf-ae82-d2d2439764c6",
+	1,
+	"3779f99b-bce1-4c4c-a59a-37b90fce0083",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../DSL_blinky.xtuml');

@@ -1,0 +1,159 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("29f75252-591b-4be3-94c3-672deecc2e6c",
+	'if',
+	3,
+	'OPIF',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("d1275cc6-f6cb-47ee-b86b-f7a2783f21d0",
+	"29f75252-591b-4be3-94c3-672deecc2e6c",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'instruction = param.instruction;
+program = param.program;
+create object instance opif of OPIF;
+relate opif to instruction across R2;
+opif.condition = program.store[ program.PC + 1 ];
+return 2;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("bb585edc-0dd0-413e-8647-63f05de10071",
+	"d1275cc6-f6cb-47ee-b86b-f7a2783f21d0",
+	'instruction',
+	"fdc2359e-aa6d-4cd6-904e-90a164469ef2",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("fdc2359e-aa6d-4cd6-904e-90a164469ef2",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<instruction>',
+	'',
+	'',
+	'../virtual machine.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("987259e8-4844-49bf-bdc2-013923bb94fd",
+	"d1275cc6-f6cb-47ee-b86b-f7a2783f21d0",
+	'program',
+	"8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	0,
+	'',
+	"bb585edc-0dd0-413e-8647-63f05de10071",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8f9ec1af-91a5-4cc6-8af6-44fb34b9686c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../virtual machine.xtuml');
+INSERT INTO O_TFR
+	VALUES ("e8ab6955-7af9-49a7-9f3b-13aa2da188e7",
+	"29f75252-591b-4be3-94c3-672deecc2e6c",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo( message:"if" );
+',
+	1,
+	'',
+	"d1275cc6-f6cb-47ee-b86b-f7a2783f21d0");
+INSERT INTO O_REF
+	VALUES ("29f75252-591b-4be3-94c3-672deecc2e6c",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	0,
+	"b20754b4-7faa-4231-a675-423898873a7a",
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"a9a37bbc-dcbc-4e4f-94d3-d83fb5d3abdc",
+	"64d9d140-cbcb-4b5c-8958-525c2c2f35ef",
+	"9f8ba987-3de6-4e5a-adfb-545966b56a8f",
+	"b0473fdd-3381-4451-bd93-69f85f35dcb8",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'instruction',
+	'location',
+	'R2');
+INSERT INTO R_RGO_PROXY
+	VALUES ("29f75252-591b-4be3-94c3-672deecc2e6c",
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"a9a37bbc-dcbc-4e4f-94d3-d83fb5d3abdc",
+	'../virtual machine.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	0,
+	"77cbad1a-ccde-4cde-9674-244700258204",
+	"64d9d140-cbcb-4b5c-8958-525c2c2f35ef",
+	'../virtual machine.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("9f8ba987-3de6-4e5a-adfb-545966b56a8f",
+	"29f75252-591b-4be3-94c3-672deecc2e6c",
+	"b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	1,
+	'location');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("b20754b4-7faa-4231-a675-423898873a7a",
+	"00bebde0-55ce-4066-b2a9-90372e754961",
+	'../instruction/instruction.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("9f8ba987-3de6-4e5a-adfb-545966b56a8f",
+	"29f75252-591b-4be3-94c3-672deecc2e6c",
+	"00000000-0000-0000-0000-000000000000",
+	'location',
+	'',
+	'',
+	'location',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("b03a854e-e0c5-45e8-a156-6e76387a5afd",
+	"29f75252-591b-4be3-94c3-672deecc2e6c");
+INSERT INTO O_BATTR
+	VALUES ("b03a854e-e0c5-45e8-a156-6e76387a5afd",
+	"29f75252-591b-4be3-94c3-672deecc2e6c");
+INSERT INTO O_ATTR
+	VALUES ("b03a854e-e0c5-45e8-a156-6e76387a5afd",
+	"29f75252-591b-4be3-94c3-672deecc2e6c",
+	"9f8ba987-3de6-4e5a-adfb-545966b56a8f",
+	'condition',
+	'',
+	'',
+	'condition',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"29f75252-591b-4be3-94c3-672deecc2e6c");
+INSERT INTO O_OIDA
+	VALUES ("9f8ba987-3de6-4e5a-adfb-545966b56a8f",
+	"29f75252-591b-4be3-94c3-672deecc2e6c",
+	0,
+	'location');
+INSERT INTO O_ID
+	VALUES (1,
+	"29f75252-591b-4be3-94c3-672deecc2e6c");
+INSERT INTO O_ID
+	VALUES (2,
+	"29f75252-591b-4be3-94c3-672deecc2e6c");
+INSERT INTO PE_PE_PROXY
+	VALUES ("29f75252-591b-4be3-94c3-672deecc2e6c",
+	1,
+	"29302e88-9412-4bb6-8fe3-e59b85d440a1",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../virtual machine.xtuml');

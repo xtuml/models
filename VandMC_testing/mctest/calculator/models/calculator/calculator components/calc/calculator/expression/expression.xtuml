@@ -1,0 +1,230 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	'expression',
+	1,
+	'EXPR',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("933ac4dd-1609-46de-a37f-e42b794e100a",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	'getkey',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'key = -1;  // default to empty buffer
+if ( self.outdex < self.index )
+  key = self.raw[ self.outdex ];
+  self.outdex = self.outdex + 1;
+end if;
+return key;',
+	1,
+	'',
+	"2b0c347d-3b5f-4734-be34-aa97cfb8ba2c");
+INSERT INTO O_TFR
+	VALUES ("218ac032-2527-4542-b850-7f39e28ec27b",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	'init',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'self.evaluation = 0;
+self.index = 0;
+self.outdex = 0;
+
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("2b0c347d-3b5f-4734-be34-aa97cfb8ba2c",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	'addkey',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'if ( self.index == self.outdex )
+  generate EXPR4:symbol( code: param.code ) to self;
+end if;
+self.raw[ self.index ] = param.code;
+self.index = self.index + 1;
+',
+	1,
+	'',
+	"218ac032-2527-4542-b850-7f39e28ec27b");
+INSERT INTO O_TPARM
+	VALUES ("0d249df6-ee8b-4d60-8f76-da5567103126",
+	"2b0c347d-3b5f-4734-be34-aa97cfb8ba2c",
+	'code',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("2b794147-694a-4610-aaa1-c3ad062a74ae",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	'combine',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one op related by self->OP[R1];
+select one operand1 related by op->VAL[R2];
+select one operand2 related by op->VAL[R3];
+if ( 10 == op.op )
+  self.evaluation = operand1.value + operand2.value;
+elif ( 11 == op.op )
+  self.evaluation = operand1.value - operand2.value;
+elif ( 12 == op.op )
+  self.evaluation = operand1.value * operand2.value;
+elif ( 13 == op.op )
+  self.evaluation = operand1.value / operand2.value;
+else
+  // unknown operator
+end if;
+
+// Now make the left operand equal to the evaluated expression.
+// This way we can receive more key strokes and keep combining.
+operand1.value = self.evaluation;
+op.op = param.code;
+unrelate op from operand2 across R3;
+delete object instance operand2;',
+	1,
+	'',
+	"933ac4dd-1609-46de-a37f-e42b794e100a");
+INSERT INTO O_TPARM
+	VALUES ("4b6c0eca-2075-47ab-bcd8-7de586ded7dd",
+	"2b794147-694a-4610-aaa1-c3ad062a74ae",
+	'code',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("a6ebe188-44eb-490c-98b4-2c443c8019fc",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO O_BATTR
+	VALUES ("a6ebe188-44eb-490c-98b4-2c443c8019fc",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO S_DIM
+	VALUES (80,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	"a6ebe188-44eb-490c-98b4-2c443c8019fc",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"af4f143c-264f-4c88-bb9f-30dceacaaf4e",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("a6ebe188-44eb-490c-98b4-2c443c8019fc",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	"70661a05-dcd9-4776-89a8-035b26eefbbb",
+	'raw',
+	'',
+	'',
+	'raw',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'[80]',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("70661a05-dcd9-4776-89a8-035b26eefbbb",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO O_BATTR
+	VALUES ("70661a05-dcd9-4776-89a8-035b26eefbbb",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO O_ATTR
+	VALUES ("70661a05-dcd9-4776-89a8-035b26eefbbb",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	"00000000-0000-0000-0000-000000000000",
+	'evaluation',
+	'',
+	'',
+	'evaluation',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("a6af0e4e-4d26-4485-824d-2f4a55858842",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO O_BATTR
+	VALUES ("a6af0e4e-4d26-4485-824d-2f4a55858842",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO O_ATTR
+	VALUES ("a6af0e4e-4d26-4485-824d-2f4a55858842",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	"a6ebe188-44eb-490c-98b4-2c443c8019fc",
+	'index',
+	'',
+	'',
+	'index',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("93166589-eb70-4b1a-8078-6f862a8037fa",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO O_BATTR
+	VALUES ("93166589-eb70-4b1a-8078-6f862a8037fa",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO O_ATTR
+	VALUES ("93166589-eb70-4b1a-8078-6f862a8037fa",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	"7918965b-f488-46ef-8a23-a1d214d0968f",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("7918965b-f488-46ef-8a23-a1d214d0968f",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO O_BATTR
+	VALUES ("7918965b-f488-46ef-8a23-a1d214d0968f",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO O_ATTR
+	VALUES ("7918965b-f488-46ef-8a23-a1d214d0968f",
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	"a6af0e4e-4d26-4485-824d-2f4a55858842",
+	'outdex',
+	'',
+	'',
+	'outdex',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO O_ID
+	VALUES (1,
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO O_ID
+	VALUES (2,
+	"73a44505-1b7f-419d-a09d-5b35e3f2918d");
+INSERT INTO PE_PE_PROXY
+	VALUES ("73a44505-1b7f-419d-a09d-5b35e3f2918d",
+	1,
+	"68b3c6b9-c1cf-4d47-b85f-9bc7fe47f8ea",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../calculator.xtuml');
