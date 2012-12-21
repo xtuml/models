@@ -1,0 +1,83 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+
+INSERT INTO O_OBJ
+	VALUES ("6359cce4-fc72-46c5-9263-b154bd9d5258",
+	'disk drive',
+	102,
+	'DRIVE',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("d7e4acce-0ba2-4991-9d6d-5a9a3f65a412",
+	"6359cce4-fc72-46c5-9263-b154bd9d5258",
+	'dispose',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one cd related by self->CD[R200];
+if ( empty cd )
+  select one dvd related by self->DVD[R200];
+  if ( not_empty dvd )
+    unrelate dvd from self across R200;
+    delete object instance dvd;
+  end if;
+else
+  unrelate cd from self across R200;
+  delete object instance cd;
+end if;
+delete object instance self;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("e5f7a1a8-7a27-4044-8004-8f37f17fdb46",
+	"6359cce4-fc72-46c5-9263-b154bd9d5258");
+INSERT INTO O_BATTR
+	VALUES ("e5f7a1a8-7a27-4044-8004-8f37f17fdb46",
+	"6359cce4-fc72-46c5-9263-b154bd9d5258");
+INSERT INTO O_ATTR
+	VALUES ("e5f7a1a8-7a27-4044-8004-8f37f17fdb46",
+	"6359cce4-fc72-46c5-9263-b154bd9d5258",
+	"00000000-0000-0000-0000-000000000000",
+	'capacity',
+	'',
+	'',
+	'capacity',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("7996d2e2-8dc5-4510-9138-7fc69e930177",
+	"6359cce4-fc72-46c5-9263-b154bd9d5258");
+INSERT INTO O_BATTR
+	VALUES ("7996d2e2-8dc5-4510-9138-7fc69e930177",
+	"6359cce4-fc72-46c5-9263-b154bd9d5258");
+INSERT INTO O_ATTR
+	VALUES ("7996d2e2-8dc5-4510-9138-7fc69e930177",
+	"6359cce4-fc72-46c5-9263-b154bd9d5258",
+	"e5f7a1a8-7a27-4044-8004-8f37f17fdb46",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"6359cce4-fc72-46c5-9263-b154bd9d5258");
+INSERT INTO O_ID
+	VALUES (1,
+	"6359cce4-fc72-46c5-9263-b154bd9d5258");
+INSERT INTO O_ID
+	VALUES (2,
+	"6359cce4-fc72-46c5-9263-b154bd9d5258");
+INSERT INTO PE_PE_PROXY
+	VALUES ("6359cce4-fc72-46c5-9263-b154bd9d5258",
+	1,
+	"9848b9d8-32f5-4451-9fe4-c5b25a7a23b1",
+	"00000000-0000-0000-0000-000000000000",
+	4,
+	'../deep.xtuml');
