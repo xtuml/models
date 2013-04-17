@@ -1,0 +1,475 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	'CheckArrays',
+	2,
+	'CHK',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("5da56667-df9c-4dba-8fbf-5e5c7c37575b",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	'checkDataOpByVal',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'// Read array data
+if ( param.data[0] == "myData_0" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( "myData_1" == param.data[1] )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data[2] == "myData_2" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+
+
+// Make calls with class attribute
+rvalDataEE = OW::checkDataEEByVal( data: self.myData );
+rvalDataDF = ::checkDataDFByVal( data: self.myData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with parameter data
+rvalDataEE = OW::checkDataEEByVal( data: param.data );
+rvalDataDF = ::checkDataDFByVal( data: param.data );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with temporary
+localData = param.data;
+rvalDataEE = OW::checkDataEEByVal( data: localData );
+rvalDataDF = ::checkDataDFByVal( data: localData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+
+return localData;
+',
+	1,
+	'[]',
+	"49e6e596-5125-4676-8b39-73b46e022da1");
+INSERT INTO O_TPARM
+	VALUES ("7089b213-bb9f-4509-a544-20ffe6b791af",
+	"5da56667-df9c-4dba-8fbf-5e5c7c37575b",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'[]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"7089b213-bb9f-4509-a544-20ffe6b791af",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"b19bd4be-9083-405f-b105-8e9a1e2ff514",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"5da56667-df9c-4dba-8fbf-5e5c7c37575b",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"917c2203-6837-44cb-973f-96543a4a814d",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("49e6e596-5125-4676-8b39-73b46e022da1",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	'checkDataOpByRef',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'// Read array data
+if ( param.data[0] == "myData_0" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( "myData_1" == param.data[1] )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data[2] == "myData_2" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+
+
+// Make calls with class attribute
+rvalDataEE = OW::checkDataEEByRef( data: self.myData );
+rvalDataDF = ::checkDataDFByRef( data: self.myData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with parameter data
+rvalDataEE = OW::checkDataEEByRef( data: param.data );
+rvalDataDF = ::checkDataDFByRef( data: param.data );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with temporary
+localData = param.data;
+rvalDataEE = OW::checkDataEEByRef( data: localData );
+rvalDataDF = ::checkDataDFByRef( data: localData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+
+return localData;
+
+',
+	1,
+	'[]',
+	"0fb2d77c-d745-4d98-97b8-b4f8b728eac3");
+INSERT INTO O_TPARM
+	VALUES ("f2da267d-240f-486e-8520-b52bfb15be3e",
+	"49e6e596-5125-4676-8b39-73b46e022da1",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'[]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"f2da267d-240f-486e-8520-b52bfb15be3e",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"c2c102f5-c7e6-4856-929a-6403d4300c94",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"49e6e596-5125-4676-8b39-73b46e022da1",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"543fdca5-0568-402f-91a2-0ad0f721998d",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("0fb2d77c-d745-4d98-97b8-b4f8b728eac3",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	'checkData2RVal',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'return param.data;
+',
+	1,
+	'[]',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("d49d798d-4da8-4224-9df4-66056e93f830",
+	"0fb2d77c-d745-4d98-97b8-b4f8b728eac3",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'[]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"d49d798d-4da8-4224-9df4-66056e93f830",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"9f10665c-8223-4368-818c-291bf3c5b7e5",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"0fb2d77c-d745-4d98-97b8-b4f8b728eac3",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"ca5cc135-72ef-4e37-bce7-951e65028c1c",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("b124bc03-6725-4fa0-8c34-41d8718de426",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354");
+INSERT INTO O_BATTR
+	VALUES ("b124bc03-6725-4fa0-8c34-41d8718de426",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354");
+INSERT INTO O_ATTR
+	VALUES ("b124bc03-6725-4fa0-8c34-41d8718de426",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	"00000000-0000-0000-0000-000000000000",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("8b484bf3-bfc5-4af1-a842-098b53cab72c",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354");
+INSERT INTO O_BATTR
+	VALUES ("8b484bf3-bfc5-4af1-a842-098b53cab72c",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	"8b484bf3-bfc5-4af1-a842-098b53cab72c",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"46938bf1-f504-4a08-87e2-e43c6122ef66",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("8b484bf3-bfc5-4af1-a842-098b53cab72c",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	"b124bc03-6725-4fa0-8c34-41d8718de426",
+	'myData',
+	'',
+	'',
+	'myData',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'[]',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("91bc7bb7-8f86-4460-8cdb-dccbb3a7f699",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354");
+INSERT INTO O_BATTR
+	VALUES ("91bc7bb7-8f86-4460-8cdb-dccbb3a7f699",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	"91bc7bb7-8f86-4460-8cdb-dccbb3a7f699",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"4999b753-b057-4755-8d87-e41972985fe3",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("91bc7bb7-8f86-4460-8cdb-dccbb3a7f699",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	"8b484bf3-bfc5-4af1-a842-098b53cab72c",
+	'myData2',
+	'',
+	'',
+	'myData2',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'[]',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("4a658040-b41e-43d7-9bb6-6d8dbd8b4108",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	'self.mdaR0 = self.myData.length * 1001 * 0;
+',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("4a658040-b41e-43d7-9bb6-6d8dbd8b4108",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354");
+INSERT INTO O_ATTR
+	VALUES ("4a658040-b41e-43d7-9bb6-6d8dbd8b4108",
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	"91bc7bb7-8f86-4460-8cdb-dccbb3a7f699",
+	'mdaR0',
+	'',
+	'',
+	'mdaR0',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354");
+INSERT INTO O_ID
+	VALUES (1,
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354");
+INSERT INTO O_ID
+	VALUES (2,
+	"e04ac4dc-b0c2-486d-a905-bf0b0999b354");
+INSERT INTO PE_PE
+	VALUES ("e04ac4dc-b0c2-486d-a905-bf0b0999b354",
+	1,
+	"55cca3d9-654c-445d-accd-6bbafdf8c328",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("55cca3d9-654c-445d-accd-6bbafdf8c328",
+	"00000000-0000-0000-0000-000000000000",
+	"d44b6837-1053-4e93-a92b-63147bc38ed4",
+	'Test',
+	'',
+	0,
+	'../Test.xtuml');

@@ -1,0 +1,433 @@
+-- BP 7.1 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("953fdd14-c4e7-4487-adc9-4b50d0979ad9",
+	"00000000-0000-0000-0000-000000000000",
+	"fef3eff1-801a-4caf-aaa1-502cd8fda1e0",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("44b2d350-7d6c-485c-a4f0-61bd04553cda",
+	112,
+	"953fdd14-c4e7-4487-adc9-4b50d0979ad9",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'G_ALL_R_BRG_tim::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("44b2d350-7d6c-485c-a4f0-61bd04553cda",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("c91a2b8b-29af-40ea-8318-858a725d7d3c",
+	"00000000-0000-0000-0000-000000000000",
+	'LogDateAndTime',
+	'',
+	'//output the current date
+cur_date = TIM::current_date();
+LOG::LogDate(date:cur_date,message:param.message) ;
+
+//output the current time
+cur_time = TIM::current_clock();
+LOG::LogTime(timestamp:cur_time,message:param.message);',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("a35bc7bc-903a-44f5-9d54-246b752a8e09",
+	"c91a2b8b-29af-40ea-8318-858a725d7d3c",
+	'message',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("c91a2b8b-29af-40ea-8318-858a725d7d3c",
+	1,
+	"953fdd14-c4e7-4487-adc9-4b50d0979ad9",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	"00000000-0000-0000-0000-000000000000",
+	'TestTIM',
+	'Test the TIM bridges as parameters to a function.
+Test parameter values from TIM bridges passed as parameters.
+Test the TIM bridges called from within a function.',
+	'//////////////////////////////////////////////
+// Test incoming parameters.
+//////////////////////////////////////////////
+if ( param.create_date == param.current_date )
+  LOG::LogSuccess(message:"Success in function TestTIM - param.create_date is equal to param.current_date.");
+else
+  LOG::LogFailure(message:"Failure in function TestTIM - param.create_date is not equal to param.current_date.");
+end if;
+
+if ( ( param.get_second + param.get_minute + param.get_hour + param.get_day + param.get_month + param.get_year ) == 6 )
+  LOG::LogSuccess(message:"Success in function TestTIM - Sum of param.get_* is equal to six(6).");
+else
+  LOG::LogFailure(message:"Failure in function TestTIM - Sum of param.get_* is not equal to six(6).");
+end if;
+
+if ( param.timer_time_add )
+  LOG::LogSuccess(message:"Success in function TestTIM - param.timer_add_time is TRUE.");
+else
+  LOG::LogFailure(message:"Failure in function TestTIM - param.timer_add_time is not TRUE.");
+end if;
+
+if ( param.timer_reset_time )
+  LOG::LogSuccess(message:"Success in function TestTIM - param.timer_reset_time is TRUE.");
+else
+  LOG::LogFailure(message:"Failure in function TestTIM - param.timer_reset_time is not TRUE.");
+end if;
+
+if ( param.timer_cancel )
+  LOG::LogSuccess(message:"Success in function TestTIM - param.timer_cancel_time is TRUE.");
+else
+  LOG::LogFailure(message:"Failure in function TestTIM - param.timer_cancel_time is not TRUE.");
+end if;
+
+if ( param.timer_remaining_time >= 500000 )
+  LOG::LogSuccess(message:"Success in function TestTIM - param.timer_remaining_time is >= 500000.");
+else
+  LOG::LogFailure(message:"Failure in function TestTIM - param.timer_remaining_time is < 500000.");
+end if;
+
+if ( TIM::timer_cancel( timer_inst_ref: param.timer_start ) == TRUE )
+  LOG::LogSuccess(message:"Success in function TestTIM - param.timer_start was cancelled.");
+else
+  LOG::LogFailure(message:"Failure in function TestTIM - param.timer_start was not cancelled.");
+end if;
+
+if ( TIM::timer_cancel( timer_inst_ref: param.timer_start_recurring ) == TRUE )
+  LOG::LogSuccess(message:"Success in function TestTIM - param.timer_start_recurring was cancelled.");
+else
+  LOG::LogFailure(message:"Failure in function TestTIM - param.timer_start_recurring was not cancelled.");
+end if;
+
+//////////////////////////////////////////////
+// TIM::current_clock
+//////////////////////////////////////////////
+clock = TIM::current_clock();
+if ( param.current_clock <= clock )
+  LOG::LogSuccess(message:"Success in function TestTIM - param.current_clock is less than or equal to clock.");
+else
+  LOG::LogFailure(message:"Failure in function TestTIM - param.current_clock is greater than clock.");
+end if;
+
+//////////////////////////////////////////////
+// TIM::current_date
+//////////////////////////////////////////////
+today = TIM::current_date();
+
+//////////////////////////////////////////////
+// TIM::get_day
+// TIM::get_hour
+// TIM::get_minute
+// TIM::get_month
+// TIM::get_second
+// TIM::get_year
+// TIM::create_date
+//////////////////////////////////////////////
+sec = TIM::get_second( date: today );
+
+if ( today == TIM::create_date( second:sec, minute: TIM::get_minute( date: today ), hour: TIM::get_hour( date: today ), day: TIM::get_day( date: today ), month: TIM::get_month( date: today ), year:TIM::get_year( date: today ) ) )
+  LOG::LogSuccess(message:"Success in function TestTIM - TIM::create_date using TIM invocations.");
+else
+  LOG::LogFailure(message:"Failure in function TestTIM - TIM::create_date using TIM invocations.");
+end if;
+
+//////////////////////////////////////////////
+// TIM::timer_start
+// TIM::timer_remaining_time
+//////////////////////////////////////////////
+create event instance e of BC1(type:1) to BC creator;
+timer1 = TIM::timer_start( microseconds: 5000000, event_inst: e );
+
+create object instance bc3 of BC3;
+bc3.type = 1;
+bc3.timer = timer1;
+
+// Log the remaining time.
+time_remain = TIM::timer_remaining_time( timer_inst_ref: timer1 );
+LOG::LogInt( int: time_remain, message: "Function TestTIM - Time remaining on timer1." );
+
+//////////////////////////////////////////////
+// TIM::timer_start_recurring
+// TIM::timer_remaining_time
+//////////////////////////////////////////////
+create object instance bc of BC;
+bc.num_recur = 0;
+num_recur = bc.num_recur;
+
+create event instance e2 of BC1(type:0) to bc;
+timer2 = TIM::timer_start_recurring( microseconds: 1, event_inst: e2 );
+
+//////////////////////////////////////////////
+// TIM::timer_add_time - live timer
+// TIM::timer_reset_time - live timer
+// TIM::timer_cancel - live timer
+//////////////////////////////////////////////
+// Add time to the live timer
+if ( TIM::timer_add_time( timer_inst_ref: timer2, microseconds: 60000000 ) == TRUE )
+  LOG::LogSuccess( message: "Function TestTIM - TIM::timer_add_time returned that timer2 has had time added.");
+    
+  // Check the remaining time to ensure that the add worked
+  if ( TIM::timer_remaining_time( timer_inst_ref: timer2 ) > 58000000 )
+     LOG::LogSuccess(message:"Function TestTIM - timer2 has had time added successfully.");
+  else
+    LOG::LogFailure( message: "Function TestTIM - timer2 has not had time added.");
+  end if;
+
+else
+  LOG::LogFailure( message: "Function TestTIM - TIM::timer_add_time returned that timer2 has not had time added.");
+end if;
+
+// Reset the live timer
+if ( TIM::timer_reset_time( timer_inst_ref: timer2, microseconds: 5000000  ) == TRUE )
+  LOG::LogSuccess( message: "Function TestTIM - TIM::timer_reset_time returned that timer2 was reset.");
+
+  // Check if the timer actually was reset
+  if ( TIM::timer_remaining_time( timer_inst_ref: timer2 ) < 6000000 )
+     LOG::LogSuccess(message:"Function TestTIM - timer2 has had time reset successfully.");
+  else
+    LOG::LogFailure( message: "Function TestTIM - timer2 has not had time reset.");
+  end if;
+else
+  LOG::LogFailure( message: "Function TestTIM - TIM::timer_reset_time returned that timer2 was not reset.");
+end if;
+
+// Try to cancel the live timer.
+if ( TIM::timer_cancel( timer_inst_ref: timer2 ) == TRUE )
+  LOG::LogSuccess(message:"Function TestTIM - TIM::timer_cancel returned that timer2 was cancelled.");
+else
+  LOG::LogFailure(message:"Function TestTIM - TIM::timer_cancel returned that timer2 was cancelled.");
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("98c6b63a-d893-4978-ab0b-1a27f73ebe17",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'create_date',
+	"ba5eda7a-def5-0000-0000-00000000000e",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("bb1c3cec-941c-4cb1-8f03-58506ae8edb4",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'current_clock',
+	"ba5eda7a-def5-0000-0000-000000000010",
+	0,
+	'',
+	"98c6b63a-d893-4978-ab0b-1a27f73ebe17",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("6d192725-d256-46ab-b750-bb3c6157c982",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'current_date',
+	"ba5eda7a-def5-0000-0000-00000000000e",
+	0,
+	'',
+	"bb1c3cec-941c-4cb1-8f03-58506ae8edb4",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("215da2cc-145e-4721-9456-2f909cf44ab2",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'get_day',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"6d192725-d256-46ab-b750-bb3c6157c982",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("21764f3e-f95c-4833-b461-eb297d2bac75",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'get_hour',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"215da2cc-145e-4721-9456-2f909cf44ab2",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("761d32ed-d6eb-4684-bc27-b2ece369cb15",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'get_minute',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"21764f3e-f95c-4833-b461-eb297d2bac75",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("9a69f5c7-d01e-4e8d-ae31-8a1c6739f357",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'get_month',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"761d32ed-d6eb-4684-bc27-b2ece369cb15",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("a6ea4feb-a314-4b37-909b-730f478d9aa7",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'get_second',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"9a69f5c7-d01e-4e8d-ae31-8a1c6739f357",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("cd867b53-acec-4207-a371-e2ba25e3dbf1",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'get_year',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"a6ea4feb-a314-4b37-909b-730f478d9aa7",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("a3938c2f-28c3-45a2-a8eb-a75ca26e3f16",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'timer_time_add',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"0dc47bed-7315-4501-b7af-8ea99620c776",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("380537ba-15bd-4508-a1fa-27819af1703d",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'timer_cancel',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"cd867b53-acec-4207-a371-e2ba25e3dbf1",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("24fa1da5-f246-4852-b93f-50b92629abbe",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'timer_remaining_time',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"380537ba-15bd-4508-a1fa-27819af1703d",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("27ac9635-2b05-48ab-8813-66666016ebdc",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'timer_reset_time',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"24fa1da5-f246-4852-b93f-50b92629abbe",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("1c7d877b-0595-4f20-b41a-1d7c667f6cb5",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'timer_start',
+	"ba5eda7a-def5-0000-0000-00000000000f",
+	0,
+	'',
+	"27ac9635-2b05-48ab-8813-66666016ebdc",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("0dc47bed-7315-4501-b7af-8ea99620c776",
+	"98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	'timer_start_recurring',
+	"ba5eda7a-def5-0000-0000-00000000000f",
+	0,
+	'',
+	"1c7d877b-0595-4f20-b41a-1d7c667f6cb5",
+	'');
+INSERT INTO PE_PE
+	VALUES ("98fbde64-0c60-41fe-a0e7-e684fb50df0a",
+	1,
+	"953fdd14-c4e7-4487-adc9-4b50d0979ad9",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("679838fc-4b77-4b05-881f-a663724d7c78",
+	"00000000-0000-0000-0000-000000000000",
+	'TestTIM2',
+	'',
+	'select any bc3 from instances of BC3 where selected.type == 1;
+timer1 = bc3.timer;
+
+//////////////////////////////////////////////
+// TIM::timer_add_time - dead timer
+// TIM::timer_reset_time - dead timer
+// TIM::timer_cancel - dead timer
+//////////////////////////////////////////////
+// Try to add time to the dead timer.
+if ( TIM::timer_add_time( timer_inst_ref: timer1, microseconds: 1000000 ) == FALSE )
+  LOG::LogSuccess( message: "Function TestTIM - TIM::timer_add_time returned that timer1 has popped.");
+else
+  LOG::LogFailure( message: "Function TestTIM - TIM::timer_add_time returned that timer1 has not popped.");
+end if;
+
+// Try to reset the time on the dead timer.
+if ( TIM::timer_reset_time( timer_inst_ref: timer1, microseconds: 1000000  ) == FALSE )
+  LOG::LogSuccess( message: "Function TestTIM - TIM::timer_reset_time returned that timer1 has popped.");
+else
+  LOG::LogFailure( message: "Function TestTIM - TIM::timer_reset_time returned that timer1 has not popped.");
+end if;
+
+// Try to cancel the dead timer.
+if ( TIM::timer_cancel( timer_inst_ref: timer1 ) == FALSE )
+  LOG::LogSuccess(message:"Function TestTIM - TIM::timer_cancel returned that timer1 has popped.");
+else
+  LOG::LogFailure(message:"Function TestTIM - TIM::timer_cancel returned that timer1 has not popped.");
+end if;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("679838fc-4b77-4b05-881f-a663724d7c78",
+	1,
+	"953fdd14-c4e7-4487-adc9-4b50d0979ad9",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("953fdd14-c4e7-4487-adc9-4b50d0979ad9",
+	1,
+	"9abbf133-2898-4211-947d-1af6d3f2ecce",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("9abbf133-2898-4211-947d-1af6d3f2ecce",
+	"fef3eff1-801a-4caf-aaa1-502cd8fda1e0",
+	"fef3eff1-801a-4caf-aaa1-502cd8fda1e0",
+	'G_ALL_R_BRG_tim',
+	'The purpose of this domain is to test the Model Compiler implementation of the TIM bridges.
+
+Note that there are ERRORs in the Model Verifier output from this domain.  This is because we are waiting for a timer to expire, and Model Verifier errors if timer_remaining_time, timer_reset_time, timer_add_time or timer_cancel is called after a timer has expired.
+
+As of 09/03/2002, the Model Debugger will have LogFailures because of the way that it orders the parameter invocations. It will also not run to completion for an unknown reason.
+
+As of 02/25/2003, the test does not issue LogFailures because of changes to the timing, nextgen:822.',
+	0,
+	'../G_ALL_R_BRG_tim.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("fef3eff1-801a-4caf-aaa1-502cd8fda1e0",
+	'G_ALL_R_BRG_tim',
+	1,
+	'../../G_ALL_R_BRG_tim.xtuml');

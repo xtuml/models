@@ -1,0 +1,237 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("2f79a238-23e0-4dec-8cd7-49e04be89f2f",
+	'TM Test Driver',
+	4,
+	'TMD',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("cebc3f09-2b59-4d06-9579-67cb6e043c39",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f");
+INSERT INTO O_BATTR
+	VALUES ("cebc3f09-2b59-4d06-9579-67cb6e043c39",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f");
+INSERT INTO O_ATTR
+	VALUES ("cebc3f09-2b59-4d06-9579-67cb6e043c39",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f",
+	"00000000-0000-0000-0000-000000000000",
+	'tmd_id',
+	'',
+	'',
+	'tmd_id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("936d1277-dd23-4c36-bbce-61fa8124a6b6",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f");
+INSERT INTO O_BATTR
+	VALUES ("936d1277-dd23-4c36-bbce-61fa8124a6b6",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f");
+INSERT INTO O_ATTR
+	VALUES ("936d1277-dd23-4c36-bbce-61fa8124a6b6",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f",
+	"cebc3f09-2b59-4d06-9579-67cb6e043c39",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("a3514971-26ca-4c16-b9d2-6dd2b49a474e",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f",
+	'//////////////////////////////////////////////
+// TIM::current_clock
+//////////////////////////////////////////////
+clock = TIM::current_clock();
+
+//////////////////////////////////////////////
+// TIM::current_date
+//////////////////////////////////////////////
+today = TIM::current_date();
+
+//////////////////////////////////////////////
+// TIM::get_day
+// TIM::get_hour
+// TIM::get_minute
+// TIM::get_month
+// TIM::get_second
+// TIM::get_year
+// TIM::create_date
+//////////////////////////////////////////////
+sec = TIM::get_second( date: today );
+
+if ( today == TIM::create_date( second:sec, minute: TIM::get_minute( date: today ), hour: TIM::get_hour( date: today ), day: TIM::get_day( date: today ), month: TIM::get_month( date: today ), year:TIM::get_year( date: today ) ) )
+  LOG::LogSuccess(message:"Success in mathematically derived attribute TestTIM - TIM::create_date using TIM invocations.");
+else
+  LOG::LogFailure(message:"Failure in mathematically derived attribute TestTIM - TIM::create_date using TIM invocations.");
+end if;
+
+//////////////////////////////////////////////
+// TIM::timer_start
+// TIM::timer_remaining_time
+//////////////////////////////////////////////
+create event instance e of BC1(type:5) to BC creator;
+timer1 = TIM::timer_start( microseconds: 5000000, event_inst: e );
+
+create object instance bc3 of BC3;
+bc3.type = 5;
+bc3.timer = timer1;
+
+// Log the remaining time.
+time_remain = TIM::timer_remaining_time( timer_inst_ref: timer1 );
+LOG::LogInt( int: time_remain, message: "Mathematically Derived Attribute TestTIM - Time remaining on timer1." );
+
+//////////////////////////////////////////////
+// TIM::timer_start_recurring
+// TIM::timer_remaining_time
+//////////////////////////////////////////////
+create object instance bc of BC;
+bc.num_recur = 0;
+num_recur = bc.num_recur;
+
+create event instance e2 of BC1(type:0) to bc;
+timer2 = TIM::timer_start_recurring( microseconds: 1, event_inst: e2 );
+
+//////////////////////////////////////////////
+// TIM::timer_add_time - live timer
+// TIM::timer_reset_time - live timer
+// TIM::timer_cancel - live timer
+//////////////////////////////////////////////
+// Add time to the live timer
+if ( TIM::timer_add_time( timer_inst_ref: timer2, microseconds: 60000000 ) == TRUE )
+  LOG::LogSuccess( message: "Mathematically Derived Attribute TestTIM - TIM::timer_add_time returned that timer2 has had time added.");
+    
+  // Check the remaining time to ensure that the add worked
+  if ( TIM::timer_remaining_time( timer_inst_ref: timer2 ) > 58000000 )
+     LOG::LogSuccess(message:"Mathematically Derived Attribute TestTIM - timer2 has had time added successfully.");
+  else
+    LOG::LogFailure( message: "Mathematically Derived Attribute TestTIM - timer2 has not had time added.");
+  end if;
+
+else
+  LOG::LogFailure( message: "Mathematically Derived Attribute TestTIM - TIM::timer_add_time returned that timer2 has not had time added.");
+end if;
+
+// Reset the live timer
+if ( TIM::timer_reset_time( timer_inst_ref: timer2, microseconds: 5000000  ) == TRUE )
+  LOG::LogSuccess( message: "Mathematically Derived Attribute TestTIM - TIM::timer_reset_time returned that timer2 was reset.");
+
+  // Check if the timer actually was reset
+  if ( TIM::timer_remaining_time( timer_inst_ref: timer2 ) < 6000000 )
+     LOG::LogSuccess(message:"Mathematically Derived Attribute TestTIM - timer2 has had time reset successfully.");
+  else
+    LOG::LogFailure( message: "Mathematically Derived Attribute TestTIM - timer2 has not had time reset.");
+  end if;
+else
+  LOG::LogFailure( message: "Mathematically Derived Attribute TestTIM - TIM::timer_reset_time returned that timer2 was not reset.");
+end if;
+
+// Try to cancel the live timer.
+if ( TIM::timer_cancel( timer_inst_ref: timer2 ) == TRUE )
+  LOG::LogSuccess(message:"Mathematically Derived Attribute TestTIM - TIM::timer_cancel returned that timer2 was cancelled.");
+else
+  LOG::LogFailure(message:"Mathematically Derived Attribute TestTIM - TIM::timer_cancel returned that timer2 was cancelled.");
+end if;
+
+// We need to assign it...
+self.mda = -1;',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("a3514971-26ca-4c16-b9d2-6dd2b49a474e",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f");
+INSERT INTO O_ATTR
+	VALUES ("a3514971-26ca-4c16-b9d2-6dd2b49a474e",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f",
+	"936d1277-dd23-4c36-bbce-61fa8124a6b6",
+	'mda',
+	'',
+	'',
+	'mda',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("49a1f990-1e18-4872-9c4c-a6260ce4b185",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f",
+	'select any bc3 from instances of BC3 where selected.type == 5;
+timer1 = bc3.timer;
+
+//////////////////////////////////////////////
+// TIM::timer_add_time - dead timer
+// TIM::timer_reset_time - dead timer
+// TIM::timer_cancel - dead timer
+//////////////////////////////////////////////
+// Try to add time to the dead timer.
+if ( TIM::timer_add_time( timer_inst_ref: timer1, microseconds: 1000000 ) == FALSE )
+  LOG::LogSuccess( message: "Mathematically Derived Attribute TestTIM - TIM::timer_add_time returned that timer1 has popped.");
+else
+  LOG::LogFailure( message: "Mathematically Derived Attribute TestTIM - TIM::timer_add_time returned that timer1 has not popped.");
+end if;
+
+// Try to reset the time on the dead timer.
+if ( TIM::timer_reset_time( timer_inst_ref: timer1, microseconds: 1000000  ) == FALSE )
+  LOG::LogSuccess( message: "Mathematically Derived Attribute TestTIM - TIM::timer_reset_time returned that timer1 has popped.");
+else
+  LOG::LogFailure( message: "Mathematically Derived Attribute TestTIM - TIM::timer_reset_time returned that timer1 has not popped.");
+end if;
+
+// Try to cancel the dead timer.
+if ( TIM::timer_cancel( timer_inst_ref: timer1 ) == FALSE )
+  LOG::LogSuccess(message:"Mathematically Derived Attribute TestTIM - TIM::timer_cancel returned that timer1 has popped.");
+else
+  LOG::LogFailure(message:"Mathematically Derived Attribute TestTIM - TIM::timer_cancel returned that timer1 has not popped.");
+end if;
+
+self.mda2 = 1;',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("49a1f990-1e18-4872-9c4c-a6260ce4b185",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f");
+INSERT INTO O_ATTR
+	VALUES ("49a1f990-1e18-4872-9c4c-a6260ce4b185",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f",
+	"a3514971-26ca-4c16-b9d2-6dd2b49a474e",
+	'mda2',
+	'',
+	'',
+	'mda2',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f");
+INSERT INTO O_OIDA
+	VALUES ("cebc3f09-2b59-4d06-9579-67cb6e043c39",
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f",
+	0,
+	'tmd_id');
+INSERT INTO O_ID
+	VALUES (1,
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f");
+INSERT INTO O_ID
+	VALUES (2,
+	"2f79a238-23e0-4dec-8cd7-49e04be89f2f");
+INSERT INTO PE_PE
+	VALUES ("2f79a238-23e0-4dec-8cd7-49e04be89f2f",
+	1,
+	"5f5d9b78-fe44-49d0-a4ba-56884f385c29",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("5f5d9b78-fe44-49d0-a4ba-56884f385c29",
+	"00000000-0000-0000-0000-000000000000",
+	"fef3eff1-801a-4caf-aaa1-502cd8fda1e0",
+	'Time Date Primitives',
+	'',
+	201,
+	'../Time Date Primitives.xtuml');

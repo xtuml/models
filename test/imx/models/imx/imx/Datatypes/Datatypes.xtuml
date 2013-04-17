@@ -1,0 +1,147 @@
+-- BP 7.1 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("e41bfb45-fe84-4b18-bbb3-a54fb417ab91",
+	"00000000-0000-0000-0000-000000000000",
+	"b41dc887-22c6-44d8-b1de-cb512ff5b8cc",
+	'Datatypes',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("dffb2f5e-81ef-4568-a98d-71c137439822",
+	112,
+	"e41bfb45-fe84-4b18-bbb3-a54fb417ab91",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'imx::Datatypes');
+INSERT INTO GD_GE
+	VALUES ("d5ec24dc-63c1-41a0-bc40-52f37c53880d",
+	"dffb2f5e-81ef-4568-a98d-71c137439822",
+	"8d49bc7f-e373-482d-9368-e2266d8cb975",
+	51,
+	0,
+	'imx::Datatypes::color');
+INSERT INTO GD_SHP
+	VALUES ("d5ec24dc-63c1-41a0-bc40-52f37c53880d");
+INSERT INTO GD_NCS
+	VALUES ("d5ec24dc-63c1-41a0-bc40-52f37c53880d");
+INSERT INTO DIM_ND
+	VALUES (200.000000,
+	150.000000,
+	"d5ec24dc-63c1-41a0-bc40-52f37c53880d");
+INSERT INTO DIM_GE
+	VALUES (2279.000000,
+	1828.000000,
+	"d5ec24dc-63c1-41a0-bc40-52f37c53880d",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("d5ec24dc-63c1-41a0-bc40-52f37c53880d",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_GE
+	VALUES ("15bf1fb7-aa50-4e43-aa62-d76fa1bbb257",
+	"dffb2f5e-81ef-4568-a98d-71c137439822",
+	"e669da21-7835-459a-8e3f-338c9df49294",
+	51,
+	0,
+	'imx::Datatypes::my_string');
+INSERT INTO GD_SHP
+	VALUES ("15bf1fb7-aa50-4e43-aa62-d76fa1bbb257");
+INSERT INTO GD_NCS
+	VALUES ("15bf1fb7-aa50-4e43-aa62-d76fa1bbb257");
+INSERT INTO DIM_ND
+	VALUES (200.000000,
+	150.000000,
+	"15bf1fb7-aa50-4e43-aa62-d76fa1bbb257");
+INSERT INTO DIM_GE
+	VALUES (2499.000000,
+	1828.000000,
+	"15bf1fb7-aa50-4e43-aa62-d76fa1bbb257",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("15bf1fb7-aa50-4e43-aa62-d76fa1bbb257",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_DIA
+	VALUES ("dffb2f5e-81ef-4568-a98d-71c137439822",
+	'',
+	1.000000,
+	1599.000000,
+	1318.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT
+	VALUES ("8d49bc7f-e373-482d-9368-e2266d8cb975",
+	"00000000-0000-0000-0000-000000000000",
+	'color',
+	'Enumeration: TRUE
+Enumerator0: Red
+Enumerator1: Blue
+Enumerator2: Green
+Enumerator3: Black
+Enumerator4: Gray
+Enumerator5: Teal
+',
+	'');
+INSERT INTO S_UDT
+	VALUES ("8d49bc7f-e373-482d-9368-e2266d8cb975",
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0);
+INSERT INTO PE_PE
+	VALUES ("8d49bc7f-e373-482d-9368-e2266d8cb975",
+	1,
+	"e41bfb45-fe84-4b18-bbb3-a54fb417ab91",
+	"00000000-0000-0000-0000-000000000000",
+	3);
+INSERT INTO S_DT
+	VALUES ("e669da21-7835-459a-8e3f-338c9df49294",
+	"00000000-0000-0000-0000-000000000000",
+	'my_string',
+	'',
+	'');
+INSERT INTO S_UDT
+	VALUES ("e669da21-7835-459a-8e3f-338c9df49294",
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0);
+INSERT INTO PE_PE
+	VALUES ("e669da21-7835-459a-8e3f-338c9df49294",
+	1,
+	"e41bfb45-fe84-4b18-bbb3-a54fb417ab91",
+	"00000000-0000-0000-0000-000000000000",
+	3);
+INSERT INTO PE_PE
+	VALUES ("e41bfb45-fe84-4b18-bbb3-a54fb417ab91",
+	1,
+	"29bb35da-459b-4391-95e7-08822d104b40",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("29bb35da-459b-4391-95e7-08822d104b40",
+	"b41dc887-22c6-44d8-b1de-cb512ff5b8cc",
+	"b41dc887-22c6-44d8-b1de-cb512ff5b8cc",
+	'imx',
+	'This test deals with creating, relating, and selecting instances using navigation of the form:
+
+select any(many, one) <instance> related by <instance ref>-><relationship 1>->...-><relationship n>
+
+It also checks deletion and unrelate work correctly.  It should not be possible to select an instance from the set if it has been deleted.  It should not be possible to select an instance across a relationship that has been unrelated.
+
+The test performs these verifications with each data type.',
+	0,
+	'../imx.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("b41dc887-22c6-44d8-b1de-cb512ff5b8cc",
+	'imx',
+	1,
+	'../../imx.xtuml');

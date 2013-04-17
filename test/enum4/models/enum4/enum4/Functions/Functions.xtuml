@@ -1,0 +1,248 @@
+-- BP 7.1 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("51c4350b-cf6f-490e-803e-3db698d1a00d",
+	"00000000-0000-0000-0000-000000000000",
+	"63913ed5-1e42-4ca1-8fd4-e8a235aba5d7",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("f285afc8-9430-4246-bfaf-68a561430d36",
+	112,
+	"51c4350b-cf6f-490e-803e-3db698d1a00d",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'enum4::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("f285afc8-9430-4246-bfaf-68a561430d36",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("3d589984-9bf0-4982-9e62-1ac6a96107d6",
+	"00000000-0000-0000-0000-000000000000",
+	'bridge1',
+	'Description line 1
+Description line 2
+Description line 3
+Line 4
+Line 5
+',
+	'if(param.color_one != color::purple)
+	LOG::LogFailure(message:"bridge1 - param.color_one != color::purple");
+else
+	LOG::LogSuccess(message:"bridge1 - param.color_one == color::purple");
+end if;
+
+if(param.color_two != color::blue)
+	LOG::LogFailure(message:"bridge1 - param.color_two != color::blue");
+else
+	LOG::LogSuccess(message:"bridge1 - param.color_two == color::blue");
+end if;
+
+if(param.count == 1)
+	return param.color_one;
+elif(param.count == 2)
+	return color::purple;
+else
+	x = color::purple;
+	return x;
+end if;',
+	"159f99a1-e905-45ba-84d5-1dd7e402a37f",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("c9a192e1-7b04-4469-bc60-bf138278f87a",
+	"3d589984-9bf0-4982-9e62-1ac6a96107d6",
+	'color_one',
+	"159f99a1-e905-45ba-84d5-1dd7e402a37f",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("159f99a1-e905-45ba-84d5-1dd7e402a37f",
+	"00000000-0000-0000-0000-000000000000",
+	'color',
+	'OWNER:enum3',
+	'',
+	'../Datatypes/Datatypes.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("439cd8be-2ed3-41bf-8cfe-a3056ac6e55e",
+	"3d589984-9bf0-4982-9e62-1ac6a96107d6",
+	'color_two',
+	"159f99a1-e905-45ba-84d5-1dd7e402a37f",
+	0,
+	'',
+	"c9a192e1-7b04-4469-bc60-bf138278f87a",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("991c09aa-3ab2-44a8-93c3-3ab0ab8f6522",
+	"3d589984-9bf0-4982-9e62-1ac6a96107d6",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"439cd8be-2ed3-41bf-8cfe-a3056ac6e55e",
+	'');
+INSERT INTO PE_PE
+	VALUES ("3d589984-9bf0-4982-9e62-1ac6a96107d6",
+	1,
+	"51c4350b-cf6f-490e-803e-3db698d1a00d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("72b69fd3-9039-4086-ab03-9d6c9f0c837d",
+	"00000000-0000-0000-0000-000000000000",
+	'bridge2',
+	'Description line 1
+Description line 2
+Description line 3
+Line 4
+Line 5
+',
+	'if(param.color_one != color::purple)
+	LOG::LogFailure(message:"bridge1 - param.color_one != color::purple");
+else
+	LOG::LogSuccess(message:"bridge1 - param.color_one == color::purple");
+end if;
+
+if(param.color_two != color::blue)
+	LOG::LogFailure(message:"bridge1 - param.color_two != color::blue");
+else
+	LOG::LogSuccess(message:"bridge1 - param.color_two == color::blue");
+end if;
+
+if(param.count == 1)
+	param.color_two = param.color_one;
+	return param.color_one;
+elif(param.count == 2)
+	param.color_two = color::purple;
+	return color::purple;
+else
+	x = color::purple;
+	param.color_two = x;
+	return x;
+end if;',
+	"159f99a1-e905-45ba-84d5-1dd7e402a37f",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("ceb84aa3-0ea2-4464-b036-b159b94242cf",
+	"72b69fd3-9039-4086-ab03-9d6c9f0c837d",
+	'color_one',
+	"159f99a1-e905-45ba-84d5-1dd7e402a37f",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("9a65d90f-8459-4f43-ad6e-f35dec04502b",
+	"72b69fd3-9039-4086-ab03-9d6c9f0c837d",
+	'color_two',
+	"159f99a1-e905-45ba-84d5-1dd7e402a37f",
+	1,
+	'',
+	"ceb84aa3-0ea2-4464-b036-b159b94242cf",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("5ca29227-5d18-4c37-8e3c-8a9bdfae3d95",
+	"72b69fd3-9039-4086-ab03-9d6c9f0c837d",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"9a65d90f-8459-4f43-ad6e-f35dec04502b",
+	'');
+INSERT INTO PE_PE
+	VALUES ("72b69fd3-9039-4086-ab03-9d6c9f0c837d",
+	1,
+	"51c4350b-cf6f-490e-803e-3db698d1a00d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f96bdbb1-004b-4438-9ed2-5706c0dff2f2",
+	"00000000-0000-0000-0000-000000000000",
+	'bridge3',
+	'Description line 1
+Description line 2
+Description line 3
+Line 4
+Line 5
+',
+	'if(param.color_one != color::purple)
+	LOG::LogFailure(message:"bridge1 - param.color_one != color::purple");
+else
+	LOG::LogSuccess(message:"bridge1 - param.color_one == color::purple");
+end if;
+
+if(param.color_two != color::blue)
+	LOG::LogFailure(message:"bridge1 - param.color_two != color::blue");
+else
+	LOG::LogSuccess(message:"bridge1 - param.color_two == color::blue");
+end if;
+
+x = param.color_one;
+param.color_one = param.color_two;
+param.color_two = x;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("c8f1d04b-11f3-41e6-a29d-dd8f826e4424",
+	"f96bdbb1-004b-4438-9ed2-5706c0dff2f2",
+	'color_one',
+	"159f99a1-e905-45ba-84d5-1dd7e402a37f",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("27e93a40-2876-4b29-865e-a629093520fe",
+	"f96bdbb1-004b-4438-9ed2-5706c0dff2f2",
+	'color_two',
+	"159f99a1-e905-45ba-84d5-1dd7e402a37f",
+	1,
+	'',
+	"c8f1d04b-11f3-41e6-a29d-dd8f826e4424",
+	'');
+INSERT INTO PE_PE
+	VALUES ("f96bdbb1-004b-4438-9ed2-5706c0dff2f2",
+	1,
+	"51c4350b-cf6f-490e-803e-3db698d1a00d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("51c4350b-cf6f-490e-803e-3db698d1a00d",
+	1,
+	"0360fde5-f5ed-4caf-ae2a-e9eaed462b77",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("0360fde5-f5ed-4caf-ae2a-e9eaed462b77",
+	"63913ed5-1e42-4ca1-8fd4-e8a235aba5d7",
+	"63913ed5-1e42-4ca1-8fd4-e8a235aba5d7",
+	'enum4',
+	'This test is a helper domain for enum3.  See enum3 for a complete description.',
+	0,
+	'../enum4.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("63913ed5-1e42-4ca1-8fd4-e8a235aba5d7",
+	'enum4',
+	1,
+	'../../enum4.xtuml');

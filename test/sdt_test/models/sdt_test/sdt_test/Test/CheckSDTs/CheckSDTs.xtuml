@@ -1,0 +1,429 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6",
+	'CheckSDTs',
+	2,
+	'CHK',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("a9ba3cad-eabb-4ade-8ade-62924efcf53d",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6",
+	'checkDataOpByVal',
+	'',
+	"3eedff8d-6bd5-4281-bbca-b076bc26e7be",
+	1,
+	'// Read SDT data
+if ( param.data.a_integer == 1 )
+  LOG::LogSuccess( message: "Successful read of SDT int member in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT int member in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_boolean == true )
+  LOG::LogSuccess( message: "Successful read of SDT boolean member in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT boolean member in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_date == TIM::current_date() )
+  LOG::LogSuccess( message: "Successful read of SDT date member in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT date member in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_real == 1.0 )
+  LOG::LogSuccess( message: "Successful read of SDT real member in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT real member in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_string == "myData" )
+  LOG::LogSuccess( message: "Successful read of SDT string member in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT string member in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_timestamp < TIM::current_clock() )
+  LOG::LogSuccess( message: "Successful read of SDT timestamp member in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT timestamp member in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+
+if ( param.data.a_integer == param.data.a_TypeContainer.a_integer
+     and param.data.a_TypeContainer.a_integer == 1)
+  LOG::LogSuccess( message: "Successful read of nested SDT int member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT int member." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_boolean == param.data.a_TypeContainer.a_boolean 
+     and param.data.a_TypeContainer.a_boolean == true)
+  LOG::LogSuccess( message: "Successful read of nested SDT boolean member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT boolean member." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_date == param.data.a_TypeContainer.a_date 
+     and param.data.a_TypeContainer.a_date == TIM::current_date() )
+  LOG::LogSuccess( message: "Successful read of nested SDT date member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT date member." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_real == param.data.a_TypeContainer.a_real 
+     and param.data.a_TypeContainer.a_real == 1.0)
+  LOG::LogSuccess( message: "Successful read of nested SDT real member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT real member." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_string == param.data.a_TypeContainer.a_string 
+     and param.data.a_TypeContainer.a_string == "myData")
+  LOG::LogSuccess( message: "Successful read of nested SDT string member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT string member." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_timestamp == param.data.a_TypeContainer.a_timestamp 
+     and param.data.a_TypeContainer.a_timestamp < TIM::current_clock())
+  LOG::LogSuccess( message: "Successful read of nested SDT timestamp member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT timestamp member." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with class attribute
+rvalDataEE = OW::checkDataEEByVal( data: self.myData );
+rvalDataDF = ::checkDataDFByVal( data: self.myData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with rcvd_evt.param
+rvalDataEE = OW::checkDataEEByVal( data: param.data );
+rvalDataDF = ::checkDataDFByVal( data: param.data );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with temporary
+localData = param.data;
+rvalDataEE = OW::checkDataEEByVal( data: localData );
+rvalDataDF = ::checkDataDFByVal( data: localData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+
+return localData;
+',
+	1,
+	'',
+	"25a14be8-6159-4953-a873-852770422206");
+INSERT INTO O_TPARM
+	VALUES ("3a7fbae9-fe18-4f26-b18a-fcc0a2b79a42",
+	"a9ba3cad-eabb-4ade-8ade-62924efcf53d",
+	'data',
+	"3eedff8d-6bd5-4281-bbca-b076bc26e7be",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("3eedff8d-6bd5-4281-bbca-b076bc26e7be",
+	"00000000-0000-0000-0000-000000000000",
+	'TypeContainer',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("25a14be8-6159-4953-a873-852770422206",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6",
+	'checkDataOpByRef',
+	'',
+	"3eedff8d-6bd5-4281-bbca-b076bc26e7be",
+	1,
+	'// Read SDT data
+if ( param.data.a_integer == 1 )
+  LOG::LogSuccess( message: "Successful read of SDT int member in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT int member in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_boolean == true )
+  LOG::LogSuccess( message: "Successful read of SDT boolean member in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT boolean member in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_date == TIM::current_date() )
+  LOG::LogSuccess( message: "Successful read of SDT date member in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT date member in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_real == 1.0 )
+  LOG::LogSuccess( message: "Successful read of SDT real member in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT real member in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_string == "myData" )
+  LOG::LogSuccess( message: "Successful read of SDT string member in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT string member in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_timestamp < TIM::current_clock() )
+  LOG::LogSuccess( message: "Successful read of SDT timestamp member in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT timestamp member in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+
+if ( param.data.a_integer == param.data.a_TypeContainer.a_integer
+     and param.data.a_TypeContainer.a_integer == 1)
+  LOG::LogSuccess( message: "Successful read of nested SDT int member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT int member." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_boolean == param.data.a_TypeContainer.a_boolean 
+     and param.data.a_TypeContainer.a_boolean == true)
+  LOG::LogSuccess( message: "Successful read of nested SDT boolean member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT boolean member." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_date == param.data.a_TypeContainer.a_date 
+     and param.data.a_TypeContainer.a_date == TIM::current_date() )
+  LOG::LogSuccess( message: "Successful read of nested SDT date member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT date member." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_real == param.data.a_TypeContainer.a_real 
+     and param.data.a_TypeContainer.a_real == 1.0)
+  LOG::LogSuccess( message: "Successful read of nested SDT real member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT real member." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_string == param.data.a_TypeContainer.a_string 
+     and param.data.a_TypeContainer.a_string == "myData")
+  LOG::LogSuccess( message: "Successful read of nested SDT string member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT string member." );
+  ::failedChecksTest();
+end if;
+if ( param.data.a_timestamp == param.data.a_TypeContainer.a_timestamp 
+     and param.data.a_TypeContainer.a_timestamp < TIM::current_clock())
+  LOG::LogSuccess( message: "Successful read of nested SDT timestamp member." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of nested SDT timestamp member." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with class attribute
+rvalDataEE = OW::checkDataEEByRef( data: self.myData );
+rvalDataDF = ::checkDataDFByRef( data: self.myData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with rcvd_evt.param
+rvalDataEE = OW::checkDataEEByRef( data: param.data );
+rvalDataDF = ::checkDataDFByRef( data: param.data );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with temporary
+localData = param.data;
+rvalDataEE = OW::checkDataEEByRef( data: localData );
+rvalDataDF = ::checkDataDFByRef( data: localData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of SDT return value." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of SDT return value." );
+  ::failedChecksTest();
+end if;
+
+return localData;
+
+',
+	1,
+	'',
+	"8f25ec74-6e1d-4c37-818f-0b4738d26aad");
+INSERT INTO O_TPARM
+	VALUES ("f9a4625f-fb3c-430f-b169-1c0052d58218",
+	"25a14be8-6159-4953-a873-852770422206",
+	'data',
+	"3eedff8d-6bd5-4281-bbca-b076bc26e7be",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("8f25ec74-6e1d-4c37-818f-0b4738d26aad",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6",
+	'checkData2RVal',
+	'',
+	"3eedff8d-6bd5-4281-bbca-b076bc26e7be",
+	1,
+	'return param.data;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("1ca8ac42-d432-47c2-b935-2d47f6998482",
+	"8f25ec74-6e1d-4c37-818f-0b4738d26aad",
+	'data',
+	"3eedff8d-6bd5-4281-bbca-b076bc26e7be",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("d74aa436-fdae-4958-969e-ac1050f5e20c",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6");
+INSERT INTO O_BATTR
+	VALUES ("d74aa436-fdae-4958-969e-ac1050f5e20c",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6");
+INSERT INTO O_ATTR
+	VALUES ("d74aa436-fdae-4958-969e-ac1050f5e20c",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6",
+	"00000000-0000-0000-0000-000000000000",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("df1d565e-3f59-4d11-bdc2-a49cd6e42721",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6");
+INSERT INTO O_BATTR
+	VALUES ("df1d565e-3f59-4d11-bdc2-a49cd6e42721",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6");
+INSERT INTO O_ATTR
+	VALUES ("df1d565e-3f59-4d11-bdc2-a49cd6e42721",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6",
+	"d74aa436-fdae-4958-969e-ac1050f5e20c",
+	'myData',
+	'',
+	'',
+	'myData',
+	0,
+	"3eedff8d-6bd5-4281-bbca-b076bc26e7be",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1863a5f1-ac7d-4f43-be27-1f23031707dc",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6");
+INSERT INTO O_BATTR
+	VALUES ("1863a5f1-ac7d-4f43-be27-1f23031707dc",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6");
+INSERT INTO O_ATTR
+	VALUES ("1863a5f1-ac7d-4f43-be27-1f23031707dc",
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6",
+	"df1d565e-3f59-4d11-bdc2-a49cd6e42721",
+	'myData2',
+	'',
+	'',
+	'myData2',
+	0,
+	"3eedff8d-6bd5-4281-bbca-b076bc26e7be",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6");
+INSERT INTO O_ID
+	VALUES (1,
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6");
+INSERT INTO O_ID
+	VALUES (2,
+	"3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6");
+INSERT INTO PE_PE
+	VALUES ("3e6a8518-fb1a-412c-8bb7-8e3ddaf974d6",
+	1,
+	"d1e3f85b-3159-483f-8694-654c38c56ae8",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("d1e3f85b-3159-483f-8694-654c38c56ae8",
+	"00000000-0000-0000-0000-000000000000",
+	"06876d18-af65-4104-9393-7601846a6572",
+	'Test',
+	'',
+	0,
+	'../Test.xtuml');

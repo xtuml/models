@@ -1,0 +1,147 @@
+-- BP 7.1 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("3cc747d9-1e1f-48af-940d-a3b505e8214d",
+	"00000000-0000-0000-0000-000000000000",
+	"d1ec851a-b255-4865-a2eb-0050dabef7b4",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("e9819be9-db92-4ce3-9dd2-40dea1c4de95",
+	112,
+	"3cc747d9-1e1f-48af-940d-a3b505e8214d",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'G_ALL_multiple_exit_return::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("e9819be9-db92-4ce3-9dd2-40dea1c4de95",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("aec046e7-8807-48c4-9a45-410e4da80b48",
+	"00000000-0000-0000-0000-000000000000",
+	'multiplereturn',
+	'',
+	'if(param.count == 0)
+  param.count = param.count+1;
+  return succ_fail::SUCC0;
+elif(param.count == 1)
+  param.count = param.count+1;
+  return succ_fail::SUCC1;
+elif(param.count == 2)
+  param.count = param.count+1;
+  return succ_fail::SUCC2;
+end if;
+param.count = param.count+1;
+return succ_fail::FAIL;
+
+',
+	"057863e8-5916-465e-a6b1-ee013d0fc3e4",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("8ddcee83-ef91-43d4-a0e7-0f4eb52cd2fd",
+	"aec046e7-8807-48c4-9a45-410e4da80b48",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("aec046e7-8807-48c4-9a45-410e4da80b48",
+	1,
+	"3cc747d9-1e1f-48af-940d-a3b505e8214d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_DT_PROXY
+	VALUES ("057863e8-5916-465e-a6b1-ee013d0fc3e4",
+	"00000000-0000-0000-0000-000000000000",
+	'succ_fail',
+	'',
+	'',
+	'../Datatypes/Datatypes.xtuml');
+INSERT INTO S_SYNC
+	VALUES ("510ef712-90de-4eeb-b5a8-eaedc33c0d2a",
+	"00000000-0000-0000-0000-000000000000",
+	'returnvoid',
+	'',
+	'if(param.count == 0)
+  param.count = param.count+1;
+  param.sorf = succ_fail::SUCC0;
+  return;
+elif(param.count == 1)
+  param.count = param.count+1;
+  param.sorf = succ_fail::SUCC1;
+  return;
+elif(param.count == 2)
+  param.count = param.count+1;
+  param.sorf = succ_fail::SUCC2;
+  return;
+end if;
+param.count = param.count+1;
+return;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("2e029116-c83a-4f45-88c8-f13e9ba8bd9d",
+	"510ef712-90de-4eeb-b5a8-eaedc33c0d2a",
+	'sorf',
+	"057863e8-5916-465e-a6b1-ee013d0fc3e4",
+	1,
+	'',
+	"da6ae1b5-cd6a-44e7-9e60-c5ee1a63314d",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("da6ae1b5-cd6a-44e7-9e60-c5ee1a63314d",
+	"510ef712-90de-4eeb-b5a8-eaedc33c0d2a",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("510ef712-90de-4eeb-b5a8-eaedc33c0d2a",
+	1,
+	"3cc747d9-1e1f-48af-940d-a3b505e8214d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("3cc747d9-1e1f-48af-940d-a3b505e8214d",
+	1,
+	"7e24c227-7b27-4f5f-89d6-f6c0d40c3a16",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("7e24c227-7b27-4f5f-89d6-f6c0d40c3a16",
+	"d1ec851a-b255-4865-a2eb-0050dabef7b4",
+	"d1ec851a-b255-4865-a2eb-0050dabef7b4",
+	'G_ALL_multiple_exit_return',
+	'This domain tests the return statement, as used in bridges, class based operations, instance based operations and functions.  For each of the four contexts there are two functions, one which returns an enum and another that returns void, but uses a by reference parameter.  Either the return value or the by reference parameter is checked for validity after each call.  Each of the contexts is called multiple times.
+
+This test also tests return from within an MDAs action.  We set the MDA and then issue a return and check that the value of the MDA was set correctly.',
+	0,
+	'../G_ALL_multiple_exit_return.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("d1ec851a-b255-4865-a2eb-0050dabef7b4",
+	'G_ALL_multiple_exit_return',
+	1,
+	'../../G_ALL_multiple_exit_return.xtuml');

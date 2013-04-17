@@ -1,0 +1,228 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	'The_Class',
+	1,
+	'The_Class',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("b488f34a-d056-40c8-b6ef-057287bfd7b2",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	'Select_Class',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'r = ::gfunc();
+s = TEST::getTrue();
+ 
+//select any My_Class from instances of The_Class where (selected.Attr_B == 1);
+
+// Class operation
+//select any My_Class from instances of The_Class where (selected.get_A() == 0);
+//select any My_Class from instances of The_Class where (0 == selected.get_A());
+//select any My_Class from instances of The_Class where (selected.getTrue()); 
+
+// MDA / DBA
+//select any My_Class from instances of The_Class where (selected.Attr_B == 10);
+//select any My_Class from instances of The_Class where (10 == selected.Attr_B);
+//select any My_Class from instances of The_Class where (selected.Attr_true);
+//select any My_Class from instances of The_Class where (selected.Attr_A == 0);
+
+// (Domain) Function
+//select any My_Class from instances of The_Class where (::gfunc() == true);
+//select any My_Class from instances of The_Class where (true == ::gfunc());  
+//select any My_Class from instances of The_Class where (::gfunc()); 
+
+// Messages
+
+// Bridges
+//select any My_Class from instances of The_Class where (TEST::getTrue() == true);
+//select any My_Class from instances of The_Class where (true == TEST::getTrue());  
+//select any My_Class from instances of The_Class where (TEST::getTrue()); 
+
+/*if (empty My_Class)
+ LOG::LogInfo(message : "empty My_Class");
+else
+ LOG::LogInfo(message : "found My_Class");  
+end if;*/ ',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("6b39c3d2-0129-4a4c-93b7-97f72d4d5d5e",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	'Initialize',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'create object instance My_Class of The_Class;
+My_Class.Attr_A = 0;',
+	1,
+	'',
+	"b488f34a-d056-40c8-b6ef-057287bfd7b2");
+INSERT INTO O_TFR
+	VALUES ("27f704e6-2c62-42b3-ae9d-0f942c1b959a",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	'dba_param_op',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Inside dba_param_op, param value =");
+LOG::LogInteger(message:param.pDBA);',
+	1,
+	'',
+	"6b39c3d2-0129-4a4c-93b7-97f72d4d5d5e");
+INSERT INTO O_TPARM
+	VALUES ("915972cf-2723-4c99-aaa3-50fcf8f54fa1",
+	"27f704e6-2c62-42b3-ae9d-0f942c1b959a",
+	'pDBA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"eed80a17-2431-428a-b43c-dd1a0315e475",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("eed80a17-2431-428a-b43c-dd1a0315e475",
+	"27f704e6-2c62-42b3-ae9d-0f942c1b959a",
+	'i',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("a5520d39-17ae-4baa-8dba-0245c2e8ff1b",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	'Test1',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'select any myClass from instances of The_Class;
+myClass.dba_param_op(i:0, pDBA:myClass.Attr_B);
+
+myClass.Attr_A = 1;
+::dba_param_func(i:1, pDBA:myClass.Attr_B);
+
+a[2] = 2;
+a[1] = 1;
+a[0] = 0;
+::dba_param_func(i:1, pDBA:a.length);',
+	1,
+	'',
+	"27f704e6-2c62-42b3-ae9d-0f942c1b959a");
+INSERT INTO O_TFR
+	VALUES ("1ca13820-93c9-4ec3-bdd5-f5daa45bbc41",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	'get_A',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'return self.Attr_A;',
+	1,
+	'',
+	"a5520d39-17ae-4baa-8dba-0245c2e8ff1b");
+INSERT INTO O_TFR
+	VALUES ("e9c1cb43-ac62-4f75-9da8-0b85ff86e9a4",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	'getTrue',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'return true;',
+	1,
+	'',
+	"1ca13820-93c9-4ec3-bdd5-f5daa45bbc41");
+INSERT INTO O_TFR
+	VALUES ("f9ccb361-529f-4f10-80d4-a9e5c967c473",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	'class_based_op',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'return true;',
+	1,
+	'',
+	"e9c1cb43-ac62-4f75-9da8-0b85ff86e9a4");
+INSERT INTO O_NBATTR
+	VALUES ("7fe715ad-f6a1-422c-a4bf-dcdad1f49d22",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d");
+INSERT INTO O_BATTR
+	VALUES ("7fe715ad-f6a1-422c-a4bf-dcdad1f49d22",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d");
+INSERT INTO O_ATTR
+	VALUES ("7fe715ad-f6a1-422c-a4bf-dcdad1f49d22",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	"00000000-0000-0000-0000-000000000000",
+	'Attr_A',
+	'',
+	'',
+	'Attr_A',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("28c14652-9e3b-4a9d-b9b2-846df053a1a1",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	'self.Attr_B = self.Attr_A + 10;',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("28c14652-9e3b-4a9d-b9b2-846df053a1a1",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d");
+INSERT INTO O_ATTR
+	VALUES ("28c14652-9e3b-4a9d-b9b2-846df053a1a1",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	"7fe715ad-f6a1-422c-a4bf-dcdad1f49d22",
+	'Attr_B',
+	'',
+	'',
+	'Attr_B',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("bfd4829e-4bcf-40f7-8e82-b52009074386",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	'self.Attr_true = true;',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("bfd4829e-4bcf-40f7-8e82-b52009074386",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d");
+INSERT INTO O_ATTR
+	VALUES ("bfd4829e-4bcf-40f7-8e82-b52009074386",
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	"28c14652-9e3b-4a9d-b9b2-846df053a1a1",
+	'Attr_true',
+	'',
+	'',
+	'Attr_true',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d");
+INSERT INTO O_ID
+	VALUES (1,
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d");
+INSERT INTO O_ID
+	VALUES (2,
+	"87f58163-485d-4c9b-bd6c-80a5fa8c2f2d");
+INSERT INTO PE_PE
+	VALUES ("87f58163-485d-4c9b-bd6c-80a5fa8c2f2d",
+	1,
+	"a9b76a17-21d6-4922-8b97-4f1a544118ac",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a9b76a17-21d6-4922-8b97-4f1a544118ac",
+	"00000000-0000-0000-0000-000000000000",
+	"6e616945-97c8-4171-89c1-a4ae0ec8c179",
+	'SS',
+	'',
+	0,
+	'../SS.xtuml');

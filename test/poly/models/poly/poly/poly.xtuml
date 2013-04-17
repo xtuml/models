@@ -1,0 +1,201 @@
+-- BP 7.1 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("5b29a0f8-eab8-404d-9415-58ce0e936c23",
+	"024fd131-380c-4b55-8efc-8979724b1546",
+	"024fd131-380c-4b55-8efc-8979724b1546",
+	'poly',
+	'This domain tests Polymorphic Events.  There are three subsystems that test various super/suptype hierarchies:
+ - Complex: This subsystem has one supertype with two different subtype hierarchies.  There is also a single class that is a subtype to two different supertypes.
+ - Simple: There is a simple super/subtype hierarchy in this subsystem.  There is also an associative class.
+ - Subtype Chain:  This subsystem has three diferent super/subtype hierarchies.  Two of which stem from the subtypes of a single supertype.
+
+This test takes some instruction to run in Model Verifier.  Follow these steps:
+ 1) Add Creation Evt to Mission Control:Init
+ 2) Add Creation Evt to Complex:Init
+ 3) Add Creation Evt to Simple:Init
+ 4) Add Creation Evt to Subtype Chain:Init
+
+Note that as of BP5.0 Model Verifier will ERROR on the first occasion that C_S3 is generated from C_B.  This is because the event is not used in the subtype (C_BA) of this particular instance of C_B.  Later in the test, the same event is generated, but this time it works, as it is consumed by C_BB.  This behavior is considered to be a problem with Model Verifier.',
+	0);
+INSERT INTO GD_MD
+	VALUES ("2995827d-4e5a-4830-9dfa-427eed6c55ab",
+	112,
+	"5b29a0f8-eab8-404d-9415-58ce0e936c23",
+	108,
+	1,
+	0,
+	1,
+	1,
+	0,
+	12,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'poly');
+INSERT INTO GD_GE
+	VALUES ("cb0004d7-f0da-431d-8dd6-a249b2297dca",
+	"2995827d-4e5a-4830-9dfa-427eed6c55ab",
+	"cf15957c-3b13-470b-9862-b7d2b95c1fe1",
+	108,
+	0,
+	'poly::Simple');
+INSERT INTO GD_SHP
+	VALUES ("cb0004d7-f0da-431d-8dd6-a249b2297dca");
+INSERT INTO GD_NCS
+	VALUES ("cb0004d7-f0da-431d-8dd6-a249b2297dca");
+INSERT INTO DIM_ND
+	VALUES (160.000000,
+	96.000000,
+	"cb0004d7-f0da-431d-8dd6-a249b2297dca");
+INSERT INTO DIM_GE
+	VALUES (1696.000000,
+	1424.000000,
+	"cb0004d7-f0da-431d-8dd6-a249b2297dca",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("cb0004d7-f0da-431d-8dd6-a249b2297dca",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_GE
+	VALUES ("8829476e-f8a1-4207-b1a7-f965ddf38bd7",
+	"2995827d-4e5a-4830-9dfa-427eed6c55ab",
+	"e9db1e44-8ae4-4e81-81df-0e8b0cd6b5a9",
+	108,
+	0,
+	'poly::Subtype Chain');
+INSERT INTO GD_SHP
+	VALUES ("8829476e-f8a1-4207-b1a7-f965ddf38bd7");
+INSERT INTO GD_NCS
+	VALUES ("8829476e-f8a1-4207-b1a7-f965ddf38bd7");
+INSERT INTO DIM_ND
+	VALUES (160.000000,
+	96.000000,
+	"8829476e-f8a1-4207-b1a7-f965ddf38bd7");
+INSERT INTO DIM_GE
+	VALUES (1696.000000,
+	1552.000000,
+	"8829476e-f8a1-4207-b1a7-f965ddf38bd7",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("8829476e-f8a1-4207-b1a7-f965ddf38bd7",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_GE
+	VALUES ("62a11650-3b13-4dce-96d5-926372b1219c",
+	"2995827d-4e5a-4830-9dfa-427eed6c55ab",
+	"f5af06a7-883a-4eb4-b339-efb3bf990400",
+	108,
+	0,
+	'poly::Complex');
+INSERT INTO GD_SHP
+	VALUES ("62a11650-3b13-4dce-96d5-926372b1219c");
+INSERT INTO GD_NCS
+	VALUES ("62a11650-3b13-4dce-96d5-926372b1219c");
+INSERT INTO DIM_ND
+	VALUES (160.000000,
+	96.000000,
+	"62a11650-3b13-4dce-96d5-926372b1219c");
+INSERT INTO DIM_GE
+	VALUES (1696.000000,
+	1680.000000,
+	"62a11650-3b13-4dce-96d5-926372b1219c",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("62a11650-3b13-4dce-96d5-926372b1219c",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_GE
+	VALUES ("4e6ef9b4-c2d1-4068-aeb4-58cba235f80a",
+	"2995827d-4e5a-4830-9dfa-427eed6c55ab",
+	"d5faf188-c1d2-4f28-94a8-de9b9350adf5",
+	108,
+	0,
+	'poly::Mission Control');
+INSERT INTO GD_SHP
+	VALUES ("4e6ef9b4-c2d1-4068-aeb4-58cba235f80a");
+INSERT INTO GD_NCS
+	VALUES ("4e6ef9b4-c2d1-4068-aeb4-58cba235f80a");
+INSERT INTO DIM_ND
+	VALUES (160.000000,
+	96.000000,
+	"4e6ef9b4-c2d1-4068-aeb4-58cba235f80a");
+INSERT INTO DIM_GE
+	VALUES (1696.000000,
+	1296.000000,
+	"4e6ef9b4-c2d1-4068-aeb4-58cba235f80a",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("4e6ef9b4-c2d1-4068-aeb4-58cba235f80a",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_GE
+	VALUES ("0f193dd0-7fef-4fe2-8cc1-76d55de057d2",
+	"2995827d-4e5a-4830-9dfa-427eed6c55ab",
+	"9135fe93-527c-4f15-b0dd-dd949b855927",
+	108,
+	0,
+	'poly::Datatypes');
+INSERT INTO GD_SHP
+	VALUES ("0f193dd0-7fef-4fe2-8cc1-76d55de057d2");
+INSERT INTO GD_NCS
+	VALUES ("0f193dd0-7fef-4fe2-8cc1-76d55de057d2");
+INSERT INTO DIM_ND
+	VALUES (160.000000,
+	96.000000,
+	"0f193dd0-7fef-4fe2-8cc1-76d55de057d2");
+INSERT INTO DIM_GE
+	VALUES (2320.000000,
+	1552.000000,
+	"0f193dd0-7fef-4fe2-8cc1-76d55de057d2",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("0f193dd0-7fef-4fe2-8cc1-76d55de057d2",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_GE
+	VALUES ("efc8b52a-8ca5-4185-89ac-ea86875125e4",
+	"2995827d-4e5a-4830-9dfa-427eed6c55ab",
+	"1353f273-3b63-4cdd-b3f9-57d7687cc3b5",
+	108,
+	0,
+	'poly::External Entities');
+INSERT INTO GD_SHP
+	VALUES ("efc8b52a-8ca5-4185-89ac-ea86875125e4");
+INSERT INTO GD_NCS
+	VALUES ("efc8b52a-8ca5-4185-89ac-ea86875125e4");
+INSERT INTO DIM_ND
+	VALUES (160.000000,
+	96.000000,
+	"efc8b52a-8ca5-4185-89ac-ea86875125e4");
+INSERT INTO DIM_GE
+	VALUES (2144.000000,
+	1552.000000,
+	"efc8b52a-8ca5-4185-89ac-ea86875125e4",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("efc8b52a-8ca5-4185-89ac-ea86875125e4",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_DIA
+	VALUES ("2995827d-4e5a-4830-9dfa-427eed6c55ab",
+	'',
+	1.204967,
+	1666.000000,
+	1283.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO PE_PE
+	VALUES ("5b29a0f8-eab8-404d-9415-58ce0e936c23",
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO S_SYS_PROXY
+	VALUES ("024fd131-380c-4b55-8efc-8979724b1546",
+	'poly',
+	1,
+	'../poly.xtuml');

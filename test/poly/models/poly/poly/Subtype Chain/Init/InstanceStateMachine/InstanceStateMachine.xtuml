@@ -1,0 +1,298 @@
+-- BP 7.1 content: InstanceStateMachine syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO SM_ISM
+	VALUES ("a691db97-11d6-407a-9ef7-3c22895d419e",
+	"40fef248-732d-471e-9056-99bf4e1985e0");
+INSERT INTO SM_SM
+	VALUES ("a691db97-11d6-407a-9ef7-3c22895d419e",
+	'',
+	17);
+INSERT INTO SM_MOORE
+	VALUES ("a691db97-11d6-407a-9ef7-3c22895d419e");
+INSERT INTO SM_LEVT
+	VALUES ("d38c1326-24e3-492c-b571-9f0941ddb8f9",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_SEVT
+	VALUES ("d38c1326-24e3-492c-b571-9f0941ddb8f9",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_EVT
+	VALUES ("d38c1326-24e3-492c-b571-9f0941ddb8f9",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	"00000000-0000-0000-0000-000000000000",
+	1,
+	'init',
+	0,
+	'',
+	'C_INIT1',
+	'');
+INSERT INTO SM_STATE
+	VALUES ("e419b1c9-6e06-470c-a1d3-8d7f6a5218a9",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	"00000000-0000-0000-0000-000000000000",
+	'One',
+	1,
+	0);
+INSERT INTO SM_EIGN
+	VALUES ("e419b1c9-6e06-470c-a1d3-8d7f6a5218a9",
+	"d38c1326-24e3-492c-b571-9f0941ddb8f9",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO SM_SEME
+	VALUES ("e419b1c9-6e06-470c-a1d3-8d7f6a5218a9",
+	"d38c1326-24e3-492c-b571-9f0941ddb8f9",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_CRTXN
+	VALUES ("e50bc42c-bf46-4008-b470-f32be3189de4",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	"d38c1326-24e3-492c-b571-9f0941ddb8f9",
+	"00000000-0000-0000-0000-000000880002");
+INSERT INTO SM_TXN
+	VALUES ("e50bc42c-bf46-4008-b470-f32be3189de4",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	"e419b1c9-6e06-470c-a1d3-8d7f6a5218a9",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_MOAH
+	VALUES ("2dfd869c-1078-4b63-bed7-e5cdc0c63fb5",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	"e419b1c9-6e06-470c-a1d3-8d7f6a5218a9");
+INSERT INTO SM_AH
+	VALUES ("2dfd869c-1078-4b63-bed7-e5cdc0c63fb5",
+	"a691db97-11d6-407a-9ef7-3c22895d419e");
+INSERT INTO SM_ACT
+	VALUES ("2dfd869c-1078-4b63-bed7-e5cdc0c63fb5",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	1,
+	'create object instance s_aa of C_S;      s_aa.x = 100;
+create object instance a_aa of C_A;      a_aa.x = 101;
+create object instance aa of C_AA;       aa.x = 102;
+relate s_aa to a_aa across R102;
+relate a_aa to aa across R100;
+
+create object instance s_ab of C_S;      s_ab.x = 103;
+create object instance a_ab of C_A;      a_ab.x = 104;
+create object instance ab of C_AB;       ab.x = 105;
+relate s_ab to a_ab across R102;
+relate a_ab to ab across R100;
+
+create object instance s_ba of C_S;      s_ba.x = 106;
+create object instance b_ba of C_B;      b_ba.x = 107;
+create object instance ba of C_BA;       ba.x = 108;
+relate s_ba to b_ba across R102;
+relate b_ba to ba across R101;
+
+create object instance s_bb of C_S;      s_bb.x = 109;
+create object instance b_bb of C_B;      b_bb.x = 110;
+create object instance bb of C_BB;       bb.x = 111;
+relate s_bb to b_bb across R102;
+relate b_bb to bb across R101;
+
+// Used to be state: ''2. Two''.
+create object instance s_aa of C_S;      s_aa.x = 120;
+create object instance a_aa of C_A;      a_aa.x = 121;
+create object instance aa of C_AA;       aa.x = 122;
+relate s_aa to a_aa across R102;
+relate a_aa to aa across R100;
+
+create object instance s_ab of C_S;      s_ab.x = 123;
+create object instance a_ab of C_A;      a_ab.x = 124;
+create object instance ab of C_AB;       ab.x = 125;
+relate s_ab to a_ab across R102;
+relate a_ab to ab across R100;
+
+create object instance s_ba of C_S;      s_ba.x = 126;
+create object instance b_ba of C_B;      b_ba.x = 127;
+create object instance ba of C_BA;       ba.x = 128;
+create object instance bb1 of C_BB;       bb1.x = 132;
+relate s_ba to b_ba across R102;
+relate b_ba to ba across R101;
+relate b_ba to bb1 across R101;
+
+create object instance s_bb of C_S;      s_bb.x = 129;
+create object instance b_bb of C_B;      b_bb.x = 130;
+create object instance bb of C_BB;      bb.x = 131;
+relate s_bb to b_bb across R102;
+relate b_bb to bb across R101;
+
+// Used to be state: ''3. Finish''.
+generate C_D0:''Start'' to C_D creator;',
+	'');
+INSERT INTO SM_TAH
+	VALUES ("2abf4213-a17a-4280-9372-d5fdfea9cd8e",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	"e50bc42c-bf46-4008-b470-f32be3189de4");
+INSERT INTO SM_AH
+	VALUES ("2abf4213-a17a-4280-9372-d5fdfea9cd8e",
+	"a691db97-11d6-407a-9ef7-3c22895d419e");
+INSERT INTO SM_ACT
+	VALUES ("2abf4213-a17a-4280-9372-d5fdfea9cd8e",
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	1,
+	'',
+	'');
+INSERT INTO GD_MD
+	VALUES ("40ca0dda-583e-4e9f-be22-46bc9185b680",
+	8,
+	"a691db97-11d6-407a-9ef7-3c22895d419e",
+	40,
+	1,
+	0,
+	1,
+	1,
+	0,
+	12,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'poly::Subtype Chain::Init::Instance State Machine');
+INSERT INTO GD_GE
+	VALUES ("f0d21286-56d6-4d6b-af64-ef434f7a8c22",
+	"40ca0dda-583e-4e9f-be22-46bc9185b680",
+	"e419b1c9-6e06-470c-a1d3-8d7f6a5218a9",
+	41,
+	0,
+	'poly::Subtype Chain::Init::Instance State Machine::One');
+INSERT INTO GD_SHP
+	VALUES ("f0d21286-56d6-4d6b-af64-ef434f7a8c22");
+INSERT INTO GD_NCS
+	VALUES ("f0d21286-56d6-4d6b-af64-ef434f7a8c22");
+INSERT INTO DIM_ND
+	VALUES (320.000000,
+	416.000000,
+	"f0d21286-56d6-4d6b-af64-ef434f7a8c22");
+INSERT INTO DIM_GE
+	VALUES (1488.000000,
+	1152.000000,
+	"f0d21286-56d6-4d6b-af64-ef434f7a8c22",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("f0d21286-56d6-4d6b-af64-ef434f7a8c22",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_CON
+	VALUES ("a8783839-04c7-433b-85da-9c86b3fb630d",
+	1648.000000,
+	1152.000000,
+	"f0d21286-56d6-4d6b-af64-ef434f7a8c22");
+INSERT INTO GD_GE
+	VALUES ("6d04a44b-25fb-4de0-9fc1-c9a96a3389ee",
+	"40ca0dda-583e-4e9f-be22-46bc9185b680",
+	"e50bc42c-bf46-4008-b470-f32be3189de4",
+	49,
+	0,
+	'C_INIT1: init');
+INSERT INTO GD_CON
+	VALUES ("6d04a44b-25fb-4de0-9fc1-c9a96a3389ee",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_CTXT
+	VALUES ("0d998349-67e3-409f-a854-96656689619d",
+	"6d04a44b-25fb-4de0-9fc1-c9a96a3389ee",
+	1,
+	0.000000,
+	0.000000);
+INSERT INTO DIM_ND
+	VALUES (0.000000,
+	0.000000,
+	"0d998349-67e3-409f-a854-96656689619d");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"0d998349-67e3-409f-a854-96656689619d",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("0d998349-67e3-409f-a854-96656689619d",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_CTXT
+	VALUES ("882ca0f1-ae9a-4f91-b70c-ee085fa2f232",
+	"6d04a44b-25fb-4de0-9fc1-c9a96a3389ee",
+	3,
+	0.000000,
+	0.000000);
+INSERT INTO DIM_ND
+	VALUES (0.000000,
+	0.000000,
+	"882ca0f1-ae9a-4f91-b70c-ee085fa2f232");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"882ca0f1-ae9a-4f91-b70c-ee085fa2f232",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("882ca0f1-ae9a-4f91-b70c-ee085fa2f232",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_CTXT
+	VALUES ("28df484a-cd89-4c16-bf05-29bf54acf0da",
+	"6d04a44b-25fb-4de0-9fc1-c9a96a3389ee",
+	2,
+	0.000000,
+	0.000000);
+INSERT INTO DIM_ND
+	VALUES (0.000000,
+	0.000000,
+	"28df484a-cd89-4c16-bf05-29bf54acf0da");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"28df484a-cd89-4c16-bf05-29bf54acf0da",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("28df484a-cd89-4c16-bf05-29bf54acf0da",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_LS
+	VALUES ("a4d2de78-cbee-42c9-b206-e8e64912ccf5",
+	"6d04a44b-25fb-4de0-9fc1-c9a96a3389ee",
+	"00000000-0000-0000-0000-000000000000",
+	"6ce8b2dc-5bcb-4365-a34f-5679607b4cfc",
+	"0efdabdb-453b-4091-8664-90f4a8b09132");
+INSERT INTO DIM_WAY
+	VALUES ("6ce8b2dc-5bcb-4365-a34f-5679607b4cfc",
+	1648.000000,
+	1152.000000,
+	"6d04a44b-25fb-4de0-9fc1-c9a96a3389ee",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_WAY
+	VALUES ("0efdabdb-453b-4091-8664-90f4a8b09132",
+	1648.000000,
+	1056.000000,
+	"6d04a44b-25fb-4de0-9fc1-c9a96a3389ee",
+	"00000000-0000-0000-0000-000000000000",
+	"6ce8b2dc-5bcb-4365-a34f-5679607b4cfc");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"6d04a44b-25fb-4de0-9fc1-c9a96a3389ee",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("6d04a44b-25fb-4de0-9fc1-c9a96a3389ee",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ED
+	VALUES ("a8783839-04c7-433b-85da-9c86b3fb630d",
+	"00000000-0000-0000-0000-000000000000",
+	"6d04a44b-25fb-4de0-9fc1-c9a96a3389ee");
+INSERT INTO DIM_DIA
+	VALUES ("40ca0dda-583e-4e9f-be22-46bc9185b680",
+	'',
+	0.947972,
+	1212.000000,
+	964.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_OBJ_PROXY
+	VALUES ("40fef248-732d-471e-9056-99bf4e1985e0",
+	'Init',
+	110,
+	'C_INIT',
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'../Init.xtuml');

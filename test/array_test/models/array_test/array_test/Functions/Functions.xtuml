@@ -1,0 +1,1083 @@
+-- BP 7.1 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	"d44b6837-1053-4e93-a92b-63147bc38ed4",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("bc79d812-a0bf-4302-be4e-35a70466c3c8",
+	112,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'array_test::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("bc79d812-a0bf-4302-be4e-35a70466c3c8",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("7767a38f-936e-480f-a476-6a0acc237fbe",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'//
+// Check to see if any instances are already here.
+// This would mean that we have restored from NVS
+// or that preexisting instances were defined in data.
+//
+
+select any p from instances of P;
+
+if( empty p )
+
+  // Initialize
+  LOG::LogInfo( message:"Did not find any PEI data, initializing NVS" );
+  i = NVS::format();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error formatting the NVS." );
+  end if;
+  i = NVS::version( first:1, second:2 );
+  i =  NVS::checksum( first:1, second:2 );
+
+  // Parents and their life
+  create object instance p1 of P;
+  assign p1.family.father = "Calvin''s Dad";
+  assign p1.family.mother = "Calvin''s Mom";
+
+  // assign pets
+  assign p1.family.Pets[0].name = "Garfield";
+  assign p1.family.Pets[0].PetType = PetType::cat;
+  assign p1.family.Pets[0].CareGiver = p1.family.mother;
+  assign p1.family.Pets[1].name = "Odie";
+  assign p1.family.Pets[1].PetType = PetType::dog;
+  assign p1.family.Pets[1].CareGiver = p1.family.father;
+
+  // assign some schools
+  assign p1.schools[0] = "Hershey";
+  assign p1.schools[1] = "East Tipp";
+  assign p1.schools[2] = "Harrison";
+
+  // assign another pet for later comparison use
+  assign p1.pet.name = "Garfield";
+  assign p1.pet.PetType = PetType::cat;
+  assign p1.pet.CareGiver = p1.family.mother;
+
+  // assign some deep nesting
+  assign p1.nest[0].deep_nest[0][0].real_numbers[0] = 0.0;
+  assign p1.nest[0].deep_nest[0][0].real_numbers[1] = 1.0;
+  assign p1.nest[0].deep_nest[0][1].real_numbers[0] = 0.0;
+  assign p1.nest[0].deep_nest[0][1].real_numbers[1] = 1.0;
+  assign p1.nest[0].deep_nest[1][0].real_numbers[0] = 0.0;
+  assign p1.nest[0].deep_nest[1][0].real_numbers[1] = 1.0;
+  assign p1.nest[0].deep_nest[1][1].real_numbers[0] = 0.0;
+  assign p1.nest[0].deep_nest[1][1].real_numbers[1] = 1.0;
+
+  // do some array syntax checks
+  if ( "Hershey" == p1.schools[0] )
+    LOG::LogSuccess( message: "Successful read of array element as rVal in setup function." );
+  else
+    LOG::LogFailure( message: "Unsuccessful read of array element as rVal in setup function." );
+    ::failedFamilyTest();
+  end if;
+  if ( "Odie" == p1.family.Pets[1].name )
+    LOG::LogSuccess( message: "Successful read of array element as rVal in setup function." );
+  else
+    LOG::LogFailure( message: "Unsuccessful read of array element as rVal in setup function." );
+    ::failedFamilyTest();
+  end if;
+  if ( p1.nest[0].deep_nest[0][0].real_numbers[0] == 0.0 )
+    LOG::LogSuccess( message: "Successful read of deeply-nested array element as lVal in setup function." );
+  else
+    LOG::LogFailure( message: "Unsuccessful read of deeply-nested array element as lVal in setup function." );
+    ::failedFamilyTest();
+  end if;
+  if ( 1.0 == p1.nest[0].deep_nest[0][1].real_numbers[1] )
+    LOG::LogSuccess( message: "Successful read of deeply-nested array element as rVal in setup function." );
+  else
+    LOG::LogFailure( message: "Unsuccessful read of deeply-nested array element as rVal in setup function." );
+    ::failedFamilyTest();
+  end if;
+
+  // Non-themed test class
+  create object instance c1 of CHK;
+  create object instance c2 of CHKM;
+
+  // Test control
+  create object instance t1 of TC;
+
+  // Commit everything
+  i = PERSIST::commit();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error commiting persistence information. Error code:" );
+    LOG::LogInteger( message:i );
+  end if;
+else
+  LOG::LogInfo( message:"Found PEI data." );
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("7767a38f-936e-480f-a476-6a0acc237fbe",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("9fa6a07d-416a-4a0c-9c4a-4f7d31fbf0eb",
+	"00000000-0000-0000-0000-000000000000",
+	'test',
+	'',
+	'// Kick off the check arrays test sequence
+select any c from instances of CHK;
+generate CHK2:''start''() to c;
+select any c2 from instances of CHKM;
+generate CHKM2:''start''() to c2;
+
+// Kick off the family test sequence
+select any p from instances of P;
+HOSP::delivery( current_family: p.family );
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("9fa6a07d-416a-4a0c-9c4a-4f7d31fbf0eb",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("aeea586b-79ed-4f8f-b2cc-2fe369ca0f59",
+	"00000000-0000-0000-0000-000000000000",
+	'xit',
+	'',
+	'// Get rid of all instances, so the NVS is in a consistent state.
+select many ps from instances of P;
+for each p in ps
+  delete object instance p;
+end for;
+
+select many cs from instances of CHK;
+for each c in cs
+  delete object instance c;
+end for;
+
+select many cms from instances of CHKM;
+for each cm in cms
+  delete object instance cm;
+end for;
+
+select many tcs from instances of TC;
+for each tc in tcs
+  delete object instance tc;
+end for;
+
+// Shut down.
+ARCH::shutdown();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("aeea586b-79ed-4f8f-b2cc-2fe369ca0f59",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("cb4f3ae3-0c04-4885-bcad-21b2d1451e7f",
+	"00000000-0000-0000-0000-000000000000",
+	'updateFamily',
+	'',
+	'// A constructs that just tests the language, not actually used
+new_child = param.newFamily.child_1;
+
+// This select is overkill just to test syntax for arrays
+select any p1 from instances of P where selected.schools[1] == "East Tipp";
+select any p2 from instances of P where "East Tipp" == selected.schools[selected.getNumOne()];
+select any p3 from instances of P where selected.family.Pets[1000 - 1000].name == "Garfield";
+select any p4 from instances of P where "Garfield" == selected.family.Pets[0].name;
+select any p5 from instances of P where selected.family.Pets == p1.family.Pets;
+select any p6 from instances of P where p1.family.Pets == selected.family.Pets;
+select any p7 from instances of P where selected.nest[0].deep_nest[0][0].real_numbers[0] == 0.0;
+select any p8 from instances of P where 1.0 == selected.nest[0].deep_nest[0][1].real_numbers[1];
+
+// Here''s the real work
+generate P2:''new_child''( updated_family: param.newFamily ) to p1;
+
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("543091ed-df82-4684-af85-789195900797",
+	"cb4f3ae3-0c04-4885-bcad-21b2d1451e7f",
+	'newFamily',
+	"8709e0bc-93c6-484e-9b2a-9a2712fc55f2",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8709e0bc-93c6-484e-9b2a-9a2712fc55f2",
+	"00000000-0000-0000-0000-000000000000",
+	'Family',
+	'',
+	'',
+	'../Datatypes/Datatypes.xtuml');
+INSERT INTO PE_PE
+	VALUES ("cb4f3ae3-0c04-4885-bcad-21b2d1451e7f",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("417b493d-658d-4d57-9b38-8b83d6f66e2e",
+	"00000000-0000-0000-0000-000000000000",
+	'checkDataDFByVal',
+	'',
+	'// Read array data
+if ( param.data[0] == "myData_0" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+if ( "myData_1" == param.data[1] )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+if ( param.data[2] == "myData_2" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+
+// Just some more checks to exercise syntax
+tData[2] = "myData_2";
+tData[0] = "myData_0";
+tData[1] = "myData_1";
+
+select any c from instances of CHK;
+if ( param.data == c.myData )
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+if ( c.myData != param.data )
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-val domain function." );
+  ::failedChecksTest();
+else
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-val domain function." );
+end if;
+if ( param.data == tData )
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+if ( tData != param.data )
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-val domain function." );
+  ::failedChecksTest();
+else
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-val domain function." );
+end if;
+
+localData = param.data;
+return localData;',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'[]');
+INSERT INTO S_SPARM
+	VALUES ("b476d512-bafe-4368-9088-7811f7460d05",
+	"417b493d-658d-4d57-9b38-8b83d6f66e2e",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'[]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"b476d512-bafe-4368-9088-7811f7460d05",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"d9c4af50-bbe3-46bb-8574-78109e191657",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"417b493d-658d-4d57-9b38-8b83d6f66e2e",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"7db71244-c5d8-4105-9191-d9cde872ab34",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO PE_PE
+	VALUES ("417b493d-658d-4d57-9b38-8b83d6f66e2e",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("02a3b3b3-5355-4dbb-b6b4-d64d16f29a8b",
+	"00000000-0000-0000-0000-000000000000",
+	'checkDataDFByRef',
+	'',
+	'// Read array data
+if ( param.data[0] == "myData_0" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+if ( "myData_1" == param.data[1] )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+if ( param.data[2] == "myData_2" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+
+// Just some more checks to exercise syntax
+tData[2] = "myData_2";
+tData[0] = "myData_0";
+tData[1] = "myData_1";
+
+select any c from instances of CHK;
+if ( param.data == c.myData )
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+if ( c.myData != param.data )
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-ref domain function." );
+  ::failedChecksTest();
+else
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-ref domain function." );
+end if;
+if ( param.data == tData )
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+if ( tData != param.data )
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-ref domain function." );
+  ::failedChecksTest();
+else
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-ref domain function." );
+end if;
+
+
+localData = param.data;
+return localData;',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'[]');
+INSERT INTO S_SPARM
+	VALUES ("29af4693-a118-4321-9060-2f04cb20466d",
+	"02a3b3b3-5355-4dbb-b6b4-d64d16f29a8b",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'[]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"29af4693-a118-4321-9060-2f04cb20466d",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"5bed9515-db86-4251-bfac-fc71ba97077c",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"02a3b3b3-5355-4dbb-b6b4-d64d16f29a8b",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"513205ba-4717-4bbf-8f65-8e85f42a2959",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO PE_PE
+	VALUES ("02a3b3b3-5355-4dbb-b6b4-d64d16f29a8b",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("4006f192-77c8-404b-ba42-c334f2bb9ea7",
+	"00000000-0000-0000-0000-000000000000",
+	'failedFamilyTest',
+	'',
+	'LOG::LogFailure( message: "Failed during the family test." );
+
+// Tell test control we''re done
+select any tc from instances of TC;
+generate TC1:''completedFamilyTest''() to tc;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("4006f192-77c8-404b-ba42-c334f2bb9ea7",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("95060964-3a66-43ac-a7dc-d0dcf7df6391",
+	"00000000-0000-0000-0000-000000000000",
+	'failedChecksTest',
+	'',
+	'LOG::LogFailure( message: "Failed during the checks test." );
+
+// Tell test control we''re done
+select any tc from instances of TC;
+generate TC2:''completedChecksTest''() to tc;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("95060964-3a66-43ac-a7dc-d0dcf7df6391",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("276fc606-e1f7-4c55-be59-1e03a922cf01",
+	"00000000-0000-0000-0000-000000000000",
+	'checkDataDFByRefM',
+	'',
+	'// Read array data
+if ( param.data[0][0] == "myData_0_0" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+if ( "myData_0_1" == param.data[0][1] )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+if ( param.data[1][0] == "myData_1_0" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+if ( param.data[1][1] == "myData_1_1" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+
+localData = param.data;
+if ( param.data == localData )
+  LOG::LogSuccess( message: "Successful compare of multi-dim arrays in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful compare of multi-dim arrays in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+
+// More syntax checks
+select any c from instances of CHKM;
+
+if ( param.data == c.myData )
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+if ( c.myData != param.data )
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-ref domain function." );
+  ::failedChecksTest();
+else
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-ref domain function." );
+end if;
+if ( param.data[0] == c.myData[0] )
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-ref domain function." );
+  ::failedChecksTest();
+end if;
+if ( c.myData[0] != param.data[0] )
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-ref domain function." );
+  ::failedChecksTest();
+else
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-ref domain function." );
+end if;
+
+return localData;',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'[][]');
+INSERT INTO S_SPARM
+	VALUES ("bd659192-a686-4d93-adbe-d2a3289359f6",
+	"276fc606-e1f7-4c55-be59-1e03a922cf01",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'[][]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"bd659192-a686-4d93-adbe-d2a3289359f6",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"a3dfd0d0-6c08-4451-8831-6082c5dd0317",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"bd659192-a686-4d93-adbe-d2a3289359f6",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"13fa2ee4-047e-4df8-8eb2-9a113cc63b99",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"276fc606-e1f7-4c55-be59-1e03a922cf01",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"4868bbb0-cb6e-4096-98ff-650a47e7f05d",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"276fc606-e1f7-4c55-be59-1e03a922cf01",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"84c8fda2-8861-4b65-b580-ddb16bb908c7",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO PE_PE
+	VALUES ("276fc606-e1f7-4c55-be59-1e03a922cf01",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("2fd90dcd-8dab-4483-9e00-59081d3f0003",
+	"00000000-0000-0000-0000-000000000000",
+	'checkDataDFByValM',
+	'',
+	'// Read array data
+if ( param.data[0][0] == "myData_0_0" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+if ( "myData_0_1" == param.data[0][1] )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+if ( param.data[1][0] == "myData_1_0" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+if ( param.data[1][1] == "myData_1_1" )
+  LOG::LogSuccess( message: "Successful read of array element in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of array element in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+
+localData = param.data;
+if ( param.data == localData )
+  LOG::LogSuccess( message: "Successful compare of multi-dim arrays in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful compare of multi-dim arrays in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+
+// More syntax checks
+select any c from instances of CHKM;
+
+if ( param.data == c.myData )
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+if ( c.myData != param.data )
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-val domain function." );
+  ::failedChecksTest();
+else
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-val domain function." );
+end if;
+if ( param.data[0] == c.myData[0] )
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-val domain function." );
+  ::failedChecksTest();
+end if;
+if ( c.myData[0] != param.data[0] )
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in pass-by-val domain function." );
+  ::failedChecksTest();
+else
+  LOG::LogSuccess( message: "Successful comparison of arrays in pass-by-val domain function." );
+end if;
+
+return localData;',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'[][]');
+INSERT INTO S_SPARM
+	VALUES ("b6bddcff-b96b-4092-a963-bdb0b76bff5e",
+	"2fd90dcd-8dab-4483-9e00-59081d3f0003",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'[][]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"b6bddcff-b96b-4092-a963-bdb0b76bff5e",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"807c4929-a358-4582-9b30-955182ef5a96",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"b6bddcff-b96b-4092-a963-bdb0b76bff5e",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"08be5a54-a393-4d8d-b8d9-a8dc05129dd7",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"2fd90dcd-8dab-4483-9e00-59081d3f0003",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"bf21fe7e-8f8e-42af-a753-4b516e59ab04",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"2fd90dcd-8dab-4483-9e00-59081d3f0003",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"c3a97ee2-491d-455f-83b3-13cc76c044a9",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO PE_PE
+	VALUES ("2fd90dcd-8dab-4483-9e00-59081d3f0003",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("0840aa66-e6be-4355-9012-8212c0e19daa",
+	"00000000-0000-0000-0000-000000000000",
+	'failedChecksTestM',
+	'',
+	'LOG::LogFailure( message: "Failed during the checks test." );
+
+// Tell test control we''re done
+select any tc from instances of TC;
+generate TC3:''completedChecksMTest''() to tc;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("0840aa66-e6be-4355-9012-8212c0e19daa",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("237e48cb-61c5-4ec5-a892-63553dd17a86",
+	"00000000-0000-0000-0000-000000000000",
+	'getNumZero',
+	'',
+	'return 0;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("237e48cb-61c5-4ec5-a892-63553dd17a86",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("a27bb1b2-ac31-4685-8954-55c5f6aed32a",
+	"00000000-0000-0000-0000-000000000000",
+	'checkDeeplyNestedByVal',
+	'',
+	'// Check some deep nesting
+if ( param.data[0].deep_nest[0][0].real_numbers[0] == 0.0 )
+  LOG::LogSuccess( message: "Successful read of deeply-nested array element as lVal in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of deeply-nested array element as lVal in pass-by-val domain function." );
+  ::failedFamilyTest();
+end if;
+if ( 1.0 == param.data[0].deep_nest[0][1].real_numbers[1] )
+  LOG::LogSuccess( message: "Successful read of deeply-nested array element as rVal in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of deeply-nested array element as rVal in pass-by-val domain function." );
+  ::failedFamilyTest();
+end if;
+
+someReals = param.data[0].deep_nest[0][0];
+if ( param.data[0].deep_nest[0][0] == someReals )
+  LOG::LogSuccess( message: "Successful comparison of deeply-nested arrays as lVal in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of deeply-nested arrays as lVal in pass-by-val domain function." );
+  ::failedFamilyTest();
+end if;
+if ( someReals == param.data[0].deep_nest[0][0] )
+  LOG::LogSuccess( message: "Successful comparison of deeply-nested array element as rVal in pass-by-val domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of deeply-nested array element as rVal in pass-by-val domain function." );
+  ::failedFamilyTest();
+end if;
+
+return param.data;',
+	"fb869d16-2f89-47c4-8c9a-e01744d2ee30",
+	1,
+	'[]');
+INSERT INTO S_SPARM
+	VALUES ("ac6da160-e8b6-4933-a480-fdc69008cfe8",
+	"a27bb1b2-ac31-4685-8954-55c5f6aed32a",
+	'data',
+	"fb869d16-2f89-47c4-8c9a-e01744d2ee30",
+	0,
+	'[]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"ac6da160-e8b6-4933-a480-fdc69008cfe8",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"3a29cf36-1746-4614-86c1-b0ddabfa9d76",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("fb869d16-2f89-47c4-8c9a-e01744d2ee30",
+	"00000000-0000-0000-0000-000000000000",
+	'Nest',
+	'',
+	'',
+	'../Datatypes/Datatypes.xtuml');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"a27bb1b2-ac31-4685-8954-55c5f6aed32a",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"18b8a5a4-4914-48f4-9069-a3d6fedf091d",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO PE_PE
+	VALUES ("a27bb1b2-ac31-4685-8954-55c5f6aed32a",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("716dd970-563d-4254-9106-06f3f6de32c1",
+	"00000000-0000-0000-0000-000000000000",
+	'checkDeeplyNestedByRef',
+	'',
+	'// Check some deep nesting
+if ( param.data[0].deep_nest[0][0].real_numbers[0] == 0.0 )
+  LOG::LogSuccess( message: "Successful read of deeply-nested array element as lVal in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of deeply-nested array element as lVal in pass-by-ref domain function." );
+  ::failedFamilyTest();
+end if;
+if ( 1.0 == param.data[0].deep_nest[0][1].real_numbers[1] )
+  LOG::LogSuccess( message: "Successful read of deeply-nested array element as rVal in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of deeply-nested array element as rVal in pass-by-ref domain function." );
+  ::failedFamilyTest();
+end if;
+
+someReals = param.data[0].deep_nest[0][0];
+if ( param.data[0].deep_nest[0][0] == someReals )
+  LOG::LogSuccess( message: "Successful comparison of deeply-nested arrays as lVal in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of deeply-nested arrays as lVal in pass-by-ref domain function." );
+  ::failedFamilyTest();
+end if;
+if ( someReals == param.data[0].deep_nest[0][0] )
+  LOG::LogSuccess( message: "Successful comparison of deeply-nested array element as rVal in pass-by-ref domain function." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of deeply-nested array element as rVal in pass-by-ref domain function." );
+  ::failedFamilyTest();
+end if;
+
+return param.data;',
+	"fb869d16-2f89-47c4-8c9a-e01744d2ee30",
+	1,
+	'[]');
+INSERT INTO S_SPARM
+	VALUES ("4cf25229-b082-424b-b03e-b2d251f358ab",
+	"716dd970-563d-4254-9106-06f3f6de32c1",
+	'data',
+	"fb869d16-2f89-47c4-8c9a-e01744d2ee30",
+	0,
+	'[]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"4cf25229-b082-424b-b03e-b2d251f358ab",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"bb4f5481-cb7d-43d5-a471-9cbac890fccf",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"716dd970-563d-4254-9106-06f3f6de32c1",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"e04226f9-4ade-4bd4-bd9b-f41baf06b1bb",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO PE_PE
+	VALUES ("716dd970-563d-4254-9106-06f3f6de32c1",
+	1,
+	"48728e75-4bda-4e05-b1c5-738d24bbd509",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("48728e75-4bda-4e05-b1c5-738d24bbd509",
+	1,
+	"316fa73b-998a-4123-89c2-9266e3e91afa",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("316fa73b-998a-4123-89c2-9266e3e91afa",
+	"d44b6837-1053-4e93-a92b-63147bc38ed4",
+	"d44b6837-1053-4e93-a92b-63147bc38ed4",
+	'array_test',
+	'',
+	0,
+	'../array_test.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("d44b6837-1053-4e93-a92b-63147bc38ed4",
+	'array_test',
+	1,
+	'../../array_test.xtuml');

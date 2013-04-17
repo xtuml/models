@@ -1,0 +1,190 @@
+-- BP 7.1 content: InstanceStateMachine syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO SM_ISM
+	VALUES ("09ed320e-2566-4d8a-a89a-e1d212203be3",
+	"db1b0ea7-3e57-4a03-ac12-d35f44e2211c");
+INSERT INTO SM_SM
+	VALUES ("09ed320e-2566-4d8a-a89a-e1d212203be3",
+	'',
+	3);
+INSERT INTO SM_MOORE
+	VALUES ("09ed320e-2566-4d8a-a89a-e1d212203be3");
+INSERT INTO SM_STATE
+	VALUES ("b1c3993a-e55b-4258-b958-8235a4e0ceee",
+	"09ed320e-2566-4d8a-a89a-e1d212203be3",
+	"00000000-0000-0000-0000-000000000000",
+	'init state one',
+	1,
+	0);
+INSERT INTO SM_STATE
+	VALUES ("1b09c345-2a08-4171-bb68-7cf79c0157ba",
+	"09ed320e-2566-4d8a-a89a-e1d212203be3",
+	"00000000-0000-0000-0000-000000000000",
+	'init state two',
+	3,
+	0);
+INSERT INTO SM_MOAH
+	VALUES ("52eb3bf0-7889-425f-9bab-08dd645cdf70",
+	"09ed320e-2566-4d8a-a89a-e1d212203be3",
+	"b1c3993a-e55b-4258-b958-8235a4e0ceee");
+INSERT INTO SM_AH
+	VALUES ("52eb3bf0-7889-425f-9bab-08dd645cdf70",
+	"09ed320e-2566-4d8a-a89a-e1d212203be3");
+INSERT INTO SM_ACT
+	VALUES ("52eb3bf0-7889-425f-9bab-08dd645cdf70",
+	"09ed320e-2566-4d8a-a89a-e1d212203be3",
+	1,
+	'LOG::LogInfo(message:"Domain init1 - init state one");
+create object instance a1 of OA;
+create object instance b1 of OB;
+create object instance c1 of OC;
+
+//assign id attrs
+a1.oa_id=1;
+b1.ob_id=1;
+c1.oc_id=1;
+
+select many as from instances of OA;
+x = (cardinality as);
+if (x == 1)
+  LOG::LogSuccess(message:"OAS - init one one init");
+else
+  LOG::LogFailure(message:"OAS - init one one int");
+end if;
+
+select many bs from instances of OB;
+x = (cardinality bs);
+if (x == 1)
+  LOG::LogSuccess(message:"OBS - init one one init");
+else
+  LOG::LogFailure(message:"OBS - init one one int");
+end if;
+
+select many cs from instances of OC;
+x = (cardinality cs);
+if (x == 1)
+  LOG::LogSuccess(message:"OCS - init one one init");
+else
+  LOG::LogFailure(message:"OCS - init one one int");
+end if;
+LOG::LogInfo(message:"Ending in init state one");
+
+// The first time this bridge function is called, the value
+// should be 99.  We will check this, and set it to the 
+// next init state (2)
+
+nextinit_state=2;
+x=BR::getandset(i:nextinit_state);
+
+// make sure x = 99
+if (x == 99)
+  LOG::LogSuccess(message:"Domain init1 - init one - checking x == 99");
+else
+  LOG::LogFailure(message:"Domain init1 - init one - checking x == 99");
+end if;
+
+',
+	'');
+INSERT INTO SM_MOAH
+	VALUES ("eee0b9ad-2a33-4370-964c-3c4b762a0bab",
+	"09ed320e-2566-4d8a-a89a-e1d212203be3",
+	"1b09c345-2a08-4171-bb68-7cf79c0157ba");
+INSERT INTO SM_AH
+	VALUES ("eee0b9ad-2a33-4370-964c-3c4b762a0bab",
+	"09ed320e-2566-4d8a-a89a-e1d212203be3");
+INSERT INTO SM_ACT
+	VALUES ("eee0b9ad-2a33-4370-964c-3c4b762a0bab",
+	"09ed320e-2566-4d8a-a89a-e1d212203be3",
+	1,
+	'LOG::LogInfo(message:"Domain init1 - Starting in init state two");
+
+x=BR::getandset(i:3);
+if (x == 2)
+  LOG::LogSuccess(message:"Domain init1 - state 2 - checking getandset");
+else
+  LOG::LogFailure(message:"Domain init1 - state 2 - checking getandset");
+end if;
+',
+	'');
+INSERT INTO GD_MD
+	VALUES ("998d2852-e80b-4390-8f4c-fa125cb21f49",
+	8,
+	"09ed320e-2566-4d8a-a89a-e1d212203be3",
+	40,
+	1,
+	0,
+	1,
+	1,
+	0,
+	12,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'init1::init one::init object one::Instance State Machine');
+INSERT INTO GD_GE
+	VALUES ("8901c582-b753-4c2f-a24d-39cb51459a48",
+	"998d2852-e80b-4390-8f4c-fa125cb21f49",
+	"b1c3993a-e55b-4258-b958-8235a4e0ceee",
+	41,
+	0,
+	'init1::init one::init object one::Instance State Machine::init state one');
+INSERT INTO GD_SHP
+	VALUES ("8901c582-b753-4c2f-a24d-39cb51459a48");
+INSERT INTO GD_NCS
+	VALUES ("8901c582-b753-4c2f-a24d-39cb51459a48");
+INSERT INTO DIM_ND
+	VALUES (384.000000,
+	208.000000,
+	"8901c582-b753-4c2f-a24d-39cb51459a48");
+INSERT INTO DIM_GE
+	VALUES (1712.000000,
+	1152.000000,
+	"8901c582-b753-4c2f-a24d-39cb51459a48",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("8901c582-b753-4c2f-a24d-39cb51459a48",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_GE
+	VALUES ("32242a4d-1642-4ee6-896e-6cbc439d65f9",
+	"998d2852-e80b-4390-8f4c-fa125cb21f49",
+	"1b09c345-2a08-4171-bb68-7cf79c0157ba",
+	41,
+	0,
+	'init1::init one::init object one::Instance State Machine::init state two');
+INSERT INTO GD_SHP
+	VALUES ("32242a4d-1642-4ee6-896e-6cbc439d65f9");
+INSERT INTO GD_NCS
+	VALUES ("32242a4d-1642-4ee6-896e-6cbc439d65f9");
+INSERT INTO DIM_ND
+	VALUES (384.000000,
+	208.000000,
+	"32242a4d-1642-4ee6-896e-6cbc439d65f9");
+INSERT INTO DIM_GE
+	VALUES (1712.000000,
+	1424.000000,
+	"32242a4d-1642-4ee6-896e-6cbc439d65f9",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("32242a4d-1642-4ee6-896e-6cbc439d65f9",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_DIA
+	VALUES ("998d2852-e80b-4390-8f4c-fa125cb21f49",
+	'',
+	1.000000,
+	1600.000000,
+	1179.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_OBJ_PROXY
+	VALUES ("db1b0ea7-3e57-4a03-ac12-d35f44e2211c",
+	'init object one',
+	8,
+	'INITONE',
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'../init object one.xtuml');

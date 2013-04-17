@@ -1,0 +1,175 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("d16b5a47-dfe5-4c64-84f9-02bfaac4af6d",
+	'Test Class',
+	4,
+	'TC',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("6ab76206-78f2-4ac2-afbf-5b6a63577ea5",
+	"d16b5a47-dfe5-4c64-84f9-02bfaac4af6d",
+	'TestBRG_FUN',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'val_param = 0;
+val_param = EE::NoParam();
+if ( val_param != 0 )
+  LOG::LogSuccess( message:"Bridge wired to a function in another domain: NoParam" );
+else
+  LOG::LogFailure( message:"Bridge wired to a function in another domain: NoParam" );
+end if;
+starting_val = val_param;
+
+ref_param = EE::ByVal( val:val_param );
+if ( ref_param == val_param / 2 )
+  LOG::LogSuccess( message:"Bridge wired to a function in another domain: ByVal" );
+else
+  LOG::LogFailure( message:"Bridge wired to a function in another domain: ByVal" );
+end if;
+
+tmp = ref_param;
+val_param = EE::ByRef( ref:ref_param );
+if ( val_param == tmp / ref_param )
+  LOG::LogSuccess( message:"Bridge wired to a function in another domain: ByRef" );
+else
+  LOG::LogFailure( message:"Bridge wired to a function in another domain: ByRef" );
+end if;
+
+tmp = EE::Combo( ref:ref_param , val:val_param );
+if ((tmp == ref_param ) and ( tmp == starting_val ))
+  LOG::LogSuccess( message:"Bridge wired to a function in another domain: Combo" );
+else
+  LOG::LogFailure( message:"Bridge wired to a function in another domain: Combo" );
+end if;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("e8bb67ff-9901-48a2-8f47-48d0bf8304e0",
+	"d16b5a47-dfe5-4c64-84f9-02bfaac4af6d",
+	'TestBRG_REL',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'val_param = 0;
+val_param = AEE::NoParam();
+if ( val_param != 0 )
+  LOG::LogSuccess( message:"Bridge wired to realized code: NoParam" );
+else
+  LOG::LogFailure( message:"Bridge wired to realized code: NoParam" );
+end if;
+starting_val = val_param;
+
+ref_param = AEE::ByVal( val:val_param );
+if ( ref_param == val_param / 2 )
+  LOG::LogSuccess( message:"Bridge wired to realized code: ByVal" );
+else
+  LOG::LogFailure( message:"Bridge wired to realized code: ByVal" );
+end if;
+
+tmp = ref_param;
+val_param = AEE::ByRef( ref:ref_param );
+if ( val_param == tmp / ref_param )
+  LOG::LogSuccess( message:"Bridge wired to realized code: ByRef" );
+else
+  LOG::LogFailure( message:"Bridge wired to realized code: ByRef" );
+end if;
+
+tmp = AEE::Combo( ref:ref_param , val:val_param );
+if ((tmp == ref_param ) and ( tmp == starting_val ))
+  LOG::LogSuccess( message:"Bridge wired to realized code: Combo" );
+else
+  LOG::LogFailure( message:"Bridge wired to realized code: Combo" );
+end if;',
+	1,
+	'',
+	"6ab76206-78f2-4ac2-afbf-5b6a63577ea5");
+INSERT INTO O_TFR
+	VALUES ("0fe32700-2e20-42f6-83db-5bee01ae37d9",
+	"d16b5a47-dfe5-4c64-84f9-02bfaac4af6d",
+	'TestCOP',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'val_param = 0;
+val_param = FO::ClassNoParam();
+if ( val_param != 0 )
+  LOG::LogSuccess( message:"Class Operation NoParam" );
+else
+  LOG::LogFailure( message:"Class Operation NoParam" );
+end if;
+starting_val = val_param;
+
+ref_param = FO::ClassByVal( val:val_param );
+if ( ref_param == val_param / 2 )
+  LOG::LogSuccess( message:"Class Operation ByVal" );
+else
+  LOG::LogFailure( message:"Class Operation ByVal" );
+end if;
+
+tmp = ref_param;
+val_param = FO::ClassByRef( ref:ref_param );
+if ( val_param == tmp / ref_param )
+  LOG::LogSuccess( message:"Class Operation ByRef" );
+else
+  LOG::LogFailure( message:"Class Operation ByRef" );
+end if;
+
+tmp = FO::ClassCombo( ref:ref_param , val:val_param );
+if ((tmp == ref_param ) and ( tmp == starting_val ))
+  LOG::LogSuccess( message:"Class Operation Combo" );
+else
+  LOG::LogFailure( message:"Class Operation Combo" );
+end if;',
+	1,
+	'',
+	"e8bb67ff-9901-48a2-8f47-48d0bf8304e0");
+INSERT INTO O_NBATTR
+	VALUES ("0a515c24-6ca6-4fed-8093-bb63cc839690",
+	"d16b5a47-dfe5-4c64-84f9-02bfaac4af6d");
+INSERT INTO O_BATTR
+	VALUES ("0a515c24-6ca6-4fed-8093-bb63cc839690",
+	"d16b5a47-dfe5-4c64-84f9-02bfaac4af6d");
+INSERT INTO O_ATTR
+	VALUES ("0a515c24-6ca6-4fed-8093-bb63cc839690",
+	"d16b5a47-dfe5-4c64-84f9-02bfaac4af6d",
+	"00000000-0000-0000-0000-000000000000",
+	'tc_ID',
+	'',
+	'',
+	'tc_ID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"d16b5a47-dfe5-4c64-84f9-02bfaac4af6d");
+INSERT INTO O_OIDA
+	VALUES ("0a515c24-6ca6-4fed-8093-bb63cc839690",
+	"d16b5a47-dfe5-4c64-84f9-02bfaac4af6d",
+	0,
+	'tc_ID');
+INSERT INTO O_ID
+	VALUES (1,
+	"d16b5a47-dfe5-4c64-84f9-02bfaac4af6d");
+INSERT INTO O_ID
+	VALUES (2,
+	"d16b5a47-dfe5-4c64-84f9-02bfaac4af6d");
+INSERT INTO PE_PE
+	VALUES ("d16b5a47-dfe5-4c64-84f9-02bfaac4af6d",
+	1,
+	"c8199a46-2fd2-46ef-bae8-43975133d219",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("c8199a46-2fd2-46ef-bae8-43975133d219",
+	"00000000-0000-0000-0000-000000000000",
+	"bbf3049a-828b-4aa8-94be-9eaa0b221670",
+	'G_COP_R_ALL_interop',
+	'Rename this subsystem to something appropriate for your purposes.',
+	1,
+	'../G_COP_R_ALL_interop.xtuml');

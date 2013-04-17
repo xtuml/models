@@ -1,0 +1,318 @@
+-- BP 7.1 content: InstanceStateMachine syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO SM_ISM
+	VALUES ("f677c997-81b2-40f4-ba85-bf68226d32e3",
+	"914fd10b-b600-4dc9-9c68-3df19213cd36");
+INSERT INTO SM_SM
+	VALUES ("f677c997-81b2-40f4-ba85-bf68226d32e3",
+	'',
+	6);
+INSERT INTO SM_MOORE
+	VALUES ("f677c997-81b2-40f4-ba85-bf68226d32e3");
+INSERT INTO SM_LEVT
+	VALUES ("44f53515-1d90-41ad-8e3d-07ac6bd60aef",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_SEVT
+	VALUES ("44f53515-1d90-41ad-8e3d-07ac6bd60aef",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_EVT
+	VALUES ("44f53515-1d90-41ad-8e3d-07ac6bd60aef",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	"00000000-0000-0000-0000-000000000000",
+	1,
+	'Init',
+	0,
+	'',
+	'INIT1',
+	'');
+INSERT INTO SM_STATE
+	VALUES ("cad7383f-f187-4bf6-937c-0e80e9591654",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	"00000000-0000-0000-0000-000000000000",
+	'Initialize',
+	1,
+	0);
+INSERT INTO SM_EIGN
+	VALUES ("cad7383f-f187-4bf6-937c-0e80e9591654",
+	"44f53515-1d90-41ad-8e3d-07ac6bd60aef",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO SM_SEME
+	VALUES ("cad7383f-f187-4bf6-937c-0e80e9591654",
+	"44f53515-1d90-41ad-8e3d-07ac6bd60aef",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_CRTXN
+	VALUES ("409dc43d-6206-4302-bf12-81fffcd0532c",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	"44f53515-1d90-41ad-8e3d-07ac6bd60aef",
+	"00000000-0000-0000-0000-000000300001");
+INSERT INTO SM_TXN
+	VALUES ("409dc43d-6206-4302-bf12-81fffcd0532c",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	"cad7383f-f187-4bf6-937c-0e80e9591654",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_MOAH
+	VALUES ("f379a56a-3571-4d4c-ad65-f44bc4465e7e",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	"cad7383f-f187-4bf6-937c-0e80e9591654");
+INSERT INTO SM_AH
+	VALUES ("f379a56a-3571-4d4c-ad65-f44bc4465e7e",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3");
+INSERT INTO SM_ACT
+	VALUES ("f379a56a-3571-4d4c-ad65-f44bc4465e7e",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	1,
+	'create object instance int of INT;
+int.width = 5;
+int.length = 6;
+//int.area should be 30
+//int.perimeter should be 22
+
+create object instance real of REAL;
+real.width = 1.3;
+real.length = 2.4;
+//real.area should be 3.12
+//real.perimeter should be 7.4
+
+create object instance string of STR;
+string.first = "First";
+string.last = "Last";
+//string.FL should be "First Last"
+//string.LF should be "Last, First"
+
+create object instance bool of BOOL;
+bool.p = true;
+bool.q = false;
+//bool.b_and should be false
+//bool.b_or should be true
+
+create object instance date_time of DT;
+date_time.date = TIM::create_date(day:1, month:1, year:2000, second:0, minute:0, hour:12);
+date_time.time = TIM::current_clock();
+//date_time.next_date should be 2001.1.1 12:00:00
+//date_time.next_time should be date_time.time
+
+create object instance inst of INST;
+create event instance e of INST1 to inst;
+inst.one = e;
+create event instance e1 of INST1 to inst;
+inst.one_one = e1;
+create event instance e2 of INST2(int:83) to inst;
+inst.two = e2;
+//inst.three should be inst.two
+//inst.four is set by Verifier
+//inst.five is set by Verifier
+//inst.six should be inst.four
+
+create object instance iref of IREF;
+iref.one = TIM::timer_start(microseconds:100000000, event_inst:e);
+iref.one_one = TIM::timer_start(microseconds:100000000, event_inst:e1);
+//iref.two is set by Verifier
+//iref.three should be iref.one
+//iref.four should be iref.two
+
+create object instance enum of ENUM;
+enum.color = color::purple;
+enum.size = number::three;
+//enum.color2 should be color::yellow
+//enum.size2 should be number::four
+
+create object instance uni of UNI;
+//uni.one is set by Verifier
+//uni.two is set by Verifier
+
+generate D0 to D creator;',
+	'');
+INSERT INTO SM_TAH
+	VALUES ("dac1e242-9d11-4473-9edb-dcd8c639590b",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	"409dc43d-6206-4302-bf12-81fffcd0532c");
+INSERT INTO SM_AH
+	VALUES ("dac1e242-9d11-4473-9edb-dcd8c639590b",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3");
+INSERT INTO SM_ACT
+	VALUES ("dac1e242-9d11-4473-9edb-dcd8c639590b",
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	1,
+	'',
+	'');
+INSERT INTO GD_MD
+	VALUES ("72ae6e43-3f2c-4fa7-99bd-1982cb56826c",
+	8,
+	"f677c997-81b2-40f4-ba85-bf68226d32e3",
+	40,
+	1,
+	0,
+	1,
+	1,
+	0,
+	12,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'trans::Drivers::Init::Instance State Machine');
+INSERT INTO GD_GE
+	VALUES ("cca49770-0579-4807-8f76-368b7e08ccd0",
+	"72ae6e43-3f2c-4fa7-99bd-1982cb56826c",
+	"cad7383f-f187-4bf6-937c-0e80e9591654",
+	41,
+	0,
+	'trans::Drivers::Init::Instance State Machine::Initialize');
+INSERT INTO GD_SHP
+	VALUES ("cca49770-0579-4807-8f76-368b7e08ccd0");
+INSERT INTO GD_NCS
+	VALUES ("cca49770-0579-4807-8f76-368b7e08ccd0");
+INSERT INTO DIM_ND
+	VALUES (224.000000,
+	288.000000,
+	"cca49770-0579-4807-8f76-368b7e08ccd0");
+INSERT INTO DIM_GE
+	VALUES (1712.000000,
+	1328.000000,
+	"cca49770-0579-4807-8f76-368b7e08ccd0",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("cca49770-0579-4807-8f76-368b7e08ccd0",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_CON
+	VALUES ("f197a246-0f29-415f-a45e-1d0b18cd6ba7",
+	1840.000000,
+	1328.000000,
+	"cca49770-0579-4807-8f76-368b7e08ccd0");
+INSERT INTO GD_GE
+	VALUES ("4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	"72ae6e43-3f2c-4fa7-99bd-1982cb56826c",
+	"409dc43d-6206-4302-bf12-81fffcd0532c",
+	49,
+	0,
+	'INIT1: Init');
+INSERT INTO GD_CON
+	VALUES ("4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_CTXT
+	VALUES ("08dfd86f-709c-4780-bd68-18692b392ce7",
+	"4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	1,
+	0.000000,
+	0.000000);
+INSERT INTO DIM_ND
+	VALUES (0.000000,
+	0.000000,
+	"08dfd86f-709c-4780-bd68-18692b392ce7");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"08dfd86f-709c-4780-bd68-18692b392ce7",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("08dfd86f-709c-4780-bd68-18692b392ce7",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_CTXT
+	VALUES ("87d3b2d4-bde2-4ecc-8b22-fcd433027457",
+	"4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	3,
+	8.000000,
+	-22.000000);
+INSERT INTO DIM_ND
+	VALUES (117.000000,
+	18.000000,
+	"87d3b2d4-bde2-4ecc-8b22-fcd433027457");
+INSERT INTO DIM_GE
+	VALUES (1848.000000,
+	1274.000000,
+	"87d3b2d4-bde2-4ecc-8b22-fcd433027457",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("87d3b2d4-bde2-4ecc-8b22-fcd433027457",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_CTXT
+	VALUES ("af0ecd0e-2fb3-4098-973b-8a027b5ba918",
+	"4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	2,
+	0.000000,
+	0.000000);
+INSERT INTO DIM_ND
+	VALUES (0.000000,
+	0.000000,
+	"af0ecd0e-2fb3-4098-973b-8a027b5ba918");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"af0ecd0e-2fb3-4098-973b-8a027b5ba918",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("af0ecd0e-2fb3-4098-973b-8a027b5ba918",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_LS
+	VALUES ("cfe23fae-64fb-4068-8d36-b9e7d0fd39d6",
+	"4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	"00000000-0000-0000-0000-000000000000",
+	"9088b77a-57c7-4f04-846f-8dcebbe2d397",
+	"a2af7194-4fce-4add-a9d1-92c7aa267f2e");
+INSERT INTO GD_LS
+	VALUES ("92c0fbf4-9711-4f69-a195-3f3e18bab581",
+	"4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	"cfe23fae-64fb-4068-8d36-b9e7d0fd39d6",
+	"a2af7194-4fce-4add-a9d1-92c7aa267f2e",
+	"0d647d80-0d88-4631-8aa1-17f3bc669205");
+INSERT INTO DIM_WAY
+	VALUES ("9088b77a-57c7-4f04-846f-8dcebbe2d397",
+	1840.000000,
+	1328.000000,
+	"4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_WAY
+	VALUES ("a2af7194-4fce-4add-a9d1-92c7aa267f2e",
+	1840.000000,
+	1280.000000,
+	"4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	"00000000-0000-0000-0000-000000000000",
+	"9088b77a-57c7-4f04-846f-8dcebbe2d397");
+INSERT INTO DIM_WAY
+	VALUES ("0d647d80-0d88-4631-8aa1-17f3bc669205",
+	1840.000000,
+	1264.000000,
+	"4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	"00000000-0000-0000-0000-000000000000",
+	"a2af7194-4fce-4add-a9d1-92c7aa267f2e");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ED
+	VALUES ("f197a246-0f29-415f-a45e-1d0b18cd6ba7",
+	"00000000-0000-0000-0000-000000000000",
+	"4bedebc3-9861-4bfd-ab8d-c10e31eb8ec8");
+INSERT INTO DIM_DIA
+	VALUES ("72ae6e43-3f2c-4fa7-99bd-1982cb56826c",
+	'',
+	0.884422,
+	1611.000000,
+	1159.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_OBJ_PROXY
+	VALUES ("914fd10b-b600-4dc9-9c68-3df19213cd36",
+	'Init',
+	102,
+	'INIT',
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'../Init.xtuml');
