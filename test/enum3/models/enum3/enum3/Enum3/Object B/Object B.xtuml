@@ -1,0 +1,301 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("3745175f-11a3-42db-ab25-a6fcad9ad314",
+	'Object B',
+	3,
+	'OB',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("e30c90e2-98b8-48ce-a966-94018d2ec032",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314",
+	'op1',
+	'',
+	"8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	0,
+	'if(param.color_one != color::black)
+	LOG::LogFailure(message:"Operation OB::op1 - param.color_one != color::black");
+else
+	LOG::LogSuccess(message:"Operation OB::op1 - param.color_one == color::black");
+end if;
+
+if(param.color_two != color::orange)
+	LOG::LogFailure(message:"Operation OB::op1 - param.color_two != color::orange");
+else
+	LOG::LogSuccess(message:"Operation OB::op1 - param.color_two == color::orange");
+end if;
+
+if(param.count == 1)
+	return param.color_one;
+elif(param.count == 2)
+	return color::black;
+else
+	x = color::black;
+	return x;
+end if;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("ed080d43-19f8-4f8f-a805-d4c32a979667",
+	"e30c90e2-98b8-48ce-a966-94018d2ec032",
+	'color_one',
+	"8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	"00000000-0000-0000-0000-000000000000",
+	'color',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("c0a35b43-eca3-4e16-8444-e4e1586dc109",
+	"e30c90e2-98b8-48ce-a966-94018d2ec032",
+	'color_two',
+	"8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	0,
+	'',
+	"ed080d43-19f8-4f8f-a805-d4c32a979667",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("3712efa6-57f8-403e-89c8-519bc174b170",
+	"e30c90e2-98b8-48ce-a966-94018d2ec032",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"c0a35b43-eca3-4e16-8444-e4e1586dc109",
+	'');
+INSERT INTO O_TFR
+	VALUES ("b1633102-1d25-4417-9d13-cdf4a5d4ade5",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314",
+	'op2',
+	'',
+	"8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	0,
+	'if(param.color_one != color::black)
+	LOG::LogFailure(message:"bridge1 - param.color_one != color::black");
+else
+	LOG::LogSuccess(message:"bridge1 - param.color_one == color::black");
+end if;
+
+if(param.color_two != color::orange)
+	LOG::LogFailure(message:"bridge1 - param.color_two != color::orange");
+else
+	LOG::LogSuccess(message:"bridge1 - param.color_two == color::orange");
+end if;
+
+if(param.count == 1)
+	param.color_two = param.color_one;
+	return param.color_one;
+elif(param.count == 2)
+	param.color_two = color::black;
+	return color::black;
+else
+	x = color::black;
+	param.color_two = x;
+	return x;
+end if;',
+	1,
+	'',
+	"e30c90e2-98b8-48ce-a966-94018d2ec032");
+INSERT INTO O_TPARM
+	VALUES ("5a99a4ac-bb1b-4ce6-b2b2-19ff7e58c420",
+	"b1633102-1d25-4417-9d13-cdf4a5d4ade5",
+	'color_one',
+	"8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("f0025897-28ed-4f62-a8c7-63bff91785da",
+	"b1633102-1d25-4417-9d13-cdf4a5d4ade5",
+	'color_two',
+	"8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	1,
+	'',
+	"5a99a4ac-bb1b-4ce6-b2b2-19ff7e58c420",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("ed7b8763-e804-4008-a358-c56300c36ef3",
+	"b1633102-1d25-4417-9d13-cdf4a5d4ade5",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"f0025897-28ed-4f62-a8c7-63bff91785da",
+	'');
+INSERT INTO O_TFR
+	VALUES ("952ea1e5-eb50-40cb-8568-043aacac75dc",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314",
+	'op3',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'if(param.color_one != color::black)
+	LOG::LogFailure(message:"bridge1 - param.color_one != color::black");
+else
+	LOG::LogSuccess(message:"bridge1 - param.color_one == color::black");
+end if;
+
+if(param.color_two != color::orange)
+	LOG::LogFailure(message:"bridge1 - param.color_two != color::orange");
+else
+	LOG::LogSuccess(message:"bridge1 - param.color_two == color::orange");
+end if;
+
+x = param.color_one;
+param.color_one = param.color_two;
+param.color_two = x;
+',
+	1,
+	'',
+	"b1633102-1d25-4417-9d13-cdf4a5d4ade5");
+INSERT INTO O_TPARM
+	VALUES ("fdb4b6a1-99d4-4ef5-9be3-72443e679952",
+	"952ea1e5-eb50-40cb-8568-043aacac75dc",
+	'color_one',
+	"8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("f83db579-c643-47af-a651-524decac9d8e",
+	"952ea1e5-eb50-40cb-8568-043aacac75dc",
+	'color_two',
+	"8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	1,
+	'',
+	"fdb4b6a1-99d4-4ef5-9be3-72443e679952",
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("fb1d96de-56aa-405f-89c7-bb1862b98e2f",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314",
+	'if(self.color_two == color::red)
+	self.color_changer = color::violet;
+else
+	self.color_changer = color::black;
+end if;',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("fb1d96de-56aa-405f-89c7-bb1862b98e2f",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO O_ATTR
+	VALUES ("fb1d96de-56aa-405f-89c7-bb1862b98e2f",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314",
+	"00000000-0000-0000-0000-000000000000",
+	'color_changer',
+	'',
+	'',
+	'color_changer',
+	0,
+	"8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("baaf179a-ba8d-4cab-bff8-45ce7523ae11",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO O_BATTR
+	VALUES ("baaf179a-ba8d-4cab-bff8-45ce7523ae11",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO O_ATTR
+	VALUES ("baaf179a-ba8d-4cab-bff8-45ce7523ae11",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314",
+	"fb1d96de-56aa-405f-89c7-bb1862b98e2f",
+	'ob_id',
+	'',
+	'',
+	'ob_id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("94725422-cbbc-4802-adec-685c52424a47",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO O_BATTR
+	VALUES ("94725422-cbbc-4802-adec-685c52424a47",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO O_ATTR
+	VALUES ("94725422-cbbc-4802-adec-685c52424a47",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314",
+	"baaf179a-ba8d-4cab-bff8-45ce7523ae11",
+	'color_one',
+	'',
+	'',
+	'color_one',
+	0,
+	"8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("2ed92cfc-27ea-4058-97f7-4ef4c4fc7325",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO O_BATTR
+	VALUES ("2ed92cfc-27ea-4058-97f7-4ef4c4fc7325",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO O_ATTR
+	VALUES ("2ed92cfc-27ea-4058-97f7-4ef4c4fc7325",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314",
+	"94725422-cbbc-4802-adec-685c52424a47",
+	'color_two',
+	'',
+	'',
+	'color_two',
+	0,
+	"8501f014-4dbf-4bcc-97e5-2a177b05dcfb",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("0fc7ad5f-4fc9-43ee-a93a-4aed7bac2346",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO O_BATTR
+	VALUES ("0fc7ad5f-4fc9-43ee-a93a-4aed7bac2346",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO O_ATTR
+	VALUES ("0fc7ad5f-4fc9-43ee-a93a-4aed7bac2346",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314",
+	"2ed92cfc-27ea-4058-97f7-4ef4c4fc7325",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO O_OIDA
+	VALUES ("baaf179a-ba8d-4cab-bff8-45ce7523ae11",
+	"3745175f-11a3-42db-ab25-a6fcad9ad314",
+	0,
+	'ob_id');
+INSERT INTO O_ID
+	VALUES (1,
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO O_ID
+	VALUES (2,
+	"3745175f-11a3-42db-ab25-a6fcad9ad314");
+INSERT INTO PE_PE
+	VALUES ("3745175f-11a3-42db-ab25-a6fcad9ad314",
+	1,
+	"d9ac38f6-f259-45d1-9e24-6e79e3f2065f",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("d9ac38f6-f259-45d1-9e24-6e79e3f2065f",
+	"00000000-0000-0000-0000-000000000000",
+	"59884ae1-719b-44d9-96a1-b4b8e4171a06",
+	'Enum3',
+	'',
+	1,
+	'../Enum3.xtuml');

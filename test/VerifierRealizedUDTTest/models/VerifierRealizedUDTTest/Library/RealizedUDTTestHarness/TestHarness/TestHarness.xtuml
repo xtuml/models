@@ -1,0 +1,390 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("d0bed7cf-3f56-45ca-ab35-0bf95fc279be",
+	"00000000-0000-0000-0000-000000000000",
+	"ff30565d-2b49-43aa-b271-9cbb834662ff",
+	'TestHarness',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("dc0946e6-6ace-4edc-baf3-2ea54182ef75",
+	112,
+	"d0bed7cf-3f56-45ca-ab35-0bf95fc279be",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'3.5.5',
+	'Library::RealizedUDTTestHarness::TestHarness');
+INSERT INTO GD_GE
+	VALUES ("fe7421f2-ea57-4357-a9d2-3004d556b3db",
+	"dc0946e6-6ace-4edc-baf3-2ea54182ef75",
+	"497ba674-e948-4088-a338-9b0805698d39",
+	21,
+	0,
+	'Library::RealizedUDTTestHarness::TestHarness::TestHarnessValues');
+INSERT INTO GD_SHP
+	VALUES ("fe7421f2-ea57-4357-a9d2-3004d556b3db");
+INSERT INTO GD_NCS
+	VALUES ("fe7421f2-ea57-4357-a9d2-3004d556b3db");
+INSERT INTO DIM_ND
+	VALUES (421.000000,
+	253.000000,
+	"fe7421f2-ea57-4357-a9d2-3004d556b3db");
+INSERT INTO DIM_GE
+	VALUES (4260.000000,
+	3072.000000,
+	"fe7421f2-ea57-4357-a9d2-3004d556b3db",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("fe7421f2-ea57-4357-a9d2-3004d556b3db",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_DIA
+	VALUES ("dc0946e6-6ace-4edc-baf3-2ea54182ef75",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("ba548a72-0bdb-4e7a-8466-7aadfc52352f",
+	"00000000-0000-0000-0000-000000000000",
+	'performOperationTest',
+	'',
+	'select any testValue from instances of THV;
+if empty testValue
+  create object instance testValue of THV;
+  testValue.testSDT.testUDT = 100;
+  testValue.testSDT.testNestedUDT = 200;
+  testValue.testSDT.testRealizedUDTNoAccessors = 300; // Note: this is a real
+  testValue.testSDT.testRealizedUDTWithAccessors = false;
+  testValue.testSDT.testEnumeration = TestEnumeration::Blue;
+  testValue.testSDT.testNestedEnumeration = TestEnumeration::Yellow;
+
+  testValue.testNestedSDT.testUDT = 110;
+  testValue.testNestedSDT.testNestedUDT = 120;
+  testValue.testNestedSDT.testRealizedUDTNoAccessors = 130.0;
+  testValue.testNestedSDT.testNestedRealizedUDTNoAccessors = 140.0;
+  testValue.testNestedSDT.testRealizedUDTWithAccessors = true;
+  testValue.testNestedSDT.testNestedRealizedUDTWithAccessors = false;
+  testValue.testNestedSDT.testRealizedUDTNoAccessors = 150.0;
+  testValue.testNestedSDT.testEnumeration = TestEnumeration::Green;
+  testValue.testNestedSDT.testNestedEnumeration = TestEnumeration::Blue;
+end if;
+
+Port2::testUDT(testUDT:400);
+
+udtResult = Port2::returnTestUDT();
+if udtResult == 500
+  LOG::LogSuccess(message:"returnTestUDT: PASSED");
+else
+  LOG::LogFailure(message:"returnTestUDT: Unexpected Value: ");
+  LOG::LogInteger(message:udtResult);
+end if;
+
+Port2::testNestedUDT(nestedTestUDT:500);
+
+udtResult = Port2::returnNestedTestUDT();
+if udtResult == 600
+  LOG::LogSuccess(message:"returnNestedTestUDT: PASSED");
+else
+  LOG::LogFailure(message:"returnNestedTestUDT: Unexpected Value: ");
+  LOG::LogInteger(message:udtResult);
+end if;
+
+Port2::testRealizedUDTNoAccessors(realizedTestUDTNoAccessors:600);
+
+udtRealResult = Port2::returnRealizedUDTNoAccessors();
+if udtRealResult == 600
+  LOG::LogSuccess(message:"returnRealizedUDTNoAccessors: PASSED");
+else
+  LOG::LogReal(message:"returnRealizedUDTNoAccessors: Unexpected Value: ", r: udtRealResult);
+end if;
+
+Port2::testNestedRealizedUDTNoAccessors(nestedRealizedUDTNoAccessors:700);
+
+udtRealResult = Port2::returnNestedRealizedUDTNoAccessors();
+if udtRealResult == 800
+  LOG::LogSuccess(message:"returnNestedRealizedUDTNoAccessors: PASSED");
+else
+  LOG::LogReal(message:"returnNestedRealizedUDTNoAccessors: Unexpected Value: ", r: udtRealResult);
+end if;
+
+Port2::testRealizedUDTWithAccessors(realizedUDTWithAccessors:false);
+
+udtBooleanResult = Port2::returnRealizedUDTWithAccessors();
+if udtBooleanResult == true
+  LOG::LogSuccess(message:"returnRealizedUDTWithAccessors: PASSED");
+else
+  LOG::LogFailure(message:"returnRealizedUDTWithAccessors: Unexpected Value: false");
+end if;
+
+Port2::testNestedRealizedUDTWithAccessors(nestedRealizedUDTWithAccessors:false);
+
+udtBooleanResult = Port2::returnNestedRealizedUDTWithAccessors();
+if udtBooleanResult == true
+  LOG::LogSuccess(message:"returnNestedRealizedUDTWithAccessors: PASSED");
+else
+  LOG::LogFailure(message:"returnNestedRealizedUDTWithAccessors: Unexpected Value: false");
+end if;
+
+Port2::testSDTWithRealizedUDTs(testRealizedUDTTestSDT:testValue.testSDT);
+
+sdtResult = Port2::returnSDTWithRealizedUDTs();
+if sdtResult.testUDT == 11
+  if sdtResult.testNestedUDT == 12
+    if sdtResult.testRealizedUDTNoAccessors == 13
+      if sdtResult.testNestedRealizedUDTNoAccessors == 14
+        if sdtResult.testRealizedUDTWithAccessors == true
+          if sdtResult.testNestedRealizedUDTWithAccessors == false
+            if sdtResult.testEnumeration == TestEnumeration::Green
+              if sdtResult.testNestedEnumeration == TestEnumeration::Blue
+                LOG::LogSuccess(message:"returnSDTWithRealizedUDTs: PASSED");
+              else
+                LOG::LogFailure(message:"returnSDTWithRealizedUDTs: " +
+                                 "Unexpected testNestedEnumeration Value: " +
+                                              ::enumToString(enumeration:
+                                              sdtResult.testNestedEnumeration));
+              end if;
+            else
+              LOG::LogFailure(message:"returnSDTWithRealizedUDTs: " +
+                                      "Unexpected testEnumeration Value: " +
+                         ::enumToString(enumeration:sdtResult.testEnumeration));
+            end if;
+          else
+            LOG::LogFailure(message:"returnSDTWithRealizedUDTs: Unexpected testNestedRealizedUDTWithAccessors Value: false");
+          end if;
+        else
+          LOG::LogFailure(message:"returnSDTWithRealizedUDTs: Unexpected testRealizedUDTWithAccessors Value: true");
+        end if;
+      else
+        LOG::LogReal(message:"returnSDTWithRealizedUDTs: Unexpected testNestedRealizedUDTNoAccessors Value: ", r:sdtResult.testNestedRealizedUDTNoAccessors);
+      end if;
+    else
+      LOG::LogReal(message:"returnSDTWithRealizedUDTs: Unexpected testRealizedUDTNoAccessors Value: ", r:sdtResult.testRealizedUDTNoAccessors);
+    end if;
+  else
+    LOG::LogFailure(message:"returnSDTWithRealizedUDTs: Unexpected testNestedUDT Value: ");
+    LOG::LogInteger(message: sdtResult.testNestedUDT);
+  end if;
+else
+  LOG::LogFailure(message:"returnSDTWithRealizedUDTs: Unexpected testUDT Value: ");
+  LOG::LogInteger(message: sdtResult.testUDT);
+end if;
+
+testValue.testSDT.testUDT = 1300;
+testValue.testSDT.testNestedUDT = 1400;
+testValue.testSDT.testRealizedUDTNoAccessors = 1500;
+testValue.testSDT.testNestedRealizedUDTNoAccessors = 1600;
+testValue.testSDT.testRealizedUDTWithAccessors = true;
+testValue.testSDT.testNestedRealizedUDTWithAccessors = false;
+testValue.testSDT.testEnumeration = TestEnumeration::Green;
+testValue.testSDT.testNestedEnumeration = TestEnumeration::Blue;
+
+Port2::testNestedSDTWithRealizedUDTs(nestedTestSDT:testValue.testSDT);
+
+sdtResult = Port2::returnNestedSDTWithRealizedUDTs();
+if sdtResult.testUDT == 7
+  if sdtResult.testNestedUDT == 8
+    if sdtResult.testRealizedUDTNoAccessors == 9
+      if sdtResult.testNestedRealizedUDTNoAccessors == 10
+        if sdtResult.testRealizedUDTWithAccessors == true
+          if sdtResult.testNestedRealizedUDTWithAccessors == false
+            if sdtResult.testEnumeration == TestEnumeration::Green
+              if sdtResult.testNestedEnumeration == TestEnumeration::Blue
+                LOG::LogSuccess(message:"returnSDTWithRealizedUDTs: PASSED");
+              else
+                LOG::LogFailure(message:"returnSDTWithRealizedUDTs: " +
+                                 "Unexpected testNestedEnumeration Value: " +
+                                              ::enumToString(enumeration:
+                                              sdtResult.testNestedEnumeration));
+              end if;
+            else
+              LOG::LogFailure(message:"returnSDTWithRealizedUDTs: " +
+                                      "Unexpected testEnumeration Value: " +
+                         ::enumToString(enumeration:sdtResult.testEnumeration));
+            end if;
+          else
+            LOG::LogFailure(message:"returnSDTWithRealizedUDTs: Unexpected testNestedRealizedUDTWithAccessors Value: false");
+          end if;
+        else
+          LOG::LogFailure(message:"returnSDTWithRealizedUDTs: Unexpected testRealizedUDTWithAccessors Value: true");
+        end if;
+      else
+        LOG::LogReal(message:"returnSDTWithRealizedUDTs: Unexpected testNestedRealizedUDTNoAccessors Value: ", r:sdtResult.testNestedRealizedUDTNoAccessors);
+      end if;
+    else
+      LOG::LogReal(message:"returnSDTWithRealizedUDTs: Unexpected testRealizedUDTNoAccessors Value: ", r:sdtResult.testRealizedUDTNoAccessors);
+    end if;
+  else
+    LOG::LogFailure(message:"returnSDTWithRealizedUDTs: Unexpected testNestedUDT Value: ");
+    LOG::LogInteger(message: sdtResult.testNestedUDT);
+  end if;
+else
+  LOG::LogFailure(message:"returnSDTWithRealizedUDTs: Unexpected testUDT Value: ");
+  LOG::LogInteger(message: sdtResult.testUDT);
+end if;
+
+Port2::testEnumeration(testEnumeration:TestEnumeration::Cyan);
+
+enumResult = Port2::returnTestEnumeration();
+if (enumResult == TestEnumeration::Yellow)
+  LOG::LogSuccess(message:"returnTestEnumeration: PASSED");
+else
+  LOG::LogFailure(message:"returnTestEnumeration: Unexpected Value: " +
+                                        ::enumToString(enumeration:enumResult));
+end if;
+
+Port2::testNestedEnumeration(nestedEnumeration:TestEnumeration::Red);
+
+enumResult = Port2::returnNestedEnumeration();
+if (enumResult == TestEnumeration::Red)
+  LOG::LogSuccess(message:"returnNestedEnumeration: PASSED");
+else
+  LOG::LogFailure(message:"returnNestedEnumeration: Unexpected Value: " +
+                                        ::enumToString(enumeration:enumResult));
+end if;
+
+// Now initiate the incoming message tests in the realized code
+LOG::LogInfo(message:"Beginning incoming calls test.");
+Port2::executeTest();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("ba548a72-0bdb-4e7a-8466-7aadfc52352f",
+	1,
+	"d0bed7cf-3f56-45ca-ab35-0bf95fc279be",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("139834b8-883a-44e7-bdbc-0cb67e1f7e57",
+	"00000000-0000-0000-0000-000000000000",
+	'enumToString',
+	'',
+	'result = "unknown";
+if param.enumeration == TestEnumeration::Red
+  result = "Red";
+elif param.enumeration == TestEnumeration::Green
+  result = "Green";
+elif param.enumeration == TestEnumeration::Blue
+  result = "Blue";
+elif param.enumeration == TestEnumeration::Yellow
+  result = "Yellow";
+elif param.enumeration == TestEnumeration::Cyan
+  result = "Cyan";
+elif param.enumeration == TestEnumeration::Magenta
+  result = "Magenta";
+end if;
+return result;',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("7efa3be7-6a15-486f-ada8-bea3f6ddc1bb",
+	"139834b8-883a-44e7-bdbc-0cb67e1f7e57",
+	'enumeration',
+	"d35ce3aa-2f01-404e-b2e1-790bf532ca4c",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d35ce3aa-2f01-404e-b2e1-790bf532ca4c",
+	"00000000-0000-0000-0000-000000000000",
+	'TestEnumeration',
+	'',
+	'',
+	'../../Library.xtuml');
+INSERT INTO PE_PE
+	VALUES ("139834b8-883a-44e7-bdbc-0cb67e1f7e57",
+	1,
+	"d0bed7cf-3f56-45ca-ab35-0bf95fc279be",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("660e7603-031b-48fe-867a-28e08e01d07d",
+	"00000000-0000-0000-0000-000000000000",
+	'performSignalTest',
+	'',
+	'select any testValue from instances of THV;
+if empty testValue
+  create object instance testValue of THV;
+end if;
+
+testValue.initialize();
+
+Port2::testUDTSig(testUDT:400);
+
+Port2::testNestedUDTSig(nestedUDT:500);
+
+Port2::testRealizedUDTNoAccessorsSig(realizedUDTNoAccessors:600);
+
+Port2::testNestedRealizedUDTNoAccessorsSig(nestedRealizedUDTNoAccessors:700);
+
+Port2::testRealizedUDTWithAccessorsSig(realizedUDTWithAccessors:false);
+
+Port2::testNestedRealizedUDTWithAccessorsSig(nestedRealizedUDTWithAccessors:false);
+
+Port2::testSDTWithRealizedUDTsSig(testRealizedUDTTestSDT:testValue.testSDT);
+
+testValue.testSDT.testUDT = 1300;
+testValue.testSDT.testNestedUDT = 1400;
+testValue.testSDT.testRealizedUDTNoAccessors = 1500;
+testValue.testSDT.testNestedRealizedUDTNoAccessors = 1600;
+testValue.testSDT.testRealizedUDTWithAccessors = true;
+testValue.testSDT.testNestedRealizedUDTWithAccessors = false;
+testValue.testSDT.testEnumeration = TestEnumeration::Green;
+testValue.testSDT.testNestedEnumeration = TestEnumeration::Blue;
+
+Port2::testNestedSDTWithRealizedUDTsSig(nestedTestSDT:testValue.testSDT);
+
+Port2::testEnumerationSig(testEnumeration:TestEnumeration::Cyan);
+
+Port2::testNestedEnumerationSig(nestedTestEnumeration:TestEnumeration::Red);
+
+// Now initiate the incoming message tests in the realized code
+LOG::LogInfo(message:"Beginning incoming signals test.");
+Port2::executeSignalTest();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("660e7603-031b-48fe-867a-28e08e01d07d",
+	1,
+	"d0bed7cf-3f56-45ca-ab35-0bf95fc279be",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("d0bed7cf-3f56-45ca-ab35-0bf95fc279be",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"dff04702-7005-4131-b72a-60f29a510a14",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("dff04702-7005-4131-b72a-60f29a510a14",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'RealizedUDTTestHarness',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../RealizedUDTTestHarness.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("ff30565d-2b49-43aa-b271-9cbb834662ff",
+	'VerifierRealizedUDTTest',
+	1,
+	'../../../VerifierRealizedUDTTest.xtuml');

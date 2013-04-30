@@ -1,0 +1,378 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	"795ac54c-14a9-4a62-a834-cda4a2e71118",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("89f24e26-eef5-4ed3-9bf6-f2d3e14e4e67",
+	112,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'Verifier_event_specification_statements_test::Verifier_event_specification_statements_test::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("89f24e26-eef5-4ed3-9bf6-f2d3e14e4e67",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("6a36d5fd-fe7a-4b5d-b9c0-c7233cffb1cc",
+	"00000000-0000-0000-0000-000000000000",
+	'test_assigner',
+	'',
+	'// Generate the event to start the test
+generate ASSIGNER_A1:''go'' to ASSIGNER assigner;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("6a36d5fd-fe7a-4b5d-b9c0-c7233cffb1cc",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b45d8296-1f5b-442e-a86e-1c555ba9e566",
+	"00000000-0000-0000-0000-000000000000",
+	'test_creator',
+	'',
+	'// Generate the event to start the test
+generate CREATOR1:''create'' to CREATOR creator;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("b45d8296-1f5b-442e-a86e-1c555ba9e566",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("977cdfc7-af42-4549-bbb5-913d4af9790b",
+	"00000000-0000-0000-0000-000000000000",
+	'test_standard',
+	'',
+	'// Generate the event to start the test
+create object instance standard of STANDARD;
+generate STANDARD1:''go'' to standard;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("977cdfc7-af42-4549-bbb5-913d4af9790b",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("7d727149-af94-4a9e-baee-1a0f6f5ece15",
+	"00000000-0000-0000-0000-000000000000",
+	'test_creator_with_event_data_items',
+	'Uses a creation event to create an instance of the CWE class just like the test_creator test.
+However, this time event data will be passed along with the creation transition.
+One of the event data items is a stored event that should be generated inside the state machine, and
+a pass-or-fail instance will indicate whether that event was generated.',
+	'// Create an instance of the Pass or Fail class that will be used to indicate whether the carried event was generated
+create object instance pass_or_fail of PASSORFAIL;
+pass_or_fail.passed = false;
+pass_or_fail.name = "Creator with Event Data Items test";
+
+// Relate cannot be done until the instance has been created.  So this instance''s ID will be passed as event data too
+
+// Create an event that will be passed into the CWE class to be fired later
+create event instance carried_event of PASSORFAIL1 to pass_or_fail;
+
+// Generate the event to start the test
+generate CWE1:''create''(event_data:carried_event, pof_ID:pass_or_fail.Pof_ID) to CWE creator;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("7d727149-af94-4a9e-baee-1a0f6f5ece15",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("47d974ac-9f3d-44a0-9029-5c9d3e86da25",
+	"00000000-0000-0000-0000-000000000000",
+	'test_creator_without_using_event',
+	'Creates an instance of a class that supports creation transitions, but instead uses a create statement to create the instance.
+The difference is that the initial state should not be executed when a create statement is used, but should be executed if
+a creation transition is used.',
+	'// test_creator_without_using_event()
+
+// Since this instance was not created by an event, its first state should not
+// be executed 
+create object instance no_event_inst of EXECUTEINITIALSTATE;
+
+// If the first state was executed, then a specific log message will be created.
+// Therefore, if it is does not exists then the test passes.
+
+select any pof from instances of PASSORFAIL where 
+    selected.name == "Execute initial state machine has executed initial state";
+            
+if (empty pof)
+  LOG::LogSuccess( message:"Test creator without using event: Pass" );
+else
+  LOG::LogFailure( message:"Test creator without using event: Fail");
+  delete object instance pof;
+end if;
+
+// Start next test
+LOG::LogInfo( message:"Starting multiple creation events test" );
+::test_multiple_creation_events();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("47d974ac-9f3d-44a0-9029-5c9d3e86da25",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("53a3ba9e-aad8-4b5c-b8b5-d79f5abaf9c9",
+	"00000000-0000-0000-0000-000000000000",
+	'test_final_state',
+	'',
+	'// Generate the event to start the test
+generate FINALSTATE2:''create'' to FINALSTATE creator;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("53a3ba9e-aad8-4b5c-b8b5-d79f5abaf9c9",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("163fb9ca-c0a9-4357-9757-699f8f988986",
+	"00000000-0000-0000-0000-000000000000",
+	'test_event_to_self_prioritization',
+	'',
+	'// Generate the event to start the test
+generate EVENTSTOSELFA1:''create'' to EVENTSTOSELFA creator;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("163fb9ca-c0a9-4357-9757-699f8f988986",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("a10a6064-1842-46ae-8f6b-a218b2807665",
+	"00000000-0000-0000-0000-000000000000",
+	'test_event_to_self_prioritization_without_self_keyword',
+	'',
+	'// Since no self keyword is used, this test requires that only one instance of
+// C exist in the system. Therefore, destroy all other Cs if they exist from
+// running a previous test for example.
+select many Cs from instances of EVENTSTOSELFC;
+for each C in Cs
+  delete object instance C;
+end for;
+
+// Generate the event to start the test
+generate EVENTSTOSELFC1:''create'' to EVENTSTOSELFC creator;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("a10a6064-1842-46ae-8f6b-a218b2807665",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("d0dc4c71-f898-404d-8480-99cef004df75",
+	"00000000-0000-0000-0000-000000000000",
+	'test_assigner_event_to_self_prioritization',
+	'',
+	'// Generate the event to start the test
+generate ASSIGNEREVT2SELFA_A1:''create'' to ASSIGNEREVT2SELFA assigner;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("d0dc4c71-f898-404d-8480-99cef004df75",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("4ba9e4b3-ce29-4410-b9f8-b95337e5f3c1",
+	"00000000-0000-0000-0000-000000000000",
+	'test_event_ordering',
+	'',
+	'// Generate the event to start the test
+generate EVENTORDERING6:''create'' to EVENTORDERING creator;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("4ba9e4b3-ce29-4410-b9f8-b95337e5f3c1",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("6cfab029-7062-4441-b591-7cb664beb87f",
+	"00000000-0000-0000-0000-000000000000",
+	'test_generating_stored_events_twice',
+	'',
+	'// Note this test is expected to throw an error to the eclipse error log stating that the pre-existing event
+// could not be executed.  That is the desired behavior, and the error message can be ignored.  The test will
+// proceed to the pass state, and the instance of the log class containing an error message will be deleted
+// when the test successfully passes.
+
+// Generate the event to start the test
+generate CALLSTOREDEVENTTWICE1:''create'' to CALLSTOREDEVENTTWICE creator;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("6cfab029-7062-4441-b591-7cb664beb87f",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("434b6c01-5c4a-4609-9571-0f7ba6a2f50e",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'LOG::LogInfo(message:"Starting Verifier event specification i1694 test");',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("434b6c01-5c4a-4609-9571-0f7ba6a2f50e",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("3a7e726e-13d6-492d-a162-dfde5350d388",
+	"00000000-0000-0000-0000-000000000000",
+	'test',
+	'',
+	'// Start the first test, which will start the next test as soon as it passes.
+// That test will call the next test in turn until all tests successfully pass.
+// The last test will call the xit() function.
+LOG::LogInfo( message:"Starting assigner test" );
+::test_assigner();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("3a7e726e-13d6-492d-a162-dfde5350d388",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("74323181-330d-4610-aee0-42a97110131a",
+	"00000000-0000-0000-0000-000000000000",
+	'xit',
+	'',
+	'LOG::LogInfo(message:"Test complete. Shutting down.");
+ARCH::shutdown();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("74323181-330d-4610-aee0-42a97110131a",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b12d4d1d-4e2f-4dc4-a05e-789292c0f361",
+	"00000000-0000-0000-0000-000000000000",
+	'test_multiple_creation_events',
+	'',
+	'// Generate the event to start the test
+create object instance test of MULTIPLECREATIONEVENTS;
+generate MULTIPLECREATIONEVENTS3:''go'' to test;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("b12d4d1d-4e2f-4dc4-a05e-789292c0f361",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("2895e2dd-3f6e-4575-b933-16e6a69ce576",
+	"00000000-0000-0000-0000-000000000000",
+	'test_multiple_events_to_other_instance',
+	'',
+	'// Create many instances of the class
+i = 3;
+while (i > 0)
+  create object instance a of GME2OI;
+  a.number = i;
+  a.isWaiting = false;
+  a.isStarted = false;
+  i = i - 1;
+end while;
+
+// Only start 1 of the instances
+select any inst from instances of GME2OI;
+generate GME2OI1 to inst;
+generate GME2OI1 to inst;
+// Each instance will kick off the other instances',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("2895e2dd-3f6e-4575-b933-16e6a69ce576",
+	1,
+	"d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("d51cd82b-3db4-49f8-a1d2-96df3ec6020c",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"e054d586-b053-442e-8925-75389b9b8c34",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("e054d586-b053-442e-8925-75389b9b8c34",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Verifier_event_specification_statements_test',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../Verifier_event_specification_statements_test.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("795ac54c-14a9-4a62-a834-cda4a2e71118",
+	'Verifier_event_specification_statements_test',
+	1,
+	'../../../Verifier_event_specification_statements_test.xtuml');

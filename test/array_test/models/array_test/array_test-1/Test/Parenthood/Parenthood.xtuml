@@ -1,0 +1,345 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("7777aa98-8d42-47de-bc02-483039e625dc",
+	'Parenthood',
+	1,
+	'P',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("d1e6a4cc-39ce-4f23-9139-501738c7c881",
+	"7777aa98-8d42-47de-bc02-483039e625dc",
+	'pull_out_hair',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'generate P1:grow_up() to self;
+LOG::LogInfo( message: "Calvin is driving his parents crazy." );
+
+',
+	1,
+	'',
+	"76e6439b-415c-432c-8306-dbc1848d90ef");
+INSERT INTO O_TFR
+	VALUES ("76e6439b-415c-432c-8306-dbc1848d90ef",
+	"7777aa98-8d42-47de-bc02-483039e625dc",
+	'happy_times',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'family = param.family;
+
+if ( family == param.family )
+  LOG::LogSuccess( message: "Successful comparison of SDT with SDT array in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of SDT with SDT array in pass-by-val class operation." );
+  ::failedFamilyTest();
+end if;
+
+child_name = param.family.child_1;
+
+if ( child_name == "Calvin" )
+  LOG::LogSuccess( message: "Happy times with new baby." );
+  family = param.family;
+else
+  LOG::LogFailure( message: "Something broke in the test.  Child name is incorrect." );
+  ::failedFamilyTest();
+end if;
+
+if ( param.family.Pets[0].name == "Garfield" )
+  LOG::LogSuccess( message: "Successful read of SDT array element inside SDT in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT array element inside SDT in pass-by-val class operation." );
+  ::failedFamilyTest();
+end if;
+if ( PetType::cat == param.family.Pets[0].PetType )
+  LOG::LogSuccess( message: "Successful read of SDT array element inside SDT in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT array element inside SDT in pass-by-val class operation." );
+  ::failedFamilyTest();
+end if;
+if ( param.family.Pets[0].CareGiver == param.family.mother )
+  LOG::LogSuccess( message: "Successful read of SDT array element inside SDT in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT array element inside SDT in pass-by-val class operation." );
+  ::failedFamilyTest();
+end if;
+// Use some funky expression syntax to index into the array
+if ( param.family.Pets[101 - 100].name == "Odie" )
+  LOG::LogSuccess( message: "Successful read of SDT array element inside SDT in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT array element inside SDT in pass-by-val class operation." );
+  ::failedFamilyTest();
+end if;
+if ( PetType::dog == param.family.Pets[self.getNumOne()].PetType )
+  LOG::LogSuccess( message: "Successful read of SDT array element inside SDT in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT array element inside SDT in pass-by-val class operation." );
+  ::failedFamilyTest();
+end if;
+numOne = self.getNumOne();
+if ( param.family.Pets[numOne].CareGiver == param.family.father )
+  LOG::LogSuccess( message: "Successful read of SDT array element inside SDT in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of SDT array element inside SDT in pass-by-val class operation." );
+  ::failedFamilyTest();
+end if;
+
+if ( param.family.Pets[0] == self.pet )
+  LOG::LogSuccess( message: "Successful comparison of SDT array element in state activity." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of SDT array element in state activity." );
+  ::failedFamilyTest();
+end if;
+if ( self.pet != param.family.Pets[1] )
+  LOG::LogSuccess( message: "Successful comparison of SDT array element in state activity." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of SDT array element in state activity." );
+  ::failedFamilyTest();
+end if;
+
+aPet[1] = self.pet;
+aPet[0] = self.pet;
+aPet[1].name = "Odie";
+aPet[1].PetType = PetType::dog;
+aPet[1].CareGiver = self.family.father;
+
+if ( param.family.Pets == aPet )
+  LOG::LogSuccess( message: "Successful comparison of arrays in state activity." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of arrays in state activity." );
+  ::failedFamilyTest();
+end if;
+if ( aPet != param.family.Pets )
+  LOG::LogFailure( message: "Unsuccessful comparison of SDT array element in state activity." );
+  ::failedFamilyTest();
+else
+  LOG::LogSuccess( message: "Successful comparison of SDT array element in state activity." );
+end if;
+
+// Check some deep nesting
+if ( self.nest[0].deep_nest[0][0].real_numbers[0] == 0.0 )
+  LOG::LogSuccess( message: "Successful read of deeply-nested array element as lVal in state activity." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of deeply-nested array element as lVal in state activity." );
+  ::failedFamilyTest();
+end if;
+if ( 1.0 == self.nest[0].deep_nest[0][1].real_numbers[1] )
+  LOG::LogSuccess( message: "Successful read of deeply-nested array element as rVal in state activity." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of deeply-nested array element as rVal in state activity." );
+  ::failedFamilyTest();
+end if;
+
+deepTemp = self.nest;
+someReals = self.nest[0].deep_nest[0][0];
+if ( deepTemp[0].deep_nest[0][0] == someReals )
+  LOG::LogSuccess( message: "Successful comparison of deeply-nested arrays as lVal in state activity." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of deeply-nested arrays as lVal in state activity." );
+  ::failedFamilyTest();
+end if;
+if ( someReals == deepTemp[0].deep_nest[0][0] )
+  LOG::LogSuccess( message: "Successful comparison of deeply-nested array element as rVal in state activity." );
+else
+  LOG::LogFailure( message: "Unsuccessful comparison of deeply-nested array element as rVal in state activity." );
+  ::failedFamilyTest();
+end if;
+
+generate P1:grow_up() to self;',
+	1,
+	'',
+	"cf1eb907-c3d2-45da-85d1-e95935bf1471");
+INSERT INTO O_TPARM
+	VALUES ("fcbf7303-85ba-46a2-8ecd-071e52ac14a7",
+	"76e6439b-415c-432c-8306-dbc1848d90ef",
+	'family',
+	"163969b3-35a7-4fd4-a885-ce391734f781",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("163969b3-35a7-4fd4-a885-ce391734f781",
+	"00000000-0000-0000-0000-000000000000",
+	'Family',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("cf1eb907-c3d2-45da-85d1-e95935bf1471",
+	"7777aa98-8d42-47de-bc02-483039e625dc",
+	'getNumOne',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'return 1;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("7ad47e02-e006-42a1-85c6-7e1728fae848",
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO O_BATTR
+	VALUES ("7ad47e02-e006-42a1-85c6-7e1728fae848",
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO O_ATTR
+	VALUES ("7ad47e02-e006-42a1-85c6-7e1728fae848",
+	"7777aa98-8d42-47de-bc02-483039e625dc",
+	"00000000-0000-0000-0000-000000000000",
+	'family',
+	'',
+	'',
+	'family',
+	0,
+	"163969b3-35a7-4fd4-a885-ce391734f781",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("716c9a7c-e0f4-4c29-a544-da25ccabb592",
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO O_BATTR
+	VALUES ("716c9a7c-e0f4-4c29-a544-da25ccabb592",
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO O_ATTR
+	VALUES ("716c9a7c-e0f4-4c29-a544-da25ccabb592",
+	"7777aa98-8d42-47de-bc02-483039e625dc",
+	"7ad47e02-e006-42a1-85c6-7e1728fae848",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("70e5e44d-f2bd-40af-9e9d-cf717f0d6e65",
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO O_BATTR
+	VALUES ("70e5e44d-f2bd-40af-9e9d-cf717f0d6e65",
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"7777aa98-8d42-47de-bc02-483039e625dc",
+	"70e5e44d-f2bd-40af-9e9d-cf717f0d6e65",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"f88d3327-5b76-4fb1-a9ab-2b5e0cb38cc9",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("70e5e44d-f2bd-40af-9e9d-cf717f0d6e65",
+	"7777aa98-8d42-47de-bc02-483039e625dc",
+	"716c9a7c-e0f4-4c29-a544-da25ccabb592",
+	'schools',
+	'',
+	'',
+	'schools',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'[]',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("bb5d5472-38f6-4891-a05e-f2cc175dbb55",
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO O_BATTR
+	VALUES ("bb5d5472-38f6-4891-a05e-f2cc175dbb55",
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO O_ATTR
+	VALUES ("bb5d5472-38f6-4891-a05e-f2cc175dbb55",
+	"7777aa98-8d42-47de-bc02-483039e625dc",
+	"70e5e44d-f2bd-40af-9e9d-cf717f0d6e65",
+	'pet',
+	'',
+	'',
+	'pet',
+	0,
+	"d9b3d554-f369-409d-a195-fbaed4d65c0e",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d9b3d554-f369-409d-a195-fbaed4d65c0e",
+	"00000000-0000-0000-0000-000000000000",
+	'Pet',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("79fdd492-79bb-4404-8545-ae2b576dd85d",
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO O_BATTR
+	VALUES ("79fdd492-79bb-4404-8545-ae2b576dd85d",
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"7777aa98-8d42-47de-bc02-483039e625dc",
+	"79fdd492-79bb-4404-8545-ae2b576dd85d",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"a03b6d47-2d29-4573-afcd-d2792889becd",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("79fdd492-79bb-4404-8545-ae2b576dd85d",
+	"7777aa98-8d42-47de-bc02-483039e625dc",
+	"bb5d5472-38f6-4891-a05e-f2cc175dbb55",
+	'nest',
+	'',
+	'',
+	'nest',
+	0,
+	"2e8643f8-ad29-4e05-a176-b98908f2c724",
+	'[]',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("2e8643f8-ad29-4e05-a176-b98908f2c724",
+	"00000000-0000-0000-0000-000000000000",
+	'Nest',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_ID
+	VALUES (0,
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO O_ID
+	VALUES (1,
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO O_ID
+	VALUES (2,
+	"7777aa98-8d42-47de-bc02-483039e625dc");
+INSERT INTO PE_PE
+	VALUES ("7777aa98-8d42-47de-bc02-483039e625dc",
+	1,
+	"76a64433-42d8-4437-9642-2901e1d177ce",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("76a64433-42d8-4437-9642-2901e1d177ce",
+	"00000000-0000-0000-0000-000000000000",
+	"d44b6837-1053-4e93-a92b-63147bc38ed4",
+	'Test',
+	'',
+	0,
+	'../Test.xtuml');

@@ -1,0 +1,571 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("e656402d-dd27-4fdb-817f-cce0c286ec78",
+	'Test Component Syntax',
+	1,
+	'TCS',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("1df97a93-22eb-4d46-b332-8c305b178e5b",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	'testSyntax',
+	'',
+	"ba5eda7a-def5-0000-0000-00000000000d",
+	1,
+	'self.CRA = sender;
+self.CRA_SDT.Component_ID = sender; 
+self.CRA= self.CRA_SDT.Component_ID;
+self.CRA_SDT.Component_ID = param.CRABv;
+self.CRA = param.CRABr;
+param.CRABr = param.CRABv;
+param.CRASDTBr.Component_ID = sender; // <- Bad Error when no CRASDTBr parameter
+t = param.CRASDTBv.Component_ID; // <- Bad Error when no CRASDTBv parameter
+
+send ComponentTestInterface::SigNoParms() to sender;
+send ComponentTestInterface::SigNoParms() to self.CRA;
+send ComponentTestInterface::SigNoParms() to param.CRABv;
+send ComponentTestInterface::SigNoParms() to CT::BrWithCRReturn();
+send ComponentTestInterface::SigNoParms() to ::FnWithCRReturn();
+send ComponentTestInterface::SigNoParms() to self.opWithCRReturn();
+send ComponentTestInterface::SigNoParms() to self.CRA_SDT.Component_ID;
+send ComponentTestInterface::SigNoParms() to t;
+ComponentTestInterface::SigNoParms();
+
+send ComponentTestInterface::OpNoParmsNoReturn() to sender;
+send ComponentTestInterface::OpNoParmsNoReturn() to self.CRA;
+send ComponentTestInterface::OpNoParmsNoReturn() to param.CRABv;
+send ComponentTestInterface::OpNoParmsNoReturn() to CT::BrWithCRReturn();
+send ComponentTestInterface::OpNoParmsNoReturn() to ::FnWithCRReturn();
+send ComponentTestInterface::OpNoParmsNoReturn() to self.opWithCRReturn();
+send ComponentTestInterface::OpNoParmsNoReturn() to self.CRA_SDT.Component_ID;
+send ComponentTestInterface::OpNoParmsNoReturn() to t;
+ComponentTestInterface::OpNoParmsNoReturn();
+
+x = 1;
+send ComponentTestInterface::SigWithParms(CRParm:sender, Parm:x);
+send ComponentTestInterface::SigWithParms(CRParm:sender, Parm:x) to
+                                                      self.CRA_SDT.Component_ID;
+send ComponentTestInterface::SigWithParms(CRParm:self.CRA, Parm:1) to self.CRA;
+send ComponentTestInterface::OpWithParmsNoReturn(CRParmBr:t,
+                             CRParmBv:self.CRA, ParmBr:x, ParmBv:0) to self.CRA;
+self.CRA = ComponentTestInterface::OpNoParmsCRReturn();
+ 
+// Test reference thru Port
+send TestPort::SigNoParms() to sender;
+send TestPort::SigNoParms() to self.CRA;
+send TestPort::SigNoParms() to param.CRABv;
+send TestPort::SigNoParms() to CT::BrWithCRReturn();
+send TestPort::SigNoParms() to ::FnWithCRReturn();
+send TestPort::SigNoParms() to self.opWithCRReturn();
+send TestPort::SigNoParms() to self.CRA_SDT.Component_ID;
+send TestPort::SigNoParms() to t;
+TestPort::SigNoParms();
+
+send TestPort::OpNoParmsNoReturn() to sender;
+send TestPort::OpNoParmsNoReturn() to self.CRA;
+send TestPort::OpNoParmsNoReturn() to param.CRABv;
+send TestPort::OpNoParmsNoReturn() to CT::BrWithCRReturn();
+send TestPort::OpNoParmsNoReturn() to ::FnWithCRReturn();
+send TestPort::OpNoParmsNoReturn() to self.opWithCRReturn();
+send TestPort::OpNoParmsNoReturn() to self.CRA_SDT.Component_ID;
+send TestPort::OpNoParmsNoReturn() to t;
+TestPort::OpNoParmsNoReturn();
+
+x = 1;
+send TestPort::SigWithParms(CRParm:sender, Parm:x);
+send TestPort::SigWithParms(CRParm:sender, Parm:x) to self.CRA_SDT.Component_ID;
+send TestPort::SigWithParms(CRParm:self.CRA, Parm:1) to self.CRA;
+send TestPort::OpWithParmsNoReturn(CRParmBr:t,
+                             CRParmBv:self.CRA, ParmBr:x, ParmBv:0) to self.CRA;
+self.CRA = TestPort::OpNoParmsCRReturn();
+
+// Test reference thru Ports with multiple refs
+send TestPort1::testOp();
+send TestPort1::testOp() to sender;
+send TestPort2::testOp() to self.CRA;
+send TestPort1::testSig();
+send TestPort1::testSig() to sender;
+send TestPort2::testSig() to self.CRA;
+
+return self.CRA_SDT.Component_ID;',
+	1,
+	'',
+	"331dafc9-af93-4768-8b81-c61b4e63f040");
+INSERT INTO O_TPARM
+	VALUES ("9c3cc646-60cc-428e-a8ca-f48c917fda63",
+	"1df97a93-22eb-4d46-b332-8c305b178e5b",
+	'CRABv',
+	"ba5eda7a-def5-0000-0000-00000000000d",
+	0,
+	'',
+	"74fb4673-4d36-47cf-b289-68d348644b2a",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("74fb4673-4d36-47cf-b289-68d348644b2a",
+	"1df97a93-22eb-4d46-b332-8c305b178e5b",
+	'CRABr',
+	"ba5eda7a-def5-0000-0000-00000000000d",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("07b263d6-5e17-407b-a68c-5abc2ed59488",
+	"1df97a93-22eb-4d46-b332-8c305b178e5b",
+	'CRASDTBr',
+	"19988281-e39a-4c09-9bd0-6588412e3b55",
+	1,
+	'',
+	"9c3cc646-60cc-428e-a8ca-f48c917fda63",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("19988281-e39a-4c09-9bd0-6588412e3b55",
+	"00000000-0000-0000-0000-000000000000",
+	'Component Test Structure',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("2fe24d6b-0ce2-4f43-a137-33c20012413c",
+	"1df97a93-22eb-4d46-b332-8c305b178e5b",
+	'CRASDTBv',
+	"19988281-e39a-4c09-9bd0-6588412e3b55",
+	0,
+	'',
+	"07b263d6-5e17-407b-a68c-5abc2ed59488",
+	'');
+INSERT INTO O_TFR
+	VALUES ("d9b2ca1b-6e58-4834-9ce1-2832c14977ca",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	'opWithCRReturn',
+	'',
+	"ba5eda7a-def5-0000-0000-00000000000d",
+	1,
+	'return sender;',
+	1,
+	'',
+	"09bd90af-e81e-4686-b866-969a2e4b2358");
+INSERT INTO O_TFR
+	VALUES ("331dafc9-af93-4768-8b81-c61b4e63f040",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	'testArraySyntax',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'self.CRA_SDT.Component_ID = param.CRAArrayBv[0];
+self.CRA = param.CRAArrayBr[1];
+param.CRAArrayBr = param.CRAArrayBv;
+param.CRASDTArrayBr[2].Component_ID = sender;
+t = param.CRASDTArrayBv[3].Component_ID;
+
+send ComponentTestInterface::SigNoParms() to param.CRAArrayBv[4];
+send ComponentTestInterface::SigNoParms() to self.CRAArray[1];
+send ComponentTestInterface::SigNoParms() to self.CRA_SDTArray[1].Component_ID;
+ComponentTestInterface::SigNoParms();
+send ComponentTestInterface::OpNoParmsNoReturn() to param.CRAArrayBv[5];
+send ComponentTestInterface::OpNoParmsNoReturn() to self.CRAArray[1]; 
+send ComponentTestInterface::OpNoParmsNoReturn() to
+                                              self.CRA_SDTArray[1].Component_ID;
+ComponentTestInterface::OpNoParmsNoReturn();
+// Test reference thru Port
+send TestPort::SigNoParms() to param.CRAArrayBv[6];
+send TestPort::SigNoParms() to self.CRAArray[1];
+send TestPort::SigNoParms() to self.CRA_SDTArray[1].Component_ID;
+
+send TestPort::OpNoParmsNoReturn() to param.CRAArrayBv[7];
+send TestPort::OpNoParmsNoReturn() to self.CRAArray[1];
+send TestPort::OpNoParmsNoReturn() to self.CRA_SDTArray[1].Component_ID;',
+	1,
+	'',
+	"b7b20601-45c0-41ed-a1a5-b2881d87b2f6");
+INSERT INTO O_TPARM
+	VALUES ("aacfea29-4760-42d0-944f-c4e3ce8afbfc",
+	"331dafc9-af93-4768-8b81-c61b4e63f040",
+	'CRAArrayBr',
+	"ba5eda7a-def5-0000-0000-00000000000d",
+	1,
+	'[]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"aacfea29-4760-42d0-944f-c4e3ce8afbfc",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"9a5577ed-9b0d-4f7d-97f7-d715316c51d0",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("4462c51b-e1d3-4bb1-bd23-90ca3b55f7e2",
+	"331dafc9-af93-4768-8b81-c61b4e63f040",
+	'CRAArrayBv',
+	"ba5eda7a-def5-0000-0000-00000000000d",
+	0,
+	'[]',
+	"aacfea29-4760-42d0-944f-c4e3ce8afbfc",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"4462c51b-e1d3-4bb1-bd23-90ca3b55f7e2",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"9aa9af3d-3c03-4f48-85be-27df937f3e5a",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("a8d90619-6cc2-4135-acf5-5f858df1f260",
+	"331dafc9-af93-4768-8b81-c61b4e63f040",
+	'CRASDTArrayBr',
+	"19988281-e39a-4c09-9bd0-6588412e3b55",
+	1,
+	'[]',
+	"4462c51b-e1d3-4bb1-bd23-90ca3b55f7e2",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"a8d90619-6cc2-4135-acf5-5f858df1f260",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"dee4aa35-af52-4323-aadc-68000af51b1f",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("dbff917a-23b9-485a-b883-a65ec33ef41b",
+	"331dafc9-af93-4768-8b81-c61b4e63f040",
+	'CRASDTArrayBv',
+	"19988281-e39a-4c09-9bd0-6588412e3b55",
+	0,
+	'[]',
+	"a8d90619-6cc2-4135-acf5-5f858df1f260",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"dbff917a-23b9-485a-b883-a65ec33ef41b",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"9bbee531-3783-477d-b125-5c924963404b",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("d2d000c6-823a-4378-85a8-eff96621ca4c",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	'opWithParmNoReturn',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"d9b2ca1b-6e58-4834-9ce1-2832c14977ca");
+INSERT INTO O_TPARM
+	VALUES ("c3c6a0a8-f393-494e-8b8b-e8798f163fd3",
+	"d2d000c6-823a-4378-85a8-eff96621ca4c",
+	'testParam',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("b7b20601-45c0-41ed-a1a5-b2881d87b2f6",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	'opWithTimerReturn',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	'',
+	"d2d000c6-823a-4378-85a8-eff96621ca4c");
+INSERT INTO O_TFR
+	VALUES ("09bd90af-e81e-4686-b866-969a2e4b2358",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	'opPreferenceTest',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'::FnWithCRParm(CRParm:sender);',
+	1,
+	'',
+	"5bc2c8c9-1445-42f0-ad73-c1da90741801");
+INSERT INTO O_TFR
+	VALUES ("5bc2c8c9-1445-42f0-ad73-c1da90741801",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	'opClassBasedPreferenceTest',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'::FnWithCRParm(CRParm:sender);',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("e950da0c-9b7d-467e-bd23-274a7316a158",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_BATTR
+	VALUES ("e950da0c-9b7d-467e-bd23-274a7316a158",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_ATTR
+	VALUES ("e950da0c-9b7d-467e-bd23-274a7316a158",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	"34fc6c3c-46ad-4df8-b23c-c31468a69865",
+	'CRA',
+	'',
+	'',
+	'CRA',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000d",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("7f56356c-f229-41c5-ba45-7449cc36a656",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_BATTR
+	VALUES ("7f56356c-f229-41c5-ba45-7449cc36a656",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_ATTR
+	VALUES ("7f56356c-f229-41c5-ba45-7449cc36a656",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	"e950da0c-9b7d-467e-bd23-274a7316a158",
+	'CRA_SDT',
+	'',
+	'',
+	'CRA_SDT',
+	0,
+	"19988281-e39a-4c09-9bd0-6588412e3b55",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("6c49ab44-d02f-4709-9b0c-60502214a84d",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_BATTR
+	VALUES ("6c49ab44-d02f-4709-9b0c-60502214a84d",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	"6c49ab44-d02f-4709-9b0c-60502214a84d",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"dd5484da-e55c-4407-99e1-79eba89d1d1c",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("6c49ab44-d02f-4709-9b0c-60502214a84d",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	"7f56356c-f229-41c5-ba45-7449cc36a656",
+	'CRAArray',
+	'',
+	'',
+	'CRAArray',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000d",
+	'[]',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("54b112fb-14c0-416e-862c-5e47f92513fd",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_BATTR
+	VALUES ("54b112fb-14c0-416e-862c-5e47f92513fd",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	"54b112fb-14c0-416e-862c-5e47f92513fd",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"ef196ac9-7fed-4254-8a30-40efea021560",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("54b112fb-14c0-416e-862c-5e47f92513fd",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	"6c49ab44-d02f-4709-9b0c-60502214a84d",
+	'CRA_SDTArray',
+	'',
+	'',
+	'CRA_SDTArray',
+	0,
+	"19988281-e39a-4c09-9bd0-6588412e3b55",
+	'[]',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e08f64c7-f71a-4188-880b-fc6732ff1699",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_BATTR
+	VALUES ("e08f64c7-f71a-4188-880b-fc6732ff1699",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_ATTR
+	VALUES ("e08f64c7-f71a-4188-880b-fc6732ff1699",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	"54b112fb-14c0-416e-862c-5e47f92513fd",
+	'testReal',
+	'',
+	'',
+	'testReal',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("76980535-10c0-4d7c-9baa-d3b4ad752459",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_BATTR
+	VALUES ("76980535-10c0-4d7c-9baa-d3b4ad752459",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	"76980535-10c0-4d7c-9baa-d3b4ad752459",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"e9f7702d-669c-43ba-915a-1adef129b1d9",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("76980535-10c0-4d7c-9baa-d3b4ad752459",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	"e08f64c7-f71a-4188-880b-fc6732ff1699",
+	'testDateArray',
+	'',
+	'',
+	'testDateArray',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'[]',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("34fc6c3c-46ad-4df8-b23c-c31468a69865",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_BATTR
+	VALUES ("34fc6c3c-46ad-4df8-b23c-c31468a69865",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_ATTR
+	VALUES ("34fc6c3c-46ad-4df8-b23c-c31468a69865",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	"00000000-0000-0000-0000-000000000000",
+	'Id',
+	'',
+	'',
+	'Id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1f31d1b3-5d61-4160-9717-725a64800378",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_BATTR
+	VALUES ("1f31d1b3-5d61-4160-9717-725a64800378",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_ATTR
+	VALUES ("1f31d1b3-5d61-4160-9717-725a64800378",
+	"e656402d-dd27-4fdb-817f-cce0c286ec78",
+	"76980535-10c0-4d7c-9baa-d3b4ad752459",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_ID
+	VALUES (1,
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO O_ID
+	VALUES (2,
+	"e656402d-dd27-4fdb-817f-cce0c286ec78");
+INSERT INTO PE_PE
+	VALUES ("e656402d-dd27-4fdb-817f-cce0c286ec78",
+	1,
+	"591c6765-1adb-4874-832e-138794255005",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("591c6765-1adb-4874-832e-138794255005",
+	"00000000-0000-0000-0000-000000000000",
+	"b7e88124-8f6b-4031-9f0d-885a509ba4f0",
+	'Good Syntax',
+	'',
+	0,
+	'../Good Syntax.xtuml');

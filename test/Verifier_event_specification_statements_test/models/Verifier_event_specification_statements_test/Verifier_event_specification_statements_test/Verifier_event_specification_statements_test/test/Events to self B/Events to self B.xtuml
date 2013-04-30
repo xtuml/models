@@ -1,0 +1,79 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("d360d4fe-3eaf-4b89-8733-1ec9eb720f5b",
+	'Events to self B',
+	10,
+	'EVENTSTOSELFB',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("b9b2d633-a43a-4178-be1e-9313306e4284",
+	"d360d4fe-3eaf-4b89-8733-1ec9eb720f5b",
+	'generate_evt_to_A',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Generate a pending event for an instance of EVENTSTOSELFA that does not come from itself
+select any A from instances of EVENTSTOSELFA;
+if (not_empty A)
+  generate EVENTSTOSELFA4:''from_other_instance'' to A;
+else
+  LOG::LogFailure( message: 
+         "Event to self test: FAIL - could not find instance of EVENTSTOSELFA");
+end if;',
+	1,
+	'',
+	"8bf82f5e-1f1e-4c61-9c61-2c9097b4863e");
+INSERT INTO O_TFR
+	VALUES ("8bf82f5e-1f1e-4c61-9c61-2c9097b4863e",
+	"d360d4fe-3eaf-4b89-8733-1ec9eb720f5b",
+	'generate_assigner_evt_to_A',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'generate ASSIGNEREVT2SELFA_A4:''from_other_instance'' to ASSIGNEREVT2SELFA assigner;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("11bd8c42-9293-40ee-8d9d-22df82e42357",
+	"d360d4fe-3eaf-4b89-8733-1ec9eb720f5b",
+	'generate_evt_to_C',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Generate a pending event for an instance of EVENTSTOSELFC that does not come from itself
+select any C from instances of EVENTSTOSELFC;
+if (not_empty C)
+  generate EVENTSTOSELFC4:''from_other_instance'' to C;
+else
+  LOG::LogFailure( message: "Event to self test without self keyword: FAIL" +
+                                 " - could not find instance of EVENTSTOSELFC");
+end if;',
+	1,
+	'',
+	"b9b2d633-a43a-4178-be1e-9313306e4284");
+INSERT INTO O_ID
+	VALUES (0,
+	"d360d4fe-3eaf-4b89-8733-1ec9eb720f5b");
+INSERT INTO O_ID
+	VALUES (1,
+	"d360d4fe-3eaf-4b89-8733-1ec9eb720f5b");
+INSERT INTO O_ID
+	VALUES (2,
+	"d360d4fe-3eaf-4b89-8733-1ec9eb720f5b");
+INSERT INTO PE_PE
+	VALUES ("d360d4fe-3eaf-4b89-8733-1ec9eb720f5b",
+	1,
+	"c990f4f8-a478-460c-b931-bd6f7ada3e8f",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("c990f4f8-a478-460c-b931-bd6f7ada3e8f",
+	"00000000-0000-0000-0000-000000000000",
+	"795ac54c-14a9-4a62-a834-cda4a2e71118",
+	'test',
+	'',
+	0,
+	'../test.xtuml');

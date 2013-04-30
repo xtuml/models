@@ -1,0 +1,105 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("0ce64bb3-0154-43c9-b9ac-7ae3b3dfc1d4",
+	"00000000-0000-0000-0000-000000000000",
+	"8f206a0b-1583-4527-9946-56331d99bd33",
+	'Test Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("470ede6a-02fc-4c12-ae97-c28ff5bcbf85",
+	112,
+	"0ce64bb3-0154-43c9-b9ac-7ae3b3dfc1d4",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'3.2.0',
+	'domain::domain::Test Functions');
+INSERT INTO DIM_DIA
+	VALUES ("470ede6a-02fc-4c12-ae97-c28ff5bcbf85",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("8752a30e-cba3-4f73-a46c-a7920675cad2",
+	"00000000-0000-0000-0000-000000000000",
+	'testFunction',
+	'',
+	'
+create object instance tc of TC;
+testVar = ::funcReturningIntValue();
+tc.testAttr = ::funcReturningIntValue();
+tc.testOperation(intPar:456);
+
+//  1) LAUNCH VERIFIER.
+//  2) RUN THIS TEST FUNCTION.
+//  3) SINGLE-STEP TO THE STATEMENT BELOW.
+//  4) IN THE DEBUG WINDOW: RIGHT-CLICK ON THE BLUE TEST_VerifierRelaunch BLOB AND SELECT "Terminate and Relaunch".
+//  5) YOU MUXT EXPAND THE LINE IN THE DEBUG WINDOW TO SEE THAT THIS DOMAIN REALLY IS IN "Running" STATE.
+//  6) RUN THIS TEST FUNCTION AGAIN. NOTHING HAPPENS! (= you do not hit the breakpoint above)
+//  7) IN THE DEBUG WINDOW: RIGHT-CLICK ON THE BLUE TEST_VerifierRelaunch BLOB AND SELECT "Terminate and Relaunch" AGAIN.
+//  8) VERIFIER HANGS DURING RELAUNCH AT "Launching ... (24%)". (see lower right corner)
+//  9) TO EXIT THIS HANGING STATE YOU MUST TERMINATE BRIDGEPOINT.
+// 10) NOTE: YOU MAY NEED TO REPEAT THE "Terminate and Relaunch" IN CASE IT DOESN''T HANG THE FIRST TIME.
+breakPointStatement = true;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("8752a30e-cba3-4f73-a46c-a7920675cad2",
+	1,
+	"0ce64bb3-0154-43c9-b9ac-7ae3b3dfc1d4",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("9147b170-ac10-4184-b5e3-991a707947fa",
+	"00000000-0000-0000-0000-000000000000",
+	'funcReturningIntValue',
+	'',
+	'
+return 123;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("9147b170-ac10-4184-b5e3-991a707947fa",
+	1,
+	"0ce64bb3-0154-43c9-b9ac-7ae3b3dfc1d4",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("0ce64bb3-0154-43c9-b9ac-7ae3b3dfc1d4",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"746dfb73-c085-4a98-a6ae-6cb259a5d857",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("746dfb73-c085-4a98-a6ae-6cb259a5d857",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'domain',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../domain.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("8f206a0b-1583-4527-9946-56331d99bd33",
+	'VerifierLaunchConfigurationTests',
+	1,
+	'../../../VerifierLaunchConfigurationTests.xtuml');

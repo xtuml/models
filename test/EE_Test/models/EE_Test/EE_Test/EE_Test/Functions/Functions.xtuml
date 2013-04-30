@@ -1,0 +1,121 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("f3c9aae1-55c0-462f-9267-278a6837d67b",
+	"00000000-0000-0000-0000-000000000000",
+	"20cf1c80-1077-433a-bf3f-61eb4a1f4b24",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("12933bf5-9d6c-4b77-9f4b-d4c6a152a1d8",
+	112,
+	"f3c9aae1-55c0-462f-9267-278a6837d67b",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'EE_Test::EE_Test::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("12933bf5-9d6c-4b77-9f4b-d4c6a152a1d8",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("301491d0-61b5-473e-972c-f1619cdfa180",
+	"00000000-0000-0000-0000-000000000000",
+	'xit',
+	'',
+	'select many tests from instances of EE_TST;
+for each test in tests
+  delete object instance test;
+end for;
+LOG::LogInfo(message:"Test complete. Shutting down.");
+ARCH::shutdown();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("301491d0-61b5-473e-972c-f1619cdfa180",
+	1,
+	"f3c9aae1-55c0-462f-9267-278a6837d67b",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("5f9fe856-491b-41b4-b632-8d7e3dd46fb4",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'LOG::LogInfo(message:"Testing built in External Entity from a function");
+LOG::LogInteger(message:1);
+a = 2;
+LOG::LogInteger(message:a);
+LOG::LogReal(message:"Real ->", r:3.0);
+r = 4.0;
+LOG::LogReal(message:"Real ->", r:r);
+LOG::LogFailure(message:"Success, we logged a failure.");
+STUB::Dummy(message:"This message should not show up in the results, because the Bridge has no realized code or OAL");
+LOG::LogSuccess(message:"Success, we logged a success.");
+
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("5f9fe856-491b-41b4-b632-8d7e3dd46fb4",
+	1,
+	"f3c9aae1-55c0-462f-9267-278a6837d67b",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("080e8b34-b2c8-48e3-b528-612d6b0b11dd",
+	"00000000-0000-0000-0000-000000000000",
+	'test',
+	'',
+	'create object instance test of EE_TST;
+test.testEE();
+generate EE_TST1:execute to test;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("080e8b34-b2c8-48e3-b528-612d6b0b11dd",
+	1,
+	"f3c9aae1-55c0-462f-9267-278a6837d67b",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("f3c9aae1-55c0-462f-9267-278a6837d67b",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"41e07ade-cba5-49de-9255-3d0d7cdfce4c",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("41e07ade-cba5-49de-9255-3d0d7cdfce4c",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'EE_Test',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../EE_Test.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("20cf1c80-1077-433a-bf3f-61eb4a1f4b24",
+	'EE_Test',
+	1,
+	'../../../EE_Test.xtuml');

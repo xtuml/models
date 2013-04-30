@@ -1,0 +1,219 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("8f92a27e-94a6-4d69-b040-40e56d7f227b",
+	'Event Object',
+	2,
+	'E_OBJ',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("207b6e97-8a8c-4d25-b43a-e12f579d06eb",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b",
+	'op_gen_evt_c',
+	'x = param.op_param;
+select any e_obj from instances of E_OBJ;
+select any o_obj from instances of O_OBJ;
+create event instance e of O_OBJ2:''TimeOut'' to o_obj; 
+timer = TIM::timer_start(microseconds:1000000, event_inst:e);
+create event instance e2 of E_OBJ2:''Event''(count:x+1, timer:timer) to e_obj;
+e_obj.my_event = e2;
+generate e_obj.my_event;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'x = param.op_param;
+select any e_obj from instances of E_OBJ;
+select any o_obj from instances of O_OBJ;
+create event instance o of O_OBJ2(count:x+1) to o_obj; 
+timer = TIM::timer_start(microseconds:5000000, event_inst:o);
+e_obj.my_timer = timer;
+
+create event instance e2 of E_OBJ2:''Event''(count:x+1) to e_obj;
+e_obj.my_event = e2;
+generate e_obj.my_event;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("85381007-33d7-4f64-802d-10940696bc9d",
+	"207b6e97-8a8c-4d25-b43a-e12f579d06eb",
+	'op_param',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("114787a3-ec77-4008-bf5f-fa1af9196c68",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b",
+	'op_gen_evt_i',
+	'x = param.op_param;
+select any e_obj from instances of E_OBJ;
+select any o_obj from instances of O_OBJ;
+create event instance e of O_OBJ2:''TimeOut'' to o_obj; 
+timer = TIM::timer_start(microseconds:1000000, event_inst:e);
+create event instance e2 of E_OBJ2:''Event''(count:x+1, timer:timer) to e_obj;
+e_obj.my_event = e2;
+generate e_obj.my_event;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'x = param.op_param;
+select any e_obj from instances of E_OBJ;
+select any o_obj from instances of O_OBJ;
+create event instance o of O_OBJ2(count:x+1) to o_obj; 
+timer = TIM::timer_start(microseconds:5000000, event_inst:o);
+e_obj.my_timer = timer;
+
+create event instance e2 of E_OBJ2:''Event''(count:x+1) to e_obj;
+e_obj.my_event = e2;
+generate e_obj.my_event;',
+	1,
+	'',
+	"207b6e97-8a8c-4d25-b43a-e12f579d06eb");
+INSERT INTO O_TPARM
+	VALUES ("9fff25c6-6796-44ed-bfc1-5bfdea2ed1af",
+	"114787a3-ec77-4008-bf5f-fa1af9196c68",
+	'op_param',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("bb72aabb-eed3-4a90-8d51-c4500ed9cfe8",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO O_BATTR
+	VALUES ("bb72aabb-eed3-4a90-8d51-c4500ed9cfe8",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO O_ATTR
+	VALUES ("bb72aabb-eed3-4a90-8d51-c4500ed9cfe8",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b",
+	"00000000-0000-0000-0000-000000000000",
+	'my_event',
+	'',
+	'',
+	'my_event',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000a",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("049e6754-027a-46af-9aba-c5203ce160e0",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO O_BATTR
+	VALUES ("049e6754-027a-46af-9aba-c5203ce160e0",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO O_ATTR
+	VALUES ("049e6754-027a-46af-9aba-c5203ce160e0",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b",
+	"bb72aabb-eed3-4a90-8d51-c4500ed9cfe8",
+	'e_obj_id',
+	'',
+	'',
+	'e_obj_id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("46850749-bed7-483b-bab1-772c268b47cf",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO O_BATTR
+	VALUES ("46850749-bed7-483b-bab1-772c268b47cf",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO O_ATTR
+	VALUES ("46850749-bed7-483b-bab1-772c268b47cf",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b",
+	"049e6754-027a-46af-9aba-c5203ce160e0",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("c079ed96-317d-4f87-8fd9-20f97747d9e0",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b",
+	'self.mda_gen_evt = 7;
+select any e_obj from instances of E_OBJ;
+select any o_obj from instances of O_OBJ;
+create event instance o of O_OBJ2(count:8) to o_obj; 
+timer = TIM::timer_start(microseconds:5000000, event_inst:o);
+self.my_timer = timer;
+
+create event instance e2 of E_OBJ2:''Event''(count:8) to e_obj;
+e_obj.my_event = e2;
+generate e_obj.my_event;
+',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("c079ed96-317d-4f87-8fd9-20f97747d9e0",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO O_ATTR
+	VALUES ("c079ed96-317d-4f87-8fd9-20f97747d9e0",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b",
+	"46850749-bed7-483b-bab1-772c268b47cf",
+	'mda_gen_evt',
+	'self.mda_gen_evt = 7;
+select any e_obj from instances of E_OBJ;
+select any o_obj from instances of O_OBJ;
+create event instance e of O_OBJ2:''TimeOut'' to o_obj; 
+timer = TIM::timer_start(microseconds:1000000, event_inst:e);
+create event instance e2 of E_OBJ2:''Event''(count:8, timer:timer) to e_obj;
+e_obj.my_event = e2;
+generate e_obj.my_event;',
+	'',
+	'mda_gen_evt',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("69d10df2-3007-499b-8751-ae1881750bf9",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO O_BATTR
+	VALUES ("69d10df2-3007-499b-8751-ae1881750bf9",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO O_ATTR
+	VALUES ("69d10df2-3007-499b-8751-ae1881750bf9",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b",
+	"c079ed96-317d-4f87-8fd9-20f97747d9e0",
+	'my_timer',
+	'',
+	'',
+	'my_timer',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000f",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO O_OIDA
+	VALUES ("049e6754-027a-46af-9aba-c5203ce160e0",
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b",
+	0,
+	'e_obj_id');
+INSERT INTO O_ID
+	VALUES (1,
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO O_ID
+	VALUES (2,
+	"8f92a27e-94a6-4d69-b040-40e56d7f227b");
+INSERT INTO PE_PE
+	VALUES ("8f92a27e-94a6-4d69-b040-40e56d7f227b",
+	1,
+	"00015c42-0327-464f-8e4c-fa0e733294e1",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("00015c42-0327-464f-8e4c-fa0e733294e1",
+	"00000000-0000-0000-0000-000000000000",
+	"0fc5308f-0975-429f-9229-f24dc21d6a1b",
+	'Event_generation',
+	'',
+	1,
+	'../Event_generation.xtuml');

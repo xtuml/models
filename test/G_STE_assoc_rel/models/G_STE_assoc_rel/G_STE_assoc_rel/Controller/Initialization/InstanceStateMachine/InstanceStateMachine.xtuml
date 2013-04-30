@@ -1,0 +1,574 @@
+-- BP 7.1 content: InstanceStateMachine syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO SM_ISM
+	VALUES ("5b07d60c-9713-476c-a775-82df07645771",
+	"40fc84b7-8cf5-4f63-ba7c-c7c002750f36");
+INSERT INTO SM_SM
+	VALUES ("5b07d60c-9713-476c-a775-82df07645771",
+	'',
+	5);
+INSERT INTO SM_MOORE
+	VALUES ("5b07d60c-9713-476c-a775-82df07645771");
+INSERT INTO SM_LEVT
+	VALUES ("d6631737-a655-42e1-b2be-a93b0f223e37",
+	"5b07d60c-9713-476c-a775-82df07645771",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_SEVT
+	VALUES ("d6631737-a655-42e1-b2be-a93b0f223e37",
+	"5b07d60c-9713-476c-a775-82df07645771",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_EVT
+	VALUES ("d6631737-a655-42e1-b2be-a93b0f223e37",
+	"5b07d60c-9713-476c-a775-82df07645771",
+	"00000000-0000-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	'',
+	'INIT1',
+	'');
+INSERT INTO SM_STATE
+	VALUES ("e5ee9d05-e05e-4e19-9873-a4990dec7622",
+	"5b07d60c-9713-476c-a775-82df07645771",
+	"00000000-0000-0000-0000-000000000000",
+	'Initialization',
+	1,
+	0);
+INSERT INTO SM_SEME
+	VALUES ("e5ee9d05-e05e-4e19-9873-a4990dec7622",
+	"d6631737-a655-42e1-b2be-a93b0f223e37",
+	"5b07d60c-9713-476c-a775-82df07645771",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_NSTXN
+	VALUES ("49014bd3-1d6d-4c4d-a5ea-fbe5d1dc4d36",
+	"5b07d60c-9713-476c-a775-82df07645771",
+	"e5ee9d05-e05e-4e19-9873-a4990dec7622",
+	"d6631737-a655-42e1-b2be-a93b0f223e37",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_TXN
+	VALUES ("49014bd3-1d6d-4c4d-a5ea-fbe5d1dc4d36",
+	"5b07d60c-9713-476c-a775-82df07645771",
+	"e5ee9d05-e05e-4e19-9873-a4990dec7622",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO SM_MOAH
+	VALUES ("e7f355c2-82d0-4675-976c-65391cbf9aed",
+	"5b07d60c-9713-476c-a775-82df07645771",
+	"e5ee9d05-e05e-4e19-9873-a4990dec7622");
+INSERT INTO SM_AH
+	VALUES ("e7f355c2-82d0-4675-976c-65391cbf9aed",
+	"5b07d60c-9713-476c-a775-82df07645771");
+INSERT INTO SM_ACT
+	VALUES ("e7f355c2-82d0-4675-976c-65391cbf9aed",
+	"5b07d60c-9713-476c-a775-82df07645771",
+	1,
+	'// SIMPLE
+
+// 1-1:1
+create object instance a1 of A;
+a1.a_id = 0;
+create object instance a2 of A;
+a2.a_id = 1;
+create object instance b1 of B;
+b1.b_id = 0;
+create object instance b2 of B;
+b2.b_id = 1;
+create object instance c1 of C;
+create object instance c2 of C;
+relate a1 to b1 across R1 using c1;
+relate a2 to b2 across R1 using c2;
+
+// 2-1:1
+create object instance d1 of D;
+d1.d_id = 0;
+create object instance d2 of D;
+d2.d_id = 1;
+create object instance e1 of E;
+e1.e_id = 0;
+create object instance e2 of E;
+e2.e_id = 1;
+create object instance f1 of F;
+f1.f_id = 0;
+create object instance f2 of F;
+f2.f_id = 1;
+create object instance f3 of F;
+f3.f_id = 2;
+relate d1 to e1 across R2 using f1;
+relate d1 to e1 across R2 using f2;
+relate d2 to e2 across R2 using f3;
+
+// 1-1:2
+create object instance g1 of G;
+g1.g_id = 0;
+create object instance g2 of G;
+g2.g_id = 1;
+create object instance h1 of H;
+h1.h_id = 0;
+create object instance h2 of H;
+h2.h_id = 1;
+create object instance h3 of H;
+h3.h_id = 2;
+create object instance i1 of I;
+create object instance i2 of I;
+create object instance i3 of I;
+relate g1 to h1 across R3 using i1;
+relate g1 to h2 across R3 using i2;
+relate g2 to h3 across R3 using i3;
+
+// 2-1:2
+create object instance j1 of J;
+j1.j_id = 0;
+create object instance j2 of J;
+j2.j_id = 1;
+create object instance k1 of K;
+k1.k_id = 0;
+create object instance k2 of K;
+k2.k_id = 1;
+create object instance k3 of K;
+k3.k_id = 2;
+create object instance l1 of L;
+l1.l_id = 0;
+create object instance l2 of L;
+l2.l_id = 1;
+create object instance l3 of L;
+l3.l_id = 2;
+create object instance l4 of L;
+l4.l_id = 3;
+create object instance l5 of L;
+l5.l_id = 4;
+relate j1 to k1 across R4 using l1;
+relate j1 to k1 across R4 using l2;
+relate j1 to k2 across R4 using l3;
+relate j1 to k2 across R4 using l4;
+relate j2 to k3 across R4 using l5;
+
+// 1-2:2
+create object instance m1 of M;
+m1.m_id = 0;
+create object instance m2 of M;
+m2.m_id = 1;
+create object instance m3 of M;
+m3.m_id = 2;
+create object instance n1 of N;
+n1.n_id = 0;
+create object instance n2 of N;
+n2.n_id = 1;
+create object instance n3 of N;
+n3.n_id = 2;
+create object instance o1 of O;
+create object instance o2 of O;
+create object instance o3 of O;
+create object instance o4 of O;
+create object instance o5 of O;
+relate m1 to n1 across R7 using o1;
+relate m1 to n2 across R7 using o2;
+relate m2 to n1 across R7 using o3;
+relate m2 to n2 across R7 using o4;
+relate m3 to n3 across R7 using o5;
+
+// 2-2:2
+create object instance p1 of P;
+p1.p_id = 0;
+create object instance p2 of P;
+p2.p_id = 1;
+create object instance p3 of P;
+p3.p_id = 2;
+create object instance q1 of Q;
+q1.q_id = 0;
+create object instance q2 of Q;
+q2.q_id = 1;
+create object instance q3 of Q;
+q3.q_id = 2;
+create object instance r1 of R;
+r1.r_id = 0;
+create object instance r2 of R;
+r2.r_id = 1;
+create object instance r3 of R;
+r3.r_id = 2;
+create object instance r4 of R;
+r4.r_id = 3;
+create object instance r5 of R;
+r5.r_id = 4;
+create object instance r6 of R;
+r6.r_id = 5;
+create object instance r7 of R;
+r7.r_id = 6;
+create object instance r8 of R;
+r8.r_id = 7;
+create object instance r9 of R;
+r9.r_id = 8;
+relate p1 to q1 across R8 using r1;
+relate p1 to q1 across R8 using r2;
+relate p1 to q2 across R8 using r3;
+relate p1 to q2 across R8 using r4;
+relate p2 to q1 across R8 using r5;
+relate p2 to q1 across R8 using r6;
+relate p2 to q2 across R8 using r7;
+relate p2 to q2 across R8 using r8;
+relate p3 to q3 across R8 using r9;
+
+// REFLEXIVE
+
+// 1-1:1 reflexive
+create object instance aa1 of AA;
+aa1.aa_id = 0;
+aa1.aa_id2 = 1;
+create object instance aa2 of AA;
+aa2.aa_id = 1;
+aa2.aa_id2 = 0;
+create object instance aa3 of AA;
+aa3.aa_id = 2;
+aa3.aa_id2 = 2;
+create object instance bb1 of BB;
+create object instance bb2 of BB;
+create object instance bb3 of BB;
+relate aa1 to aa2 across R200.''left'' using bb1;
+relate aa2 to aa3 across R200.''left'' using bb2;
+relate aa3 to aa1 across R200.''left'' using bb3;
+
+// 2-1:1 reflexive
+create object instance cc1 of CC;
+cc1.cc_id = 0;
+cc1.cc_id2 = 1;
+create object instance cc2 of CC;
+cc2.cc_id = 1;
+cc2.cc_id2 = 0;
+create object instance cc3 of CC;
+cc3.cc_id = 2;
+cc3.cc_id2 = 2;
+create object instance dd1 of DD;
+dd1.dd_id = 0;
+create object instance dd2 of DD;
+dd2.dd_id = 1;
+create object instance dd3 of DD;
+dd3.dd_id = 2;
+relate cc1 to cc2 across R201.''right'' using dd1;
+relate cc2 to cc1 across R201.''left'' using dd2;
+relate cc3 to cc1 across R201.''right'' using dd3;
+
+// 1-1:2 reflexive
+create object instance ee1 of EE;
+ee1.ee_id = 0;
+ee1.ee_id2 = 1;
+create object instance ee2 of EE;
+ee2.ee_id = 1;
+ee2.ee_id2 = 0;
+create object instance ee3 of EE;
+ee3.ee_id = 2;
+ee3.ee_id2 = 2;
+create object instance ee4 of EE;
+ee4.ee_id = 3;
+ee4.ee_id2 = 3;
+create object instance ff1 of FF;
+create object instance ff2 of FF;
+create object instance ff3 of FF;
+relate ee1 to ee2 across R202.''left'' using ff1;
+relate ee1 to ee3 across R202.''left'' using ff2;
+relate ee3 to ee4 across R202.''left'' using ff3;
+
+// 2-1:2 reflexive
+create object instance gg1 of GG;
+gg1.gg_id = 0;
+gg1.gg_id2 = 1;
+create object instance gg2 of GG;
+gg2.gg_id = 1;
+gg2.gg_id2 = 0;
+create object instance gg3 of GG;
+gg3.gg_id = 2;
+gg3.gg_id2 = 2;
+create object instance gg4 of GG;
+gg4.gg_id = 3;
+gg4.gg_id2 = 3;
+create object instance hh1 of HH;
+hh1.hh_id = 0;
+create object instance hh2 of HH;
+hh2.hh_id = 1;
+create object instance hh3 of HH;
+hh3.hh_id = 2;
+create object instance hh4 of HH;
+hh4.hh_id = 3;
+create object instance hh5 of HH;
+hh5.hh_id = 4;
+relate gg1 to gg2 across R203.''left'' using hh1;
+relate gg2 to gg1 across R203.''right'' using hh2;
+relate gg1 to gg3 across R203.''left'' using hh3;
+relate gg3 to gg1 across R203.''right'' using hh4;
+relate gg4 to gg1 across R203.''left'' using hh5;
+
+// 1-2:2
+create object instance ii1 of II;
+ii1.ii_id = 0;
+ii1.ii_id2 = 1;
+create object instance ii2 of II;
+ii2.ii_id = 1;
+ii2.ii_id2 = 0;
+create object instance ii3 of II;
+ii3.ii_id = 2;
+ii3.ii_id2 = 2;
+create object instance ii4 of II;
+ii4.ii_id = 3;
+ii4.ii_id2 = 3;
+create object instance ii5 of II;
+ii5.ii_id = 4;
+ii5.ii_id2 = 4;
+create object instance ii6 of II;
+ii6.ii_id = 5;
+ii6.ii_id2 = 5;
+create object instance jj1 of JJ;
+create object instance jj2 of JJ;
+create object instance jj3 of JJ;
+create object instance jj4 of JJ;
+relate ii1 to ii2 across R204.''left'' using jj1;
+relate ii1 to ii3 across R204.''left'' using jj2;
+relate ii2 to ii4 across R204.''right'' using jj3;
+relate ii5 to ii6 across R204.''left'' using jj4;
+
+// 2-2:2
+create object instance kk1 of KK;
+kk1.kk_id = 0;
+kk1.kk_id2 = 1;
+create object instance kk2 of KK;
+kk2.kk_id = 1;
+kk2.kk_id2 = 0;
+create object instance kk3 of KK;
+kk3.kk_id = 2;
+kk3.kk_id2 = 2;
+create object instance kk4 of KK;
+kk4.kk_id = 3;
+kk4.kk_id2 = 3;
+create object instance kk5 of KK;
+kk5.kk_id = 4;
+kk5.kk_id2 = 4;
+create object instance kk6 of KK;
+kk6.kk_id = 5;
+kk6.kk_id2 = 5;
+create object instance ll1 of LL;
+ll1.ll_id = 0;
+create object instance ll2 of LL;
+ll2.ll_id = 1;
+create object instance ll3 of LL;
+ll3.ll_id = 2;
+create object instance ll4 of LL;
+ll4.ll_id = 3;
+create object instance ll5 of LL;
+ll5.ll_id = 4;
+create object instance ll6 of LL;
+ll6.ll_id = 5;
+create object instance ll7 of LL;
+ll7.ll_id = 6;
+relate kk1 to kk2 across R205.''left'' using ll1;
+relate kk2 to kk1 across R205.''right'' using ll2;
+relate kk1 to kk3 across R205.''left'' using ll3;
+relate kk3 to kk1 across R205.''right'' using ll4;
+relate kk2 to kk4 across R205.''right'' using ll5;
+relate kk4 to kk2 across R205.''left'' using ll6;
+relate kk5 to kk6 across R205.''left'' using ll7;
+
+generate DRV1 to DRV creator;',
+	'');
+INSERT INTO SM_TAH
+	VALUES ("ecaaab9a-5041-4166-9358-ea7f10145dd6",
+	"5b07d60c-9713-476c-a775-82df07645771",
+	"49014bd3-1d6d-4c4d-a5ea-fbe5d1dc4d36");
+INSERT INTO SM_AH
+	VALUES ("ecaaab9a-5041-4166-9358-ea7f10145dd6",
+	"5b07d60c-9713-476c-a775-82df07645771");
+INSERT INTO SM_ACT
+	VALUES ("ecaaab9a-5041-4166-9358-ea7f10145dd6",
+	"5b07d60c-9713-476c-a775-82df07645771",
+	1,
+	'',
+	'');
+INSERT INTO GD_MD
+	VALUES ("81e333b1-3b45-401f-b727-4faa8582a41b",
+	8,
+	"5b07d60c-9713-476c-a775-82df07645771",
+	40,
+	1,
+	0,
+	1,
+	1,
+	0,
+	12,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'G_STE_assoc_rel::Controller::Initialization::Instance State Machine');
+INSERT INTO GD_GE
+	VALUES ("c07c6fb1-cd6e-476a-a80e-578f5005105e",
+	"81e333b1-3b45-401f-b727-4faa8582a41b",
+	"e5ee9d05-e05e-4e19-9873-a4990dec7622",
+	41,
+	0,
+	'G_STE_assoc_rel::Controller::Initialization::Instance State Machine::Initialization');
+INSERT INTO GD_SHP
+	VALUES ("c07c6fb1-cd6e-476a-a80e-578f5005105e");
+INSERT INTO GD_NCS
+	VALUES ("c07c6fb1-cd6e-476a-a80e-578f5005105e");
+INSERT INTO DIM_ND
+	VALUES (768.000000,
+	2528.000000,
+	"c07c6fb1-cd6e-476a-a80e-578f5005105e");
+INSERT INTO DIM_GE
+	VALUES (528.000000,
+	240.000000,
+	"c07c6fb1-cd6e-476a-a80e-578f5005105e",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("c07c6fb1-cd6e-476a-a80e-578f5005105e",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_CON
+	VALUES ("ba2b3502-5c9d-4bb5-8a37-9dd40dce6ff3",
+	560.000000,
+	240.000000,
+	"c07c6fb1-cd6e-476a-a80e-578f5005105e");
+INSERT INTO DIM_CON
+	VALUES ("d059dcf0-3e27-49c2-ba30-415be145bbb8",
+	1248.000000,
+	240.000000,
+	"c07c6fb1-cd6e-476a-a80e-578f5005105e");
+INSERT INTO GD_GE
+	VALUES ("b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	"81e333b1-3b45-401f-b727-4faa8582a41b",
+	"49014bd3-1d6d-4c4d-a5ea-fbe5d1dc4d36",
+	42,
+	0,
+	'G_STE_assoc_rel::Controller::Initialization::Instance State Machine::Initialization::INIT1: ');
+INSERT INTO GD_CON
+	VALUES ("b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_CTXT
+	VALUES ("306bb64a-d0db-4485-bcfb-537b7670a10b",
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	1,
+	0.000000,
+	0.000000);
+INSERT INTO DIM_ND
+	VALUES (0.000000,
+	0.000000,
+	"306bb64a-d0db-4485-bcfb-537b7670a10b");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"306bb64a-d0db-4485-bcfb-537b7670a10b",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("306bb64a-d0db-4485-bcfb-537b7670a10b",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_CTXT
+	VALUES ("562aa8c4-9649-4e29-a73e-ca52e6fd1842",
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	3,
+	-7.000000,
+	-12.000000);
+INSERT INTO DIM_ND
+	VALUES (43.000000,
+	22.000000,
+	"562aa8c4-9649-4e29-a73e-ca52e6fd1842");
+INSERT INTO DIM_GE
+	VALUES (878.000000,
+	152.000000,
+	"562aa8c4-9649-4e29-a73e-ca52e6fd1842",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("562aa8c4-9649-4e29-a73e-ca52e6fd1842",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_CTXT
+	VALUES ("4dc16994-d942-4560-94d3-5e3667593abf",
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	2,
+	0.000000,
+	0.000000);
+INSERT INTO DIM_ND
+	VALUES (0.000000,
+	0.000000,
+	"4dc16994-d942-4560-94d3-5e3667593abf");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"4dc16994-d942-4560-94d3-5e3667593abf",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("4dc16994-d942-4560-94d3-5e3667593abf",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_LS
+	VALUES ("c060ba48-22d0-40df-a8f5-bf846b224c4d",
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	"00000000-0000-0000-0000-000000000000",
+	"17d462d0-579f-475d-a433-aa0365a7c83b",
+	"52cea6b3-daf8-4816-ab63-82805826de89");
+INSERT INTO GD_LS
+	VALUES ("9fb1d9d5-8918-40ed-8376-865462a50a3f",
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	"c060ba48-22d0-40df-a8f5-bf846b224c4d",
+	"52cea6b3-daf8-4816-ab63-82805826de89",
+	"852555b0-8e9c-4cb5-8a48-7808fe7ea842");
+INSERT INTO GD_LS
+	VALUES ("1e1ee426-426f-42e1-9c4b-2a6ce2730ff7",
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	"9fb1d9d5-8918-40ed-8376-865462a50a3f",
+	"852555b0-8e9c-4cb5-8a48-7808fe7ea842",
+	"4ed0682e-9867-4f32-b6d1-588197593de8");
+INSERT INTO DIM_WAY
+	VALUES ("17d462d0-579f-475d-a433-aa0365a7c83b",
+	560.000000,
+	240.000000,
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_WAY
+	VALUES ("52cea6b3-daf8-4816-ab63-82805826de89",
+	560.000000,
+	192.000000,
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	"00000000-0000-0000-0000-000000000000",
+	"17d462d0-579f-475d-a433-aa0365a7c83b");
+INSERT INTO DIM_WAY
+	VALUES ("852555b0-8e9c-4cb5-8a48-7808fe7ea842",
+	1248.000000,
+	192.000000,
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	"00000000-0000-0000-0000-000000000000",
+	"52cea6b3-daf8-4816-ab63-82805826de89");
+INSERT INTO DIM_WAY
+	VALUES ("4ed0682e-9867-4f32-b6d1-588197593de8",
+	1248.000000,
+	240.000000,
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	"00000000-0000-0000-0000-000000000000",
+	"852555b0-8e9c-4cb5-8a48-7808fe7ea842");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("b5188f9d-8039-4fce-81bf-72f3bcfb5222",
+	1,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ED
+	VALUES ("ba2b3502-5c9d-4bb5-8a37-9dd40dce6ff3",
+	"d059dcf0-3e27-49c2-ba30-415be145bbb8",
+	"b5188f9d-8039-4fce-81bf-72f3bcfb5222");
+INSERT INTO DIM_DIA
+	VALUES ("81e333b1-3b45-401f-b727-4faa8582a41b",
+	'',
+	1.000000,
+	352.000000,
+	285.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_OBJ_PROXY
+	VALUES ("40fc84b7-8cf5-4f63-ba7c-c7c002750f36",
+	'Initialization',
+	2,
+	'INIT',
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'../Initialization.xtuml');

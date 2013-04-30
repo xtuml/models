@@ -1,0 +1,860 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("eaf0f475-0192-4528-b75a-8b26112c28a7",
+	'Class',
+	13,
+	'CL',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("b745758f-6447-4dec-a3bf-5e50cb157e5d",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7",
+	'class_compare_enums',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'LOG::LogInfo(message:"In class based operation class_compare_enums.");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select any.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select any sel from instances of SEL where selected.sel2_ID == colors::green;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using literal.");
+end if;
+
+a_color = colors::green;
+select any sel from instances of SEL where selected.sel2_ID == a_color;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using local.");
+end if;
+
+select any sel2 from instances of SEL2;
+select any sel from instances of SEL where selected.sel2_ID == sel2.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using base attribute.");
+end if;
+
+select any sel from instances of SEL where selected.sel_ID == colors::yellow;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select any sel from instances of SEL where selected.sel_ID == a_color;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select any sel from instances of SEL where selected.sel_ID == sel1.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select many.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select many sels from instances of SEL where colors::green == selected.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instances of ''Select'' using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instances of ''Select'' using literal.");
+end if;
+
+a_color = colors::green;
+select many sels from instances of SEL where a_color == selected.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instances of ''Select'' using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using local.");
+end if;
+
+select many sels from instances of SEL where sel2.sel2_ID == selected.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instances of ''Select'' using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instances of ''Select'' using base attribute.");
+end if;
+
+select many sels from instances of SEL where selected.sel_ID == colors::yellow;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select many sels from instances of SEL where selected.sel_ID == a_color;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select many sels from instances of SEL where selected.sel_ID == sel1.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select one related by.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select any sel_one2 from instances of SEL_ONE2;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one2_ID == colors::blue;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one instance of ''Select One'' using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one instance of ''Select One'' using literal.");
+end if;
+
+a_color = colors::blue;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one2_ID == a_color;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one instance of ''Select One'' using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one instance of ''Select One'' using local.");
+end if;
+
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one2_ID == sel_one2.sel_one2_ID;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one instance of ''Select One'' using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one instance of ''Select One'' using base attribute.");
+end if;
+
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one_ID == colors::purple;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one related by ''Select One Two'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one relate dby ''Select One Two'' using identifier and literal.");
+end if;
+
+a_color = colors::purple;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one_ID == a_color;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one related by ''Select One Two'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one related by  ''Select One Two'' using identifier and local.");
+end if;
+
+select any sel_one1 from instances of SEL_ONE;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one_ID == sel_one1.sel_one_ID;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one related by ''Select One Two'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one related by ''Select One Two'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select any related by.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select any sel related by sel2->SEL[R1] where colors::green == selected.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' related by using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' related by using literal.");
+end if;
+
+a_color = colors::green;
+select any sel related by sel2->SEL[R1] where a_color == selected.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' related by using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' related by using local.");
+end if;
+
+select any sel related by sel2->SEL[R1] where sel2.sel2_ID == selected.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' related by using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' related by using base attribute.");
+end if;
+
+select any sel related by sel2->SEL[R1] where colors::yellow == selected.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any related by ''Select Two'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any related by ''Select Two'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select any sel related by sel2->SEL[R1] where a_color == selected.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any related by ''Select Two'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any related by ''Select Two'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select any sel related by sel2->SEL[R1] where sel1.sel_ID == selected.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any related by ''Select Two'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any related by ''Select Two'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select many related by.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select many sels related by sel2->SEL[R1] where selected.sel2_ID == colors::green;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' related by using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' related by using literal.");
+end if;
+
+a_color = colors::green;
+select many sels related by sel2->SEL[R1] where selected.sel2_ID == a_color;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' related by using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' related by using local.");
+end if;
+
+select many sels related by sel2->SEL[R1] where selected.sel2_ID == sel2.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected an instance of ''Select'' related by using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select an instance of ''Select'' related by using base attribute.");
+end if;
+
+select many sels related by sel2->SEL[R1] where colors::yellow == selected.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many related by ''Select Two'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many related by ''Select Two'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select many sels related by sel2->SEL[R1] where a_color == selected.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many related by ''Select Two'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many related by ''Select Two'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select many sels related by sel2->SEL[R1] where sel1.sel_ID == selected.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many related by ''Select Two'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many related by ''Select Two'' using identifier and base attribute.");
+end if;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("57be8e08-da87-46b3-9c17-d40fa69b14f9",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7",
+	'instance_compare_enums',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"In instance based operation instance_compare_enums.");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select any.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select any sel from instances of SEL where selected.sel2_ID == colors::green;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using literal.");
+end if;
+
+a_color = colors::green;
+select any sel from instances of SEL where selected.sel2_ID == a_color;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using local.");
+end if;
+
+select any sel2 from instances of SEL2;
+select any sel from instances of SEL where selected.sel2_ID == sel2.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using base attribute.");
+end if;
+
+select any sel from instances of SEL where selected.sel_ID == colors::yellow;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select any sel from instances of SEL where selected.sel_ID == a_color;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select any sel from instances of SEL where selected.sel_ID == sel1.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select many.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select many sels from instances of SEL where colors::green == selected.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instances of ''Select'' using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instances of ''Select'' using literal.");
+end if;
+
+a_color = colors::green;
+select many sels from instances of SEL where a_color == selected.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instances of ''Select'' using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using local.");
+end if;
+
+select many sels from instances of SEL where sel2.sel2_ID == selected.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instances of ''Select'' using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instances of ''Select'' using base attribute.");
+end if;
+
+select many sels from instances of SEL where selected.sel_ID == colors::yellow;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select many sels from instances of SEL where selected.sel_ID == a_color;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select many sels from instances of SEL where selected.sel_ID == sel1.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select one related by.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select any sel_one2 from instances of SEL_ONE2;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one2_ID == colors::blue;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one instance of ''Select One'' using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one instance of ''Select One'' using literal.");
+end if;
+
+a_color = colors::blue;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one2_ID == a_color;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one instance of ''Select One'' using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one instance of ''Select One'' using local.");
+end if;
+
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one2_ID == sel_one2.sel_one2_ID;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one instance of ''Select One'' using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one instance of ''Select One'' using base attribute.");
+end if;
+
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one_ID == colors::purple;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one related by ''Select One Two'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one relate dby ''Select One Two'' using identifier and literal.");
+end if;
+
+a_color = colors::purple;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one_ID == a_color;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one related by ''Select One Two'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one related by  ''Select One Two'' using identifier and local.");
+end if;
+
+select any sel_one1 from instances of SEL_ONE;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one_ID == sel_one1.sel_one_ID;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one related by ''Select One Two'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one related by ''Select One Two'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select any related by.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select any sel related by sel2->SEL[R1] where colors::green == selected.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' related by using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' related by using literal.");
+end if;
+
+a_color = colors::green;
+select any sel related by sel2->SEL[R1] where a_color == selected.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' related by using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' related by using local.");
+end if;
+
+select any sel related by sel2->SEL[R1] where sel2.sel2_ID == selected.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' related by using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' related by using base attribute.");
+end if;
+
+select any sel related by sel2->SEL[R1] where colors::yellow == selected.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any related by ''Select Two'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any related by ''Select Two'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select any sel related by sel2->SEL[R1] where a_color == selected.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any related by ''Select Two'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any related by ''Select Two'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select any sel related by sel2->SEL[R1] where sel1.sel_ID == selected.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any related by ''Select Two'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any related by ''Select Two'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select many related by.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select many sels related by sel2->SEL[R1] where selected.sel2_ID == colors::green;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' related by using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' related by using literal.");
+end if;
+
+a_color = colors::green;
+select many sels related by sel2->SEL[R1] where selected.sel2_ID == a_color;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' related by using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' related by using local.");
+end if;
+
+select many sels related by sel2->SEL[R1] where selected.sel2_ID == sel2.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected an instance of ''Select'' related by using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select an instance of ''Select'' related by using base attribute.");
+end if;
+
+select many sels related by sel2->SEL[R1] where colors::yellow == selected.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many related by ''Select Two'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many related by ''Select Two'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select many sels related by sel2->SEL[R1] where a_color == selected.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many related by ''Select Two'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many related by ''Select Two'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select many sels related by sel2->SEL[R1] where sel1.sel_ID == selected.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many related by ''Select Two'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many related by ''Select Two'' using identifier and base attribute.");
+end if;
+',
+	1,
+	'',
+	"b745758f-6447-4dec-a3bf-5e50cb157e5d");
+INSERT INTO O_NBATTR
+	VALUES ("43294f13-09a4-4aac-a280-cc196859106f",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7");
+INSERT INTO O_BATTR
+	VALUES ("43294f13-09a4-4aac-a280-cc196859106f",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7");
+INSERT INTO O_ATTR
+	VALUES ("43294f13-09a4-4aac-a280-cc196859106f",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7",
+	"00000000-0000-0000-0000-000000000000",
+	'cl_ID',
+	'',
+	'',
+	'cl_ID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("f39451fd-b557-432c-9aa5-46d2065768fa",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7",
+	'LOG::LogInfo(message:"In MDA compare_enums.");
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select any.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select any sel from instances of SEL where selected.sel2_ID == colors::green;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using literal.");
+end if;
+
+a_color = colors::green;
+select any sel from instances of SEL where selected.sel2_ID == a_color;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using local.");
+end if;
+
+select any sel2 from instances of SEL2;
+select any sel from instances of SEL where selected.sel2_ID == sel2.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using base attribute.");
+end if;
+
+select any sel from instances of SEL where selected.sel_ID == colors::yellow;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select any sel from instances of SEL where selected.sel_ID == a_color;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select any sel from instances of SEL where selected.sel_ID == sel1.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select many.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select many sels from instances of SEL where colors::green == selected.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instances of ''Select'' using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instances of ''Select'' using literal.");
+end if;
+
+a_color = colors::green;
+select many sels from instances of SEL where a_color == selected.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instances of ''Select'' using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using local.");
+end if;
+
+select many sels from instances of SEL where sel2.sel2_ID == selected.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instances of ''Select'' using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instances of ''Select'' using base attribute.");
+end if;
+
+select many sels from instances of SEL where selected.sel_ID == colors::yellow;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select many sels from instances of SEL where selected.sel_ID == a_color;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select many sels from instances of SEL where selected.sel_ID == sel1.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select one related by.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select any sel_one2 from instances of SEL_ONE2;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one2_ID == colors::blue;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one instance of ''Select One'' using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one instance of ''Select One'' using literal.");
+end if;
+
+a_color = colors::blue;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one2_ID == a_color;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one instance of ''Select One'' using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one instance of ''Select One'' using local.");
+end if;
+
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one2_ID == sel_one2.sel_one2_ID;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one instance of ''Select One'' using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one instance of ''Select One'' using base attribute.");
+end if;
+
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one_ID == colors::purple;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one related by ''Select One Two'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one relate dby ''Select One Two'' using identifier and literal.");
+end if;
+
+a_color = colors::purple;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one_ID == a_color;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one related by ''Select One Two'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one related by  ''Select One Two'' using identifier and local.");
+end if;
+
+select any sel_one1 from instances of SEL_ONE;
+select one sel_one related by sel_one2->SEL_ONE[R2] where selected.sel_one_ID == sel_one1.sel_one_ID;
+if ( not_empty sel_one )
+  LOG::LogSuccess(message:"Successfully selected one related by ''Select One Two'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select one related by ''Select One Two'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select any related by.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select any sel related by sel2->SEL[R1] where colors::green == selected.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' related by using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' related by using literal.");
+end if;
+
+a_color = colors::green;
+select any sel related by sel2->SEL[R1] where a_color == selected.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' related by using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' related by using local.");
+end if;
+
+select any sel related by sel2->SEL[R1] where sel2.sel2_ID == selected.sel2_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any instance of ''Select'' related by using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any instance of ''Select'' related by using base attribute.");
+end if;
+
+select any sel related by sel2->SEL[R1] where colors::yellow == selected.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any related by ''Select Two'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any related by ''Select Two'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select any sel related by sel2->SEL[R1] where a_color == selected.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any related by ''Select Two'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any related by ''Select Two'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select any sel related by sel2->SEL[R1] where sel1.sel_ID == selected.sel_ID;
+if ( not_empty sel )
+  LOG::LogSuccess(message:"Successfully selected any related by ''Select Two'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select any related by ''Select Two'' using identifier and base attribute.");
+end if;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Select many related by.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+select many sels related by sel2->SEL[R1] where selected.sel2_ID == colors::green;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' related by using literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' related by using literal.");
+end if;
+
+a_color = colors::green;
+select many sels related by sel2->SEL[R1] where selected.sel2_ID == a_color;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many instance of ''Select'' related by using local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many instance of ''Select'' related by using local.");
+end if;
+
+select many sels related by sel2->SEL[R1] where selected.sel2_ID == sel2.sel2_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected an instance of ''Select'' related by using base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select an instance of ''Select'' related by using base attribute.");
+end if;
+
+select many sels related by sel2->SEL[R1] where colors::yellow == selected.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many related by ''Select Two'' using identifier and literal.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many related by ''Select Two'' using identifier and literal.");
+end if;
+
+a_color = colors::yellow;
+select many sels related by sel2->SEL[R1] where a_color == selected.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many related by ''Select Two'' using identifier and local.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many related by ''Select Two'' using identifier and local.");
+end if;
+
+select any sel1 from instances of SEL;
+select many sels related by sel2->SEL[R1] where sel1.sel_ID == selected.sel_ID;
+if ( not_empty sels )
+  LOG::LogSuccess(message:"Successfully selected many related by ''Select Two'' using identifier and base attribute.");
+else
+  LOG::LogFailure(message:"Did NOT successfully select many related by ''Select Two'' using identifier and base attribute.");
+end if;
+
+self.compare_enums = 1;',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("f39451fd-b557-432c-9aa5-46d2065768fa",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7");
+INSERT INTO O_ATTR
+	VALUES ("f39451fd-b557-432c-9aa5-46d2065768fa",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7",
+	"43294f13-09a4-4aac-a280-cc196859106f",
+	'compare_enums',
+	'',
+	'',
+	'compare_enums',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("09505391-85af-4f57-ad68-95176fa9fd5a",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7");
+INSERT INTO O_BATTR
+	VALUES ("09505391-85af-4f57-ad68-95176fa9fd5a",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7");
+INSERT INTO O_ATTR
+	VALUES ("09505391-85af-4f57-ad68-95176fa9fd5a",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7",
+	"f39451fd-b557-432c-9aa5-46d2065768fa",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"eaf0f475-0192-4528-b75a-8b26112c28a7");
+INSERT INTO O_OIDA
+	VALUES ("43294f13-09a4-4aac-a280-cc196859106f",
+	"eaf0f475-0192-4528-b75a-8b26112c28a7",
+	0,
+	'cl_ID');
+INSERT INTO O_ID
+	VALUES (1,
+	"eaf0f475-0192-4528-b75a-8b26112c28a7");
+INSERT INTO O_ID
+	VALUES (2,
+	"eaf0f475-0192-4528-b75a-8b26112c28a7");
+INSERT INTO PE_PE
+	VALUES ("eaf0f475-0192-4528-b75a-8b26112c28a7",
+	1,
+	"7e54b53b-f491-4867-a10f-a03807433994",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("7e54b53b-f491-4867-a10f-a03807433994",
+	"00000000-0000-0000-0000-000000000000",
+	"68df64b2-99f2-4b7c-b709-3b39a6e9eb17",
+	'G_STE_select_where_enum',
+	'This subsystem contains the classes for initialization, run, and data for the test.',
+	1,
+	'../G_STE_select_where_enum.xtuml');

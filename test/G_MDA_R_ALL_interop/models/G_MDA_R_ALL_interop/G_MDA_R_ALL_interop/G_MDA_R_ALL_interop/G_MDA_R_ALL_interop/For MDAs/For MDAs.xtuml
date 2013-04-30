@@ -1,0 +1,205 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("cfdab1d5-9a81-4cb5-ad7d-34de51d15569",
+	'For MDAs',
+	4,
+	'FM',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("1a2f5e25-03c5-431a-ba29-6bb52e2d19dd",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569");
+INSERT INTO O_BATTR
+	VALUES ("1a2f5e25-03c5-431a-ba29-6bb52e2d19dd",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569");
+INSERT INTO O_ATTR
+	VALUES ("1a2f5e25-03c5-431a-ba29-6bb52e2d19dd",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569",
+	"00000000-0000-0000-0000-000000000000",
+	'mda_id',
+	'',
+	'',
+	'mda_id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("4edef5d8-23bb-482b-856e-f249b4de3ef3",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569",
+	'val_param = 0;
+val_param = EE::NoParam();
+if ( val_param != 0 )
+  LOG::LogSuccess( message:"Bridge wired to a function in another domain: NoParam" );
+else
+  LOG::LogFailure( message:"Bridge wired to a function in another domain: NoParam" );
+end if;
+starting_val = val_param;
+
+ref_param = EE::ByVal( val:val_param );
+if ( ref_param == val_param / 2 )
+  LOG::LogSuccess( message:"Bridge wired to a function in another domain: ByVal" );
+else
+  LOG::LogFailure( message:"Bridge wired to a function in another domain: ByVal" );
+end if;
+
+tmp = ref_param;
+val_param = EE::ByRef( ref:ref_param );
+if ( val_param == tmp / ref_param )
+  LOG::LogSuccess( message:"Bridge wired to a function in another domain: ByRef" );
+else
+  LOG::LogFailure( message:"Bridge wired to a function in another domain: ByRef" );
+end if;
+
+tmp = EE::Combo( ref:ref_param , val:val_param );
+if ((tmp == ref_param ) and ( tmp == starting_val ))
+  LOG::LogSuccess( message:"Bridge wired to a function in another domain: Combo" );
+else
+  LOG::LogFailure( message:"Bridge wired to a function in another domain: Combo" );
+end if;
+self.mda_BRG_FUN = 42;',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("4edef5d8-23bb-482b-856e-f249b4de3ef3",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569");
+INSERT INTO O_ATTR
+	VALUES ("4edef5d8-23bb-482b-856e-f249b4de3ef3",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569",
+	"1a2f5e25-03c5-431a-ba29-6bb52e2d19dd",
+	'mda_BRG_FUN',
+	'',
+	'',
+	'mda_BRG_FUN',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("101a3e10-b1b1-4190-9a3c-b1b0e964c8fb",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569",
+	'val_param = 0;
+val_param = AEE::NoParam();
+if ( val_param != 0 )
+  LOG::LogSuccess( message:"Bridge wired to realized code: NoParam" );
+else
+  LOG::LogFailure( message:"Bridge wired to realized code: NoParam" );
+end if;
+starting_val = val_param;
+
+ref_param = AEE::ByVal( val:val_param );
+if ( ref_param == val_param / 2 )
+  LOG::LogSuccess( message:"Bridge wired to realized code: ByVal" );
+else
+  LOG::LogFailure( message:"Bridge wired to realized code: ByVal" );
+end if;
+
+tmp = ref_param;
+val_param = AEE::ByRef( ref:ref_param );
+if ( val_param == tmp / ref_param )
+  LOG::LogSuccess( message:"Bridge wired to realized code: ByRef" );
+else
+  LOG::LogFailure( message:"Bridge wired to realized code: ByRef" );
+end if;
+
+tmp = AEE::Combo( ref:ref_param , val:val_param );
+if ((tmp == ref_param ) and ( tmp == starting_val ))
+  LOG::LogSuccess( message:"Bridge wired to realized code: Combo" );
+else
+  LOG::LogFailure( message:"Bridge wired to realized code: Combo" );
+end if;
+self.mda_BRG_REL = 42;',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("101a3e10-b1b1-4190-9a3c-b1b0e964c8fb",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569");
+INSERT INTO O_ATTR
+	VALUES ("101a3e10-b1b1-4190-9a3c-b1b0e964c8fb",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569",
+	"4edef5d8-23bb-482b-856e-f249b4de3ef3",
+	'mda_BRG_REL',
+	'',
+	'',
+	'mda_BRG_REL',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("ce750f3a-acb4-4b0d-a640-97c69711fe8f",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569",
+	'val_param = 0;
+val_param = FO::ClassNoParam();
+if ( val_param != 0 )
+  LOG::LogSuccess( message:"Class Operation NoParam" );
+else
+  LOG::LogFailure( message:"Class Operation NoParam" );
+end if;
+starting_val = val_param;
+
+ref_param = FO::ClassByVal( val:val_param );
+if ( ref_param == val_param / 2 )
+  LOG::LogSuccess( message:"Class Operation ByVal" );
+else
+  LOG::LogFailure( message:"Class Operation ByVal" );
+end if;
+
+tmp = ref_param;
+val_param = FO::ClassByRef( ref:ref_param );
+if ( val_param == tmp / ref_param )
+  LOG::LogSuccess( message:"Class Operation ByRef" );
+else
+  LOG::LogFailure( message:"Class Operation ByRef" );
+end if;
+
+tmp = FO::ClassCombo( ref:ref_param , val:val_param );
+if ((tmp == ref_param ) and ( tmp == starting_val ))
+  LOG::LogSuccess( message:"Class Operation Combo" );
+else
+  LOG::LogFailure( message:"Class Operation Combo" );
+end if;
+self.mda_COP = 42;',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("ce750f3a-acb4-4b0d-a640-97c69711fe8f",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569");
+INSERT INTO O_ATTR
+	VALUES ("ce750f3a-acb4-4b0d-a640-97c69711fe8f",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569",
+	"101a3e10-b1b1-4190-9a3c-b1b0e964c8fb",
+	'mda_COP',
+	'',
+	'',
+	'mda_COP',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569");
+INSERT INTO O_OIDA
+	VALUES ("1a2f5e25-03c5-431a-ba29-6bb52e2d19dd",
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569",
+	0,
+	'mda_id');
+INSERT INTO O_ID
+	VALUES (1,
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569");
+INSERT INTO O_ID
+	VALUES (2,
+	"cfdab1d5-9a81-4cb5-ad7d-34de51d15569");
+INSERT INTO PE_PE
+	VALUES ("cfdab1d5-9a81-4cb5-ad7d-34de51d15569",
+	1,
+	"e065040c-f1d2-46ad-af3b-acee7bc4f4cf",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("e065040c-f1d2-46ad-af3b-acee7bc4f4cf",
+	"00000000-0000-0000-0000-000000000000",
+	"c62ddae6-1679-47ba-bd30-5dc2f321972f",
+	'G_MDA_R_ALL_interop',
+	'Rename this subsystem to something appropriate for your purposes.',
+	1,
+	'../G_MDA_R_ALL_interop.xtuml');

@@ -1,0 +1,127 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("b55ed783-3faa-4358-9524-637a0d07a1ee",
+	"00000000-0000-0000-0000-000000000000",
+	"edd1ab60-152d-445f-9bf2-fb27ab58eb8e",
+	'pkg',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("fbea28f9-8b1c-4ddd-88c6-d95865427c44",
+	112,
+	"b55ed783-3faa-4358-9524-637a0d07a1ee",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	200,
+	150,
+	0,
+	'3.4.9',
+	'System::TestDriverComponent::pkg');
+INSERT INTO DIM_DIA
+	VALUES ("fbea28f9-8b1c-4ddd-88c6-d95865427c44",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("2134bb23-6c03-4017-a326-889c9ce6c467",
+	"00000000-0000-0000-0000-000000000000",
+	'sendOpWithoutReturn',
+	'',
+	'send Port1::Op1();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("2134bb23-6c03-4017-a326-889c9ce6c467",
+	1,
+	"b55ed783-3faa-4358-9524-637a0d07a1ee",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("bd11ca11-8749-451a-82fa-09fd878710fb",
+	"00000000-0000-0000-0000-000000000000",
+	'sendSignal',
+	'',
+	'send Port1::Sig1();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("bd11ca11-8749-451a-82fa-09fd878710fb",
+	1,
+	"b55ed783-3faa-4358-9524-637a0d07a1ee",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("8b89f101-12ca-44fa-b0b2-474515853269",
+	"00000000-0000-0000-0000-000000000000",
+	'sendOpWithReturn',
+	'',
+	'returnValue =  Port2::Op3(); 
+if returnValue == "true"
+  LOG::LogSuccess(message:"Correct return value from message");
+else 
+  LOG::LogFailure(message:"Wrong return value from message");
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("8b89f101-12ca-44fa-b0b2-474515853269",
+	1,
+	"b55ed783-3faa-4358-9524-637a0d07a1ee",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("3df7468b-34d9-423f-b527-65cc6812c7c9",
+	"00000000-0000-0000-0000-000000000000",
+	'longdelegationWithReturn',
+	'',
+	'returnValue = Port3::Op3();
+if (returnValue == "true")
+   LOG::LogSuccess(message:"Correct return value from delegated message");
+else 
+   LOG::LogFailure(message:"Return value is not correct from delegated message");
+end if; ',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("3df7468b-34d9-423f-b527-65cc6812c7c9",
+	1,
+	"b55ed783-3faa-4358-9524-637a0d07a1ee",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("b55ed783-3faa-4358-9524-637a0d07a1ee",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"dc9b2b5e-ff01-49ad-87d4-80f50534be8e",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("dc9b2b5e-ff01-49ad-87d4-80f50534be8e",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'TestDriverComponent',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../TestDriverComponent.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("edd1ab60-152d-445f-9bf2-fb27ab58eb8e",
+	'Delegation',
+	1,
+	'../../../Delegation.xtuml');

@@ -1,0 +1,605 @@
+-- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("4eabfc11-3631-4941-b651-a3b002795315",
+	'CheckMultiArrays',
+	5,
+	'CHKM',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("de19781b-2975-4abf-affe-b9c33215cf3c",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	'checkDataOpByRefM',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'// Read array data
+if ( param.data[0][0] == "myData_0_0" )
+  LOG::LogSuccess( message: "Successful read of multi-dim array element in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of multi-dim array element in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( "myData_0_1" == param.data[0][1] )
+  LOG::LogSuccess( message: "Successful read of multi-dim array element in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of multi-dim array element in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data[1][0] == "myData_1_0" )
+  LOG::LogSuccess( message: "Successful read of multi-dim array element in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of multi-dim array element in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data[1][1] == "myData_1_1" )
+  LOG::LogSuccess( message: "Successful read of multi-dim array element in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of multi-dim array element in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+
+
+// Make calls with class attribute
+rvalDataEE = OW::checkDataEEByRefM( data: self.myData );
+rvalDataDF = ::checkDataDFByRefM( data: self.myData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with parameter data
+rvalDataEE = OW::checkDataEEByRefM( data: param.data );
+rvalDataDF = ::checkDataDFByRefM( data: param.data );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with temporary
+localData = param.data;
+rvalDataEE = OW::checkDataEEByRefM( data: localData );
+rvalDataDF = ::checkDataDFByRefM( data: localData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-ref class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-ref class operation." );
+  ::failedChecksTest();
+end if;
+
+// Do some array syntax tests.  These are meaningless to the flow of the app.
+select any p1 from instances of CHKM where selected.myData == rvalDataEE;
+select any p2 from instances of CHKM where rvalDataEE == selected.myData;
+
+return localData;
+',
+	1,
+	'[][]',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("d1bcadd9-94d8-464c-adc6-ffec91fe9b3b",
+	"de19781b-2975-4abf-affe-b9c33215cf3c",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'[][]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"d1bcadd9-94d8-464c-adc6-ffec91fe9b3b",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"8c078905-87db-42b6-89b9-6ea189977d3a",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"d1bcadd9-94d8-464c-adc6-ffec91fe9b3b",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"ff8b2548-91e5-4f04-b2ee-26c8d3dd3bd1",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"de19781b-2975-4abf-affe-b9c33215cf3c",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"7d45e57b-9ec8-441b-8b70-6a8c87b71646",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"de19781b-2975-4abf-affe-b9c33215cf3c",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"6e9c3960-3087-4591-9c5f-c33f1210eb0f",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("0dac611d-4ef0-42ee-89a0-eee1ab491a13",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	'checkDataOpByValM',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'// Read array data
+if ( param.data[0][0] == "myData_0_0" )
+  LOG::LogSuccess( message: "Successful read of multi-dim array element in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of multi-dim array element in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data[0][1] == "myData_0_1" )
+  LOG::LogSuccess( message: "Successful read of multi-dim array element in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of multi-dim array element in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data[1][0] == "myData_1_0" )
+  LOG::LogSuccess( message: "Successful read of multi-dim array element in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of multi-dim array element in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( param.data[1][1] == "myData_1_1" )
+  LOG::LogSuccess( message: "Successful read of multi-dim array element in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful read of multi-dim array element in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+
+
+// Make calls with class attribute
+rvalDataEE = OW::checkDataEEByValM( data: self.myData );
+rvalDataDF = ::checkDataDFByValM( data: self.myData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with parameter data
+rvalDataEE = OW::checkDataEEByValM( data: param.data );
+rvalDataDF = ::checkDataDFByValM( data: param.data );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+
+// Make calls with temporary
+localData = param.data;
+rvalDataEE = OW::checkDataEEByValM( data: localData );
+rvalDataDF = ::checkDataDFByValM( data: localData );
+
+// Check the return value data
+if ( rvalDataEE == self.myData )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+if ( rvalDataDF == rvalDataEE )
+  LOG::LogSuccess( message: "Successful check of multi-dim array element return value in pass-by-val class operation." );
+else
+  LOG::LogFailure( message: "Unsuccessful check of multi-dim array element return value in pass-by-val class operation." );
+  ::failedChecksTest();
+end if;
+
+// Do some array syntax tests.  These are meaningless to the flow of the app.
+select any p1 from instances of CHKM where selected.myData == rvalDataEE;
+select any p2 from instances of CHKM where rvalDataEE == selected.myData;
+
+return localData;
+',
+	1,
+	'[][]',
+	"de19781b-2975-4abf-affe-b9c33215cf3c");
+INSERT INTO O_TPARM
+	VALUES ("3f1911f2-f6a0-4903-818b-1e8207bdb09d",
+	"0dac611d-4ef0-42ee-89a0-eee1ab491a13",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'[][]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"3f1911f2-f6a0-4903-818b-1e8207bdb09d",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"df9d60e1-5bfe-441c-877c-1aa095a5ff0f",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"3f1911f2-f6a0-4903-818b-1e8207bdb09d",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"904c95db-7200-42fb-80a7-55ddc5cd1b6d",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"0dac611d-4ef0-42ee-89a0-eee1ab491a13",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"7b4969c2-c91b-477a-9f68-367f0f5dc6d9",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"0dac611d-4ef0-42ee-89a0-eee1ab491a13",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"8de5c140-06eb-4035-980d-fc789b3880b9",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("ee3dea1c-dba7-4d2f-8570-5fb0c8e18578",
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO O_BATTR
+	VALUES ("ee3dea1c-dba7-4d2f-8570-5fb0c8e18578",
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	"ee3dea1c-dba7-4d2f-8570-5fb0c8e18578",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"0e66a395-e49d-417d-80a9-ec384d356cdf",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	"ee3dea1c-dba7-4d2f-8570-5fb0c8e18578",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"f66082c6-4063-483c-946e-1309b41f717f",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("ee3dea1c-dba7-4d2f-8570-5fb0c8e18578",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	"00000000-0000-0000-0000-000000000000",
+	'myData',
+	'',
+	'',
+	'myData',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'[][]',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("28be6d7c-aeb6-4e2b-ae10-3b5585056133",
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO O_BATTR
+	VALUES ("28be6d7c-aeb6-4e2b-ae10-3b5585056133",
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	"28be6d7c-aeb6-4e2b-ae10-3b5585056133",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"9be9b15c-4124-4142-a6dd-8fa4e6fce199",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	"28be6d7c-aeb6-4e2b-ae10-3b5585056133",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"ba811e86-416b-4727-9f91-3bc7f5a664e1",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("28be6d7c-aeb6-4e2b-ae10-3b5585056133",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	"ee3dea1c-dba7-4d2f-8570-5fb0c8e18578",
+	'myData2',
+	'',
+	'',
+	'myData2',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'[][]',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("a5136aeb-38a6-4422-8d01-3d0370f7b56a",
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO O_BATTR
+	VALUES ("a5136aeb-38a6-4422-8d01-3d0370f7b56a",
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO O_ATTR
+	VALUES ("a5136aeb-38a6-4422-8d01-3d0370f7b56a",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	"28be6d7c-aeb6-4e2b-ae10-3b5585056133",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("8a214b4d-bb58-4135-bff0-546656af5a8a",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	'self.mdaR1 = self.numbers[0][1] * 1;
+',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("8a214b4d-bb58-4135-bff0-546656af5a8a",
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO O_ATTR
+	VALUES ("8a214b4d-bb58-4135-bff0-546656af5a8a",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	"a5136aeb-38a6-4422-8d01-3d0370f7b56a",
+	'mdaR1',
+	'',
+	'',
+	'mdaR1',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("b49167cf-5faf-449b-bd18-3f6203f10ad8",
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO O_BATTR
+	VALUES ("b49167cf-5faf-449b-bd18-3f6203f10ad8",
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	"b49167cf-5faf-449b-bd18-3f6203f10ad8",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"672bdd0f-7dfa-4a61-8608-91dfebfa1b58",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	"b49167cf-5faf-449b-bd18-3f6203f10ad8",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"31fbf7a6-41ad-4963-a5c0-2ef8676ffa56",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("b49167cf-5faf-449b-bd18-3f6203f10ad8",
+	"4eabfc11-3631-4941-b651-a3b002795315",
+	"8a214b4d-bb58-4135-bff0-546656af5a8a",
+	'numbers',
+	'',
+	'',
+	'numbers',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'[][]',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO O_ID
+	VALUES (1,
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO O_ID
+	VALUES (2,
+	"4eabfc11-3631-4941-b651-a3b002795315");
+INSERT INTO PE_PE
+	VALUES ("4eabfc11-3631-4941-b651-a3b002795315",
+	1,
+	"76a64433-42d8-4437-9642-2901e1d177ce",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("76a64433-42d8-4437-9642-2901e1d177ce",
+	"00000000-0000-0000-0000-000000000000",
+	"d44b6837-1053-4e93-a92b-63147bc38ed4",
+	'Test',
+	'',
+	0,
+	'../Test.xtuml');
