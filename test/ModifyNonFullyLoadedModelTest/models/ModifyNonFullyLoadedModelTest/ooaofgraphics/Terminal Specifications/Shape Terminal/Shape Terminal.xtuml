@@ -1,0 +1,202 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	'Shape Terminal',
+	204,
+	'TS_SHT',
+	'Instances of this class represent cases where a connector
+can start or end on a shape.
+
+Instances of this class are instantiated at startup from a
+pre-existing instance specification.
+---------------------------------------------------------------------------
+
+PEI:true
+Persistent:false',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("3264bfed-0d60-450e-b9d7-c05e9b19f7f3",
+	"9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	'criteriaMet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select one model related by self->TS_TSP[R201]->GD_MD[R207];
+if (not_empty model)
+  select one diagram related by model->DIM_DIA[R18];
+  unScaledX = GR::unScale(value:param.x - diagram.viewportX);
+  unScaledY = GR::unScale(value:param.y - diagram.viewportY);
+  select many shapeElems related by model->GD_GE[R1]->GD_SHP[R2]->GD_GE[R2];
+  select one esTarget related by self->TS_SSP[R204]->GD_ES[R200];
+  for each elem in shapeElems
+    select one es related by elem->GD_ES[R10];
+    if (es == esTarget)
+      if (elem.isOver(x:unScaledX, y:unScaledY))
+        select one tsp related by self->TS_TSP[R201];
+        relate tsp to elem across R206;
+        tsp.satisfied = true;
+        return true;
+      end if;
+    end if;
+  end for;
+end if;
+return false;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("15da25c6-b12c-4f2f-a2b6-d502c9cef1cc",
+	"3264bfed-0d60-450e-b9d7-c05e9b19f7f3",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("62dc9630-43cd-4a3f-8701-2371faa3e414",
+	"3264bfed-0d60-450e-b9d7-c05e9b19f7f3",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"15da25c6-b12c-4f2f-a2b6-d502c9cef1cc",
+	'');
+INSERT INTO O_REF
+	VALUES ("9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	0,
+	"fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"bd7e13b3-57f2-4c77-805d-48c16d9e6e30",
+	"01ef6f34-2297-4b7d-b5d3-c18ee6c65307",
+	"5ecc19cc-7933-4cbe-8224-e4ab940fb0c4",
+	"5f9207cc-f1bd-41c2-ab0a-eb909b600726",
+	"0365ca10-3e0f-4b05-b801-35adbda8bed2",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Terminal Specification',
+	'Term_Spec_ID',
+	'R201');
+INSERT INTO R_RGO_PROXY
+	VALUES ("9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	"bd7e13b3-57f2-4c77-805d-48c16d9e6e30",
+	"01ef6f34-2297-4b7d-b5d3-c18ee6c65307",
+	'../Terminal Specifications.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	0,
+	"bd7e13b3-57f2-4c77-805d-48c16d9e6e30",
+	"5ecc19cc-7933-4cbe-8224-e4ab940fb0c4",
+	'../Terminal Specifications.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("5f9207cc-f1bd-41c2-ab0a-eb909b600726",
+	"9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	"fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	1,
+	'Term_Spec_ID');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	'../Terminal Specification/Terminal Specification.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("5f9207cc-f1bd-41c2-ab0a-eb909b600726",
+	"9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	"00000000-0000-0000-0000-000000000000",
+	'Term_Spec_ID',
+	'',
+	'',
+	'Term_Spec_ID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	"94095a0a-14d9-4dec-938e-3d2f23ed5447",
+	0,
+	"af32472d-144c-47d2-a974-33a6f93a6c39",
+	"172e1178-fae1-4241-bfab-66ce39abb1c5",
+	"91f6903e-4558-47e3-b9c4-17cfe798e1a9",
+	"918e4583-2b7c-4749-b128-0d0292f59211",
+	"97097fe2-b21f-4da8-8bc0-81d97c9a855a",
+	"5aa24327-059d-4dec-ba0d-7bc86a83cddf",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Shape Specification',
+	'OOA_Type',
+	'R204');
+INSERT INTO R_RGO_PROXY
+	VALUES ("9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	"172e1178-fae1-4241-bfab-66ce39abb1c5",
+	"91f6903e-4558-47e3-b9c4-17cfe798e1a9",
+	'../Terminal Specifications.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("af32472d-144c-47d2-a974-33a6f93a6c39",
+	"94095a0a-14d9-4dec-938e-3d2f23ed5447",
+	0,
+	"172e1178-fae1-4241-bfab-66ce39abb1c5",
+	"918e4583-2b7c-4749-b128-0d0292f59211",
+	'../Terminal Specifications.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("97097fe2-b21f-4da8-8bc0-81d97c9a855a",
+	"9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	"31ca5789-18a8-481b-a2d8-2f81f155b17e",
+	"0f68fc0c-7577-4260-8e10-9e0c9fa053ee",
+	1,
+	'OOA_Type');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("31ca5789-18a8-481b-a2d8-2f81f155b17e",
+	"0f68fc0c-7577-4260-8e10-9e0c9fa053ee",
+	'../../Graphical Data/Element Specification/Element Specification.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("97097fe2-b21f-4da8-8bc0-81d97c9a855a",
+	"9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	"5f9207cc-f1bd-41c2-ab0a-eb909b600726",
+	'OOA_Type',
+	'',
+	'',
+	'OOA_Type',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"9242eee5-15aa-4feb-ab13-53063a1ddb2d");
+INSERT INTO O_OIDA
+	VALUES ("5f9207cc-f1bd-41c2-ab0a-eb909b600726",
+	"9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	0,
+	'Term_Spec_ID');
+INSERT INTO O_ID
+	VALUES (1,
+	"9242eee5-15aa-4feb-ab13-53063a1ddb2d");
+INSERT INTO O_ID
+	VALUES (2,
+	"9242eee5-15aa-4feb-ab13-53063a1ddb2d");
+INSERT INTO PE_PE
+	VALUES ("9242eee5-15aa-4feb-ab13-53063a1ddb2d",
+	1,
+	"c2b036aa-e960-4115-836d-415687925a0d",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("c2b036aa-e960-4115-836d-415687925a0d",
+	"00000000-0000-0000-0000-000000000000",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'Terminal Specifications',
+	'The TS (Terminal Specification) subsystem models specification classes that
+define the legal ending points for BridgePoint connector symbols.
+-------------------------------------------------------
+// This is used by schema_gen to ignore this subsystem (for publication)
+TRANSLATE_FOR_EXTERNAL_USE:FALSE
+Notify_Changes:false
+
+',
+	0,
+	'../Terminal Specifications.xtuml');

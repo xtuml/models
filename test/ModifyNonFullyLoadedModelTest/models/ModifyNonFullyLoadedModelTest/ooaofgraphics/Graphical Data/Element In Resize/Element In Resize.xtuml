@@ -1,0 +1,289 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("42134166-2299-4fe6-b3a1-da607e863322",
+	'Element In Resize',
+	10,
+	'GD_EIR',
+	'One instance of this class exists during the time a graphical element
+is being resized. Both Shapes and connectors can be resized. In the
+case of a connector, resizing can occur on any of the text blocks
+associated with it.
+
+---------------------------------------------------------------------------------
+Persistent:false
+TRANSLATE_FOR_EXTERNAL_USE:FALSE
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("997ae99c-8f99-44d2-ae32-a5379c872406",
+	"42134166-2299-4fe6-b3a1-da607e863322",
+	'initialize',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one symbol related by self->GD_GE[R12];
+self.Vertex = symbol.getVertexUnder(x:GR::getAbsoluteXPosition(),
+                                                                  y:GR::getAbsoluteYPosition());
+self.End = symbol.getEndUnder(x:GR::getAbsoluteXPosition(),
+                                                        y:GR::getAbsoluteYPosition());
+',
+	1,
+	'',
+	"46cd383e-0c96-4242-8886-b71367b99ba6");
+INSERT INTO O_TFR
+	VALUES ("46cd383e-0c96-4242-8886-b71367b99ba6",
+	"42134166-2299-4fe6-b3a1-da607e863322",
+	'finish',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'if ( self.End == End::Floating )
+  // Floating text boxes belong to Shapes
+  select one shp_elem related by self->GD_GE[R12];
+  select one con_text related by shp_elem->GD_SHP[R2]->GD_CTXT[R27];
+  if ( not_empty con_text )
+    text = CL::getCompartmentText(from:shp_elem.represents, 
+        compartment_id: 0, entry_id: 0, at: Justification::Floating); 
+    con_text.resizeToText(text: text);           
+  end if;
+else
+  select one con related by self->GD_GE[R12]->GD_CON[R2];
+
+  if (not_empty con)
+    //
+    // If we were resizing a connector text box, we Need to
+    // resize it to reflect the size of the text as it is laid out.
+    //
+    select one con_elem related by con->GD_GE[R2];
+    elemOOA_ID = con_elem.OOA_ID;
+    elemOOA_Type =OOAType::None;
+    select any con_text related by con->GD_CTXT[R8] where selected.end == self.End;
+    select one node related by con_text->DIM_ND[R19];
+    if (self.End == End::Start)
+      select one start_elem related by con->DIM_ED[R20]->DIM_CON[R320]->DIM_GE[R311]->GD_GE[R23];
+      if (not_empty start_elem)
+        elemOOA_ID = start_elem.OOA_ID;
+        elemOOA_Type = start_elem.OOA_Type;
+      end if;
+    elif (self.End == End::End)
+      select one end_elem related by con->DIM_ED[R20]->DIM_CON[R321]->DIM_GE[R311]->GD_GE[R23];
+      if (not_empty end_elem)
+        elemOOA_ID = end_elem.OOA_ID;
+        elemOOA_Type = end_elem.OOA_Type;
+      end if;
+    end if;
+    //
+    // Get the text . . . .
+    //
+    text = CL::getConnectorText(from:con_elem.represents, end_OOA_ID:elemOOA_ID,
+                                                end_OOA_IsImportedClass:elemOOA_Type == OOAType::ImportedClass,
+                                                at:self.End);
+    con_text.resizeToText(text: text);
+  end if;
+end if;
+',
+	1,
+	'',
+	"5c254ad7-4def-44e8-a671-7c7b1af35c7f");
+INSERT INTO O_TFR
+	VALUES ("5c254ad7-4def-44e8-a671-7c7b1af35c7f",
+	"42134166-2299-4fe6-b3a1-da607e863322",
+	'dispose',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one model related by self->GD_MD[R12];
+select one ge related by self->GD_GE[R12];
+unrelate ge from model across R12 using self;
+delete object instance self;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("8a90ea91-2486-423f-adc0-2c39f8d12217",
+	"42134166-2299-4fe6-b3a1-da607e863322");
+INSERT INTO O_BATTR
+	VALUES ("8a90ea91-2486-423f-adc0-2c39f8d12217",
+	"42134166-2299-4fe6-b3a1-da607e863322");
+INSERT INTO O_ATTR
+	VALUES ("8a90ea91-2486-423f-adc0-2c39f8d12217",
+	"42134166-2299-4fe6-b3a1-da607e863322",
+	"43b7f9fe-ec03-45b0-bd9d-5e05d5523edc",
+	'Vertex',
+	'This attribute captures which of the four possible corners of
+an element is being moved by the user; North East, North West,
+South East or South West.',
+	'',
+	'Vertex',
+	0,
+	"d7a74195-e424-45a0-8c77-869b0a8a80ba",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d7a74195-e424-45a0-8c77-869b0a8a80ba",
+	"00000000-0000-0000-0000-000000000000",
+	'Vertex',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("ac2dcfc1-bab2-4196-b755-43a3cab156d0",
+	"42134166-2299-4fe6-b3a1-da607e863322");
+INSERT INTO O_BATTR
+	VALUES ("ac2dcfc1-bab2-4196-b755-43a3cab156d0",
+	"42134166-2299-4fe6-b3a1-da607e863322");
+INSERT INTO O_ATTR
+	VALUES ("ac2dcfc1-bab2-4196-b755-43a3cab156d0",
+	"42134166-2299-4fe6-b3a1-da607e863322",
+	"8a90ea91-2486-423f-adc0-2c39f8d12217",
+	'End',
+	'This attribute captures which of the text blocks of a connector is
+being resized; Start, Middle or End. In the case where a Shape is
+being resized, this attribute value is "None".',
+	'',
+	'End',
+	0,
+	"3a766804-bd88-47ef-abe7-d9ca7c1576f2",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("3a766804-bd88-47ef-abe7-d9ca7c1576f2",
+	"00000000-0000-0000-0000-000000000000",
+	'End',
+	'Translate:false',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_REF
+	VALUES ("42134166-2299-4fe6-b3a1-da607e863322",
+	"7203cd95-2fe7-42df-ba99-41b43e8968c9",
+	0,
+	"91b6c76c-69e4-485b-b26a-58b346c17ffb",
+	"4ceddf27-c272-4222-ad8f-9962caa5ebd4",
+	"3d84c55c-4ea3-403e-b2c1-939a4a74f886",
+	"1d5cb578-3c4a-49f9-afe2-ff80ae813cfa",
+	"5071ecea-e764-45e0-ad6b-753bbf2212cc",
+	"221138a9-81be-407c-9d7e-c7118bcd6798",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Graphical Element',
+	'elementId',
+	'R12');
+INSERT INTO R_RGO_PROXY
+	VALUES ("42134166-2299-4fe6-b3a1-da607e863322",
+	"4ceddf27-c272-4222-ad8f-9962caa5ebd4",
+	"3d84c55c-4ea3-403e-b2c1-939a4a74f886",
+	'../Graphical Data.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("91b6c76c-69e4-485b-b26a-58b346c17ffb",
+	"7203cd95-2fe7-42df-ba99-41b43e8968c9",
+	0,
+	"4ceddf27-c272-4222-ad8f-9962caa5ebd4",
+	"1d5cb578-3c4a-49f9-afe2-ff80ae813cfa",
+	'../Graphical Data.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("5071ecea-e764-45e0-ad6b-753bbf2212cc",
+	"42134166-2299-4fe6-b3a1-da607e863322",
+	"9b69bfa9-07b2-458c-8dd7-442d13942cd0",
+	"0a762924-8165-4d5f-bcb2-bc29265b5505",
+	1,
+	'elementId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("9b69bfa9-07b2-458c-8dd7-442d13942cd0",
+	"0a762924-8165-4d5f-bcb2-bc29265b5505",
+	'../../UML 2.0 Diagram Interchange/DiagramElement/DiagramElement.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("5071ecea-e764-45e0-ad6b-753bbf2212cc",
+	"42134166-2299-4fe6-b3a1-da607e863322",
+	"ac2dcfc1-bab2-4196-b755-43a3cab156d0",
+	'elementId',
+	'',
+	'',
+	'elementId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("42134166-2299-4fe6-b3a1-da607e863322",
+	"07c25b68-fe92-4d3a-841f-64424566c4ea",
+	0,
+	"0554b4f3-4a0b-4749-8289-98731f1fdc15",
+	"4ceddf27-c272-4222-ad8f-9962caa5ebd4",
+	"3d84c55c-4ea3-403e-b2c1-939a4a74f886",
+	"80f65fb7-f10e-4897-875d-71b838212de1",
+	"43b7f9fe-ec03-45b0-bd9d-5e05d5523edc",
+	"81702192-9653-4539-814b-abe105863f94",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Model',
+	'diagramId',
+	'R12');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("0554b4f3-4a0b-4749-8289-98731f1fdc15",
+	"07c25b68-fe92-4d3a-841f-64424566c4ea",
+	0,
+	"4ceddf27-c272-4222-ad8f-9962caa5ebd4",
+	"80f65fb7-f10e-4897-875d-71b838212de1",
+	'../Graphical Data.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("43b7f9fe-ec03-45b0-bd9d-5e05d5523edc",
+	"42134166-2299-4fe6-b3a1-da607e863322",
+	"9edd1bb2-c129-40a1-a7fc-78cf864a4509",
+	"734442d4-2bef-417a-92c5-0ea747247bc8",
+	1,
+	'diagramId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("9edd1bb2-c129-40a1-a7fc-78cf864a4509",
+	"734442d4-2bef-417a-92c5-0ea747247bc8",
+	'../../UML 2.0 Diagram Interchange/Diagram/Diagram.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("43b7f9fe-ec03-45b0-bd9d-5e05d5523edc",
+	"42134166-2299-4fe6-b3a1-da607e863322",
+	"00000000-0000-0000-0000-000000000000",
+	'diagramId',
+	'',
+	'',
+	'diagramId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"42134166-2299-4fe6-b3a1-da607e863322");
+INSERT INTO O_OIDA
+	VALUES ("5071ecea-e764-45e0-ad6b-753bbf2212cc",
+	"42134166-2299-4fe6-b3a1-da607e863322",
+	0,
+	'elementId');
+INSERT INTO O_OIDA
+	VALUES ("43b7f9fe-ec03-45b0-bd9d-5e05d5523edc",
+	"42134166-2299-4fe6-b3a1-da607e863322",
+	0,
+	'diagramId');
+INSERT INTO O_ID
+	VALUES (1,
+	"42134166-2299-4fe6-b3a1-da607e863322");
+INSERT INTO O_ID
+	VALUES (2,
+	"42134166-2299-4fe6-b3a1-da607e863322");
+INSERT INTO PE_PE
+	VALUES ("42134166-2299-4fe6-b3a1-da607e863322",
+	1,
+	"b87cfa9b-48ba-41f2-adf1-00890c52b7a2",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("b87cfa9b-48ba-41f2-adf1-00890c52b7a2",
+	"00000000-0000-0000-0000-000000000000",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'Graphical Data',
+	'The GD (Graphics Domain) subsystem models the graphical elements for a BridgePoint model.
+-------------------------------------------------------
+Import:org.eclipse.swt.graphics.Color
+Notify_Changes:true',
+	0,
+	'../Graphical Data.xtuml');

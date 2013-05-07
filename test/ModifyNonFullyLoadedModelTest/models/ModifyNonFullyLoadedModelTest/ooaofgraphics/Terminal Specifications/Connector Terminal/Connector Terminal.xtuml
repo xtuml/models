@@ -1,0 +1,292 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	'Connector Terminal',
+	205,
+	'TS_CNT',
+	'Instances of this class represent cases where a valid
+start or end point for a connector is another connector.
+
+Instances of this class are instantiated at startup from a
+pre-existing instance specification.
+---------------------------------------------------------------------------
+
+PEI:true
+Persistent:false',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("85eb45e3-f543-4a3d-abc2-d5b37859ef41",
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	'criteriaMet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select any elem from instances of GD_GE;
+select one model related by self->TS_TSP[R201]->GD_MD[R207];
+if (not_empty model)
+  criteriaMet = false;
+  select one diagram related by model->DIM_DIA[R18];
+  unScaledX = GR::unScale(value:param.x1 - diagram.viewportX);
+  unScaledY = GR::unScale(value:param.y1 - diagram.viewportY);
+  unScaledX2 = GR::unScale(value:param.x2 - diagram.viewportX);
+  unScaledY2 = GR::unScale(value:param.y2 - diagram.viewportY);
+  select many conElems related by model->GD_GE[R1]->GD_CON[R2]->GD_GE[R2];
+  select one esTarget related by self->TS_CSP[R205]->GD_ES[R200];
+  closestDistance = -1;
+  for each elem in conElems
+    select one es related by elem->GD_ES[R10];
+    if (es == esTarget)
+      select one conElem related by elem->GD_CON[R2];
+      if (param.x2 != 0 and param.y2 != 0)
+        // We have a segment to evaluate, test for both isOver and intersects conditions . . .
+        select one tsp related by self->TS_TSP[R201];
+        if (conElem.isOver(x:unScaledX, y:unScaledY))
+          relate tsp to elem across R206;
+          criteriaMet = true;
+          break;
+        else
+          // if the start of the given segment is over the current
+          // connector do not test for an intersect as the end is
+          // in whitespace which is to be allowed for recursive connectors
+          if(not conElem.isOver(x:unScaledX2, y:unScaledY2))
+            xIntersect = conElem.getIntersect(x1:param.x2, y1:param.y2, x2:param.x1, y2:param.y1, axis:Axis::X, testInfinite:false);
+            yIntersect = conElem.getIntersect(x1:param.x2, y1:param.y2, x2:param.x1, y2:param.y1, axis:Axis::Y, testInfinite:false);
+            distance = ::getDistance(x1:param.x1, y1:param.y1, x2:xIntersect, y2:yIntersect);
+            // store the distance from then end of the segment
+            // being tested and the intersection point so
+            // that the destination connector is the one with
+            // the closest intersect
+            if(distance < closestDistance) or (closestDistance == -1)
+              if(xIntersect != 0 and yIntersect != 0)
+                relate tsp to elem across R206;
+                criteriaMet = true;
+                closestDistance = distance;
+              end if;
+            end if;
+          end if;
+        end if;
+      else
+        // We do not yet have a segment to evaluate, test only for isOver . . . 
+        if (conElem.isOver(x:unScaledX, y:unScaledY))
+          select one tsp related by self->TS_TSP[R201];
+          relate tsp to elem across R206;
+          criteriaMet = true;
+          break;
+        end if;
+      end if;
+    end if;
+  end for;
+  if (criteriaMet)
+    select one tsp related by self->TS_TSP[R201];
+    tsp.satisfied = true;
+    return true;
+  end if;
+end if;
+return false;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("b0935b57-b776-4082-9190-c65a9844f16c",
+	"85eb45e3-f543-4a3d-abc2-d5b37859ef41",
+	'x1',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("8155d737-e312-4ff7-9073-75fd2f2539ad",
+	"85eb45e3-f543-4a3d-abc2-d5b37859ef41",
+	'y1',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"48e33b2d-3485-41db-9861-000d78dbc658",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("48e33b2d-3485-41db-9861-000d78dbc658",
+	"85eb45e3-f543-4a3d-abc2-d5b37859ef41",
+	'x2',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"b0935b57-b776-4082-9190-c65a9844f16c",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("f7dc9b01-29f0-447c-b320-ba17e2ccb2a2",
+	"85eb45e3-f543-4a3d-abc2-d5b37859ef41",
+	'y2',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"8155d737-e312-4ff7-9073-75fd2f2539ad",
+	'');
+INSERT INTO O_REF
+	VALUES ("fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	0,
+	"fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"bd7e13b3-57f2-4c77-805d-48c16d9e6e30",
+	"13863568-30d4-44db-ad1e-fe42b4cc9f93",
+	"5ecc19cc-7933-4cbe-8224-e4ab940fb0c4",
+	"c093e8db-899c-4c72-9781-dcecd83e0dec",
+	"f5592fbf-da8c-43ae-b4d4-b1ee11ace573",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Terminal Specification',
+	'Term_Spec_ID',
+	'R201');
+INSERT INTO R_RGO_PROXY
+	VALUES ("fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	"bd7e13b3-57f2-4c77-805d-48c16d9e6e30",
+	"13863568-30d4-44db-ad1e-fe42b4cc9f93",
+	'../Terminal Specifications.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	0,
+	"bd7e13b3-57f2-4c77-805d-48c16d9e6e30",
+	"5ecc19cc-7933-4cbe-8224-e4ab940fb0c4",
+	'../Terminal Specifications.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("c093e8db-899c-4c72-9781-dcecd83e0dec",
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	"fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	1,
+	'Term_Spec_ID');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	'../Terminal Specification/Terminal Specification.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("c093e8db-899c-4c72-9781-dcecd83e0dec",
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	"00000000-0000-0000-0000-000000000000",
+	'Term_Spec_ID',
+	'',
+	'',
+	'Term_Spec_ID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("4eb4ad82-538c-4a9a-931e-4ab21e9b874d",
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225");
+INSERT INTO O_BATTR
+	VALUES ("4eb4ad82-538c-4a9a-931e-4ab21e9b874d",
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225");
+INSERT INTO O_ATTR
+	VALUES ("4eb4ad82-538c-4a9a-931e-4ab21e9b874d",
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	"c093e8db-899c-4c72-9781-dcecd83e0dec",
+	'terminatesAt',
+	'A connector can terminate at the start of a target
+connector, at its end or anywhere along it. This attribute
+captures the connection point.
+
+---------------------------------------------------------------------------
+',
+	'',
+	'terminatesAt',
+	0,
+	"3a766804-bd88-47ef-abe7-d9ca7c1576f2",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("3a766804-bd88-47ef-abe7-d9ca7c1576f2",
+	"00000000-0000-0000-0000-000000000000",
+	'End',
+	'Translate:false',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_REF
+	VALUES ("fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	"689d6225-0dc2-44ce-8739-be3ef50c90d9",
+	0,
+	"4ba93a53-c8be-455b-af12-cb6c7e9af181",
+	"96ee655c-a43d-482e-a400-0a9d71442eb3",
+	"4cdb89f5-f1a7-474e-9cc7-4c3fb8afd1ca",
+	"cfb46e92-7f1e-4288-a69f-68a2cd8f7ea9",
+	"1bcd9979-767b-4b8e-a3ac-bc839e494cfc",
+	"cfd13ea7-fdec-42fc-8a48-3eabe2572654",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Connector Specification',
+	'OOA_Type',
+	'R205');
+INSERT INTO R_RGO_PROXY
+	VALUES ("fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	"96ee655c-a43d-482e-a400-0a9d71442eb3",
+	"4cdb89f5-f1a7-474e-9cc7-4c3fb8afd1ca",
+	'../Terminal Specifications.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("4ba93a53-c8be-455b-af12-cb6c7e9af181",
+	"689d6225-0dc2-44ce-8739-be3ef50c90d9",
+	0,
+	"96ee655c-a43d-482e-a400-0a9d71442eb3",
+	"cfb46e92-7f1e-4288-a69f-68a2cd8f7ea9",
+	'../Terminal Specifications.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("1bcd9979-767b-4b8e-a3ac-bc839e494cfc",
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	"31ca5789-18a8-481b-a2d8-2f81f155b17e",
+	"0f68fc0c-7577-4260-8e10-9e0c9fa053ee",
+	1,
+	'OOA_Type');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("31ca5789-18a8-481b-a2d8-2f81f155b17e",
+	"0f68fc0c-7577-4260-8e10-9e0c9fa053ee",
+	'../../Graphical Data/Element Specification/Element Specification.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("1bcd9979-767b-4b8e-a3ac-bc839e494cfc",
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	"4eb4ad82-538c-4a9a-931e-4ab21e9b874d",
+	'OOA_Type',
+	'',
+	'',
+	'OOA_Type',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225");
+INSERT INTO O_OIDA
+	VALUES ("c093e8db-899c-4c72-9781-dcecd83e0dec",
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	0,
+	'Term_Spec_ID');
+INSERT INTO O_ID
+	VALUES (1,
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225");
+INSERT INTO O_ID
+	VALUES (2,
+	"fd92c2e6-22b3-49a3-941a-f0e1cb6a0225");
+INSERT INTO PE_PE
+	VALUES ("fd92c2e6-22b3-49a3-941a-f0e1cb6a0225",
+	1,
+	"c2b036aa-e960-4115-836d-415687925a0d",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("c2b036aa-e960-4115-836d-415687925a0d",
+	"00000000-0000-0000-0000-000000000000",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'Terminal Specifications',
+	'The TS (Terminal Specification) subsystem models specification classes that
+define the legal ending points for BridgePoint connector symbols.
+-------------------------------------------------------
+// This is used by schema_gen to ignore this subsystem (for publication)
+TRANSLATE_FOR_EXTERNAL_USE:FALSE
+Notify_Changes:false
+
+',
+	0,
+	'../Terminal Specifications.xtuml');

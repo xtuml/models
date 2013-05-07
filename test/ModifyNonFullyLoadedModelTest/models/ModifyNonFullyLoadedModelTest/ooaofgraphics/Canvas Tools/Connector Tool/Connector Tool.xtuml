@@ -1,0 +1,646 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	'Connector Tool',
+	104,
+	'CT_CTL',
+	'The Connector Tool owns the state machine that takes the
+user from enabling the tool, through choosing the start location
+and either dragging or clicking the connector waypoints to
+recognizing the end location and finally displaying the
+connector.
+--------------------------------------------------------------------------
+Persistent:false                            ',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("2e7fdd76-5da7-4cbd-a577-3bd2f097bea4",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	'finalize',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one canvas related by self->CT_MTL[R102]->GD_MD[R100];
+select one diagram related by canvas->DIM_DIA[R18];
+select one elemSpec related by self->CT_MTL[R102]->GD_ES[R103];
+select one conElem related by elemSpec->GD_GE[R16];
+select one connector related by conElem->GD_CON[R2];
+select one segment related by self->GD_LS[R106];
+//
+select many segments related by connector->GD_LS[R6];
+//
+select one startElement related by self->GD_GE[R104];
+if (not_empty startElement)
+  for each seg in segments // Find the first segment in this connector
+    if (seg.Previous_elementId == OS::NULL_UNIQUE_ID())
+      segment = seg;
+    end if;
+  end for;
+
+  // create an anchor on the starting element
+  create object instance anchor of DIM_CON;
+  // initialize the anchors position
+  select one segmentStart related by segment->DIM_WAY[R21];
+  select one segmentEnd related by segment->DIM_WAY[R22];
+  anchor.positionX = segmentStart.positionX;
+  anchor.positionY = segmentStart.positionY;
+  select one graphElement related by startElement->DIM_GE[R23];
+  relate anchor to graphElement across R311;
+
+  // make the anchor the one at which the connector starts
+  select one edge related by connector->DIM_ED[R20];
+  relate edge to anchor across R320;
+
+  unrelate self from startElement across R104;
+  select one shp related by startElement->GD_SHP[R2];
+  select one con related by startElement->GD_CON[R2];
+  if (not_empty shp)
+  	// find the intersection point between the segment and the shape
+	intersectX = shp.getXIntersect(x1:segmentStart.positionX, y1:segmentStart.positionY, 
+		x2:segmentEnd.positionX, y2:segmentEnd.positionY);
+	intersectY = shp.getYIntersect(x1:segmentStart.positionX, y1:segmentStart.positionY, 
+		x2:segmentEnd.positionX, y2:segmentEnd.positionY);
+		
+	// [1] move the segment''s start to the grid snap-point nearest to 
+	// the intersection point along the shape''s edge (note that the 
+	// point will only be a snap-point in one axis if the shape''s edge 
+	// is not itself snapped to the grid)
+	snapPointId = shp.getNearestGridSnapPointOnEdge(x:intersectX, y:intersectY);
+	select any snapPoint from instances of DIM_PNT where selected.pointId == snapPointId;
+	segment.moveStart(xDelta:snapPoint.x - segmentStart.positionX, 
+		yDelta:snapPoint.y - segmentStart.positionY, snapToGrid:false);
+	delete object instance snapPoint;
+  elif(not_empty con)
+    select any cnt related by startElement->TS_TSP[R206]->TS_CNT[R201];
+    // crop the segment to the connector
+    if (cnt.terminatesAt == End::Middle)
+      // crop the segment to the connector
+	  con.cropTo(attachingSegmentId:segment.elementId, createdAnchorId:anchor.conId, end:End::Start);
+    elif (cnt.terminatesAt == End::Start)
+      select one segmentStart related by segment->DIM_WAY[R21];
+      select one segmentEnd related by segment->DIM_WAY[R22];
+      segment.moveStart(xDelta:con.getStartX() - segmentEnd.positionX, 
+        	yDelta:con.getStartY() - segmentEnd.positionY, snapToGrid:false);
+    elif (cnt.terminatesAt == End::End)
+      select one segmentStart related by segment->DIM_WAY[R21];
+      select one segmentEnd related by segment->DIM_WAY[R22];
+      segment.moveStart(xDelta:con.getEndX() - segmentEnd.positionX, 
+        	yDelta:con.getEndY() - segmentEnd.positionY, snapToGrid:false);
+    end if; // terminates at
+  end if;
+end if;
+select one endElement related by self->GD_GE[R105];
+if (not_empty endElement)
+  for each seg in segments // Find the last segment in this connector
+    select one nextSeg related by seg->GD_LS[R7.''precedes''];
+    if (empty nextSeg)
+      segment = seg;
+    end if;
+  end for;
+
+  // create an anchor on the ending element
+  create object instance anchor of DIM_CON;
+  // initialize the anchors location
+  select one segmentStart related by segment->DIM_WAY[R21];
+  select one segmentEnd related by segment->DIM_WAY[R22];
+  anchor.positionX = segmentEnd.positionX;
+  anchor.positionY = segmentEnd.positionY;
+  select one graphElement related by endElement->DIM_GE[R23];
+  relate anchor to graphElement across R311;
+
+  // make the anchor the one at which the connector ends
+  select one edge related by connector->DIM_ED[R20];
+  relate edge to anchor across R321;
+
+  unrelate self from endElement across R105;
+  select one shp related by endElement->GD_SHP[R2];
+  select one con related by endElement->GD_CON[R2];
+  if (not_empty shp) // Crop the last segment to the boundary of the shape
+    // find the intersection point between the segment and the shape
+    intersectX = shp.getXIntersect(x1:segmentStart.positionX, y1:segmentStart.positionY, 
+    	x2:segmentEnd.positionX, y2:segmentEnd.positionY);
+    intersectY = shp.getYIntersect(x1:segmentStart.positionX, y1:segmentStart.positionY, 
+    	x2:segmentEnd.positionX, y2:segmentEnd.positionY);
+
+	// see [1], above
+   	snapPointId = shp.getNearestGridSnapPointOnEdge(x:intersectX, y:intersectY);
+   	select any snapPoint from instances of DIM_PNT where selected.pointId == snapPointId;
+    segment.moveEnd(xDelta:snapPoint.x - segmentEnd.positionX, 
+    	yDelta:snapPoint.y - segmentEnd.positionY, snapToGrid:false);
+   	delete object instance snapPoint;
+
+  elif (not_empty con) // Find the segment on the target connector that intersects the last segment being drawn
+    select any cnt related by endElement->TS_TSP[R206]->TS_CNT[R201];
+    if (cnt.terminatesAt == End::Middle)
+      // crop the segment to the connector
+	  con.cropTo(attachingSegmentId:segment.elementId, createdAnchorId:anchor.conId, end:End::End);
+    elif (cnt.terminatesAt == End::Start)
+      create object instance aos of GD_AOS;
+      startSegId = con.getStartingSegmentId();
+      select any startSeg related by con->GD_LS[R6] where (selected.elementId == startSegId);
+      relate anchor to startSeg across R26 using aos;
+      select one segmentStart related by segment->DIM_WAY[R21];
+      select one segmentEnd related by segment->DIM_WAY[R22];
+      segment.moveEnd(xDelta:con.getStartX() - segmentEnd.positionX, 
+        	yDelta:con.getStartY() - segmentEnd.positionY, snapToGrid:false);
+    elif (cnt.terminatesAt == End::End)
+      create object instance aos of GD_AOS;
+      endSegId = con.getEndingSegmentId();
+      select any endSeg related by con->GD_LS[R6] where (selected.elementId == endSegId);
+      relate anchor to endSeg across R26 using aos;
+      select one segmentStart related by segment->DIM_WAY[R21];
+      select one segmentEnd related by segment->DIM_WAY[R22];
+      segment.moveEnd(xDelta:con.getEndX() - segmentEnd.positionX, 
+        	yDelta:con.getEndY() - segmentEnd.positionY, snapToGrid:false);
+    end if; // terminates at
+  end if;   
+end if;',
+	1,
+	'',
+	"a17fa150-fcc4-4598-b3ad-da6ba3725bb5");
+INSERT INTO O_TFR
+	VALUES ("caab28aa-1414-40af-a35f-62a343e3b317",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	'determineMouseUpValidity',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'criteriaMet = false;
+select one canvas related by self->CT_MTL[R102]->GD_MD[R100];
+select one seg related by self->GD_LS[R106];
+seg.updateEnd(x:param.x, y:param.y);
+select one csp related by self->CT_MTL[R102]->GD_ES[R103]->TS_CSP[R200];
+select many startTerms related by csp->TS_TSP[R202];
+select one segmentStart related by seg->DIM_WAY[R21];
+select one segmentEnd related by seg->DIM_WAY[R22];
+completed = false;
+if (not csp.startCriteriaMet())
+  for each startTerm in startTerms
+    if (startTerm.criteriaMet(x1:segmentEnd.positionX, y1:segmentEnd.positionY, 
+    	x2:segmentStart.positionX, y2:segmentStart.positionY))
+      criteriaMet = true;
+      select one startElem related by startTerm->GD_GE[R206];
+      select one endElem related by self->GD_GE[R105];
+      // if either end is whitespace this is not
+      // a connector that starts and ends on whitespace
+      // see if this is a suitable location
+      if(not_empty startElem or not_empty endElem)
+        if  (not param.allowSameShape and startElem == endElem) // Start and end symbols are the same
+          generate CT_CTL4:''Unsuitable Location'' to self;
+          completed = true;
+        else
+          select one con related by seg->GD_CON[R6];
+          con.reverseSense();  // The user started with the end point, so reverse the direction
+          if (not_empty startElem)
+            relate self to startElem across R104;
+          end if;
+          generate CT_CTL8:Complete to self;
+          completed = true;
+        end if;
+      end if;
+      break;
+    end if;
+  end for;
+end if;
+if (not criteriaMet and not csp.endCriteriaMet())
+  select many endTerms related by csp->TS_TSP[R203];
+  for each endTerm in endTerms
+    if (endTerm.criteriaMet(x1:segmentEnd.positionX, y1:segmentEnd.positionY, 
+    	x2:segmentStart.positionX, y2:segmentStart.positionY))
+      criteriaMet = true;
+      select one startElem related by self->GD_GE[R104];
+      select one endElem related by endTerm->GD_GE[R206];
+      // if either end is whitespace this is not
+      // a connector that starts and ends on whitespace
+      // see if this is a suitable location
+      if(not_empty startElem or not_empty endElem)
+        if (not param.allowSameShape and startElem == endElem and 
+        		(not_empty startElem and not_empty endElem)) // Start and end symbols are the same
+          generate CT_CTL4:''Unsuitable Location'' to self;
+          completed = true;
+        else
+          if (not_empty endElem)
+            relate self to endElem across R105;
+          end if;
+          generate CT_CTL8:Complete to self;
+          completed = true;
+        end if;
+      end if;
+      break;
+    end if;
+  end for;
+end if;
+if (not criteriaMet and (csp.startCriteriaMet() or csp.endCriteriaMet()))
+  // Waypoints are allowed, hence whitespace is OK
+  overWhitespace = true;
+  select one conElem related by seg->GD_CON[R6]->GD_GE[R2];
+  select many elems related by self->CT_MTL[R102]->GD_MD[R100]->GD_GE[R1];
+  for each elem in elems
+    if (elem != conElem and elem.isOver(x:param.x, y:param.y))
+      overWhitespace = false;
+    end if;
+  end for;
+  if (overWhitespace)
+    generate CT_CTL5:''Suitable Location''(X:param.x, Y:param.y) to self;
+  else
+    generate CT_CTL4:''Unsuitable Location'' to self;
+  end if;
+// if the criteria has been met and the start
+// connector specification has been satisfied
+// and the connector has not yet been completed
+// this connector is being created as one which
+// starts and ends on whitespace
+else
+  if(not completed)
+    generate CT_CTL8:Complete to self;
+  end if;
+end if;',
+	1,
+	'',
+	"49ab5718-6b7e-4e6f-8ec9-fb1ecd1e7cdd");
+INSERT INTO O_TPARM
+	VALUES ("6b290aa6-602f-4490-8125-8d0fcfae438e",
+	"caab28aa-1414-40af-a35f-62a343e3b317",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"c6d1e92e-ca4c-427b-9e63-55666749e8f1",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("63e8ef50-8f62-4b20-874b-011632efe1a8",
+	"caab28aa-1414-40af-a35f-62a343e3b317",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"6b290aa6-602f-4490-8125-8d0fcfae438e",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("c6d1e92e-ca4c-427b-9e63-55666749e8f1",
+	"caab28aa-1414-40af-a35f-62a343e3b317",
+	'allowSameShape',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("ae2e6bf7-edc4-4513-a1d7-e63852215ba6",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	'trackMouseWithSegmentEnd',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one canvas related by self->CT_MTL[R102]->GD_MD[R100];
+select one diagram related by canvas->DIM_DIA[R18];
+select one segment related by self->GD_LS[R106];
+select one segmentEnd related by segment->DIM_WAY[R22];
+segmentEnd.positionX = ::roundToGridSnapPoint(
+	ordinate:(GR::scale(value:GR::getAbsoluteXPosition()) + diagram.viewportX), isConnector:true);
+segmentEnd.positionY = ::roundToGridSnapPoint(
+	ordinate:(GR::scale(value:GR::getAbsoluteYPosition()) + diagram.viewportY), isConnector:true);
+',
+	1,
+	'',
+	"2e7fdd76-5da7-4cbd-a577-3bd2f097bea4");
+INSERT INTO O_TPARM
+	VALUES ("166b87b6-e725-4328-9bff-fbfbe7ca310e",
+	"ae2e6bf7-edc4-4513-a1d7-e63852215ba6",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("ff44e0a9-3b70-4f1e-a7da-ad25ca417425",
+	"ae2e6bf7-edc4-4513-a1d7-e63852215ba6",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"166b87b6-e725-4328-9bff-fbfbe7ca310e",
+	'');
+INSERT INTO O_TFR
+	VALUES ("a17fa150-fcc4-4598-b3ad-da6ba3725bb5",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	'dispose',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one mtl related by self->CT_MTL[R102];
+if ( not_empty mtl )
+  unrelate self from mtl across R102;
+end if;
+select one ls related by self->GD_LS[R106];
+if (not_empty ls)
+  unrelate self from ls across R106;
+end if;
+select one ge related by self->GD_GE[R104];
+if (not_empty ge)
+  unrelate self from ge across R104;
+end if;
+select one ge related by self->GD_GE[R105];
+if (not_empty ge)
+  unrelate self from ge across R105;
+end if;',
+	1,
+	'',
+	"caab28aa-1414-40af-a35f-62a343e3b317");
+INSERT INTO O_TFR
+	VALUES ("49ab5718-6b7e-4e6f-8ec9-fb1ecd1e7cdd",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	'clearPartialConnector',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one startElement related by self->GD_GE[R105];
+if(not_empty startElement)
+  unrelate self from startElement across R105;
+end if;
+select one endElement related by self->GD_GE[R104];
+if(not_empty endElement)
+  unrelate self from endElement across R104;
+end if;
+select one element related by self->CT_MTL[R102]->GD_ES[R103]->GD_GE[R16];
+if (not_empty element)
+  element.dispose();
+end if;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_REF
+	VALUES ("f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	0,
+	"c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"544e2a9e-7caf-4e0b-ae25-51bfe9759a7a",
+	"467f0191-44c7-4a12-8fa2-42d050c3bee9",
+	"3ce2badf-c10f-4867-b99e-ba35f8929b5a",
+	"a788f2db-e675-4113-8ca0-b403fde3558f",
+	"557301a9-2369-450a-915c-e4ea5f837472",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Model Tool',
+	'Tool_ID',
+	'R102');
+INSERT INTO R_RGO_PROXY
+	VALUES ("f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"544e2a9e-7caf-4e0b-ae25-51bfe9759a7a",
+	"467f0191-44c7-4a12-8fa2-42d050c3bee9",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	0,
+	"544e2a9e-7caf-4e0b-ae25-51bfe9759a7a",
+	"3ce2badf-c10f-4867-b99e-ba35f8929b5a",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("a788f2db-e675-4113-8ca0-b403fde3558f",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	1,
+	'Tool_ID');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	'../Model Tool/Model Tool.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("a788f2db-e675-4113-8ca0-b403fde3558f",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"00000000-0000-0000-0000-000000000000",
+	'Tool_ID',
+	'',
+	'',
+	'Tool_ID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"fb0e5b39-dbfa-4b6a-aa45-53fb6963cb85",
+	0,
+	"0f3f7fdb-ed4b-475e-94b1-5e1cedf6fc39",
+	"426387dd-e494-4156-a362-ba075c523735",
+	"2b391544-141a-465e-8d9c-1808706ca60a",
+	"083e7fe1-1e1b-4f91-b875-7a5465353148",
+	"0570437b-0b65-4022-83bf-4b918161936e",
+	"01e46dc8-ffab-456e-b841-e0e34b6d931b",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Line Segment',
+	'elementId',
+	'R106');
+INSERT INTO R_RGO_PROXY
+	VALUES ("f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"426387dd-e494-4156-a362-ba075c523735",
+	"2b391544-141a-465e-8d9c-1808706ca60a",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("0f3f7fdb-ed4b-475e-94b1-5e1cedf6fc39",
+	"fb0e5b39-dbfa-4b6a-aa45-53fb6963cb85",
+	0,
+	"426387dd-e494-4156-a362-ba075c523735",
+	"083e7fe1-1e1b-4f91-b875-7a5465353148",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("0570437b-0b65-4022-83bf-4b918161936e",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"0f3f7fdb-ed4b-475e-94b1-5e1cedf6fc39",
+	"fb0e5b39-dbfa-4b6a-aa45-53fb6963cb85",
+	1,
+	'elementId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("0f3f7fdb-ed4b-475e-94b1-5e1cedf6fc39",
+	"fb0e5b39-dbfa-4b6a-aa45-53fb6963cb85",
+	'../../Graphical Data/Line Segment/Line Segment.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("0570437b-0b65-4022-83bf-4b918161936e",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"a788f2db-e675-4113-8ca0-b403fde3558f",
+	'Current_Seg_elementId',
+	'',
+	'Current_Seg_',
+	'GE_ID',
+	1,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("5765dfc4-3e49-4d37-8d1c-cd2d8d5a16fd",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3");
+INSERT INTO O_BATTR
+	VALUES ("5765dfc4-3e49-4d37-8d1c-cd2d8d5a16fd",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3");
+INSERT INTO O_ATTR
+	VALUES ("5765dfc4-3e49-4d37-8d1c-cd2d8d5a16fd",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"0570437b-0b65-4022-83bf-4b918161936e",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"7203cd95-2fe7-42df-ba99-41b43e8968c9",
+	0,
+	"91b6c76c-69e4-485b-b26a-58b346c17ffb",
+	"bc45852a-939c-4d86-9d0c-d7b6b0d5523c",
+	"9d127540-b3bb-4498-bda5-61b1e3dca452",
+	"6d12112d-e9e6-43f0-a7ec-17ac0cae3280",
+	"900328a5-6cea-4aa8-b335-b362f53fb059",
+	"c090335c-d4b3-4ac2-ba7a-b8b6ca49dcc8",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Graphical Element',
+	'elementId',
+	'R104');
+INSERT INTO R_RGO_PROXY
+	VALUES ("f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"bc45852a-939c-4d86-9d0c-d7b6b0d5523c",
+	"9d127540-b3bb-4498-bda5-61b1e3dca452",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("91b6c76c-69e4-485b-b26a-58b346c17ffb",
+	"7203cd95-2fe7-42df-ba99-41b43e8968c9",
+	0,
+	"bc45852a-939c-4d86-9d0c-d7b6b0d5523c",
+	"6d12112d-e9e6-43f0-a7ec-17ac0cae3280",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("900328a5-6cea-4aa8-b335-b362f53fb059",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"9b69bfa9-07b2-458c-8dd7-442d13942cd0",
+	"0a762924-8165-4d5f-bcb2-bc29265b5505",
+	1,
+	'elementId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("9b69bfa9-07b2-458c-8dd7-442d13942cd0",
+	"0a762924-8165-4d5f-bcb2-bc29265b5505",
+	'../../UML 2.0 Diagram Interchange/DiagramElement/DiagramElement.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("900328a5-6cea-4aa8-b335-b362f53fb059",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"5765dfc4-3e49-4d37-8d1c-cd2d8d5a16fd",
+	'start_elementId',
+	'',
+	'start_',
+	'elementId',
+	1,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"7203cd95-2fe7-42df-ba99-41b43e8968c9",
+	0,
+	"91b6c76c-69e4-485b-b26a-58b346c17ffb",
+	"27f77f6e-bc2d-4564-80e1-3d9089d9985e",
+	"1bfe21f8-2e9e-4a8f-b82c-95399fe3423a",
+	"60414464-1087-46b0-8909-76f69d085c38",
+	"cd2e9a2c-dfa8-407b-a7cc-6efba8b42add",
+	"b136e600-33e8-414d-83f8-beb212e320b5",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Graphical Element',
+	'elementId',
+	'R105');
+INSERT INTO R_RGO_PROXY
+	VALUES ("f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"27f77f6e-bc2d-4564-80e1-3d9089d9985e",
+	"1bfe21f8-2e9e-4a8f-b82c-95399fe3423a",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("91b6c76c-69e4-485b-b26a-58b346c17ffb",
+	"7203cd95-2fe7-42df-ba99-41b43e8968c9",
+	0,
+	"27f77f6e-bc2d-4564-80e1-3d9089d9985e",
+	"60414464-1087-46b0-8909-76f69d085c38",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("cd2e9a2c-dfa8-407b-a7cc-6efba8b42add",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"9b69bfa9-07b2-458c-8dd7-442d13942cd0",
+	"0a762924-8165-4d5f-bcb2-bc29265b5505",
+	1,
+	'elementId');
+INSERT INTO O_ATTR
+	VALUES ("cd2e9a2c-dfa8-407b-a7cc-6efba8b42add",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"900328a5-6cea-4aa8-b335-b362f53fb059",
+	'end_elementId',
+	'',
+	'end_',
+	'elementId',
+	1,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("fca83405-9a1a-45f8-b0c5-13af059c635b",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3");
+INSERT INTO O_BATTR
+	VALUES ("fca83405-9a1a-45f8-b0c5-13af059c635b",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3");
+INSERT INTO O_ATTR
+	VALUES ("fca83405-9a1a-45f8-b0c5-13af059c635b",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	"cd2e9a2c-dfa8-407b-a7cc-6efba8b42add",
+	'currentTransaction',
+	'',
+	'',
+	'currentTransaction',
+	0,
+	"a08bc519-0818-4efa-8726-c3dd7bc228ee",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("a08bc519-0818-4efa-8726-c3dd7bc228ee",
+	"00000000-0000-0000-0000-000000000000",
+	'Transaction',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_ID
+	VALUES (0,
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3");
+INSERT INTO O_OIDA
+	VALUES ("a788f2db-e675-4113-8ca0-b403fde3558f",
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	0,
+	'Tool_ID');
+INSERT INTO O_ID
+	VALUES (1,
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3");
+INSERT INTO O_ID
+	VALUES (2,
+	"f8c22e3c-a1f5-43de-9a22-c969d1c772b3");
+INSERT INTO PE_PE
+	VALUES ("f8c22e3c-a1f5-43de-9a22-c969d1c772b3",
+	1,
+	"162963cc-507c-42b6-9d88-e6062a35f9a8",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("162963cc-507c-42b6-9d88-e6062a35f9a8",
+	"00000000-0000-0000-0000-000000000000",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'Canvas Tools',
+	'// This is used by schema_gen to ignore this subsystem (for publication)
+  TRANSLATE_FOR_EXTERNAL_USE:FALSE
+  Notify_Changes:false
+',
+	0,
+	'../Canvas Tools.xtuml');
