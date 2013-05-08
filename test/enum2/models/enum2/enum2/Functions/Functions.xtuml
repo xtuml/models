@@ -1,0 +1,140 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("6b90f343-8a82-4f57-b89a-15425437b623",
+	"00000000-0000-0000-0000-000000000000",
+	"aafcfd7c-a770-434f-954a-5e80d36b4c4d",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("04a7d41e-cc73-4072-adbf-6423cdb9f8cd",
+	112,
+	"6b90f343-8a82-4f57-b89a-15425437b623",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'enum2::enum2::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("04a7d41e-cc73-4072-adbf-6423cdb9f8cd",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("3070c6a1-9cb3-4cb7-821c-49ba86ef7c15",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'// Look for PEI.  Set up an Initialize the NVS if needed.
+select many tes from instances of TE;
+if( empty tes )
+  LOG::LogInfo( message:"Did not find any PEI data, initializing NVS" );
+  i = NVS::format();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error formatting the NVS." );
+  end if;
+  i = NVS::version( first:1, second:2 );
+  i =  NVS::checksum( first:1, second:2 );
+
+  create object instance of TE;
+
+  i = PERSIST::commit();
+  if( i != 0 )
+        LOG::LogFailure( message:"Error commiting persistence information. Error code:" );
+        LOG::LogInteger( message:i );
+  end if;
+else
+  LOG::LogInfo( message:"Found PEI data." );
+end if;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("3070c6a1-9cb3-4cb7-821c-49ba86ef7c15",
+	1,
+	"6b90f343-8a82-4f57-b89a-15425437b623",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("c53d4645-5724-4e96-9799-65e9d07984e8",
+	"00000000-0000-0000-0000-000000000000",
+	'test',
+	'',
+	'// Check for PEI.
+select many tes from instances of TE;
+if( empty tes )
+  LOG::LogFailure( message:"Failed to select an instance of TE" );
+end if;
+
+// Kick off testing.
+DR::checkin(id:2);
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("c53d4645-5724-4e96-9799-65e9d07984e8",
+	1,
+	"6b90f343-8a82-4f57-b89a-15425437b623",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("7def6b7f-ac2b-4a82-9d2b-fd93962ed4f1",
+	"00000000-0000-0000-0000-000000000000",
+	'xit',
+	'',
+	'// Delete all instances.
+
+select many tes from instances of TE;
+for each te in tes
+  delete object instance te;
+end for;
+
+// Shut down.
+ARCH::shutdown();
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("7def6b7f-ac2b-4a82-9d2b-fd93962ed4f1",
+	1,
+	"6b90f343-8a82-4f57-b89a-15425437b623",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("6b90f343-8a82-4f57-b89a-15425437b623",
+	1,
+	"d27806e3-91bc-425c-b968-d0e6d3b61055",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("d27806e3-91bc-425c-b968-d0e6d3b61055",
+	"aafcfd7c-a770-434f-954a-5e80d36b4c4d",
+	"aafcfd7c-a770-434f-954a-5e80d36b4c4d",
+	'enum2',
+	'This test is a helper domain for enum1.  See enum1 for a complete description.
+
+** Note: This domain cannot be run in Verifier as it relies on the transfer of data between two OOA domains via FBO.',
+	0,
+	'../enum2.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("aafcfd7c-a770-434f-954a-5e80d36b4c4d",
+	'enum2',
+	1,
+	'../../enum2.xtuml');
