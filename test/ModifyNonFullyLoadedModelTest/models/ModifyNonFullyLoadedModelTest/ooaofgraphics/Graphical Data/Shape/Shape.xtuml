@@ -1,0 +1,1897 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'Shape',
+	3,
+	'GD_SHP',
+	'This represents the rectangular space taken by a shape on the model.  The actual shape drawn may be an oval, partitioned rectangle, etc.  Note: sometimes BridgePoint reverses the NW and SE coordinates of the shape when populating the graphical subsystem model.',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("1625ae32-a7af-4f6b-a779-a31056a80112",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'draw',
+	'First adjust the x and y values for the canvas scroll position.
+Then draw the appropriate shape (this is obtained from the
+client).
+
+Set clipping to the bounding rectangle of the shape, so that
+text that is too long for the symbol does not spill onto the 
+canvas. Then show the text for each symbol compartment.
+
+Each compartment can potentially show four different blocks
+of text, Left Justified, Centered, Right Justified and Bottom
+Justified. The deepest text block of the first three is used to
+determine where the bottom of the compartment is.
+
+If there is more than one compartment, draw a horizontal
+dividing line between the text blocks. Repeat the text drawing
+procedure for each compartment.
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'tabHeightRatio = 5;
+tabWidthRatio = 10;
+select one shape related by self->GD_GE[R2];
+select one graphNode related by self->DIM_ND[R19];
+select one graphElement related by graphNode->DIM_GE[R301];
+select one canvas related by shape->GD_MD[R1];
+select one diagram related by canvas->DIM_DIA[R18];
+select one elemSpec related by shape->GD_ES[R10];
+//
+// Correct for scroll position
+//
+x = graphElement.positionX - diagram.viewportX; 
+y = graphElement.positionY - diagram.viewportY;
+w = graphNode.width; 
+h = graphNode.height;
+lastAvailableVerticalPosn = y + h;
+//
+// Draw the shape
+//
+if (CL::getShapeStyle(from:shape.represents) == Style::RoundBox)
+  GR::drawRoundRect(context:param.context, x:x, y:y, w:w, h:h);
+elif (CL::getShapeStyle(from:shape.represents) == Style::Component)
+  GR::drawRect(context:param.context, x:x, y:y, w:w, h:h);
+elif (CL::getShapeStyle(from:shape.represents) == Style::Folder)
+  tabHeight = h/tabHeightRatio;
+  if (w < h*2)
+    tabHeight = w/tabWidthRatio;
+  end if;
+  GR::drawFolder(context:param.context, x:x, y:y, w:w, h:h, t:tabHeight);
+elif (CL::getShapeStyle(from:shape.represents) == Style::FilledCircle)
+  r = graphNode.width / 2 ;
+  center_x = x + r;
+  center_y = y + r;
+  if ( elemSpec.isFixedSize )
+    r = elemSpec.defaultWidth / 2.0;
+  end if;
+  GR::drawCircle(context:param.context, x:center_x, y:center_y, radius: r, filled: true);
+elif (CL::getShapeStyle(from:shape.represents) == Style::BullsEye)
+  r = graphNode.width / 2 ;
+  center_x = x + r;
+  center_y = y + r;
+  if ( elemSpec.isFixedSize )
+    r = elemSpec.defaultWidth / 2.0;
+  end if;
+  GR::drawCircle(context:param.context, x:center_x, y:center_y, radius: r * 1.5, filled: false);
+  GR::drawCircle(context:param.context, x:center_x, y:center_y, radius: r, filled: true);
+elif (CL::getShapeStyle(from:shape.represents) == Style::CircleCross)
+  r = graphNode.width / 2 ;
+  center_x = x + r;
+  center_y = y + r;
+  if ( elemSpec.isFixedSize )
+    r = elemSpec.defaultWidth / 2.0;
+  end if;
+  GR::drawCircle(context:param.context, x:center_x, y:center_y, radius: r, filled: false);
+  rcos45 = 0.7071067811865476 * r;
+  GR::drawLine(context:param.context, 
+  	  x: ::round(value:center_x + rcos45), y: ::round(value:center_y + rcos45),
+      x2: ::round(value:center_x - rcos45), y2: ::round(value:center_y - rcos45));
+  GR::drawLine(context:param.context, 
+  	  x: ::round(value:center_x + rcos45), y: ::round(value:center_y - rcos45),
+      x2: ::round(value:center_x - rcos45), y2: ::round(value:center_y + rcos45));
+elif (CL::getShapeStyle(from:shape.represents) == Style::Diamond)
+  ::drawDiamond(context:param.context, x:x, y:y, w:w, h:h);
+elif (CL::getShapeStyle(from:shape.represents) == Style::ConcavePentagon)
+  ::drawConcavePentagon(context:param.context, x:x, y:y, w:w, h:h);
+elif (CL::getShapeStyle(from:shape.represents) == Style::ConvexPentagon)
+  ::drawConvexPentagon(context:param.context, x:x, y:y, w:w, h:h);
+elif (CL::getShapeStyle(from:shape.represents) == Style::Hourglass)
+  ::drawHourglass(context:param.context, x:x, y:y, w:w, h:h);
+elif (CL::getShapeStyle(from:shape.represents) == Style::StickFigure)
+  // use the rectangle width and the aspect
+  // ratio to detm the height-extent of the rectangle
+  width = OS::intToReal(value:elemSpec.defaultWidth);
+  height = OS::intToReal(value:elemSpec.defaultHeight);
+  // we need to adjust the size to allow room for the
+  // actor symbol''s text, this forces us to adjust not
+  // only the height but the also the width so that the
+  // shape remains fixed aspect
+  actorName = CL::getCompartmentText(from:shape.represents, compartment_id:2,
+       entry_id:1, at:Justification::Center_in_X);
+  Y_extent = GR::getTextExtent(context:param.context, text:actorName, axis:Axis::Y);
+  // adjust the actor''s height to allow room for
+  // the actor''s name; include extra space so that
+  // the text does not appear connected to the actor
+  // body.
+  actorHeight = h;
+  actorWidth = w;
+  actorX = x;
+  // use the complete shape size for the actor
+  // if the text is larger than a quarter of the 
+  // shape size, and there is a name for the actor
+  if(Y_extent < (h / 4)) and (actorName != "")
+    actorHeight = h - Y_extent - 10;
+    actorWidth = (width * actorHeight) / height;
+    // center the actor with the shape
+    // size
+    actorX = x + ((w - actorWidth) / 2);
+  end if;
+  GR::drawActor(context:param.context, x:actorX, y:y, w:actorWidth, h:actorHeight);
+  // if the actor''s size was adjusted
+  // adjust the y to accomadate for the
+  // adjustment
+  y = y + actorHeight;
+elif(CL::getShapeStyle(from:shape.represents) == Style::Ellipse)
+  GR::drawEllipse(context:param.context, x:x, y:y, w:w, h:h);
+else
+  // default symbol is Style::Box
+  GR::drawRect(context:param.context, x:x, y:y, w:w, h:h);
+end if;
+//
+// If we''re drawing a folder, increase y by the tabSize to limit the text area to the box below the tab
+//
+if (CL::getShapeStyle(from:shape.represents) == Style::Folder)
+  tabHeight = h/tabHeightRatio;
+  if (w < h*2)
+    tabHeight = w/tabWidthRatio;
+  end if;
+  y = y + tabHeight;
+  h = h - tabHeight;
+elif (CL::getShapeStyle(from:shape.represents) == Style::ConcavePentagon)
+//
+// If we''re drawing an incoming flow, increase x by the size of the angled
+// ends to limit the text area to the rectangular area of the shape
+//
+  flagSize = w/5;
+  x = x + flagSize;
+  w = w - flagSize;
+elif (CL::getShapeStyle(from:shape.represents) == Style::ConvexPentagon)
+//
+// If we''re drawing an outgoing flow, decrease w by the size of the arrow
+// end to limit the text area to the rectangular area of the shape
+//
+  flagSize = w/5;
+  w = w - flagSize;
+end if;
+//
+// Do not let any graphics spill out onto the canvas
+//
+GR::clipTo(context:param.context, x:x, y:y, w:w, h:h);
+compartment_id = 1;
+unScaledSpacing = GR::getGraphicSpacing();
+spacing = GR::scale(value:unScaledSpacing);
+compartments = CL::getCompartments(from:shape.represents);
+while (compartment_id <= compartments)
+  entry_id = 1;
+  compartmentTopY = y;
+  entries = CL::getEntries(from:shape.represents, compartment_id:compartment_id);
+  while (entry_id <= entries)
+    //
+    // Draw the left justified text for the compartment
+    //
+    leftResult = CL::getCompartmentText(from:shape.represents, compartment_id:compartment_id,
+                       entry_id:entry_id, at:Justification::Left);
+    leftStyle = CL::getTextStyle(from:shape.represents, compartment_id:compartment_id,
+                       entry_id:entry_id, at:Justification::Left);
+    rightResult = CL::getCompartmentText(from:shape.represents,  compartment_id:compartment_id,
+                       entry_id:entry_id, at:Justification::Right);
+    rightStyle = CL::getTextStyle(from:shape.represents, compartment_id:compartment_id,
+                       entry_id:entry_id, at:Justification::Right);
+    availableRHSpace = GR::getTextExtent(context:param.context, text:rightResult,axis:Axis::X);
+    if (rightResult != "")
+      widthLeftForLeftText = availableRHSpace + spacing;
+      if (w - widthLeftForLeftText > 36) // (pixels)
+        leftResult = GR::fitTextTo(context:param.context, input:leftResult, width:w - widthLeftForLeftText, elideAtEnd:true);
+      else
+        // Not enough room for left and right text blocks, so split the symbol 50-50
+        availableRHSpace = w/2 - spacing;
+        leftResult = GR::fitTextTo(context:param.context, input:leftResult, width:availableRHSpace, elideAtEnd:true);
+      end if;
+    end if;
+    Y_extent = 0;
+    if (leftResult != "")
+      leftResult = GR::fitTextTo(context:param.context, input:leftResult, width:w - (unScaledSpacing * 2), elideAtEnd:true);
+      verticalPosnAfterPrinting = y + GR::getTextExtent(context:param.context, text:leftResult,axis:Axis::Y);
+      //
+      // If the text won''t fit completely, then don''t show it unless it is a single entry like a state action
+      //
+      if ((verticalPosnAfterPrinting < lastAvailableVerticalPosn) OR (entries == 1 AND OS::isMultiLine(text:leftResult)))
+        GR::drawText(context:param.context, text:leftResult,
+				x:x + spacing, 
+				y:y + spacing,
+				justified_to:Justification::Left, text_style:leftStyle);
+      end if;
+      Y_extent = GR::getTextExtent(context:param.context, text:leftResult, axis:Axis::Y);
+    end if;
+    //
+    // Draw the right justified text for the compartment
+    //
+    if (rightResult != "")
+      if (availableRHSpace < GR::getTextExtent(context:param.context, text:rightResult, axis:Axis::X))
+        rightResult = GR::fitTextTo(context:param.context, input:rightResult, width:availableRHSpace, elideAtEnd:true);
+      end if;
+      verticalPosnAfterPrinting = y + GR::getTextExtent(context:param.context, text:rightResult,axis:Axis::Y);
+      //
+      // As for left justified text, if the text won''t fit completely, then don''t
+      //  show it (we don''t care about multiline-ism for right justified text).
+      //
+      if (verticalPosnAfterPrinting < lastAvailableVerticalPosn)
+        GR::drawText(context:param.context, text:rightResult, 
+                                 x:x + w - spacing,
+                                 y:y + spacing,
+                                 justified_to:Justification::Right, text_style:rightStyle);
+      end if;
+      Y_extent = ::max(a:Y_extent, b:GR::getTextExtent(context:param.context, text:rightResult, axis:Axis::Y));
+    end if;
+    //
+    // Draw the centered text for the compartment
+    //
+    centerResult = CL::getCompartmentText(from:shape.represents, compartment_id:compartment_id,
+                       entry_id:entry_id, at:Justification::Center_in_X);
+    centerXStyle = CL::getTextStyle(from:shape.represents, compartment_id:compartment_id,
+                       entry_id:entry_id, at:Justification::Center_in_X);
+    if (centerResult != "")
+		elideAtEnd = CL::getElideCompartmentTextAtEnd(
+			element:shape.represents, compartmentNum:compartment_id,
+        	entryNum:entry_id);
+    
+      centerResult = GR::fitTextTo(context:param.context, input:centerResult, 
+      	width:w - (unScaledSpacing * 2), elideAtEnd:elideAtEnd);
+      verticalPosnAfterPrinting = y + GR::getTextExtent(context:param.context, text:centerResult,axis:Axis::Y);
+      //
+      // Again for centered text, don''t print partially visible text
+      //
+      if (verticalPosnAfterPrinting < lastAvailableVerticalPosn)
+        GR::drawText(context:param.context, text:centerResult, 
+                               x:x + (w/2),
+                               y:y + spacing,
+                               justified_to:Justification::Center_in_X, text_style:centerXStyle);
+      end if;
+      Y_extent = ::max(a:Y_extent, b:GR::getTextExtent(context:param.context, text:centerResult, axis:Axis::Y));
+    end if;
+    //
+    // Move y down for next entry
+    //
+    y = y + Y_extent;
+    entry_id = entry_id + 1;
+  end while;
+  
+  // for each icon slot of this compartment
+  numSlots = CL::getNumCompartmentIconSlots(element:shape.represents, 
+  	compartmentNum:compartment_id);
+  slotNum = 0;
+  iconSize = ::getIconSize();
+  iconSpacing = ::getIconSpacing();
+  iconDistanceFromEdge = ::getIconDistanceFromEdge();
+  while (slotNum < numSlots)
+  	// if this slot''s icon should be drawn
+  	if (CL::shouldCompartmentIconBeDrawn(element:shape.represents,
+  		compartmentNum:compartment_id, slotNum:slotNum))
+  		// draw this slot''s icon
+  		iconName = CL::getCompartmentIconName(element:shape.represents,
+  			compartmentNum:compartment_id, slotNum:slotNum);
+  		GR::drawImage(context:param.context, name:iconName, 
+  			x:x + iconDistanceFromEdge + slotNum * (iconSize + iconSpacing), 
+  			y:compartmentTopY + iconDistanceFromEdge);
+  	end if;
+  	
+  	slotNum = slotNum + 1;		
+  end while;
+
+  //
+  // Move y down for next compartment
+  //
+  if (compartment_id != CL::getCompartments(from:shape.represents)) and ((CL::getShapeStyle(from:shape.represents) == Style::Box) or (CL::getShapeStyle(from:shape.represents) == Style::RoundBox))
+    y = y +  (spacing * 2);
+    GR::drawLine(context:param.context, x:x, y:y, x2:x + w, y2:y);
+  end if;
+  compartment_id = compartment_id + 1;
+end while;
+//
+//  Preserve last y position for later comparison to prevent xy
+//  centered text overwriting other previously written text.
+//
+lastVerticalPosn = y;
+//
+// Restore x, y and w, h to start positions
+//
+x = graphElement.positionX - diagram.viewportX; 
+y = graphElement.positionY - diagram.viewportY;
+w = graphNode.width; 
+h = graphNode.height;
+//
+// Draw the bottom text for the symbol
+//
+result = CL::getCompartmentText(from:shape.represents,  compartment_id:compartment_id, 
+                   entry_id:0, at:Justification::Bottom);
+bottomStyle = CL::getTextStyle(from:shape.represents, compartment_id:compartment_id,
+                       entry_id:0, at:Justification::Bottom);
+if (result != "")
+  GR::drawText(context:param.context, text:result,  x:x + w/2,  y:y + h, 
+                     justified_to:Justification::Bottom, text_style:bottomStyle);
+end if;
+//
+// If we''re drawing a folder, increase y by the tabSize to limit the text area to the box below the tab
+//
+if (CL::getShapeStyle(from:shape.represents) == Style::Folder)
+  tabHeight = h/tabHeightRatio;
+  if (w < h*2)
+    tabHeight = w/tabWidthRatio;
+  end if;
+  y = y + tabHeight;
+  h = h - tabHeight;
+elif (CL::getShapeStyle(from:shape.represents) == Style::ConcavePentagon)
+//
+// If we''re drawing an incoming flow, increase x by the size of the angled
+// ends to limit the text area to the rectangular area of the shape
+//
+  flagSize = w/5;
+  x = x + flagSize;
+  w = w - flagSize;
+elif (CL::getShapeStyle(from:shape.represents) == Style::ConvexPentagon)
+//
+// If we''re drawing an outgoing flow, decrease w by the size of the arrow
+// end to limit the text area to the rectangular area of the shape
+//
+  flagSize = w/5;
+  w = w - flagSize;
+end if;
+//
+// Draw the centered text for the symbol
+//
+result = CL::getCompartmentText(from:shape.represents,  compartment_id:compartment_id,
+                   entry_id:0, at:Justification::Center);
+centerStyle = CL::getTextStyle(from:shape.represents, compartment_id:compartment_id,
+                       entry_id:0, at:Justification::Center);
+if (result != "")
+  elideAtEnd = true;
+  elideAtEnd = CL::getElideCompartmentTextAtEnd(
+	  element:shape.represents, compartmentNum:compartment_id,
+      entryNum:0);
+  result = GR::fitTextTo(context:param.context, input:result, width:w - (unScaledSpacing * 2), elideAtEnd:elideAtEnd);
+  labelVerticalPosn = y + (h/2) - (GR::getTextExtent(context:param.context, text:result, axis:Axis::Y) / 2);
+  if (lastVerticalPosn < labelVerticalPosn)
+    GR::drawText(context:param.context, text:result, 
+                          x:x + (w/2),
+                          y:y + (h/2),
+                          justified_to:Justification::Center, text_style:centerStyle);
+  end if;
+end if;
+//
+// Derestrict canvas access
+//
+GR::unClip(context:param.context);
+//
+// Draw the floating text, if any
+//
+if ( elemSpec.hasFloatingText )
+  result = CL::getCompartmentText(from:shape.represents,  compartment_id:0,
+                                entry_id:0, at:Justification::Floating);
+  if (result != "")
+    select one con_text related by self->GD_CTXT[R27];
+    if (not_empty con_text)
+      // the default position is slightly below the main shape''s position
+      yOffset = GR::getMinShapeSize();
+      con_text.drawText(context: param.context, text: result, at: End::Floating,
+         disable_selection: param.disable_selection, x1: x, y1: y + yOffset,
+         x2: x+w, y2: y + yOffset );
+    end if;
+  end if;
+end if;
+//
+// If selected, draw the resize handles
+//
+if (CL::isSelected(element:shape.represents) AND NOT param.disable_selection)
+  //
+  // Restore x, y and w, h to start positions
+  //
+  x = graphElement.positionX - diagram.viewportX; 
+  y = graphElement.positionY - diagram.viewportY;
+  w = graphNode.width; 
+  h = graphNode.height;
+  GR::drawResizeHandles(Context:param.context, x:x, y:y, w:w, h:h);
+end if;
+
+if(CL::getShapeStyle(from:shape.represents) == Style::Component)
+  // draw the component mini-symbol in the top right corner
+  GR::setLineWidth(context:param.context, w:1);
+  GR::clipTo(context:param.context, x:x, y:y, w:w, h:h);
+  innerBoxWidth = 25;
+  innerBoxHeight = 20;
+  innerBoxX = x + w - (16 + innerBoxWidth);
+  innerBoxY = y + 16;
+  GR::drawRect(context:param.context, x:innerBoxX, y:innerBoxY, w:innerBoxWidth, h:innerBoxHeight);
+  attachedBoxWidth = 12;
+  attachedBoxHeight = 6;
+  attachedBoxX = innerBoxX - (attachedBoxWidth / 2);
+  attachedBoxY = innerBoxY + 2;
+  GR::drawRect(context:param.context, x:attachedBoxX, y:attachedBoxY, w:attachedBoxWidth, h:attachedBoxHeight);
+  attachedBoxY = attachedBoxY + attachedBoxHeight + 2;
+  GR::drawRect(context:param.context, x:attachedBoxX, y:attachedBoxY, w:attachedBoxWidth, h:attachedBoxHeight);
+  GR::unClip(context:param.context);
+end if;
+',
+	1,
+	'',
+	"ab15cda6-8477-4c92-9f9d-83e33565f6d2");
+INSERT INTO O_TPARM
+	VALUES ("82fb6f20-357a-46c4-8d2e-b79827c691b3",
+	"1625ae32-a7af-4f6b-a779-a31056a80112",
+	'context',
+	"9b090b3d-98a8-4bfb-b7ea-eea38ae06ce3",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("9b090b3d-98a8-4bfb-b7ea-eea38ae06ce3",
+	"00000000-0000-0000-0000-000000000000",
+	'GCDelegate',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("083fd7f2-53ed-412e-a719-02d4cc0539df",
+	"1625ae32-a7af-4f6b-a779-a31056a80112",
+	'disable_selection',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"82fb6f20-357a-46c4-8d2e-b79827c691b3",
+	'');
+INSERT INTO O_TFR
+	VALUES ("6579fb52-c588-4e4d-8789-4bdda49d47bf",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'isOverNW',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select one mdl related by self->GD_GE[R2]->GD_MD[R1];
+select one diagram related by mdl->DIM_DIA[R18];
+select one graphNode related by self->DIM_ND[R19];
+select one graphElement related by graphNode->DIM_GE[R301];
+scaled_x = GR::scale(value:param.x) + diagram.viewportX;
+scaled_y = GR::scale(value:param.y) + diagram.viewportY;
+result = GR::isWithinHotspot(x:scaled_x,
+	y:scaled_y,
+	x2:graphElement.positionX, y2:graphElement.positionY);
+if ( not result )
+  select one text related by self->GD_CTXT[R27];
+  if ( not_empty text )
+    result = text.isOverVertex(scaled_x:scaled_x, scaled_y:scaled_y) == Vertex::NW;
+  end if;
+end if;
+return result;',
+	1,
+	'',
+	"08b904d0-f1bf-41d9-aac4-cbd5cec8cdaa");
+INSERT INTO O_TPARM
+	VALUES ("6022ccb3-4dc5-4e61-b481-188f47dee6fd",
+	"6579fb52-c588-4e4d-8789-4bdda49d47bf",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("58031fe6-800e-4c7c-a685-291d86cc6d7d",
+	"6579fb52-c588-4e4d-8789-4bdda49d47bf",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"6022ccb3-4dc5-4e61-b481-188f47dee6fd",
+	'');
+INSERT INTO O_TFR
+	VALUES ("7e50ef25-944a-400a-81d8-4c62781c2044",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'isOverSE',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select one mdl related by self->GD_GE[R2]->GD_MD[R1];
+select one diagram related by mdl->DIM_DIA[R18];
+select one graphNode related by self->DIM_ND[R19];
+select one graphElement related by graphNode->DIM_GE[R301];
+scaled_x = GR::scale(value:param.x) + diagram.viewportX;
+scaled_y = GR::scale(value:param.y) + diagram.viewportY;
+result = GR::isWithinHotspot(x:scaled_x,
+	y:scaled_y,
+	x2:graphElement.positionX + graphNode.width, 
+	y2:graphElement.positionY + graphNode.height);
+if ( not result )
+  select one text related by self->GD_CTXT[R27];
+  if ( not_empty text )
+    result = text.isOverVertex(scaled_x:scaled_x, scaled_y:scaled_y) == Vertex::SE;
+  end if;
+end if;
+return result;',
+	1,
+	'',
+	"6579fb52-c588-4e4d-8789-4bdda49d47bf");
+INSERT INTO O_TPARM
+	VALUES ("b42c6796-33c1-4cf6-a02b-994acfe9a495",
+	"7e50ef25-944a-400a-81d8-4c62781c2044",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("74ee0472-c4f6-48af-a20f-a66c908d51d1",
+	"7e50ef25-944a-400a-81d8-4c62781c2044",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"b42c6796-33c1-4cf6-a02b-994acfe9a495",
+	'');
+INSERT INTO O_TFR
+	VALUES ("08b904d0-f1bf-41d9-aac4-cbd5cec8cdaa",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'isOverNE',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select one mdl related by self->GD_GE[R2]->GD_MD[R1];
+select one diagram related by mdl->DIM_DIA[R18];
+select one graphNode related by self->DIM_ND[R19];
+select one graphElement related by graphNode->DIM_GE[R301];
+scaled_x = GR::scale(value:param.x) + diagram.viewportX;
+scaled_y = GR::scale(value:param.y) + diagram.viewportY;
+result = GR::isWithinHotspot(x:scaled_x,
+	y:scaled_y,
+	x2:graphElement.positionX + graphNode.width, y2:graphElement.positionY);
+if ( not result )
+  select one text related by self->GD_CTXT[R27];
+  if ( not_empty text )
+    result = text.isOverVertex(scaled_x:scaled_x, scaled_y:scaled_y) == Vertex::NE;
+  end if;
+end if;
+return result;',
+	1,
+	'',
+	"22792826-954c-4c6a-9713-d3d1913c3abd");
+INSERT INTO O_TPARM
+	VALUES ("c3d44813-ff4d-4b51-b6c8-183d652707de",
+	"08b904d0-f1bf-41d9-aac4-cbd5cec8cdaa",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("7f84fabb-5167-4394-94ef-0f45cad40225",
+	"08b904d0-f1bf-41d9-aac4-cbd5cec8cdaa",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"c3d44813-ff4d-4b51-b6c8-183d652707de",
+	'');
+INSERT INTO O_TFR
+	VALUES ("03679163-b334-47ff-8cc8-79173dbb1767",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'isOverSW',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select one mdl related by self->GD_GE[R2]->GD_MD[R1];
+select one diagram related by mdl->DIM_DIA[R18];
+select one graphNode related by self->DIM_ND[R19];
+select one graphElement related by graphNode->DIM_GE[R301];
+scaled_x = GR::scale(value:param.x) + diagram.viewportX;
+scaled_y = GR::scale(value:param.y) + diagram.viewportY;
+result = GR::isWithinHotspot(x:scaled_x,
+	y:scaled_y,
+	x2:graphElement.positionX, y2:graphElement.positionY + graphNode.height);
+if ( not result )
+  select one text related by self->GD_CTXT[R27];
+  if ( not_empty text )
+    result = text.isOverVertex(scaled_x:scaled_x, scaled_y:scaled_y) == Vertex::SW;
+  end if;
+end if;
+return result;',
+	1,
+	'',
+	"7e50ef25-944a-400a-81d8-4c62781c2044");
+INSERT INTO O_TPARM
+	VALUES ("024ac680-a417-422d-87a3-1230deb1fdba",
+	"03679163-b334-47ff-8cc8-79173dbb1767",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("84654eff-a680-45f1-a611-4d92007f2d41",
+	"03679163-b334-47ff-8cc8-79173dbb1767",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"024ac680-a417-422d-87a3-1230deb1fdba",
+	'');
+INSERT INTO O_TFR
+	VALUES ("acc0948a-eae5-4be5-9569-5e2350ce2c5d",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'isOverVertex',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'if (self.isOverNW(x:param.x, y:param.y))
+  return true;
+end if;
+if (self.isOverSW(x:param.x, y:param.y))
+  return true;
+end if;
+if (self.isOverNE(x:param.x, y:param.y))
+  return true;
+end if;
+if (self.isOverSE(x:param.x, y:param.y))
+  return true;
+end if;
+select one text related by self->GD_CTXT[R27];
+if ( not_empty text )
+  select one mdl related by self->GD_GE[R2]->GD_MD[R1];
+  select one diagram related by mdl->DIM_DIA[R18];
+  scaled_x = GR::scale(value:param.x) + diagram.viewportX;
+  scaled_y = GR::scale(value:param.y) + diagram.viewportY;
+  return text.isOverVertex(scaled_x:scaled_x, scaled_y:scaled_y) != Vertex::None;
+end if;
+return false;',
+	1,
+	'',
+	"03679163-b334-47ff-8cc8-79173dbb1767");
+INSERT INTO O_TPARM
+	VALUES ("7fb57da0-e376-4c8c-93a5-9329d8879f93",
+	"acc0948a-eae5-4be5-9569-5e2350ce2c5d",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("c6630869-2830-4a13-8cb9-f343a6b54616",
+	"acc0948a-eae5-4be5-9569-5e2350ce2c5d",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"7fb57da0-e376-4c8c-93a5-9329d8879f93",
+	'');
+INSERT INTO O_TFR
+	VALUES ("50dadeba-1a36-43c8-9041-010b02de0ddb",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'isOver',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select one canvas related by self->GD_GE[R2]->GD_MD[R1];
+select one diagram related by canvas->DIM_DIA[R18];
+select one graphNode related by self->DIM_ND[R19];
+select one graphElement related by graphNode->DIM_GE[R301];
+x = graphElement.positionX - diagram.viewportX;
+y = graphElement.positionY - diagram.viewportY;
+w = graphNode.width;
+h = graphNode.height;
+if (GR::scale(value:param.x) >= x and GR::scale(value:param.x) <= x +w)
+  if (GR::scale(value:param.y) >= y and GR::scale(value:param.y) <= y +h)
+    return true;
+  end if;
+end if;
+select one text related by self->GD_CTXT[R27];
+if ( not_empty text )
+  select one mdl related by self->GD_GE[R2]->GD_MD[R1];
+  select one diagram related by mdl->DIM_DIA[R18];
+  scaled_x = GR::scale(value:param.x) + diagram.viewportX;
+  scaled_y = GR::scale(value:param.y) + diagram.viewportY;
+  return text.isOver(scaled_x:scaled_x, scaled_y:scaled_y);
+end if;
+return false;',
+	1,
+	'',
+	"a947e0ff-f811-44b8-af32-2e5872fc0a37");
+INSERT INTO O_TPARM
+	VALUES ("bf703cf9-0d5d-404a-948c-99a6b293fc4b",
+	"50dadeba-1a36-43c8-9041-010b02de0ddb",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("58617282-b5d0-4622-9cdd-f923e1b2303b",
+	"50dadeba-1a36-43c8-9041-010b02de0ddb",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"bf703cf9-0d5d-404a-948c-99a6b293fc4b",
+	'');
+INSERT INTO O_TFR
+	VALUES ("00c938b9-773c-41a5-90c3-02fcfe9e89c9",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'move',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// snap the given movement amounts to the grid
+select one graphNode related by self->DIM_ND[R19];
+select one graphElement related by graphNode->DIM_GE[R301];
+x = ::roundToGridSnapPoint(
+	ordinate:(graphElement.positionX + GR::scale(value:param.xDelta)), isConnector:false);
+y = ::roundToGridSnapPoint(
+	ordinate:(graphElement.positionY + GR::scale(value:param.yDelta)), isConnector:false);	
+
+// if the grid-snapping above dictates no change in position
+if (x == graphElement.positionX and y == graphElement.positionY)
+	// this movement shouldn''t be performed
+	return;
+end if;
+
+// move the shape to the snap point reached
+deltaX = x - graphElement.positionX;
+graphElement.positionX = x;
+deltaY = y - graphElement.positionY;
+graphElement.positionY = y;
+
+// move the floating text box if present
+select one text related by self->GD_CTXT[R27];
+if ( not_empty text )
+  text.move(xDelta: deltaX, yDelta: deltaY );
+end if;
+
+
+// for each connector that begins at this shape
+select many connectors related by graphElement->DIM_CON[R311]->DIM_ED[R320]->GD_CON[R20];
+for each connector in connectors
+	// get the starting waypoint of this connector
+	segmentId = connector.getStartingSegmentId();
+	select any segment related by connector->GD_LS[R6]
+		where selected.elementId == segmentId;	
+	select one waypoint related by segment->DIM_WAY[R21];
+	
+	// move the starting waypoint the same amount that 
+	// this shape moved, plus the amount necessary (if any)
+	// to place it at the nearest snap-point (in at least 
+	// one axis) on the shape''s edge (since the shape is 
+	// itself now snapped at least its top and left sides)
+	snapPointId = self.getNearestGridSnapPointOnEdge(
+		x:waypoint.positionX + deltaX, 
+		y:waypoint.positionY + deltaY);
+	select any snapPoint from instances of DIM_PNT where selected.pointId == snapPointId;
+	connector.moveStart(
+		xDelta:snapPoint.x - waypoint.positionX, 
+		yDelta:snapPoint.y - waypoint.positionY, snapToGrid:false);
+	delete object instance snapPoint;
+end for;
+
+// for each connector that ends at this shape
+select many connectors related by graphElement->DIM_CON[R311]->DIM_ED[R321]->GD_CON[R20];
+for each connector in connectors    
+  // get the ending waypoint of this connector
+  segmentId = connector.getEndingSegmentId();
+  select any segment related by connector->GD_LS[R6]
+	  where selected.elementId == segmentId;	
+  select one waypoint related by segment->DIM_WAY[R22];
+
+  // see [1], with the ending waypoint now being the one moved
+  snapPointId = self.getNearestGridSnapPointOnEdge(
+	  x:waypoint.positionX + deltaX, 
+	  y:waypoint.positionY + deltaY);
+  select any snapPoint from instances of DIM_PNT where selected.pointId == snapPointId;
+  connector.moveEnd(
+	  xDelta:snapPoint.x - waypoint.positionX, 
+	  yDelta:snapPoint.y - waypoint.positionY, snapToGrid:false);
+  delete object instance snapPoint;
+end for;',
+	1,
+	'',
+	"acc0948a-eae5-4be5-9569-5e2350ce2c5d");
+INSERT INTO O_TPARM
+	VALUES ("52c7c4b3-6c89-498d-9df7-cf99ff03f033",
+	"00c938b9-773c-41a5-90c3-02fcfe9e89c9",
+	'xDelta',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("ebb5bcc1-1e7c-432d-986a-86ceab92a2d8",
+	"00c938b9-773c-41a5-90c3-02fcfe9e89c9",
+	'yDelta',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"52c7c4b3-6c89-498d-9df7-cf99ff03f033",
+	'');
+INSERT INTO O_TFR
+	VALUES ("a947e0ff-f811-44b8-af32-2e5872fc0a37",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'isInside',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select one canvas related by self->GD_GE[R2]->GD_MD[R1];
+select one graphNode related by self->DIM_ND[R19];
+select one graphElement related by graphNode->DIM_GE[R301];
+x = graphElement.positionX;
+y = graphElement.positionY;
+w = graphNode.width;
+h = graphNode.height;
+if (param.x < x and (param.x + param.w > x + w))
+  if (param.y < y and (param.y + param.h > y + h))
+    return true;
+  end if;
+end if;
+return false;',
+	1,
+	'',
+	"7ce1be54-c6f8-4144-9be3-bb41246585cb");
+INSERT INTO O_TPARM
+	VALUES ("c99ae106-f4ba-4a80-a32a-3a8491b85fef",
+	"a947e0ff-f811-44b8-af32-2e5872fc0a37",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"69f961ac-fb47-4563-916e-cbda96e389c6",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("2fbd4e7a-0018-426a-99e0-08689cb4d1cd",
+	"a947e0ff-f811-44b8-af32-2e5872fc0a37",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"c99ae106-f4ba-4a80-a32a-3a8491b85fef",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("69f961ac-fb47-4563-916e-cbda96e389c6",
+	"a947e0ff-f811-44b8-af32-2e5872fc0a37",
+	'w',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"f35ec4bf-5128-4134-90dd-93ba4150f009",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("f35ec4bf-5128-4134-90dd-93ba4150f009",
+	"a947e0ff-f811-44b8-af32-2e5872fc0a37",
+	'h',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("d96bc30f-bd81-48f3-a58d-4d3f627c2ded",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'moveConnectors',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'/*
+Finds all connectors that are attached to this shape at one of the two 
+sides that are adjacent to the given vertex, and moves the connected
+vertices of those connectors by the given delta, which is how much
+the shape''s vertex was moved.  The given old-shape values indicate
+the size and position of the shape before the vertex''s movement, 
+so that this routine may determine to which side of the shape each 
+connector is connected.
+*/
+
+// for each connector that starts at this shape
+select one elem related by self->GD_GE[R2]->DIM_GE[R23];
+select many connectors related by elem->DIM_CON[R311]->DIM_ED[R320]->GD_CON[R20];
+for each connector in connectors
+	// if cropping the start of this connector to the shape''s boundary
+	// would have some effect
+	cropToDeltaId = connector.getDeltaForCropTo(
+		deltaX:param.xDelta, deltaY:param.yDelta, 
+		vertex:param.Vertex, end:End::Start, 
+		oldShapeX:param.oldShapeX, oldShapeY:param.oldShapeY,
+		oldShapeWidth:param.oldShapeWidth, oldShapeHeight:param.oldShapeHeight);
+	select any cropToDelta from instances of DIM_PNT 
+		where selected.pointId == cropToDeltaId;
+	if (cropToDelta.x != 0 or cropToDelta.y != 0)
+		// move the start of this connector to the crop position
+		connector.moveStart(xDelta:cropToDelta.x, yDelta:cropToDelta.y, 
+			snapToGrid:false);
+
+		// get the starting waypoint of this connector
+		segmentId = connector.getStartingSegmentId();
+		select any segment related by connector->GD_LS[R6]
+			where selected.elementId == segmentId;	
+		select one waypoint related by segment->DIM_WAY[R21];
+
+		// [1] move the starting waypoint the amount necessary (if any)
+		// to place it at the nearest snap-point (in at least 
+		// one axis) on the shape''s edge (since the shape is 
+		// itself now snapped on the two sides adjacent to the 
+		// given vertex)
+		snapPointId = self.getNearestGridSnapPointOnEdge(
+			x:waypoint.positionX, y:waypoint.positionY);
+		select any snapPoint from instances of DIM_PNT 
+			where selected.pointId == snapPointId;
+		connector.moveStart(
+			xDelta:snapPoint.x - waypoint.positionX, 
+			yDelta:snapPoint.y - waypoint.positionY, snapToGrid:false);
+		delete object instance snapPoint;
+	end if;
+	delete object instance cropToDelta;
+end for;
+
+// for each connector that ends at this shape
+select many connectors related by elem->DIM_CON[R311]->DIM_ED[R321]->GD_CON[R20];
+for each connector in connectors
+	// if cropping the end of this connector to the shape''s boundary
+	// would have some effect
+	cropToDeltaId = connector.getDeltaForCropTo(
+		deltaX:param.xDelta, deltaY:param.yDelta, 
+		vertex:param.Vertex, end:End::End, 
+		oldShapeX:param.oldShapeX, oldShapeY:param.oldShapeY,
+		oldShapeWidth:param.oldShapeWidth, oldShapeHeight:param.oldShapeHeight);
+	select any cropToDelta from instances of DIM_PNT 
+		where selected.pointId == cropToDeltaId;
+	if (cropToDelta.x != 0 or cropToDelta.y != 0)
+		// move the end of this connector to the crop position
+		connector.moveEnd(xDelta:cropToDelta.x, yDelta:cropToDelta.y, 
+			snapToGrid:false);
+
+		// get the ending waypoint of this connector
+		segmentId = connector.getEndingSegmentId();
+		select any segment related by connector->GD_LS[R6]
+			where selected.elementId == segmentId;	
+		select one waypoint related by segment->DIM_WAY[R22];
+	
+		// see [1], with the ending waypoint now being the one moved
+		snapPointId = self.getNearestGridSnapPointOnEdge(
+			x:waypoint.positionX, y:waypoint.positionY);
+		select any snapPoint from instances of DIM_PNT 
+			where selected.pointId == snapPointId;
+		connector.moveEnd(
+			xDelta:snapPoint.x - waypoint.positionX, 
+			yDelta:snapPoint.y - waypoint.positionY, snapToGrid:false);
+		delete object instance snapPoint;
+	end if;
+	delete object instance cropToDelta;
+end for;
+',
+	1,
+	'',
+	"00c938b9-773c-41a5-90c3-02fcfe9e89c9");
+INSERT INTO O_TPARM
+	VALUES ("1c074303-2a4a-4e46-a329-f68f6e70d452",
+	"d96bc30f-bd81-48f3-a58d-4d3f627c2ded",
+	'xDelta',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"25eb0769-4377-453f-8466-9fd892882a10",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("aef78fe7-b2d1-4240-b028-3dab800738e0",
+	"d96bc30f-bd81-48f3-a58d-4d3f627c2ded",
+	'yDelta',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"1c074303-2a4a-4e46-a329-f68f6e70d452",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("c1d920d0-4eb0-4175-a225-3e4f51c44f3a",
+	"d96bc30f-bd81-48f3-a58d-4d3f627c2ded",
+	'Vertex',
+	"d7a74195-e424-45a0-8c77-869b0a8a80ba",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d7a74195-e424-45a0-8c77-869b0a8a80ba",
+	"00000000-0000-0000-0000-000000000000",
+	'Vertex',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("e87d315a-a377-4d51-85d1-584f3accffa1",
+	"d96bc30f-bd81-48f3-a58d-4d3f627c2ded",
+	'oldShapeX',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"5b6e8b70-e2fe-422d-9544-93bca8c9d712",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("25eb0769-4377-453f-8466-9fd892882a10",
+	"d96bc30f-bd81-48f3-a58d-4d3f627c2ded",
+	'oldShapeY',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"e87d315a-a377-4d51-85d1-584f3accffa1",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("5b6e8b70-e2fe-422d-9544-93bca8c9d712",
+	"d96bc30f-bd81-48f3-a58d-4d3f627c2ded",
+	'oldShapeWidth',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"767c9195-b6b4-43c3-ac3a-127c11fa5682",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("767c9195-b6b4-43c3-ac3a-127c11fa5682",
+	"d96bc30f-bd81-48f3-a58d-4d3f627c2ded",
+	'oldShapeHeight',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"c1d920d0-4eb0-4175-a225-3e4f51c44f3a",
+	'');
+INSERT INTO O_TFR
+	VALUES ("4a3f62ce-c5ec-48c2-807d-0532cf980e65",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'moveVertex',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one canvas related by self->GD_GE[R2]->GD_MD[R1];
+select one diagram related by canvas->DIM_DIA[R18];
+
+if ( param.End == End::Floating )
+  select one text related by self->GD_CTXT[R27];
+  if ( not_empty text )
+    text.moveVertex(viewportX: diagram.viewportX, 
+        viewportY: diagram.viewportY, Vertex: param.Vertex);
+  end if;
+  
+  // nothing else to do
+  return;
+end if;
+// copy the current positional data of this shape into 
+// temporary variables, which we''ll modify below
+select one graphNode related by self->DIM_ND[R19];
+select one graphElement related by graphNode->DIM_GE[R301];
+x1 = graphElement.positionX;
+y1 = graphElement.positionY;
+x2 = x1 + graphNode.width;
+y2 = y1 + graphNode.height;
+
+// use the given vertex to decide which of the above 
+// temporary variables to adjust to reflect the 
+// new mouse position
+snapX = ::roundToGridSnapPoint(
+	ordinate:(GR::scale(value:GR::getAbsoluteXPosition())
+		+ diagram.viewportX), isConnector:false); 
+snapY = ::roundToGridSnapPoint(
+	ordinate:(GR::scale(value:GR::getAbsoluteYPosition())
+		+ diagram.viewportY), isConnector:false);
+		
+if (param.Vertex == Vertex::NW)
+	x1 = snapX;
+	y1 = snapY;
+elif (param.Vertex == Vertex::SE)
+	x2 = snapX;
+	y2 = snapY;
+elif (param.Vertex == Vertex::NE)
+	x2 = snapX;
+	y1 = snapY;
+elif (param.Vertex == Vertex::SW)
+	x1 = snapX;
+	y2 = snapY;
+end if;
+
+// if the shape is not being resized to be smaller than a minimum size
+minSize = GR::getMinShapeSize();
+if (x2 - x1 >= minSize and y2 - y1 >= minSize)
+ 	
+	// remember this shape''s current position and size for the call to 
+	// moveConnectors, below
+	oldX = graphElement.positionX;
+	oldY = graphElement.positionY;
+	oldWidth = graphNode.width;
+	oldHeight = graphNode.height;
+
+    // adjust the shape so that it has a fixed aspect
+    select one spec related by self->GD_GE[R2]->GD_ES[R10];
+    if (spec.isFixedAspectRatio)
+      // use the rectangle width and the aspect
+      // ratio to detm the height-extent of the rectangle
+      width = OS::intToReal(value:spec.defaultWidth);
+      height = OS::intToReal(value:spec.defaultHeight);
+      newWidth = x2 - x1;
+      newHeight = (newWidth * width) / height;
+      // if the vertex moved is on the northern part of
+      // this shape
+      if(param.Vertex == Vertex::NW) or (param.Vertex == Vertex::NE)
+        // we must adjust the position y instead of the height
+        // so that the shape does not move
+        originalHeight = y2 - y1;
+        // adjust the y coordinate the difference of the new
+        // height and the original
+        y1 = y1 + (originalHeight - newHeight);
+      else
+        // otherwise adjust the greater y
+        y2 = y1 + newHeight;
+      end if;
+    end if;
+                                         
+	// detm the amount of x movement
+	dx = x1 - graphElement.positionX;
+	if (dx == 0)
+		dx = x2 - (graphElement.positionX + graphNode.width);
+	end if;
+   	
+	// detm the amount of y movement
+	dy = y1 - graphElement.positionY;
+	if (dy == 0)
+		dy = y2 - (graphElement.positionY + graphNode.height);
+	end if;
+		
+	// update this shape''s position and size with the values computed above
+	graphElement.positionX = x1;
+	graphElement.positionY = y1;
+	graphNode.width = x2 - x1;
+	graphNode.height = y2 - y1;
+
+	// if there was any x or y movement
+	if (dx != 0 or dy != 0)
+		// move any affected connectors a like amount
+		self.moveConnectors(xDelta:dx, yDelta:dy, Vertex:param.Vertex,
+			oldShapeX:oldX, oldShapeY:oldY, 
+			oldShapeWidth:oldWidth, oldShapeHeight:oldHeight);
+	end if;
+end if;
+',
+	1,
+	'',
+	"6642da38-34c5-429a-aec3-da727c460cc6");
+INSERT INTO O_TPARM
+	VALUES ("4bf33360-f981-4bb5-8318-59f3eaea6753",
+	"4a3f62ce-c5ec-48c2-807d-0532cf980e65",
+	'xDelta',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"a19527fb-b653-44f2-bcab-3d7da74e79e5",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("3e589c0e-f639-43c1-ae62-92e2be5c04db",
+	"4a3f62ce-c5ec-48c2-807d-0532cf980e65",
+	'yDelta',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"4bf33360-f981-4bb5-8318-59f3eaea6753",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("a19527fb-b653-44f2-bcab-3d7da74e79e5",
+	"4a3f62ce-c5ec-48c2-807d-0532cf980e65",
+	'Vertex',
+	"d7a74195-e424-45a0-8c77-869b0a8a80ba",
+	0,
+	'',
+	"21d6d2bb-574c-41af-a4a1-1b351971b09d",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("21d6d2bb-574c-41af-a4a1-1b351971b09d",
+	"4a3f62ce-c5ec-48c2-807d-0532cf980e65",
+	'End',
+	"3a766804-bd88-47ef-abe7-d9ca7c1576f2",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("3a766804-bd88-47ef-abe7-d9ca7c1576f2",
+	"00000000-0000-0000-0000-000000000000",
+	'End',
+	'Translate:false',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("0a944bec-d686-4eec-87f3-177a19e266fb",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'getXIntersect',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'return self.getIntersect(x1:param.x1, y1:param.y1, x2:param.x2, y2:param.y2, axis:Axis::X);',
+	1,
+	'',
+	"d8ff4c62-3a6e-410b-8349-8cd53503fbd6");
+INSERT INTO O_TPARM
+	VALUES ("f16effcd-f3f9-4869-ac64-7a65a25351f0",
+	"0a944bec-d686-4eec-87f3-177a19e266fb",
+	'x1',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("de8550df-1c5d-49ad-8660-381115cddee4",
+	"0a944bec-d686-4eec-87f3-177a19e266fb",
+	'y1',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"586f06ae-00a1-40cb-9568-011ececd58fd",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("586f06ae-00a1-40cb-9568-011ececd58fd",
+	"0a944bec-d686-4eec-87f3-177a19e266fb",
+	'x2',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"f16effcd-f3f9-4869-ac64-7a65a25351f0",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("eab33307-d907-43af-a2c5-475d2d526080",
+	"0a944bec-d686-4eec-87f3-177a19e266fb",
+	'y2',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"de8550df-1c5d-49ad-8660-381115cddee4",
+	'');
+INSERT INTO O_TFR
+	VALUES ("7ce1be54-c6f8-4144-9be3-bb41246585cb",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'getYIntersect',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'return self.getIntersect(x1:param.x1, y1:param.y1, x2:param.x2, y2:param.y2, axis:Axis::Y);',
+	1,
+	'',
+	"0a944bec-d686-4eec-87f3-177a19e266fb");
+INSERT INTO O_TPARM
+	VALUES ("acbce73d-3dc0-41e6-8669-66405a5e890a",
+	"7ce1be54-c6f8-4144-9be3-bb41246585cb",
+	'x1',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("865629b3-5356-48d4-bcf2-904402733df5",
+	"7ce1be54-c6f8-4144-9be3-bb41246585cb",
+	'y1',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"f5cd14a4-2dc2-4213-acdd-a690008e3d3d",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("f5cd14a4-2dc2-4213-acdd-a690008e3d3d",
+	"7ce1be54-c6f8-4144-9be3-bb41246585cb",
+	'x2',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"acbce73d-3dc0-41e6-8669-66405a5e890a",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("442e39fb-dc26-47be-afd0-ba271298a4e5",
+	"7ce1be54-c6f8-4144-9be3-bb41246585cb",
+	'y2',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"865629b3-5356-48d4-bcf2-904402733df5",
+	'');
+INSERT INTO O_TFR
+	VALUES ("5db149fd-0e2d-42bb-89e4-2af0ca00d49e",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'getIntersect',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'select one ge related by self->GD_GE[R2];
+style = CL::getShapeStyle(from:ge.represents);
+
+minX = ::min(a:param.x1, b:param.x2);
+maxX = ::max(a:param.x1, b:param.x2);
+minY = ::min(a:param.y1, b:param.y2);
+maxY = ::max(a:param.y1, b:param.y2);
+//
+// Look for an intersection with all four sides of the shape.
+//
+// Top
+select one graphNode related by self->DIM_ND[R19];
+select one graphElement related by graphNode->DIM_GE[R301];
+
+if(style == Style::Ellipse)
+  result_x = ::getIntersectionOfSegmentWithEllipse(ellipseH:graphNode.height,
+  				ellipseW:graphNode.width, ellipseX:graphElement.positionX, ellipseY:graphElement.positionY,
+	  			x:param.x1, x2:param.x2, y:param.y1, y2:param.y2, considerLine:true, axis:Axis::X);
+  result_y = ::getIntersectionOfSegmentWithEllipse(ellipseH:graphNode.height,
+  				ellipseW:graphNode.width, ellipseX:graphElement.positionX, ellipseY:graphElement.positionY,
+	  			x:param.x1, x2:param.x2, y:param.y1, y2:param.y2, considerLine:true, axis:Axis::Y);
+  if(result_x != 0) and (result_y != 0)
+    pointx = result_x;
+	pointy = result_y;
+    if(param.axis == Axis::X)
+	  return pointx;
+	else
+	  return pointy;
+	end if;
+  end if;
+end if;
+
+leftX = graphElement.positionX;
+rightX = graphElement.positionX + graphNode.width;
+topY = graphElement.positionY;
+bottomY = graphElement.positionY + graphNode.height;
+intersectX = GR::getXIntersect(x1:param.x1, y1:param.y1, x2:param.x2, y2:param.y2,
+	x3:leftX, y3:topY, x4:rightX, y4:topY);
+intersectY = GR::getYIntersect(x1:param.x1, y1:param.y1, x2:param.x2, y2:param.y2,
+	x3:leftX, y3:topY, x4:rightX, y4:topY);
+if ((intersectX >= minX and intersectX <= maxX) and
+    (intersectY >= minY and intersectY <= maxY))
+  if ((intersectX >= leftX 
+  	and intersectX <= rightX) 
+  	and (intersectY == topY))
+    if (param.axis == Axis::X)
+      return intersectX;
+    else
+      return intersectY;
+    end if;
+  end if;
+end if;
+// Bottom
+intersectX = GR::getXIntersect(x1:param.x1, y1:param.y1, x2:param.x2, y2:param.y2,
+	x3:leftX, y3:bottomY, x4:rightX, y4:bottomY);
+intersectY = GR::getYIntersect(x1:param.x1, y1:param.y1, x2:param.x2, y2:param.y2,
+	x3:leftX, y3:bottomY, x4:rightX, y4:bottomY);
+if ((intersectX >= minX and intersectX <= maxX) and
+    (intersectY >= minY and intersectY <= maxY))
+  if ((intersectX >= leftX and intersectX <= rightX) and
+    (intersectY == bottomY))
+    if (param.axis == Axis::X)
+      return intersectX;
+    else
+      return intersectY;
+    end if;
+  end if;
+end if;
+// Left
+intersectX = GR::getXIntersect(x1:param.x1, y1:param.y1, x2:param.x2, y2:param.y2,
+                                                  x3:leftX, y3:topY, x4:leftX, y4:bottomY);
+intersectY = GR::getYIntersect(x1:param.x1, y1:param.y1, x2:param.x2, y2:param.y2,
+                                                  x3:leftX, y3:topY, x4:leftX, y4:bottomY);
+if ((intersectX >= minX and intersectX <= maxX) and
+    (intersectY >= minY and intersectY <= maxY))
+  if ((intersectX == leftX) and
+    (intersectY >= topY and intersectY <= bottomY))
+    if (param.axis == Axis::X)
+      return intersectX;
+    else
+      return intersectY;
+    end if;
+  end if;
+end if;
+// Right
+intersectX = GR::getXIntersect(x1:param.x1, y1:param.y1, x2:param.x2, y2:param.y2,
+                                                  x3:rightX, y3:topY, x4:rightX, y4:bottomY);
+intersectY = GR::getYIntersect(x1:param.x1, y1:param.y1, x2:param.x2, y2:param.y2,
+                                                  x3:rightX, y3:topY, x4:rightX, y4:bottomY);
+if ((intersectX >= minX and intersectX <= maxX) and
+    (intersectY >= minY and intersectY <= maxY))
+  if ((intersectX == rightX) and
+    (intersectY >= topY and intersectY <= bottomY))
+    if (param.axis == Axis::X)
+      return intersectX;
+    else
+      return intersectY;
+    end if;
+  end if;
+end if;
+return 0;',
+	1,
+	'',
+	"fe879418-d394-40c3-b3be-975154ca242d");
+INSERT INTO O_TPARM
+	VALUES ("5d7b46d9-6833-47e7-aa54-1560470432b7",
+	"5db149fd-0e2d-42bb-89e4-2af0ca00d49e",
+	'x1',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"b2bf7870-6abd-4677-8bdd-018bfd5bb53f",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("fbe7e344-b552-4800-8a12-a0c5d7cd3bde",
+	"5db149fd-0e2d-42bb-89e4-2af0ca00d49e",
+	'y1',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"1c2ea6dc-c81c-45af-af09-d9272d89cb08",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("1c2ea6dc-c81c-45af-af09-d9272d89cb08",
+	"5db149fd-0e2d-42bb-89e4-2af0ca00d49e",
+	'x2',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"5d7b46d9-6833-47e7-aa54-1560470432b7",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("9ae20d63-6a68-41ed-ba18-b8d08bd2a3d1",
+	"5db149fd-0e2d-42bb-89e4-2af0ca00d49e",
+	'y2',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"fbe7e344-b552-4800-8a12-a0c5d7cd3bde",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("b2bf7870-6abd-4677-8bdd-018bfd5bb53f",
+	"5db149fd-0e2d-42bb-89e4-2af0ca00d49e",
+	'axis',
+	"29c5f2d9-b613-4ac5-9236-c6b930797e05",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("29c5f2d9-b613-4ac5-9236-c6b930797e05",
+	"00000000-0000-0000-0000-000000000000",
+	'Axis',
+	'Specifies the X or Y axis.',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("ab15cda6-8477-4c92-9f9d-83e33565f6d2",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'dispose',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one ge related by self->GD_GE[R2];
+if ( not_empty ge )
+  ge.dispose();
+else
+  select one graphNode related by self->DIM_ND[R19];
+  if ( not_empty graphNode )
+    unrelate self from graphNode across R19;
+    graphNode.dispose();
+  end if;
+  select one ctxt related by self->GD_CTXT[R27];
+  if ( not_empty ctxt )
+    unrelate self from ctxt across R27;
+    ctxt.dispose();
+  end if;
+
+  delete object instance self;
+end if;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("6642da38-34c5-429a-aec3-da727c460cc6",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'moveToDefaultPosition',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one ge related by self->GD_GE[R2];
+if ( not_empty ge )
+  select one mdl related by ge->GD_MD[R1];
+  select one diagram related by mdl->DIM_DIA[R18];
+  select one es related by ge->GD_ES[R10];
+  select one graphNode related by self->DIM_ND[R19];
+  select one graphElement related by graphNode->DIM_GE[R301];
+  if ( not_empty mdl and not_empty es )
+    spacing = es.defaultWidth / 10;
+    select many ge_set related by mdl->GD_GE[R1];
+    graphElement.positionX = diagram.viewportX + (spacing * cardinality ge_set);
+    graphElement.positionY = diagram.viewportY + (spacing * cardinality ge_set);
+    graphNode.width = es.defaultWidth;
+    graphNode.height = es.defaultHeight;
+  end if;
+end if;',
+	1,
+	'',
+	"d96bc30f-bd81-48f3-a58d-4d3f627c2ded");
+INSERT INTO O_TFR
+	VALUES ("496d40e7-3a88-426e-a91b-d24a92b4353f",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'getNearestGridSnapPointOnEdge',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000005",
+	1,
+	'// This operation returns the ID of a new point instance 
+// which represents the nearest grid snap-point to the logical
+// position given that''s on the same edge of this
+// element as that position.  As such, this operation 
+// assumes that the given position is located on an edge of 
+// this element.  
+//
+// If the shape edge is not itself snapped to the grid,
+// the returned location will not be a snap-point in both axes,
+// but rather just whichever axis is parallel to the edge.
+// ------------------------------------------------------------
+
+// if the given position is on the top or bottom edge of this 
+// shape''s rectangle
+select one elem related by self->GD_GE[R2]->DIM_GE[R23];
+select one node related by elem->DIM_ND[R301];
+x = param.x;
+y = param.y;
+if (::round(value:y) == ::round(value:elem.positionY)
+	or ::round(value:y) == ::round(value:elem.positionY + node.height))
+	// find the nearest snap-point x-wise
+	x = ::roundToGridSnapPointWithinLimits(ordinate:x, 
+		min:elem.positionX, max:elem.positionX + node.width, isConnector:true);
+// otherwise, it''s on the left or right edge
+else
+	// find the nearest snap-point y-wise
+	y = ::roundToGridSnapPointWithinLimits(ordinate:y, 
+		min:elem.positionY, max:elem.positionY + node.height, isConnector:true);
+end if;		
+
+// create the result object, and return its ID
+create object instance result of DIM_PNT;
+result.x = x;
+result.y = y;
+return result.pointId;
+',
+	1,
+	'',
+	"5db149fd-0e2d-42bb-89e4-2af0ca00d49e");
+INSERT INTO O_TPARM
+	VALUES ("de27b24a-2079-4942-876a-ad0d399d28cb",
+	"496d40e7-3a88-426e-a91b-d24a92b4353f",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("22d49809-b428-4a6a-9da2-5e6b70b67454",
+	"496d40e7-3a88-426e-a91b-d24a92b4353f",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"de27b24a-2079-4942-876a-ad0d399d28cb",
+	'');
+INSERT INTO O_TFR
+	VALUES ("051f11c4-006a-44ff-82db-2ccad0f266b1",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'getRepresents',
+	'',
+	"9b2af4ce-1f5a-417f-9015-2a365712bef5",
+	1,
+	'/*
+Returns the model element represented by the region within this shape that 
+covers the given location (which is specified relative to this shape''s 
+position).
+*/ 
+
+// if the given location is over an icon slot
+select one element related by self->GD_GE[R2];
+slotNum = self.getIconSlotNumOver(x:param.x, y:param.y);
+if (slotNum >= 0)
+	// return the model-element that this icon slot represents
+	return CL::getIconRepresents(element:element.represents, 
+		compartmentNum:1, slotNum:slotNum);
+end if;
+
+// return the model-element that this shape represents
+return element.represents;',
+	1,
+	'',
+	"496d40e7-3a88-426e-a91b-d24a92b4353f");
+INSERT INTO O_TPARM
+	VALUES ("4c13f6df-4e62-4b18-adec-5738ed238eb7",
+	"051f11c4-006a-44ff-82db-2ccad0f266b1",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("8cc63a1e-1157-4a90-a5c7-bcc3b5742771",
+	"051f11c4-006a-44ff-82db-2ccad0f266b1",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"4c13f6df-4e62-4b18-adec-5738ed238eb7",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("9b2af4ce-1f5a-417f-9015-2a365712bef5",
+	"00000000-0000-0000-0000-000000000000",
+	'instance',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("d8ff4c62-3a6e-410b-8349-8cd53503fbd6",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'getToolTipText',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'/*
+Returns the tootlip text this shape would like displayed for the given location 
+(which is specified relative to this shape''s position).
+*/ 
+
+// if the given location is over an icon slot
+select one element related by self->GD_GE[R2];
+slotNum = self.getIconSlotNumOver(x:param.x, y:param.y);
+if (slotNum >= 0)
+	// if the slot''s icon is being shown
+	if (CL::shouldCompartmentIconBeDrawn(
+		element:element.represents, compartmentNum:1, slotNum:slotNum))
+		// return the appropriate text for the icon 
+		if (slotNum == 0)
+			return "Double-click here to open Instance State Machine Diagram";
+		elif (slotNum == 1)
+			return "Double-click here to open Class State Machine Diagram";
+		end if;
+	end if;
+end if;
+
+return "";',
+	1,
+	'',
+	"051f11c4-006a-44ff-82db-2ccad0f266b1");
+INSERT INTO O_TPARM
+	VALUES ("4aa43f67-5579-4e1a-be22-e4c18ef3490f",
+	"d8ff4c62-3a6e-410b-8349-8cd53503fbd6",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("f3d03679-c960-4603-b183-cd7031edd5f0",
+	"d8ff4c62-3a6e-410b-8349-8cd53503fbd6",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"4aa43f67-5579-4e1a-be22-e4c18ef3490f",
+	'');
+INSERT INTO O_TFR
+	VALUES ("fe879418-d394-40c3-b3be-975154ca242d",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'getIconSlotNumOver',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'/*
+Returns the icon slot number which the given location (which is specified 
+relative to this shape''s position) is over.  -1 is returned if there is no
+such slot.
+*/ 
+
+// if the given location lies y-wise within the y-bounds of the icons 
+// of this shape''s first compartment (only the first compartment is considered, 
+// since no icons are currently displayed for later compartments)
+select one element related by self->GD_GE[R2];
+iconDistanceFromEdge = ::getIconDistanceFromEdge();
+iconSize = ::getIconSize();
+iconSpacing = ::getIconSpacing();
+if (param.y >= iconDistanceFromEdge 
+	and param.y < iconDistanceFromEdge + iconSize)
+	// for each icon-slot in the first compartment of this element
+	numSlots = CL::getNumCompartmentIconSlots(
+		element:element.represents, compartmentNum:1);
+	slotNum = 0;
+	while (slotNum < numSlots) 
+		// if the given location lies within this icon slot
+		iconX = iconDistanceFromEdge + slotNum * (iconSize + iconSpacing);
+		if (param.x >= iconX and param.x < iconX + iconSize)
+			// return this slot''s number
+			return slotNum;
+		end if;
+
+		slotNum = slotNum + 1;
+	end while;
+end if;
+
+// the given location is over no icon slot
+return -1;',
+	1,
+	'',
+	"1625ae32-a7af-4f6b-a779-a31056a80112");
+INSERT INTO O_TPARM
+	VALUES ("bcbd67df-eadc-44d1-bec4-874e2c07a427",
+	"fe879418-d394-40c3-b3be-975154ca242d",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("b41bd015-2b00-4393-b887-5891fdfe55b1",
+	"fe879418-d394-40c3-b3be-975154ca242d",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"bcbd67df-eadc-44d1-bec4-874e2c07a427",
+	'');
+INSERT INTO O_TFR
+	VALUES ("22792826-954c-4c6a-9713-d3d1913c3abd",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	'isOverDiagramPosition',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select one graphNode related by self->DIM_ND[R19];
+select one graphElement related by graphNode->DIM_GE[R301];
+x = graphElement.positionX;
+y = graphElement.positionY;
+w = graphNode.width;
+h = graphNode.height;
+return param.x >= x and param.x < x + w and param.y >= y and param.y < y + h;',
+	1,
+	'',
+	"50dadeba-1a36-43c8-9041-010b02de0ddb");
+INSERT INTO O_TPARM
+	VALUES ("fd4204b3-381c-442e-aa12-287c17a0102e",
+	"22792826-954c-4c6a-9713-d3d1913c3abd",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("f52b4d85-2b1e-4989-9815-e81d28b31252",
+	"22792826-954c-4c6a-9713-d3d1913c3abd",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"fd4204b3-381c-442e-aa12-287c17a0102e",
+	'');
+INSERT INTO O_REF
+	VALUES ("0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	"62176e52-a3da-4048-b14e-9f605d6cfa4d",
+	0,
+	"abd193e8-6195-40ab-881b-d7a1145430a1",
+	"12f83543-1083-4417-bbec-fbde75f48180",
+	"2b86386d-8b89-4dbc-8f0c-75a10d94c370",
+	"c72d198b-cee3-4faa-be97-e0be688f968c",
+	"7e1d380f-53a9-4400-8586-15cf6881aac0",
+	"abd054b0-8c40-4a4e-828e-0e8adb305b10",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'GraphNode',
+	'elementId',
+	'R19');
+INSERT INTO R_RGO_PROXY
+	VALUES ("0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	"12f83543-1083-4417-bbec-fbde75f48180",
+	"2b86386d-8b89-4dbc-8f0c-75a10d94c370",
+	'../Graphical Data.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("abd193e8-6195-40ab-881b-d7a1145430a1",
+	"62176e52-a3da-4048-b14e-9f605d6cfa4d",
+	0,
+	"12f83543-1083-4417-bbec-fbde75f48180",
+	"c72d198b-cee3-4faa-be97-e0be688f968c",
+	'../Graphical Data.xtuml');
+INSERT INTO O_REF
+	VALUES ("0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	"7203cd95-2fe7-42df-ba99-41b43e8968c9",
+	0,
+	"91b6c76c-69e4-485b-b26a-58b346c17ffb",
+	"41625db4-8601-4fc1-ab87-1b16faf99cef",
+	"9dcf781c-c3b8-4e90-a486-195deff34228",
+	"9cb8ddd1-0af4-4b17-86b5-1557d3692ee8",
+	"7e1d380f-53a9-4400-8586-15cf6881aac0",
+	"00813013-0485-4944-ac8d-9842f24bcd99",
+	"abd054b0-8c40-4a4e-828e-0e8adb305b10",
+	0,
+	'',
+	'Graphical Element',
+	'elementId',
+	'R2');
+INSERT INTO R_RGO_PROXY
+	VALUES ("0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	"41625db4-8601-4fc1-ab87-1b16faf99cef",
+	"9dcf781c-c3b8-4e90-a486-195deff34228",
+	'../Graphical Data.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("91b6c76c-69e4-485b-b26a-58b346c17ffb",
+	"7203cd95-2fe7-42df-ba99-41b43e8968c9",
+	0,
+	"41625db4-8601-4fc1-ab87-1b16faf99cef",
+	"9cb8ddd1-0af4-4b17-86b5-1557d3692ee8",
+	'../Graphical Data.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("7e1d380f-53a9-4400-8586-15cf6881aac0",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	"9b69bfa9-07b2-458c-8dd7-442d13942cd0",
+	"0a762924-8165-4d5f-bcb2-bc29265b5505",
+	1,
+	'elementId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("9b69bfa9-07b2-458c-8dd7-442d13942cd0",
+	"0a762924-8165-4d5f-bcb2-bc29265b5505",
+	'../../UML 2.0 Diagram Interchange/DiagramElement/DiagramElement.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("7e1d380f-53a9-4400-8586-15cf6881aac0",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	"00000000-0000-0000-0000-000000000000",
+	'elementId',
+	'',
+	'',
+	'eleId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd");
+INSERT INTO O_OIDA
+	VALUES ("7e1d380f-53a9-4400-8586-15cf6881aac0",
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	0,
+	'elementId');
+INSERT INTO O_ID
+	VALUES (1,
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd");
+INSERT INTO O_ID
+	VALUES (2,
+	"0bff922d-14d3-43aa-ab0c-9c14b0a585dd");
+INSERT INTO PE_PE
+	VALUES ("0bff922d-14d3-43aa-ab0c-9c14b0a585dd",
+	1,
+	"b87cfa9b-48ba-41f2-adf1-00890c52b7a2",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("b87cfa9b-48ba-41f2-adf1-00890c52b7a2",
+	"00000000-0000-0000-0000-000000000000",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'Graphical Data',
+	'The GD (Graphics Domain) subsystem models the graphical elements for a BridgePoint model.
+-------------------------------------------------------
+Import:org.eclipse.swt.graphics.Color
+Notify_Changes:true',
+	0,
+	'../Graphical Data.xtuml');

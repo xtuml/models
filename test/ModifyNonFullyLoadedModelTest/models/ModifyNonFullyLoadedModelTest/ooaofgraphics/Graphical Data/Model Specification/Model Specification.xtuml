@@ -1,0 +1,220 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("0cd52d1e-ab9b-4693-9d42-8d4ea9445e04",
+	'Model Specification',
+	7,
+	'GD_MS',
+	'A model specification instance defines a type of canvas.
+We use the OOA_Type and the Model_Type as identifiers
+because the OOA_Type defines the OOA of OOA element
+type that the canvas type represents, but there can be 
+more than one canvas type per OOA of OOA element type.
+
+Instances of this class are instantiated at startup from a
+pre-existing instance specification.
+---------------------------------------------------------------------------
+
+PEI:true
+Persistent:false
+TRANSLATE_FOR_EXTERNAL_USE:FALSE
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("63aec19e-3503-4f2f-8271-d6e8643b4149",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04",
+	'elementCreated',
+	'This operation is special. We need to create the instance in the 
+model root associated with the Model, not with the Model Specification.
+------------------
+Translate: native',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'        Ooaofgraphics modelRoot = Ooaofgraphics.getInstance(Cl_c.getModelRootname(p_Elem));
+        Model_c mdl = new Model_c(modelRoot);
+		Ooaofooa.getDefaultInstance().fireModelElementCreated(new BaseModelDelta(
+			Modeleventnotification_c.DELTA_NEW,
+			mdl));
+		Diagram_c diagram = new Diagram_c(modelRoot);
+		Ooaofooa.getDefaultInstance().fireModelElementCreated(new BaseModelDelta(
+			Modeleventnotification_c.DELTA_NEW,
+			diagram));
+        diagram.relateAcrossR18To(mdl);
+        this.relateAcrossR9To(mdl);
+        mdl.Initialize(p_Elem);
+',
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("c5152c5d-db53-42a9-bcad-5437032888cb",
+	"63aec19e-3503-4f2f-8271-d6e8643b4149",
+	'elem',
+	"9b2af4ce-1f5a-417f-9015-2a365712bef5",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("9b2af4ce-1f5a-417f-9015-2a365712bef5",
+	"00000000-0000-0000-0000-000000000000",
+	'instance',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("e418ecb4-a057-4628-a4f1-9f3a7ee3a1fe",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_BATTR
+	VALUES ("e418ecb4-a057-4628-a4f1-9f3a7ee3a1fe",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_ATTR
+	VALUES ("e418ecb4-a057-4628-a4f1-9f3a7ee3a1fe",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04",
+	"00000000-0000-0000-0000-000000000000",
+	'Model_Type',
+	'Description: An enumeration of the values that identify the type of a model.
+Full Name: Graphical Model Type
+Data Domain:  None= 0, DPD= 1, PDD(R)=2, PDD(A)=3, PDD(S)=4, CD=5, OCD(A)=6, OCD(S)=7, SC(Instance)=8, SC(Assigner)=10, Data Type Package=100, Function Package=101, External Entity Package=102',
+	'',
+	'Model_Type',
+	0,
+	"927ab308-4898-4b6f-adeb-44c0234b80d0",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("927ab308-4898-4b6f-adeb-44c0234b80d0",
+	"00000000-0000-0000-0000-000000000000",
+	'ModelType',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("9f0a7b61-0824-432b-b9ba-1b7add2ae98f",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_BATTR
+	VALUES ("9f0a7b61-0824-432b-b9ba-1b7add2ae98f",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_ATTR
+	VALUES ("9f0a7b61-0824-432b-b9ba-1b7add2ae98f",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04",
+	"e418ecb4-a057-4628-a4f1-9f3a7ee3a1fe",
+	'OOA_Type',
+	'',
+	'',
+	'OOA_Type',
+	0,
+	"4ae751c2-9ce2-4f6c-892f-79b9e6b3a107",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("4ae751c2-9ce2-4f6c-892f-79b9e6b3a107",
+	"00000000-0000-0000-0000-000000000000",
+	'OOAType',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("be8ba02c-df3c-4589-81da-0b4006a03dad",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_BATTR
+	VALUES ("be8ba02c-df3c-4589-81da-0b4006a03dad",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_ATTR
+	VALUES ("be8ba02c-df3c-4589-81da-0b4006a03dad",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04",
+	"9f0a7b61-0824-432b-b9ba-1b7add2ae98f",
+	'Name',
+	'',
+	'',
+	'Name',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("85d593d6-7c0d-45c4-b175-1e4a47ad076e",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_BATTR
+	VALUES ("85d593d6-7c0d-45c4-b175-1e4a47ad076e",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_ATTR
+	VALUES ("85d593d6-7c0d-45c4-b175-1e4a47ad076e",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04",
+	"be8ba02c-df3c-4589-81da-0b4006a03dad",
+	'background',
+	'',
+	'',
+	'background',
+	0,
+	"cc67d6c3-5d2b-4d06-b409-efd824bcd88c",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("cc67d6c3-5d2b-4d06-b409-efd824bcd88c",
+	"00000000-0000-0000-0000-000000000000",
+	'Color',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("828480a7-db0a-46b4-831e-99ab71b578ec",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_BATTR
+	VALUES ("828480a7-db0a-46b4-831e-99ab71b578ec",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_ATTR
+	VALUES ("828480a7-db0a-46b4-831e-99ab71b578ec",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04",
+	"85d593d6-7c0d-45c4-b175-1e4a47ad076e",
+	'represents',
+	'',
+	'',
+	'represents',
+	0,
+	"76a19fd6-586f-4e96-b25b-da67d9411278",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("76a19fd6-586f-4e96-b25b-da67d9411278",
+	"00000000-0000-0000-0000-000000000000",
+	'class',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_ID
+	VALUES (0,
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_OIDA
+	VALUES ("9f0a7b61-0824-432b-b9ba-1b7add2ae98f",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04",
+	0,
+	'OOA_Type');
+INSERT INTO O_OIDA
+	VALUES ("e418ecb4-a057-4628-a4f1-9f3a7ee3a1fe",
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04",
+	0,
+	'Model_Type');
+INSERT INTO O_ID
+	VALUES (1,
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO O_ID
+	VALUES (2,
+	"0cd52d1e-ab9b-4693-9d42-8d4ea9445e04");
+INSERT INTO PE_PE
+	VALUES ("0cd52d1e-ab9b-4693-9d42-8d4ea9445e04",
+	1,
+	"b87cfa9b-48ba-41f2-adf1-00890c52b7a2",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("b87cfa9b-48ba-41f2-adf1-00890c52b7a2",
+	"00000000-0000-0000-0000-000000000000",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'Graphical Data',
+	'The GD (Graphics Domain) subsystem models the graphical elements for a BridgePoint model.
+-------------------------------------------------------
+Import:org.eclipse.swt.graphics.Color
+Notify_Changes:true',
+	0,
+	'../Graphical Data.xtuml');

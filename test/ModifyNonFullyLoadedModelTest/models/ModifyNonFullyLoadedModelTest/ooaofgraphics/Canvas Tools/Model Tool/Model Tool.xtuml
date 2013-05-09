@@ -1,0 +1,274 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("6fa4925f-5682-491e-bbb8-fa09957b7013",
+	'Model Tool',
+	101,
+	'CT_MTL',
+	'Each time a new Model instance is created, a set of Tool
+instances are created for it. There is one Tool instance
+created for each Element Specification associated with
+the Model Specification of which the newly created Model
+is an instance. In additon one Selection Tool instance is
+created for each canvas.
+
+---------------------------------------------------------------------------
+Persistent:false',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("ed250d11-8da6-41ae-9fcb-d8de911461ef",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	'dispose',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one es related by self->GD_ES[R103];
+if (not_empty es)
+  unrelate self from es across R103;
+end if;
+select one mdl related by self->GD_MD[R100];
+if (not_empty mdl)
+  unrelate self from mdl across R100;
+end if;
+select one act related by self->CT_ACT[R109];
+if (not_empty act)
+  unrelate self from act across R109;
+end if;
+select one stl related by self->CT_STL[R102];
+select one ctl related by self->CT_CTL[R102];
+select one sel related by self->CT_SEL[R102];
+select one scr related by self->CT_SCR[R102];
+if (not_empty stl)
+  unrelate self from stl across R102;
+  stl.dispose();
+elif (not_empty ctl)
+  unrelate self from ctl across R102;
+  ctl.dispose();
+elif (not_empty sel)
+  unrelate self from sel across R102;
+  sel.dispose();
+elif (not_empty scr)
+  unrelate self from scr across R102;
+  scr.dispose();
+end if;
+
+delete object instance self;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("27229bac-e0e7-4373-8389-3b550141ab23",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	'initialize',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'drawing = false;',
+	1,
+	'',
+	"ed250d11-8da6-41ae-9fcb-d8de911461ef");
+INSERT INTO O_NBATTR
+	VALUES ("c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013");
+INSERT INTO O_BATTR
+	VALUES ("c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013");
+INSERT INTO O_ATTR
+	VALUES ("c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"00000000-0000-0000-0000-000000000000",
+	'Tool_ID',
+	'',
+	'',
+	'Tool_ID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("b6949dec-2b81-4676-a9e7-0bd897c5e9e3",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013");
+INSERT INTO O_BATTR
+	VALUES ("b6949dec-2b81-4676-a9e7-0bd897c5e9e3",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013");
+INSERT INTO O_ATTR
+	VALUES ("b6949dec-2b81-4676-a9e7-0bd897c5e9e3",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	'active',
+	'This attribute is true when the tool in question is enabled.',
+	'',
+	'active',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"0f68fc0c-7577-4260-8e10-9e0c9fa053ee",
+	0,
+	"31ca5789-18a8-481b-a2d8-2f81f155b17e",
+	"0dca42b5-6f89-482c-bba8-dabdb76a80c9",
+	"6e35bd40-e6f3-45e8-9c0f-704ed556cb67",
+	"bfe97c01-f754-4898-ae23-414e95f2330a",
+	"b92791b4-8412-48be-bdf9-613a52742f7f",
+	"d2fbb4d0-8cb7-4151-b665-008063bc10c8",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Element Specification',
+	'OOA_Type',
+	'R103');
+INSERT INTO R_RGO_PROXY
+	VALUES ("6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"0dca42b5-6f89-482c-bba8-dabdb76a80c9",
+	"6e35bd40-e6f3-45e8-9c0f-704ed556cb67",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("31ca5789-18a8-481b-a2d8-2f81f155b17e",
+	"0f68fc0c-7577-4260-8e10-9e0c9fa053ee",
+	0,
+	"0dca42b5-6f89-482c-bba8-dabdb76a80c9",
+	"bfe97c01-f754-4898-ae23-414e95f2330a",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("b92791b4-8412-48be-bdf9-613a52742f7f",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"31ca5789-18a8-481b-a2d8-2f81f155b17e",
+	"0f68fc0c-7577-4260-8e10-9e0c9fa053ee",
+	1,
+	'OOA_Type');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("31ca5789-18a8-481b-a2d8-2f81f155b17e",
+	"0f68fc0c-7577-4260-8e10-9e0c9fa053ee",
+	'../../Graphical Data/Element Specification/Element Specification.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("b92791b4-8412-48be-bdf9-613a52742f7f",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"b6949dec-2b81-4676-a9e7-0bd897c5e9e3",
+	'OOA_Type',
+	'',
+	'',
+	'OOA_Type',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("ebf0d609-20b3-4706-8a25-43c04903aab1",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013");
+INSERT INTO O_BATTR
+	VALUES ("ebf0d609-20b3-4706-8a25-43c04903aab1",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013");
+INSERT INTO O_ATTR
+	VALUES ("ebf0d609-20b3-4706-8a25-43c04903aab1",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"b92791b4-8412-48be-bdf9-613a52742f7f",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("6597fb4c-19f4-43ba-8604-e5a638e1263e",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013");
+INSERT INTO O_BATTR
+	VALUES ("6597fb4c-19f4-43ba-8604-e5a638e1263e",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013");
+INSERT INTO O_ATTR
+	VALUES ("6597fb4c-19f4-43ba-8604-e5a638e1263e",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"ebf0d609-20b3-4706-8a25-43c04903aab1",
+	'drawing',
+	'',
+	'',
+	'drawing',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"07c25b68-fe92-4d3a-841f-64424566c4ea",
+	0,
+	"0554b4f3-4a0b-4749-8289-98731f1fdc15",
+	"de98d8e9-e9aa-4b2a-a188-e1af6f916823",
+	"5e164d17-c89c-4528-bb00-a0c17c791b57",
+	"1f365560-5541-4106-97d5-51918b9ed2f6",
+	"b2ee441d-2821-4c47-976f-d8a4e1cad6ed",
+	"66279c0e-197e-48aa-aa84-a3a8cdc8ef50",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Model',
+	'diagramId',
+	'R100');
+INSERT INTO R_RGO_PROXY
+	VALUES ("6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"de98d8e9-e9aa-4b2a-a188-e1af6f916823",
+	"5e164d17-c89c-4528-bb00-a0c17c791b57",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("0554b4f3-4a0b-4749-8289-98731f1fdc15",
+	"07c25b68-fe92-4d3a-841f-64424566c4ea",
+	0,
+	"de98d8e9-e9aa-4b2a-a188-e1af6f916823",
+	"1f365560-5541-4106-97d5-51918b9ed2f6",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("b2ee441d-2821-4c47-976f-d8a4e1cad6ed",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"9edd1bb2-c129-40a1-a7fc-78cf864a4509",
+	"734442d4-2bef-417a-92c5-0ea747247bc8",
+	1,
+	'diagramId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("9edd1bb2-c129-40a1-a7fc-78cf864a4509",
+	"734442d4-2bef-417a-92c5-0ea747247bc8",
+	'../../UML 2.0 Diagram Interchange/Diagram/Diagram.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("b2ee441d-2821-4c47-976f-d8a4e1cad6ed",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	"6597fb4c-19f4-43ba-8604-e5a638e1263e",
+	'diagramId',
+	'',
+	'',
+	'diagramId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"6fa4925f-5682-491e-bbb8-fa09957b7013");
+INSERT INTO O_OIDA
+	VALUES ("c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	0,
+	'Tool_ID');
+INSERT INTO O_ID
+	VALUES (1,
+	"6fa4925f-5682-491e-bbb8-fa09957b7013");
+INSERT INTO O_ID
+	VALUES (2,
+	"6fa4925f-5682-491e-bbb8-fa09957b7013");
+INSERT INTO PE_PE
+	VALUES ("6fa4925f-5682-491e-bbb8-fa09957b7013",
+	1,
+	"162963cc-507c-42b6-9d88-e6062a35f9a8",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("162963cc-507c-42b6-9d88-e6062a35f9a8",
+	"00000000-0000-0000-0000-000000000000",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'Canvas Tools',
+	'// This is used by schema_gen to ignore this subsystem (for publication)
+  TRANSLATE_FOR_EXTERNAL_USE:FALSE
+  Notify_Changes:false
+',
+	0,
+	'../Canvas Tools.xtuml');

@@ -1,0 +1,1561 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("25a83752-f695-4475-b36c-7973e9041a14",
+	112,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'ModifyNonFullyLoadedModelTest::ooaofgraphics::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("25a83752-f695-4475-b36c-7973e9041a14",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("b3dd7f55-9fd8-458a-b955-237d05dc2eb6",
+	"00000000-0000-0000-0000-000000000000",
+	'max',
+	'Returns the larger of the two values passed.',
+	'if (param.a > param.b)
+  return param.a;
+else
+  return param.b;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("d34b9db5-9bdd-4e19-b237-016660bf767f",
+	"b3dd7f55-9fd8-458a-b955-237d05dc2eb6",
+	'a',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("bdc4fb1e-6b68-4d28-9755-2408d522aa39",
+	"b3dd7f55-9fd8-458a-b955-237d05dc2eb6",
+	'b',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"d34b9db5-9bdd-4e19-b237-016660bf767f",
+	'');
+INSERT INTO PE_PE
+	VALUES ("b3dd7f55-9fd8-458a-b955-237d05dc2eb6",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("15c3a0d4-9648-4551-b9da-9dbab6d24afe",
+	"00000000-0000-0000-0000-000000000000",
+	'min',
+	'Returns the smaller of the two values passed.',
+	'if (param.a < param.b)
+  return param.a;
+else
+  return param.b;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("e90f6b80-35cd-48d8-b551-f5c77450d6df",
+	"15c3a0d4-9648-4551-b9da-9dbab6d24afe",
+	'a',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("ecaa6dff-36d7-4bf9-a705-274a5329b914",
+	"15c3a0d4-9648-4551-b9da-9dbab6d24afe",
+	'b',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"e90f6b80-35cd-48d8-b551-f5c77450d6df",
+	'');
+INSERT INTO PE_PE
+	VALUES ("15c3a0d4-9648-4551-b9da-9dbab6d24afe",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("77cd8ccd-453d-46c7-a72f-336ea336ea05",
+	"00000000-0000-0000-0000-000000000000",
+	'fixBPGraphics',
+	'Converts BridgePoint graphics to Tiger graphics on import.',
+	'select any dpd from instances of GD_MD where (selected.Model_Type == ModelType::DomainPackageDiagram);
+select any dtp from instances of GD_MD where (selected.Model_Type == ModelType::DataTypePackageDiagram);
+select any fnp from instances of GD_MD where (selected.Model_Type == ModelType::FunctionPackageDiagram);
+select any eep from instances of GD_MD where (selected.Model_Type == ModelType::ExternalEntityPackageDiagram);
+if (not_empty eep)
+  ::fixBPEEGraphics();
+end if;
+if (not_empty dtp)
+  ::fixBPDTGraphics();
+end if;
+if (not_empty fnp)
+  ::fixBPFNGraphics();
+end if;
+if (not_empty dpd)
+  // Clean up any remaining external entities on the DPD . . .
+  select many eeGes related by dpd->GD_GE[R1] where (selected.OOA_Type == OOAType::EE);
+  for each eeGe in eeGes
+    eeGe.dispose();
+  end for;
+end if;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("77cd8ccd-453d-46c7-a72f-336ea336ea05",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ddb434e2-772a-4fca-b512-d61b7f1c49c2",
+	"00000000-0000-0000-0000-000000000000",
+	'fixBPFNGraphics',
+	'Creates graphics for BridgePoint functions.',
+	'DPD_Model_Type = ModelType::DomainPackageDiagram;
+Function_Model_Type = ModelType::FunctionPackageDiagram;
+EE_OOA_Type = OOAType::EE;
+
+select any dpd from instances of GD_MD where (selected.Model_Type == DPD_Model_Type);
+select any fnp from instances of GD_MD where (selected.Model_Type == Function_Model_Type);
+if (not_empty fnp and not_empty dpd)
+  select any fnpSpec from instances of GD_MS where (selected.Model_Type == Function_Model_Type);
+  if (not_empty fnpSpec)
+    represents = fnp.represents;
+    select any fnpGe from instances of GD_GE where (selected.represents == represents);
+    // If there is an EE symbol position, reuse it.
+    select any oldEE related by dpd->GD_GE[R1] where (selected.OOA_Type == EE_OOA_Type);
+    if (not_empty oldEE)
+      select one oldShp related by oldEE->GD_SHP[R2];
+      unrelate oldEE from oldShp across R2;
+      select one oldGraphElem related by oldEE->DIM_GE[R23];
+      unrelate oldEE from oldGraphElem across R23;
+      oldEE.dispose();
+      relate fnpGe to oldShp across R2;
+      relate fnpGe to oldGraphElem across R23;
+    else
+      select many otherShps related by dpd->GD_GE[R1]->GD_SHP[R2];
+      select any rightMostShp related by dpd->GD_GE[R1]->GD_SHP[R2];
+      select one rightMostNode related by rightMostShp->DIM_ND[R19];
+      select one rightMostElement related by rightMostNode->DIM_GE[R301];
+      for each otherShp in otherShps
+        select one otherNode related by otherShp->DIM_ND[R19];
+        select one otherElement related by otherNode->DIM_GE[R301];
+        if (otherElement.positionX > rightMostElement.positionX)
+          rightMostShp = otherShp;
+          rightMostNode = otherNode;
+          rightMostElement = otherElement;
+        end if;
+      end for;
+      create object instance shp of GD_SHP;
+	  create object instance graphNode of DIM_ND;
+	  relate graphNode to shp across R19;
+	  create object instance graphElement of DIM_GE;
+	  relate graphElement to graphNode across R301;
+	  relate graphElement to fnpGe across R23;
+	  create object instance diagramElement of DIM_ELE;
+	  relate diagramElement to graphElement across R302;
+	  relate fnpGe to shp across R2;
+      if (not_empty rightMostShp)
+        // place this shape with 10% spacing away from rightmost shape found
+        width = rightMostNode.width;
+        graphElement.positionX = rightMostElement.positionX + rightMostNode.width + (width) / 10;
+        graphNode.width = width;
+        graphElement.positionY = rightMostElement.positionY;
+        graphNode.height = rightMostNode.height;
+      else
+        // Stack at the scroll position
+        shp.moveToDefaultPosition();
+      end if;
+    end if;
+  end if;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("ddb434e2-772a-4fca-b512-d61b7f1c49c2",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("260d5d89-0285-44da-9999-0a872deb1444",
+	"00000000-0000-0000-0000-000000000000",
+	'fixBPDTGraphics',
+	'Creates graphics for BridgePoint data types.',
+	'DPD_Model_Type = ModelType::DomainPackageDiagram;
+DataType_Model_Type = ModelType::DataTypePackageDiagram;
+EE_OOA_Type = OOAType::EE;
+Core_OOA_Type = OOAType::CoreDataType;
+User_OOA_Type = OOAType::UserDataType;
+Enum_OOA_Type = OOAType::EnumerationDataType;
+
+select any dpd from instances of GD_MD where (selected.Model_Type == DPD_Model_Type);
+select one dpdDiagram related by dpd->DIM_DIA[R18];
+select any dtp from instances of GD_MD where (selected.Model_Type == DataType_Model_Type);
+select one dtpDiagram related by dtp->DIM_DIA[R18];
+if (not_empty dtp and not_empty dpd)
+  dtpDiagram.viewportX = dpdDiagram.viewportX;
+  dtpDiagram.viewportY = dpdDiagram.viewportY;
+  dtpDiagram.zoom = dpdDiagram.zoom;
+  select any dtpSpec from instances of GD_MS where (selected.Model_Type == DataType_Model_Type);
+  if (not_empty dtpSpec)
+    represents = dtp.represents;
+    select any dtpGe from instances of GD_GE where (selected.represents == represents);
+    // If there is an EE symbol position, reuse it.
+    select any oldEE related by dpd->GD_GE[R1] where (selected.OOA_Type == EE_OOA_Type);
+    if (not_empty oldEE)
+      select one oldShp related by oldEE->GD_SHP[R2];
+      unrelate oldEE from oldShp across R2;
+      select one oldGraphElem related by oldEE->DIM_GE[R23];
+      unrelate oldEE from oldGraphElem across R23;
+      oldEE.dispose();
+      relate dtpGe to oldShp across R2;
+      relate dtpGe to oldGraphElem across R23;
+    else
+      select many otherShps related by dpd->GD_GE[R1]->GD_SHP[R2];
+      select any rightMostShp related by dpd->GD_GE[R1]->GD_SHP[R2];
+      select one rightMostNode related by rightMostShp->DIM_ND[R19];
+      select one rightMostElement related by rightMostNode->DIM_GE[R301];
+      for each otherShp in otherShps
+        select one otherNode related by otherShp->DIM_ND[R19];
+        select one otherElement related by otherNode->DIM_GE[R301];
+        if (otherElement.positionX > rightMostElement.positionX)
+          rightMostShp = otherShp;
+          rightMostNode = otherNode;
+          rightMostElement = otherElement;
+        end if;
+      end for;
+	  create object instance shp of GD_SHP;
+	  create object instance graphNode of DIM_ND;
+	  relate graphNode to shp across R19;
+	  create object instance graphElement of DIM_GE;
+	  relate graphElement to graphNode across R301;
+	  relate graphElement to dtpGe across R23;
+	  create object instance diagramElement of DIM_ELE;
+	  relate diagramElement to graphElement across R302;
+	  relate dtpGe to shp across R2;
+      if (not_empty rightMostShp)
+        // place this shape with 10% spacing away from rightmost shape found
+        width = rightMostNode.width;
+        graphElement.positionX = rightMostElement.positionX + rightMostNode.width + (width) / 10;
+        graphNode.width = width;
+        graphElement.positionY = rightMostElement.positionY;
+        graphNode.height = rightMostNode.height;
+      else
+        // Stack at the scroll position
+        shp.moveToDefaultPosition();
+      end if;
+    end if;  // end else empty oldEE
+    // Fix up Core Data types
+    select any dtSpec from instances of GD_ES where (selected.OOA_Type == Core_OOA_Type);
+    xPosn = dtpDiagram.viewportX + OS::realToInt(value:(dtSpec.defaultWidth/10.0));
+    yPosn = dtpDiagram.viewportY + OS::realToInt(value:(dtSpec.defaultHeight/10.0));
+    select many dts from instances of GD_GE where (selected.OOA_Type == Core_OOA_Type);
+    for each dt in dts
+      relate dt to dtp across R1;
+      create object instance shp of GD_SHP;
+	  create object instance graphNode of DIM_ND;
+	  relate graphNode to shp across R19;
+	  create object instance graphElement of DIM_GE;
+	  relate graphElement to graphNode across R301;
+	  relate graphElement to dt across R23;
+	  create object instance diagramElement of DIM_ELE;
+	  relate diagramElement to graphElement across R302;
+      relate shp to dt across R2;
+      graphElement.positionX = xPosn;
+      graphElement.positionY = yPosn;
+      graphNode.width = dtSpec.defaultWidth;
+      graphNode.height = dtSpec.defaultHeight;
+      xPosn = xPosn + dtSpec.defaultWidth + OS::realToInt(value:(dtSpec.defaultWidth/10.0));
+      if (xPosn > dtpDiagram.viewportX + dtSpec.defaultWidth * 5)
+        xPosn = dtpDiagram.viewportX + OS::realToInt(value:(dtSpec.defaultWidth/10.0));
+        yPosn = yPosn + dtSpec.defaultHeight + OS::realToInt(value:(dtSpec.defaultHeight/10.0));
+      end if;
+    end for;
+    if (xPosn != dtpDiagram.viewportX + OS::realToInt(value:(dtSpec.defaultWidth/10.0)))
+      xPosn = dtpDiagram.viewportX + OS::realToInt(value:(dtSpec.defaultWidth/10.0));
+      yPosn = yPosn + dtSpec.defaultHeight + OS::realToInt(value:(dtSpec.defaultHeight/10.0));
+    end if;
+    // Fix up User Data types
+    select any dtSpec from instances of GD_ES where (selected.OOA_Type == User_OOA_Type);
+    select many dts from instances of GD_GE where (selected.OOA_Type == User_OOA_Type);
+    for each dt in dts
+      relate dt to dtp across R1;
+      create object instance shp of GD_SHP;
+	  create object instance graphNode of DIM_ND;
+	  relate graphNode to shp across R19;
+	  create object instance graphElement of DIM_GE;
+	  relate graphElement to graphNode across R301;
+	  relate graphElement to dt across R23;
+	  create object instance diagramElement of DIM_ELE;
+	  relate diagramElement to graphElement across R302;
+      relate shp to dt across R2;
+      graphElement.positionX = xPosn;
+      graphElement.positionY = yPosn;
+      graphNode.width = dtSpec.defaultWidth;
+      graphNode.height = dtSpec.defaultHeight;
+      xPosn = xPosn + dtSpec.defaultWidth + OS::realToInt(value:(dtSpec.defaultWidth/10.0));
+      if (xPosn > dtpDiagram.viewportX + dtSpec.defaultWidth * 5)
+        xPosn = dtpDiagram.viewportX + OS::realToInt(value:(dtSpec.defaultWidth/10.0));
+        yPosn = yPosn + dtSpec.defaultHeight + OS::realToInt(value:(dtSpec.defaultHeight/10.0));
+      end if;
+    end for;
+    if (xPosn != dtpDiagram.viewportX + OS::realToInt(value:(dtSpec.defaultWidth/10.0)))
+      xPosn = dtpDiagram.viewportX + OS::realToInt(value:(dtSpec.defaultWidth/10.0));
+      yPosn = yPosn + dtSpec.defaultHeight + OS::realToInt(value:(dtSpec.defaultHeight/10.0));
+    end if;
+    // Fix up Enumeration Data types
+    select any dtSpec from instances of GD_ES where (selected.OOA_Type == Enum_OOA_Type);
+    select many dts from instances of GD_GE where (selected.OOA_Type == Enum_OOA_Type);
+    for each dt in dts
+      relate dt to dtp across R1;
+      create object instance shp of GD_SHP;
+      relate shp to dt across R2;
+	  create object instance graphNode of DIM_ND;
+	  relate graphNode to shp across R19;
+	  create object instance graphElement of DIM_GE;
+	  relate graphElement to graphNode across R301;
+	  relate graphElement to dt across R23;
+	  create object instance diagramElement of DIM_ELE;
+	  relate diagramElement to graphElement across R302;
+      graphElement.positionX = xPosn;
+      graphElement.positionY = yPosn;
+      graphNode.width = dtSpec.defaultWidth;
+      graphNode.height = dtSpec.defaultHeight;
+      xPosn = xPosn + dtSpec.defaultWidth + OS::realToInt(value:(dtSpec.defaultWidth/10.0));
+      if (xPosn > dtpDiagram.viewportX + dtSpec.defaultWidth * 5)
+        xPosn = dtpDiagram.viewportX + OS::realToInt(value:(dtSpec.defaultWidth/10.0));
+        yPosn = yPosn + dtSpec.defaultHeight + OS::realToInt(value:(dtSpec.defaultHeight/10.0));
+      end if;
+    end for;
+  end if;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("260d5d89-0285-44da-9999-0a872deb1444",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("bdd2fe90-7e5c-42bf-bdc4-6d52b551b4d9",
+	"00000000-0000-0000-0000-000000000000",
+	'fixBPEEGraphics',
+	'Converts BridgePoint External Entities into Tiger style graphics.',
+	'/*
+The following abbreviations are used below:
+dp 		domain package
+ee(p) 	external entity (package)
+*/
+
+// if the domain does not contain both a domain package diagram and an 
+// external-entity package diagram, then there is nothing to do
+select any dpModel from instances of GD_MD 
+	where selected.Model_Type == ModelType::DomainPackageDiagram;
+select any eepModel from instances of GD_MD 
+	where selected.Model_Type == ModelType::ExternalEntityPackageDiagram;
+if (empty dpModel or empty eepModel) return; end if;
+
+// use the same viewport and zoom values for the external-entity package
+// diagram as for the domain package diagram
+select one dpDiagram related by dpModel->DIM_DIA[R18];
+select one eepDiagram related by eepModel->DIM_DIA[R18];
+eepDiagram.viewportX = dpDiagram.viewportX;
+eepDiagram.viewportY = dpDiagram.viewportY;
+eepDiagram.zoom = dpDiagram.zoom;
+  
+// for each external-entity graphical element in the domain package diagram
+select many eeElements related by dpModel->GD_GE[R1] 
+	where selected.OOA_Type == OOAType::EE;
+select any firstEeElement from instances of GD_GE 
+	where selected.elementId != selected.elementId; // kludge to make empty
+for each eeElement in eeElements
+	// move this element to the new external-entity package diagram
+	unrelate eeElement from dpModel across R1;
+	relate eeElement to eepModel across R1;
+	
+	// if this is the first element in the set
+	if (empty firstEeElement) 
+		// remember this element, for below
+		firstEeElement = eeElement;
+	end if;
+end for;
+	
+// move the external-entity-package graphical element to the 
+// domain package diagram
+select any eepElement from instances of GD_GE 
+	where selected.represents == eepModel.represents;
+select one previousModel related by eepElement->GD_MD[R1];
+unrelate eepElement from previousModel across R1;
+relate eepElement to dpModel across R1;
+    	
+// if no position has yet been assigned to the external-entity-package 
+// graphical element (meaning, it is freshly created from an import),
+// and there was at least one external-entity in the DPD, above
+select one eepGraphElement related by eepElement->DIM_GE[R23];
+select one eepGraphNode related by eepGraphElement->DIM_ND[R301];
+if (eepGraphNode.width == 0 and not_empty firstEeElement)
+	// set the positional data of the external-entity-package graphical 
+	// element to that of one of the external-entity graphical elements 
+	// that was moved above, so that the package will appear where the 
+	// external-entity did
+    select one eeGraphElement related by firstEeElement->DIM_GE[R23];
+    select one eeGraphNode related by eeGraphElement->DIM_ND[R301];
+	eepGraphElement.positionX = eeGraphElement.positionX;
+	eepGraphElement.positionY = eeGraphElement.positionY;
+	eepGraphNode.width = eeGraphNode.width;
+	eepGraphNode.height = eeGraphNode.height;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("bdd2fe90-7e5c-42bf-bdc4-6d52b551b4d9",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b528a361-a97c-4bff-a700-e40a66706344",
+	"00000000-0000-0000-0000-000000000000",
+	'TigerToBPGraphics',
+	'Converts Tiger graphics to BridgePoint graphics for export.',
+	'DPD_Model_Type = ModelType::DomainPackageDiagram;
+DataType_Model_Type = ModelType::DataTypePackageDiagram;
+Function_Model_Type = ModelType::FunctionPackageDiagram;
+EE_Model_Type = ModelType::ExternalEntityPackageDiagram;
+SS_OOA_Type = OOAType::Subsystem;
+EE_OOA_Type = OOAType::EE;
+
+select any dpd from instances of GD_MD where (selected.Model_Type == DPD_Model_Type);
+// remove all non subsystem packages on the dpd
+select many ges related by dpd->GD_GE[R1] where (selected.OOA_Type != SS_OOA_Type);
+for each ge in ges
+  unrelate ge from dpd across R1;
+end for;
+// Revert EE''s to Domain Package Diagram
+select many eeGes from instances of GD_GE where (selected.OOA_Type == EE_OOA_Type);
+for each eeGe in eeGes
+  select one mdl related by eeGe->GD_MD[R1];
+  unrelate eeGe from mdl across R1;
+  relate eeGe to dpd across R1;
+end for;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("b528a361-a97c-4bff-a700-e40a66706344",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("293e897d-916b-4f00-8d85-242544489e6e",
+	"00000000-0000-0000-0000-000000000000",
+	'BPToTigerGraphics',
+	'Converts BridgePoint Graphics back to Tiger style graphics after export.',
+	'::fixBPEEGraphics();
+// Note: EE''s are restored by fixBPEEGraphics
+DPD_Model_Type = ModelType::DomainPackageDiagram;
+DT_OOA_Type = OOAType::DataTypePackage;
+FN_OOA_Type = OOAType::FunctionPackage;
+EE_OOA_Type = OOAType::EE;
+
+select any dpd from instances of GD_MD where (selected.Model_Type == DPD_Model_Type);
+if (not_empty dpd)
+  // Move Package symbols back to DPD
+  select many ges from instances of GD_GE where (selected.OOA_Type == DT_OOA_Type or
+                                                                            selected.OOA_Type == FN_OOA_Type);
+  for each ge in ges
+    relate ge to dpd across R1;
+  end for;
+end if;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("293e897d-916b-4f00-8d85-242544489e6e",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("494fbe2e-5db7-4e50-95b2-196e42e72d38",
+	"00000000-0000-0000-0000-000000000000",
+	'roundToGridSnapPointWithinLimits',
+	'',
+	'// calculate the nearest snap value to the value given
+snapIncr = ::getGridSnapIncrement(isConnector:param.isConnector);
+snap = ::round(value:(param.ordinate / snapIncr)) * snapIncr;
+
+// if the snap value is less than the given minimum
+if (snap < param.min)  
+	// add one snap increment to the value
+	snap = snap + snapIncr;
+	
+// else, if the snap value is greater than the given maximum
+elif (snap > param.max)
+	// subtract one snap increment from the value
+	snap = snap - snapIncr;
+end if;
+
+return snap;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("21c15021-bd9a-4ccd-a255-1d14ea0cc448",
+	"494fbe2e-5db7-4e50-95b2-196e42e72d38",
+	'ordinate',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"0f135f4c-b799-4d63-bf46-92ed94624447",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("0f135f4c-b799-4d63-bf46-92ed94624447",
+	"494fbe2e-5db7-4e50-95b2-196e42e72d38",
+	'min',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"2742a793-7acd-4d4f-a13b-682329f0ddb5",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("2742a793-7acd-4d4f-a13b-682329f0ddb5",
+	"494fbe2e-5db7-4e50-95b2-196e42e72d38",
+	'max',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"7c6dd6d6-43ac-4a74-9ef1-620de487cc94",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("7c6dd6d6-43ac-4a74-9ef1-620de487cc94",
+	"494fbe2e-5db7-4e50-95b2-196e42e72d38",
+	'isConnector',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("494fbe2e-5db7-4e50-95b2-196e42e72d38",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("d5ecbd54-227e-4178-bda3-2a57455fb8a7",
+	"00000000-0000-0000-0000-000000000000",
+	'round',
+	'Translate: native',
+	'return Math.round(p_Value);',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("2776185a-abea-48af-95bb-746ad8465dc8",
+	"d5ecbd54-227e-4178-bda3-2a57455fb8a7",
+	'value',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("d5ecbd54-227e-4178-bda3-2a57455fb8a7",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b5258e6a-e3a3-4207-812f-c6b8651389f4",
+	"00000000-0000-0000-0000-000000000000",
+	'getGridSnapIncrement',
+	'',
+	'if(param.isConnector)
+  return 6;
+else
+  return 12;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("084f69e4-3fb9-4adf-a435-971e6902cfa1",
+	"b5258e6a-e3a3-4207-812f-c6b8651389f4",
+	'isConnector',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("b5258e6a-e3a3-4207-812f-c6b8651389f4",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("cde28aa8-55cf-4b1e-b624-93bdfa3acc26",
+	"00000000-0000-0000-0000-000000000000",
+	'roundToGridSnapPoint',
+	'',
+	'maxInt = OS::MAX_INT();
+return ::roundToGridSnapPointWithinLimits(ordinate:param.ordinate, 
+	min:-maxInt, max:maxInt, isConnector:param.isConnector);',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("8878113d-462a-4f66-8137-336b9944cb9b",
+	"cde28aa8-55cf-4b1e-b624-93bdfa3acc26",
+	'ordinate',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"f7cad425-6776-49df-b60e-f3bea305141b",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("f7cad425-6776-49df-b60e-f3bea305141b",
+	"cde28aa8-55cf-4b1e-b624-93bdfa3acc26",
+	'isConnector',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("cde28aa8-55cf-4b1e-b624-93bdfa3acc26",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("bb83cc4f-b144-4e71-8592-2c268628f2a6",
+	"00000000-0000-0000-0000-000000000000",
+	'getDistance',
+	'',
+	'/*
+Returns the distance between the given positions (x1, y1) and (x2, y2).
+*/
+
+a = param.x2 - param.x1;
+b = param.y2 - param.y1;
+return OS::getSquareRoot(value:(a * a + b * b));',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("9114f664-039a-43ae-943b-96e14d40cebb",
+	"bb83cc4f-b144-4e71-8592-2c268628f2a6",
+	'x1',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("89ff5b4d-87ba-4c57-9c2a-4bb299e31a16",
+	"bb83cc4f-b144-4e71-8592-2c268628f2a6",
+	'y1',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"bec96d10-e116-4204-b80d-797e35cb494c",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("bec96d10-e116-4204-b80d-797e35cb494c",
+	"bb83cc4f-b144-4e71-8592-2c268628f2a6",
+	'x2',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"9114f664-039a-43ae-943b-96e14d40cebb",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("94fe33b4-ceed-4b2f-bb8f-dc7ed93720cf",
+	"bb83cc4f-b144-4e71-8592-2c268628f2a6",
+	'y2',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"89ff5b4d-87ba-4c57-9c2a-4bb299e31a16",
+	'');
+INSERT INTO PE_PE
+	VALUES ("bb83cc4f-b144-4e71-8592-2c268628f2a6",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("fc076b62-863d-45ec-92b8-be62e43a0681",
+	"00000000-0000-0000-0000-000000000000",
+	'getIconDistanceFromEdge',
+	'',
+	'return 4;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("fc076b62-863d-45ec-92b8-be62e43a0681",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("9fe7621d-1102-46b6-9304-3ddc32387abc",
+	"00000000-0000-0000-0000-000000000000",
+	'getIconSize',
+	'',
+	'return 16;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("9fe7621d-1102-46b6-9304-3ddc32387abc",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("21b22a6b-a763-4d20-8967-9b5ed2a0095f",
+	"00000000-0000-0000-0000-000000000000",
+	'getIconSpacing',
+	'',
+	'return 2;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("21b22a6b-a763-4d20-8967-9b5ed2a0095f",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("fac24a79-c82b-4af0-a2f5-a78ee6f5fdf0",
+	"00000000-0000-0000-0000-000000000000",
+	'drawDiamond',
+	'',
+	'/**
+*  Draw a diamond symbol
+*
+*/
+p = GR::startPoly(numVert: 4);
+x = param.x;
+y = param.y;
+w = param.w;
+h = param.h;
+GR::polyAddPoint(poly:p, x: x+w/2, y:y );
+GR::polyAddPoint(poly:p, x: x+w,   y:y+h/2 );
+GR::polyAddPoint(poly:p, x: x+w/2, y:y+h );
+GR::polyAddPoint(poly:p, x: x,     y:y+h/2 );
+GR::polyDraw(context: param.context, poly:p);',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("3063850b-52c5-4b21-9a45-0c879f7d21a8",
+	"fac24a79-c82b-4af0-a2f5-a78ee6f5fdf0",
+	'context',
+	"9b090b3d-98a8-4bfb-b7ea-eea38ae06ce3",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("9b090b3d-98a8-4bfb-b7ea-eea38ae06ce3",
+	"00000000-0000-0000-0000-000000000000",
+	'GCDelegate',
+	'',
+	'',
+	'../Datatypes/Datatypes.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("45a400e6-6689-4343-a56a-0b5f22dbb982",
+	"fac24a79-c82b-4af0-a2f5-a78ee6f5fdf0",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"519b5f0c-bb70-49b5-bc3e-be9e62f29119",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("cf396dda-b52b-4982-8cca-d084dfd23c84",
+	"fac24a79-c82b-4af0-a2f5-a78ee6f5fdf0",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"45a400e6-6689-4343-a56a-0b5f22dbb982",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("519b5f0c-bb70-49b5-bc3e-be9e62f29119",
+	"fac24a79-c82b-4af0-a2f5-a78ee6f5fdf0",
+	'w',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"9d30ec07-27bc-476c-8426-a4c33a8c94da",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("9d30ec07-27bc-476c-8426-a4c33a8c94da",
+	"fac24a79-c82b-4af0-a2f5-a78ee6f5fdf0",
+	'h',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"3063850b-52c5-4b21-9a45-0c879f7d21a8",
+	'');
+INSERT INTO PE_PE
+	VALUES ("fac24a79-c82b-4af0-a2f5-a78ee6f5fdf0",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("207bfcc7-d135-4c2e-9469-b3b855ea1013",
+	"00000000-0000-0000-0000-000000000000",
+	'drawConcavePentagon',
+	'',
+	'/**
+ *
+ *  Draw a Concave Pentagon symbol
+ *
+ */
+p = GR::startPoly(numVert: 5);
+x = param.x;
+y = param.y;
+w = param.w;
+h = param.h;
+GR::polyAddPoint(poly:p, x: x, y:y );
+GR::polyAddPoint(poly:p, x: x+w,   y:y );
+GR::polyAddPoint(poly:p, x: x+w,   y:y+h );
+GR::polyAddPoint(poly:p, x: x,     y:y+h );
+GR::polyAddPoint(poly:p, x: x+w/5, y:y+h/2 );
+GR::polyDraw(context: param.context, poly:p);',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("891a63d9-6dfc-47f2-bf86-84bb3aee6052",
+	"207bfcc7-d135-4c2e-9469-b3b855ea1013",
+	'context',
+	"9b090b3d-98a8-4bfb-b7ea-eea38ae06ce3",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("1f83e15d-e2a8-4b5c-985e-fabe723e3809",
+	"207bfcc7-d135-4c2e-9469-b3b855ea1013",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"7c111962-92ad-4197-81dc-eaf2c208f8cc",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("c41b22f8-92e8-40b9-97d8-5b2b14881ef1",
+	"207bfcc7-d135-4c2e-9469-b3b855ea1013",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"1f83e15d-e2a8-4b5c-985e-fabe723e3809",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("7c111962-92ad-4197-81dc-eaf2c208f8cc",
+	"207bfcc7-d135-4c2e-9469-b3b855ea1013",
+	'w',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"0cc91f2c-a551-41cb-90a5-062a09c1807a",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("0cc91f2c-a551-41cb-90a5-062a09c1807a",
+	"207bfcc7-d135-4c2e-9469-b3b855ea1013",
+	'h',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"891a63d9-6dfc-47f2-bf86-84bb3aee6052",
+	'');
+INSERT INTO PE_PE
+	VALUES ("207bfcc7-d135-4c2e-9469-b3b855ea1013",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f3c4b5cc-0cc1-4892-a8a1-0176b2ef3215",
+	"00000000-0000-0000-0000-000000000000",
+	'drawConvexPentagon',
+	'',
+	'/**
+ *
+ *  Draw a convex pentagon symbol
+ *
+ */
+x = param.x;
+y = param.y;
+w = param.w;
+h = param.h;
+p = GR::startPoly(numVert: 5);
+GR::polyAddPoint(poly:p, x: x, y:y );
+GR::polyAddPoint(poly:p, x: x+(4*w)/5,   y:y );
+GR::polyAddPoint(poly:p, x: x+w,   y:y+h/2 );
+GR::polyAddPoint(poly:p, x: x+(4*w)/5,     y:y+h );
+GR::polyAddPoint(poly:p, x: x, y:y+h );
+GR::polyDraw(context: param.context, poly:p);',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("0a89ff75-bfb4-4749-bf35-00bdda3599ae",
+	"f3c4b5cc-0cc1-4892-a8a1-0176b2ef3215",
+	'context',
+	"9b090b3d-98a8-4bfb-b7ea-eea38ae06ce3",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("a9241c9c-042d-4de2-b3b7-8a7feb88732b",
+	"f3c4b5cc-0cc1-4892-a8a1-0176b2ef3215",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"b9831d09-07e6-48f3-bab0-dd83ba999a76",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("3794f3d5-4d57-40b9-9a70-76bbdc68dfdf",
+	"f3c4b5cc-0cc1-4892-a8a1-0176b2ef3215",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"a9241c9c-042d-4de2-b3b7-8a7feb88732b",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("b9831d09-07e6-48f3-bab0-dd83ba999a76",
+	"f3c4b5cc-0cc1-4892-a8a1-0176b2ef3215",
+	'w',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"e64d8d80-a5a7-4e45-88e5-d18be16b5b26",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("e64d8d80-a5a7-4e45-88e5-d18be16b5b26",
+	"f3c4b5cc-0cc1-4892-a8a1-0176b2ef3215",
+	'h',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"0a89ff75-bfb4-4749-bf35-00bdda3599ae",
+	'');
+INSERT INTO PE_PE
+	VALUES ("f3c4b5cc-0cc1-4892-a8a1-0176b2ef3215",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("9d176254-aeff-463e-bb88-7971fe666f40",
+	"00000000-0000-0000-0000-000000000000",
+	'drawHourglass',
+	'',
+	'/**
+ *
+ *  Draw a hourglass symbol
+ *
+ */
+x = param.x;
+y = param.y;
+w = param.w;
+h = param.h;
+// draw this as two triangles so the fill color is correct
+p1 = GR::startPoly(numVert: 3);
+GR::polyAddPoint(poly:p1, x: x,     y:y );
+GR::polyAddPoint(poly:p1, x: x+w,   y:y );
+GR::polyAddPoint(poly:p1, x: x+w/2, y:y+h/2 );
+GR::polyDraw(context: param.context, poly:p1);
+p2 = GR::startPoly(numVert: 3);
+GR::polyAddPoint(poly:p2, x: x,     y:y+h );
+GR::polyAddPoint(poly:p2, x: x+w,   y:y+h );
+GR::polyAddPoint(poly:p2, x: x+w/2, y:y+h/2 );
+GR::polyDraw(context: param.context, poly:p2);',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("a6cc7a3e-d9ea-412b-ba83-50e9781fe37e",
+	"9d176254-aeff-463e-bb88-7971fe666f40",
+	'context',
+	"9b090b3d-98a8-4bfb-b7ea-eea38ae06ce3",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("e07e2ddd-e37f-44f0-8b1d-73756b941a66",
+	"9d176254-aeff-463e-bb88-7971fe666f40",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"9ef78987-a7fe-49cd-901d-9a1910d3a226",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("e3d3d76a-6fdd-4429-b0ef-b0750ed68ae9",
+	"9d176254-aeff-463e-bb88-7971fe666f40",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"e07e2ddd-e37f-44f0-8b1d-73756b941a66",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("9ef78987-a7fe-49cd-901d-9a1910d3a226",
+	"9d176254-aeff-463e-bb88-7971fe666f40",
+	'w',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"cfe66460-5434-4585-b3a8-9a90c2e747f0",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("cfe66460-5434-4585-b3a8-9a90c2e747f0",
+	"9d176254-aeff-463e-bb88-7971fe666f40",
+	'h',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"a6cc7a3e-d9ea-412b-ba83-50e9781fe37e",
+	'');
+INSERT INTO PE_PE
+	VALUES ("9d176254-aeff-463e-bb88-7971fe666f40",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("1f69755f-6115-4735-b93f-641479dc074f",
+	"00000000-0000-0000-0000-000000000000",
+	'getIntersectionOfSegmentWithEllipse',
+	'',
+	'/*
+Returns the intersection of the given segment or line (x, y)-(x2, y2) 
+(as detm''d by param.considerLine) and the ellipse defined by the given 
+rectangle, or the zero if there is none.  Since most often there will
+be two intersections, one that is on the given segment will be returned over 
+one which is not, and secondarily, the one that is closer to (x, y)
+will be given preference.
+
+*/
+
+// we''ll consider the ellipse to be centered at the origin, so that its
+// equation simplifies to (x^2 / a^2) + (y^2 / b^2) = 1, where a is half
+// the ellipse''s width, and b is half the ellipse''s height
+
+// detm the a and b in the equation for the ellipse
+ellipseA = param.ellipseW / 2;
+ellipseB = param.ellipseH / 2;
+
+// since we are (above) implicitly tranlsating the ellipse''s center to the 
+// origin, we must translate the given line points by the same amount 
+centerX = param.ellipseX + param.ellipseW / 2;
+centerY = param.ellipseY + param.ellipseH / 2;
+x = param.x - centerX;
+y = param.y - centerY;
+x2 = param.x2 - centerX;
+y2 = param.y2 - centerY;
+
+// if the given line is vertical, which we have to treat as a special case
+// since y = mx + b can''t be used to express it
+result1X = 0.0;
+result1Y = 0.0;
+result2X = 0.0;
+result2Y = 0.0;
+if (x == x2)
+	// treat the line as x = x0, in which case the intersection y 
+	// equals (+/-)b * square_root(1 - (x0^2 / a^2));
+	
+	// if there is no intersection
+	determinant = 1 - (x * x) / (ellipseA * ellipseA);
+	if (determinant < 0)
+		// return that fact
+		return 0;
+	end if;
+
+	// complete the above-specified calculation
+	result1X = x;
+	result1Y = ellipseB * OS::getSquareRoot(value:determinant);
+	result2X = x;
+	result2Y = -result1Y;
+
+// otherwise
+else
+	// express the line using y = mx + B, in which case we wind up with a 
+	// simple quadratic equation for x with:
+	// quadA = 1 / a^2 + m^2 / b^2
+	// quadB = 2 * B * m / b^2
+	// quadC = B^2 / b^2 - 1 
+	slope = ::getSlope(x:x, y:y, x2:x2, y2:y2);
+	yIntercept = ::getYIntercept(x:x, y:y, x2:x2, y2:y2);
+	slopeSquared = slope * slope;
+	ellipseBSquared = ellipseB * ellipseB;
+	quadA = 1 / (ellipseA * ellipseA) + slopeSquared / ellipseBSquared;
+	quadB = 2 * yIntercept * slope / ellipseBSquared;
+	quadC = (yIntercept * yIntercept) / ellipseBSquared - 1;
+	
+	// if there is no intersection
+	determinant = quadB * quadB - 4 * quadA * quadC;
+	if (determinant < 0)
+		// return that fact
+		return 0;
+	end if;
+	
+	// complete the above-specified calculation
+	determinantSquareRoot = OS::getSquareRoot(value:determinant);
+	result1X = (-quadB + determinantSquareRoot) / (2 * quadA);
+	result1Y = slope * result1X + yIntercept;
+	result2X = (-quadB - determinantSquareRoot) / (2 * quadA);
+	result2Y = slope * result2X + yIntercept;
+end if;
+
+// detm which of the two intersection points found above to return as the 
+// result, giving preference to one that''s on the given segment, 
+// and secondarily, to the one that''s closer to the given first point of that
+// segement
+result1OnSegment = param.considerLine or ::getBoxDefinedBySegmentContains(
+		x1:x, y1:y, x2:x2, y2:y2, x:result1X, y:result1Y);
+result2OnSegment = param.considerLine or ::getBoxDefinedBySegmentContains(
+		x1:x, y1:y, x2:x2, y2:y2, x:result2X, y:result2Y);
+result1Distance = ::getDistance(x1:x, y1:y, x2:result1X, y2:result1Y);
+result2Distance = ::getDistance(x1:x, y1:y, x2:result2X, y2:result2Y);
+useResult2 = false;
+useResult2 = ((not result1OnSegment) and result2OnSegment)
+	or (not (result1OnSegment and (not result2OnSegment)) and
+		result2Distance < result1Distance);
+x = 0;
+y = 0;
+if (not useResult2)
+	x = result1X;
+	y = result1Y;
+else 
+	x = result2X;
+	y = result2Y;
+end if;
+
+// translate the result back so it applies to the given ellipse
+// and line positions
+x = x + centerX;
+y = y + centerY;
+if(param.axis == Axis::X)
+  return x;
+else
+  return y;
+end if;
+',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("ebce5c83-de7d-4030-928d-8d25eab90b4b",
+	"1f69755f-6115-4735-b93f-641479dc074f",
+	'ellipseH',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"90ba22b4-7cff-47c9-8afa-acb9d4fb66ce",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("4287eedd-e293-417c-908b-f04025abeef1",
+	"1f69755f-6115-4735-b93f-641479dc074f",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"be71c7a7-4e3c-436c-ba37-fe1a1b613641",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("a21660c2-d355-4de7-bacf-98ae92f61c1d",
+	"1f69755f-6115-4735-b93f-641479dc074f",
+	'y2',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"d9e9e4bf-59f6-439e-9cab-35e1b8fde3e7",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("410042f5-ce8a-4d28-ae88-69c0ec82cdff",
+	"1f69755f-6115-4735-b93f-641479dc074f",
+	'x2',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"4287eedd-e293-417c-908b-f04025abeef1",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("d9e9e4bf-59f6-439e-9cab-35e1b8fde3e7",
+	"1f69755f-6115-4735-b93f-641479dc074f",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"410042f5-ce8a-4d28-ae88-69c0ec82cdff",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("be71c7a7-4e3c-436c-ba37-fe1a1b613641",
+	"1f69755f-6115-4735-b93f-641479dc074f",
+	'ellipseY',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"a73900f2-73f0-416b-bd32-2b651e98c00a",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("a73900f2-73f0-416b-bd32-2b651e98c00a",
+	"1f69755f-6115-4735-b93f-641479dc074f",
+	'ellipseX',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"b9d4da39-b449-4af6-9ed2-1c5913d102dd",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("b9d4da39-b449-4af6-9ed2-1c5913d102dd",
+	"1f69755f-6115-4735-b93f-641479dc074f",
+	'ellipseW',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"ebce5c83-de7d-4030-928d-8d25eab90b4b",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("90ba22b4-7cff-47c9-8afa-acb9d4fb66ce",
+	"1f69755f-6115-4735-b93f-641479dc074f",
+	'considerLine',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"8339aef1-476e-4aee-a46b-37e1f994ddba",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("8339aef1-476e-4aee-a46b-37e1f994ddba",
+	"1f69755f-6115-4735-b93f-641479dc074f",
+	'axis',
+	"29c5f2d9-b613-4ac5-9236-c6b930797e05",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("29c5f2d9-b613-4ac5-9236-c6b930797e05",
+	"00000000-0000-0000-0000-000000000000",
+	'Axis',
+	'Specifies the X or Y axis.',
+	'',
+	'../Datatypes/Datatypes.xtuml');
+INSERT INTO PE_PE
+	VALUES ("1f69755f-6115-4735-b93f-641479dc074f",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("5ff7dde0-92d2-4113-b7ed-3643c8168375",
+	"00000000-0000-0000-0000-000000000000",
+	'getSlope',
+	'',
+	'/*
+Returns the slope of the given line (x1, y1)-(x2, y2), or a very high 
+number if the line is vertical.
+*/
+
+// if the line is vertical
+if (param.x == param.x2) 
+	// return a very high number
+	return OS::MAX_INT();
+end if;
+
+// return the slope of the line
+return (param.y2 - param.y) / (param.x2 - param.x);',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("75ab3b4c-f2b6-4ff2-b383-4842855d2cbc",
+	"5ff7dde0-92d2-4113-b7ed-3643c8168375",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("52971ffb-e1b6-4ac7-b73a-f59b2523f480",
+	"5ff7dde0-92d2-4113-b7ed-3643c8168375",
+	'x2',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"75ab3b4c-f2b6-4ff2-b383-4842855d2cbc",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("8437a711-524f-4293-82e9-a5355cb67762",
+	"5ff7dde0-92d2-4113-b7ed-3643c8168375",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"52971ffb-e1b6-4ac7-b73a-f59b2523f480",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("eb79d681-4605-400e-8b61-814ace83f53a",
+	"5ff7dde0-92d2-4113-b7ed-3643c8168375",
+	'y2',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"8437a711-524f-4293-82e9-a5355cb67762",
+	'');
+INSERT INTO PE_PE
+	VALUES ("5ff7dde0-92d2-4113-b7ed-3643c8168375",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ffeb1b5a-bd0c-4d65-a23c-8c3297f99604",
+	"00000000-0000-0000-0000-000000000000",
+	'getYIntercept',
+	'',
+	'/*
+Returns the y-intercept of the given line (x1, y1)-(x2, y2).  If the line
+is vertical, the result will be a very extreme value, instead of undefined.
+*/
+
+// rewrite y = mx + b as b = y - mx and plug in one of the given points 
+// on the line to get the intercept
+slope = ::getSlope(x:param.x, y:param.y, x2:param.x2, y2:param.y2);
+return param.y - slope * param.x;',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("a5e7c44d-85c3-429a-bd12-a7ee87885a80",
+	"ffeb1b5a-bd0c-4d65-a23c-8c3297f99604",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("d3e82fc8-02d7-4cfb-9e42-417746f75840",
+	"ffeb1b5a-bd0c-4d65-a23c-8c3297f99604",
+	'x2',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"a5e7c44d-85c3-429a-bd12-a7ee87885a80",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("b650c869-4043-4eb8-8c17-636cc417a273",
+	"ffeb1b5a-bd0c-4d65-a23c-8c3297f99604",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"d3e82fc8-02d7-4cfb-9e42-417746f75840",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("bacb7edd-a226-4b15-9835-b9aeb3a2c35f",
+	"ffeb1b5a-bd0c-4d65-a23c-8c3297f99604",
+	'y2',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"b650c869-4043-4eb8-8c17-636cc417a273",
+	'');
+INSERT INTO PE_PE
+	VALUES ("ffeb1b5a-bd0c-4d65-a23c-8c3297f99604",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("9cc182b9-6c93-40a4-a69d-535a8096e2be",
+	"00000000-0000-0000-0000-000000000000",
+	'getBoxDefinedBySegmentContains',
+	'',
+	'/*
+Returns whether the box defined by considering the given segment 
+(x1, y1)-(x2, y2) as its diagonal contains the given location.
+*/
+
+// alias the parameters for better readability of what''s below
+x1 = param.x1;
+y1 = param.y1;
+x2 = param.x2;
+y2 = param.y2;
+x = param.x;
+y = param.y;
+
+// detm the box defined by the given segment
+minX = ::min(a:x1, b:x2);
+maxX = ::max(a:x1, b:x2);
+minY = ::min(a:y1, b:y2);
+maxY = ::max(a:y1, b:y2);
+
+// return whether the given position lies within the box detm''d above
+return ((x >= minX and x <= maxX) and (y >= minY and y <= maxY));
+',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("c0bfd6fa-7aa0-4ed8-940a-f9c841282fb2",
+	"9cc182b9-6c93-40a4-a69d-535a8096e2be",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("6ae8a289-fbb3-41af-8e36-1e849bc92f50",
+	"9cc182b9-6c93-40a4-a69d-535a8096e2be",
+	'y2',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"79d113d8-445f-40b7-937e-9224b54feebd",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("a00c7859-8dad-4b2a-8976-721c099b20f1",
+	"9cc182b9-6c93-40a4-a69d-535a8096e2be",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"3690e361-f3ec-4ad9-8ed0-90835585e1ba",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("3690e361-f3ec-4ad9-8ed0-90835585e1ba",
+	"9cc182b9-6c93-40a4-a69d-535a8096e2be",
+	'x2',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"1f20b3ea-3ea7-419b-bf9f-a40dd78d7a2b",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("79d113d8-445f-40b7-937e-9224b54feebd",
+	"9cc182b9-6c93-40a4-a69d-535a8096e2be",
+	'y1',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"a00c7859-8dad-4b2a-8976-721c099b20f1",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("1f20b3ea-3ea7-419b-bf9f-a40dd78d7a2b",
+	"9cc182b9-6c93-40a4-a69d-535a8096e2be",
+	'x1',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"c0bfd6fa-7aa0-4ed8-940a-f9c841282fb2",
+	'');
+INSERT INTO PE_PE
+	VALUES ("9cc182b9-6c93-40a4-a69d-535a8096e2be",
+	1,
+	"e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("e9d4a273-02f7-4ef8-927c-9efabf299e6e",
+	1,
+	"269ef67c-c8d0-4817-8370-f658f8499e31",
+	"00000000-0000-0000-0000-000000000000",
+	-1);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("269ef67c-c8d0-4817-8370-f658f8499e31",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'ooaofgraphics',
+	'========================================================================
+
+File:          $RCSfile: ooaofgraphics.xtuml,v $
+Version:   $Revision: 1.5 $
+Modified:  $Date: 2010/01/05 03:54:35 $
+
+(c) Copyright 2004-2010 Mentor Graphics Corporation All rights reserved.
+
+========================================================================
+This document contains information proprietary and confidential to
+Project Technology, Inc. and is not for external distribution.
+========================================================================
+
+This is the graphics domain for the Tiger project.
+
+The processing in this model describes the activities
+required for model diagram display and editing.
+
+Import:com.mentor.nucleus.bp.core.*
+-------------------------------------------------------------------------------------------------------------
+',
+	0,
+	'../ooaofgraphics.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'ModifyNonFullyLoadedModelTest',
+	1,
+	'../../ModifyNonFullyLoadedModelTest.xtuml');

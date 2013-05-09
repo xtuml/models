@@ -1,0 +1,223 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("618905dc-6ef1-4f6e-965c-9773d42500de",
+	'GraphEdge',
+	28,
+	'DIM_ED',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("7845f0a3-9e90-4e17-b7b7-b8686953636c",
+	"618905dc-6ef1-4f6e-965c-9773d42500de",
+	'dispose',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one parent related by self->DIM_GE[R301];
+if ( not_empty parent )
+  parent.dispose();
+else
+  select one connector1 related by self->DIM_CON[R320];
+  unrelate self from connector1 across R320;
+  select one connector2 related by self->DIM_CON[R321];
+  unrelate self from connector2 across R321;
+  select many way_set related by self->DIM_WAY[R319];
+  for each way in way_set
+    unrelate self from way across R319;
+    way.dispose();
+  end for;
+  select one gd_con related by self->GD_CON[R20];
+  if ( not_empty gd_con )
+    unrelate self from gd_con across R20;
+    select one ge related by gd_con->GD_GE[R2];
+    if (not_empty ge )
+      // make sure the GD_GE instance is disposed
+      // but we need to dispose the GD_CON instance directly
+      unrelate ge from gd_con across R2;
+      ge.dispose();
+    end if;
+    gd_con.dispose();
+  end if;
+end if;
+delete object instance self;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_REF
+	VALUES ("618905dc-6ef1-4f6e-965c-9773d42500de",
+	"e4921447-32c9-40d9-948a-dbb7abe37f2f",
+	0,
+	"1fe9e25b-051f-45a6-a277-ae73d2e42a4c",
+	"9e2f346c-62c4-4f54-a1b6-969865519789",
+	"bb989526-c9b9-4738-b28e-0d3b6778a7b5",
+	"2bc94de2-0129-4d9e-9671-98877fdab351",
+	"1f210d8a-43a2-4846-8684-1a67748881e0",
+	"14f7889f-a88d-4b8d-969a-a5077d8b2bc0",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'GraphConnector',
+	'conId',
+	'R320');
+INSERT INTO R_RGO_PROXY
+	VALUES ("618905dc-6ef1-4f6e-965c-9773d42500de",
+	"9e2f346c-62c4-4f54-a1b6-969865519789",
+	"bb989526-c9b9-4738-b28e-0d3b6778a7b5",
+	'../UML 2.0 Diagram Interchange.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("1fe9e25b-051f-45a6-a277-ae73d2e42a4c",
+	"e4921447-32c9-40d9-948a-dbb7abe37f2f",
+	0,
+	"9e2f346c-62c4-4f54-a1b6-969865519789",
+	"2bc94de2-0129-4d9e-9671-98877fdab351",
+	'../UML 2.0 Diagram Interchange.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("1f210d8a-43a2-4846-8684-1a67748881e0",
+	"618905dc-6ef1-4f6e-965c-9773d42500de",
+	"1fe9e25b-051f-45a6-a277-ae73d2e42a4c",
+	"e4921447-32c9-40d9-948a-dbb7abe37f2f",
+	1,
+	'conId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("1fe9e25b-051f-45a6-a277-ae73d2e42a4c",
+	"e4921447-32c9-40d9-948a-dbb7abe37f2f",
+	'../GraphConnector/GraphConnector.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("1f210d8a-43a2-4846-8684-1a67748881e0",
+	"618905dc-6ef1-4f6e-965c-9773d42500de",
+	"00000000-0000-0000-0000-000000000000",
+	'first_conId',
+	'',
+	'first_',
+	'graphConnector1Id',
+	1,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("618905dc-6ef1-4f6e-965c-9773d42500de",
+	"e4921447-32c9-40d9-948a-dbb7abe37f2f",
+	0,
+	"1fe9e25b-051f-45a6-a277-ae73d2e42a4c",
+	"8675bcc4-b0ab-4aa7-b59d-c3416c2820f1",
+	"d220a341-d572-4131-9fb7-3e535a2d82f7",
+	"13d05060-b748-47b1-95fd-74a4e6747e74",
+	"280a15b2-b9ba-4714-982d-da17e8f1a3b8",
+	"789edbae-e380-4efd-b19c-e466c8d36fd7",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'GraphConnector',
+	'conId',
+	'R321');
+INSERT INTO R_RGO_PROXY
+	VALUES ("618905dc-6ef1-4f6e-965c-9773d42500de",
+	"8675bcc4-b0ab-4aa7-b59d-c3416c2820f1",
+	"d220a341-d572-4131-9fb7-3e535a2d82f7",
+	'../UML 2.0 Diagram Interchange.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("1fe9e25b-051f-45a6-a277-ae73d2e42a4c",
+	"e4921447-32c9-40d9-948a-dbb7abe37f2f",
+	0,
+	"8675bcc4-b0ab-4aa7-b59d-c3416c2820f1",
+	"13d05060-b748-47b1-95fd-74a4e6747e74",
+	'../UML 2.0 Diagram Interchange.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("280a15b2-b9ba-4714-982d-da17e8f1a3b8",
+	"618905dc-6ef1-4f6e-965c-9773d42500de",
+	"1fe9e25b-051f-45a6-a277-ae73d2e42a4c",
+	"e4921447-32c9-40d9-948a-dbb7abe37f2f",
+	1,
+	'conId');
+INSERT INTO O_ATTR
+	VALUES ("280a15b2-b9ba-4714-982d-da17e8f1a3b8",
+	"618905dc-6ef1-4f6e-965c-9773d42500de",
+	"1f210d8a-43a2-4846-8684-1a67748881e0",
+	'last_conId',
+	'',
+	'last_',
+	'Grc_ID',
+	1,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("618905dc-6ef1-4f6e-965c-9773d42500de",
+	"f49e9862-5646-46a9-9220-fd04545f7519",
+	0,
+	"f1845d40-7708-4402-961d-c60ff906a7bd",
+	"f2d1ab8a-3c53-4b65-b556-6ddd5b5cbce4",
+	"0dce325d-2ae7-4fd2-82d5-e72710dd0981",
+	"6f21522a-610e-4718-a9a5-f28fd8860a54",
+	"ec2135c9-cd68-43d5-927b-7fcc1d9ca566",
+	"87f8fd06-3a89-4397-8654-9f315acae649",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'GraphElement',
+	'elementId',
+	'R301');
+INSERT INTO R_RGO_PROXY
+	VALUES ("618905dc-6ef1-4f6e-965c-9773d42500de",
+	"f2d1ab8a-3c53-4b65-b556-6ddd5b5cbce4",
+	"0dce325d-2ae7-4fd2-82d5-e72710dd0981",
+	'../UML 2.0 Diagram Interchange.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("f1845d40-7708-4402-961d-c60ff906a7bd",
+	"f49e9862-5646-46a9-9220-fd04545f7519",
+	0,
+	"f2d1ab8a-3c53-4b65-b556-6ddd5b5cbce4",
+	"6f21522a-610e-4718-a9a5-f28fd8860a54",
+	'../UML 2.0 Diagram Interchange.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("ec2135c9-cd68-43d5-927b-7fcc1d9ca566",
+	"618905dc-6ef1-4f6e-965c-9773d42500de",
+	"9b69bfa9-07b2-458c-8dd7-442d13942cd0",
+	"0a762924-8165-4d5f-bcb2-bc29265b5505",
+	1,
+	'elementId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("9b69bfa9-07b2-458c-8dd7-442d13942cd0",
+	"0a762924-8165-4d5f-bcb2-bc29265b5505",
+	'../DiagramElement/DiagramElement.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("ec2135c9-cd68-43d5-927b-7fcc1d9ca566",
+	"618905dc-6ef1-4f6e-965c-9773d42500de",
+	"280a15b2-b9ba-4714-982d-da17e8f1a3b8",
+	'elementId',
+	'',
+	'',
+	'eleId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"618905dc-6ef1-4f6e-965c-9773d42500de");
+INSERT INTO O_OIDA
+	VALUES ("ec2135c9-cd68-43d5-927b-7fcc1d9ca566",
+	"618905dc-6ef1-4f6e-965c-9773d42500de",
+	0,
+	'elementId');
+INSERT INTO O_ID
+	VALUES (1,
+	"618905dc-6ef1-4f6e-965c-9773d42500de");
+INSERT INTO O_ID
+	VALUES (2,
+	"618905dc-6ef1-4f6e-965c-9773d42500de");
+INSERT INTO PE_PE
+	VALUES ("618905dc-6ef1-4f6e-965c-9773d42500de",
+	1,
+	"895ccaa3-f52f-4ddb-8dd0-2fc8883f422e",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("895ccaa3-f52f-4ddb-8dd0-2fc8883f422e",
+	"00000000-0000-0000-0000-000000000000",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'UML 2.0 Diagram Interchange',
+	'Notify_Changes:true',
+	0,
+	'../UML 2.0 Diagram Interchange.xtuml');

@@ -1,0 +1,267 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	'Selection Tool',
+	103,
+	'CT_SEL',
+	'The Selection Tool is the default tool when a Model canvas is
+first opened. When it is activated it allows the user to drag and modify
+existing diagram symbols. It is automatically deactivated when another tool is selected.
+
+---------------------------------------------------------------------------
+Persistent:false',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("160996fe-69a5-45d1-8927-67e34de77077",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	'dispose',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one mtl related by self->CT_MTL[R102];
+if ( not_empty mtl )
+  unrelate self from mtl across R102;
+end if;
+delete object instance self;',
+	1,
+	'',
+	"ea1c051f-6e87-4683-b7e8-2190b9ee257e");
+INSERT INTO O_TFR
+	VALUES ("267ea4d0-3079-4b8e-bfb6-f66f4bc99da5",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	'unSelectAll',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'CL::clearSelection();',
+	1,
+	'',
+	"c65ac0a6-1209-4ea5-ac72-d2ebcafe19b9");
+INSERT INTO O_TFR
+	VALUES ("c65ac0a6-1209-4ea5-ac72-d2ebcafe19b9",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	'enableTextMoveUnder',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one model related by self->CT_MTL[R102]->GD_MD[R100];
+model.enableTextMoveUnder(x: param.x, y: param.y);
+',
+	1,
+	'',
+	"160996fe-69a5-45d1-8927-67e34de77077");
+INSERT INTO O_TPARM
+	VALUES ("33adcabd-70f3-4dc6-a818-923222924364",
+	"c65ac0a6-1209-4ea5-ac72-d2ebcafe19b9",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("2edcc581-6ed7-460a-9811-29cda13d63da",
+	"c65ac0a6-1209-4ea5-ac72-d2ebcafe19b9",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"33adcabd-70f3-4dc6-a818-923222924364",
+	'');
+INSERT INTO O_TFR
+	VALUES ("ea1c051f-6e87-4683-b7e8-2190b9ee257e",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	'disableTextMove',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one model related by self->CT_MTL[R102]->GD_MD[R100];
+select one con_text related by model->GD_CTXT[R14];
+if (not_empty con_text)
+  select one tim related by model->GD_TIM[R14];
+  unrelate model from con_text across R14 using tim;
+  delete object instance tim;
+end if;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_REF
+	VALUES ("afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	0,
+	"c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"544e2a9e-7caf-4e0b-ae25-51bfe9759a7a",
+	"9d1479b6-4fd3-4a4a-80af-928006c5d68d",
+	"3ce2badf-c10f-4867-b99e-ba35f8929b5a",
+	"6f0f530e-9562-4851-9996-9d30a1b86a13",
+	"03b6a835-4ef5-4b08-a7fc-6bd8d5305d9f",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Model Tool',
+	'Tool_ID',
+	'R102');
+INSERT INTO R_RGO_PROXY
+	VALUES ("afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	"544e2a9e-7caf-4e0b-ae25-51bfe9759a7a",
+	"9d1479b6-4fd3-4a4a-80af-928006c5d68d",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	0,
+	"544e2a9e-7caf-4e0b-ae25-51bfe9759a7a",
+	"3ce2badf-c10f-4867-b99e-ba35f8929b5a",
+	'../Canvas Tools.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("6f0f530e-9562-4851-9996-9d30a1b86a13",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	"c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	1,
+	'Tool_ID');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("c55a9f02-9e7e-4bcd-8adb-aba542a2b8ef",
+	"6fa4925f-5682-491e-bbb8-fa09957b7013",
+	'../Model Tool/Model Tool.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("6f0f530e-9562-4851-9996-9d30a1b86a13",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	"00000000-0000-0000-0000-000000000000",
+	'Tool_ID',
+	'',
+	'',
+	'Tool_ID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("2613111d-eb93-4cab-b90d-e4fec8d02c66",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_BATTR
+	VALUES ("2613111d-eb93-4cab-b90d-e4fec8d02c66",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_ATTR
+	VALUES ("2613111d-eb93-4cab-b90d-e4fec8d02c66",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	"6f0f530e-9562-4851-9996-9d30a1b86a13",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("a7d80018-7aec-43d6-b833-f6d711ce9456",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_BATTR
+	VALUES ("a7d80018-7aec-43d6-b833-f6d711ce9456",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_ATTR
+	VALUES ("a7d80018-7aec-43d6-b833-f6d711ce9456",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	"2613111d-eb93-4cab-b90d-e4fec8d02c66",
+	'shouldRestoreCursorShape',
+	'',
+	'',
+	'shouldRestoreCursorShape',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("8bd97536-7c1a-4060-a03a-4ad28fee31f7",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_BATTR
+	VALUES ("8bd97536-7c1a-4060-a03a-4ad28fee31f7",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_ATTR
+	VALUES ("8bd97536-7c1a-4060-a03a-4ad28fee31f7",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	"a7d80018-7aec-43d6-b833-f6d711ce9456",
+	'currentTransaction',
+	'',
+	'',
+	'currentTransaction',
+	0,
+	"a08bc519-0818-4efa-8726-c3dd7bc228ee",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("a08bc519-0818-4efa-8726-c3dd7bc228ee",
+	"00000000-0000-0000-0000-000000000000",
+	'Transaction',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("dd001791-5723-418d-afa8-587ebdf4e219",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_BATTR
+	VALUES ("dd001791-5723-418d-afa8-587ebdf4e219",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_ATTR
+	VALUES ("dd001791-5723-418d-afa8-587ebdf4e219",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	"8bd97536-7c1a-4060-a03a-4ad28fee31f7",
+	'symbolMoveMouseStartX',
+	'The logical x-position of the mouse cursor at the start of any current dragging of shapes.',
+	'',
+	'symbolMoveMouseStartX',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("cc539196-8f77-47ec-b3ff-01f6cfa46ac5",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_BATTR
+	VALUES ("cc539196-8f77-47ec-b3ff-01f6cfa46ac5",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_ATTR
+	VALUES ("cc539196-8f77-47ec-b3ff-01f6cfa46ac5",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	"dd001791-5723-418d-afa8-587ebdf4e219",
+	'symbolMoveMouseStartY',
+	'See partner attribute.',
+	'',
+	'symbolMoveMouseStartY',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_OIDA
+	VALUES ("6f0f530e-9562-4851-9996-9d30a1b86a13",
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	0,
+	'Tool_ID');
+INSERT INTO O_ID
+	VALUES (1,
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO O_ID
+	VALUES (2,
+	"afe71fdf-f875-4e81-908b-0caf34f0ed89");
+INSERT INTO PE_PE
+	VALUES ("afe71fdf-f875-4e81-908b-0caf34f0ed89",
+	1,
+	"162963cc-507c-42b6-9d88-e6062a35f9a8",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("162963cc-507c-42b6-9d88-e6062a35f9a8",
+	"00000000-0000-0000-0000-000000000000",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'Canvas Tools',
+	'// This is used by schema_gen to ignore this subsystem (for publication)
+  TRANSLATE_FOR_EXTERNAL_USE:FALSE
+  Notify_Changes:false
+',
+	0,
+	'../Canvas Tools.xtuml');

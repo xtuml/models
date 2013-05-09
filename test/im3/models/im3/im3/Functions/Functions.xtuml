@@ -1,0 +1,408 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("5c54ee68-e14f-457a-8c2f-80de1286a7c6",
+	"00000000-0000-0000-0000-000000000000",
+	"78652760-2b92-4cfb-8a2d-44a4714fbb3f",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("ffb3a1b9-61d7-4e47-bff2-289e4c5a7455",
+	112,
+	"5c54ee68-e14f-457a-8c2f-80de1286a7c6",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'im3::im3::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("ffb3a1b9-61d7-4e47-bff2-289e4c5a7455",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("dda704c2-e109-4bfc-9256-d50b103f5cbf",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'// 
+// Check to see if any instances are already here.
+// This would mean that we have restored from NVS
+// or that preexisting instances were defined in data.
+//
+
+LOG::LogInfo( message:"Did not find any PEI data, initializing NVS" );
+i = NVS::format();
+if( i != 0 )
+  LOG::LogFailure( message:"Error formatting the NVS." );
+end if;
+i = NVS::version( first:1, second:2 );
+i = NVS::checksum( first:1, second:2 );
+
+i = PERSIST::commit();
+if( i != 0 )
+  LOG::LogFailure( message:"Error commiting persistence information. Error code is " );
+  LOG::LogInteger( message:i );
+end if;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("dda704c2-e109-4bfc-9256-d50b103f5cbf",
+	1,
+	"5c54ee68-e14f-457a-8c2f-80de1286a7c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("485f1f27-78ea-4cf6-b0be-4b4382832afa",
+	"00000000-0000-0000-0000-000000000000",
+	'test',
+	'',
+	'// No PEI to check, just trigger the tests.
+
+generate ICD1:''Start IC Test Suite''() to ICD creator;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("485f1f27-78ea-4cf6-b0be-4b4382832afa",
+	1,
+	"5c54ee68-e14f-457a-8c2f-80de1286a7c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("303159cd-bf70-4259-a365-ef38b99864a8",
+	"00000000-0000-0000-0000-000000000000",
+	'xit',
+	'',
+	'// Unrelate everything.
+
+select many ois from instances of OI;
+for each oi in ois
+  select one oi2 related by oi->OI[R4.''is to the right of''];
+  if( not empty oi2)
+    unrelate oi from oi2 across R4.''is to the right of'';
+  end if;
+end for;
+
+select many oi2s from instances of OI2;
+for each oi2 in oi2s
+  select one oi22 related by oi2->OI2[R13.''has parent''];
+  if( not empty oi22)
+    unrelate oi2 from oi22 across R13.''has parent'';
+  end if;
+end for;
+
+select many oks from instances of OK;
+for each ok in oks;
+  select one oj related by ok->OJ[R5.''is to the left of''];
+  select one oj2 related by ok->OJ[R5.''is to the right of''];
+  if( not empty oj and not empty oj2 )
+    unrelate oj2 from oj across R5.''is to the right of'' using ok; 
+  end if;
+end for;
+
+select many ok2s from instances of OK2;
+for each ok2 in ok2s;
+  select one oj2 related by ok2->OJ2[R12.''follows''];
+  select one oj22 related by ok2->OJ2[R12.''precedes''];
+  if( not empty oj2 and not empty oj22 )
+    unrelate oj22 from oj2  across R12.''precedes'' using ok2;
+  end if;
+end for;
+
+select many refs from instances of REF;
+for each ref in refs
+  select one ref2 related by ref->REF[R104.''is left of''];
+  if( not empty ref2 )
+    unrelate ref from ref2 across R104.''is left of'';
+  end if;
+end for;
+
+select many refs from instances of REF;
+for each ref in refs
+  select many refs2 related by ref->REF[R107.''is parent of''];
+  for each ref2 in refs2
+    unrelate ref from ref2 across R107.''is parent of'';
+  end for;
+end for;
+
+select many asc1s from instances of ASC1;
+for each asc1 in asc1s
+  select one ref1 related by asc1->REF[R103.''is right of''];
+  select one ref2 related by asc1->REF[R103.''is left of''];
+  if( not empty ref1 and not empty ref2 )
+    unrelate ref1 from ref2 across R103.''is left of'' using asc1;
+  end if;
+end for;
+
+select many asc4s from instances of ASC4;
+for each asc4 in asc4s
+  select one ref1 related by asc4->REF[R102.''is right of''];
+  select one ref2 related by asc4->REF[R102.''is left of''];
+  if( not empty ref1 and not empty ref2 )
+    unrelate ref1 from ref2 across R102.''is left of'' using asc4;
+  end if;
+end for;
+
+select many asc2s from instances of ASC2;
+for each asc2 in asc2s
+  select one ref1 related by asc2->REF[R105.''is child of''];
+  select one ref2 related by asc2->REF[R105.''is parent of''];
+  if( not empty ref1 and not empty ref2 )
+    unrelate ref1 from ref2 across R105.''is parent of'' using asc2;
+  end if;
+end for;
+
+select many asc6s from instances of ASC6;
+for each asc6 in asc6s
+  select one ref1 related by asc6->REF[R101.''is child of''];
+  select one ref2 related by asc6->REF[R101.''is parent of''];
+  if( not empty ref1 and not empty ref2 )
+    unrelate ref1 from ref2 across R101.''is parent of'' using asc6;
+  end if;
+end for;
+
+select many asc3s from instances of ASC3;
+for each asc3 in asc3s
+  select one ref1 related by asc3->REF[R106.''is left of''];
+  select one ref2 related by asc3->REF[R106.''is left of''];
+  if( not empty ref2 and not empty ref1 )
+    unrelate ref1 from ref2 across R106.''is right of'' using asc3;
+  end if;
+end for;
+
+select many asc5s from instances of ASC5;
+for each asc5 in asc5s
+  select one ref1 related by asc5->REF[R100.''is left of''];
+  select one ref2 related by asc5->REF[R100.''is left of''];
+  if( not empty ref2 and not empty ref1 )
+    unrelate ref1 from ref2 across R100.''is right of'' using asc5;
+  end if;
+end for;
+
+// Now we can delete everything.
+select many icds from instances of ICD;
+for each icd in icds
+  delete object instance icd;
+end for;
+
+select many ois from instances of OI;
+for each oi in ois
+  delete object instance oi;
+end for;
+
+select many oi2s from instances of OI2;
+for each oi2 in oi2s
+  delete object instance oi2;
+end for;
+
+select many ojs from instances of OJ;
+for each oj in ojs
+  delete object instance oj;
+end for;
+
+select many oks from instances of OK;
+for each ok in oks
+  delete object instance ok;
+end for;
+
+select many oj2s from instances of OJ2;
+for each oj2 in oj2s
+  delete object instance oj2;
+end for;
+
+select many ok2s from instances of OK2;
+for each ok2 in ok2s
+  delete object instance ok2;
+end for;
+
+select many userinits from instances of USERINIT1;
+for each userinit in userinits
+  delete object instance userinit;
+end for;
+
+select many scs from instances of SC;
+for each sc in scs
+  delete object instance sc;
+end for;
+
+select many refs from instances of REF;
+for each ref in refs
+  delete object instance ref;
+end for;
+
+select many asc1s from instances of ASC1;
+for each asc1 in asc1s
+  delete object instance asc1;
+end for;
+
+select many asc2s from instances of ASC2;
+for each asc2 in asc2s
+  delete object instance asc2;
+end for;
+
+select many asc3s from instances of ASC3;
+for each asc3 in asc3s
+  delete object  instance asc3;
+end for;
+
+select many asc4s from instances of ASC4;
+for each asc4 in asc4s
+  delete object instance  asc4;
+end for;
+
+select many asc5s from instances of ASC5;
+for each asc5 in asc5s
+  delete object instance  asc5;
+end for;
+
+select many asc6s from instances of ASC6;
+for each asc6 in asc6s
+  delete object instance  asc6;
+end for;
+
+select many ts1s from instances of TS1;
+for each ts1 in ts1s
+  delete object instance  ts1;
+end for;
+
+select many ts2s from instances of TS2;
+for each ts2 in ts2s
+  delete object instance  ts2;
+end for;
+
+select many ts3s from instances of TS3;
+for each ts3 in ts3s
+  delete object instance  ts3;
+end for;
+
+// Shut down.
+ARCH::shutdown();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("303159cd-bf70-4259-a365-ef38b99864a8",
+	1,
+	"5c54ee68-e14f-457a-8c2f-80de1286a7c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("5301a076-4e68-4edb-b7dc-669353e1b8cc",
+	"00000000-0000-0000-0000-000000000000",
+	'setup2',
+	'',
+	'// 
+// Check to see if any instances are already here.
+// This would mean that we have restored from NVS
+// or that preexisting instances were defined in data.
+//
+select many asc1s from instances of ASC1;
+if( empty asc1s )
+  LOG::LogInfo( message:"Did not find any PEI data, initializing NVS" );
+  i = NVS::format();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error formatting the NVS." );
+  end if;
+  i = NVS::version( first:1, second:2 );
+  i = NVS::checksum( first:1, second:2 );
+
+  create object instance sc of SC;
+  sc.count = 1;
+
+  create object instance test1 of TS1;
+  create object instance test2 of TS2;
+  create object instance test3 of TS3;
+
+  i = PERSIST::commit();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error commiting persistence information. Error code is " );
+    LOG::LogInteger( message:i );
+  end if;
+else
+  LOG::LogInfo( message:"Found PEI data." );
+end if;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("5301a076-4e68-4edb-b7dc-669353e1b8cc",
+	1,
+	"5c54ee68-e14f-457a-8c2f-80de1286a7c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("e6362c96-53a1-4629-b5ff-b49db99a8fa8",
+	"00000000-0000-0000-0000-000000000000",
+	'test2',
+	'',
+	'// Check for PEI
+
+select many scs from instances of SC;
+if( empty scs )
+  LOG::LogFailure( message:"Failed to select an instance of SC" );
+end if;
+
+select many ts1s from instances of TS1;
+if( empty ts1s )
+  LOG::LogFailure( message:"Failed to select an instance of TS1" );
+end if;
+
+select many ts2s from instances of TS2;
+if( empty ts2s )
+  LOG::LogFailure( message:"Failed to select an instance of TS2" );
+end if;
+
+select many ts3s from instances of TS3;
+if( empty ts3s )
+  LOG::LogFailure( message:"Failed to select an instance of TS3 ");
+end if;
+
+// Kick off testing.
+for each sc in scs
+  Generate SC1:START() to sc;
+end for;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("e6362c96-53a1-4629-b5ff-b49db99a8fa8",
+	1,
+	"5c54ee68-e14f-457a-8c2f-80de1286a7c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("5c54ee68-e14f-457a-8c2f-80de1286a7c6",
+	1,
+	"f3e7465b-f113-4c80-996e-a553c844e80b",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("f3e7465b-f113-4c80-996e-a553c844e80b",
+	"78652760-2b92-4cfb-8a2d-44a4714fbb3f",
+	"78652760-2b92-4cfb-8a2d-44a4714fbb3f",
+	'im3',
+	'This test deals with reflexive relationships as well as assigner classes from a reflexive relationship.  It also tests creating, selecting, relating, unrelating, and deleting instances.',
+	0,
+	'../im3.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("78652760-2b92-4cfb-8a2d-44a4714fbb3f",
+	'im3',
+	1,
+	'../../im3.xtuml');

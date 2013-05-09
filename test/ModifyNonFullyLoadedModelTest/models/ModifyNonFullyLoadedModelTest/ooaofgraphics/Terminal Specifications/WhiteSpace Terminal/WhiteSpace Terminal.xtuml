@@ -1,0 +1,150 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("88458e53-5159-4ac4-87ff-5a34d3787e29",
+	'WhiteSpace Terminal',
+	203,
+	'TS_WST',
+	'Instances of this class represent valid cases where a
+connector starts on whitespace.
+
+Instances of this class are instantiated at startup from a
+pre-existing instance specification.
+---------------------------------------------------------------------------
+
+PEI:true
+Persistent:false',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("f96791ef-76e2-4469-92f5-d2f33c218b8c",
+	"88458e53-5159-4ac4-87ff-5a34d3787e29",
+	'criteriaMet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select one model related by self->TS_TSP[R201]->GD_MD[R207];
+if (not_empty model)
+  select any tool related by model->CT_MTL[R100] where (selected.active == true);
+  if (not_empty tool)
+    select one curElem related by tool->GD_ES[R103]->GD_GE[R16];
+    select one diagram related by model->DIM_DIA[R18];
+    unScaledX = GR::unScale(value:param.x - diagram.viewportX);
+    unScaledY = GR::unScale(value:param.y - diagram.viewportY);
+    select many elems related by model->GD_GE[R1];
+    for each elem in elems
+      if (curElem != elem and elem.isOver(x:unScaledX, y:unScaledY))
+        return false;
+      end if;
+    end for;
+  end if;
+end if;
+select one termSpec related by self->TS_TSP[R201];
+termSpec.satisfied = true;
+return true;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("ba305b28-6559-44b2-a170-283ce2afb1a5",
+	"f96791ef-76e2-4469-92f5-d2f33c218b8c",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("518701a0-a29b-4480-ac7d-1c52f4b26b33",
+	"f96791ef-76e2-4469-92f5-d2f33c218b8c",
+	'y',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"ba305b28-6559-44b2-a170-283ce2afb1a5",
+	'');
+INSERT INTO O_REF
+	VALUES ("88458e53-5159-4ac4-87ff-5a34d3787e29",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	0,
+	"fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"bd7e13b3-57f2-4c77-805d-48c16d9e6e30",
+	"6ee8d95a-adbf-426d-981c-cc886f75d9ad",
+	"5ecc19cc-7933-4cbe-8224-e4ab940fb0c4",
+	"eb8c2363-fb5e-40e1-99f0-1f06ca06368e",
+	"ed198f57-fbf3-4aa4-ad71-a5ef768fee3f",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Terminal Specification',
+	'Term_Spec_ID',
+	'R201');
+INSERT INTO R_RGO_PROXY
+	VALUES ("88458e53-5159-4ac4-87ff-5a34d3787e29",
+	"bd7e13b3-57f2-4c77-805d-48c16d9e6e30",
+	"6ee8d95a-adbf-426d-981c-cc886f75d9ad",
+	'../Terminal Specifications.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	0,
+	"bd7e13b3-57f2-4c77-805d-48c16d9e6e30",
+	"5ecc19cc-7933-4cbe-8224-e4ab940fb0c4",
+	'../Terminal Specifications.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("eb8c2363-fb5e-40e1-99f0-1f06ca06368e",
+	"88458e53-5159-4ac4-87ff-5a34d3787e29",
+	"fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	1,
+	'Term_Spec_ID');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("fc937d75-5456-4d49-8c04-5459a4a3d3b4",
+	"7254e350-a071-4898-869b-57afadb1fe65",
+	'../Terminal Specification/Terminal Specification.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("eb8c2363-fb5e-40e1-99f0-1f06ca06368e",
+	"88458e53-5159-4ac4-87ff-5a34d3787e29",
+	"00000000-0000-0000-0000-000000000000",
+	'Term_Spec_ID',
+	'',
+	'',
+	'Term_Spec_ID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"88458e53-5159-4ac4-87ff-5a34d3787e29");
+INSERT INTO O_OIDA
+	VALUES ("eb8c2363-fb5e-40e1-99f0-1f06ca06368e",
+	"88458e53-5159-4ac4-87ff-5a34d3787e29",
+	0,
+	'Term_Spec_ID');
+INSERT INTO O_ID
+	VALUES (1,
+	"88458e53-5159-4ac4-87ff-5a34d3787e29");
+INSERT INTO O_ID
+	VALUES (2,
+	"88458e53-5159-4ac4-87ff-5a34d3787e29");
+INSERT INTO PE_PE
+	VALUES ("88458e53-5159-4ac4-87ff-5a34d3787e29",
+	1,
+	"c2b036aa-e960-4115-836d-415687925a0d",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("c2b036aa-e960-4115-836d-415687925a0d",
+	"00000000-0000-0000-0000-000000000000",
+	"fdf31f8a-ccf8-41e5-ae7d-d53e709c1f25",
+	'Terminal Specifications',
+	'The TS (Terminal Specification) subsystem models specification classes that
+define the legal ending points for BridgePoint connector symbols.
+-------------------------------------------------------
+// This is used by schema_gen to ignore this subsystem (for publication)
+TRANSLATE_FOR_EXTERNAL_USE:FALSE
+Notify_Changes:false
+
+',
+	0,
+	'../Terminal Specifications.xtuml');
