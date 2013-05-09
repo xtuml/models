@@ -1,0 +1,348 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("53bce22d-1194-456b-b93f-40a2b126c90d",
+	'ƒaƒXƒN',
+	1,
+	'D_D',
+	'In this model, a Disk refers to an optical disk that is used to store data
+records.  All disks in the optical disk management system are required to have a
+permanently assigned home in the external disk library.  Each disk in the system
+is also required to be labeled with its disk identifier.  Disks can be one of
+two types: offline or online.  When a disk is in its home in the external
+library or moving its name to home, it is an offline disk.  When it is in the
+cabinet or moving to the cabinet, it is accessible by applications, and so is
+termed an online disk.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("dfd9d831-a14d-42d2-a85e-ddf45652bbe0",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_BATTR
+	VALUES ("dfd9d831-a14d-42d2-a85e-ddf45652bbe0",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_ATTR
+	VALUES ("dfd9d831-a14d-42d2-a85e-ddf45652bbe0",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"00000000-0000-0000-0000-000000000000",
+	'Disk_ID',
+	'Every disk in the system is assigned a unique disk identifier.  This identifier
+is written on the disk itself in machine-readable form so that the optical disk
+management system can keep track of it.  The disk identifier must also be placed
+on the outside of the disk in a humah-readable form so that an operator can
+identify it.
+',
+	'',
+	'Disk_ID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("df36694d-0af7-4c75-a4d3-93ae94b511da",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_BATTR
+	VALUES ("df36694d-0af7-4c75-a4d3-93ae94b511da",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_ATTR
+	VALUES ("df36694d-0af7-4c75-a4d3-93ae94b511da",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"dfd9d831-a14d-42d2-a85e-ddf45652bbe0",
+	'Serial_Number',
+	'Disks are bought from various manufacturers.  Each manufacturer stamps the disks
+with serial numbers to distinguish them from other disks being manufactured.  It
+would be convenient to simply use the manufacturers serial number as the unique
+identifier for the disk.  This cannot be done, however, because there is nothing
+that prevents the exact same serial number being stamped on two different disks
+made by two different manufacturers.
+',
+	'',
+	'Serial_Number',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("53bce22d-1194-456b-b93f-40a2b126c90d",
+	"03aa3cb4-d4d4-416e-ac46-ffbe33043b68",
+	0,
+	"c595666b-9581-4406-bd67-14414377e816",
+	"54033ad6-f2bc-4e5d-8da6-e05ed16da8df",
+	"ecdcc834-c3a6-4026-aaa3-33a152f433cc",
+	"5a7762a7-04f7-4576-ab67-e753488c1d5b",
+	"75b805c5-94b8-45f0-8d18-e638565289c2",
+	"dd70a9a8-9e51-4aa4-8d39-8dfd9050ed73",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'Reference Domain:
+',
+	'Permanent Home in Library',
+	'Row_Number',
+	'R4');
+INSERT INTO R_RGO_PROXY
+	VALUES ("53bce22d-1194-456b-b93f-40a2b126c90d",
+	"54033ad6-f2bc-4e5d-8da6-e05ed16da8df",
+	"ecdcc834-c3a6-4026-aaa3-33a152f433cc",
+	'../Odms.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("c595666b-9581-4406-bd67-14414377e816",
+	"03aa3cb4-d4d4-416e-ac46-ffbe33043b68",
+	0,
+	"54033ad6-f2bc-4e5d-8da6-e05ed16da8df",
+	"5a7762a7-04f7-4576-ab67-e753488c1d5b",
+	'../Odms.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("75b805c5-94b8-45f0-8d18-e638565289c2",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"c595666b-9581-4406-bd67-14414377e816",
+	"03aa3cb4-d4d4-416e-ac46-ffbe33043b68",
+	1,
+	'Row_Number');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("c595666b-9581-4406-bd67-14414377e816",
+	"03aa3cb4-d4d4-416e-ac46-ffbe33043b68",
+	'../Permanent Home in Library/Permanent Home in Library.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("75b805c5-94b8-45f0-8d18-e638565289c2",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"df36694d-0af7-4c75-a4d3-93ae94b511da",
+	'Row_Number',
+	'The row number in the external library in which the disk is stored when it is
+offline.  This attribute, together with Disk.Column Number, formalizes the
+association Disk IS PERMANENTLY ASSIGNED TO Permanent Home in External Library.
+',
+	'',
+	'Row_Number',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("53bce22d-1194-456b-b93f-40a2b126c90d",
+	"03aa3cb4-d4d4-416e-ac46-ffbe33043b68",
+	0,
+	"ac164882-9953-4de3-8def-cd7010642c53",
+	"54033ad6-f2bc-4e5d-8da6-e05ed16da8df",
+	"ecdcc834-c3a6-4026-aaa3-33a152f433cc",
+	"5a7762a7-04f7-4576-ab67-e753488c1d5b",
+	"4faec150-8cbf-45d4-9da2-dbaa3b4a348c",
+	"adf12320-7eef-4403-b46f-49041ddf8167",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'Reference Domain:
+',
+	'Permanent Home in Library',
+	'Column_Number',
+	'R4');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("ac164882-9953-4de3-8def-cd7010642c53",
+	"03aa3cb4-d4d4-416e-ac46-ffbe33043b68",
+	0,
+	"54033ad6-f2bc-4e5d-8da6-e05ed16da8df",
+	"5a7762a7-04f7-4576-ab67-e753488c1d5b",
+	'../Odms.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("4faec150-8cbf-45d4-9da2-dbaa3b4a348c",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"ac164882-9953-4de3-8def-cd7010642c53",
+	"03aa3cb4-d4d4-416e-ac46-ffbe33043b68",
+	1,
+	'Column_Number');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("ac164882-9953-4de3-8def-cd7010642c53",
+	"03aa3cb4-d4d4-416e-ac46-ffbe33043b68",
+	'../Permanent Home in Library/Permanent Home in Library.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("4faec150-8cbf-45d4-9da2-dbaa3b4a348c",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"75b805c5-94b8-45f0-8d18-e638565289c2",
+	'Column_Number',
+	'The column number in the external library in which the disk is stored when it is
+offline.  Row number and column number together pinpoint the disks location in
+the library.  This attribute, together with Disk.Row Number, formalizes the
+association Disk IS PERMANENTLY ASSIGNED TO Permanent Home in External Library.
+',
+	'',
+	'Column_Number',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("afa52031-98e9-4f0d-b675-bb48d6ca6db6",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_BATTR
+	VALUES ("afa52031-98e9-4f0d-b675-bb48d6ca6db6",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_ATTR
+	VALUES ("afa52031-98e9-4f0d-b675-bb48d6ca6db6",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"4faec150-8cbf-45d4-9da2-dbaa3b4a348c",
+	'Number_of_Bytes_Available',
+	'The number of bytes on the disk that are currently available for writing.',
+	'',
+	'Number_of_Bytes_Available',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("8af3fe32-e5a2-40b1-b8b3-07533e052b1f",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_BATTR
+	VALUES ("8af3fe32-e5a2-40b1-b8b3-07533e052b1f",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_ATTR
+	VALUES ("8af3fe32-e5a2-40b1-b8b3-07533e052b1f",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"afa52031-98e9-4f0d-b675-bb48d6ca6db6",
+	'Address_to_Start_Writing',
+	'The address of the first sector which is writable.',
+	'',
+	'Address_to_Start_Writing',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("504702fc-b650-45d3-9bf6-0c1888a37eb3",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_BATTR
+	VALUES ("504702fc-b650-45d3-9bf6-0c1888a37eb3",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_ATTR
+	VALUES ("504702fc-b650-45d3-9bf6-0c1888a37eb3",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"8af3fe32-e5a2-40b1-b8b3-07533e052b1f",
+	'Write_Protect_ Status',
+	'Disks can be write-protected if desired.  This attribute records the
+write-protect status of the disk.
+',
+	'',
+	'Write_Protect_ Status',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("593fa113-be35-45df-8141-2a68668a4036",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_BATTR
+	VALUES ("593fa113-be35-45df-8141-2a68668a4036",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_ATTR
+	VALUES ("593fa113-be35-45df-8141-2a68668a4036",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"504702fc-b650-45d3-9bf6-0c1888a37eb3",
+	'Waiting_for_Slot',
+	'This attribute is set based on the current state of the state machine, it is
+always FALSE except when in the "Waiting for Slot" state.',
+	'',
+	'Waiting_for_Slot',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("5342742c-8e93-435e-98a6-94767a9aa8d5",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_BATTR
+	VALUES ("5342742c-8e93-435e-98a6-94767a9aa8d5",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_ATTR
+	VALUES ("5342742c-8e93-435e-98a6-94767a9aa8d5",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"593fa113-be35-45df-8141-2a68668a4036",
+	'Waiting_for_Drive',
+	'This attribute is TRUE only when the state machine is in the Waiting for Drive
+state.',
+	'',
+	'Waiting_for_Drive',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e3ca84d4-fb79-40ec-be7b-427e081acc40",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_BATTR
+	VALUES ("e3ca84d4-fb79-40ec-be7b-427e081acc40",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_ATTR
+	VALUES ("e3ca84d4-fb79-40ec-be7b-427e081acc40",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"5342742c-8e93-435e-98a6-94767a9aa8d5",
+	'Unowned_in_Cabinet',
+	'This attribute is TRUE only when the state machine is in the Unowned in Cabinet
+state.',
+	'',
+	'Unowned_in_Cabinet',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("019ac183-2f54-46be-a199-e908c8409916",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_BATTR
+	VALUES ("019ac183-2f54-46be-a199-e908c8409916",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_ATTR
+	VALUES ("019ac183-2f54-46be-a199-e908c8409916",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"e3ca84d4-fb79-40ec-be7b-427e081acc40",
+	'Unowned_in_Library',
+	'This attribute is TRUE only when the state machine is in the Unowned in Library
+state.',
+	'',
+	'Unowned_in_Library',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e479fe4c-00f3-4f17-9919-ccbf8f1939aa",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_BATTR
+	VALUES ("e479fe4c-00f3-4f17-9919-ccbf8f1939aa",
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_ATTR
+	VALUES ("e479fe4c-00f3-4f17-9919-ccbf8f1939aa",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	"019ac183-2f54-46be-a199-e908c8409916",
+	'current_state',
+	'The current state of the Disk.',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_OIDA
+	VALUES ("dfd9d831-a14d-42d2-a85e-ddf45652bbe0",
+	"53bce22d-1194-456b-b93f-40a2b126c90d",
+	0,
+	'Disk_ID');
+INSERT INTO O_ID
+	VALUES (1,
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO O_ID
+	VALUES (2,
+	"53bce22d-1194-456b-b93f-40a2b126c90d");
+INSERT INTO PE_PE
+	VALUES ("53bce22d-1194-456b-b93f-40a2b126c90d",
+	1,
+	"c81c3dfa-cb3f-4bd8-a3b3-aa007e95fd65",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("c81c3dfa-cb3f-4bd8-a3b3-aa007e95fd65",
+	"00000000-0000-0000-0000-000000000000",
+	"3a93eaad-90d0-43cb-9559-d34ea2a2fdea",
+	'Odms',
+	'This is the main subsystem for the Optical Disk Management System model.',
+	1,
+	'../Odms.xtuml');
