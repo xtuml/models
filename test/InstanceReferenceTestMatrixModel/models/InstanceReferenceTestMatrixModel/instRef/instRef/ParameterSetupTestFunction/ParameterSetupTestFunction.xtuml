@@ -1,0 +1,193 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("98c986bb-36b9-4322-9357-7fd34871ee49",
+	"00000000-0000-0000-0000-000000000000",
+	"13c14d34-d225-4949-89b6-fe738cc62cbb",
+	'ParameterSetupTestFunction',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("40adb0c5-7be4-422a-97a1-7f2182500936",
+	112,
+	"98c986bb-36b9-4322-9357-7fd34871ee49",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'InstanceReferenceTestMatrixModel::instRef::instRef::ParameterSetupTestFunction');
+INSERT INTO DIM_DIA
+	VALUES ("40adb0c5-7be4-422a-97a1-7f2182500936",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("17c68ca4-f2a3-4454-9299-4d046e4b74f7",
+	"00000000-0000-0000-0000-000000000000",
+	'InstRefParameterSetupTest',
+	'',
+	'temp = param.inst;
+
+if empty temp
+	LOG::LogFailure(message:"Instance Reference Parameter Setup Failure");
+	
+else 
+	LOG::LogSuccess(message:"Instance Reference Parameter Setup Success");
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("7d2afc2a-a851-4b4f-b545-a6793a592fc4",
+	"17c68ca4-f2a3-4454-9299-4d046e4b74f7",
+	'inst',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d26cf195-7219-44b5-b4b4-43864cf587d8",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vehicle>',
+	'',
+	'',
+	'../Datatypes/Datatypes.xtuml');
+INSERT INTO PE_PE
+	VALUES ("17c68ca4-f2a3-4454-9299-4d046e4b74f7",
+	1,
+	"98c986bb-36b9-4322-9357-7fd34871ee49",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("45fe2e67-f321-4e85-9a48-f1773b4e014c",
+	"00000000-0000-0000-0000-000000000000",
+	'InstRefSetParameterSetupTest',
+	'',
+	'instRefSet = param.instSet;
+
+if empty instRefSet
+	LOG::LogFailure(message:"Instance Reference Set Parameter Setup Failure ");
+else 
+	LOG::LogSuccess(message:"Instance Reference Set Parameter Setup Success");
+end if; ',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("86b2a5ad-3ea6-44a7-b3f9-4694c90cc0c2",
+	"45fe2e67-f321-4e85-9a48-f1773b4e014c",
+	'instSet',
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref_set<vehicle>',
+	'',
+	'',
+	'../Datatypes/Datatypes.xtuml');
+INSERT INTO PE_PE
+	VALUES ("45fe2e67-f321-4e85-9a48-f1773b4e014c",
+	1,
+	"98c986bb-36b9-4322-9357-7fd34871ee49",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("66fd6d17-86b1-48bd-a7af-3067747d34b9",
+	"00000000-0000-0000-0000-000000000000",
+	'EmptyInstRefParameterSetupTest',
+	'',
+	'temp = param.inst;
+
+if not_empty temp
+	LOG::LogFailure(message:"Instance Reference Parameter Setup Failure");
+	
+else 
+	LOG::LogSuccess(message:"Instance Reference Parameter Setup Success");
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("14cba307-7084-42cc-a2a7-646d4e926f31",
+	"66fd6d17-86b1-48bd-a7af-3067747d34b9",
+	'inst',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("66fd6d17-86b1-48bd-a7af-3067747d34b9",
+	1,
+	"98c986bb-36b9-4322-9357-7fd34871ee49",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("dcae7e55-626c-4141-ac46-8490d78b8ad5",
+	"00000000-0000-0000-0000-000000000000",
+	'EmptyInstRefSetParameterSetupTest',
+	'',
+	'instRefSet = param.instSet;
+
+if not_empty instRefSet
+	LOG::LogFailure(message:"Instance Reference Set Parameter Setup Failure ");
+else 
+	LOG::LogSuccess(message:"Instance Reference Set Parameter Setup Success");
+end if; ',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("6d9ba589-0831-4440-89db-305b4162a438",
+	"dcae7e55-626c-4141-ac46-8490d78b8ad5",
+	'instSet',
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("dcae7e55-626c-4141-ac46-8490d78b8ad5",
+	1,
+	"98c986bb-36b9-4322-9357-7fd34871ee49",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("98c986bb-36b9-4322-9357-7fd34871ee49",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"5d53dd8f-1622-4edc-89a5-23d6e4d3adab",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("5d53dd8f-1622-4edc-89a5-23d6e4d3adab",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'instRef',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../instRef.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("13c14d34-d225-4949-89b6-fe738cc62cbb",
+	'InstanceReferenceTestMatrixModel',
+	1,
+	'../../../InstanceReferenceTestMatrixModel.xtuml');

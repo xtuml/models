@@ -1,0 +1,410 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("51ba4b1c-0e1a-483d-95e2-2d575cbe831d",
+	"00000000-0000-0000-0000-000000000000",
+	"13c14d34-d225-4949-89b6-fe738cc62cbb",
+	'Enviroment Setup Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("139f98d1-83fa-4a11-8a2c-35b1e19a9434",
+	112,
+	"51ba4b1c-0e1a-483d-95e2-2d575cbe831d",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	200,
+	150,
+	0,
+	'3.2.3',
+	'InstanceReferenceTestMatrixModel::instRef::instRef::Enviroment Setup Functions');
+INSERT INTO DIM_DIA
+	VALUES ("139f98d1-83fa-4a11-8a2c-35b1e19a9434",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("43242dfb-40b4-460b-9ce1-a9a6fb4169b3",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'create object instance john of P;
+create object instance crash of A;
+create object instance car of V;
+car.setModel(model:"Toyota");
+john.setName(name:"John");
+create object instance  anotherCar of V;
+
+john.vehicleReference = car;
+
+select many vehicles from instances of V;
+
+relate john to car across R1 using crash;
+
+if  param.accessType == "Direct"
+	
+	if param.referenceType == "Attribute"
+		create object instance testObject of ATTR1;
+		testObject.iReference = car;
+		testObject.cars_set = vehicles;
+		testObject.accidentReference = crash;
+		
+	elif param.referenceType == "Array Element"
+		create object instance testObject of AER1;
+		testObject.iReferenceArray[0] = car;
+		testObject.iReferenceArray[1] = anotherCar;
+		testObject.cars_setArray[0] = vehicles;
+		testObject.accidentReferenceArray[0] = crash;
+	elif param.referenceType == "Structure Member"
+		create object instance testObject of MBR1;
+		testObject.sdtMember.instRef = car;
+		testObject.sdtMember.instRef_set = vehicles;
+
+	elif param.referenceType == "Event Parameter"
+	
+	end if;
+elif  param.accessType == "Invalid"
+	
+		delete object instance car;
+		delete object instance anotherCar;
+	
+	if param.referenceType == "Attribute"
+		create object instance testObject of ATTR2;
+		
+	elif param.referenceType == "Array Element"
+		create object instance testObject of AER2;
+		
+	elif param.referenceType == "Structure Member"
+		create object instance testObject of MBR2;
+	end if;
+	
+	
+elif  param.accessType == "Nested"
+	if param.referenceType == "Attribute"
+		create object instance testObject of ATTR3;
+		testObject.iReference = car;
+		testObject.iReference.selfReference = car;
+		testObject.iReference.allVehicles = vehicles;
+	elif param.referenceType == "Structure Member"
+		create object instance testObject of MBR3;
+		testObject.sdtMember.nestedSDT.instRef = car;
+		testObject.sdtMember.nestedSDT.instRef_set = vehicles;
+	elif param.referenceType =="Mixed One"
+		create object instance brand of B;
+		car.brand.manufacturers[0] = brand;
+		brand.bestCar = car;
+		brand.allCars = vehicles;
+	elif param.referenceType =="Mixed Two"
+		create object instance testObject of MIX2;
+		testObject.structReference.car = car;
+		
+		create object instance brand of B;
+		car.manufacturer = brand;
+		
+		brand.oldCars[0] =car;
+		brand.categorizedCars[0] = vehicles;
+	elif param.referenceType =="Mixed Three"
+		create object instance testObject of MIX3;
+		testObject.car =car;
+		testObject.car.manufacturerList[0].manufacturerCar = car;
+		testObject.car.manufacturerList[0].manufacturerCarSet = vehicles;
+	end if;
+	
+elif  param.accessType == "Invalid Nested"
+	if param.referenceType == "Attribute"
+		create object instance testObject of ATTR4;
+		testObject.iReference = car;
+		//testObject.iReference.selfReference = car;
+		//testObject.iReference.allVehicles = vehicles;
+	elif param.referenceType == "Structure Member"
+		create object instance testObject of MBR4;
+		//testObject.sdtMember.nestedSDT.instRef = car;
+		//testObject.sdtMember.nestedSDT.instRef_set = vehicles;
+	elif param.referenceType =="Mixed One"
+		create object instance brand of B;
+		car.brand.manufacturers[0] = brand;
+		brand.bestCar = car;
+		brand.allCars = vehicles;
+	elif param.referenceType =="Mixed Two"
+		create object instance testObject of MIX2;
+		testObject.structReference.car = car;
+		
+		create object instance brand of B;
+		car.manufacturer = brand;
+		
+		brand.oldCars[0] =car;
+		brand.categorizedCars[0] = vehicles;
+	elif param.referenceType =="Mixed Three"
+		create object instance testObject of MIX3;
+		testObject.car =car;
+		testObject.car.manufacturerList[0].manufacturerCar = car;
+		testObject.car.manufacturerList[0].manufacturerCarSet = vehicles;
+	end if;
+	
+	//delete object instance car;
+	//delete object instance anotherCar;
+end if;
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("04b7ebd5-081a-4577-b5ea-eb00424d0e22",
+	"43242dfb-40b4-460b-9ce1-a9a6fb4169b3",
+	'accessType',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("cc9936e9-477b-4fdd-af3e-8eff49d7bb2d",
+	"43242dfb-40b4-460b-9ce1-a9a6fb4169b3",
+	'referenceType',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"04b7ebd5-081a-4577-b5ea-eb00424d0e22",
+	'');
+INSERT INTO PE_PE
+	VALUES ("43242dfb-40b4-460b-9ce1-a9a6fb4169b3",
+	1,
+	"51ba4b1c-0e1a-483d-95e2-2d575cbe831d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("7b76db46-9a9d-4bb9-9906-c3c6c2b15985",
+	"00000000-0000-0000-0000-000000000000",
+	'dispose',
+	'',
+	'select many Vs from instances of V;
+select many As from instances of A;
+select many Ps from instances of P;
+
+
+if ( not_empty Vs )
+  for each v in Vs
+    delete object instance v;
+  end for;
+end if;
+
+if ( not_empty Ps )
+  for each p in Ps 
+    delete object instance p;
+  end for;
+end if;
+
+if ( not_empty As )
+  for each a in As
+    delete object instance a;
+  end for;
+end if;
+
+if param.accessType == "Direct"
+	if  param.referenceType == "Attribute" 
+	  select many tests from instances of ATTR1;
+	  for each test in tests
+	    delete object instance test;
+	  end for;
+	elif param.referenceType == "Array Element"
+	  select many tests from instances of AER1;
+	  for each test in tests
+	    delete object instance test;
+	  end for;
+	elif param.referenceType == "Structure Member"
+	  select many tests from instances of MBR1;
+	  for each test in tests
+	    delete object instance test;
+	  end for;
+	elif param.referenceType == "Event Parameter"
+	  select many tests from instances of EVTDI;
+	  for each test in tests
+	    delete object instance test;
+	  end for;
+	end if;
+
+elif param.accessType == "Invalid"
+	if  param.referenceType == "Attribute" 
+	  select many tests from instances of ATTR2;
+	  for each test in tests
+	    delete object instance test;
+	  end for;
+	elif param.referenceType == "Array Element"
+	  select many tests from instances of AER2;
+	  for each test in tests
+	    delete object instance test;
+	  end for;
+	elif param.referenceType == "Structure Member"
+	  select many tests from instances of MBR2;
+	  for each test in tests
+	    delete object instance test;
+	  end for;
+	end if;
+
+elif param.accessType =="Nested"
+	if  param.referenceType == "Attribute" 
+	  select many tests from instances of ATTR3;
+	  for each test in tests
+	    delete object instance test;
+	  end for;
+	elif param.referenceType == "Structure Member"
+	  select many tests from instances of MBR3;
+	  for each test in tests
+	    delete object instance test;
+	  end for;
+	elif param.referenceType == "Mixed One"
+		select many brands from instances of B;
+		for each brand in brands
+			delete object instance brand;
+		end for;
+	elif param.referenceType == "Mixed Two"
+		select many brands from instances of B;
+		for each brand in brands
+			delete object instance brand;
+		end for;
+		select many tests from instances of MIX2;
+		for each test in tests
+			delete object instance test;
+		end for;
+	elif param.referenceType == "Mixed Three"
+		select many tests from instances of MIX3;
+		for each test in tests
+			delete object instance test;
+		end for;
+		
+	end if;
+
+elif param.accessType =="Invalid Nested"
+	if  param.referenceType == "Attribute" 
+	  select many tests from instances of ATTR4;
+	  for each test in tests
+	    delete object instance test;
+	  end for;
+	elif param.referenceType == "Structure Member"
+	  select many tests from instances of MBR4;
+	  for each test in tests
+	    delete object instance test;
+	  end for;
+	elif param.referenceType == "Mixed One"
+		select many brands from instances of B;
+		for each brand in brands
+			delete object instance brand;
+		end for;
+	elif param.referenceType == "Mixed Two"
+		select many brands from instances of B;
+		for each brand in brands
+			delete object instance brand;
+		end for;
+		select many tests from instances of MIX2;
+		for each test in tests
+			delete object instance test;
+		end for;
+	elif param.referenceType == "Mixed Three"
+		select many tests from instances of MIX3;
+		for each test in tests
+			delete object instance test;
+		end for;
+		
+	end if;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO S_SPARM
+	VALUES ("361c7de1-1c3f-4a17-b0d0-e0121118786d",
+	"7b76db46-9a9d-4bb9-9906-c3c6c2b15985",
+	'accessType',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("838efc34-9b96-4da5-bf1b-694a5ce258c7",
+	"7b76db46-9a9d-4bb9-9906-c3c6c2b15985",
+	'referenceType',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"361c7de1-1c3f-4a17-b0d0-e0121118786d",
+	'');
+INSERT INTO PE_PE
+	VALUES ("7b76db46-9a9d-4bb9-9906-c3c6c2b15985",
+	1,
+	"51ba4b1c-0e1a-483d-95e2-2d575cbe831d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("fed92fe3-8fea-4f75-afea-f9a147f94e96",
+	"00000000-0000-0000-0000-000000000000",
+	'RunAllDirectTests',
+	'',
+	'::ArrayElement_Direct();
+::Attribute_Direct();
+::BridgeParameter_Direct();
+::FunctionParameter_Direct();
+::OperationParameter_Direct();
+::StructureMember_Direct();
+::EventParameter_Direct();
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("fed92fe3-8fea-4f75-afea-f9a147f94e96",
+	1,
+	"51ba4b1c-0e1a-483d-95e2-2d575cbe831d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("5e14c6ea-ee0e-4983-9b34-10182a3cbafe",
+	"00000000-0000-0000-0000-000000000000",
+	'RunAllNestedTests',
+	'',
+	'::Attribute_Nested();
+::StructureMember_Nested();
+::MixedOne_Nested();
+::MixedTwo_Nested();
+::MixedThree_Nested();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("5e14c6ea-ee0e-4983-9b34-10182a3cbafe",
+	1,
+	"51ba4b1c-0e1a-483d-95e2-2d575cbe831d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("51ba4b1c-0e1a-483d-95e2-2d575cbe831d",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"5d53dd8f-1622-4edc-89a5-23d6e4d3adab",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("5d53dd8f-1622-4edc-89a5-23d6e4d3adab",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'instRef',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../instRef.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("13c14d34-d225-4949-89b6-fe738cc62cbb",
+	'InstanceReferenceTestMatrixModel',
+	1,
+	'../../../InstanceReferenceTestMatrixModel.xtuml');

@@ -1,0 +1,930 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("3de2237d-b8a8-459d-a71d-09424d93d207",
+	'testTransient_Direct',
+	8,
+	'TRN1',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("a07695a0-a8bb-4f3f-86da-bb8a2f62c357",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_oprInvocation',
+	'I1A1',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_oprInvocation, Matrix cell : A1 V1 I4");
+
+select any instRef from instances of V;
+if ( empty instRef)
+   LOG::LogFailure(message:"Failed to assign the IR to the transient variable instRef");
+   return;
+end if;
+
+instRef.setModel(model:"BMW");
+if ( instRef.model == "BMW")
+	LOG::LogSuccess(message:"V_TRN_oprInvocation -A1 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_oprInvocation -A1 V1 I4-  test failed");
+end if;
+EOF = true; ',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("8218b7b6-f68c-42d9-8441-e4d0cdddc3b3",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_readAttr',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_readAttir, Matrix cell : A2 V1 I4");
+select any instRef from instances of V;
+if ( empty instRef)
+	LOG::LogFailure(message:"Failed to assign the IR to the transient variable instRef");
+	LOG::LogFailure(message:"V_TRN_readAttir -A2 V1 I4-  test failed");
+else
+	LOG::LogSuccess(message:"V_TRN_readAttir -A2 V1 I4-  test passed");
+end if;
+
+temp = instRef.model;
+if ( temp != "")
+	LOG::LogSuccess(message:"V_TRN_readAttir -A2 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_readAttir -A2 V1 I4-  test failed");
+end if;
+EOF = true;
+',
+	1,
+	'',
+	"a07695a0-a8bb-4f3f-86da-bb8a2f62c357");
+INSERT INTO O_TFR
+	VALUES ("d12df368-543e-44d9-9f9b-e567962a9a32",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_selectOne',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_selectOne, Matrix cell : A3 V1 I4");
+select any instRef from instances of V;
+
+if ( empty instRef )
+	LOG::LogFailure(message:"V_TRN_selectOne -A3 V1 I4-  test failed");
+end if;
+
+select one ped related by instRef->P[R1];
+if ( empty ped)
+	LOG::LogFailure(message:"V_TRN_selectOne -A3 V1 I4-  test failed");
+else 
+	LOG::LogSuccess(message:"V_TRN_selectOne -A3 V1 I4-  test passed");
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"8218b7b6-f68c-42d9-8441-e4d0cdddc3b3");
+INSERT INTO O_TFR
+	VALUES ("8857bfad-05a2-4d3f-8de8-de5e5ddd5623",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_relateByFirst',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_relateByFirst, Matrix cell : A6 V1 I4");
+create object instance ped of P;
+create object instance acc of A;
+create object instance instRef of V;
+
+
+relate instRef to ped across R1 using acc;
+
+select one car related by ped->V[R1];
+if ( empty car )
+	LOG::LogFailure(message:"V_TRN_relateByFirst -A6 V1 I4-  test failed");
+else
+	LOG::LogSuccess(message:"V_TRN_relateByFirst -A6 V1 I4-  test passed");
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"a4609301-9ac0-4ec2-afda-71e8254dd266");
+INSERT INTO O_TFR
+	VALUES ("7928aee4-5d02-49e2-902d-9a493992f16c",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_relateUsing',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_relateUsing, Matrix cell : A7 V1 I4");
+create object instance ped of P;
+
+create object instance veh of V;
+create object instance InstRef of A;
+
+
+relate veh to ped across R1 using InstRef;
+
+select one acc related by veh->A[R1];
+if ( not_empty acc)
+	LOG::LogSuccess(message:"V_TRN_relateUsing -A7 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_relateUsing -A7 V1 I4-  test failed");
+end if;
+
+EOF = true;
+
+',
+	1,
+	'',
+	"8857bfad-05a2-4d3f-8de8-de5e5ddd5623");
+INSERT INTO O_TFR
+	VALUES ("fb579388-9525-4a52-9513-1b25baf300e9",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_realteBySecond',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_relateBySecond, Matrix cell : A8 V1 I4");
+create object instance ped of P;
+
+create object instance acc of A;
+
+create object instance InstRef of V;
+
+relate ped to  InstRef across R1 using acc;
+
+select one car related by ped->V[R1];
+if (not_empty car )
+	LOG::LogSuccess(message:"V_TRN_relateBySecond -A8 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_relateBySecond -A8 V1 I4-  test failed");
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"7928aee4-5d02-49e2-902d-9a493992f16c");
+INSERT INTO O_TFR
+	VALUES ("3e43b22b-f9e5-4611-9a2e-8e88ab933f2d",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_unrelateFirst',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_unrelateFirst, Matrix cell : A9 V1 I4");
+select any ped from instances of P;
+if ( empty ped)
+   LOG::LogFailure(message:"Failed to select ped");
+   LOG::LogFailure(message:"V_TRN_unrelateFirst -A9 V1 I4-  test failed");
+   return;
+end if;
+select any acc from instances of A;
+if ( empty acc)
+   LOG::LogFailure(message:"Failed to select acc");
+   LOG::LogFailure(message:"V_TRN_unrelateFirst -A9 V1 I4-  test failed");
+   return;
+end if;
+
+select any InstRef from instances of V;
+
+if ( empty InstRef)
+   LOG::LogFailure(message:"Failed to select InstRef");
+   LOG::LogFailure(message:"V_TRN_unrelateFirst -A9 V1 I4-  test failed");
+   return;
+end if;
+
+
+unrelate InstRef from ped across R1 using acc;
+
+select one car related by ped->V[R1];
+if ( empty car)
+	LOG::LogSuccess(message:"V_TRN_unrelateFirst -A9 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_unrelateFirst -A9 V1 I4-  test failed");
+end if;
+
+EOF = true;',
+	1,
+	'',
+	"fb579388-9525-4a52-9513-1b25baf300e9");
+INSERT INTO O_TFR
+	VALUES ("fd52d655-2c1c-4ae2-b874-56135571e330",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_booleanBinaryOperationLeftOperand',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_booleanBinaryOperationLeftOperand, Matrix cell : A14 V1 I4");
+select any veh from instances of V;
+select any instRef from instances of V;
+if ( empty veh)
+   LOG::LogFailure(message:"Failed to select veh");
+   LOG::LogFailure(message:"V_TRN_booleanBinaryOperationLeftOperand -A14 V1 I4-  test failed");
+   return;
+   
+end if;
+if instRef== veh
+	LOG::LogSuccess(message:"V_TRN_booleanBinaryOperationLeftOperand -A14 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_booleanBinaryOperationLeftOperand -A14 V1 I4-  test failed");	
+end if;
+
+',
+	1,
+	'',
+	"5420aad5-cfd4-4d12-93a3-555598ba2b5e");
+INSERT INTO O_TFR
+	VALUES ("2474b7de-310d-45b5-8c24-d28dd73f3893",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_UnaryOperators',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_UnaryOperators, Matrix cell : A16 V1 I4");
+select any instRef from instances of V;
+
+if ( empty instRef)
+ a =1;
+end if;
+
+if ( not_empty instRef)
+ a =1;
+end if;
+
+if (  1 == cardinality instRef)
+ a =1;
+end if;
+LOG::LogSuccess(message:"V_TRN_UnaryOperators -A16 V1 I4-  test passed");
+EOF = true;',
+	1,
+	'',
+	"e6e6bd09-8469-4527-9bf5-6d913062c6cd");
+INSERT INTO O_TFR
+	VALUES ("e1034774-34c8-427c-8d20-9a1b9f4a784c",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_generateEvent',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_generateEvent, Matrix cell : A17 V1 I4");
+select any instRef from instances of V;
+if ( empty instRef)
+	LOG::LogFailure(message:"Failed to copy instace reference to the transient variable instRef");
+	LOG::LogFailure(message:"V_TRN_generateEvent -A17 V1 I4-  test failed");
+	return;
+   
+end if;
+generate V1:accelerate to instRef;
+LOG::LogSuccess(message:"V_TRN_generateEvent -A17 V1 I4-  test passed");
+EOF = true;',
+	1,
+	'',
+	"2474b7de-310d-45b5-8c24-d28dd73f3893");
+INSERT INTO O_TFR
+	VALUES ("c9d3564f-e448-4ba7-91e9-5390b386b478",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_writeAttr',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_writeAttr, Matrix cell : A19 V1 I4");
+create object instance newCar of V;   
+instRef= newCar;
+if ( not_empty instRef )
+	LOG::LogSuccess(message:"V_TRN_writeAttr -A19 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_writeAttr -A19 V1 I4-  test failed");
+end if; 
+
+instRef.model = "BMW";
+EOF= true;
+ 
+',
+	1,
+	'',
+	"8c2a516a-ab99-4092-b1f5-a1bae16f4631");
+INSERT INTO O_TFR
+	VALUES ("a910a461-90cc-484a-b751-224e9a8551b3",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_delete',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_delete, Matrix cell : A20 V1 I4");
+select any instRef from instances of V;
+if ( empty instRef)
+	LOG::LogFailure(message:"Failed to copy instace reference to the transient variable instRef");
+	LOG::LogFailure(message:"V_TRN_delete -A20 V1 I4-  test failed");
+	return;
+   
+end if;
+delete object instance instRef;
+select any veh from instances of V;
+if ( empty veh)
+	LOG::LogSuccess(message:"V_TRN_delete -A20 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_delete -A20 V1 I4-  test failed");
+end if;',
+	1,
+	'',
+	"c9d3564f-e448-4ba7-91e9-5390b386b478");
+INSERT INTO O_TFR
+	VALUES ("2fe6bd35-999e-4a45-8e86-2440859d21f7",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_binaryOperations_ref_ref',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Can not implement this test till the grammar is added ',
+	1,
+	'',
+	"618a4caf-345e-45f2-8424-fceabdcdcce9");
+INSERT INTO O_TFR
+	VALUES ("07683a3b-17f1-48e2-8660-2812e3f84794",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_forEachSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_forEachSet, Matrix cell : A21 V1 I4");
+coutner = 0;
+select many instRef_set from instances of V;
+
+if ( empty instRef_set)
+	LOG::LogFailure(message:"Failed to copy instace reference set to the transient variable instRef_set");
+	LOG::LogFailure(message:"V_TRN_forEachSet -A21 V1 I4-  test failed");
+	return;
+   
+end if;
+for each car in instRef_set
+	if ( empty car)
+		LOG::LogFailure(message:"Failed to copy instace reference to the transient variable car");
+		LOG::LogFailure(message:"V_TRN_forEachSet -A21 V1 I4-  test failed");
+		return;
+	end if;
+ counter = coutner + 1;
+end for;  
+LOG::LogSuccess(message:"V_TRN_forEachSet -A21 V1 I4-  test passed");',
+	1,
+	'',
+	"a910a461-90cc-484a-b751-224e9a8551b3");
+INSERT INTO O_TFR
+	VALUES ("da7d1a6c-643a-4f21-95ad-f131bbb3a3af",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_selectSetOne',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_selectSetOne, Matrix cell : A22 V1 I4");
+select many instRef_set from instances of V;
+
+if ( empty instRef_set)
+	LOG::LogFailure(message:"instRef_set instance reference set is empty");
+	LOG::LogFailure(message:"V_TRN_selectSetOne -A22 V1 I4-  test failed");
+	return;
+   
+end if;
+select many peds related by instRef_set->P[R1];
+if ( empty peds)
+	LOG::LogFailure(message:"V_TRN_selectSetOne -A22 V1 I4-  test failed");
+else
+	LOG::LogSuccess(message:"V_TRN_selectSetOne -A22 V1 I4-  test passed");	
+end if;',
+	1,
+	'',
+	"07683a3b-17f1-48e2-8660-2812e3f84794");
+INSERT INTO O_TFR
+	VALUES ("fbcd2ae0-9b5e-429e-b949-9693a5b4d387",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_unaryOperators_InstRefSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_unaryOperators_InstRefSet, Matrix cell : A25 V1 I4");
+
+select many instRef_set from instances of V;
+if empty instRef_set
+  EmptySet = true;
+end if;
+LOG::LogSuccess(message:"V_TRN_unaryOperators_InstRefSet -A25 V1 I4-  test passed");	
+EOF=true;',
+	1,
+	'',
+	"e6174e3c-ebe7-4155-9b53-05c7cb552e96");
+INSERT INTO O_TFR
+	VALUES ("be0409f6-f6e2-4e0b-8d19-05495f173c33",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_binaryOperations_ref_set',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Can not implement this test till the grammar is added ',
+	1,
+	'',
+	"fbcd2ae0-9b5e-429e-b949-9693a5b4d387");
+INSERT INTO O_TFR
+	VALUES ("618a4caf-345e-45f2-8424-fceabdcdcce9",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_binaryOperations_set_set',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Can not implement this test till the grammar is added ',
+	1,
+	'',
+	"be0409f6-f6e2-4e0b-8d19-05495f173c33");
+INSERT INTO O_TFR
+	VALUES ("63ecb4ee-a1a4-48a0-aa64-86392ebbfef0",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_unrelateSecond',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_unrelateSecond, Matrix cell : A10 V1 I4");
+select any ped from instances of P;
+if ( empty ped)
+   LOG::LogFailure(message:"Failed to select ped");
+   LOG::LogFailure(message:"V_TRN_unrelateSecond -A10 V1 I4-  test failed");
+   return;
+end if;
+select any acc from instances of A;
+if ( empty acc)
+   LOG::LogFailure(message:"Failed to select acc");
+   LOG::LogFailure(message:"V_TRN_unrelateSecond -A10 V1 I4-  test failed");
+   return;
+end if;
+
+select any InstRef from instances of V;
+
+if ( empty InstRef)
+   LOG::LogFailure(message:"Failed to select InstRef");
+   LOG::LogFailure(message:"V_TRN_unrelateFirst -A9 V1 I4-  test failed");
+   return;
+end if;
+
+unrelate ped from InstRef across R1 using acc;
+
+select one car related by ped->V[R1];
+if ( empty car)
+	LOG::LogSuccess(message:"V_TRN_unrelateSecond -A10 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_unrelateSecond -A10 V1 I4-  test failed");
+end if;
+EOF = true;',
+	1,
+	'',
+	"3e43b22b-f9e5-4611-9a2e-8e88ab933f2d");
+INSERT INTO O_TFR
+	VALUES ("e6e6bd09-8469-4527-9bf5-6d913062c6cd",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_booleanBinaryOperationRightOperand',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_booleanBinaryOperationRightOperand, Matrix cell : A15 V1 I4");
+
+select any veh from instances of V;
+select any instRef from instances of V;
+if ( empty veh)
+   LOG::LogFailure(message:"Failed to select veh");
+   LOG::LogFailure(message:"V_TRN_booleanBinaryOperationRightOperand -A15 V1 I4-  test failed");
+   return;
+   
+end if;
+if  veh ==instRef
+	LOG::LogSuccess(message:"V_TRN_booleanBinaryOperationRightOperand -A15 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_booleanBinaryOperationRightOperand -A15 V1 I4-  test failed");	
+end if;
+
+
+',
+	1,
+	'',
+	"fd52d655-2c1c-4ae2-b874-56135571e330");
+INSERT INTO O_TFR
+	VALUES ("959e369a-118e-4208-ac5c-5df5923c419d",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_selectTwo',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_selectTwo, Matrix cell : A4 V1 I4");
+select any ped from instances of P;
+if ( empty ped)
+   LOG::LogFailure(message:"Failed to select ped");
+   LOG::LogFailure(message:"V_TRN_selectTwo -A4 V1 I4-  test failed");
+   return;
+end if;
+
+select one instRef related by ped->V[R1];
+if ( not_empty instRef )
+	LOG::LogSuccess(message:"V_TRN_selectTwo -A4 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_selectTwo -A4 V1 I4-  test failed");
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"d12df368-543e-44d9-9f9b-e567962a9a32");
+INSERT INTO O_TFR
+	VALUES ("a4609301-9ac0-4ec2-afda-71e8254dd266",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_selectWhere',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_selectWhere, Matrix cell : A5 V1 I4");
+select any instRef from instances of V;
+
+if ( empty instRef)
+   LOG::LogFailure(message:"V_TRN_selectWhere -A5 V1 I4-  test failed");
+   return;
+end if;
+select one ped related by instRef->P[R1] where( selected.name == "John"); 
+if ( not_empty ped)
+	LOG::LogSuccess(message:"V_TRN_selectWhere -A5 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_selectWhere -A5 V1 I4-  test failed");
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"959e369a-118e-4208-ac5c-5df5923c419d");
+INSERT INTO O_TFR
+	VALUES ("07f63b7f-32ca-4b58-9234-2b5b6786e8cd",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_unrelateUsing',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_unrelateUsing, Matrix cell : A11 V1 I4");
+select any ped from instances of P;
+if ( empty ped)
+   LOG::LogFailure(message:"Failed to select ped");
+   LOG::LogFailure(message:"V_TRN_unrelateUsing -A11 V1 I4-  test failed");
+   return;
+end if;
+select any car from instances of V;
+if ( empty car)
+   LOG::LogFailure(message:"Failed to select car");
+   LOG::LogFailure(message:"V_TRN_unrelateUsing -A11 V1 I4-  test failed");
+   return;
+end if;
+select any InstRef from instances of A;
+
+if ( empty InstRef)
+   LOG::LogFailure(message:"Failed to select InstRef");
+   LOG::LogFailure(message:"V_TRN_unrelateFirst -A9 V1 I4-  test failed");
+   return;
+end if;
+
+unrelate ped from car across R1 using InstRef;
+
+select one acc related by ped->A[R1];
+if ( empty acc)
+	LOG::LogSuccess(message:"V_TRN_unrelateUsing -A11 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_unrelateUsing -A11 V1 I4-  test failed");
+end if;
+
+EOF = true;',
+	1,
+	'',
+	"63ecb4ee-a1a4-48a0-aa64-86392ebbfef0");
+INSERT INTO O_TFR
+	VALUES ("2a23392f-3b37-482c-aa40-733b8cc49cb7",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_forEachInstance',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_forEachInstance, Matrix cell : A12 V1 I4");
+counter = 0;
+select many cars from instances of V;
+if ( cardinality  cars  == 0)
+   LOG::LogFailure(message:"The instance reference set is empty");
+   LOG::LogFailure(message:"V_TRN_forEachInstance -A12 V1 I4-  test failed");
+   return;
+end if;
+
+for each InstRef in cars
+	if ( empty InstRef)
+	   LOG::LogFailure(message:"Failed to copy instace reference to the transient variable InstRef");
+	   LOG::LogFailure(message:"V_TRN_forEachInstance -A12 V1 I4-  test failed");
+	   return;
+	end if;	
+ counter = counter + 1;
+end for;  
+LOG::LogSuccess(message:"V_TRN_forEachInstance -A12 V1 I4-  test passed");
+EOF = true;',
+	1,
+	'',
+	"07f63b7f-32ca-4b58-9234-2b5b6786e8cd");
+INSERT INTO O_TFR
+	VALUES ("5420aad5-cfd4-4d12-93a3-555598ba2b5e",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_WhereClause',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_WhereClause, Matrix cell : A13 V1 I4");
+select any car from instances of V;
+if ( empty car)
+   LOG::LogFailure(message:"Failed to select car");
+   LOG::LogFailure(message:"V_TRN_WhereClause -A13 V1 I4-  test failed");
+   return;
+end if;
+select one ped related by car->P[R1] where( selected.vehicleReference == car);
+
+if ( empty ped)
+   LOG::LogFailure(message:"Failed to select ped");
+   LOG::LogFailure(message:"V_TRN_WhereClause -A13 V1 I4-  test failed");
+   return;
+else
+	LOG::LogSuccess(message:"V_TRN_WhereClause -A13 V1 I4-  test passed");   
+end if;
+ 
+EOF = true;
+
+',
+	1,
+	'',
+	"2a23392f-3b37-482c-aa40-733b8cc49cb7");
+INSERT INTO O_TFR
+	VALUES ("8c2a516a-ab99-4092-b1f5-a1bae16f4631",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_createEvent',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_createEvent, Matrix cell : A18 V1 I4");
+select any instRef from instances of V;
+if ( empty instRef)
+	LOG::LogFailure(message:"Failed to copy instace reference to the transient variable instRef");
+	LOG::LogFailure(message:"V_TRN_createEvent -A18 V1 I4-  test failed");
+	return;
+   
+end if;
+create event instance accelerate_event of V1:accelerate to instRef;
+temp  = TIM::timer_start(microseconds:100000,event_inst:accelerate_event);
+LOG::LogSuccess(message:"V_TRN_createEvent -A18 V1 I4-  test passed");
+EOF = true;',
+	1,
+	'',
+	"e1034774-34c8-427c-8d20-9a1b9f4a784c");
+INSERT INTO O_TFR
+	VALUES ("7ee33363-9dbd-424b-add4-599ed58ac022",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_selectSetTwo',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_selectSetTwo, Matrix cell : A23 V1 I4");
+select many peds from instances of P;
+if ( empty peds)
+	LOG::LogFailure(message:"peds instance reference set is empty");
+	LOG::LogFailure(message:"V_TRN_selectSetTwo -A23 V1 I4-  test failed");
+	return;
+end if;
+
+
+
+select many instRef_set related by peds->V[R1];
+if ( empty instRef_set)
+	LOG::LogFailure(message:"V_TRN_selectSetTwo -A23 V1 I4-  test failed");
+else 
+	LOG::LogSuccess(message:"V_TRN_selectSetTwo -A23 V1 I4-  test passed");
+end if; 
+EOF = true;',
+	1,
+	'',
+	"da7d1a6c-643a-4f21-95ad-f131bbb3a3af");
+INSERT INTO O_TFR
+	VALUES ("e6174e3c-ebe7-4155-9b53-05c7cb552e96",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_selectWhereSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_selectWhereSet, Matrix cell : A24 V1 I4");
+select many instRef_set from instances of V;
+
+select many peds related by instRef_set->P[R1] where( selected.name == "John");
+if ( empty peds)
+	LOG::LogFailure(message:"V_TRN_selectWhereSet -A24 V1 I4-  test failed");
+else
+	LOG::LogSuccess(message:"V_TRN_selectWhereSet -A24 V1 I4-  test passed");	
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"7ee33363-9dbd-424b-add4-599ed58ac022");
+INSERT INTO O_TFR
+	VALUES ("6ceff085-35dd-4452-8f60-ebd3134a52f3",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_Create',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_Create, Matrix cell : A29 V1 I4");
+
+create object instance instRef of V;
+
+if ( not_empty instRef)
+	LOG::LogSuccess(message:"V_TRN_Create -A29 V1 I4-  test passed");
+
+else
+	LOG::LogFailure(message:"V_TRN_Create -A29 V1 I4-  test failed");
+
+end if;
+
+',
+	1,
+	'',
+	"2fe6bd35-999e-4a45-8e86-2440859d21f7");
+INSERT INTO O_TFR
+	VALUES ("e33f9cbf-66b1-47af-b579-f2488aa22daf",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_booleanBinaryOperationLeftOperandSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_booleanBinaryOperationLeftOperandSet, Matrix cell : A30 V1 I4");
+select many vehs from instances of V;
+select many instRef_set from instances of V;
+if ( empty vehs)
+   LOG::LogFailure(message:"vehs is empty instance reference set");
+   LOG::LogFailure(message:"V_TRN_booleanBinaryOperationLeftOperandSet -A30 V1 I4-  test failed");
+   return;
+   
+end if;
+if ( empty instRef_set)
+   LOG::LogFailure(message:"instRef_set is empty instance reference set");
+   LOG::LogFailure(message:"V_TRN_booleanBinaryOperationLeftOperandSet -A30 V1 I4-  test failed");
+   return;
+   
+end if;
+if instRef_set == vehs
+	LOG::LogSuccess(message:"V_TRN_booleanBinaryOperationLeftOperandSet -A30 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_booleanBinaryOperationLeftOperandSet -A30 V1 I4-  test failed");	
+end if;
+
+create object instance temp of V;
+select many instRef_set from instances of V;
+if instRef_set != vehs
+	LOG::LogSuccess(message:"V_TRN_booleanBinaryOperationLeftOperandSet -A30 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_booleanBinaryOperationLeftOperandSet -A30 V1 I4-  test failed");	
+end if;',
+	1,
+	'',
+	"6ceff085-35dd-4452-8f60-ebd3134a52f3");
+INSERT INTO O_TFR
+	VALUES ("59550523-7eca-4b4e-bc4c-1e96d269a505",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	'V_TRN_booleanBinaryOperationRightOperandSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testTransient_Direct::V_TRN_booleanBinaryOperationRightOperandSet, Matrix cell : A31 V1 I4");
+select many vehs from instances of V;
+select many instRef_set from instances of V;
+if ( empty vehs)
+   LOG::LogFailure(message:"vehs is empty instance reference set");
+   LOG::LogFailure(message:"V_TRN_booleanBinaryOperationRightOperandSet -A31 V1 I4-  test failed");
+   return;
+   
+end if;
+if ( empty instRef_set)
+   LOG::LogFailure(message:"instRef_set is empty instance reference set");
+   LOG::LogFailure(message:"V_TRN_booleanBinaryOperationRightOperandSet -A31 V1 I4-  test failed");
+   return;
+   
+end if;
+if  vehs == instRef_set
+	LOG::LogSuccess(message:"V_TRN_booleanBinaryOperationRightOperandSet -A31 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_booleanBinaryOperationRightOperandSet -A31 V1 I4-  test failed");	
+end if;
+
+create object instance temp of V;
+select many instRef_set from instances of V;
+if  vehs != instRef_set 
+	LOG::LogSuccess(message:"V_TRN_booleanBinaryOperationRightOperandSet -A31 V1 I4-  test passed");
+else
+	LOG::LogFailure(message:"V_TRN_booleanBinaryOperationRightOperandSet -A31 V1 I4-  test failed");	
+end if; ',
+	1,
+	'',
+	"e33f9cbf-66b1-47af-b579-f2488aa22daf");
+INSERT INTO O_NBATTR
+	VALUES ("3ddadf08-0e2a-463c-8487-f9454e011593",
+	"3de2237d-b8a8-459d-a71d-09424d93d207");
+INSERT INTO O_BATTR
+	VALUES ("3ddadf08-0e2a-463c-8487-f9454e011593",
+	"3de2237d-b8a8-459d-a71d-09424d93d207");
+INSERT INTO O_ATTR
+	VALUES ("3ddadf08-0e2a-463c-8487-f9454e011593",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	"00000000-0000-0000-0000-000000000000",
+	'iReference',
+	'',
+	'',
+	'iReference',
+	0,
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d26cf195-7219-44b5-b4b4-43864cf587d8",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vehicle>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("e4e7fd59-3ae6-4810-8549-242c4d7907e9",
+	"3de2237d-b8a8-459d-a71d-09424d93d207");
+INSERT INTO O_BATTR
+	VALUES ("e4e7fd59-3ae6-4810-8549-242c4d7907e9",
+	"3de2237d-b8a8-459d-a71d-09424d93d207");
+INSERT INTO O_ATTR
+	VALUES ("e4e7fd59-3ae6-4810-8549-242c4d7907e9",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	"3fc73d8d-524c-42f5-9c49-108ff4b76e0c",
+	'accidentReference',
+	'',
+	'',
+	'accidentReference',
+	0,
+	"639bcda0-62ad-4700-a901-1904aa6e098d",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("639bcda0-62ad-4700-a901-1904aa6e098d",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Accident>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("3fc73d8d-524c-42f5-9c49-108ff4b76e0c",
+	"3de2237d-b8a8-459d-a71d-09424d93d207");
+INSERT INTO O_BATTR
+	VALUES ("3fc73d8d-524c-42f5-9c49-108ff4b76e0c",
+	"3de2237d-b8a8-459d-a71d-09424d93d207");
+INSERT INTO O_ATTR
+	VALUES ("3fc73d8d-524c-42f5-9c49-108ff4b76e0c",
+	"3de2237d-b8a8-459d-a71d-09424d93d207",
+	"3ddadf08-0e2a-463c-8487-f9454e011593",
+	'cars_set',
+	'',
+	'',
+	'cars_set',
+	0,
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref_set<vehicle>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_ID
+	VALUES (0,
+	"3de2237d-b8a8-459d-a71d-09424d93d207");
+INSERT INTO O_ID
+	VALUES (1,
+	"3de2237d-b8a8-459d-a71d-09424d93d207");
+INSERT INTO O_ID
+	VALUES (2,
+	"3de2237d-b8a8-459d-a71d-09424d93d207");
+INSERT INTO PE_PE
+	VALUES ("3de2237d-b8a8-459d-a71d-09424d93d207",
+	1,
+	"f0df44d5-e872-4448-8d98-f7bb6be2b9cb",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("f0df44d5-e872-4448-8d98-f7bb6be2b9cb",
+	"00000000-0000-0000-0000-000000000000",
+	"13c14d34-d225-4949-89b6-fe738cc62cbb",
+	'Subsystem',
+	'',
+	0,
+	'../Subsystem.xtuml');
