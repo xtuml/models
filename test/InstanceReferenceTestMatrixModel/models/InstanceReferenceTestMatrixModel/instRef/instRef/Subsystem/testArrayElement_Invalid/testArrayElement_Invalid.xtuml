@@ -1,0 +1,1178 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'testArrayElement_Invalid',
+	11,
+	'AER2',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("ed29b19c-6b40-4b1c-a65f-371ac8af3041",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_oprInvocation',
+	'I1A1',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_oprInvocation, Matrix cell : A1 V2 I13");
+
+//self.self.iReferenceArray[0].setModel(model:"BMW");
+/* Parser Error  
+  - expecting TOK_EQUAL, found '')''
+  - unexpected token: (
+  - ->(<- is not an attribute of class ->vehicle<-.
+  - expecting TOK_EQUAL, found '')''
+  */
+
+//  ---------- Workaround ----------
+obj  = self.iReferenceArray[0];
+if ( empty obj)
+   LOG::LogFailure(message:"Failed to assign the IR to the transient variable obj");
+end if;
+obj.setModel(model:"BMW");
+if ( obj.model == "BMW")
+	LOG::LogSuccess(message:"O_ATTR_oprInvocation -A1 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_oprInvocation -A1 V2 I13-  test failed");
+end if;
+EOF = true; ',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("2b7fc90b-8ca4-4764-8d74-5bbe7a4d46a2",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_readAttr',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_readAttir, Matrix cell : A2 V2 I13");
+objArray = self.iReferenceArray;
+
+//length =  objArray.length;				// Parser bug :   ->length<- is not an attribute of class ->vehicle<-.
+//length =  self.iReferenceArray.length;	// Parser bug :   ->length<- is not an attribute of class ->vehicle<-.
+
+obj = self.iReferenceArray[0];
+
+if ( not_empty obj)
+	 LOG::LogFailure(message:"obj is not empty");
+	 LOG::LogFailure(message:"O_ATTR_readAttir -A2 V2 I13-  test failed");
+else
+	LOG::LogSuccess(message:"O_ATTR_readAttir -A2 V2 I13-  test passed");
+end if;
+
+model = self.iReferenceArray[0].model;  // empty instance access
+//model = self.iReferenceArray.model;		// Expected Error : Variable ->iReferenceArray<- is an array.
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_ATTR_readAttir -A2 V2 I3-  test failed");
+
+
+//model = objArray.model;   // Parser missing error : Variable ->objArray<- is an array.
+//temp = objArray[0].model;	// Parser bug : Variable ->objArray<- has too many array indices.
+
+
+EOF = true;
+',
+	1,
+	'',
+	"ed29b19c-6b40-4b1c-a65f-371ac8af3041");
+INSERT INTO O_TFR
+	VALUES ("907e10c2-afee-4cd8-827b-fe1532587444",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_selectOne',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_selectOne, Matrix cell : A3 V2 I13");
+//select one ped related by self.iReference->P[R1]; 
+
+/* Parser Error 
+unexpected token: .
+  */
+
+
+//  ---------- Workaround ----------
+obj = self.iReference;
+if ( empty obj)
+   LOG::LogFailure(message:"Failed to assign the IR to the transient variable obj");
+end if;
+select one ped related by obj->P[R1];
+if ( empty ped)
+	LOG::LogFailure(message:"O_ATTR_selectOne -A3 V2 I13-  test failed");
+else 
+	LOG::LogSuccess(message:"O_ATTR_selectOne -A3 V2 I13-  test passed");
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"2b7fc90b-8ca4-4764-8d74-5bbe7a4d46a2");
+INSERT INTO O_TFR
+	VALUES ("3364e7f8-4a27-4420-8d91-007a09167225",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_relateByFirst',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_relateByFirst, Matrix cell : A6 V2 I13");
+create object instance ped of P;
+
+create object instance acc of A;
+//relate self.iReference to ped across R1 using acc;
+/* Parser Error 
+expecting "to", found ''.''
+  */
+
+ //  ---------- Workaround ----------
+obj = self.iReference ;
+if ( empty obj)
+   LOG::LogFailure(message:"Failed to assign the IR to the transient variable obj");
+   LOG::LogFailure(message:"O_ATTR_relateByFirst -A6 V2 I13-  test failed");
+   return;
+end if;
+relate obj to ped across R1 using acc;
+
+select one car related by ped->V[R1];
+if ( empty car )
+	LOG::LogFailure(message:"O_ATTR_relateByFirst -A6 V2 I13-  test failed");
+else
+	LOG::LogSuccess(message:"O_ATTR_relateByFirst -A6 V2 I13-  test passed");
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"6a6a2574-9b80-44ef-be81-d423a2e51b1e");
+INSERT INTO O_TFR
+	VALUES ("cee7744b-97a4-468c-9cc2-3f7ccf831b5d",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_relateUsing',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_relateUsing, Matrix cell : A7 V2 I13");
+create object instance ped of P;
+
+create object instance veh of V;
+
+
+//relate veh to ped across R1 using self.accidentReference;
+/* Parser Error 
+Class ->testAttribute<- is not the link class between classes ->vehicle<- and ->Pedestrian<- in link association ->R1<-
+  */
+
+//  ---------- Workaround ----------
+obj = self.accidentReference;
+if ( empty obj)
+   LOG::LogFailure(message:"Failed to assign the IR to the transient variable obj");
+   LOG::LogFailure(message:"O_ATTR_relateUsing -A7 V2 I13-  test failed");
+   return;
+end if;
+relate veh to ped across R1 using obj;
+
+select one acc related by veh->A[R1];
+if ( acc == self.accidentReference )
+	LOG::LogSuccess(message:"O_ATTR_relateUsing -A7 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_relateUsing -A7 V2 I13-  test failed");
+end if;
+
+EOF = true;
+
+',
+	1,
+	'',
+	"3364e7f8-4a27-4420-8d91-007a09167225");
+INSERT INTO O_TFR
+	VALUES ("10680fcf-27b0-4b78-a01c-4c83bcb2a73b",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_realteBySecond',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_relateBySecond, Matrix cell : A8 V2 I13");
+create object instance ped of P;
+
+create object instance acc of A;
+
+//relate ped to self.iReference across R1 using acc;
+/* Parser Error 
+- expecting "across", found ''.''
+  */
+
+//  ---------- Workaround ---------- 
+obj = self.iReference ;
+if ( empty obj)
+   LOG::LogFailure(message:"Failed to copy instace reference to the transient variable obj");
+   LOG::LogFailure(message:"O_ATTR_relateBySecond -A8 V2 I13-  test failed");
+   return;
+end if;
+relate ped to  obj across R1 using acc;
+
+select one car related by ped->V[R1];
+if ( car == self.iReference )
+	LOG::LogSuccess(message:"O_ATTR_relateBySecond -A8 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_relateBySecond -A8 V2 I13-  test failed");
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"cee7744b-97a4-468c-9cc2-3f7ccf831b5d");
+INSERT INTO O_TFR
+	VALUES ("11867c0c-9917-4a97-b946-75b5fb394c09",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_unrelateFirst',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_unrelateFirst, Matrix cell : A9 V2 I13");
+select any ped from instances of P;
+if ( empty ped)
+   LOG::LogFailure(message:"Failed to select ped");
+   LOG::LogFailure(message:"O_ATTR_unrelateFirst -A9 V2 I13-  test failed");
+   return;
+end if;
+select any acc from instances of A;
+if ( empty acc)
+   LOG::LogFailure(message:"Failed to select acc");
+   LOG::LogFailure(message:"O_ATTR_unrelateFirst -A9 V2 I13-  test failed");
+   return;
+end if;
+//unrelate self.iReference from ped across R1 using acc;
+/* Parser Error 
+expecting "from", found ''.''
+  */
+  
+//  ---------- Workaround ----------
+obj  = self.iReference;
+if ( empty obj)
+   LOG::LogFailure(message:"Failed to copy instace reference to the transient variable obj");
+   LOG::LogFailure(message:"O_ATTR_unrelateFirst -A9 V2 I13-  test failed");
+   return;
+end if;
+unrelate obj from ped across R1 using acc;
+
+select one car related by ped->V[R1];
+if ( empty car)
+	LOG::LogSuccess(message:"O_ATTR_unrelateFirst -A9 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_unrelateFirst -A9 V2 I13-  test failed");
+end if;
+
+EOF = true;',
+	1,
+	'',
+	"10680fcf-27b0-4b78-a01c-4c83bcb2a73b");
+INSERT INTO O_TFR
+	VALUES ("0c7b6a8a-c850-4367-b6d1-635a9fec12af",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_booleanBinaryOperationLeftOperand',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_booleanBinaryOperationLeftOperand, Matrix cell : A14 V2 I13");
+select any veh from instances of V;
+if ( not_empty veh)
+   LOG::LogFailure(message:"veh is not empty");
+   LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationLeftOperand -A14 V2 I13-  test failed");
+   return;
+   
+end if;
+if self.iReferenceArray[0] == veh
+	LOG::LogSuccess(message:"O_ATTR_booleanBinaryOperationLeftOperand -A14 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationLeftOperand -A14 V2 I13-  test failed");	
+end if;
+
+create object instance veh of V;
+if self.iReferenceArray[0].model == veh.model // null empty access
+	;
+end if;
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationLeftOperand -A14 V2 I13-  test failed");
+	
+
+',
+	1,
+	'',
+	"8893cd43-f3fb-46a2-804c-d890a15a342f");
+INSERT INTO O_TFR
+	VALUES ("973e6a4c-fd0d-4b11-ada9-7405d0d70de2",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_UnaryOperators',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_UnaryOperators, Matrix cell : A16 V2 I13");
+//if ( empty self.iReference )
+//a =1;
+//end if;
+/* Parser Error 
+Multiple markers at this line
+  - expecting TOK_RPAREN, found ''iReference''
+  - unexpected token: .
+  - unexpected token: )
+  */
+  
+
+//  ---------- Workaround ----------
+obj = self.iReference;
+if ( empty obj)
+ a =1;
+end if;
+
+if ( not_empty obj)
+ a =1;
+end if;
+
+if ( cardinality obj == 1)
+ a =1;
+end if;
+LOG::LogSuccess(message:"O_ATTR_UnaryOperators -A16 V2 I13-  test passed");
+EOF = true;',
+	1,
+	'',
+	"22fa14e7-1ce9-42ae-9332-311e5390a97a");
+INSERT INTO O_TFR
+	VALUES ("15b1664d-543b-4032-a764-ee5420cde391",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_generateEvent',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_generateEvent, Matrix cell : A17 V2 I13");
+//generate V2:accelerate to self.iReference;
+/* Parser Error 
+unexpected token: self
+*/
+//  ---------- Workaround ----------
+obj = self.iReference; 
+if ( empty obj)
+	LOG::LogFailure(message:"Failed to copy instace reference to the transient variable obj");
+	LOG::LogFailure(message:"O_ATTR_generateEvent -A17 V2 I13-  test failed");
+	return;
+   
+end if;
+generate V2:accelerate to obj;
+LOG::LogSuccess(message:"O_ATTR_generateEvent -A17 V2 I13-  test passed");
+EOF = true;',
+	1,
+	'',
+	"973e6a4c-fd0d-4b11-ada9-7405d0d70de2");
+INSERT INTO O_TFR
+	VALUES ("2b5e407e-46ce-4fa1-9177-451873d75c69",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_writeAttr',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_writeAttr, Matrix cell : A19 V2 I13");
+select any newCar from instances of V where selected.model == "none";   
+self.iReferenceArray[0]= newCar;
+if ( self.iReferenceArray[0] == newCar )
+	LOG::LogSuccess(message:"O_ATTR_writeAttr -A19 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_writeAttr -A19 V2 I13-  test failed");
+end if;
+
+self.iReferenceArray[0].model= "BMW"; // empty instance access
+//self.iReferenceArray.model= "BMW";	// expected error : Multiple markers at this line
+  										//- Variable ->iReferenceArray<- is an array.
+  										//- expecting TOK_EQUAL, found '';''
+
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_ATTR_writeAttr -A19 V2 I13-  test failed");
+ 
+EOF= true;
+ 
+',
+	1,
+	'',
+	"10330e06-19d9-4a94-a91e-20e9b69c7659");
+INSERT INTO O_TFR
+	VALUES ("c45389fe-ecc3-47cd-b703-95c88deddc8e",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_delete',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_delete, Matrix cell : A20 V2 I13");
+//delete object instance self.iReference;
+/* Parser Error
+Multiple markers at this line
+  - unexpected token: iReference
+  - expecting Semicolon, found ''.'' 
+  */
+  
+//  ---------- Workaround ---------- 
+obj = self.iReference ;
+if ( empty obj)
+	LOG::LogFailure(message:"Failed to copy instace reference to the transient variable obj");
+	LOG::LogFailure(message:"O_ATTR_delete -A20 V2 I13-  test failed");
+	return;
+   
+end if;
+delete object instance obj;
+select any veh from instances of V;
+if ( empty veh)
+	LOG::LogSuccess(message:"O_ATTR_delete -A20 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_delete -A20 V2 I13-  test failed");
+end if;',
+	1,
+	'',
+	"2b5e407e-46ce-4fa1-9177-451873d75c69");
+INSERT INTO O_TFR
+	VALUES ("8b451152-8a1d-418d-a65b-e407672ca94c",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_binaryOperations_ref_ref',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Can not implement this test till the grammar is added ',
+	1,
+	'',
+	"1947bd1f-b4a5-4dae-a19b-c80a27ad990a");
+INSERT INTO O_TFR
+	VALUES ("e7781d18-956a-472a-8b87-a6c9e4d14ccd",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_forEachSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_forEachSet, Matrix cell : A21 V2 I13");
+coutner = 0;
+//for each car in self.cars_set
+// counter++;
+//end for;
+/* Parser Error 
+Variable ->self<- used in context where it must already exist
+  */
+  
+//  ---------- Workaround ----------  
+objs = self.cars_set;
+if ( empty objs)
+	LOG::LogFailure(message:"Failed to copy instace reference set to the transient variable objs");
+	LOG::LogFailure(message:"O_ATTR_forEachSet -A21 V2 I13-  test failed");
+	return;
+   
+end if;
+for each car in objs
+	if ( empty car)
+		LOG::LogFailure(message:"Failed to copy instace reference to the transient variable car");
+		LOG::LogFailure(message:"O_ATTR_forEachSet -A21 V2 I13-  test failed");
+		return;
+	end if;
+ counter = coutner + 1;
+end for;  
+LOG::LogSuccess(message:"O_ATTR_forEachSet -A21 V2 I13-  test passed");',
+	1,
+	'',
+	"c45389fe-ecc3-47cd-b703-95c88deddc8e");
+INSERT INTO O_TFR
+	VALUES ("bd8c0550-c7d1-4502-99e1-9b3c194c8633",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_selectSetOne',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_selectSetOne, Matrix cell : A22 V2 I13");
+//select many peds related by self.cars_set->P[R1];
+
+/* Parser Error 
+unexpected token: .
+  */
+  
+//  ---------- Workaround ----------  
+
+cars = self.cars_set;
+if ( empty cars)
+	LOG::LogFailure(message:"Failed to copy instace reference set to the transient variable cars");
+	LOG::LogFailure(message:"O_ATTR_selectSetOne -A22 V2 I13-  test failed");
+	return;
+   
+end if;
+select many peds related by cars->P[R1];
+if ( empty peds)
+	LOG::LogFailure(message:"O_ATTR_selectSetOne -A22 V2 I13-  test failed");
+else
+	LOG::LogSuccess(message:"O_ATTR_selectSetOne -A22 V2 I13-  test passed");	
+end if;',
+	1,
+	'',
+	"e7781d18-956a-472a-8b87-a6c9e4d14ccd");
+INSERT INTO O_TFR
+	VALUES ("699a289c-99e0-400c-8e93-01b844acc0ea",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_unaryOperators_InstRefSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_unaryOperators_InstRefSet, Matrix cell : A25 V2 I13");
+//if empty self.cars_set 
+//  EmptySet = true;
+//end if;
+/* Parser Error
+Multiple markers at this line
+  - unexpected token: cars_set
+  - unexpected token: .
+*/
+
+//  ---------- Workaround ----------
+objs = self.cars_set;
+if empty objs
+  EmptySet = true;
+end if;
+LOG::LogSuccess(message:"O_ATTR_unaryOperators_InstRefSet -A25 V2 I13-  test passed");	
+EOF=true;',
+	1,
+	'',
+	"84b1aab4-15cc-4108-bff6-1b615123f1d6");
+INSERT INTO O_TFR
+	VALUES ("cb86f3b5-ebbc-4f5b-9e0e-3df3bae5e26e",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_binaryOperations_ref_set',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Can not implement this test till the grammar is added ',
+	1,
+	'',
+	"699a289c-99e0-400c-8e93-01b844acc0ea");
+INSERT INTO O_TFR
+	VALUES ("1947bd1f-b4a5-4dae-a19b-c80a27ad990a",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_binaryOperations_set_set',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Can not implement this test till the grammar is added ',
+	1,
+	'',
+	"cb86f3b5-ebbc-4f5b-9e0e-3df3bae5e26e");
+INSERT INTO O_TFR
+	VALUES ("427ae73e-4683-4096-ba12-22c8bc9ec22e",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_unrelateSecond',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_unrelateSecond, Matrix cell : A10 V2 I13");
+select any ped from instances of P;
+if ( empty ped)
+   LOG::LogFailure(message:"Failed to select ped");
+   LOG::LogFailure(message:"O_ATTR_unrelateSecond -A10 V2 I13-  test failed");
+   return;
+end if;
+select any acc from instances of A;
+if ( empty acc)
+   LOG::LogFailure(message:"Failed to select acc");
+   LOG::LogFailure(message:"O_ATTR_unrelateSecond -A10 V2 I13-  test failed");
+   return;
+end if;
+
+//unrelate ped from self.iReference across R1 using acc;
+/* Parser Error 
+expecting "across", found ''.''
+  */
+  
+//  ---------- Workaround ----------
+obj  = self.iReference;
+if ( empty obj)
+   LOG::LogFailure(message:"Failed to copy instace reference to the transient variable obj");
+   LOG::LogFailure(message:"O_ATTR_unrelateSecond -A10 V2 I13-  test failed");
+   return;
+end if;
+
+unrelate ped from obj across R1 using acc;
+
+select one car related by ped->V[R1];
+if ( empty car)
+	LOG::LogSuccess(message:"O_ATTR_unrelateSecond -A10 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_unrelateSecond -A10 V2 I13-  test failed");
+end if;
+EOF = true;',
+	1,
+	'',
+	"11867c0c-9917-4a97-b946-75b5fb394c09");
+INSERT INTO O_TFR
+	VALUES ("22fa14e7-1ce9-42ae-9332-311e5390a97a",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_booleanBinaryOperationRightOperand',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_booleanBinaryOperationRightOperand, Matrix cell : A15 V2 I13");
+select any veh from instances of V;
+if ( not_empty veh)
+   LOG::LogFailure(message:"veh is not empty");
+   LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationRightOperand -A15 V2 I13-  test failed");
+   return;
+   
+end if;
+if  veh == self.iReferenceArray[0]
+	LOG::LogSuccess(message:"O_ATTR_booleanBinaryOperationRightOperand -A14 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationRightOperand -A14 V2 I13-  test failed");
+end if;
+
+create object instance veh of V;
+if  veh.model == self.iReferenceArray[0].model  //empty instance access
+	;
+end if;
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationRightOperand -A14 V2 I13-  test failed");
+
+',
+	1,
+	'',
+	"0c7b6a8a-c850-4367-b6d1-635a9fec12af");
+INSERT INTO O_TFR
+	VALUES ("b42e0f3b-a37a-4c8b-9714-3978c28382e1",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_selectTwo',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_selectTwo, Matrix cell : A4 V2 I13");
+select any ped from instances of P;
+if ( empty ped)
+   LOG::LogFailure(message:"Failed to select ped");
+   LOG::LogFailure(message:"O_ATTR_selectTwo -A4 V2 I13-  test failed");
+   return;
+end if;
+//select one self.iReference related by ped->V[R1]; 
+
+/* Parser Error 
+Cannot assign a value to ->self<-.
+  */
+
+
+//  ---------- Workaround ----------
+
+select one obj related by ped->V[R1];
+if ( not_empty obj )
+	self.iReference = obj;
+	if ( self.iReference  == obj)
+		LOG::LogSuccess(message:"O_ATTR_selectTwo -A4 V2 I13-  test passed");
+	else
+		LOG::LogFailure(message:"O_ATTR_selectTwo -A4 V2 I13-  test failed");
+	end if;
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"907e10c2-afee-4cd8-827b-fe1532587444");
+INSERT INTO O_TFR
+	VALUES ("6a6a2574-9b80-44ef-be81-d423a2e51b1e",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_selectWhere',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_selectWhere, Matrix cell : A5 V2 I13");
+//select one ped related by self.iReference->P[R1] where( selected.name == "John"); 
+
+/* Parser Error 
+Multiple markers at this line
+  - unexpected token: .
+  - Keyword ->Selected<- cannot be used outside a where expression
+  - Expression within Select Where clause does not yield boolean result
+  */
+
+
+//  ---------- Workaround ----------
+obj = self.iReference;
+if ( empty obj)
+   LOG::LogFailure(message:"Failed to assign the IR to the transient variable obj");
+   LOG::LogFailure(message:"O_ATTR_selectWhere -A5 V2 I13-  test failed");
+   return;
+end if;
+select one ped related by obj->P[R1] where( selected.name == "John"); 
+if ( not_empty ped)
+	LOG::LogSuccess(message:"O_ATTR_selectWhere -A5 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_selectWhere -A5 V2 I13-  test failed");
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"b42e0f3b-a37a-4c8b-9714-3978c28382e1");
+INSERT INTO O_TFR
+	VALUES ("e8126791-7d48-4c46-aecf-7e3208872535",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_unrelateUsing',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_unrelateUsing, Matrix cell : A11 V2 I13");
+select any ped from instances of P;
+if ( empty ped)
+   LOG::LogFailure(message:"Failed to select ped");
+   LOG::LogFailure(message:"O_ATTR_unrelateUsing -A11 V2 I13-  test failed");
+   return;
+end if;
+select any car from instances of V;
+if ( empty car)
+   LOG::LogFailure(message:"Failed to select car");
+   LOG::LogFailure(message:"O_ATTR_unrelateUsing -A11 V2 I13-  test failed");
+   return;
+end if;
+
+//unrelate ped from car across R1 using self.accidentReference;
+/* Parser Error 
+Class ->testAttribute<- is not the link class between classes ->Pedestrian<- and ->vehicle<- in link association ->R1<-
+  */
+  
+//  ---------- Workaround ----------
+obj  = self.accidentReference;
+if ( empty obj)
+   LOG::LogFailure(message:"Failed to copy instace reference to the transient variable obj");
+   LOG::LogFailure(message:"O_ATTR_unrelateUsing -A11 V2 I13-  test failed");
+   return;
+end if;
+
+unrelate ped from car across R1 using obj;
+
+select one acc related by ped->A[R1];
+if ( empty acc)
+	LOG::LogSuccess(message:"O_ATTR_unrelateUsing -A11 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_unrelateUsing -A11 V2 I13-  test failed");
+end if;
+
+EOF = true;',
+	1,
+	'',
+	"427ae73e-4683-4096-ba12-22c8bc9ec22e");
+INSERT INTO O_TFR
+	VALUES ("25765e9d-de3e-4021-a0e6-8d6d97d0473e",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_forEachInstance',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_forEachInstance, Matrix cell : A12 V2 I13");
+counter = 0;
+select many cars from instances of V;
+if ( cardinality  cars  == 0)
+   LOG::LogFailure(message:"The instance reference set is empty");
+   LOG::LogFailure(message:"O_ATTR_forEachInstance - A12 V2 I13-  test failed");
+   return;
+end if;
+//for each self.iReference in cars
+// counter = counter + 1;
+//end for;
+/* Parser Error 
+Cannot assign a value to ->self<-.
+  */
+  
+//  ---------- Workaround ----------  
+for each obj in cars
+	if ( empty obj)
+	   LOG::LogFailure(message:"Failed to copy instace reference to the transient variable obj");
+	   LOG::LogFailure(message:"O_ATTR_forEachInstance -A12V2I13-  test failed");
+	   return;
+	end if;	
+ self.iReference = obj;
+ if self.iReference != obj
+ 	 LOG::LogFailure(message:"O_ATTR_forEachInstance -A12 V2 I13-  test failed");
+ end if;
+ counter = counter + 1;
+end for;  
+LOG::LogSuccess(message:"O_ATTR_forEachInstance -A12 V2 I13-  test passed");
+EOF = true;',
+	1,
+	'',
+	"e8126791-7d48-4c46-aecf-7e3208872535");
+INSERT INTO O_TFR
+	VALUES ("8893cd43-f3fb-46a2-804c-d890a15a342f",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_WhereClause',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_WhereClause, Matrix cell : A13 V2 I13");
+select any car from instances of V;
+if ( not_empty car)
+   LOG::LogFailure(message:"car is not empty");
+   LOG::LogFailure(message:"O_ATTR_WhereClause -A13 V2 I13-  test failed");
+   return;
+end if;
+select one ped related by car->P[R1] where( selected.vehicleReference == self.iReferenceArray[0]);
+
+if ( not_empty ped)
+   LOG::LogFailure(message:"O_ATTR_WhereClause -A13 V2 I13-  test failed");
+   return;
+else
+	LOG::LogSuccess(message:"O_ATTR_WhereClause -A13 V2 I13-  test passed");   
+end if;
+ 
+select one ped related by car->P[R1] where( selected.vehicleReference.model == self.iReferenceArray[0].model); // empty instance access
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_ATTR_WhereClause -A13 V2 I13-  test failed");
+
+EOF = true;
+
+',
+	1,
+	'',
+	"25765e9d-de3e-4021-a0e6-8d6d97d0473e");
+INSERT INTO O_TFR
+	VALUES ("10330e06-19d9-4a94-a91e-20e9b69c7659",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_createEvent',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_createEvent, Matrix cell : A18 V2 I13");
+//create event instance accelerate_event of V2:accelerate to self.iReference;
+//temp  = TIM::timer_start(microseconds:100000,event_inst:accelerate_event);
+/* Parser Error 
+unexpected token: self
+*/
+//  ---------- Workaround ----------
+obj = self.iReference; 
+if ( empty obj)
+	LOG::LogFailure(message:"Failed to copy instace reference to the transient variable obj");
+	LOG::LogFailure(message:"O_ATTR_createEvent -A18 V2 I13-  test failed");
+	return;
+   
+end if;
+create event instance accelerate_event of V2:accelerate to obj;
+temp  = TIM::timer_start(microseconds:100000,event_inst:accelerate_event);
+LOG::LogSuccess(message:"O_ATTR_createEvent -A18 V2 I13-  test passed");
+EOF = true;',
+	1,
+	'',
+	"15b1664d-543b-4032-a764-ee5420cde391");
+INSERT INTO O_TFR
+	VALUES ("336d9fd7-072c-4f0b-af4a-36af5b7d8405",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_selectSetTwo',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_selectSetTwo, Matrix cell : A23 V2 I13");
+select many peds from instances of P;
+if ( empty peds)
+	LOG::LogFailure(message:"peds instance reference set is empty");
+	LOG::LogFailure(message:"O_ATTR_selectSetTwo -A23 V2 I13-  test failed");
+	return;
+end if;
+//select many self.cars_set related by peds->V[R1];
+
+/* Parser Error 
+Cannot assign a value to ->self<-.
+  */
+  
+//  ---------- Workaround ----------  
+
+
+select many cars related by peds->V[R1];
+self.cars_set  = cars;
+if ( empty cars)
+	LOG::LogFailure(message:"O_ATTR_selectSetTwo -A23 V2 I13-  test failed");
+else 
+	LOG::LogSuccess(message:"O_ATTR_selectSetTwo -A23 V2 I13-  test passed");
+end if; 
+EOF = true;',
+	1,
+	'',
+	"bd8c0550-c7d1-4502-99e1-9b3c194c8633");
+INSERT INTO O_TFR
+	VALUES ("84b1aab4-15cc-4108-bff6-1b615123f1d6",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_selectWhereSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::O_ATTR_selectWhereSet, Matrix cell : A24 V2 I13");
+//select many peds related by self.cars_set->P[R1] where( selected.name == "John"); 
+
+/* Parser Error 
+Multiple markers at this line
+  - Expression within Select Where clause does not yield boolean result
+  - Keyword ->Selected<- cannot be used outside a where expression
+  - unexpected token: . yield boolean result
+  */
+
+
+//  ---------- Workaround ----------
+objs = self.cars_set;
+select many peds related by objs->P[R1] where( selected.name == "John");
+if ( empty peds)
+	LOG::LogFailure(message:"O_ATTR_selectWhereSet -A24 V2 I13-  test failed");
+else
+	LOG::LogSuccess(message:"O_ATTR_selectWhereSet -A24 V2 I13-  test passed");	
+end if;
+EOF = true;
+
+',
+	1,
+	'',
+	"336d9fd7-072c-4f0b-af4a-36af5b7d8405");
+INSERT INTO O_TFR
+	VALUES ("048e0edc-1d14-4308-a1ec-e42fdb7d5808",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_Create',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::V_AER_Create, Matrix cell : A29 V2 I13");
+
+//create object instance self.iReferenceArray[0] of V;
+/* Parser Error : 
+unexpected token: self
+*/
+
+
+//  ---------- Workaround ----------
+create object instance obj of V;
+self.iReferenceArray[0] = obj;',
+	1,
+	'',
+	"8b451152-8a1d-418d-a65b-e407672ca94c");
+INSERT INTO O_TFR
+	VALUES ("71128c0c-da37-4d67-ad19-1d1dbe6c50ed",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_booleanBinaryOperationLeftOperandSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::V_AER_booleanBinaryOperationLeftOperandSet, Matrix cell : A30 V2 I13");
+select many vehs from instances of V;
+if ( not_empty vehs)
+   LOG::LogFailure(message:"vehs is not empty");
+   LOG::LogFailure(message:"V_AER_booleanBinaryOperationLeftOperandSet -A30 V2 I13-  test failed");
+   return;
+   
+end if;
+if self.cars_setArray[0] == vehs
+	LOG::LogSuccess(message:"V_AER_booleanBinaryOperationLeftOperandSet -A30 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"V_AER_booleanBinaryOperationLeftOperandSet -A30 V2 I13-  test failed");	
+end if;
+',
+	1,
+	'',
+	"048e0edc-1d14-4308-a1ec-e42fdb7d5808");
+INSERT INTO O_TFR
+	VALUES ("0fef5e84-18cf-45b6-8081-5e7b9d155064",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_booleanBinaryOperationRightOperandSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::V_AER_booleanBinaryOperationRightOperandSet, Matrix cell : A31 V2 I13");
+
+select many vehs from instances of V;
+if ( not_empty vehs)
+   LOG::LogFailure(message:"vehs is not empty");
+   LOG::LogFailure(message:"V_AER_booleanBinaryOperationRightOperandSet -A31 V2 I13-  test failed");
+   return;
+   
+end if;
+
+
+if  vehs == self.cars_setArray[0]
+	LOG::LogSuccess(message:"V_AER_booleanBinaryOperationRightOperandSet -A31 V2 I13-  test passed");
+else
+	LOG::LogFailure(message:"V_AER_booleanBinaryOperationRightOperandSet -A31 V2 I13-  test failed");
+end if;
+
+',
+	1,
+	'',
+	"71128c0c-da37-4d67-ad19-1d1dbe6c50ed");
+INSERT INTO O_TFR
+	VALUES ("f06c26a1-01fa-4b24-ad14-1fd75094a08c",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_ActivitiesInvocation',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::V_AER_ActivitiesInvocation, Matrix cell : A36 V2 I9");
+
+::EmptyInstRefParameterSetupTest(inst: self.iReferenceArray[0]);',
+	1,
+	'',
+	"0fef5e84-18cf-45b6-8081-5e7b9d155064");
+INSERT INTO O_TFR
+	VALUES ("74a15d14-1fdd-41ab-be7e-5c3b5f135e4c",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	'V_AER_ActivitiesInvocationSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testArrayElement_Invalid::V_AER_ActivitiesInvocationSet, Matrix cell : A36 V2 I9");
+
+::EmptyInstRefSetParameterSetupTest(instSet: self.cars_setArray[0]); ',
+	1,
+	'',
+	"f06c26a1-01fa-4b24-ad14-1fd75094a08c");
+INSERT INTO O_NBATTR
+	VALUES ("3c243f43-4f0a-4b0b-9b91-166d4430735c",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f");
+INSERT INTO O_BATTR
+	VALUES ("3c243f43-4f0a-4b0b-9b91-166d4430735c",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f");
+INSERT INTO S_DIM
+	VALUES (5,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	"3c243f43-4f0a-4b0b-9b91-166d4430735c",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"77eb24ed-cf6a-46c5-aac8-dd2288cca6cc",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("3c243f43-4f0a-4b0b-9b91-166d4430735c",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	"00000000-0000-0000-0000-000000000000",
+	'iReferenceArray',
+	'',
+	'',
+	'iReferenceArray',
+	0,
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	'[5]',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d26cf195-7219-44b5-b4b4-43864cf587d8",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vehicle>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("aa718a27-9368-4dd5-8444-c3d7b3678e9d",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f");
+INSERT INTO O_BATTR
+	VALUES ("aa718a27-9368-4dd5-8444-c3d7b3678e9d",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f");
+INSERT INTO S_DIM
+	VALUES (2,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	"aa718a27-9368-4dd5-8444-c3d7b3678e9d",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"465fa479-0c22-4b29-9ff1-c9e35f14aeed",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("aa718a27-9368-4dd5-8444-c3d7b3678e9d",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	"2c400389-dca5-440d-84e3-dbab180957e5",
+	'accidentReferenceArray',
+	'',
+	'',
+	'accidentReferenceArray',
+	0,
+	"639bcda0-62ad-4700-a901-1904aa6e098d",
+	'[2]',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("639bcda0-62ad-4700-a901-1904aa6e098d",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Accident>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("2c400389-dca5-440d-84e3-dbab180957e5",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f");
+INSERT INTO O_BATTR
+	VALUES ("2c400389-dca5-440d-84e3-dbab180957e5",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f");
+INSERT INTO S_DIM
+	VALUES (2,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	"2c400389-dca5-440d-84e3-dbab180957e5",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"6b953318-1ff0-4482-9afa-79eed28b16a8",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("2c400389-dca5-440d-84e3-dbab180957e5",
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	"3c243f43-4f0a-4b0b-9b91-166d4430735c",
+	'cars_setArray',
+	'',
+	'',
+	'cars_setArray',
+	0,
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	'[2]',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref_set<vehicle>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_ID
+	VALUES (0,
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f");
+INSERT INTO O_ID
+	VALUES (1,
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f");
+INSERT INTO O_ID
+	VALUES (2,
+	"b42acee6-25c3-49e2-ad05-5d13495cb02f");
+INSERT INTO PE_PE
+	VALUES ("b42acee6-25c3-49e2-ad05-5d13495cb02f",
+	1,
+	"f0df44d5-e872-4448-8d98-f7bb6be2b9cb",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("f0df44d5-e872-4448-8d98-f7bb6be2b9cb",
+	"00000000-0000-0000-0000-000000000000",
+	"13c14d34-d225-4949-89b6-fe738cc62cbb",
+	'Subsystem',
+	'',
+	0,
+	'../Subsystem.xtuml');

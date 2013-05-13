@@ -1,0 +1,308 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("f474762f-6a20-42ee-82af-bf99c639edf4",
+	'testMixedReferenceTwo_Nested',
+	18,
+	'MIX2',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("9aeace71-ae9f-4294-b7f9-5b7083a3ed35",
+	"f474762f-6a20-42ee-82af-bf99c639edf4",
+	'MIX_booleanBinaryOperationLeftOperand',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testMixedReferenceTwo_Nested::MIX_booleanBinaryOperationLeftOperand, Matrix cell : A14 V3 I10");
+select any veh from instances of V;
+sdt  = self.structReference;
+
+if ( empty veh)
+   LOG::LogFailure(message:"Failed to select veh");
+   LOG::LogFailure(message:"MIX_booleanBinaryOperationLeftOperand -A14 V3 I10-  test failed");
+   return;
+   
+end if; 
+
+
+if sdt.car.manufacturer.oldCars[0] == veh
+	LOG::LogSuccess(message:"MIX_booleanBinaryOperationLeftOperand -A14 V3 I10-  test passed");
+else
+	LOG::LogFailure(message:"MIX_booleanBinaryOperationLeftOperand -A14 V3 I10-  test failed");	
+end if;
+
+if sdt.car.manufacturer.oldCars[0].model == veh.model 
+	LOG::LogSuccess(message:"MIX_booleanBinaryOperationLeftOperand -A14 V3 I10-  test passed");
+else
+	LOG::LogFailure(message:"MIX_booleanBinaryOperationLeftOperand -A14 V3 I10-  test failed");	
+end if;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("6dec5d15-4509-496b-9f6d-e1846b0e2cda",
+	"f474762f-6a20-42ee-82af-bf99c639edf4",
+	'MIX_booleanBinaryOperationLeftOperandSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testMixedReferenceTwo_Nested::MIX_booleanBinaryOperationLeftOperandSet, Matrix cell : A30 V3 I10");
+select many vehs from instances of V;
+if ( empty vehs)
+   LOG::LogFailure(message:"vehs is empty instance reference set");
+   LOG::LogFailure(message:"MIX_booleanBinaryOperationLeftOperandSet -A30 V3 I10-  test failed");
+   return;
+   
+end if;
+sdt  = self.structReference;
+
+
+if sdt.car.manufacturer.categorizedCars[0] == vehs 
+	LOG::LogSuccess(message:"MIX_booleanBinaryOperationLeftOperandSet -A30 V3 I10-  test passed");
+else
+	LOG::LogFailure(message:"MIX_booleanBinaryOperationLeftOperandSet -A30 V3 I10-  test failed");	
+end if;
+',
+	1,
+	'',
+	"9aeace71-ae9f-4294-b7f9-5b7083a3ed35");
+INSERT INTO O_TFR
+	VALUES ("cd8337a4-14ac-4a39-ab9a-d3d1a2c630d2",
+	"f474762f-6a20-42ee-82af-bf99c639edf4",
+	'MIX_booleanBinaryOperationRightOperand',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testMixedReferenceTwo_Nested::MIX_booleanBinaryOperationRightOperand, Matrix cell : A15 V3 I10");
+select any veh from instances of V;
+sdt  = self.structReference;
+
+if ( empty veh)
+   LOG::LogFailure(message:"Failed to select veh");
+   LOG::LogFailure(message:"MIX_booleanBinaryOperationRightOperand -A15 V3 I10-  test failed");
+   return;
+end if;
+
+
+if  veh == sdt.car.manufacturer.oldCars[0]
+	LOG::LogSuccess(message:"MIX_booleanBinaryOperationRightOperand -A14 V3 I10-  test passed");
+else
+	LOG::LogFailure(message:"MIX_booleanBinaryOperationRightOperand -A14 V3 I10-  test failed");
+end if;
+
+if  veh.model == sdt.car.manufacturer.oldCars[0].model
+	LOG::LogSuccess(message:"MIX_booleanBinaryOperationRightOperand -A14 V3 I10-  test passed");
+else
+	LOG::LogFailure(message:"MIX_booleanBinaryOperationRightOperand -A14 V3 I10-  test failed");
+end if;
+',
+	1,
+	'',
+	"6dec5d15-4509-496b-9f6d-e1846b0e2cda");
+INSERT INTO O_TFR
+	VALUES ("8c92bba7-faa3-4ba1-a55c-cab6f8c70646",
+	"f474762f-6a20-42ee-82af-bf99c639edf4",
+	'MIX_booleanBinaryOperationRightOperandSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testMixedReferenceTwo_Nested::MIX_booleanBinaryOperationRightOperandSet, Matrix cell : A31 V3 I10");
+
+select many vehs from instances of V;
+if ( empty vehs)
+   LOG::LogFailure(message:"vehs is empty instance reference set");
+   LOG::LogFailure(message:"MIX_booleanBinaryOperationRightOperandSet -A31 V3 I10-  test failed");
+   return;
+end if;
+sdt  = self.structReference;
+
+
+if  vehs == sdt.car.manufacturer.categorizedCars[0]
+	LOG::LogSuccess(message:"MIX_booleanBinaryOperationRightOperandSet -A31 V3 I10-  test passed");
+else
+	LOG::LogFailure(message:"MIX_booleanBinaryOperationRightOperandSet -A31 V3 I10-  test failed");
+end if;
+
+',
+	1,
+	'',
+	"cd8337a4-14ac-4a39-ab9a-d3d1a2c630d2");
+INSERT INTO O_TFR
+	VALUES ("21b04bfb-c06e-46fa-aa86-822c742006fa",
+	"f474762f-6a20-42ee-82af-bf99c639edf4",
+	'MIX_readAttr',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testMixedReferenceTwo_Nested::MIX_readAttir, Matrix cell : A2 V3 I10");
+
+sdt  = self.structReference;
+inst = sdt.car.manufacturer.oldCars[0];
+if ( empty inst)
+	 LOG::LogFailure(message:"Failed to assign the IR to the transient variable inst");
+	 LOG::LogFailure(message:"MIX_readAttir -A2 V3 I10-  test failed");
+else
+	LOG::LogSuccess(message:"MIX_readAttir -A2 V3 I10-  test passed");
+end if;
+
+model = sdt.car.manufacturer.oldCars[0].model;
+if ( model == "")
+	 LOG::LogFailure(message:"MIX_readAttir -A2 V3 I10-  test failed");
+else
+	LOG::LogSuccess(message:"MIX_readAttir -A2 V3 I10-  test passed");
+end if; 
+
+EOF = 1;',
+	1,
+	'',
+	"8c92bba7-faa3-4ba1-a55c-cab6f8c70646");
+INSERT INTO O_TFR
+	VALUES ("f174040c-da15-4ee6-94cd-1c18de2afddc",
+	"f474762f-6a20-42ee-82af-bf99c639edf4",
+	'MIX_WhereClause',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testMixedReferenceTwo_Nested::MIX_WhereClause, Matrix cell : A13 V3 I10");
+select any car from instances of V;
+if ( empty car)
+   LOG::LogFailure(message:"Failed to select car");
+   LOG::LogFailure(message:"MIX_WhereClause -A13 V3 I10-  test failed");
+   return;
+end if;
+
+sdt  = self.structReference;
+
+select one ped related by car->P[R1] where( selected.vehicleReference == sdt.car.manufacturer.oldCars[0]);
+
+if ( empty ped)
+   LOG::LogFailure(message:"Failed to select ped");
+   LOG::LogFailure(message:"MIX_WhereClause -A13 V3 I10-  test failed");
+   return;
+else
+	LOG::LogSuccess(message:"MIX_WhereClause -A13 V3 I10-  test passed");   
+end if;
+
+select one ped related by car->P[R1] where( selected.vehicleReference.model == sdt.car.manufacturer.oldCars[0].model); 
+if ( empty ped)
+   LOG::LogFailure(message:"Failed to select ped");
+   LOG::LogFailure(message:"MIX_WhereClause -A13 V3 I10-  test failed");
+   return;
+else 
+	LOG::LogSuccess(message:"MIX_WhereClause -A13 V3 I10-  test passed");   
+end if;
+ 
+EOF = true;
+
+',
+	1,
+	'',
+	"21b04bfb-c06e-46fa-aa86-822c742006fa");
+INSERT INTO O_TFR
+	VALUES ("68d16f8f-b85f-4ef0-947a-9bedb945fc98",
+	"f474762f-6a20-42ee-82af-bf99c639edf4",
+	'MIX_writeAttr',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testMixedReferenceTwo_Nested::MIX_writeAttr, Matrix cell : A19 V3 I10");
+create object instance newCar of V;   
+sdt  = self.structReference;
+
+
+sdt.car.manufacturer.oldCars[0] = newCar;
+if ( sdt.car.manufacturer.oldCars[0] == newCar )
+	LOG::LogSuccess(message:"MIX_writeAttr -A19 V3 I10-  test passed");
+else
+	LOG::LogFailure(message:"MIX_writeAttr -A19 V3 I10-  test failed");
+end if; 
+sdt.car.manufacturer.oldCars[0].model = "BMW";
+if ( sdt.car.manufacturer.oldCars[0].model == "BMW" )
+	LOG::LogSuccess(message:"MIX_writeAttr -A19 V3 I10-  test passed");
+else
+	LOG::LogFailure(message:"MIX_writeAttr -A19 V3 I10-  test failed");
+end if; 
+EOF= true;
+ 
+',
+	1,
+	'',
+	"f174040c-da15-4ee6-94cd-1c18de2afddc");
+INSERT INTO O_TFR
+	VALUES ("a4bbe563-091b-4a90-b385-62e7bce5680c",
+	"f474762f-6a20-42ee-82af-bf99c639edf4",
+	'MIX_ActivitiesInvocation',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testMixedReferenceOne_Nested::MIX_ActivitiesInvocation, Matrix cell : A36 V3 I10");
+sdt  = self.structReference;
+
+::InstRefParameterSetupTest(inst: sdt.car.manufacturer.oldCars[0]); ',
+	1,
+	'',
+	"68d16f8f-b85f-4ef0-947a-9bedb945fc98");
+INSERT INTO O_TFR
+	VALUES ("0cf1e4fb-e8e5-4d13-979f-65ffb792e9df",
+	"f474762f-6a20-42ee-82af-bf99c639edf4",
+	'MIX_ActivitiesInvocationSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testMixedReferenceTwo_Nested::MIX_ActivitiesInvocationSet, Matrix cell : A36 V3 I10");
+sdt  = self.structReference;
+
+::InstRefSetParameterSetupTest(instSet: sdt.car.manufacturer.categorizedCars[0]);  ',
+	1,
+	'',
+	"a4bbe563-091b-4a90-b385-62e7bce5680c");
+INSERT INTO O_NBATTR
+	VALUES ("a2af725e-eca6-4089-b88d-173ceb12ef95",
+	"f474762f-6a20-42ee-82af-bf99c639edf4");
+INSERT INTO O_BATTR
+	VALUES ("a2af725e-eca6-4089-b88d-173ceb12ef95",
+	"f474762f-6a20-42ee-82af-bf99c639edf4");
+INSERT INTO O_ATTR
+	VALUES ("a2af725e-eca6-4089-b88d-173ceb12ef95",
+	"f474762f-6a20-42ee-82af-bf99c639edf4",
+	"00000000-0000-0000-0000-000000000000",
+	'structReference',
+	'',
+	'',
+	'structReference',
+	0,
+	"77073e29-cd81-4400-a711-505fdfe19352",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("77073e29-cd81-4400-a711-505fdfe19352",
+	"00000000-0000-0000-0000-000000000000",
+	'Mixed_SecondChain',
+	'',
+	'',
+	'../../Datatypes/InstanceReference Structure Types/InstanceReference Structure Types.xtuml');
+INSERT INTO O_ID
+	VALUES (0,
+	"f474762f-6a20-42ee-82af-bf99c639edf4");
+INSERT INTO O_ID
+	VALUES (1,
+	"f474762f-6a20-42ee-82af-bf99c639edf4");
+INSERT INTO O_ID
+	VALUES (2,
+	"f474762f-6a20-42ee-82af-bf99c639edf4");
+INSERT INTO PE_PE
+	VALUES ("f474762f-6a20-42ee-82af-bf99c639edf4",
+	1,
+	"f0df44d5-e872-4448-8d98-f7bb6be2b9cb",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("f0df44d5-e872-4448-8d98-f7bb6be2b9cb",
+	"00000000-0000-0000-0000-000000000000",
+	"13c14d34-d225-4949-89b6-fe738cc62cbb",
+	'Subsystem',
+	'',
+	0,
+	'../Subsystem.xtuml');

@@ -1,0 +1,876 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'testAttribute_InvalidNested',
+	7,
+	'ATTR4',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("4a833441-fed8-4ab0-a396-0e4fabff400b",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_oprInvocation',
+	'I1A1',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_oprInvocation, Matrix cell : A1 V4 I3");
+
+//self.iReference.selfReference.setModel(model:"BMW");
+/* Parser Error  
+  - expecting TOK_EQUAL, found '')''
+  - unexpected token: (
+  - ->(<- is not an attribute of class ->vehicle<-.
+  - expecting TOK_EQUAL, found '')''
+  */
+
+//  ---------- Workaround ----------
+obj  = self.iReference.selfReference;
+obj.setModel(model:"BMW");
+EOF = true; ',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("d12b5b8f-e276-4db2-9272-161c2e8015ae",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_readAttr',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_readAttir, Matrix cell : A2 V4 I3");
+obj =  self.iReference.selfReference;
+if ( not_empty obj)
+	 LOG::LogFailure(message:"O_ATTR_readAttir -A2 V4 I3-  test failed");
+	 return;
+end if;
+
+model =  self.iReference.selfReference.model; // empty instance access
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_ATTR_readAttir -A2 V4 I3-  test failed");
+
+EOF = true;
+',
+	1,
+	'',
+	"4a833441-fed8-4ab0-a396-0e4fabff400b");
+INSERT INTO O_TFR
+	VALUES ("5fb5113c-dbb0-49fc-8a45-004f84904c56",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_selectOne',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_selectOne, Matrix cell : A3 V4 I3");
+//select one ped related by self.iReference.selfReference->P[R1]; 
+
+/* Parser Error 
+unexpected token: .
+  */
+
+
+//  ---------- Workaround ----------
+obj = self.iReference.selfReference;
+select one ped related by obj->P[R1];
+EOF = true;
+
+',
+	1,
+	'',
+	"d12b5b8f-e276-4db2-9272-161c2e8015ae");
+INSERT INTO O_TFR
+	VALUES ("f9741964-3ac5-4c5a-ab3f-e1b0e44b47c0",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_relateByFirst',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_relateByFirst, Matrix cell : A6 V4 I3");
+create object instance ped of P;
+create object instance acc of A;
+
+//relate self.iReference.selfReference to ped across R1 using acc;
+/* Parser Error 
+expecting "to", found ''.''
+  */
+
+ //  ---------- Workaround ----------
+obj = self.iReference.selfReference;
+relate obj to ped across R1 using acc;
+EOF = true;
+
+
+
+',
+	1,
+	'',
+	"c1b0bc72-ed08-4c19-a6b0-a661c30d2f9d");
+INSERT INTO O_TFR
+	VALUES ("230e1691-27fd-4b79-8eea-2c2abd511f79",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_relateUsing',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_relateUsing, Matrix cell : A7 V4 I3");
+create object instance ped of P;
+create object instance veh of V;
+
+//relate veh to ped across R1 using self.iReference.selfReference;
+/* Parser Error 
+Class ->testAttribute_Nested<- is not the link class between classes ->vehicle<- and ->Pedestrian<- in link association ->R1<-
+  */
+
+//  ---------- Workaround ----------
+obj = self.accidentReference.selfReference;
+relate veh to ped across R1 using obj;
+EOF = true;
+
+',
+	1,
+	'',
+	"f9741964-3ac5-4c5a-ab3f-e1b0e44b47c0");
+INSERT INTO O_TFR
+	VALUES ("25302cdb-2408-4f37-a6df-b825d118253c",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_realteBySecond',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_relateBySecond, Matrix cell : A8 V4 I3");
+create object instance ped of P;
+create object instance acc of A;
+
+//relate ped to self.iReference.selfReference across R1 using acc;
+/* Parser Error 
+- expecting "across", found ''.''
+  */
+
+//  ---------- Workaround ---------- 
+obj = self.iReference.selfReference ;
+relate ped to  obj across R1 using acc;
+EOF = true;
+
+',
+	1,
+	'',
+	"230e1691-27fd-4b79-8eea-2c2abd511f79");
+INSERT INTO O_TFR
+	VALUES ("db361a8a-b688-433f-be8a-cdb2fbdf2380",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_unrelateFirst',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_unrelateFirst, Matrix cell : A9 V4 I3");
+select any ped from instances of P;
+select any acc from instances of A;
+
+//unrelate self.iReference.selfReference from ped across R1 using acc;
+/* Parser Error 
+expecting "from", found ''.''
+  */
+  
+//  ---------- Workaround ----------
+obj  = self.iReference.selfReference;
+unrelate obj from ped across R1 using acc;
+EOF = true;',
+	1,
+	'',
+	"25302cdb-2408-4f37-a6df-b825d118253c");
+INSERT INTO O_TFR
+	VALUES ("c6fd8b97-d176-4efb-93c8-d9cca37d27d6",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_booleanBinaryOperationLeftOperand',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_booleanBinaryOperationLeftOperand, Matrix cell : A14 V4 I3");
+select any veh from instances of V;
+if ( empty veh)
+   LOG::LogFailure(message:"Failed to select veh"); 
+   LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationLeftOperand -A14 V4 I3-  test failed");
+   return;
+   
+end if;
+if self.iReference.selfReference != veh
+	LOG::LogSuccess(message:"O_ATTR_booleanBinaryOperationLeftOperand -A14 V4 I3-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationLeftOperand -A14 V4 I3-  test failed");	
+end if;
+
+if self.iReference.selfReference.model != veh.model // empty instance access
+	;	
+end if;
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationLeftOperand -A14 V4 I3-  test failed");	
+
+',
+	1,
+	'',
+	"aae174c0-8d67-4088-826d-754b1e00dbb3");
+INSERT INTO O_TFR
+	VALUES ("fd8dcaeb-b986-45cb-913b-27c10d4e0ce2",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_UnaryOperators',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_UnaryOperators, Matrix cell : A16 V4 I3");
+
+//if ( empty self.iReference.selfReference )
+//a =1;
+//end if;
+/* Parser Error 
+Multiple markers at this line
+  - expecting TOK_RPAREN, found ''iReference''
+  - unexpected token: .
+  - unexpected token: )
+  */
+  
+
+//  ---------- Workaround ----------
+obj = self.iReference.selfReference;
+if ( empty obj)
+ a =1;
+end if;
+
+if ( not_empty obj)
+ a =1;
+end if;
+
+if ( cardinality obj == 1)
+ a =1;
+end if;
+
+EOF = true;',
+	1,
+	'',
+	"febd4718-35cb-4b6d-aa3f-89702b41bbea");
+INSERT INTO O_TFR
+	VALUES ("845bda89-1ab3-4403-b91e-904c23776ee5",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_generateEvent',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_generateEvent, Matrix cell : A17 V4 I3");
+//generate V1:accelerate to self.iReference.selfReference;
+/* Parser Error 
+unexpected token: self
+*/
+//  ---------- Workaround ----------
+obj = self.iReference.selfReference; 
+generate V1:accelerate to obj;
+EOF = true;',
+	1,
+	'',
+	"fd8dcaeb-b986-45cb-913b-27c10d4e0ce2");
+INSERT INTO O_TFR
+	VALUES ("339ffb11-3976-40d1-a580-7c87067445c9",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_writeAttr',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_writeAttr, Matrix cell : A19 V4 I3");
+select any veh from instances of V where selected.model == "none";   
+self.iReference.selfReference = veh;
+if ( self.iReference.selfReference == veh )
+	LOG::LogSuccess(message:"O_ATTR_writeAttr -A19 V4 I3-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_writeAttr -A19 V4 I3-  test failed");
+end if;
+ 
+self.iReference.selfReference.model = "BMW";  // empty instance access 
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_ATTR_writeAttr -A19 V4 I3-  test failed");
+
+EOF= true;
+ 
+',
+	1,
+	'',
+	"7c440c63-54c3-4788-baba-04308402afb1");
+INSERT INTO O_TFR
+	VALUES ("59920682-0090-4cee-8ecd-74d7698104ee",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_delete',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_delete, Matrix cell : A20 V4 I3");
+//delete object instance self.iReference.selfReference;
+/* Parser Error
+Multiple markers at this line
+  - expecting Semicolon, found ''.''
+  - ->iReference<- is not a class or structured data type.
+  */
+  
+//  ---------- Workaround ---------- 
+obj = self.iReference.selfReference ;
+delete object instance obj;',
+	1,
+	'',
+	"339ffb11-3976-40d1-a580-7c87067445c9");
+INSERT INTO O_TFR
+	VALUES ("74877246-bb4a-4eed-87c1-b06a70cba35c",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_binaryOperations_ref_ref',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Can not implement this test till the grammar is added ',
+	1,
+	'',
+	"96ed7864-9da6-466b-b430-35cacd2ad8d5");
+INSERT INTO O_TFR
+	VALUES ("4cf79098-2a90-4332-9557-e979b768ec4e",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_forEachSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_forEachSet, Matrix cell : A21 V4 I3");
+coutner = 0;
+//for each car in self.iReference.allVehicles
+// counter++;
+//end for;
+/* Parser Error 
+Variable ->self<- used in context where it must already exist
+  */
+  
+//  ---------- Workaround ----------  
+objs = self.iReference.allVehicles;
+for each car in objs
+ counter = coutner + 1;
+end for;  ',
+	1,
+	'',
+	"59920682-0090-4cee-8ecd-74d7698104ee");
+INSERT INTO O_TFR
+	VALUES ("0e5c4c0d-adba-4169-8f1c-a97b72edc4e9",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_selectSetOne',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_selectSetOne, Matrix cell : A22 V4 I3");
+//select many peds related by self.iReference.allVehicles->P[R1];
+
+/* Parser Error 
+unexpected token: .
+  */
+  
+//  ---------- Workaround ----------  
+
+cars = self.iReference.allVehicles;
+select many peds related by cars->P[R1];',
+	1,
+	'',
+	"4cf79098-2a90-4332-9557-e979b768ec4e");
+INSERT INTO O_TFR
+	VALUES ("cb5efb99-b374-4d63-8a4f-158fe15c59b0",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_unaryOperators_InstRefSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_unaryOperators_InstRefSet, Matrix cell : A25 V4 I3");
+//if empty self.iReference.allVehicles 
+//  EmptySet = true;
+//end if;
+/* Parser Error
+Multiple markers at this line
+  - unexpected token: .
+  - ->iReference<- is not a class or structured data type.
+*/
+
+//  ---------- Workaround ----------
+objs = self.iReference.allVehicles;
+if empty objs
+  EmptySet = true;
+end if;',
+	1,
+	'',
+	"b81a0f91-ba91-4316-b8e8-3f533927c2b2");
+INSERT INTO O_TFR
+	VALUES ("8985911c-dccb-4a22-aa9f-116d26278f63",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_binaryOperations_ref_set',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Can not implement this test till the grammar is added ',
+	1,
+	'',
+	"cb5efb99-b374-4d63-8a4f-158fe15c59b0");
+INSERT INTO O_TFR
+	VALUES ("96ed7864-9da6-466b-b430-35cacd2ad8d5",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_binaryOperations_set_set',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Can not implement this test till the grammar is added ',
+	1,
+	'',
+	"8985911c-dccb-4a22-aa9f-116d26278f63");
+INSERT INTO O_TFR
+	VALUES ("7bad16b8-aa57-4762-8d3b-06c623cb8b50",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_unrelateSecond',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_unrelateSecond, Matrix cell : A10 V4 I3");
+select any ped from instances of P;
+select any acc from instances of A;
+
+//unrelate ped from self.iReference.selfReference across R1 using acc;
+/* Parser Error 
+expecting "across", found ''.''
+  */
+  
+//  ---------- Workaround ----------
+obj  = self.iReference.selfReference;
+unrelate ped from obj across R1 using acc;
+EOF = true;',
+	1,
+	'',
+	"db361a8a-b688-433f-be8a-cdb2fbdf2380");
+INSERT INTO O_TFR
+	VALUES ("febd4718-35cb-4b6d-aa3f-89702b41bbea",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_booleanBinaryOperationRightOperand',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_booleanBinaryOperationRightOperand, Matrix cell : A15 V4 I3");
+select any veh from instances of V where selected.model == "none";
+if ( not_empty veh)
+   LOG::LogFailure(message:"veh is not empty");
+   LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationRightOperand -A15 V4 I3-  test failed");
+   return;
+   
+end if;
+
+if  veh == self.iReference.selfReference
+	LOG::LogSuccess(message:"O_ATTR_booleanBinaryOperationRightOperand -A14 V4 I3-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationRightOperand -A14 V4 I3-  test failed");
+end if;
+
+create object instance veh of V;
+
+if  veh.model == self.iReference.selfReference.model   // empty instance access
+	;
+end if;
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationRightOperand -A14 V4 I3-  test failed");',
+	1,
+	'',
+	"c6fd8b97-d176-4efb-93c8-d9cca37d27d6");
+INSERT INTO O_TFR
+	VALUES ("d099adf2-e110-4640-84d1-536b2302cd3b",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_selectTwo',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_selectTwo, Matrix cell : A4 V4 I3");
+select any ped from instances of P;
+//select one self.iReference.selfReference related by ped->V[R1]; 
+
+/* Parser Error 
+Cannot assign a value to ->self<-.
+  */
+
+
+//  ---------- Workaround ----------
+
+select one obj related by ped->V[R1];
+self.iReference.selfReference = obj;
+EOF = true;
+
+',
+	1,
+	'',
+	"5fb5113c-dbb0-49fc-8a45-004f84904c56");
+INSERT INTO O_TFR
+	VALUES ("c1b0bc72-ed08-4c19-a6b0-a661c30d2f9d",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_selectWhere',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_selectWhere, Matrix cell : A5 V4 I3");
+//select one ped related by self.iReference.selfReference->P[R1] where( selected.name == "John"); 
+
+/* Parser Error 
+Multiple markers at this line
+  - unexpected token: .
+  - Keyword ->Selected<- cannot be used outside a where expression
+  - Expression within Select Where clause does not yield boolean result
+  */
+
+
+//  ---------- Workaround ----------
+obj = self.iReference.selfReference;
+select one ped related by obj->P[R1] where( selected.name == "John"); 
+EOF = true;
+
+
+
+',
+	1,
+	'',
+	"d099adf2-e110-4640-84d1-536b2302cd3b");
+INSERT INTO O_TFR
+	VALUES ("862b5831-9748-42bb-8bb3-6080174de1ce",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_unrelateUsing',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_unrelateUsing, Matrix cell : A11 V4 I3");
+select any ped from instances of P;
+select any car from instances of V;
+
+//unrelate ped from car across R1 using self.accidentReference.selfReference;
+/* Parser Error 
+Class ->testAttribute_Nested<- is not the link class between classes ->Pedestrian<- and ->vehicle<- in link association ->R1<-
+  */
+  
+//  ---------- Workaround ----------
+obj  = self.accidentReference.selfReference;
+unrelate ped from car across R1 using obj;
+EOF = true;',
+	1,
+	'',
+	"7bad16b8-aa57-4762-8d3b-06c623cb8b50");
+INSERT INTO O_TFR
+	VALUES ("739d872e-9318-4832-a385-c998d8cb6993",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_forEachInstance',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_forEachInstance, Matrix cell : A12 V4 I3");
+counter = 0;
+select many cars from instances of V;
+//for each self.iReference.selfReference in cars
+// counter = counter + 1;
+//end for;
+/* Parser Error 
+Cannot assign a value to ->self<-.
+  */
+  
+//  ---------- Workaround ----------  
+for each obj in cars
+ self.iReference.selfReference = obj;
+ counter = counter + 1;
+end for;  ',
+	1,
+	'',
+	"862b5831-9748-42bb-8bb3-6080174de1ce");
+INSERT INTO O_TFR
+	VALUES ("aae174c0-8d67-4088-826d-754b1e00dbb3",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_WhereClause',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_WhereClause, Matrix cell : A13 V4 I3");
+select any car from instances of V;
+if ( empty car)
+   LOG::LogFailure(message:"Failed to select car");
+   LOG::LogFailure(message:"O_ATTR_WhereClause -A13 V4 I3-  test failed");
+   return;
+end if;
+select one ped related by car->P[R1] where( selected.vehicleReference == self.iReference.selfReference);
+
+if ( not_empty ped)
+   LOG::LogFailure(message:"O_ATTR_WhereClause -A13 V4 I3-  test failed");
+   return;
+else
+	LOG::LogSuccess(message:"O_ATTR_WhereClause -A13 V4 I3-  test passed");   
+end if;
+
+select one ped related by car->P[R1] where( selected.vehicleReference.model == self.iReference.selfReference.model); // empty instance access
+LOG::LogFailure(message:"Undetected null instance access");
+LOG::LogFailure(message:"O_ATTR_WhereClause -A13 V4 I3-  test failed"); 
+ 
+EOF = true;
+
+',
+	1,
+	'',
+	"739d872e-9318-4832-a385-c998d8cb6993");
+INSERT INTO O_TFR
+	VALUES ("7c440c63-54c3-4788-baba-04308402afb1",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_createEvent',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_createEvent, Matrix cell : A18 V4 I3");
+//create event instance accelerate_event of V1:accelerate to self.iReference.selfReference;
+//temp  = TIM::timer_start(microseconds:100000,event_inst:accelerate_event);
+/* Parser Error 
+unexpected token: self
+*/
+//  ---------- Workaround ----------
+obj = self.iReference.selfReference; 
+create event instance accelerate_event of V1:accelerate to obj;
+temp  = TIM::timer_start(microseconds:100000,event_inst:accelerate_event);
+EOF = true;',
+	1,
+	'',
+	"845bda89-1ab3-4403-b91e-904c23776ee5");
+INSERT INTO O_TFR
+	VALUES ("fcf2cf56-ab51-425a-b139-a452286c2e63",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_selectSetTwo',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_selectSetTwo, Matrix cell : A23 V4 I3");
+select many peds from instances of P;
+//select many self.iReference.allVehicles related by peds->V[R1];
+
+/* Parser Error 
+Cannot assign a value to ->self<-.
+  */
+  
+//  ---------- Workaround ----------  
+
+
+select many cars related by peds->V[R1];
+self.iReference.allVehicles  = cars;
+EOF = true;',
+	1,
+	'',
+	"0e5c4c0d-adba-4169-8f1c-a97b72edc4e9");
+INSERT INTO O_TFR
+	VALUES ("b81a0f91-ba91-4316-b8e8-3f533927c2b2",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_selectWhereSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_selectWhereSet, Matrix cell : A24 V4 I3");
+//select many peds related by self.iReference.allVehicles->P[R1] where( selected.name == "John"); 
+
+/* Parser Error 
+Multiple markers at this line
+  - Keyword ->Selected<- cannot be used outside a where expression
+  - Expression within Select Where clause does not yield boolean result
+  - unexpected token: .
+  */
+
+
+//  ---------- Workaround ----------
+objs = self.iReference.allVehicles;
+select many peds related by objs->P[R1] where( selected.name == "John");
+EOF = true;
+
+',
+	1,
+	'',
+	"fcf2cf56-ab51-425a-b139-a452286c2e63");
+INSERT INTO O_TFR
+	VALUES ("7738210d-3720-441c-b030-c0c68d2f17ac",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_Create',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_Create, Matrix cell : A29 V4 I3");
+
+//create object instance self.iReference.selfReference of V;
+/* Parser Error : 
+unexpected token: self
+*/
+
+
+//  ---------- Workaround ----------
+create object instance obj of V;
+self.iReference.selfReference = obj;',
+	1,
+	'',
+	"74877246-bb4a-4eed-87c1-b06a70cba35c");
+INSERT INTO O_TFR
+	VALUES ("2a4d9638-1e46-4467-8a67-40ef40668276",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_booleanBinaryOperationLeftOperandSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_booleanBinaryOperationLeftOperandSet, Matrix cell : A30 V4 I3");
+select many vehs from instances of V;
+if ( empty vehs)
+   LOG::LogFailure(message:"vehs is not empty");
+   LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationLeftOperandSet -A30 V4 I3-  test failed");
+   return;
+   
+end if;
+if self.iReference.allVehicles != vehs
+	LOG::LogSuccess(message:"O_ATTR_booleanBinaryOperationLeftOperandSet -A30 V4 I3-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationLeftOperandSet -A30 V4 I3-  test failed");	
+end if;
+',
+	1,
+	'',
+	"7738210d-3720-441c-b030-c0c68d2f17ac");
+INSERT INTO O_TFR
+	VALUES ("e08806dd-04db-4290-86b8-9dee95feb0e4",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_booleanBinaryOperationRightOperandSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_booleanBinaryOperationRightOperandSet, Matrix cell : A31 V4 I3");
+
+select many vehs from instances of V where selected.model == "none";
+if ( not_empty vehs)
+   LOG::LogFailure(message:"vehs is not empty");
+   LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationRightOperandSet -A31 V4 I3-  test failed");
+   return;
+   
+end if;
+if  vehs == self.iReference.allVehicles 
+	LOG::LogSuccess(message:"O_ATTR_booleanBinaryOperationRightOperandSet -A31 V4 I3-  test passed");
+else
+	LOG::LogFailure(message:"O_ATTR_booleanBinaryOperationRightOperandSet -A31 V4 I3-  test failed");
+end if;
+
+',
+	1,
+	'',
+	"2a4d9638-1e46-4467-8a67-40ef40668276");
+INSERT INTO O_TFR
+	VALUES ("c4eae779-de33-47cd-834c-962dccd98e83",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_ActivitiesInvocation',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testFunctionParameter_InvalidNested::O_ATTR_ActivitiesInvocation, Matrix cell : A36 V4 I3");
+
+::EmptyInstRefParameterSetupTest(inst: self.iReference.selfReference);',
+	1,
+	'',
+	"e08806dd-04db-4290-86b8-9dee95feb0e4");
+INSERT INTO O_TFR
+	VALUES ("5536bbaa-d89b-4c74-8d02-66894a0389ec",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	'O_ATTR_ActivitiesInvocationSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo(message:"Operation entered: testAttribute_InvalidNested::O_ATTR_ActivitiesInvocationSet, Matrix cell : A36 V4 I3");
+
+::EmptyInstRefSetParameterSetupTest(instSet: self.iReference.allVehicles); ',
+	1,
+	'',
+	"c4eae779-de33-47cd-834c-962dccd98e83");
+INSERT INTO O_NBATTR
+	VALUES ("3bee74b0-5237-468c-ae52-edce020fa4d9",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d");
+INSERT INTO O_BATTR
+	VALUES ("3bee74b0-5237-468c-ae52-edce020fa4d9",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d");
+INSERT INTO O_ATTR
+	VALUES ("3bee74b0-5237-468c-ae52-edce020fa4d9",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	"00000000-0000-0000-0000-000000000000",
+	'iReference',
+	'',
+	'',
+	'iReference',
+	0,
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d26cf195-7219-44b5-b4b4-43864cf587d8",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vehicle>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("9cf57fe8-f786-422a-bea7-584312fa0055",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d");
+INSERT INTO O_BATTR
+	VALUES ("9cf57fe8-f786-422a-bea7-584312fa0055",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d");
+INSERT INTO O_ATTR
+	VALUES ("9cf57fe8-f786-422a-bea7-584312fa0055",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	"fedd3771-3d71-4b7a-b02d-486b255f6c65",
+	'accidentReference',
+	'',
+	'',
+	'accidentReference',
+	0,
+	"639bcda0-62ad-4700-a901-1904aa6e098d",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("639bcda0-62ad-4700-a901-1904aa6e098d",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Accident>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("fedd3771-3d71-4b7a-b02d-486b255f6c65",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d");
+INSERT INTO O_BATTR
+	VALUES ("fedd3771-3d71-4b7a-b02d-486b255f6c65",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d");
+INSERT INTO O_ATTR
+	VALUES ("fedd3771-3d71-4b7a-b02d-486b255f6c65",
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	"3bee74b0-5237-468c-ae52-edce020fa4d9",
+	'cars_set',
+	'',
+	'',
+	'cars_set',
+	0,
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref_set<vehicle>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_ID
+	VALUES (0,
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d");
+INSERT INTO O_ID
+	VALUES (1,
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d");
+INSERT INTO O_ID
+	VALUES (2,
+	"030a7d96-c302-48bc-b2ae-82f737f1ad7d");
+INSERT INTO PE_PE
+	VALUES ("030a7d96-c302-48bc-b2ae-82f737f1ad7d",
+	1,
+	"f0df44d5-e872-4448-8d98-f7bb6be2b9cb",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("f0df44d5-e872-4448-8d98-f7bb6be2b9cb",
+	"00000000-0000-0000-0000-000000000000",
+	"13c14d34-d225-4949-89b6-fe738cc62cbb",
+	'Subsystem',
+	'',
+	0,
+	'../Subsystem.xtuml');

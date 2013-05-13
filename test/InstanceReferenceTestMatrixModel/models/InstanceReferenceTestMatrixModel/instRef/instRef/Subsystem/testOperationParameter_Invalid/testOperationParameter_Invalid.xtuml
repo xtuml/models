@@ -1,0 +1,1029 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'testOperationParameter_Invalid',
+	13,
+	'TPARM2',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("d71e009d-0a78-4dc4-bdd2-c5f4ecd360e6",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_oprInvocation',
+	'I1A1',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'
+
+//param.pedestrian.setName(name:"Tom");
+/* Parser Error 
+Multiple markers at this line
+  - unexpected token: (
+  - expecting TOK_EQUAL, found '')''
+  - Parameter ->pedestrian<- is not passed by reference and is not assignable
+  */
+
+//  ---------- Workaround ----------
+obj  = param.pedestrian;
+obj.setName(name:"Tom");
+EOF = 1; ',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("fbc87735-e999-4de7-a329-4dfbf3cb3e2f",
+	"d71e009d-0a78-4dc4-bdd2-c5f4ecd360e6",
+	'pedestrian',
+	"b929781a-8621-47b0-9023-1fd9b261f2f1",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("b929781a-8621-47b0-9023-1fd9b261f2f1",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Pedestrian>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("77d264c8-27e1-427d-a9b8-ed7c46389a90",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_readAttr',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'LOG::LogInfo(message:"Operation entered: testOperationParameter_Invalid::O_TPARM_readAttir, Matrix cell : A2 V2 I1");
+obj = param.instRef;
+if ( not_empty obj)
+	 LOG::LogFailure(message:"obj is not empty");
+	 LOG::LogFailure(message:"O_TPARM_readAttir -A2 V2 I1-  test failed");
+else
+	LOG::LogSuccess(message:"O_TPARM_readAttir -A2 V2 I1-  test passed");
+end if;
+
+
+model = param.instRef.model;  // empty instance access
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_TPARM_readAttir -A2 V2 I1-  test failed");
+EOF = 1;',
+	1,
+	'',
+	"d71e009d-0a78-4dc4-bdd2-c5f4ecd360e6");
+INSERT INTO O_TPARM
+	VALUES ("d5970dc4-1102-48ca-84c7-18c390fb55bb",
+	"77d264c8-27e1-427d-a9b8-ed7c46389a90",
+	'instRef',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d26cf195-7219-44b5-b4b4-43864cf587d8",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vehicle>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("82d68282-08a8-441f-859e-40ec17c036f5",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_selectOne',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'
+//select one ped related by param.vehicle->P[R1]; 
+
+/* Parser Error 
+Multiple markers at this line
+  - unexpected token: param
+  - unexpected token: .
+  */
+
+
+//  ---------- Workaround ----------
+obj = param.vehicle;
+select one ped related by obj->P[R1];
+EOF = true;
+
+',
+	1,
+	'',
+	"77d264c8-27e1-427d-a9b8-ed7c46389a90");
+INSERT INTO O_TPARM
+	VALUES ("0e7243dc-f9da-45ba-ad58-e279a3769870",
+	"82d68282-08a8-441f-859e-40ec17c036f5",
+	'vehicle',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("4f5b15b4-69ef-4d69-a525-a8d3d5fb7cb5",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_relateByFirst',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'create object instance ped of P;
+create object instance acc of A;
+
+//relate param.vehicle to ped across R1 using acc;
+/* Parser Error 
+Multiple markers at this line
+  - unexpected token: relate
+  - expecting TOK_EQUAL, found ''ped''
+  - Parameter ->vehicle<- is not passed by reference and is not assignable
+  */
+
+ //  ---------- Workaround ----------
+obj = param.vehicle ;
+relate obj to ped across R1 using acc;
+EOF = true;
+
+',
+	1,
+	'',
+	"6d01b6f0-3a42-4b39-8a1c-5ee8d5d8def3");
+INSERT INTO O_TPARM
+	VALUES ("d005afd7-72e4-4139-a21c-d0c406dc39ef",
+	"4f5b15b4-69ef-4d69-a525-a8d3d5fb7cb5",
+	'vehicle',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("8592f6d4-6d51-4320-b48d-df36348851ca",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_relateUsing',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'create object instance ped of P;
+create object instance veh of V;
+
+//relate veh to ped across R1 using param.accident;
+/* Parser Error 
+Multiple markers at this line
+  - Need USING clause for link classes in association ->R1<-
+  - unexpected token: param
+  */
+
+//  ---------- Workaround ----------
+obj = param.accident;
+relate veh to ped across R1 using obj;
+EOF = true;
+
+',
+	1,
+	'',
+	"4f5b15b4-69ef-4d69-a525-a8d3d5fb7cb5");
+INSERT INTO O_TPARM
+	VALUES ("39de4a03-2b36-41bc-bfd0-22867eb70d50",
+	"8592f6d4-6d51-4320-b48d-df36348851ca",
+	'accident',
+	"639bcda0-62ad-4700-a901-1904aa6e098d",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("639bcda0-62ad-4700-a901-1904aa6e098d",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Accident>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("3158dc59-7a95-44c4-a648-42bddc04d8a7",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_relateBySecond',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'create object instance ped of P;
+create object instance acc of A;
+
+//relate ped to param.vehicle across R1 using acc;
+/* Parser Error 
+Multiple markers at this line
+  - unexpected token: param
+  - expecting "across", found ''.''
+  */
+
+//  ---------- Workaround ---------- 
+obj = param.vehicle ;
+relate ped to  obj across R1 using acc;
+EOF = true;
+
+',
+	1,
+	'',
+	"8592f6d4-6d51-4320-b48d-df36348851ca");
+INSERT INTO O_TPARM
+	VALUES ("5bf6ee27-629b-40b9-9e35-612d12308a68",
+	"3158dc59-7a95-44c4-a648-42bddc04d8a7",
+	'vehicle',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("479ff929-c596-4be7-a53f-10a1919a6bae",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_unrelateFirst',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'select any ped from instances of P;
+select any acc from instances of A;
+
+//unrelate param.vehicle from ped across R1 using acc;
+/* Parser Error 
+Multiple markers at this line
+  - Parameter ->vehicle<- is not passed by reference and is not assignable
+  - expecting TOK_EQUAL, found ''ped''
+  - unexpected token: unrelate
+  */
+  
+//  ---------- Workaround ----------
+obj  = param.vehicle;
+unrelate obj from ped across R1 using acc;
+EOF = true;',
+	1,
+	'',
+	"3158dc59-7a95-44c4-a648-42bddc04d8a7");
+INSERT INTO O_TPARM
+	VALUES ("59613cf5-65c6-4543-b32b-e82596b5e524",
+	"479ff929-c596-4be7-a53f-10a1919a6bae",
+	'vehicle',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("1336ae31-9e13-40fd-b2cb-308932fc1df9",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_UnaryOperators',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'
+
+//if ( empty param.vehicle)
+ //a =1;
+//end if;
+/* Parser Error 
+Multiple markers at this line
+  - unexpected token: empty
+  - unexpected token: vehicle
+  - expecting TOK_RPAREN, found ''param''
+  */
+  
+
+//  ---------- Workaround ----------
+obj = param.vehicle;
+if ( empty obj)
+ a =1;
+end if;
+EOF = true;',
+	1,
+	'',
+	"ea173bf6-25ad-4d78-b2d8-c5d02f729021");
+INSERT INTO O_TPARM
+	VALUES ("0ca65a1f-3e1a-4afe-afef-6044021ac2fe",
+	"1336ae31-9e13-40fd-b2cb-308932fc1df9",
+	'vehicle',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("fa049ec7-b558-44f2-a71b-89eec4a9688e",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_generateEvent',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'//generate V1:accelerate to param.vehicle;
+/* Parser Error 
+unexpected token: param
+*/
+//  ---------- Workaround ----------
+obj = param.vehicle; 
+generate V1:accelerate to obj;
+select many vs from instances of V;
+for each v in vs
+generate V1:accelerate to v;
+end for; 
+EOF = true;',
+	1,
+	'',
+	"1336ae31-9e13-40fd-b2cb-308932fc1df9");
+INSERT INTO O_TPARM
+	VALUES ("f55cfad3-8ad4-4803-96bf-50f41272becc",
+	"fa049ec7-b558-44f2-a71b-89eec4a9688e",
+	'vehicle',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("083655e2-c504-4564-9552-3737c2d78750",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_writeAttr',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'LOG::LogInfo(message:"Operation entered: testOperationParameter_Invalid::O_TPARM_writeAttr, Matrix cell : A19 V1 I1");
+create object instance newCar of V;   
+param.instRef = newCar;
+if ( param.instRef == newCar )
+	LOG::LogSuccess(message:"O_TPARM_writeAttr -A19 V1 I1-  test passed");
+else
+	LOG::LogFailure(message:"O_TPARM_writeAttr -A19 V1 I1-  test failed");
+end if; 
+delete object instance newCar;
+param.instRef.model = "BMW";	// empty instance access
+if ( param.instRef.model == "BMW" )
+	;
+end if; 
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_TPARM_writeAttr -A19 V1 I1-  test failed");
+EOF= true;
+ 
+',
+	1,
+	'',
+	"55d70fae-f28f-4dba-a039-aa92b6c95cc1");
+INSERT INTO O_TPARM
+	VALUES ("643cd052-aded-4436-9c93-b5473b5d374c",
+	"083655e2-c504-4564-9552-3737c2d78750",
+	'instRef',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("5cae3167-cc99-4217-9085-ce2b94997853",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_delete',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'//delete object instance param.vehicle;
+/* Parser Error
+Multiple markers at this line
+  - unexpected token: vehicle
+  - expecting Semicolon, found ''.''
+  - unexpected token: param
+  */
+  
+//  ---------- Workaround ---------- 
+obj = param.vehicle ;
+delete object instance obj;',
+	1,
+	'',
+	"083655e2-c504-4564-9552-3737c2d78750");
+INSERT INTO O_TPARM
+	VALUES ("fbc852ee-6e9f-4a8b-850c-353a73ac07b2",
+	"5cae3167-cc99-4217-9085-ce2b94997853",
+	'vehicle',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("bf1beb2e-7420-4200-9e7a-d4a6587aa383",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_binaryOperations_ref_ref',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'//cars = param.car | param.bus;
+/* Parser Error 
+unexpected char: ''|''
+*/',
+	1,
+	'',
+	"75e34604-09ee-4ff2-9e45-e3f5687b9ca3");
+INSERT INTO O_TPARM
+	VALUES ("51f9f1d7-30dc-453e-b002-af2fea053f4b",
+	"bf1beb2e-7420-4200-9e7a-d4a6587aa383",
+	'car',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("48b409d7-a856-4293-9d5e-c59fa530ea0c",
+	"bf1beb2e-7420-4200-9e7a-d4a6587aa383",
+	'bus',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"51f9f1d7-30dc-453e-b002-af2fea053f4b",
+	'');
+INSERT INTO O_TFR
+	VALUES ("7d5750c6-5bf5-4da4-802c-65dd63f16b24",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_forEachInstance',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'coutner = 0;
+select many cars from instances of V;
+//for each param.instRef in cars
+// counter++;
+//end for;
+/* Parser Error 
+Multiple markers at this line
+  - expecting "in", found ''.''
+  - unexpected token: param
+  */
+  
+//  ---------- Workaround ----------  
+obj = param.instRef;
+for each obj in cars
+ counter = coutner + 1;
+end for;  ',
+	1,
+	'',
+	"521bcab6-6ae4-4159-af2e-b84149096c4d");
+INSERT INTO O_TPARM
+	VALUES ("3f2e0540-3237-4a80-8e95-15236620192b",
+	"7d5750c6-5bf5-4da4-802c-65dd63f16b24",
+	'instRef',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("4b8a823d-4085-4987-b71a-887d3ce6d8aa",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_unaryOperators_InstRefSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'//if empty param.cars 
+//  EmptySet = true;
+//end if;
+/* Parser Error
+Multiple markers at this line
+  - unexpected token: empty
+  - Parameter ->cars<- is not passed by reference and is not assignable
+*/
+
+//  ---------- Workaround ----------
+objs = param.cars;
+if empty objs
+  EmptySet = true;
+end if;',
+	1,
+	'',
+	"ad6fdbfe-e4b8-4d06-884e-2396942f7a44");
+INSERT INTO O_TPARM
+	VALUES ("49f4dc33-1b86-464f-bb50-c572a412814a",
+	"4b8a823d-4085-4987-b71a-887d3ce6d8aa",
+	'cars',
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref_set<vehicle>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("d1bf9a73-a193-4a58-a8f3-c37c862883dc",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_binaryOperations_ref_set',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'
+//cars = param.cars | param.vehicle;
+/* Parser Error 
+unexpected char: ''|''
+*/
+',
+	1,
+	'',
+	"4b8a823d-4085-4987-b71a-887d3ce6d8aa");
+INSERT INTO O_TPARM
+	VALUES ("a0046297-1530-4bd6-808c-94be3336bb4d",
+	"d1bf9a73-a193-4a58-a8f3-c37c862883dc",
+	'vehicle',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("194a7474-56d4-4582-a1cb-fabf6cacb828",
+	"d1bf9a73-a193-4a58-a8f3-c37c862883dc",
+	'cars',
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	0,
+	'',
+	"a0046297-1530-4bd6-808c-94be3336bb4d",
+	'');
+INSERT INTO O_TFR
+	VALUES ("75e34604-09ee-4ff2-9e45-e3f5687b9ca3",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_binaryOperations_set_set',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'//cars = param.cars | param.buses;
+/* Parser Error 
+unexpected char: ''|''
+*/',
+	1,
+	'',
+	"d1bf9a73-a193-4a58-a8f3-c37c862883dc");
+INSERT INTO O_TPARM
+	VALUES ("0db278f2-9f57-4f4e-a0f9-ad9b2919d49d",
+	"75e34604-09ee-4ff2-9e45-e3f5687b9ca3",
+	'cars',
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("a4f3d95f-0f0d-4019-b5e8-ed7af06c7a6b",
+	"75e34604-09ee-4ff2-9e45-e3f5687b9ca3",
+	'buses',
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	0,
+	'',
+	"0db278f2-9f57-4f4e-a0f9-ad9b2919d49d",
+	'');
+INSERT INTO O_TFR
+	VALUES ("dbc05361-3c80-4d36-a87c-1b8385e9e286",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_selectTwo',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"82d68282-08a8-441f-859e-40ec17c036f5");
+INSERT INTO O_TPARM
+	VALUES ("0e05cc75-5d65-4eea-9c5e-127b6a925eb6",
+	"dbc05361-3c80-4d36-a87c-1b8385e9e286",
+	'Unnamed Parameter',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("6d01b6f0-3a42-4b39-8a1c-5ee8d5d8def3",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_selectWhere',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"dbc05361-3c80-4d36-a87c-1b8385e9e286");
+INSERT INTO O_TPARM
+	VALUES ("3ebbd180-a063-4add-856f-de31373c883a",
+	"6d01b6f0-3a42-4b39-8a1c-5ee8d5d8def3",
+	'Unnamed Parameter',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("521bcab6-6ae4-4159-af2e-b84149096c4d",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_unrelateUsing',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"5053beb1-3c97-4058-898b-387431ca8fac");
+INSERT INTO O_TPARM
+	VALUES ("bb4c6b51-f230-4d35-bdda-046205126bbd",
+	"521bcab6-6ae4-4159-af2e-b84149096c4d",
+	'Unnamed Parameter',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("5053beb1-3c97-4058-898b-387431ca8fac",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_unrelateSecond',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"479ff929-c596-4be7-a53f-10a1919a6bae");
+INSERT INTO O_TPARM
+	VALUES ("0096a0b7-f586-443c-b725-c4e8bb6ed80e",
+	"5053beb1-3c97-4058-898b-387431ca8fac",
+	'Unnamed Parameter',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("32d06250-8216-4414-b39d-16abf15b4ad3",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_WhereClause',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'LOG::LogInfo(message:"Operation entered: testOperationParameter_Invalid::O_TPARM_WhereClause, Matrix cell : A13 V2 I1");
+select any car from instances of V;
+if ( not_empty car)
+   LOG::LogFailure(message:"car is not empty");
+   LOG::LogFailure(message:"O_TPARM_WhereClause -A13 V2 I1-  test failed");
+   return;
+end if;
+select one ped related by car->P[R1] where( selected.vehicleReference == param.instRef);
+
+if ( not_empty ped)
+   LOG::LogFailure(message:"ped is not empty");
+   LOG::LogFailure(message:"O_TPARM_WhereClause -A13 V2 I1-  test failed");
+   return;
+else
+	LOG::LogSuccess(message:"O_TPARM_WhereClause -A13 V2 I1-  test passed");   
+end if;
+
+select one ped related by car->P[R1] where( selected.vehicleReference.model == param.instRef.model); // empty instance access 
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_TPARM_WhereClause -A13 V2 I1-  test failed");
+ 
+EOF = true;
+
+',
+	1,
+	'',
+	"7d5750c6-5bf5-4da4-802c-65dd63f16b24");
+INSERT INTO O_TPARM
+	VALUES ("d645792a-ba41-4711-a682-e317dad41655",
+	"32d06250-8216-4414-b39d-16abf15b4ad3",
+	'instRef',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("1a633d8a-7575-469c-850c-bdf024eb89af",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_selectSetOne',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"99e24768-7563-4422-b21d-adc048f069dd");
+INSERT INTO O_TPARM
+	VALUES ("eebb42bc-c67c-4399-a89f-b095bc6e0719",
+	"1a633d8a-7575-469c-850c-bdf024eb89af",
+	'Unnamed Parameter',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("fa9012d8-b484-4aba-9081-6f17cf8a3640",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_selectSetTwo',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"1a633d8a-7575-469c-850c-bdf024eb89af");
+INSERT INTO O_TPARM
+	VALUES ("3864429b-207f-46ea-8c9f-abf1999cef7e",
+	"fa9012d8-b484-4aba-9081-6f17cf8a3640",
+	'Unnamed Parameter',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("ad6fdbfe-e4b8-4d06-884e-2396942f7a44",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_selectWhereSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"fa9012d8-b484-4aba-9081-6f17cf8a3640");
+INSERT INTO O_TPARM
+	VALUES ("6f6c6c60-246b-4a1c-8754-8ee64c8ff921",
+	"ad6fdbfe-e4b8-4d06-884e-2396942f7a44",
+	'Unnamed Parameter',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("55d70fae-f28f-4dba-a039-aa92b6c95cc1",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_createEvent',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"fa049ec7-b558-44f2-a71b-89eec4a9688e");
+INSERT INTO O_TPARM
+	VALUES ("95335f5c-e74e-46de-90f3-26813a12b3fd",
+	"55d70fae-f28f-4dba-a039-aa92b6c95cc1",
+	'Unnamed Parameter',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("86b8de2d-4fc8-4222-b36b-38f3f1e0da82",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_create',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"bf1beb2e-7420-4200-9e7a-d4a6587aa383");
+INSERT INTO O_TFR
+	VALUES ("99e24768-7563-4422-b21d-adc048f069dd",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_forEachSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"5cae3167-cc99-4217-9085-ce2b94997853");
+INSERT INTO O_TPARM
+	VALUES ("b9ec4253-b0b2-4a78-a53d-773521bb20c6",
+	"99e24768-7563-4422-b21d-adc048f069dd",
+	'Unnamed Parameter',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("4f1afb50-0d9d-4f5c-8c4b-50e45a8141a2",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_booleanBinaryOperationLeftOperand',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'LOG::LogInfo(message:"Operation entered: testOperationParameter_Invalid::O_TPARM_booleanBinaryOperationLeftOperand, Matrix cell : A14 V2 I1");
+select any veh from instances of V;
+if ( not_empty veh)
+   LOG::LogFailure(message:"veh is not empty");
+   LOG::LogFailure(message:"O_TPARM_booleanBinaryOperationLeftOperand -A14 V2 I1-  test failed");
+   return;
+   
+end if;
+if param.instRef == veh
+	LOG::LogSuccess(message:"O_TPARM_booleanBinaryOperationLeftOperand -A14 V2 I1-  test passed");
+else
+	LOG::LogFailure(message:"O_TPARM_booleanBinaryOperationLeftOperand -A14 V2 I1-  test failed");	
+end if;
+
+create object instance veh of V;
+if param.instRef.model == veh.model		// empty instance access
+	;
+end if;
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_TPARM_booleanBinaryOperationLeftOperand -A14 V2 I1-  test failed");	
+',
+	1,
+	'',
+	"32d06250-8216-4414-b39d-16abf15b4ad3");
+INSERT INTO O_TPARM
+	VALUES ("84da560f-8d65-43b1-874b-80065550c931",
+	"4f1afb50-0d9d-4f5c-8c4b-50e45a8141a2",
+	'instRef',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("ea173bf6-25ad-4d78-b2d8-c5d02f729021",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_booleanBinaryOperationRightOperand',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'LOG::LogInfo(message:"Operation entered: testOperationParameter_Invalid::O_TPARM_booleanBinaryOperationRightOperand, Matrix cell : A15 V2 I1");
+select any veh from instances of V;
+if ( not_empty veh)
+   LOG::LogFailure(message:"veh is not empty");
+   LOG::LogFailure(message:"O_TPARM_booleanBinaryOperationRightOperand -A15 V2 I1-  test failed");
+   return;
+   
+end if;
+if  veh == param.instRef
+	LOG::LogSuccess(message:"O_TPARM_booleanBinaryOperationRightOperand -A14 V2 I1-  test passed");
+else
+	LOG::LogFailure(message:"O_TPARM_booleanBinaryOperationRightOperand -A14 V2 I1-  test failed");
+end if;
+
+if  veh.model == param.instRef.model	// empty instance access
+	;
+end if;
+LOG::LogFailure(message:"Undetected empty instance access");
+LOG::LogFailure(message:"O_TPARM_booleanBinaryOperationRightOperand -A14 V2 I1-  test failed");
+',
+	1,
+	'',
+	"4f1afb50-0d9d-4f5c-8c4b-50e45a8141a2");
+INSERT INTO O_TPARM
+	VALUES ("0c7120ef-c8e2-41cd-8b77-4ee858be3b16",
+	"ea173bf6-25ad-4d78-b2d8-c5d02f729021",
+	'instRef',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("9de623b7-4d1a-41aa-ac42-46518bf7c2c4",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_booleanBinaryOperationLeftOperandSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'LOG::LogInfo(message:"Operation entered: testOperationParameter_Invalid::O_TPARM_booleanBinaryOperationLeftOperandSet, Matrix cell : A30 V2 I1");
+select many vehs from instances of V;
+if ( not_empty vehs)
+   LOG::LogFailure(message:"vehs is  not empty instance reference set");
+   LOG::LogFailure(message:"O_TPARM_booleanBinaryOperationLeftOperandSet -A30 V2 I1-  test failed");
+   return;
+   
+end if;
+if param.instRef_set == vehs
+	LOG::LogSuccess(message:"O_TPARM_booleanBinaryOperationLeftOperandSet -A30 V2 I1-  test passed");
+else
+	LOG::LogFailure(message:"O_TPARM_booleanBinaryOperationLeftOperandSet -A30 V2 I1-  test failed");	
+end if;
+',
+	1,
+	'',
+	"86b8de2d-4fc8-4222-b36b-38f3f1e0da82");
+INSERT INTO O_TPARM
+	VALUES ("4a0f5900-e638-40e6-bbf3-7721ac86c5e7",
+	"9de623b7-4d1a-41aa-ac42-46518bf7c2c4",
+	'instRef_set',
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("1e59327f-5a50-4421-92b3-cd767eed871d",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_booleanBinaryOperationRightOperandSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'LOG::LogInfo(message:"Operation entered: testOperationParameter_Invalid::O_TPARM_booleanBinaryOperationRightOperandSet, Matrix cell : A31 V2 I1");
+
+select many vehs from instances of V;
+if ( not_empty vehs)
+   LOG::LogFailure(message:"vehs is not empty instance reference set");
+   LOG::LogFailure(message:"O_TPARM_booleanBinaryOperationRightOperandSet -A31 V2 I1-  test failed");
+   return;
+   
+end if;
+if  vehs == param.instRef_set
+	LOG::LogSuccess(message:"O_TPARM_booleanBinaryOperationRightOperandSet -A31 V2 I1-  test passed");
+else
+	LOG::LogFailure(message:"O_TPARM_booleanBinaryOperationRightOperandSet -A31 V2 I1-  test failed");
+end if;
+
+',
+	1,
+	'',
+	"9de623b7-4d1a-41aa-ac42-46518bf7c2c4");
+INSERT INTO O_TPARM
+	VALUES ("c4cd1d2e-7fbc-4155-a9aa-abc5ec8ef824",
+	"1e59327f-5a50-4421-92b3-cd767eed871d",
+	'instRef_set',
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("14d5766c-50cd-4a91-b029-b8e3426a1b6d",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_ActivitiesInvocation',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'LOG::LogInfo(message:"Operation entered: testOperationParameter_Invalid::S_TPARM_ActivitiesInvocation, Matrix cell : A36 V2 I1");
+
+::EmptyInstRefParameterSetupTest(inst: param.instRef);
+',
+	1,
+	'',
+	"1e59327f-5a50-4421-92b3-cd767eed871d");
+INSERT INTO O_TPARM
+	VALUES ("e95cd5e5-250c-4144-b5b8-ff204e3abf52",
+	"14d5766c-50cd-4a91-b029-b8e3426a1b6d",
+	'instRef',
+	"d26cf195-7219-44b5-b4b4-43864cf587d8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("91a4856a-bdb9-4a8a-a858-f0c03bc3f17e",
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	'O_TPARM_ActivitiesInvocationSet',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'LOG::LogInfo(message:"Operation entered: testOperationParameter_Invalid::O_SPARM_ActivitiesInvocationSet, Matrix cell : A36 V2 I1");
+
+::EmptyInstRefSetParameterSetupTest(instSet: param.instRef_set);',
+	1,
+	'',
+	"14d5766c-50cd-4a91-b029-b8e3426a1b6d");
+INSERT INTO O_TPARM
+	VALUES ("af61b8c2-af8b-41f1-a34b-b10047a662ee",
+	"91a4856a-bdb9-4a8a-a858-f0c03bc3f17e",
+	'instRef_set',
+	"40ecf65f-aaa7-400e-beab-b95d2d98c7dd",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d");
+INSERT INTO O_ID
+	VALUES (1,
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d");
+INSERT INTO O_ID
+	VALUES (2,
+	"ea9ff432-7229-46f5-8207-9120ccdd8f2d");
+INSERT INTO PE_PE
+	VALUES ("ea9ff432-7229-46f5-8207-9120ccdd8f2d",
+	1,
+	"f0df44d5-e872-4448-8d98-f7bb6be2b9cb",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("f0df44d5-e872-4448-8d98-f7bb6be2b9cb",
+	"00000000-0000-0000-0000-000000000000",
+	"13c14d34-d225-4949-89b6-fe738cc62cbb",
+	'Subsystem',
+	'',
+	0,
+	'../Subsystem.xtuml');
