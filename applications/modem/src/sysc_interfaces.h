@@ -12,17 +12,6 @@
 
 #include "modem_sys_types.h"
 
-// messages for interface reference output (provision)
-class output_provision : virtual public sc_interface {
-  public:
-  virtual void output_process( void ) = 0;
-};
-
-// messages for interface reference output (requirement)
-class output_requirement : virtual public sc_interface {
-  public:
-};
-
 // messages for interface reference feedback (provision)
 class feedback_provision : virtual public sc_interface {
   public:
@@ -42,6 +31,17 @@ class flow_provision : virtual public sc_interface {
 
 // messages for interface reference flow (requirement)
 class flow_requirement : virtual public sc_interface {
+  public:
+};
+
+// messages for interface reference output (provision)
+class output_provision : virtual public sc_interface {
+  public:
+  virtual void output_process( void ) = 0;
+};
+
+// messages for interface reference output (requirement)
+class output_requirement : virtual public sc_interface {
   public:
 };
 
