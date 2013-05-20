@@ -1,4 +1,4 @@
--- BP 7.1 content: Component syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: Component syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO C_C
 	VALUES ("7faca62d-bd68-4fa6-8c7d-c02d7890cba2",
@@ -877,16 +877,91 @@ INSERT INTO C_I_PROXY
 	'LocationUtil',
 	'',
 	'../../LocationInterfaces/LocationUtil/LocationUtil.xtuml');
-INSERT INTO PE_PE_PROXY
+INSERT INTO PE_PE
 	VALUES ("7faca62d-bd68-4fa6-8c7d-c02d7890cba2",
 	1,
 	"2b0c8fd6-d69a-4306-9ef2-2fa3c850b738",
 	"00000000-0000-0000-0000-000000000000",
-	2,
+	2);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("2b0c8fd6-d69a-4306-9ef2-2fa3c850b738",
+	"36a41cf7-d411-488d-99fc-74866d4fea39",
+	"36a41cf7-d411-488d-99fc-74866d4fea39",
+	'Library',
+	'// ########## START OAL_1 ##########
+// always initialize data
+self.currentLocation.longitude = 0.0;
+self.currentLocation.latitude  = 0.0;
+self.currentLocation.speed     = 0.0;
+self.interval                  = 2000000;
+
+LOG::LogInfo(message: "Location listener registered.");
+
+ // start timer based on requested interval
+create event instance timeout of GPS3:timeout() to self;
+self.timer = TIM::timer_start_recurring(event_inst: timeout, microseconds: self.interval);
+// ########### END OAL_1 ###########
+
+
+
+// ########## START OAL_2 ##########
+// prepare signal data with some dummy values that change over time
+self.currentLocation.longitude = self.currentLocation.longitude + 2.0;
+self.currentLocation.latitude  = self.currentLocation.latitude  + 3.0;
+self.currentLocation.speed     = 
+                                (self.currentLocation.latitude - 
+                                 self.currentLocation.longitude) / 5.0;
+
+// pass the new location to client component
+send LocationProvider::locationUpdate(location: self.currentLocation);
+// ########### END OAL_2 ###########
+
+
+
+// ########## START OAL_3 ##########
+res = TIM::timer_cancel(timer_inst_ref: self.timer);
+// ########### END OAL_3 ###########
+
+
+
+// ########## START OAL_4 ##########
+select any gps from instances of GPS;
+if (empty gps)
+  // asynchronously create a new instance of GPS
+  generate GPS1:registerListener() to GPS creator;
+end if;
+// ########### END OAL_4 ###########
+
+
+// ########## START OAL_5 ##########
+// forward message to single instance of GPS
+select any gps from instances of GPS;
+if (not empty gps)
+  generate GPS2:unregisterListener() to gps;
+end if;
+// ########### END OAL_5 ###########
+
+
+// ########## START OAL_6 ##########
+// create an instance of the workout timer if it does not exist
+select any workoutTimer from instances of WorkoutTimer;
+if (empty workoutTimer)
+  create object instance workoutTimer of WorkoutTimer;
+end if;
+
+// forward message to the single instance of WorkoutTimer 
+generate WorkoutTimer1:startStopPressed() to workoutTimer;
+// ########### END OAL_6 ###########
+
+
+
+// ########## START OAL_7 ##########
+// print the new location to the console
+LOG::LogInfo(message: "location updated: ");
+LOG::LogReal(message: "longitude", r: param.location.longitude);
+LOG::LogReal(message: "latitude",  r: param.location.latitude );
+LOG::LogReal(message: "speed",     r: param.location.speed    );
+// ########### END OAL_7 ###########
+',
+	0,
 	'../Library.xtuml');
-INSERT INTO PE_PE
-	VALUES ("a09220a4-d685-4338-83fd-0d42f7c7e308",
-	1,
-	"00000000-0000-0000-0000-000000000000",
-	"7faca62d-bd68-4fa6-8c7d-c02d7890cba2",
-	7);
