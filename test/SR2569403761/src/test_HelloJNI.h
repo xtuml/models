@@ -9,10 +9,10 @@ extern "C" {
 #endif
 /*
  * Class:     test_HelloJNI
- * Method:    displayMessage
- * Signature: ()V
+ * Method:    getMessage
+ * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT void JNICALL Java_test_HelloJNI_displayMessage
+JNIEXPORT jstring JNICALL Java_test_HelloJNI_getMessage
   (JNIEnv *, jobject);
 
 #ifdef __cplusplus

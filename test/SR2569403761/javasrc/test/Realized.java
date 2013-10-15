@@ -3,9 +3,6 @@ package test;
 import interfaces.ITestFromProvider;
 import interfaces.ITestToProvider;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import com.mentor.nucleus.bp.core.ComponentInstance_c;
 
 public class Realized  implements ITestToProvider {
@@ -18,8 +15,8 @@ public class Realized  implements ITestToProvider {
 	}
 
 	@Override
-	public void doIt(ComponentInstance_c senderReceiver) {
-		hj.displayMessage();
+	public String doIt(ComponentInstance_c senderReceiver) {
+		return hj.getMessage();
 	}
 	
 	public void finalize() {

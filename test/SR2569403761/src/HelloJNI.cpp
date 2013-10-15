@@ -7,11 +7,10 @@
 #include <stdio.h>
 #include "test_HelloJNI.h"
 
-JNIEXPORT void JNICALL Java_test_HelloJNI_displayMessage
+JNIEXPORT jstring JNICALL Java_test_HelloJNI_getMessage
   (JNIEnv *env, jobject obj)
 {
-    printf("Hello JNI!\n");
-    fflush(stdout);
+	return env->NewStringUTF("Hello JNI.");
 }
 
 
