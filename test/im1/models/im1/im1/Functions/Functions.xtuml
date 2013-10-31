@@ -1,0 +1,243 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("f5ca0b38-0e1e-404d-90cc-61958a3c9849",
+	"00000000-0000-0000-0000-000000000000",
+	"24ff8baa-2e7a-4d72-8b45-a0892fa02782",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("4bf7eb5d-b057-412e-835a-81bba6ef02a9",
+	112,
+	"f5ca0b38-0e1e-404d-90cc-61958a3c9849",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'im1::im1::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("4bf7eb5d-b057-412e-835a-81bba6ef02a9",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("c61da038-735f-4764-b56f-b9606c0f2f22",
+	"00000000-0000-0000-0000-000000000000",
+	'test',
+	'',
+	'// No PEI to check for.  Just kick off testing.
+
+generate ICD1:''Start IC Test Suite''() to ICD creator;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("c61da038-735f-4764-b56f-b9606c0f2f22",
+	1,
+	"f5ca0b38-0e1e-404d-90cc-61958a3c9849",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f08fcb0c-3fd6-4db7-980e-7618164ac09f",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'// 
+// Check to see if any instances are already here.
+// This would mean that we have restored from NVS
+// or that preexisting instances were defined in data.
+//
+
+select many ohs from instances of OH;
+if( empty ohs )
+  LOG::LogInfo( message:"Did not find any PEI data, initializing NVS" );
+  i = NVS::format();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error formatting the NVS." );
+  end if;
+  i = NVS::version( first:1, second:2 );
+  i = NVS::checksum( first:1, second:2 );
+
+  i = PERSIST::commit();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error commiting persistence information. Error code is " );
+    LOG::LogInteger( message:i );
+  end if;
+end if;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("f08fcb0c-3fd6-4db7-980e-7618164ac09f",
+	1,
+	"f5ca0b38-0e1e-404d-90cc-61958a3c9849",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b6f60762-12d7-42a9-91d9-42e47f3eca59",
+	"00000000-0000-0000-0000-000000000000",
+	'xit',
+	'',
+	'// Erase all instances.
+
+//Erase all instances first
+select many oas from instances of OA;
+for each oa in oas;
+  
+  select many pos related by oa->PO[R7];
+  for each po in pos
+    unrelate po from oa across R7;
+  end for;
+
+  select one pob related by oa->POB[R8];
+  if( not empty pob )
+    unrelate pob from oa across R8;
+  end if;
+
+end for;
+
+select many obs from instances of OB;
+for each ob in obs
+
+  select one oc related by ob->OC[R1];
+  if( not empty oc )
+    unrelate oc from ob across R1;
+  end if;
+
+end for;
+
+select many ods from instances of OD;
+for each od in ods
+
+  select many oes related by od->OE[R2];
+  for each oe in oes
+    unrelate oe from od across R2;
+  end for;
+
+end for;
+
+select many ols from instances of OL;
+for each ol in ols
+
+  select one om related by ol->OM[R6];
+  if( not empty om )
+    unrelate om from ol across R6;
+  end if;
+
+end for;
+
+select many ohs from instances of OH;
+for each oh in ohs
+  
+  select one og related by oh->OG[R3];
+  select one of related by oh->OF[R3];
+  if( not empty og and not empty of )
+    unrelate og from of across R3 using oh;
+  end if;
+
+end for;
+
+select many pos from instances of PO;
+for each po in pos;
+  delete object instance po;
+end for;
+
+select many pobs from instances of POB;
+for each pob in pobs;
+  delete object instance pob;
+end for;
+
+select many oas from instances of OA;
+for each oa in oas;
+  delete object instance oa;
+end for;
+
+select many obs from instances of OB;
+for each ob in obs;
+  delete object instance ob;
+end for;
+
+select many ocs from instances of OC;
+for each oc in ocs;
+  delete object instance oc;
+end for;
+
+select many ods from instances of OD;
+for each od in ods;
+  delete object instance od;
+end for;
+
+select many oes from instances of OE;
+for each oe in oes;
+  delete object instance oe;
+end for;
+
+select many ofs from instances of OF;
+for each of in ofs;
+  delete object instance of;
+end for;
+
+select many ogs from instances of OG;
+for each og in ogs;
+  delete object instance og;
+end for;
+
+select many ohs from instances of OH;
+for each oh in ohs;
+  delete object instance oh;
+end for;
+
+select many ols from instances of OL;
+for each ol in ols;
+  delete object instance ol;
+end for;
+
+select many oms from instances of OM;
+for each om in oms;
+  delete object instance om;
+end for;
+
+// Shut down.
+ARCH::shutdown();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("b6f60762-12d7-42a9-91d9-42e47f3eca59",
+	1,
+	"f5ca0b38-0e1e-404d-90cc-61958a3c9849",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("f5ca0b38-0e1e-404d-90cc-61958a3c9849",
+	1,
+	"596f028f-296f-49fb-aa6e-6e728a214932",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("596f028f-296f-49fb-aa6e-6e728a214932",
+	"24ff8baa-2e7a-4d72-8b45-a0892fa02782",
+	"24ff8baa-2e7a-4d72-8b45-a0892fa02782",
+	'im1',
+	'This test deals with creating and relating instances of classes.  It also assigns values to attributes, as well as selecting instances and verifying that the assigned values are correct.  It verifies that relate has been implemented properly.',
+	0,
+	'../im1.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("24ff8baa-2e7a-4d72-8b45-a0892fa02782",
+	'im1',
+	1,
+	'../../im1.xtuml');

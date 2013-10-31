@@ -1,0 +1,226 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("630a6adc-bf6f-43dd-b6f0-7f15d212e254",
+	"00000000-0000-0000-0000-000000000000",
+	"b00ae7b2-201c-4909-924b-fc4b123a84aa",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("22a34730-9739-414e-84d8-61019714a093",
+	112,
+	"630a6adc-bf6f-43dd-b6f0-7f15d212e254",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'dogs::dogs::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("22a34730-9739-414e-84d8-61019714a093",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("f5da0c12-919f-4d20-9671-ed3c808e7afe",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'// 
+// Check to see if any instances are already here.
+// This would mean that we have restored from NVS
+// or that preexisting instances were defined in data.
+//
+
+select any cat from instances of C;
+if( empty cat )
+
+  // Initialize
+  LOG::LogInfo( message:"Did not find any PEI data, initializing NVS" );
+  i = NVS::format();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error formatting the NVS." );
+  end if;
+  i = NVS::version( first:1, second:2 );
+  i =  NVS::checksum( first:1, second:2 );
+
+  // Cats
+  create object instance c1 of C;
+  assign c1.name = "Fifi";
+  assign c1.number_legs = 4;
+
+  create object instance c2 of C;
+  assign c2.name = "Foofoo";
+  assign c2.number_legs = 4;
+
+  create object instance c3 of C;
+  assign c3.name = "Quif";
+  assign c3.number_legs = 3;
+
+  create object instance c4 of C;
+  assign c4.name = "Hairball";
+  assign c4.number_legs = 4;
+
+  create object instance c5 of C;
+  assign c5.name = "Slow";
+  assign c5.number_legs = 2;
+
+  create object instance c6 of C;
+  assign c6.name = "Dwerp";
+  assign c6.number_legs = 3;
+
+  create object instance c7 of C;
+  assign c7.name = "Mongroot";
+  assign c7.number_legs = 4;
+
+  create object instance c8 of C;
+  assign c8.name = "Ratflem";
+  assign c8.number_legs = 3;
+
+  // Dogs
+  create object instance d1 of D;
+  assign d1.name = "Rohan";
+  assign d1.number_slashes = 0;
+
+  create object instance d2 of D;
+  assign d2.name = "Oso";
+  assign d2.number_slashes = 0;
+
+  create object instance d3 of D;
+  assign d3.name = "Clifford";
+  assign d3.number_slashes = 0;
+
+  // Create the "visible cats" relationship for each dog.
+  relate d1 to c1 across R2;
+  relate d1 to c2 across R2;
+  relate d1 to c3 across R2;
+
+  relate d2 to c4 across R2;
+  relate d2 to c5 across R2;
+
+  relate d3 to c6 across R2;
+  relate d3 to c7 across R2;
+  relate d3 to c8 across R2;
+
+  // Commit everything
+  i = PERSIST::commit();
+  if( i != 0 )
+        LOG::LogFailure( message:"Error commiting persistence information. Error code:" );
+        LOG::LogInteger( message:i );
+  end if;
+else
+  LOG::LogInfo( message:"Found PEI data." );end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("f5da0c12-919f-4d20-9671-ed3c808e7afe",
+	1,
+	"630a6adc-bf6f-43dd-b6f0-7f15d212e254",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("cb080859-3f2c-4c4e-b77c-a8c6af4a596b",
+	"00000000-0000-0000-0000-000000000000",
+	'test',
+	'',
+	'// Check to make sure we have our PEI''s in place.
+select any dog from instances of D;
+if( empty dog )
+  LOG::LogFailure( message:"Failed to select any instances of D" );
+end if;
+
+select any cat from  instances of C;
+if( empty cat )
+  LOG::LogFailure( message:"Failed to select any instances of C" );
+end if;
+
+// Kick off testing.
+select any d1 from instances of D where ( selected.name == "Rohan" );
+select any d2 from instances of D where ( selected.name == "Oso" );
+select any d3 from instances of D where ( selected.name == "Clifford" );
+
+// Get some chases started
+generate D2:''cats_located''() to d1;
+generate D2:''cats_located''() to d2;
+generate D2:''cats_located''() to d3;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("cb080859-3f2c-4c4e-b77c-a8c6af4a596b",
+	1,
+	"630a6adc-bf6f-43dd-b6f0-7f15d212e254",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ec0c8759-3117-43bf-878f-448cb580ee37",
+	"00000000-0000-0000-0000-000000000000",
+	'xit',
+	'',
+	'// Get rid of all instances, so the NVS is in a consistent state.
+select many cats from instances of C;
+for each cat in cats
+   // Erase all R1 relations between cats and dogs
+   select many dogs related by cats->D[R2];
+   for each dog in dogs
+    unrelate cat from dog across R2;
+  end for;
+
+   select many dogs related by cats->D[R1];
+   for each dog in dogs
+    unrelate cat from dog across R1;
+  end for;
+
+  delete object instance cat;
+end for;
+
+// Shut down.
+
+ARCH::shutdown();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("ec0c8759-3117-43bf-878f-448cb580ee37",
+	1,
+	"630a6adc-bf6f-43dd-b6f0-7f15d212e254",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("630a6adc-bf6f-43dd-b6f0-7f15d212e254",
+	1,
+	"580213c7-63a1-4f48-8368-88e79a510ef8",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("580213c7-63a1-4f48-8368-88e79a510ef8",
+	"b00ae7b2-201c-4909-924b-fc4b123a84aa",
+	"b00ae7b2-201c-4909-924b-fc4b123a84aa",
+	'dogs',
+	'This test deals with simple relationships between two classes.
+It creates a number of instances of each class and relates them.
+The instances proceed to generate events to themselves and to one another.
+Executes unrelates between the instances.
+
+** Note this test does not use the LOG External Entity',
+	0,
+	'../dogs.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("b00ae7b2-201c-4909-924b-fc4b123a84aa",
+	'dogs',
+	1,
+	'../../dogs.xtuml');

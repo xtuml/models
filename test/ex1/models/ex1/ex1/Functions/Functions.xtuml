@@ -1,0 +1,458 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("844f1494-6d8d-4d18-896a-1a94344d24ec",
+	"00000000-0000-0000-0000-000000000000",
+	"a66acd47-2f8e-49de-a841-01bc92439ff0",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("b46e389c-b3d7-4801-9251-77c596206bfd",
+	112,
+	"844f1494-6d8d-4d18-896a-1a94344d24ec",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'ex1::ex1::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("b46e389c-b3d7-4801-9251-77c596206bfd",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("42920866-91cc-4ac0-aca7-03ad124031b8",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'// 
+// Check to see if any instances are already here.
+// This would mean that we have restored from NVS
+// or that preexisting instances were defined in data.
+//
+LOG::LogInfo(message:"in setup") ;
+select many evs from instances of EV;
+if( empty evs )
+
+
+  LOG::LogInfo( message:"Did not find any PEI data, initializing NVS" );
+  i = NVS::format();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error formatting the NVS." );
+  end if;
+  i = NVS::version( first:1, second:2 );
+  i = NVS::checksum( first:1, second:2 );
+
+  // create preexisting instances
+  create object instance ev of EV;
+  assign ev.shutdown_count = 3;
+  create object instance et of ET;
+  assign et.btrue = TRUE;
+  assign et.et_id = 1;
+  create object instance one_inst of OI;
+  relate et to one_inst across R3;
+  create object instance mi1 of MI;
+  relate et to mi1 across R4;
+  create object instance mi2 of MI;
+  relate et to mi2 across R4;
+
+  create object instance etob1 of ETOB;
+  assign etob1.etob_id = 2;
+  assign etob1.r = 2.1718;
+  assign etob1.btrue = TRUE;
+  assign etob1.bfalse = FALSE;
+  assign etob1.s = "etob1 string";
+  bridge etob1.d = TIM::create_date(second:17,minute:7,hour:13,day:9,month:8,year:1991);
+  select any event_instance from instances of EV;
+  create event instance ev_temp of EV1:''Event Instance''(message:"etob1 event instance") to      event_instance;
+  assign etob1.ev = ev_temp;
+  bridge etob1.tim = TIM::timer_start ( microseconds:2000000, event_inst:ev_temp);
+  relate et to etob1 across R1;
+  relate et to etob1 across R8;
+  create object instance etob2 of ETOB;
+  assign etob2.etob_id = 3;
+  assign etob2.r = 1.616;
+  assign etob2.btrue = TRUE;
+  assign etob2.bfalse = FALSE;
+  assign etob2.s = "etob2 string";
+  relate et to etob2 across R8;
+
+  create object instance etoc of ETOC;
+  assign etoc.etoc_id = 4;
+  assign etoc.r = 11.311;
+  assign etoc.btrue = TRUE;
+  assign etoc.bfalse = FALSE;
+  assign etoc.s = "etoc string";
+  bridge etoc.d = TIM::create_date(second:10,minute:0,hour:0,day:13,month:12,year:1997);
+  create event instance ev_temp2 of EV1:''Event Instance''(message:"etoc event instance") to   event_instance;
+  assign etoc.ev = ev_temp2;
+  bridge etoc.tim = TIM::timer_start ( microseconds:2000000, event_inst:ev_temp2);
+
+  relate etob1 to etoc across R6;
+  create object instance etoc2 of ETOC;
+  assign etoc2.etoc_id = 5;
+  assign etoc2.r = 17.311;
+  assign etoc2.btrue = TRUE;
+  assign etoc2.bfalse = FALSE;
+  assign etoc2.s = "etoc2 string";
+  relate etob2 to etoc2 across R6;
+
+  create object instance bet of BET;
+  assign bet.btrue = TRUE;
+  assign bet.bfalse = FALSE;
+  create object instance obet1 of OBET;
+  assign obet1.btrue = TRUE;
+  assign obet1.bfalse = FALSE;
+  relate bet to obet1 across R9;
+  relate bet to obet1 across R10;
+  create object instance obet2 of OBET;
+  assign obet2.btrue = TRUE;
+  assign obet2.bfalse = FALSE;
+  relate bet to obet2 across R10;
+  create object instance tbet1 of TBET;
+  assign tbet1.btrue = TRUE;
+  assign tbet1.bfalse = FALSE;
+  relate tbet1 to obet1 across R11;
+  create object instance tbet2 of TBET;
+  assign tbet2.btrue = TRUE;
+  assign tbet2.bfalse = FALSE;
+  relate tbet2 to obet2 across R11;
+
+  create object instance ubt of UBT;
+  assign ubt.btrue = TRUE;
+  assign ubt.bfalse = FALSE;
+
+  create object instance uobt1 of UOBT;
+  assign uobt1.btrue = TRUE;
+  assign uobt1.bfalse = FALSE;
+  relate ubt to uobt1 across R12;
+  relate ubt to uobt1 across R13;
+
+  create object instance uobt2 of UOBT;
+  assign uobt2.btrue = TRUE;
+  assign uobt2.bfalse = FALSE;
+  relate ubt to uobt2 across R13;
+
+  create object instance utbt1 of UTBT;
+  assign utbt1.btrue = TRUE;
+  assign utbt1.bfalse = FALSE;
+  relate utbt1 to uobt1 across R14;
+
+  create object instance utbt2 of UTBT;
+  assign utbt2.btrue = TRUE;
+  assign utbt2.bfalse = FALSE;
+  relate utbt2 to uobt2 across R14;
+
+
+  // no instances of NOI should be created
+
+  i = PERSIST::commit();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error commiting persistence information. Error code is " );
+    LOG::LogInteger( message:i );
+  end if;
+else
+  LOG::LogInfo( message:"Found PEI data." );
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("42920866-91cc-4ac0-aca7-03ad124031b8",
+	1,
+	"844f1494-6d8d-4d18-896a-1a94344d24ec",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b94a88a9-b95e-4acb-acec-bbecde545436",
+	"00000000-0000-0000-0000-000000000000",
+	'test',
+	'',
+	'// Check that the PEI is here.
+
+select many evs from instances of EV;
+if( empty evs )
+  LOG::LogFailure( message:"Failed to select an instance of EV" );
+end if;
+
+select many ets from instances of ET;
+if( empty ets )
+  LOG::LogFailure( message:"Failed to select an instance of ET" );
+end if;
+
+select many ois from instances of OI;
+if( empty ois )
+  LOG::LogFailure( message:"Failed to select an instance of OI" );
+end if;
+
+select many mi1s from instances of MI;
+if( empty mi1s )
+  LOG::LogFailure( message:"Failed to select an instance of MI" );
+end if;
+
+select many etobs from instances of ETOB;
+if( empty etobs )
+  LOG::LogFailure( message:"Failed to select an instance of ETOB" );
+end if;
+
+select many etocs from instances of ETOC;
+if( empty etocs )
+  LOG::LogFailure( message:"Failed to select an instance of ETOC" );
+end if;
+
+select many bets from instances of BET;
+if( empty bets )
+  LOG::LogFailure( message:"Failed to select an instance of BET" );
+end if;
+
+select many obets from instances of OBET;
+if( empty obets )
+  LOG::LogFailure( message:"Failed to select an instance of OBET" );
+end if;
+
+select many tbets from instances of TBET;
+if( empty tbets )
+  LOG::LogFailure( message:"Failed to select an instance of TBET" );
+end if;
+
+select many ubts from instances of UBT;
+if( empty ubts )
+  LOG::LogFailure( message:"Failed to select an instance of UBT" );
+end if;
+
+select many uobts from instances of UOBT;
+if( empty uobts )
+  LOG::LogFailure( message:"Failed to select an instance of UOBT" );
+end if;
+
+select many utbts from instances of UTBT;
+if( empty utbts )
+  LOG::LogFailure( message:"Failed to select an instance of UTBT" );
+end if;
+
+// start the expression test
+for each et in ets
+  generate ET1:''Start Expression Test''() to et;
+end for;
+
+for each bet in  bets
+  generate BET1:''Start and test''( ttrue: true, tfalse: false) to bet;
+end for;
+
+for each ubt in ubts
+  generate UBT1:''Start and test''( ttrue: true, tfalse: false) to ubt;
+end for;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("b94a88a9-b95e-4acb-acec-bbecde545436",
+	1,
+	"844f1494-6d8d-4d18-896a-1a94344d24ec",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ce1fa850-87c8-4144-a012-5235547d022c",
+	"00000000-0000-0000-0000-000000000000",
+	'xit',
+	'',
+	'// Erase the instance data.
+
+// First unrelate everything.
+select many uobts from instances of UOBT;
+for each uobt in uobts
+  
+  select one ubt related by uobt->UBT[R12];
+  if( not empty ubt)
+    unrelate uobt from ubt across R12;
+  end if;
+
+  select one obt related by uobt->UBT[R13];
+  if( not empty obt)
+    unrelate uobt from obt across R12;
+  end if;
+
+  select one utbt related by uobt->UTBT[R14];
+  if( not empty utbt)
+    unrelate uobt from utbt across R14;
+  end if;
+
+end for;
+
+select many obets from instances of OBET;
+for each obet in obets
+  
+  select one bet related by obet->BET[R9];
+  if( not empty bet)
+    unrelate bet from obet across R9;
+  end if;
+
+  select one bet related by obet->BET[R10];
+  if( not empty bet)
+    unrelate bet from obet across R10;
+  end if;
+
+  select one tbet related by obet->TBET[R11];
+  if( not empty tbet)
+    unrelate tbet from obet across R11;
+  end if;
+
+end for;
+
+select many ets from instances of ET;
+for each et in ets
+  
+  select many nois related by et->NOI[R2];
+  for each noi in nois
+    unrelate et from noi across R2;
+  end for;
+
+  select one noi related by et->NOI[R5];
+  if( not empty noi )
+    unrelate et from noi across R5;
+  end if;
+
+  select one oi related by et->OI[R3];
+  if( not empty oi )
+    unrelate oi from et across R3;
+  end if;
+
+  select many mis  related by et->MI[R4];
+  for each mi in mis
+    unrelate mi from et across R4;
+  end for;
+
+end for;
+
+select many etobs from instances of ETOB;
+for each etob in etobs
+
+  select one et related by etob->ET[R1];
+  if( not empty et )
+    unrelate et from etob across R1;
+  end if;
+
+  select one et related by etob->ET[R1];
+  if( not empty et )
+    unrelate et from etob across R8;
+  end if;
+end for;
+
+// Now erase everything
+select many ets from instances of ET;
+for each et in ets
+  delete object instance et;
+end for;
+
+select many aos from instances of AO;
+for each ao in aos
+  delete object instance ao;
+end for;
+
+select many nois from instances of NOI;
+for each noi in nois
+  delete object instance noi;
+end for;
+
+select many mis from instances of MI;
+for each mi in mis
+  delete object instance mi;
+end for;
+
+select many etobs from instances of ETOB;
+for each etob in etobs
+  delete object instance etob;
+end for;
+
+select many ubts from instances of UBT;
+for each ubt in ubts
+  delete object instance ubt;
+end for;
+
+select many bets from instances of BET;
+for each bet in bets
+  delete object instance bet;
+end for;
+
+select many uobts from instances of UOBT;
+for each uobt in uobts
+  delete object instance uobt;
+end for;
+
+select many obets from instances of OBET;
+for each obet in obets
+  delete object instance obet;
+end for;
+
+select many utbts from instances of UTBT;
+for each utbt in utbts
+  delete object instance utbt;
+end for;
+
+select many tbets from instances of TBET;
+for each tbet in tbets
+  delete object instance tbet;
+end for;
+
+select many ets from instances of ET;
+for each et in ets
+  delete object instance et;
+end for;
+
+select many evs from instances of EV;
+for each ev in evs
+  delete object instance ev;
+end for;
+
+// Shut down.
+ARCH::shutdown();
+
+
+
+
+
+
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("ce1fa850-87c8-4144-a012-5235547d022c",
+	1,
+	"844f1494-6d8d-4d18-896a-1a94344d24ec",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("844f1494-6d8d-4d18-896a-1a94344d24ec",
+	1,
+	"03d38466-c543-4d73-b3f8-e7db45c00aaa",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("03d38466-c543-4d73-b3f8-e7db45c00aaa",
+	"a66acd47-2f8e-49de-a841-01bc92439ff0",
+	"a66acd47-2f8e-49de-a841-01bc92439ff0",
+	'ex1',
+	'',
+	0,
+	'../ex1.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("a66acd47-2f8e-49de-a841-01bc92439ff0",
+	'ex1',
+	1,
+	'../../ex1.xtuml');
