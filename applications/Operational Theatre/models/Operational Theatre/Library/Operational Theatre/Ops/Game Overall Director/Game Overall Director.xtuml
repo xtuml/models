@@ -1,0 +1,226 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("eb969b2e-33af-407e-a973-ed5d57ca162b",
+	'Game Overall Director',
+	6,
+	'GD',
+	'This class manages the progress of the game.
+
+Each time the ''nextPhase'' function is invoked, the game proceeds through the following
+stages:
+
+1) Board initialization.
+2) Defense set up
+   - Collect team name.
+   - Iterate collecting fleet deployment data.
+   - Send endDeployment siganl
+3) Attack set up and game play
+   - Collect team name.
+   - Send begin salvo signal.
+   - Iterate waiting for shot, processing result and sending result to attacking team.
+   - Send game_over signal.
+4) Return to idle state, ready to start at game phase 1 again.
+
+This process is controlled by a class state machine.',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("671446f1-3a25-405e-a3cb-f3406dd81db3",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b",
+	'get_hull_size',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'type = self.get_vessel_type();
+if type == VesselType::Submarine
+  return 1;
+elif  type == VesselType::Destroyer
+  return 2;
+elif  type == VesselType::Battleship
+  return 3;
+elif  type == VesselType::Carrier
+  return 4;
+else
+  return 5;
+end if;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("52c4607a-41ae-4ca7-8b5d-0a7765d1d40c",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b",
+	'get_offset',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'if self.get_hull_size() == 1
+  return 0;
+elif  self.get_hull_size() == 2
+  return 0;
+elif  self.get_hull_size() == 3
+  return 1;
+elif  self.get_hull_size() == 4
+  return 1;
+else
+  return 2;
+end if;',
+	1,
+	'',
+	"671446f1-3a25-405e-a3cb-f3406dd81db3");
+INSERT INTO O_TFR
+	VALUES ("f8b4e5eb-bb35-426a-bcaa-19c3171fb88f",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b",
+	'get_vessel_type',
+	'',
+	"5a67badb-290a-44ec-8016-522c99b52c50",
+	1,
+	'if self.vessel_count == 1
+  return VesselType::Submarine;
+elif  self.vessel_count == 2
+  return VesselType::Submarine;
+elif  self.vessel_count == 3
+  return VesselType::Destroyer;
+elif  self.vessel_count == 4
+  return VesselType::Destroyer;
+elif  self.vessel_count == 5
+  return VesselType::Battleship;
+elif  self.vessel_count == 6
+  return VesselType::Carrier;
+else
+  return VesselType::None;
+end if;',
+	1,
+	'',
+	"52c4607a-41ae-4ca7-8b5d-0a7765d1d40c");
+INSERT INTO S_DT_PROXY
+	VALUES ("5a67badb-290a-44ec-8016-522c99b52c50",
+	"00000000-0000-0000-0000-000000000000",
+	'VesselType',
+	'',
+	'',
+	'../../../../Interfaces/Interfaces.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("f878a27c-9dba-4c5b-a84f-2892f6b9b2fc",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_BATTR
+	VALUES ("f878a27c-9dba-4c5b-a84f-2892f6b9b2fc",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_ATTR
+	VALUES ("f878a27c-9dba-4c5b-a84f-2892f6b9b2fc",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b",
+	"337c7e13-28a3-4e1a-99ec-76d89b414644",
+	'salvo_count',
+	'',
+	'',
+	'salvo_count',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("337c7e13-28a3-4e1a-99ec-76d89b414644",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_BATTR
+	VALUES ("337c7e13-28a3-4e1a-99ec-76d89b414644",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_ATTR
+	VALUES ("337c7e13-28a3-4e1a-99ec-76d89b414644",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b",
+	"00000000-0000-0000-0000-000000000000",
+	'director_id',
+	'',
+	'',
+	'director_id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("2aa03207-f745-4e2f-b395-164f5dc0f987",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_BATTR
+	VALUES ("2aa03207-f745-4e2f-b395-164f5dc0f987",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_ATTR
+	VALUES ("2aa03207-f745-4e2f-b395-164f5dc0f987",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b",
+	"f878a27c-9dba-4c5b-a84f-2892f6b9b2fc",
+	'vessel_count',
+	'',
+	'',
+	'vessel_count',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("a05bbeeb-e743-403c-9a13-5e9f8039770a",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_BATTR
+	VALUES ("a05bbeeb-e743-403c-9a13-5e9f8039770a",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_ATTR
+	VALUES ("a05bbeeb-e743-403c-9a13-5e9f8039770a",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b",
+	"2aa03207-f745-4e2f-b395-164f5dc0f987",
+	'attackTeam_id',
+	'',
+	'',
+	'attackTeam_id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e63ca8e6-ebb0-4219-b9c4-584f05864a8e",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_BATTR
+	VALUES ("e63ca8e6-ebb0-4219-b9c4-584f05864a8e",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_ATTR
+	VALUES ("e63ca8e6-ebb0-4219-b9c4-584f05864a8e",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b",
+	"a05bbeeb-e743-403c-9a13-5e9f8039770a",
+	'default_details',
+	'',
+	'',
+	'default_details',
+	0,
+	"f53ab3e7-ad65-400c-b20f-531ce078f817",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("f53ab3e7-ad65-400c-b20f-531ce078f817",
+	"00000000-0000-0000-0000-000000000000",
+	'VesselDetails',
+	'',
+	'',
+	'../../../../Interfaces/Interfaces.xtuml');
+INSERT INTO O_ID
+	VALUES (0,
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_OIDA
+	VALUES ("337c7e13-28a3-4e1a-99ec-76d89b414644",
+	"eb969b2e-33af-407e-a973-ed5d57ca162b",
+	0,
+	'director_id');
+INSERT INTO O_ID
+	VALUES (1,
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO O_ID
+	VALUES (2,
+	"eb969b2e-33af-407e-a973-ed5d57ca162b");
+INSERT INTO PE_PE
+	VALUES ("eb969b2e-33af-407e-a973-ed5d57ca162b",
+	1,
+	"8b250193-333c-405b-abd1-1d8a291fca8e",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b250193-333c-405b-abd1-1d8a291fca8e",
+	"00000000-0000-0000-0000-000000000000",
+	"e4cb7876-bb51-4bcd-962a-332ff48c3ba4",
+	'Ops',
+	'',
+	0,
+	'../Ops.xtuml');

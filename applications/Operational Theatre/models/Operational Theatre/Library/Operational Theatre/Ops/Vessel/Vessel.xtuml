@@ -1,0 +1,110 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("3e8eba31-f9a1-42cf-81e7-de004ba4e800",
+	'Vessel',
+	5,
+	'VESSEL',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("2aeb78fe-bf8a-470d-99f2-573db2b17772",
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800",
+	'is_sunk',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'select many cells related by self->OCELL[R5];
+return cardinality cells == 0;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("7a32542a-ec11-4150-a5d0-61edc0f9ef0b",
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800",
+	'get_details',
+	'',
+	"f53ab3e7-ad65-400c-b20f-531ce078f817",
+	1,
+	'details = self.details;
+if not self.is_sunk()
+  details.type = VesselType::None;
+  details.orientation = Orientation::N_S;
+  details.position.row = 0;
+  details.position.column = 0;
+end if;
+return details;',
+	1,
+	'',
+	"2aeb78fe-bf8a-470d-99f2-573db2b17772");
+INSERT INTO S_DT_PROXY
+	VALUES ("f53ab3e7-ad65-400c-b20f-531ce078f817",
+	"00000000-0000-0000-0000-000000000000",
+	'VesselDetails',
+	'',
+	'',
+	'../../../../Interfaces/Interfaces.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("01f856eb-8945-40de-867e-86063cd98ef5",
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800");
+INSERT INTO O_BATTR
+	VALUES ("01f856eb-8945-40de-867e-86063cd98ef5",
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800");
+INSERT INTO O_ATTR
+	VALUES ("01f856eb-8945-40de-867e-86063cd98ef5",
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800",
+	"00000000-0000-0000-0000-000000000000",
+	'vessel_id',
+	'',
+	'',
+	'vessel_id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("de85f574-fd97-448f-87aa-0570678f13cd",
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800");
+INSERT INTO O_BATTR
+	VALUES ("de85f574-fd97-448f-87aa-0570678f13cd",
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800");
+INSERT INTO O_ATTR
+	VALUES ("de85f574-fd97-448f-87aa-0570678f13cd",
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800",
+	"01f856eb-8945-40de-867e-86063cd98ef5",
+	'details',
+	'',
+	'',
+	'details',
+	0,
+	"f53ab3e7-ad65-400c-b20f-531ce078f817",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800");
+INSERT INTO O_OIDA
+	VALUES ("01f856eb-8945-40de-867e-86063cd98ef5",
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800",
+	0,
+	'vessel_id');
+INSERT INTO O_ID
+	VALUES (1,
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800");
+INSERT INTO O_ID
+	VALUES (2,
+	"3e8eba31-f9a1-42cf-81e7-de004ba4e800");
+INSERT INTO PE_PE
+	VALUES ("3e8eba31-f9a1-42cf-81e7-de004ba4e800",
+	1,
+	"8b250193-333c-405b-abd1-1d8a291fca8e",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b250193-333c-405b-abd1-1d8a291fca8e",
+	"00000000-0000-0000-0000-000000000000",
+	"e4cb7876-bb51-4bcd-962a-332ff48c3ba4",
+	'Ops',
+	'',
+	0,
+	'../Ops.xtuml');

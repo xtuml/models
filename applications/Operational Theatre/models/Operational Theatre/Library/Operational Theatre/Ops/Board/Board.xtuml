@@ -1,0 +1,107 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("1b580082-863a-419c-a45c-04ca7c80b5e0",
+	'Board',
+	1,
+	'BRD',
+	'Represents the game playing board. Attacking teams must also maintain their own representations of the board,
+since the state of this one is hidden from them.
+
+It is worth noting that the requirements on this board differ from those of both the attacking and defending
+components. Here, we need to track what ships have been hit, but we do not need to record which squares have
+been already used. A shot sent to the same square a second time will elicit the same response and is effectively
+wasted.
+
+The board is made up of 100 cell instances, laid out in 10 rows of 10 cells. No attempt has been made to model
+the rows or columns of the board, since we are only interested in locating which cells are occupied.',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("3ae1d91b-f950-41a7-af8f-1b7d197b73ae",
+	"1b580082-863a-419c-a45c-04ca7c80b5e0",
+	'initialize',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Board.initialize()
+BOARD_SIZE = 10;
+
+row = 0;
+select many cells related by self->CELL[R1];
+for each cell in cells
+  select one ucell related by cell->UCELL[R2];
+  if not_empty ucell
+    delete object instance ucell;
+  end if;
+  select one ocell related by cell->OCELL[R2];
+  if not_empty ocell
+    delete object instance ocell;
+  end if;
+  delete object instance cell;
+end for;
+while row < BOARD_SIZE
+  column = 0;
+  while column < BOARD_SIZE
+    create object instance cell of CELL;
+    // initialize identifier
+    cell.row = row;
+    cell.column = column;
+    // initialize coordinate
+    cell.cell.row = row;
+    cell.cell.column = column;
+    create object instance ucell of UCELL;
+    relate cell to self across R1;
+    relate cell to ucell across R2;
+    column = column + 1;
+  end while;
+  row = row + 1;
+end while;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("515e4621-19ae-4de0-94cd-a256687de31a",
+	"1b580082-863a-419c-a45c-04ca7c80b5e0");
+INSERT INTO O_BATTR
+	VALUES ("515e4621-19ae-4de0-94cd-a256687de31a",
+	"1b580082-863a-419c-a45c-04ca7c80b5e0");
+INSERT INTO O_ATTR
+	VALUES ("515e4621-19ae-4de0-94cd-a256687de31a",
+	"1b580082-863a-419c-a45c-04ca7c80b5e0",
+	"00000000-0000-0000-0000-000000000000",
+	'team_id',
+	'',
+	'',
+	'team_id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"1b580082-863a-419c-a45c-04ca7c80b5e0");
+INSERT INTO O_OIDA
+	VALUES ("515e4621-19ae-4de0-94cd-a256687de31a",
+	"1b580082-863a-419c-a45c-04ca7c80b5e0",
+	0,
+	'team_id');
+INSERT INTO O_ID
+	VALUES (1,
+	"1b580082-863a-419c-a45c-04ca7c80b5e0");
+INSERT INTO O_ID
+	VALUES (2,
+	"1b580082-863a-419c-a45c-04ca7c80b5e0");
+INSERT INTO PE_PE
+	VALUES ("1b580082-863a-419c-a45c-04ca7c80b5e0",
+	1,
+	"8b250193-333c-405b-abd1-1d8a291fca8e",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b250193-333c-405b-abd1-1d8a291fca8e",
+	"00000000-0000-0000-0000-000000000000",
+	"e4cb7876-bb51-4bcd-962a-332ff48c3ba4",
+	'Ops',
+	'',
+	0,
+	'../Ops.xtuml');

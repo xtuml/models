@@ -1,0 +1,221 @@
+-- BP 7.1.6 content: Component syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO C_C
+	VALUES ("b8db2844-605d-4f87-91a1-cca14ab37e88",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Attack33',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'');
+INSERT INTO C_PO
+	VALUES ("4691afc6-0f05-4c2a-9be1-9c456285979a",
+	"b8db2844-605d-4f87-91a1-cca14ab37e88",
+	'Attack_Port',
+	0,
+	0);
+INSERT INTO C_IR
+	VALUES ("76663576-f0da-42a9-9ec2-8fd0043e0135",
+	"850b345e-09ce-4682-8a3a-bc0f54aa57e7",
+	"00000000-0000-0000-0000-000000000000",
+	"4691afc6-0f05-4c2a-9be1-9c456285979a");
+INSERT INTO C_R
+	VALUES ("76663576-f0da-42a9-9ec2-8fd0043e0135",
+	'Attack',
+	'',
+	'Unnamed Interface',
+	'Attack33::Attack_Port::Attack');
+INSERT INTO SPR_REP
+	VALUES ("3c39df6f-f56d-47d2-b8b4-e0e77cd8b046",
+	"afa51193-296c-499a-b466-b1d45657983a",
+	"76663576-f0da-42a9-9ec2-8fd0043e0135");
+INSERT INTO SPR_RS
+	VALUES ("3c39df6f-f56d-47d2-b8b4-e0e77cd8b046",
+	'initialize',
+	'',
+	'create object instance Board of Board;
+Board.position_counter = 0;
+Board.destroyed = 0;
+row = 0;
+column = 0;
+while (row < 10)
+	while (column < 10)
+		create object instance Position of Position;
+		Position.row = row;
+		Position.column = column;
+		create object instance UnfiredPosition of UnfiredPosition;
+		relate Position to UnfiredPosition across R5;
+		relate Board to Position across R2.''consists of'';
+		column = column + 1;
+	end while;
+	column = 0;
+	row = row + 1;
+end while;
+
+send Attack_Port::ready_to_play(teamName:"33");',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("afa51193-296c-499a-b466-b1d45657983a",
+	"00000000-0000-0000-0000-000000000000",
+	-1,
+	'initialize',
+	'',
+	'../../Interfaces/Attack/Attack.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("0ddf5b86-038b-404e-b7ef-4541eac55ead",
+	"25a5c6b7-a148-4fab-9642-4ffb5cfd4d11",
+	"76663576-f0da-42a9-9ec2-8fd0043e0135");
+INSERT INTO SPR_RS
+	VALUES ("0ddf5b86-038b-404e-b7ef-4541eac55ead",
+	'ready_to_play',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("25a5c6b7-a148-4fab-9642-4ffb5cfd4d11",
+	"00000000-0000-0000-0000-000000000000",
+	-1,
+	'ready_to_play',
+	'',
+	'../../Interfaces/Attack/Attack.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("f52bc7f9-df8e-4d3b-974c-b8b13df08740",
+	"a9d2120f-0c4b-4067-8b38-02dea70cb26d",
+	"76663576-f0da-42a9-9ec2-8fd0043e0135");
+INSERT INTO SPR_RS
+	VALUES ("f52bc7f9-df8e-4d3b-974c-b8b13df08740",
+	'begin_salvo',
+	'',
+	'create object instance Salvo of Salvo;
+
+created_shots = 0;
+while (created_shots < param.number_of_shots)
+	create object instance Shot of Shot;
+	create object instance UnfiredShot of UnfiredShot;
+	relate Shot to UnfiredShot across R3;
+	relate Salvo to Shot across R1.''provides'';
+	created_shots = created_shots + 1;
+end while;
+
+select any Board from instances of Board;
+if (not_empty Board)
+	generate Board1:SalvoReceived() to Board;
+end if;',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("a9d2120f-0c4b-4067-8b38-02dea70cb26d",
+	"00000000-0000-0000-0000-000000000000",
+	-1,
+	'begin_salvo',
+	'',
+	'../../Interfaces/Attack/Attack.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("8bae5690-5c56-438c-9f32-47763ac1202e",
+	"9c60ba44-72b3-487d-817e-090a2897bfe3",
+	"76663576-f0da-42a9-9ec2-8fd0043e0135");
+INSERT INTO SPR_RS
+	VALUES ("8bae5690-5c56-438c-9f32-47763ac1202e",
+	'shot',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("9c60ba44-72b3-487d-817e-090a2897bfe3",
+	"00000000-0000-0000-0000-000000000000",
+	-1,
+	'shot',
+	'',
+	'../../Interfaces/Attack/Attack.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("28547ed6-6b22-4795-8d0c-ad663ba52998",
+	"b968343a-9d36-4a21-95d6-71a1157d1739",
+	"76663576-f0da-42a9-9ec2-8fd0043e0135");
+INSERT INTO SPR_RS
+	VALUES ("28547ed6-6b22-4795-8d0c-ad663ba52998",
+	'result',
+	'',
+	'select any Board from instances of Board;
+if (not_empty Board)
+	generate Board2:ReceiveOutcome(outcome:param.hit, coordinate:param.cell) to Board;
+end if;',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("b968343a-9d36-4a21-95d6-71a1157d1739",
+	"00000000-0000-0000-0000-000000000000",
+	-1,
+	'result',
+	'',
+	'../../Interfaces/Attack/Attack.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("370da420-dc48-4034-b0ca-e95976e285c4",
+	"30bb6a85-6568-46e5-bb9f-f8db8f8864d4",
+	"76663576-f0da-42a9-9ec2-8fd0043e0135");
+INSERT INTO SPR_RS
+	VALUES ("370da420-dc48-4034-b0ca-e95976e285c4",
+	'end_salvo',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("30bb6a85-6568-46e5-bb9f-f8db8f8864d4",
+	"00000000-0000-0000-0000-000000000000",
+	-1,
+	'end_salvo',
+	'',
+	'../../Interfaces/Attack/Attack.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("e86bcdc1-11fa-4a07-a44b-e78644096c45",
+	"7e1ea126-d5b1-45ae-8f3b-195513c995e9",
+	"76663576-f0da-42a9-9ec2-8fd0043e0135");
+INSERT INTO SPR_RS
+	VALUES ("e86bcdc1-11fa-4a07-a44b-e78644096c45",
+	'end_game',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("7e1ea126-d5b1-45ae-8f3b-195513c995e9",
+	"00000000-0000-0000-0000-000000000000",
+	-1,
+	'end_game',
+	'',
+	'../../Interfaces/Attack/Attack.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("ea1c772b-2cd7-4682-a424-0b0c236ba82d",
+	"d5c006a2-aeed-401a-a538-3bae15c5132b",
+	"76663576-f0da-42a9-9ec2-8fd0043e0135");
+INSERT INTO SPR_RO
+	VALUES ("ea1c772b-2cd7-4682-a424-0b0c236ba82d",
+	'random',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("d5c006a2-aeed-401a-a538-3bae15c5132b",
+	"00000000-0000-0000-0000-000000000000",
+	-1,
+	'random',
+	'',
+	'../../Interfaces/Attack/Attack.xtuml');
+INSERT INTO C_I_PROXY
+	VALUES ("850b345e-09ce-4682-8a3a-bc0f54aa57e7",
+	"00000000-0000-0000-0000-000000000000",
+	'Attack',
+	'',
+	'../../Interfaces/Attack/Attack.xtuml');
+INSERT INTO PE_PE
+	VALUES ("b8db2844-605d-4f87-91a1-cca14ab37e88",
+	1,
+	"a26ea999-1884-4b7a-be29-b83531fef001",
+	"00000000-0000-0000-0000-000000000000",
+	2);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a26ea999-1884-4b7a-be29-b83531fef001",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Library',
+	'',
+	0,
+	'../Library.xtuml');
