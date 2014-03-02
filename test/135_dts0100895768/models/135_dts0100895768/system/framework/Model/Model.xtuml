@@ -24,7 +24,7 @@ INSERT INTO GD_MD
 	200,
 	150,
 	0,
-	'4.1.1',
+	'4.1.0',
 	'135_dts0100895768::system::framework::Model');
 INSERT INTO GD_GE
 	VALUES ("3060f836-0956-4ae6-84b3-1029ba188338",
@@ -2030,7 +2030,7 @@ INSERT INTO O_OBJ_PROXY
 	VALUES ("4e52ce01-6c83-48ec-95fd-4d1f15d64a31",
 	'Exam',
 	7,
-	'KEY',
+	'Exam',
 	'',
 	"00000000-0000-0000-0000-000000000000",
 	'./Exam/Exam.xtuml');
@@ -2045,57 +2045,95 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'runTes',
 	'',
-	'create object instance subject1 of Subject;
+	'create object instance college of College;
+create object instance Anothercollege of College;
+
+create object instance subject1 of Subject;
 create object instance subject2 of Subject;
 create object instance subject3 of Subject;
 
-//select many subs from Subject;
-
-
+create object instance exam1_to_2 of Exam;
+create object instance exam2_to_3 of Exam;
 create object instance student1 of Student;
+
 create object instance student2 of Student;
-/*create object instance student3 of Student;
+create object instance student3 of Student;
 create object instance student4 of Student;
 create object instance student5 of Student;
-create object instance student6 of Student;*/
-
-student1.name = "Tom";
-student1.age = 19;
-/*student2.name = "Harry";
-student3.name = "Susan";
-student4.name = "Sally";
-student5.name = "Gourge";
-student6.name = "Luci";
-
-student2.age = 21;
-student3.age = 20;
-student4.age = 20;
-student5.age = 21;
-student6.age = 23;*/
-
-////////////////////////////////
+create object instance student6 of Student;
 
 create object instance teacher1 of Teacher;
 create object instance teacher2 of Teacher;
 
-teacher1.name = "me";
-teacher2.name = "sd";
+exam1_to_2.duration = 2;
+exam2_to_3.duration  = 4;
 
 
-subject1.name = "Algebra";
-subject2.name = "Chemistry";
+create object instance class1 of Classes;
+create object instance class2 of Classes;
+create object instance class3 of Classes;
+create object instance class4 of Classes;
+
+
+
+
+relate subject1 to subject2 across R7.''Prerequisite'' using exam1_to_2; 
+
+relate subject2 to subject3 across R7.''Prerequisite'' using exam2_to_3; 
+
+
+student1.name = "student1";
+student2.name = "student2";
+student3.name = "student4";
+student4.name = "student4";
+student5.name = "student5";
+student6.name = "student6";
+
+student1.age = 19;
+student2.age = 21;
+student3.age = 20;
+student4.age = 20;
+student5.age = 21;
+student6.age = 23;
+
+student1.Student_ID = 1;
+student2.Student_ID = 2;
+student3.Student_ID = 3;
+student4.Student_ID = 4;
+student5.Student_ID = 5;
+student6.Student_ID = 6;
+
+
+teacher1.name = "Teacher1";
+teacher2.name = "Teacher2";
+
+subject1.name = "subject1";
+subject2.name = "subject2";
+subject3.name = "subject3";
 subject1.credit_hours = 16;
-subject1.credit_hours = 12;
+subject2.credit_hours = 12;
+subject3.credit_hours = 14;
+
+relate student1 to class1 across R5;
+relate student2 to class2 across R5;
+relate student3 to class3 across R5;
+relate student4 to class4 across R5;
+
+
+relate student1 to college across R3;
+relate student1 to Anothercollege across R3;
+relate student2 to college across R3;
+relate student3 to college across R3;
+relate student4 to college across R3;
+relate student5 to college across R3;
+relate student6 to college across R3;
 
 
 relate student1 to teacher1 across R1 using subject1;
 relate student1 to teacher2 across R1 using subject2;
 relate student1 to teacher2 across R1 using subject3;
 
-create object instance class1 of Classes;
-create object instance class2 of Classes;
-create object instance class3 of Classes;
-create object instance class4 of Classes;
+
 
 class1.class_number = 1;
 class2.class_number = 2;
@@ -2103,69 +2141,35 @@ class3.class_number = 3;
 class4.class_number = 4;
 
 relate student1 to class1 across R5;
-relate student1 to class2 across R5;
-//relate student1 to class1 across R5;W
-//relate student2 to class2 across R5;
-
-
-create object instance temp1 of Temp;
-temp1.No = 11;
-relate student1 to temp1 across R7;
-create object instance temp1 of Temp; 
-relate student1 to temp1 across R7;
-temp1.No = 12;
-create object instance temp2 of Temp;
-relate student2 to temp2 across R7;
-temp2.No = 21; 
-create object instance temp2 of Temp;
-relate student2 to temp2 across R7;
-temp2.No = 22; 
+relate student2 to class2 across R5;
+relate student3 to class3 across R5;
+relate student4 to class4 across R5;
 
 generate Student1 to student1;
-generate Student1 to student1;
 
-/////////////////////////
-
-
-/*
 generate Student1 to student2;
 generate Student1 to student2;
+
 generate Student1 to student3;
+generate Student2 to student3;
+
 generate Student1 to student4;
+generate Student1 to student4;
+generate Student2 to student4;
+
+
 generate Student1 to student5;
 generate Student1 to student5;
+
 generate Student1 to student6;
 generate Student1 to student6;
 generate Student1 to student6;
 generate Student1 to student6;
-
-
-create object instance studentID1 of Student_ID;
-create object instance studentID2 of Student_ID;
-create object instance studentID3 of Student_ID;
-create object instance studentID4 of Student_ID;
-create object instance studentID5 of Student_ID;
-create object instance studentID6 of Student_ID;
-
-create object instance teacher1 of Teacher;
-create object instance teacher2 of Teacher;
- 
-
-teacher1.name = "MR. Rechard";
-teacher2.name = "MR. Adam";
 
 teacher1.degree = Degree::Phd;
 teacher2.degree =  Degree::Phd;
 
-create object instance class1 of Classes;
-create object instance class2 of Classes;
-create object instance class3 of Classes;
-create object instance class4 of Classes;
 
-class1.class_number = 1;
-class2.class_number = 2;
-class3.class_number = 3;
-class4.class_number = 4;
 
 class1.capacity = 10;
 class2.capacity = 20;
@@ -2173,47 +2177,8 @@ class3.capacity = 35;
 class4.capacity = 60;
 
 
-create object instance subject1 of Subject;
-create object instance subject2 of Subject;
+college.name = "MIT"; 
 
-subject1.name = "Algebra";
-subject2.name = "Chemistry";
-subject1.credit_hours = 16;
-subject1.credit_hours = 12;
-
-
-create object instance college of College;
-
-
-college.name = "MIT";
-
-
-
-
-relate student1 to college across R3 using studentID1;
-relate student2 to college across R3 using studentID2;
-relate student3 to college across R3 using studentID3;
-relate student4 to college across R3 using studentID4;
-relate student5 to college across R3 using studentID5;
-relate student6 to college across R3 using studentID6;
-
-
-relate student1 to class1 across R5;
-relate student2 to class1 across R5;
-relate student3 to class1 across R5;
-relate student4 to class1 across R5;
-relate student5 to class2 across R5;
-relate student6 to class2 across R5;
-relate student2 to class2 across R5;
-
-
-relate student1 to teacher1 across R1 using subject1;
-relate student2 to teacher1 across R1 using subject1;
-relate student3 to teacher1 across R1 using subject1;
-relate student4 to teacher1 across R1 using subject1;
-relate student5 to teacher2 across R1 using subject2;
-relate student6 to teacher2 across R1 using subject2;
-relate student2 to teacher2 across R1 using subject2;
 
 
 relate subject1 to class1 across R6;
@@ -2227,16 +2192,19 @@ relate class2 to class3 across R4.''Before'';
 relate class3 to class4 across R4.''Before'';
 relate class1 to class4 across R4.''After'';
 
-*/
+
+
 EOF = true;
 
 
+a = 1;
+while ( a !=  100)
+	create object instance stud of Student;
+	relate stud to college across R3; 
+	a = a + 1;
+end while;
 
-
-
-
-
-',
+EOF = true;',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'');
