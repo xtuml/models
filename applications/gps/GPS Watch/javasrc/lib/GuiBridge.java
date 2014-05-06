@@ -1,6 +1,6 @@
 //========================================================================
 //
-//(c) Copyright 2007-2012 by Mentor Graphics Corp. All rights reserved.
+//(c) Copyright 2007-2014 by Mentor Graphics Corp. All rights reserved.
 //
 //========================================================================
  
@@ -74,7 +74,7 @@ public class GuiBridge {
 	 */
 	public static void setData(float value, int unit) {
 		if (requester != null) {
-			// TODO - this whole class is going away...requester.sendMessage(new SetData(value, unit));
+			requester.sendMessage(new SetData(value, unit));
 		}
 	}
 	

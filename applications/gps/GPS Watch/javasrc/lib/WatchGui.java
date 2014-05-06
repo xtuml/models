@@ -20,8 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import uidatatypes.Unit;
-
 public class WatchGui extends JFrame {
 
 	public static final long serialVersionUID = 0;
@@ -29,6 +27,31 @@ public class WatchGui extends JFrame {
 	public static final int LARGE_Y = 355;
 	public static final int SMALL_Y = 295;
 	
+	public static final String[] UNIT_LABELS = new String[] {
+		  "km", 
+		  "meters",
+		  "min/km",
+		  "km/h",
+		  "miles",
+		  "yds",
+		  "ft",
+		  "min/mile",
+		  "mph",
+		  "bpm",
+		  "laps"
+	};
+	public static final int UNIT_KM           = 0;
+	public static final int UNIT_METERS       = 1;
+	public static final int UNIT_MIN_PER_KM   = 2;
+	public static final int UNIT_KM_PER_HOUR  = 3;
+	public static final int UNIT_MILES        = 4;
+	public static final int UNIT_YDS          = 5;
+	public static final int UNIT_FT           = 6;
+	public static final int UNIT_MIN_PER_MILE = 7;
+	public static final int UNIT_MPH          = 8;
+	public static final int UNIT_BPM          = 9;
+	public static final int UNIT_LAPS         = 10;
+
 	private WatchGui.ApplicationConnection server;
 	private JPanel holdAll = new JPanel();
 
@@ -238,35 +261,35 @@ public class WatchGui extends JFrame {
 		setSmallDigit(2, sec / 10);
 		setSmallDigit(3, sec % 10);
 	}
-	public void setData(float value, Unit unit) {
+	public void setData(float value, int unit) {
 		switch (unit) {
 		
-		case km:
-		case miles:
-		case kmPerHour:
-		case mph:
+		case UNIT_KM:
+		case UNIT_MILES:		
+		case UNIT_KM_PER_HOUR:
+		case UNIT_MPH:
 			setFloatingPointValue(value);
 			showSeparator(true);
 			break;
-
-		case meters:
-		case yards:
-		case feet:
-		case bpm:
-		case laps:
+	
+		case UNIT_METERS:
+		case UNIT_YDS:
+		case UNIT_FT:
+		case UNIT_BPM:
+		case UNIT_LAPS:
 			setDiscreteValue(value);
 			showSeparator(false);
 			break;
-
-		case minPerKm:
-		case minPerMile:
+	
+		case UNIT_MIN_PER_KM:
+		case UNIT_MIN_PER_MILE:
 			setTimex(value);
 			showSeparator(true);
 			break;
 		default:
 			break;
 		}
-		setUnit(unit.toString());
+		setUnit(UNIT_LABELS[unit]);
 	}
 	
 	/**
@@ -425,7 +448,7 @@ public class WatchGui extends JFrame {
 				try {
 					connection.close();
 					setTime(0);
-					setData(0f, Unit.km);
+					setData(0f, 0);
 				} catch (IOException ioException){
 					ioException.printStackTrace();
 				}
