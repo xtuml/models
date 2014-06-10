@@ -1,4 +1,4 @@
--- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO O_OBJ
 	VALUES ("d2828038-110a-4559-8452-91651af0adcb",
@@ -11,6 +11,8 @@ from the pulse monitor or a lap marker.
 
 During workout the TrackLog keeps track of certain measurements derived
 from the sequence of events that has occurred.',
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_TFR
 	VALUES ("0f45bbc6-da36-4b5b-a2dd-f739a6f0cbdd",
@@ -143,11 +145,17 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'create object instance sample of HeartRateSample;
-sample.heartRate = param.heartRate; 
-relate self to sample across R6;
+	'// Add a new heart-rate sample and notify the UI of the current heart rate.
 
-// notify UI of the new value
+select one workoutTimer related by self->WorkoutTimer[R4.''is being timed by''];
+
+// Create and initialize a new heart-rate sample.
+create object instance sample of HeartRateSample;
+sample.heartRate = param.heartRate; 
+sample.time = workoutTimer.time;
+relate self to sample across R6.''logs heart rate changes as'';
+
+// Notify UI of the new heart rate.
 self.currentHeartRate = param.heartRate;
 generate Display_A2:refresh() to Display class;',
 	1,
