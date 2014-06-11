@@ -21,7 +21,8 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'select one workoutTimer related by self->WorkoutTimer[R4];
+	'select one workoutTimer related by 
+  self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
 
 // create the new trackPoint
 create object instance trackPoint of TrackPoint;
@@ -48,12 +49,14 @@ distance = 0.0;
 if (self.hasLocation)
   send distance = UTIL::getDistance(fromLocation: self.lastKnownLocation, toLocation: param.location);
 end if;
+
 // TODO: move these to the caller
 self.hasLocation = true;
 self.lastKnownLocation = param.location;
 
-self.distance = self.distance + distance;
-self.currentSpeed = param.location.speed;
+select one session related by self->WorkoutSession[R4.''represents path for''];
+session.accumulatedDistance = session.accumulatedDistance + distance;
+session.currentSpeed = param.location.speed;
 
 // notify UI of the new value
 generate Display_A2:refresh() to Display class;',
@@ -113,7 +116,7 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'select one timer related by self->WorkoutTimer[R4];
+	'select one timer related by self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
 create object instance lapMarker of LapMarker;
 lapMarker.lapTime = timer.time; 
 relate self to lapMarker across R5;
@@ -138,174 +141,16 @@ end for;',
 	1,
 	'',
 	"83ad7ae5-197c-4e8a-b9f5-b7d1c03db0b7");
-INSERT INTO O_TFR
-	VALUES ("a2c3e91d-5d2a-4579-a1f8-44ffcc78058a",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	'addHeartRateSample',
-	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'// Add a new heart-rate sample and notify the UI of the current heart rate.
-
-select one workoutTimer related by self->WorkoutTimer[R4.''is being timed by''];
-
-// Create and initialize a new heart-rate sample.
-create object instance sample of HeartRateSample;
-sample.heartRate = param.heartRate; 
-sample.time = workoutTimer.time;
-relate self to sample across R6.''logs heart rate changes as'';
-
-// Notify UI of the new heart rate.
-self.currentHeartRate = param.heartRate;
-generate Display_A2:refresh() to Display class;',
-	1,
-	'',
-	"9d05da67-cf3d-4220-b15a-0f2e28652584");
-INSERT INTO O_TPARM
-	VALUES ("bb008dbf-4dec-43a0-ada8-e55ee708d657",
-	"a2c3e91d-5d2a-4579-a1f8-44ffcc78058a",
-	'heartRate',
-	"ba5eda7a-def5-0000-0000-000000000003",
-	0,
-	'',
-	"00000000-0000-0000-0000-000000000000",
-	'');
-INSERT INTO O_TFR
-	VALUES ("781f31ef-d608-4cb1-8598-2f0513420ab6",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	'clearHeartRateSamples',
-	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'select many samples related by self->HeartRateSample[R6];
-for each sample in samples
-  unrelate self from sample across R6;
-  delete object instance sample;
-end for;',
-	1,
-	'',
-	"a2c3e91d-5d2a-4579-a1f8-44ffcc78058a");
-INSERT INTO O_TFR
-	VALUES ("b6a25f57-327b-469f-80b9-8de45fedff94",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	'init',
-	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'self.startTime        = TIM::current_clock();
-self.distance         = 0.0;
-self.currentHeartRate = 0.0;
-self.currentSpeed     = 0.0;
-self.hasLocation      = false;',
-	1,
-	'',
-	"781f31ef-d608-4cb1-8598-2f0513420ab6");
 INSERT INTO O_NBATTR
-	VALUES ("b585a128-d256-405f-8776-ffab1e3c5c05",
+	VALUES ("67298965-4a8d-4a30-a7e0-82d1186498ca",
 	"d2828038-110a-4559-8452-91651af0adcb");
 INSERT INTO O_BATTR
-	VALUES ("b585a128-d256-405f-8776-ffab1e3c5c05",
+	VALUES ("67298965-4a8d-4a30-a7e0-82d1186498ca",
 	"d2828038-110a-4559-8452-91651af0adcb");
 INSERT INTO O_ATTR
-	VALUES ("b585a128-d256-405f-8776-ffab1e3c5c05",
+	VALUES ("67298965-4a8d-4a30-a7e0-82d1186498ca",
 	"d2828038-110a-4559-8452-91651af0adcb",
 	"00000000-0000-0000-0000-000000000000",
-	'distance',
-	'Total distance covered during a workout.',
-	'',
-	'distance',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000003",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("d09695e9-6d86-42a1-8e94-ce705cd02709",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_BATTR
-	VALUES ("d09695e9-6d86-42a1-8e94-ce705cd02709",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_ATTR
-	VALUES ("d09695e9-6d86-42a1-8e94-ce705cd02709",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	"b585a128-d256-405f-8776-ffab1e3c5c05",
-	'currentSpeed',
-	'The most recently reported speed. ',
-	'',
-	'currentSpeed',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000003",
-	'',
-	'');
-INSERT INTO O_DBATTR
-	VALUES ("3e9efd19-633d-4b2b-8e0c-ff1f21e46a1b",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	'if (self.currentSpeed != 0)
-  self.currentPace = 60.0 / self.currentSpeed;
-else
-  self.currentPace = 0.0;
-end if;',
-	1);
-INSERT INTO O_BATTR
-	VALUES ("3e9efd19-633d-4b2b-8e0c-ff1f21e46a1b",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_ATTR
-	VALUES ("3e9efd19-633d-4b2b-8e0c-ff1f21e46a1b",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	"d09695e9-6d86-42a1-8e94-ce705cd02709",
-	'currentPace',
-	'The pace is essentially the inverse of the current speed. It is expressed in minutes/meter.',
-	'',
-	'currentPace',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000003",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("6ea0053d-a8c4-4fb5-a92d-ca94909eff4e",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_BATTR
-	VALUES ("6ea0053d-a8c4-4fb5-a92d-ca94909eff4e",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_ATTR
-	VALUES ("6ea0053d-a8c4-4fb5-a92d-ca94909eff4e",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	"3e9efd19-633d-4b2b-8e0c-ff1f21e46a1b",
-	'currentHeartRate',
-	'The most recently reported hear rate sample.',
-	'',
-	'currentHeartRate',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000003",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("6a782ac9-ac99-429f-a3c6-bed8bcd2de5f",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_BATTR
-	VALUES ("6a782ac9-ac99-429f-a3c6-bed8bcd2de5f",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_ATTR
-	VALUES ("6a782ac9-ac99-429f-a3c6-bed8bcd2de5f",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	"6ea0053d-a8c4-4fb5-a92d-ca94909eff4e",
-	'startTime',
-	'The timestamp taken when the workout was started according to system clock.',
-	'',
-	'startTime',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000010",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("67298965-4a8d-4a30-a7e0-82d1186498ca",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_BATTR
-	VALUES ("67298965-4a8d-4a30-a7e0-82d1186498ca",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_ATTR
-	VALUES ("67298965-4a8d-4a30-a7e0-82d1186498ca",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	"6a782ac9-ac99-429f-a3c6-bed8bcd2de5f",
 	'lastKnownLocation',
 	'Most recently reported location.',
 	'',
