@@ -614,9 +614,14 @@ INSERT INTO SPR_RS
 	VALUES ("ed04bab6-e3c0-4b26-966f-cd9f67796268",
 	'lapResetPressed',
 	'',
-	'select any workoutTimer from instances of WorkoutTimer;
+	'// Find the singleton instance of the workout timer 
+// and forward this signal, as an event, to it.
+
+select any workoutTimer from instances of WorkoutTimer;
 if (not empty workoutTimer)
   generate WorkoutTimer2:lapResetPressed() to workoutTimer;
+else
+  LOG::LogFailure( message:"Tracking:UI:lapResetPressed - No WorkoutTimer, so nothing to do." );
 end if;
 ',
 	1);
@@ -802,7 +807,12 @@ INSERT INTO SPR_RS
 	VALUES ("8481453b-752a-4e7c-ac84-b4ce7e52d397",
 	'heartRateChanged',
 	'',
-	'select any session from instances of WorkoutSession;
+	'// Find the singleton instance of the workout session
+// and forward this signal, as an event, to it.
+// If there is no active workout session, then this 
+// sample is simply ignored and not recorded.
+
+select any session from instances of WorkoutSession;
 if (not empty session)
   session.addHeartRateSample(heartRate: param.heartRate);
 end if;',

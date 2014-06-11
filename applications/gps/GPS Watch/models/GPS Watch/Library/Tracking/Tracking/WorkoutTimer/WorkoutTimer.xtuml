@@ -1,18 +1,22 @@
--- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.6
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO O_OBJ
 	VALUES ("8d4b82cf-ec16-4fd9-925b-0e51eb64a2f7",
 	'WorkoutTimer',
 	1,
 	'WorkoutTimer',
-	'The WorkoutTimer controls the lifecycle of workouts. There should
-never be more than one instance of this class at any time.
+	'As a singleton, no more than one instance of this class exists 
+at any given time.
 
-The WorkoutTimer has the responsibility to start and stop the GPS
-upon activation/deactivation of the timer.
+Along with managing the stopwatch portion of the application,
+this class also knows:
+- Track points are stored only when the stopwatch is running.
+- How to handle the lap/reset signal based on whether the 
+stopwatch is currently running.
 
-While being active, the WorkoutTimer should keep track of elapsed
-time. Time can only be reset while being inactive.  ',
+',
+	"00000000-0000-0000-0000-000000000000",
+	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_TFR
 	VALUES ("1363f0df-e630-4deb-a831-ed6cbcc9a974",
