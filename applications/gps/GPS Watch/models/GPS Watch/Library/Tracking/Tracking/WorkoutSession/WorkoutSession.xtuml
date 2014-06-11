@@ -1,0 +1,233 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("2522ffa2-db69-4807-ab45-06acf4cf893a",
+	'WorkoutSession',
+	7,
+	'WorkoutSession',
+	'Each instance represents a single workout session.  
+
+Presently, the device supports only a single session, 
+but future releases may support multiple sessions.  
+Even in that case, only a single session is executing 
+at any given time.  Other sessions represent completed
+or planned workout sessions.',
+	"00000000-0000-0000-0000-000000000000",
+	"ece25c8b-87a9-aedb-7aab-d647e89ebfac",
+	"44937b64-b2e3-92bc-dc5d-bd375f8e4089");
+INSERT INTO O_TFR
+	VALUES ("e3f7be53-3ad2-47d3-862a-9a65846facde",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	'addHeartRateSample',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Add a new heart-rate sample and notify the UI of the current heart rate.
+
+select one workoutTimer related by self->WorkoutTimer[R8.''is timed by''];
+
+// Create and initialize a new heart-rate sample.
+create object instance sample of HeartRateSample;
+sample.heartRate = param.heartRate;
+sample.time = workoutTimer.time;
+relate self to sample across R6.''tracks heart rate over time as'';
+
+// Notify UI of the new heart rate.
+self.currentHeartRate = param.heartRate;
+generate Display_A2:refresh() to Display class;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("fb21bcee-d537-40df-a3aa-021f49c90722",
+	"e3f7be53-3ad2-47d3-862a-9a65846facde",
+	'heartRate',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("0a3c180b-9d9a-457a-ab39-2114964b5908",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	'clearHeartRateSamples',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select many samples related by self->HeartRateSample[R6];
+for each sample in samples
+  unrelate self from sample across R6;
+  delete object instance sample;
+end for;',
+	1,
+	'',
+	"e3f7be53-3ad2-47d3-862a-9a65846facde");
+INSERT INTO O_TFR
+	VALUES ("56c15cf0-cc7e-4c80-bed9-75d6c2f085dd",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	'initialize',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Initialize this workout session.
+
+self.startDate = TIM::current_date();
+self.startTime = TIM::current_clock();
+self.accumulatedDistance = 0.0;
+self.currentHeartRate = 0;
+self.currentSpeed = 0.0;',
+	1,
+	'',
+	"0a3c180b-9d9a-457a-ab39-2114964b5908");
+INSERT INTO O_NBATTR
+	VALUES ("f9ea9144-48ad-45cb-82c6-6320037767b3",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_BATTR
+	VALUES ("f9ea9144-48ad-45cb-82c6-6320037767b3",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_ATTR
+	VALUES ("f9ea9144-48ad-45cb-82c6-6320037767b3",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	"00000000-0000-0000-0000-000000000000",
+	'startDate',
+	'UTC Date on which this session commenced.',
+	'',
+	'startDate',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000e",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_BATTR
+	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_ATTR
+	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	"f9ea9144-48ad-45cb-82c6-6320037767b3",
+	'startTime',
+	'UTC time at which this session commenced.',
+	'',
+	'startTime',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000010",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("19624f2a-4f38-4a00-9a46-f7c43c783ae6",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_BATTR
+	VALUES ("19624f2a-4f38-4a00-9a46-f7c43c783ae6",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_ATTR
+	VALUES ("19624f2a-4f38-4a00-9a46-f7c43c783ae6",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	"7f25f45e-231c-4cfe-9481-7a86cabddbc6",
+	'currentSpeed',
+	'The current speed of the device, expressed in kilometers per hour, averaged 
+over a predefined number of the most recently acquired track points.
+',
+	'',
+	'currentSpeed',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'',
+	'');
+INSERT INTO O_DBATTR
+	VALUES ("30ad1cd5-b653-465a-8280-a9ae1821b3e7",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	'// Calculate current pace from current speed, converting from km/hour to minutes/km.
+
+if (self.currentSpeed != 0)
+  self.currentPace = 60.0 / self.currentSpeed;
+else
+  self.currentPace = 0.0;
+end if;',
+	1);
+INSERT INTO O_BATTR
+	VALUES ("30ad1cd5-b653-465a-8280-a9ae1821b3e7",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_ATTR
+	VALUES ("30ad1cd5-b653-465a-8280-a9ae1821b3e7",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	"19624f2a-4f38-4a00-9a46-f7c43c783ae6",
+	'currentPace',
+	'The inverse of currentSpeed, expressed in minutes per kilometer.',
+	'',
+	'currentPace',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("55020749-f521-4522-b8f9-d05866ad4d47",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_BATTR
+	VALUES ("55020749-f521-4522-b8f9-d05866ad4d47",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_ATTR
+	VALUES ("55020749-f521-4522-b8f9-d05866ad4d47",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	"30ad1cd5-b653-465a-8280-a9ae1821b3e7",
+	'currentHeartRate',
+	'Current heart rate, expressed in beats per minute, averaged over 
+a predefined number of the most recent heart-rate samples.',
+	'',
+	'currentHeartRate',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("d1d48d20-03f1-4c3c-b920-f64ef7b8a4d3",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_BATTR
+	VALUES ("d1d48d20-03f1-4c3c-b920-f64ef7b8a4d3",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_ATTR
+	VALUES ("d1d48d20-03f1-4c3c-b920-f64ef7b8a4d3",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	"55020749-f521-4522-b8f9-d05866ad4d47",
+	'accumulatedDistance',
+	'Accumulated distance for this workout session.',
+	'',
+	'accumulatedDistance',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_OIDA
+	VALUES ("f9ea9144-48ad-45cb-82c6-6320037767b3",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	0,
+	'startDate');
+INSERT INTO O_OIDA
+	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	0,
+	'startTime');
+INSERT INTO O_ID
+	VALUES (1,
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO O_ID
+	VALUES (2,
+	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+INSERT INTO PE_PE
+	VALUES ("2522ffa2-db69-4807-ab45-06acf4cf893a",
+	1,
+	"a09220a4-d685-4338-83fd-0d42f7c7e308",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a09220a4-d685-4338-83fd-0d42f7c7e308",
+	"00000000-0000-0000-0000-000000000000",
+	"36a41cf7-d411-488d-99fc-74866d4fea39",
+	'Tracking',
+	'',
+	0,
+	'../Tracking.xtuml');
