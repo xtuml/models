@@ -21,21 +21,23 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'select one workoutTimer related by 
-  self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
+	'// Add a track point to this track log, update the accumulated distance,
+// current speed, and last known location, and then notify the UI.
 
-// create the new trackPoint
+// Create a new track point.
 create object instance trackPoint of TrackPoint;
+select one workoutTimer related by 
+  self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
 trackPoint.time      = workoutTimer.time;
 trackPoint.longitude = param.location.longitude;
 trackPoint.latitude  = param.location.latitude;
 trackPoint.speed     = param.location.speed;
 
+// Add the newly created track point to the track log.
 select one firstPoint related by self->TrackPoint[R1];
 select one lastPoint related by self->TrackPoint[R3];
 
-if (empty firstPoint)
-  // this is the first trackPoint in the log
+if (empty firstPoint)  // first track point in the log
   relate self to trackPoint across R1.''has first'';
   relate self to trackPoint across R3.''has last'';
 else 
@@ -44,21 +46,20 @@ else
   relate lastPoint to trackPoint across R2.''follows'';
 end if;
 
-// calculate distance etc
+// Update accumulated distance, current speed, and last known location.
 distance = 0.0;
 if (self.hasLocation)
   send distance = UTIL::getDistance(fromLocation: self.lastKnownLocation, toLocation: param.location);
+else
+  self.hasLocation = true;
 end if;
-
-// TODO: move these to the caller
-self.hasLocation = true;
-self.lastKnownLocation = param.location;
 
 select one session related by self->WorkoutSession[R4.''represents path for''];
 session.accumulatedDistance = session.accumulatedDistance + distance;
 session.currentSpeed = param.location.speed;
+self.lastKnownLocation = param.location;
 
-// notify UI of the new value
+// Notify UI of of the updated values.
 generate Display_A2:refresh() to Display class;',
 	1,
 	'',
