@@ -103,7 +103,6 @@ if ( empty session )
 
   // Create a track log.
   create object instance trackLog of TrackLog;
-  trackLog.initialize();
 
   // Relate them all together.
   relate trackLog to session across R4.''represents path for'';
@@ -131,7 +130,6 @@ workoutTimer.initialize();
 select one trackLog related by self->TrackLog[R4.''captures path in''];
 trackLog.clearTrackPoints();
 trackLog.clearLapMarkers();
-trackLog.initialize();
 
 // Reset the session.
 self.currentSpeed = 0.0;

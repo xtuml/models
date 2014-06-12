@@ -21,8 +21,8 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'// Add a track point to this track log, update the accumulated distance,
-// current speed, and last known location, and then notify the UI.
+	'// Add a track point to this track log, update the accumulated distance
+// and current speed, and then notify the UI.
 
 // Create a new track point.
 create object instance trackPoint of TrackPoint;
@@ -37,27 +37,32 @@ trackPoint.speed     = param.location.speed;
 select one firstPoint related by self->TrackPoint[R1];
 select one lastPoint related by self->TrackPoint[R3];
 
-if (empty firstPoint)  // first track point in the log
+// Explicit variable declarations for later use outside if-else clause.
+isFirstTrackPoint = false;
+lastKnownLocation = param.location;  
+if (empty firstPoint)
+  isFirstTrackPoint = true;
   relate self to trackPoint across R1.''has first'';
   relate self to trackPoint across R3.''has last'';
 else 
+  // Save last location for use in updating accumulated distance.
+  lastKnownLocation.longitude = lastPoint.longitude;
+  lastKnownLocation.latitude = lastPoint.latitude;
   unrelate self from lastPoint across R3.''has last'';
   relate self to trackPoint across R3.''has last'';
   relate lastPoint to trackPoint across R2.''follows'';
 end if;
 
-// Update accumulated distance, current speed, and last known location.
+// Update accumulated distance and current speed.
 distance = 0.0;
-if (self.hasLocation)
-  send distance = UTIL::getDistance(fromLocation: self.lastKnownLocation, toLocation: param.location);
-else
-  self.hasLocation = true;
+if (not isFirstTrackPoint)
+  send distance = UTIL::getDistance(fromLocation: lastKnownLocation, 
+                                    toLocation: param.location);
 end if;
 
 select one session related by self->WorkoutSession[R4.''represents path for''];
 session.accumulatedDistance = session.accumulatedDistance + distance;
 session.currentSpeed = param.location.speed;
-self.lastKnownLocation = param.location;
 
 // Notify UI of of the updated values.
 generate Display_A2:refresh() to Display class;',
@@ -142,55 +147,6 @@ end for;',
 	1,
 	'',
 	"83ad7ae5-197c-4e8a-b9f5-b7d1c03db0b7");
-INSERT INTO O_TFR
-	VALUES ("b8271f29-92d9-41bb-9c9e-d5f06e16ecaf",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	'initialize',
-	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'// Initialize this instance.
-
-self.hasLocation = false;',
-	1,
-	'',
-	"9d05da67-cf3d-4220-b15a-0f2e28652584");
-INSERT INTO O_NBATTR
-	VALUES ("67298965-4a8d-4a30-a7e0-82d1186498ca",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_BATTR
-	VALUES ("67298965-4a8d-4a30-a7e0-82d1186498ca",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_ATTR
-	VALUES ("67298965-4a8d-4a30-a7e0-82d1186498ca",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	"00000000-0000-0000-0000-000000000000",
-	'lastKnownLocation',
-	'Most recently reported location.',
-	'',
-	'lastKnownLocation',
-	0,
-	"cb835491-fba0-4f96-9ad3-ef020d954fa4",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("916536de-e260-42a3-ba18-6de8522709a9",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_BATTR
-	VALUES ("916536de-e260-42a3-ba18-6de8522709a9",
-	"d2828038-110a-4559-8452-91651af0adcb");
-INSERT INTO O_ATTR
-	VALUES ("916536de-e260-42a3-ba18-6de8522709a9",
-	"d2828038-110a-4559-8452-91651af0adcb",
-	"67298965-4a8d-4a30-a7e0-82d1186498ca",
-	'hasLocation',
-	'Indicates whether the first location update has arrived. ',
-	'',
-	'hasLocation',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000001",
-	'',
-	'');
 INSERT INTO O_ID
 	VALUES (0,
 	"d2828038-110a-4559-8452-91651af0adcb");
