@@ -531,15 +531,18 @@ INSERT INTO SPR_RS
 	VALUES ("6ad4a18f-34d4-4d38-b701-6d95cc9cb6b3",
 	'locationUpdate',
 	'',
-	'// print the new location to the console
+	'// Log the newly received location data.
 LOG::LogInfo(message: "location updated: ");
 LOG::LogReal(message: "longitude", r: param.location.longitude);
 LOG::LogReal(message: "latitude",  r: param.location.latitude );
 LOG::LogReal(message: "speed",     r: param.location.speed    );
 
-select any trackLog from instances of TrackLog;
-if (not empty trackLog)
-  trackLog.addTrackPoint(location: param.location);
+// Add a track point to track log related to the singleton instance of 
+// the workout session.
+select any session from instances of WorkoutSession;
+if ( not empty session )
+  select one trackLog related by session->TrackLog[R4.''captures path in''];
+  trackLog.addTrackPoint( location: param.location );
 end if;',
 	1);
 INSERT INTO C_EP_PROXY
