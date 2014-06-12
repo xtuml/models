@@ -719,11 +719,11 @@ INSERT INTO GD_NCS
 	VALUES ("b8bf682c-54fe-4d15-8a5d-d3ce1bba7d47");
 INSERT INTO DIM_ND
 	VALUES (241.000000,
-	181.000000,
+	216.000000,
 	"b8bf682c-54fe-4d15-8a5d-d3ce1bba7d47");
 INSERT INTO DIM_GE
 	VALUES (4524.000000,
-	2772.000000,
+	2749.000000,
 	"b8bf682c-54fe-4d15-8a5d-d3ce1bba7d47",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -742,8 +742,8 @@ INSERT INTO DIM_CON
 	"b8bf682c-54fe-4d15-8a5d-d3ce1bba7d47");
 INSERT INTO DIM_CON
 	VALUES ("a849f130-36e3-4242-a3d6-addc4f24fcda",
-	4571.000000,
-	2953.000000,
+	4572.000000,
+	2965.000000,
 	"b8bf682c-54fe-4d15-8a5d-d3ce1bba7d47");
 INSERT INTO DIM_CON
 	VALUES ("f94db881-c4fb-4667-a7e8-6b7e6475c3f4",
@@ -971,8 +971,8 @@ INSERT INTO DIM_ND
 	0.000000,
 	"2493fded-d366-4959-a593-42aac0cee653");
 INSERT INTO DIM_GE
-	VALUES (4573.000000,
-	2954.000000,
+	VALUES (4574.000000,
+	2966.000000,
 	"2493fded-d366-4959-a593-42aac0cee653",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -990,8 +990,8 @@ INSERT INTO DIM_ND
 	0.000000,
 	"939b4d18-b91e-4e49-9957-5b92b0d7e8ac");
 INSERT INTO DIM_GE
-	VALUES (4533.000000,
-	3005.000000,
+	VALUES (4533.500000,
+	3011.000000,
 	"939b4d18-b91e-4e49-9957-5b92b0d7e8ac",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -1025,8 +1025,8 @@ INSERT INTO GD_LS
 	"0da43a5a-ccd1-479c-9012-8562b2bbab22");
 INSERT INTO DIM_WAY
 	VALUES ("112545ad-719b-4937-8762-939c7d138f29",
-	4571.000000,
-	2953.000000,
+	4572.000000,
+	2965.000000,
 	"0c528f56-b0d4-4087-95ad-1da6bd8c3671",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
@@ -1525,14 +1525,16 @@ INSERT INTO O_OBJ_PROXY
 	'WorkoutTimer',
 	1,
 	'WorkoutTimer',
-	'The WorkoutTimer controls the lifecycle of workouts. There should
-never be more than one instance of this class at any time.
+	'As a singleton, no more than one instance of this class exists 
+at any given time.
 
-The WorkoutTimer has the responsibility to start and stop the GPS
-upon activation/deactivation of the timer.
+Along with managing the stopwatch portion of the application,
+this class also knows:
+- Track points are stored only when the stopwatch is running.
+- How to handle the lap/reset signal based on whether the 
+stopwatch is currently running.
 
-While being active, the WorkoutTimer should keep track of elapsed
-time. Time can only be reset while being inactive.  ',
+',
 	"00000000-0000-0000-0000-000000000000",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	"00000000-0000-0000-0000-000000000000",

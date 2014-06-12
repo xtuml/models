@@ -640,14 +640,13 @@ INSERT INTO SPR_RS
 	VALUES ("1628d5aa-2f1f-40ad-9c81-0f1fff03aece",
 	'startStopPressed',
 	'',
-	'// create an instance of the workout timer if it does not exist
-select any workoutTimer from instances of WorkoutTimer;
-if (empty workoutTimer)
-  create object instance workoutTimer of WorkoutTimer;
-  workoutTimer.time = 0;
-end if;
+	'// If necessary, create a workout session and everything required to 
+// support it.  Then, forward this signal to the workout timer.
 
-// forward message to the single instance of WorkoutTimer 
+WorkoutSession::create();
+
+// Forward this signal, as an event, to the singleton instance of WorkoutTimer.
+select any workoutTimer from instances of WorkoutTimer;
 generate WorkoutTimer1:startStopPressed() to workoutTimer;',
 	1);
 INSERT INTO C_EP_PROXY

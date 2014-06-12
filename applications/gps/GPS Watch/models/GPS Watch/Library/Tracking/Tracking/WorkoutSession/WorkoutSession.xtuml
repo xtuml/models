@@ -79,6 +79,69 @@ self.currentSpeed = 0.0;',
 	1,
 	'',
 	"0a3c180b-9d9a-457a-ab39-2114964b5908");
+INSERT INTO O_TFR
+	VALUES ("3c3e9447-7fbe-40c3-835d-aa668b911afa",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	'create',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// Unless a workout session already exists, create and initialize a 
+// workout session, workout timer, and tracklog, and relate them all.
+
+select any session from instances of WorkoutSession;
+
+if ( empty session )
+
+  // Create a workout session.
+  create object instance session of WorkoutSession;
+  session.initialize();
+
+  // Create a workout timer.
+  create object instance workoutTimer of WorkoutTimer;
+  workoutTimer.initialize();
+
+  // Create a track log.
+  create object instance trackLog of TrackLog;
+  trackLog.initialize();
+
+  // Relate them all together.
+  relate trackLog to session across R4.''represents path for'';
+  relate workoutTimer to session across R8.''acts as the stopwatch for'';
+  
+end if;
+',
+	1,
+	'',
+	"56c15cf0-cc7e-4c80-bed9-75d6c2f085dd");
+INSERT INTO O_TFR
+	VALUES ("a20ddab3-779d-44fd-bea2-d5477b04a7b3",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	'reset',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Reset this session, including the timer and track log.
+
+// Reset the timer.
+select one workoutTimer related by self->WorkoutTimer[R8.''is timed by''];
+workoutTimer.initialize();
+
+// Reset the track log.
+select one trackLog related by self->TrackLog[R4.''captures path in''];
+trackLog.clearTrackPoints();
+trackLog.clearLapMarkers();
+trackLog.initialize();
+
+// Reset the session.
+self.currentSpeed = 0.0;
+self.currentHeartRate = 0;
+self.accumulatedDistance = 0.0;
+self.clearHeartRateSamples();
+',
+	1,
+	'',
+	"3c3e9447-7fbe-40c3-835d-aa668b911afa");
 INSERT INTO O_NBATTR
 	VALUES ("f9ea9144-48ad-45cb-82c6-6320037767b3",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a");
