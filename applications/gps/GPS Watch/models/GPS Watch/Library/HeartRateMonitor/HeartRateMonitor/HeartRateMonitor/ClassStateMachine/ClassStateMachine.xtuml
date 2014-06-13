@@ -224,11 +224,11 @@ if (empty monitor)
 end if;
 monitor.recentHeartRate = 50;
 
-LOG::LogInfo(message: "listener registered with interval: 3 sec");
+LOG::LogInfo(message: "listener registered");
 
 // start timer
 create event instance timeout of HeartRateMonitor_A3:timeout() to HeartRateMonitor class;
-monitor.timer = TIM::timer_start_recurring(event_inst: timeout, microseconds: 3000000); ',
+monitor.timer = TIM::timer_start_recurring( event_inst: timeout, microseconds: (HeartRateSamplingPeriod * 1000000) ); ',
 	'');
 INSERT INTO SM_TAH
 	VALUES ("d010be6b-0e95-4a7f-b75c-7c90f5b75a13",
@@ -274,7 +274,7 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'',
+	'4.1.10',
 	'GPS Watch::Library::HeartRateMonitor::HeartRateMonitor::HeartRateMonitor::Class State Machine');
 INSERT INTO GD_GE
 	VALUES ("35daa71c-83e4-4e99-b3b9-389db6452069",

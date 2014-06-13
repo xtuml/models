@@ -33,7 +33,6 @@ sample.time = workoutTimer.time;
 relate self to sample across R6.''tracks heart rate over time as'';
 
 // Notify UI of the new heart rate.
-self.currentHeartRate = param.heartRate;
 generate Display_A2:refresh() to Display class;',
 	1,
 	'',
@@ -74,7 +73,6 @@ INSERT INTO O_TFR
 self.startDate = TIM::current_date();
 self.startTime = TIM::current_clock();
 self.accumulatedDistance = 0.0;
-self.currentHeartRate = 0;
 self.currentSpeed = 0.0;',
 	1,
 	'',
@@ -133,7 +131,6 @@ trackLog.clearLapMarkers();
 
 // Reset the session.
 self.currentSpeed = 0.0;
-self.currentHeartRate = 0;
 self.accumulatedDistance = 0.0;
 self.clearHeartRateSamples();
 ',
@@ -222,9 +219,23 @@ INSERT INTO O_ATTR
 	"ba5eda7a-def5-0000-0000-000000000003",
 	'',
 	'');
-INSERT INTO O_NBATTR
+INSERT INTO O_DBATTR
 	VALUES ("55020749-f521-4522-b8f9-d05866ad4d47",
-	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	'// Calculate sliding average using the most recent samples.
+
+select one workoutTimer related by self->WorkoutTimer[R8.''is timed by''];
+select many samples related by self->HeartRateSample[R6.''tracks heart rate over time as'']
+  where ( selected.time >= ( workoutTimer.time - (HeartRateSamplingPeriod * HeartRateAveragingWindow) ) );
+numberOfSamples = 0;
+sum = 0;
+for each sample in samples
+  numberOfSamples = numberOfSamples + 1;
+  sum = sum + sample.heartRate;
+end for;
+self.currentHeartRate = sum / numberOfSamples;
+',
+	1);
 INSERT INTO O_BATTR
 	VALUES ("55020749-f521-4522-b8f9-d05866ad4d47",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a");
