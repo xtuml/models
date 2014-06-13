@@ -2,6 +2,7 @@ package lib;
 
 import java.io.DataOutputStream;
 import java.util.StringTokenizer;
+import uidatatypes.Unit;
 
 public class SetData extends SignalData {
 	public static final long serialVersionUID = 0;
@@ -17,6 +18,12 @@ public class SetData extends SignalData {
 		super(SIGNAL_NO_SET_DATA);
 		this.value = value;
 		this.unit = unit;
+	}
+	
+	public SetData(float value, Unit unit) {
+		super(SIGNAL_NO_SET_DATA);
+		this.value = value;
+		this.unit = unit.getValue();
 	}
 	
 	@Override
