@@ -6,10 +6,10 @@
  *--------------------------------------------------------------------------*/
 
 #include "GPSWatch_sys_types.h"
-#include "HeartRateMonitor_classes.h"
-#include "Location_classes.h"
 #include "Tracking_classes.h"
 #include "UI_classes.h"
+#include "Location_classes.h"
+#include "HeartRateMonitor_classes.h"
 
 
 /*
@@ -27,7 +27,7 @@ static Escher_SetElement_s node1s[ SYS_MAX_CONTAINERS ];
 void
 Escher_SetFactoryInit( const i_t n1_size )
 {
-  u2_t i;
+  Escher_size_t i;
   node1_FreeList.head = &node1s[ 0 ];
   /* Build the collection (linked list) of node1 instances.  */
   for ( i = 0; i < ( n1_size - 1 ); i++ ) {
@@ -86,13 +86,12 @@ Escher_SetInsertElement(
   Escher_SetElement_s * slot;
   if ( 0 == node1_FreeList.head ) {
     UserNodeListEmptyCallout(); /* Bad news!  No more nodes.         */
-  } else {
-    slot = node1_FreeList.head; /* Extract node from free list head. */
-    node1_FreeList.head = node1_FreeList.head->next;
-    slot->object = substance;
-    slot->next = set->head;     /* Insert substance at list front.   */
-    set->head = slot;
   }
+  slot = node1_FreeList.head; /* Extract node from free list head. */
+  node1_FreeList.head = node1_FreeList.head->next;
+  slot->object = substance;
+  slot->next = set->head;     /* Insert substance at list front.   */
+  set->head = slot;
 }
 
 /*
@@ -103,8 +102,8 @@ Escher_SetInsertElement(
 Escher_SetElement_s *
 Escher_SetInsertBlock( Escher_SetElement_s * container,
                        const u1_t * instance,
-                       const u2_t length,
-                       u2_t count )
+                       const Escher_size_t length,
+                       Escher_size_t count )
 {
   Escher_SetElement_s * head = ( count > 0 ) ? container : 0;
   while ( count > 0 ) {
@@ -204,10 +203,10 @@ Escher_SetContains(
  * Count the elements in the set.  Return that count.
  * This routine counts nodes.
  */
-u2_t 
+Escher_size_t
 Escher_SetCardinality( const Escher_ObjectSet_s * const set )
 {
-  u2_t result = 0;
+  Escher_size_t result = 0;
   const Escher_SetElement_s * node = set->head;
   while ( node != 0 ) {
     result++;
@@ -274,7 +273,7 @@ Escher_IteratorNext( Escher_Iterator_s * const iter )
  * Set memory bytes to value at destination.
  */
 void
-Escher_memset( void * const dst, const u1_t val, u2_t len )
+Escher_memset( void * const dst, const u1_t val, Escher_size_t len )
 {
   u1_t * d = (u1_t *) dst;
   while ( len > 0 ) {
@@ -287,7 +286,7 @@ Escher_memset( void * const dst, const u1_t val, u2_t len )
  * Move memory bytes from source to destination.
  */
 void
-Escher_memmove( void * const dst, const void * const src, u2_t len )
+Escher_memmove( void * const dst, const void * const src, Escher_size_t len )
 {
   u1_t * s = (u1_t *) src;
   u1_t * d = (u1_t *) dst;
@@ -305,11 +304,13 @@ Escher_strcpy( c_t * dst, const c_t * src )
 {
   c_t * s = dst;
   s2_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
-  while ( ( i > 0 ) && ( *src != '\0' ) ) {
-    --i;
-    *dst++ = *src++;
+  if ( ( 0 != src ) && ( 0 != dst ) ) {
+    while ( ( i > 0 ) && ( *src != '\0' ) ) {
+      --i;
+      *dst++ = *src++;
+    }
+    *dst = '\0';  /* Ensure delimiter.  */
   }
-  *dst = '\0';  /* Ensure delimiter.  */
   return s;
 }
 
@@ -322,6 +323,8 @@ Escher_stradd( const c_t * left, const c_t * right )
   s2_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
   c_t * s = Escher_strget();
   c_t * dst = s;
+  if ( 0 == left ) left = "";
+  if ( 0 == right ) right = "";
   while ( ( i > 0 ) && ( *left != '\0' ) ) {
     --i;
     *dst++ = *left++;
@@ -346,7 +349,7 @@ Escher_strcmp( const c_t *p1, const c_t *p2 )
   const c_t *s1 = p1;
   const c_t *s2 = p2;
   c_t c1, c2;
-  s2_t i = ESCHER_SYS_MAX_STRING_LEN;
+  i_t i = ESCHER_SYS_MAX_STRING_LEN;
   do {
     c1 = *s1++;
     c2 = *s2++;
@@ -363,8 +366,9 @@ c_t *
 Escher_strget( void )
 {
   static u1_t i = 0;
-  static c_t s[ 4 ][ ESCHER_SYS_MAX_STRING_LEN ];
-  i = ( i + 1 ) % 4;
+  static c_t s[ 16 ][ ESCHER_SYS_MAX_STRING_LEN ];
+  i = ( i + 1 ) % 16;
+  s[ i ][ 0 ] = 0;
   return ( &s[ i ][ 0 ] );
 }
 
@@ -398,7 +402,9 @@ Escher_CreateInstance(
 
   dci->inactive.head = dci->inactive.head->next;
   instance = (Escher_iHandle_t) node->object;
-  instance->current_state = dci->initial_state;
+  if ( 0 != dci->initial_state ) {
+    instance->current_state = dci->initial_state;
+  }
   Escher_SetInsertInstance( &dci->active, node );
   return instance;
 }
@@ -435,7 +441,7 @@ Escher_ClassFactoryInit(
   Escher_Extent_t * dci = *(domain_class_info[ domain_num ] + class_num);
   if ( 0 != dci ) {
   dci->active.head = 0;
-  dci->inactive.head = Escher_SetInsertBlock( 
+  dci->inactive.head = Escher_SetInsertBlock(
     dci->container,
     (const u1_t *) dci->pool,
     dci->size,
@@ -500,7 +506,7 @@ InitializeOoaEventPool( void )
 Escher_xtUMLEvent_t * Escher_AllocatextUMLEvent( void )
 {
   Escher_xtUMLEvent_t * event = 0;
-  if ( free_event_list == 0 ) {
+  if ( 0 == free_event_list ) {
     UserEventFreeListEmptyCallout();   /* Bad news!  No more events.  */
   } else {
     event = free_event_list;       /* Grab front of the free list.  */
@@ -663,7 +669,7 @@ static void ooa_loop( void )
       HeartRateMonitor_EventDispatcher,
       Location_EventDispatcher,
       Tracking_EventDispatcher,
-      UI_EventDispatcher,
+      UI_EventDispatcher
     };
   Escher_xtUMLEvent_t * event;
   /* Start consuming events and dispatching background processes.  */

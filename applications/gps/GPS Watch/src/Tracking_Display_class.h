@@ -22,8 +22,12 @@ struct Tracking_Display {
 
   /* application analysis class attributes */
 
+  /* relationship storage */
+  /* Note:  No storage needed for Display->WorkoutSession[R7] */
 };
 
+/* xtUML WARNING:  WorkoutSession<-R7->Display never related!  */
+/* Note:  WorkoutSession<-R7->Display unrelate accessor not needed */
 
 
 #define Tracking_Display_MAX_EXTENT_SIZE 200

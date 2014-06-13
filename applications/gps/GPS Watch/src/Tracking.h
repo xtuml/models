@@ -21,6 +21,7 @@ product.
 void Tracking_LOC_locationUpdate( GPSWatch_sdt_Location );
 void Tracking_LOC_registerListener( void );
 void Tracking_LOC_unregisterListener( void );
+void Tracking_UI_init( void );
 void Tracking_UI_lapResetPressed( void );
 void Tracking_UI_lightPressed( void );
 void Tracking_UI_modePressed( void );
@@ -29,7 +30,7 @@ void Tracking_UI_setTargetPressed( void );
 void Tracking_UI_setTime( const i_t );
 void Tracking_UI_startStopPressed( void );
 void Tracking_UI_startTest( void );
-void Tracking_HR_heartRateChanged( const r_t );
+void Tracking_HR_heartRateChanged( const i_t );
 void Tracking_HR_registerListener( void );
 void Tracking_HR_unregisterListener( void );
 r_t Tracking_UTIL_getDistance( GPSWatch_sdt_Location, GPSWatch_sdt_Location );

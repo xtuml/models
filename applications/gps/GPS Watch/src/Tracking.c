@@ -14,8 +14,12 @@ product.
 
 #include "GPSWatch_sys_types.h"
 #include "Tracking.h"
-#include "LOG_bridge.h"
+#include "MATH_bridge.h"
 #include "TIM_bridge.h"
+#include "LOG_bridge.h"
+#include "Location.h"
+#include "UI.h"
+#include "HeartRateMonitor.h"
 #include "Tracking_classes.h"
 
 /*
@@ -24,9 +28,9 @@ product.
  * From Provider Message:  locationUpdate
  */
 void
-Tracking_LOC_locationUpdate( GPSWatch_sdt_Location p_location)
+Tracking_LOC_locationUpdate( GPSWatch_sdt_Location p_location )
 {
-  Tracking_TrackLog * trackLog=0; 
+  Tracking_WorkoutSession * session=0;
   /* LOG::LogInfo( message:location updated:  ) */
   XTUML_OAL_STMT_TRACE( 1, "LOG::LogInfo( message:location updated:  )" );
   LOG_LogInfo( "location updated: " );
@@ -39,12 +43,16 @@ Tracking_LOC_locationUpdate( GPSWatch_sdt_Location p_location)
   /* LOG::LogReal( message:speed, r:PARAM.location.speed ) */
   XTUML_OAL_STMT_TRACE( 1, "LOG::LogReal( message:speed, r:PARAM.location.speed )" );
   LOG_LogReal( "speed", p_location.speed );
-  /* SELECT any trackLog FROM INSTANCES OF TrackLog */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any trackLog FROM INSTANCES OF TrackLog" );
-  trackLog = (Tracking_TrackLog *) Escher_SetGetAny( &pG_Tracking_TrackLog_extent.active );
-  /* IF ( not empty trackLog ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty trackLog )" );
-  if ( !( 0 == trackLog ) ) {
+  /* SELECT any session FROM INSTANCES OF WorkoutSession */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
+  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
+  /* IF ( not empty session ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
+  if ( !( 0 == session ) ) {
+    Tracking_TrackLog * trackLog=0;
+    /* SELECT one trackLog RELATED BY session->TrackLog[R4.captures path in] */
+    XTUML_OAL_STMT_TRACE( 2, "SELECT one trackLog RELATED BY session->TrackLog[R4.captures path in]" );
+    trackLog = ( 0 != session ) ? session->TrackLog_R4_captures_path_in : 0;
     /* trackLog.addTrackPoint( location:PARAM.location ) */
     XTUML_OAL_STMT_TRACE( 2, "trackLog.addTrackPoint( location:PARAM.location )" );
     Tracking_TrackLog_op_addTrackPoint( trackLog,  p_location );
@@ -76,12 +84,23 @@ Tracking_LOC_unregisterListener()
 /*
  * Interface:  UI
  * Required Port:  UI
+ * To Provider Message:  init
+ */
+void
+Tracking_UI_init()
+{
+  UI_UI_init();
+}
+
+/*
+ * Interface:  UI
+ * Required Port:  UI
  * From Provider Message:  lapResetPressed
  */
 void
 Tracking_UI_lapResetPressed()
 {
-  Tracking_WorkoutTimer * workoutTimer=0; 
+  Tracking_WorkoutTimer * workoutTimer=0;
   /* SELECT any workoutTimer FROM INSTANCES OF WorkoutTimer */
   XTUML_OAL_STMT_TRACE( 1, "SELECT any workoutTimer FROM INSTANCES OF WorkoutTimer" );
   workoutTimer = (Tracking_WorkoutTimer *) Escher_SetGetAny( &pG_Tracking_WorkoutTimer_extent.active );
@@ -93,6 +112,11 @@ Tracking_UI_lapResetPressed()
     { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( workoutTimer, &Tracking_WorkoutTimerevent2c );
       Escher_SendEvent( e );
     }
+  }
+  else {
+    /* LOG::LogFailure( message:Tracking:UI:lapResetPressed - No WorkoutTimer, so nothing to do. ) */
+    XTUML_OAL_STMT_TRACE( 2, "LOG::LogFailure( message:Tracking:UI:lapResetPressed - No WorkoutTimer, so nothing to do. )" );
+    LOG_LogFailure( "Tracking:UI:lapResetPressed - No WorkoutTimer, so nothing to do." );
   }
 }
 
@@ -126,7 +150,7 @@ Tracking_UI_modePressed()
  * To Provider Message:  setData
  */
 void
-Tracking_UI_setData( const GPSWatch_Unit_t p_unit, const r_t p_value)
+Tracking_UI_setData( const GPSWatch_Unit_t p_unit, const r_t p_value )
 {
   UI_UI_setData(  p_unit, p_value );
 }
@@ -147,7 +171,7 @@ Tracking_UI_setTargetPressed()
  * To Provider Message:  setTime
  */
 void
-Tracking_UI_setTime( const i_t p_time)
+Tracking_UI_setTime( const i_t p_time )
 {
   UI_UI_setTime(  p_time );
 }
@@ -160,20 +184,13 @@ Tracking_UI_setTime( const i_t p_time)
 void
 Tracking_UI_startStopPressed()
 {
-  Tracking_WorkoutTimer * workoutTimer=0; 
+  Tracking_WorkoutTimer * workoutTimer=0;
+  /* WorkoutSession::create() */
+  XTUML_OAL_STMT_TRACE( 1, "WorkoutSession::create()" );
+  Tracking_WorkoutSession_op_create();
   /* SELECT any workoutTimer FROM INSTANCES OF WorkoutTimer */
   XTUML_OAL_STMT_TRACE( 1, "SELECT any workoutTimer FROM INSTANCES OF WorkoutTimer" );
   workoutTimer = (Tracking_WorkoutTimer *) Escher_SetGetAny( &pG_Tracking_WorkoutTimer_extent.active );
-  /* IF ( empty workoutTimer ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( empty workoutTimer )" );
-  if ( ( 0 == workoutTimer ) ) {
-    /* CREATE OBJECT INSTANCE workoutTimer OF WorkoutTimer */
-    XTUML_OAL_STMT_TRACE( 2, "CREATE OBJECT INSTANCE workoutTimer OF WorkoutTimer" );
-    workoutTimer = (Tracking_WorkoutTimer *) Escher_CreateInstance( Tracking_DOMAIN_ID, Tracking_WorkoutTimer_CLASS_NUMBER );
-    /* ASSIGN workoutTimer.time = 0 */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN workoutTimer.time = 0" );
-    workoutTimer->time = 0;
-  }
   /* GENERATE WorkoutTimer1:startStopPressed() TO workoutTimer */
   XTUML_OAL_STMT_TRACE( 1, "GENERATE WorkoutTimer1:startStopPressed() TO workoutTimer" );
   { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( workoutTimer, &Tracking_WorkoutTimerevent1c );
@@ -198,18 +215,18 @@ Tracking_UI_startTest()
  * From Provider Message:  heartRateChanged
  */
 void
-Tracking_HR_heartRateChanged( const r_t p_heartRate)
+Tracking_HR_heartRateChanged( const i_t p_heartRate )
 {
-  Tracking_TrackLog * trackLog=0; 
-  /* SELECT any trackLog FROM INSTANCES OF TrackLog */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any trackLog FROM INSTANCES OF TrackLog" );
-  trackLog = (Tracking_TrackLog *) Escher_SetGetAny( &pG_Tracking_TrackLog_extent.active );
-  /* IF ( not empty trackLog ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty trackLog )" );
-  if ( !( 0 == trackLog ) ) {
-    /* trackLog.addHeartRateSample( heartRate:PARAM.heartRate ) */
-    XTUML_OAL_STMT_TRACE( 2, "trackLog.addHeartRateSample( heartRate:PARAM.heartRate )" );
-    Tracking_TrackLog_op_addHeartRateSample( trackLog,  p_heartRate );
+  Tracking_WorkoutSession * session=0;
+  /* SELECT any session FROM INSTANCES OF WorkoutSession */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
+  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
+  /* IF ( not empty session ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
+  if ( !( 0 == session ) ) {
+    /* session.addHeartRateSample( heartRate:PARAM.heartRate ) */
+    XTUML_OAL_STMT_TRACE( 2, "session.addHeartRateSample( heartRate:PARAM.heartRate )" );
+    Tracking_WorkoutSession_op_addHeartRateSample( session,  p_heartRate );
   }
 }
 
@@ -241,7 +258,7 @@ Tracking_HR_unregisterListener()
  * To Provider Message:  getDistance
  */
 r_t
-Tracking_UTIL_getDistance( GPSWatch_sdt_Location p_fromLocation, GPSWatch_sdt_Location p_toLocation)
+Tracking_UTIL_getDistance( GPSWatch_sdt_Location p_fromLocation, GPSWatch_sdt_Location p_toLocation )
 {
 return   Location_UTIL_getDistance(  p_fromLocation, p_toLocation );
 }
@@ -250,18 +267,17 @@ return   Location_UTIL_getDistance(  p_fromLocation, p_toLocation );
  * UML Domain Functions (Synchronous Services)
  */
 
-#if Tracking_MAX_CLASS_NUMBERS > 0
 /* xtUML class info (collections, sizes, etc.) */
 Escher_Extent_t * const Tracking_class_info[ Tracking_MAX_CLASS_NUMBERS ] = {
-  &pG_Tracking_Display_extent,
   &pG_Tracking_WorkoutTimer_extent,
+  &pG_Tracking_Display_extent,
   0,
-  &pG_Tracking_HeartRateSample_extent,
-  &pG_Tracking_LapMarker_extent,
   &pG_Tracking_TrackLog_extent,
-  &pG_Tracking_TrackPoint_extent
+  &pG_Tracking_TrackPoint_extent,
+  &pG_Tracking_LapMarker_extent,
+  &pG_Tracking_HeartRateSample_extent,
+  &pG_Tracking_WorkoutSession_extent
 };
-#endif
 
 /*
  * Array of pointers to the class event dispatcher method.

@@ -20,6 +20,7 @@ allow generated code to connect to the exact same GUI.
 */
 
 #include "GPSWatch_sys_types.h"
+void UI_UI_init( void );
 void UI_UI_lapResetPressed( void );
 void UI_UI_lightPressed( void );
 void UI_UI_modePressed( void );

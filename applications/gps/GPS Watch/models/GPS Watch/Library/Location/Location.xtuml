@@ -1,4 +1,4 @@
--- BP 7.1 content: Component syschar: 3 persistence-version: 7.1.6
+-- BP 7.1.6 content: Component syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO C_C
 	VALUES ("2a5126a3-4272-42f2-810c-07c57c5a58d1",
@@ -393,7 +393,12 @@ INSERT INTO SPR_PO
 	VALUES ("409338b4-1ff4-4ce9-893d-a58f09bbf50d",
 	'getDistance',
 	'',
-	'return param.fromLocation.longitude + param.toLocation.latitude;',
+	'// Return the straight-line distance between the two points passed as parameters.
+
+deltaLat = param.toLocation.latitude - param.fromLocation.latitude;
+deltaLong = param.toLocation.longitude - param.fromLocation.longitude;
+sumSquares = (deltaLat * deltaLat) + (deltaLong * deltaLong);
+return ( MATH::sqrt( x: sumSquares ) );',
 	1);
 INSERT INTO C_EP_PROXY
 	VALUES ("dea2904d-4d56-4426-a11d-768d3893878f",

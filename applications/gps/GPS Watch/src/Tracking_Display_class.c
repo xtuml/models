@@ -9,6 +9,7 @@
 
 #include "GPSWatch_sys_types.h"
 #include "LOG_bridge.h"
+#include "MATH_bridge.h"
 #include "TIM_bridge.h"
 #include "Tracking_classes.h"
 
@@ -40,19 +41,19 @@ static void Tracking_Display_CB_act1( Tracking_Display *, const Escher_xtUMLEven
 static void
 Tracking_Display_CB_act1( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
 {
-  r_t distance; Tracking_TrackLog * trackLog=0; 
+  r_t distance;Tracking_WorkoutSession * session=0;
   /* ASSIGN distance = 0.0 */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN distance = 0.0" );
   distance = 0.0;
-  /* SELECT any trackLog FROM INSTANCES OF TrackLog */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any trackLog FROM INSTANCES OF TrackLog" );
-  trackLog = (Tracking_TrackLog *) Escher_SetGetAny( &pG_Tracking_TrackLog_extent.active );
-  /* IF ( not empty trackLog ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty trackLog )" );
-  if ( !( 0 == trackLog ) ) {
-    /* ASSIGN distance = trackLog.distance */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN distance = trackLog.distance" );
-    distance = trackLog->distance;
+  /* SELECT any session FROM INSTANCES OF WorkoutSession */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
+  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
+  /* IF ( not empty session ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
+  if ( !( 0 == session ) ) {
+    /* ASSIGN distance = session.accumulatedDistance */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN distance = session.accumulatedDistance" );
+    distance = session->accumulatedDistance;
   }
   /* IF ( ( distance > 1000.0 ) ) */
   XTUML_OAL_STMT_TRACE( 1, "IF ( ( distance > 1000.0 ) )" );
@@ -75,19 +76,19 @@ static void Tracking_Display_CB_act2( Tracking_Display *, const Escher_xtUMLEven
 static void
 Tracking_Display_CB_act2( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
 {
-  r_t speed; Tracking_TrackLog * trackLog=0; 
+  r_t speed;Tracking_WorkoutSession * session=0;
   /* ASSIGN speed = 0.0 */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN speed = 0.0" );
   speed = 0.0;
-  /* SELECT any trackLog FROM INSTANCES OF TrackLog */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any trackLog FROM INSTANCES OF TrackLog" );
-  trackLog = (Tracking_TrackLog *) Escher_SetGetAny( &pG_Tracking_TrackLog_extent.active );
-  /* IF ( not empty trackLog ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty trackLog )" );
-  if ( !( 0 == trackLog ) ) {
-    /* ASSIGN speed = trackLog.currentSpeed */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN speed = trackLog.currentSpeed" );
-    speed = trackLog->currentSpeed;
+  /* SELECT any session FROM INSTANCES OF WorkoutSession */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
+  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
+  /* IF ( not empty session ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
+  if ( !( 0 == session ) ) {
+    /* ASSIGN speed = session.currentSpeed */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN speed = session.currentSpeed" );
+    speed = session->currentSpeed;
   }
   /* UI::setData(unit:kmPerHour, value:speed) */
   XTUML_OAL_STMT_TRACE( 1, "UI::setData(unit:kmPerHour, value:speed)" );
@@ -101,19 +102,19 @@ static void Tracking_Display_CB_act3( Tracking_Display *, const Escher_xtUMLEven
 static void
 Tracking_Display_CB_act3( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
 {
-  r_t pace; Tracking_TrackLog * trackLog=0; 
+  r_t pace;Tracking_WorkoutSession * session=0;
   /* ASSIGN pace = 0.0 */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN pace = 0.0" );
   pace = 0.0;
-  /* SELECT any trackLog FROM INSTANCES OF TrackLog */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any trackLog FROM INSTANCES OF TrackLog" );
-  trackLog = (Tracking_TrackLog *) Escher_SetGetAny( &pG_Tracking_TrackLog_extent.active );
-  /* IF ( not empty trackLog ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty trackLog )" );
-  if ( !( 0 == trackLog ) ) {
-    /* ASSIGN pace = trackLog.currentPace */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN pace = trackLog.currentPace" );
-    pace = Tracking_TrackLog_MDA_currentPace( trackLog );
+  /* SELECT any session FROM INSTANCES OF WorkoutSession */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
+  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
+  /* IF ( not empty session ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
+  if ( !( 0 == session ) ) {
+    /* ASSIGN pace = session.currentPace */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN pace = session.currentPace" );
+    pace = Tracking_WorkoutSession_MDA_currentPace( session );
   }
   /* UI::setData(unit:minPerKm, value:pace) */
   XTUML_OAL_STMT_TRACE( 1, "UI::setData(unit:minPerKm, value:pace)" );
@@ -127,19 +128,19 @@ static void Tracking_Display_CB_act4( Tracking_Display *, const Escher_xtUMLEven
 static void
 Tracking_Display_CB_act4( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
 {
-  r_t heartRate; Tracking_TrackLog * trackLog=0; 
+  r_t heartRate;Tracking_WorkoutSession * session=0;
   /* ASSIGN heartRate = 0.0 */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN heartRate = 0.0" );
   heartRate = 0.0;
-  /* SELECT any trackLog FROM INSTANCES OF TrackLog */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any trackLog FROM INSTANCES OF TrackLog" );
-  trackLog = (Tracking_TrackLog *) Escher_SetGetAny( &pG_Tracking_TrackLog_extent.active );
-  /* IF ( not empty trackLog ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty trackLog )" );
-  if ( !( 0 == trackLog ) ) {
-    /* ASSIGN heartRate = trackLog.currentHeartRate */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN heartRate = trackLog.currentHeartRate" );
-    heartRate = trackLog->currentHeartRate;
+  /* SELECT any session FROM INSTANCES OF WorkoutSession */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
+  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
+  /* IF ( not empty session ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
+  if ( !( 0 == session ) ) {
+    /* ASSIGN heartRate = session.currentHeartRate */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN heartRate = session.currentHeartRate" );
+    heartRate = Tracking_WorkoutSession_MDA_currentHeartRate( session );
   }
   /* UI::setData(unit:bpm, value:heartRate) */
   XTUML_OAL_STMT_TRACE( 1, "UI::setData(unit:bpm, value:heartRate)" );
@@ -153,7 +154,7 @@ static void Tracking_Display_CB_act5( Tracking_Display *, const Escher_xtUMLEven
 static void
 Tracking_Display_CB_act5( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
 {
-  Escher_ObjectSet_s lapMarkers_space={0}; Escher_ObjectSet_s * lapMarkers = &lapMarkers_space; /* lapMarkers (LapMarker) */ 
+  Escher_ObjectSet_s lapMarkers_space={0}; Escher_ObjectSet_s * lapMarkers = &lapMarkers_space;
   /* SELECT many lapMarkers FROM INSTANCES OF LapMarker */
   XTUML_OAL_STMT_TRACE( 1, "SELECT many lapMarkers FROM INSTANCES OF LapMarker" );
   Escher_CopySet( lapMarkers, &pG_Tracking_LapMarker_extent.active );

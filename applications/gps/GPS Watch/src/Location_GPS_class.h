@@ -77,8 +77,8 @@ typedef union {
  * enumeration of state model event numbers
  */
 #define LOCATION_GPS_CBEVENT1NUM 0  /* GPS_A1:'timeout' */
-#define LOCATION_GPS_CBEVENT2NUM 1  /* LOC::registerListener:'registerListener' */
-#define LOCATION_GPS_CBEVENT3NUM 2  /* LOC::unregisterListener:'unregisterListener' */
+#define LOCATION_GPS_CBEVENT3NUM 1  /* LOC::unregisterListener:'unregisterListener' */
+#define LOCATION_GPS_CBEVENT2NUM 2  /* LOC::registerListener:'registerListener' */
 
 extern void Location_GPS_CBDispatch( Escher_xtUMLEvent_t * );
 

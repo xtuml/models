@@ -16,7 +16,7 @@ Simulates a pulse monitor hardware/firmware. This component is only behavioral a
 */
 
 #include "GPSWatch_sys_types.h"
-void HeartRateMonitor_HR_heartRateChanged( const r_t );
+void HeartRateMonitor_HR_heartRateChanged( const i_t );
 void HeartRateMonitor_HR_registerListener( void );
 void HeartRateMonitor_HR_unregisterListener( void );
 

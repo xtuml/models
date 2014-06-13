@@ -9,36 +9,37 @@
 
 #include "GPSWatch_sys_types.h"
 #include "LOG_bridge.h"
+#include "MATH_bridge.h"
 #include "TIM_bridge.h"
 #include "Tracking_classes.h"
 
 
 /*
- * RELATE TrackLog TO HeartRateSample ACROSS R6
+ * RELATE WorkoutSession TO HeartRateSample ACROSS R6
  */
 void
-Tracking_HeartRateSample_R6_Link( Tracking_TrackLog * part, Tracking_HeartRateSample * form )
+Tracking_HeartRateSample_R6_Link_tracks_heart_rate_over_time_as( Tracking_WorkoutSession * part, Tracking_HeartRateSample * form )
 {
   if ( (part == 0) || (form == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "HeartRateSample", "Tracking_HeartRateSample_R6_Link" );
+    XTUML_EMPTY_HANDLE_TRACE( "HeartRateSample", "Tracking_HeartRateSample_R6_Link_tracks_heart_rate_over_time_as" );
     return;
   }
-  /* Note:  HeartRateSample->TrackLog[R6] not navigated */
-  Escher_SetInsertElement( &part->HeartRateSample_R6, (Escher_ObjectSet_s *) form );
+  /* Note:  HeartRateSample->WorkoutSession[R6] not navigated */
+  Escher_SetInsertElement( &part->HeartRateSample_R6_tracks_heart_rate_over_time_as, (Escher_ObjectSet_s *) form );
 }
 
 /*
- * UNRELATE TrackLog FROM HeartRateSample ACROSS R6
+ * UNRELATE WorkoutSession FROM HeartRateSample ACROSS R6
  */
 void
-Tracking_HeartRateSample_R6_Unlink( Tracking_TrackLog * part, Tracking_HeartRateSample * form )
+Tracking_HeartRateSample_R6_Unlink_tracks_heart_rate_over_time_as( Tracking_WorkoutSession * part, Tracking_HeartRateSample * form )
 {
   if ( (part == 0) || (form == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "HeartRateSample", "Tracking_HeartRateSample_R6_Unlink" );
+    XTUML_EMPTY_HANDLE_TRACE( "HeartRateSample", "Tracking_HeartRateSample_R6_Unlink_tracks_heart_rate_over_time_as" );
     return;
   }
-  /* Note:  HeartRateSample->TrackLog[R6] not navigated */
-  Escher_SetRemoveElement( &part->HeartRateSample_R6, (Escher_ObjectSet_s *) form );
+  /* Note:  HeartRateSample->WorkoutSession[R6] not navigated */
+  Escher_SetRemoveElement( &part->HeartRateSample_R6_tracks_heart_rate_over_time_as, (Escher_ObjectSet_s *) form );
 }
 
 /*

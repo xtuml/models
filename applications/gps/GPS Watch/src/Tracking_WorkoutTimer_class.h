@@ -25,13 +25,14 @@ struct Tracking_WorkoutTimer {
   Escher_Timer_t * timer;  /* - timer */
 
   /* relationship storage */
-  Tracking_TrackLog * TrackLog_R4;
+  Tracking_WorkoutSession * WorkoutSession_R8_acts_as_the_stopwatch_for;
 };
 void Tracking_WorkoutTimer_op_activate( Tracking_WorkoutTimer * );
 void Tracking_WorkoutTimer_op_deactivate( Tracking_WorkoutTimer * );
+void Tracking_WorkoutTimer_op_initialize( Tracking_WorkoutTimer * );
 
-void Tracking_WorkoutTimer_R4_Link( Tracking_TrackLog *, Tracking_WorkoutTimer * );
-void Tracking_WorkoutTimer_R4_Unlink( Tracking_TrackLog *, Tracking_WorkoutTimer * );
+void Tracking_WorkoutTimer_R8_Link_is_timed_by( Tracking_WorkoutSession *, Tracking_WorkoutTimer * );
+/* Note:  WorkoutSession<-R8->WorkoutTimer unrelate accessor not needed */
 
 
 #define Tracking_WorkoutTimer_MAX_EXTENT_SIZE 200

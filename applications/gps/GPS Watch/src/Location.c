@@ -12,8 +12,10 @@
 
 #include "GPSWatch_sys_types.h"
 #include "Location.h"
-#include "LOG_bridge.h"
+#include "MATH_bridge.h"
 #include "TIM_bridge.h"
+#include "LOG_bridge.h"
+#include "Tracking.h"
 #include "Location_classes.h"
 
 /*
@@ -22,7 +24,7 @@
  * From Provider Message:  locationUpdate
  */
 void
-Location_LOC_locationUpdate( GPSWatch_sdt_Location p_location)
+Location_LOC_locationUpdate( GPSWatch_sdt_Location p_location )
 {
   Tracking_LOC_locationUpdate(  p_location );
 }
@@ -61,24 +63,31 @@ Location_LOC_unregisterListener()
  * To Provider Message:  getDistance
  */
 r_t
-Location_UTIL_getDistance( GPSWatch_sdt_Location p_fromLocation, GPSWatch_sdt_Location p_toLocation)
+Location_UTIL_getDistance( GPSWatch_sdt_Location p_fromLocation, GPSWatch_sdt_Location p_toLocation )
 {
-  /* RETURN ( PARAM.fromLocation.longitude + PARAM.toLocation.latitude ) */
-  XTUML_OAL_STMT_TRACE( 1, "RETURN ( PARAM.fromLocation.longitude + PARAM.toLocation.latitude )" );
-  return ( p_fromLocation.longitude + p_toLocation.latitude );
-}
+  r_t sumSquares;r_t deltaLong;r_t deltaLat;
+  /* ASSIGN deltaLat = ( PARAM.toLocation.latitude - PARAM.fromLocation.latitude ) */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN deltaLat = ( PARAM.toLocation.latitude - PARAM.fromLocation.latitude )" );
+  deltaLat = ( p_toLocation.latitude - p_fromLocation.latitude );
+  /* ASSIGN deltaLong = ( PARAM.toLocation.longitude - PARAM.fromLocation.longitude ) */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN deltaLong = ( PARAM.toLocation.longitude - PARAM.fromLocation.longitude )" );
+  deltaLong = ( p_toLocation.longitude - p_fromLocation.longitude );
+  /* ASSIGN sumSquares = ( ( deltaLat * deltaLat ) + ( deltaLong * deltaLong ) ) */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN sumSquares = ( ( deltaLat * deltaLat ) + ( deltaLong * deltaLong ) )" );
+  sumSquares = ( ( deltaLat * deltaLat ) + ( deltaLong * deltaLong ) );
+  /* RETURN MATH::sqrt(x:sumSquares) */
+  XTUML_OAL_STMT_TRACE( 1, "RETURN MATH::sqrt(x:sumSquares)" );
+  return MATH_sqrt( sumSquares );}
 
 /*
  * UML Domain Functions (Synchronous Services)
  */
 
-#if Location_MAX_CLASS_NUMBERS > 0
 /* xtUML class info (collections, sizes, etc.) */
 Escher_Extent_t * const Location_class_info[ Location_MAX_CLASS_NUMBERS ] = {
   &pG_Location_GPS_extent,
   0
 };
-#endif
 
 /*
  * Array of pointers to the class event dispatcher method.

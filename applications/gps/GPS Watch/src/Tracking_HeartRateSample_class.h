@@ -21,14 +21,15 @@ extern	"C"	{
 struct Tracking_HeartRateSample {
 
   /* application analysis class attributes */
-  r_t heartRate;  /* - heartRate */
+  i_t heartRate;  /* - heartRate */
+  i_t time;  /* - time */
 
   /* relationship storage */
-  /* Note:  No storage needed for HeartRateSample->TrackLog[R6] */
+  /* Note:  No storage needed for HeartRateSample->WorkoutSession[R6] */
 };
 
-void Tracking_HeartRateSample_R6_Link( Tracking_TrackLog *, Tracking_HeartRateSample * );
-void Tracking_HeartRateSample_R6_Unlink( Tracking_TrackLog *, Tracking_HeartRateSample * );
+void Tracking_HeartRateSample_R6_Link_tracks_heart_rate_over_time_as( Tracking_WorkoutSession *, Tracking_HeartRateSample * );
+void Tracking_HeartRateSample_R6_Unlink_tracks_heart_rate_over_time_as( Tracking_WorkoutSession *, Tracking_HeartRateSample * );
 
 
 #define Tracking_HeartRateSample_MAX_EXTENT_SIZE 200

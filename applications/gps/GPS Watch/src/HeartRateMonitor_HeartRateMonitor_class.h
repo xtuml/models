@@ -21,7 +21,7 @@ extern	"C"	{
 struct HeartRateMonitor_HeartRateMonitor {
 
   /* application analysis class attributes */
-  r_t recentHeartRate;  /* - recentHeartRate */
+  i_t recentHeartRate;  /* - recentHeartRate */
   Escher_Timer_t * timer;  /* - timer */
 
 };
@@ -77,8 +77,8 @@ typedef union {
  * enumeration of state model event numbers
  */
 #define HEARTRATEMONITOR_HEARTRATEMONITOR_CBEVENT3NUM 0  /* HeartRateMonitor_A3:'timeout' */
-#define HEARTRATEMONITOR_HEARTRATEMONITOR_CBEVENT1NUM 1  /* HR::registerListener:'registerListener' */
-#define HEARTRATEMONITOR_HEARTRATEMONITOR_CBEVENT2NUM 2  /* HR::unregisterListener:'unregisterListener' */
+#define HEARTRATEMONITOR_HEARTRATEMONITOR_CBEVENT2NUM 1  /* HR::unregisterListener:'unregisterListener' */
+#define HEARTRATEMONITOR_HEARTRATEMONITOR_CBEVENT1NUM 2  /* HR::registerListener:'registerListener' */
 
 extern void HeartRateMonitor_HeartRateMonitor_CBDispatch( Escher_xtUMLEvent_t * );
 
