@@ -72,8 +72,7 @@ INSERT INTO O_TFR
 
 self.startDate = TIM::current_date();
 self.startTime = TIM::current_clock();
-self.accumulatedDistance = 0.0;
-self.currentSpeed = 0.0;',
+self.accumulatedDistance = 0.0;',
 	1,
 	'',
 	"0a3c180b-9d9a-457a-ab39-2114964b5908");
@@ -130,7 +129,6 @@ trackLog.clearTrackPoints();
 trackLog.clearLapMarkers();
 
 // Reset the session.
-self.currentSpeed = 0.0;
 self.accumulatedDistance = 0.0;
 self.clearHeartRateSamples();
 ',
@@ -173,9 +171,40 @@ INSERT INTO O_ATTR
 	"ba5eda7a-def5-0000-0000-000000000010",
 	'',
 	'');
-INSERT INTO O_NBATTR
+INSERT INTO O_DBATTR
 	VALUES ("19624f2a-4f38-4a00-9a46-f7c43c783ae6",
-	"2522ffa2-db69-4807-ab45-06acf4cf893a");
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	'// Calculate the current speed, expressed in km per hour, by summing 
+// the straight-line distance between each of several of the most recent 
+// track points and then dividing that sum by the elapsed time between 
+// the first and last point in the subset used for the calculation.
+
+select one lastPoint related by self->TrackLog[R4.''captures path in'']->TrackPoint[R3.''has last''];
+speed = 0.0;
+if ( not empty lastPoint )
+  cursor = lastPoint;
+  index = SpeedAveragingWindow;  // Number of track points to use when calculating average speed.
+  totalDistance = 0.0;
+  elapsedTime = 0.0;  // Explicit delcaration because a Real is required for a later calculation.
+  elapsedTime = lastPoint.time;
+  while ( index > 0 )
+    select one previousPoint related by cursor->TrackPoint[R2.preceeds];
+    if ( empty previousPoint )
+      break;
+    end if;
+    send distance = UTIL::getDistance( fromLat:cursor.latitude, fromLong: cursor.longitude,
+                                      toLat: previousPoint.latitude, toLong: previousPoint.longitude );
+    totalDistance = totalDistance + distance;
+    index = index - 1;
+    cursor = previousPoint;
+  end while;
+  elapsedTime = elapsedTime - cursor.time;
+  speed = totalDistance / (elapsedTime / SecondsPerHour);
+end if;
+
+// Return the value by writing to the (derived) attribute.
+self.currentSpeed = speed;',
+	1);
 INSERT INTO O_BATTR
 	VALUES ("19624f2a-4f38-4a00-9a46-f7c43c783ae6",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a");
@@ -198,7 +227,7 @@ INSERT INTO O_DBATTR
 	"2522ffa2-db69-4807-ab45-06acf4cf893a",
 	'// Calculate current pace from current speed, converting from km/hour to minutes/km.
 
-if (self.currentSpeed != 0)
+if ( self.currentSpeed != 0.0 )
   self.currentPace = 60.0 / self.currentSpeed;
 else
   self.currentPace = 0.0;

@@ -392,20 +392,20 @@ INSERT INTO SPR_PEP
 INSERT INTO SPR_PO
 	VALUES ("409338b4-1ff4-4ce9-893d-a58f09bbf50d",
 	'getDistance',
-	'',
+	'Calculate distance between the "from" and "to" coordinates passed as parameters.',
 	'// Return the straight-line distance between the two points passed as parameters.
 
-deltaLat = param.toLocation.latitude - param.fromLocation.latitude;
-deltaLong = param.toLocation.longitude - param.fromLocation.longitude;
+deltaLat = param.toLat - param.fromLat;
+deltaLong = param.toLong - param.fromLong;
 sumSquares = (deltaLat * deltaLat) + (deltaLong * deltaLong);
-return ( MATH::sqrt( x: sumSquares ) );',
+return ( (MATH::sqrt( x: sumSquares ) * kmPerDegree) );',
 	1);
 INSERT INTO C_EP_PROXY
 	VALUES ("dea2904d-4d56-4426-a11d-768d3893878f",
 	"b65a1f3e-0be2-4ec7-867b-c71757895c44",
 	-1,
 	'getDistance',
-	'',
+	'Calculate distance between the "from" and "to" coordinates passed as parameters.',
 	'../../LocationInterfaces/LocationUtil/LocationUtil.xtuml');
 INSERT INTO C_I_PROXY
 	VALUES ("b65a1f3e-0be2-4ec7-867b-c71757895c44",

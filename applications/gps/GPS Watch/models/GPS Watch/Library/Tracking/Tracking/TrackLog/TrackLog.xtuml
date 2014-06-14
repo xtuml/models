@@ -29,9 +29,8 @@ create object instance trackPoint of TrackPoint;
 select one workoutTimer related by 
   self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
 trackPoint.time      = workoutTimer.time;
-trackPoint.longitude = param.location.longitude;
-trackPoint.latitude  = param.location.latitude;
-trackPoint.speed     = param.location.speed;
+trackPoint.longitude = param.longitude;
+trackPoint.latitude  = param.latitude;
 
 // Add the newly created track point to the track log.
 select one firstPoint related by self->TrackPoint[R1];
@@ -39,15 +38,16 @@ select one lastPoint related by self->TrackPoint[R3];
 
 // Explicit variable declarations for later use outside if-else clause.
 isFirstTrackPoint = false;
-lastKnownLocation = param.location;  
+lastLatitude = 0.0;
+lastLongitude = 0.0;  
 if (empty firstPoint)
   isFirstTrackPoint = true;
   relate self to trackPoint across R1.''has first'';
   relate self to trackPoint across R3.''has last'';
 else 
   // Save last location for use in updating accumulated distance.
-  lastKnownLocation.longitude = lastPoint.longitude;
-  lastKnownLocation.latitude = lastPoint.latitude;
+  lastLatitude = lastPoint.latitude;
+  lastLongitude = lastPoint.longitude;
   unrelate self from lastPoint across R3.''has last'';
   relate self to trackPoint across R3.''has last'';
   relate lastPoint to trackPoint across R2.''follows'';
@@ -56,13 +56,12 @@ end if;
 // Update accumulated distance and current speed.
 distance = 0.0;
 if (not isFirstTrackPoint)
-  send distance = UTIL::getDistance(fromLocation: lastKnownLocation, 
-                                    toLocation: param.location);
+  send distance = UTIL::getDistance( fromLat: lastLatitude, fromLong: lastLongitude,
+                                     toLat: param.latitude, toLong: param.longitude );
 end if;
 
 select one session related by self->WorkoutSession[R4.''represents path for''];
 session.accumulatedDistance = session.accumulatedDistance + distance;
-session.currentSpeed = param.location.speed;
 
 // Notify UI of of the updated values.
 generate Display_A2:refresh() to Display class;',
@@ -70,21 +69,23 @@ generate Display_A2:refresh() to Display class;',
 	'',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_TPARM
-	VALUES ("64c18302-2a55-4277-b153-a3823748dfcb",
+	VALUES ("aaeac00c-f771-40de-8ed2-f7156bca384b",
 	"0f45bbc6-da36-4b5b-a2dd-f739a6f0cbdd",
-	'location',
-	"cb835491-fba0-4f96-9ad3-ef020d954fa4",
+	'latitude',
+	"ba5eda7a-def5-0000-0000-000000000003",
 	0,
 	'',
 	"00000000-0000-0000-0000-000000000000",
 	'');
-INSERT INTO S_DT_PROXY
-	VALUES ("cb835491-fba0-4f96-9ad3-ef020d954fa4",
-	"00000000-0000-0000-0000-000000000000",
-	'Location',
+INSERT INTO O_TPARM
+	VALUES ("f7d42a65-2ad9-4471-aca8-fa8ca8b8d9b6",
+	"0f45bbc6-da36-4b5b-a2dd-f739a6f0cbdd",
+	'longitude',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
 	'',
-	'',
-	'../../../../LocationDataTypes/LocationDataTypes.xtuml');
+	"aaeac00c-f771-40de-8ed2-f7156bca384b",
+	'');
 INSERT INTO O_TFR
 	VALUES ("7dbac40f-6e89-4ad2-a576-0f1fcfbe2dc5",
 	"d2828038-110a-4559-8452-91651af0adcb",

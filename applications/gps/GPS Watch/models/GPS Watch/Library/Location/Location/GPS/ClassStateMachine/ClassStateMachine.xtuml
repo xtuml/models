@@ -211,15 +211,13 @@ INSERT INTO SM_ACT
 	VALUES ("bcb4824a-fdc3-41d7-970d-126c2f4ac183",
 	"cbd78b0b-db48-eee0-5d1c-ff567de59af8",
 	1,
-	'// prepare signal data with some dummy values that change over time
+	'// Simulate movement.
 select any gps from instances of GPS;
-gps.currentLocation.longitude =  gps.currentLocation.longitude + 2.0;
-gps.currentLocation.latitude  =  gps.currentLocation.latitude  + 3.0;
-gps.currentLocation.speed     = (gps.currentLocation.latitude - 
-                                 gps.currentLocation.longitude) / 5.0;
+gps.currentLongitude = gps.currentLongitude + 0.02;
+gps.currentLatitude = gps.currentLatitude + 0.03;
 
-// pass the new location to client component
-send LocationProvider::locationUpdate(location: gps.currentLocation);
+// Send the new location out through the port.
+send LocationProvider::locationUpdate( latitude: gps.currentLatitude, longitude: gps.currentLongitude );
 ',
 	'');
 INSERT INTO SM_TAH
@@ -240,9 +238,8 @@ if (empty gps)
 end if;
 
 // reset currentLocation
-gps.currentLocation.longitude = 0.0;
-gps.currentLocation.latitude  = 0.0;
-gps.currentLocation.speed     = 0.0;
+gps.currentLongitude = 0.0;
+gps.currentLatitude  = 0.0;
 
 LOG::LogInfo(message: "Location listener registered.");
 
@@ -714,5 +711,5 @@ INSERT INTO O_OBJ_PROXY
 	'',
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000",
-	"cbd78b0b-db48-eee0-5d1c-ff567de59af8",
+	"00000000-0000-0000-0000-000000000000",
 	'../GPS.xtuml');

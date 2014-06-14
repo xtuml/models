@@ -533,16 +533,15 @@ INSERT INTO SPR_RS
 	'',
 	'// Log the newly received location data.
 LOG::LogInfo(message: "location updated: ");
-LOG::LogReal(message: "longitude", r: param.location.longitude);
-LOG::LogReal(message: "latitude",  r: param.location.latitude );
-LOG::LogReal(message: "speed",     r: param.location.speed    );
+LOG::LogReal(message: "longitude", r: param.longitude);
+LOG::LogReal(message: "latitude",  r: param.latitude );
 
 // Add a track point to track log related to the singleton instance of 
 // the workout session.
 select any session from instances of WorkoutSession;
 if ( not empty session )
   select one trackLog related by session->TrackLog[R4.''captures path in''];
-  trackLog.addTrackPoint( location: param.location );
+  trackLog.addTrackPoint( latitude: param.latitude, longitude: param.longitude );
 end if;',
 	1);
 INSERT INTO C_EP_PROXY
@@ -890,7 +889,8 @@ INSERT INTO SPR_REP
 INSERT INTO SPR_RO
 	VALUES ("051452c4-19ef-40e2-a973-335f648d5010",
 	'getDistance',
-	'',
+	'Returns distance, in kilometers, between the "from" and "to" coordinates passed as parameters.
+The coordinates must be passed as decimal degrees.',
 	'return 1;',
 	0);
 INSERT INTO C_EP_PROXY
@@ -898,7 +898,8 @@ INSERT INTO C_EP_PROXY
 	"b65a1f3e-0be2-4ec7-867b-c71757895c44",
 	-1,
 	'getDistance',
-	'',
+	'Returns distance, in kilometers, between the "from" and "to" coordinates passed as parameters.
+The coordinates must be passed as decimal degrees.',
 	'../../LocationInterfaces/LocationUtil/LocationUtil.xtuml');
 INSERT INTO C_I_PROXY
 	VALUES ("b65a1f3e-0be2-4ec7-867b-c71757895c44",
