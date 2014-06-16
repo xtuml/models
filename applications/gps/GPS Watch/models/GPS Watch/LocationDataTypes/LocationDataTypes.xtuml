@@ -74,6 +74,30 @@ INSERT INTO DIM_ELE
 	VALUES ("2d40a316-b43a-463f-a0a3-8e8fca5a4396",
 	0,
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO GD_GE
+	VALUES ("1690ab20-9ea5-4b89-86ea-49bfbc4a890e",
+	"9c1fea83-05c5-4e7e-8700-c60f5cc40fd1",
+	"f162a116-9934-4667-94c4-3864c0f132a0",
+	109,
+	0,
+	'GPS Watch::LocationDataTypes::simulatedGPS');
+INSERT INTO GD_SHP
+	VALUES ("1690ab20-9ea5-4b89-86ea-49bfbc4a890e");
+INSERT INTO GD_NCS
+	VALUES ("1690ab20-9ea5-4b89-86ea-49bfbc4a890e");
+INSERT INTO DIM_ND
+	VALUES (200.000000,
+	150.000000,
+	"1690ab20-9ea5-4b89-86ea-49bfbc4a890e");
+INSERT INTO DIM_GE
+	VALUES (5128.000000,
+	3084.000000,
+	"1690ab20-9ea5-4b89-86ea-49bfbc4a890e",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("1690ab20-9ea5-4b89-86ea-49bfbc4a890e",
+	0,
+	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_DIA
 	VALUES ("9c1fea83-05c5-4e7e-8700-c60f5cc40fd1",
 	'',
@@ -127,7 +151,10 @@ INSERT INTO CNST_CSP
 	'Distance',
 	'kmPerDegree is a rough conversion figure valid for most latitude figures (except where 
 the irregular shape of the earth perturbs the value) and for longitude figures
-away from the poles (where the distance between longitude lines decreases to zero).');
+away from the poles (where the distance between longitude lines decreases to zero).
+
+latitudeIncrement and longitudeIncrement specify the distance traveled by the simulated
+GPS during each interval.');
 INSERT INTO CNST_SYC
 	VALUES ("4b202723-107a-4e2e-980f-e89036bc34e2",
 	'kmPerDegree',
@@ -145,6 +172,101 @@ INSERT INTO CNST_LSC
 	'111.32');
 INSERT INTO PE_PE
 	VALUES ("4303c5d9-ba37-4a24-9943-296d96ba7853",
+	1,
+	"f8a6a6be-a419-4e76-b3ae-f4d8862c10bf",
+	"00000000-0000-0000-0000-000000000000",
+	10);
+INSERT INTO CNST_CSP
+	VALUES ("f162a116-9934-4667-94c4-3864c0f132a0",
+	'simulatedGPS',
+	'Constants specifying the behavior of the simulated GPS.
+
+initialLatitude and initialLongitude specify, as decimal degrees, 
+the initial location of the simulated GPS.
+
+latitudeIncrement and longitudeIncrement specify, as decimal degrees, 
+the distance the simulated GPS moves during each update period.
+
+updatePeriod specifies, in microseconds, the update period for the
+simulated GPS.  In other words, the simulated GPS updates its location
+once per updatePeriod.');
+INSERT INTO CNST_SYC
+	VALUES ("a9811f0f-feaa-48f8-81b3-ae890a1e531d",
+	'longitudeIncrement',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	"f162a116-9934-4667-94c4-3864c0f132a0",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO CNST_LFSC
+	VALUES ("a9811f0f-feaa-48f8-81b3-ae890a1e531d",
+	"ba5eda7a-def5-0000-0000-000000000003");
+INSERT INTO CNST_LSC
+	VALUES ("a9811f0f-feaa-48f8-81b3-ae890a1e531d",
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'0.00005');
+INSERT INTO CNST_SYC
+	VALUES ("e7ca93d4-7111-4e39-be2c-aa6d3db92bc5",
+	'latitudeIncrement',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	"f162a116-9934-4667-94c4-3864c0f132a0",
+	"a9811f0f-feaa-48f8-81b3-ae890a1e531d",
+	"ba5eda7a-def5-0000-0000-000000000003");
+INSERT INTO CNST_LFSC
+	VALUES ("e7ca93d4-7111-4e39-be2c-aa6d3db92bc5",
+	"ba5eda7a-def5-0000-0000-000000000003");
+INSERT INTO CNST_LSC
+	VALUES ("e7ca93d4-7111-4e39-be2c-aa6d3db92bc5",
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'0.00004');
+INSERT INTO CNST_SYC
+	VALUES ("7535d332-5b30-4f96-ba9d-5412d0dda077",
+	'initialLatitude',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	"f162a116-9934-4667-94c4-3864c0f132a0",
+	"e7ca93d4-7111-4e39-be2c-aa6d3db92bc5",
+	"ba5eda7a-def5-0000-0000-000000000003");
+INSERT INTO CNST_LFSC
+	VALUES ("7535d332-5b30-4f96-ba9d-5412d0dda077",
+	"ba5eda7a-def5-0000-0000-000000000003");
+INSERT INTO CNST_LSC
+	VALUES ("7535d332-5b30-4f96-ba9d-5412d0dda077",
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'32.432237');
+INSERT INTO CNST_SYC
+	VALUES ("9cead6a0-2a2a-429e-884b-773779ee648d",
+	'initialLongitude',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	"f162a116-9934-4667-94c4-3864c0f132a0",
+	"7535d332-5b30-4f96-ba9d-5412d0dda077",
+	"ba5eda7a-def5-0000-0000-000000000003");
+INSERT INTO CNST_LFSC
+	VALUES ("9cead6a0-2a2a-429e-884b-773779ee648d",
+	"ba5eda7a-def5-0000-0000-000000000003");
+INSERT INTO CNST_LSC
+	VALUES ("9cead6a0-2a2a-429e-884b-773779ee648d",
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'-110.812283');
+INSERT INTO CNST_SYC
+	VALUES ("ebff9488-13ed-4561-897b-80c169d4738b",
+	'updatePeriod',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	"f162a116-9934-4667-94c4-3864c0f132a0",
+	"9cead6a0-2a2a-429e-884b-773779ee648d",
+	"ba5eda7a-def5-0000-0000-000000000003");
+INSERT INTO CNST_LFSC
+	VALUES ("ebff9488-13ed-4561-897b-80c169d4738b",
+	"ba5eda7a-def5-0000-0000-000000000002");
+INSERT INTO CNST_LSC
+	VALUES ("ebff9488-13ed-4561-897b-80c169d4738b",
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'2000000');
+INSERT INTO PE_PE
+	VALUES ("f162a116-9934-4667-94c4-3864c0f132a0",
 	1,
 	"f8a6a6be-a419-4e76-b3ae-f4d8862c10bf",
 	"00000000-0000-0000-0000-000000000000",

@@ -12,9 +12,7 @@ but future releases may support multiple sessions.
 Even in that case, only a single session is executing 
 at any given time.  Other sessions represent completed
 or planned workout sessions.',
-	"00000000-0000-0000-0000-000000000000",
-	"ece25c8b-87a9-aedb-7aab-d647e89ebfac",
-	"44937b64-b2e3-92bc-dc5d-bd375f8e4089");
+	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_TFR
 	VALUES ("e3f7be53-3ad2-47d3-862a-9a65846facde",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a",
@@ -199,7 +197,7 @@ if ( not empty lastPoint )
     cursor = previousPoint;
   end while;
   elapsedTime = elapsedTime - cursor.time;
-  speed = totalDistance / (elapsedTime / SecondsPerHour);
+  speed = (totalDistance / 1000) / (elapsedTime / SecondsPerHour);
 end if;
 
 // Return the value by writing to the (derived) attribute.
@@ -292,7 +290,7 @@ INSERT INTO O_ATTR
 	"2522ffa2-db69-4807-ab45-06acf4cf893a",
 	"55020749-f521-4522-b8f9-d05866ad4d47",
 	'accumulatedDistance',
-	'Accumulated distance for this workout session.',
+	'Accumulated distance, expressed in meters, for this workout session.',
 	'',
 	'accumulatedDistance',
 	0,
