@@ -22,7 +22,7 @@ INSERT INTO SM_EVT
 	"cbd78b0b-db48-eee0-5d1c-ff567de59af8",
 	"00000000-0000-0000-0000-000000000000",
 	1,
-	'timeout',
+	'tick',
 	0,
 	'',
 	'GPS_A1',
@@ -189,13 +189,12 @@ INSERT INTO SM_ACT
 	VALUES ("cb34b61a-9ac0-4fb8-ba29-739480e9e590",
 	"cbd78b0b-db48-eee0-5d1c-ff567de59af8",
 	1,
-	'select any gps from instances of GPS;
+	'// Deactivate the timer.
+select any gps from instances of GPS;
 res = TIM::timer_cancel(timer_inst_ref: gps.timer);
 LOG::LogInfo(message: "Location listener unregistered.");
 
-if ( res )
-  LOG::LogSuccess( message: "Location listener: timer_cancel() succeeded." );
-else
+if ( not res )
   LOG::LogFailure( message: "Location listener: timer_cancel() failed." );
 end if;
 ',
@@ -213,8 +212,16 @@ INSERT INTO SM_ACT
 	1,
 	'// Simulate movement.
 select any gps from instances of GPS;
-gps.currentLongitude = gps.currentLongitude + longitudeIncrement;
-gps.currentLatitude = gps.currentLatitude + latitudeIncrement;
+if ( (gps.motionSegments % 3) == 0 )
+  gps.currentLongitude = gps.currentLongitude + (longitudeIncrement * 2);
+  gps.currentLatitude = gps.currentLatitude + latitudeIncrement;
+elif ( (gps.motionSegments %5) == 0 )
+  gps.currentLongitude = gps.currentLongitude + longitudeIncrement;
+  gps.currentLatitude = gps.currentLatitude + (latitudeIncrement * 3);
+else
+  gps.currentLongitude = gps.currentLongitude + longitudeIncrement;
+  gps.currentLatitude = gps.currentLatitude + latitudeIncrement;
+end if;
 ',
 	'');
 INSERT INTO SM_TAH
@@ -228,22 +235,11 @@ INSERT INTO SM_ACT
 	VALUES ("ea1d936e-7137-4b43-8326-537a93bfae9b",
 	"cbd78b0b-db48-eee0-5d1c-ff567de59af8",
 	1,
-	'// the GPS is a singleton, create if it doesn''t exist
-select any gps from instances of GPS;
-if (empty gps)
-  create object instance gps of GPS;
-end if;
-
-// reset currentLocation
-gps.currentLatitude  = initialLatitude;
-gps.currentLongitude = initialLongitude;
-
+	'// Activate the simulated GPS.
+GPS::activate();
 
 LOG::LogInfo(message: "Location listener registered.");
-
-create event instance timeout of GPS_A1:timeout() to GPS class;
-gps.timer = TIM::timer_start_recurring(event_inst: timeout,
-                                       microseconds: 2000000);',
+',
 	'');
 INSERT INTO SM_TAH
 	VALUES ("bdb32cb8-31dd-4055-8cff-47cb03c097c8",
@@ -269,7 +265,10 @@ INSERT INTO SM_ACT
 	VALUES ("f55e1769-6774-4a72-be63-c22992bda8e4",
 	"cbd78b0b-db48-eee0-5d1c-ff567de59af8",
 	1,
-	'',
+	'// Increment simulated motion segment count.
+select any gps from instances of GPS;
+gps.motionSegments = gps.motionSegments + 1;
+',
 	'');
 INSERT INTO GD_MD
 	VALUES ("885040c6-6f55-49f7-95b4-65f12d3e52be",
@@ -574,7 +573,7 @@ INSERT INTO GD_GE
 	"93241bb9-dcd3-40d6-b432-23fd64abb6d3",
 	42,
 	0,
-	'GPS Watch::Library::Location::Location::GPS::Class State Machine::locating::GPS_A1: timeout');
+	'GPS Watch::Library::Location::Location::GPS::Class State Machine::locating::GPS_A1: tick');
 INSERT INTO GD_CON
 	VALUES ("da0352db-0629-4a11-8681-d54fe774146c",
 	"00000000-0000-0000-0000-000000000000");
@@ -706,6 +705,6 @@ INSERT INTO O_OBJ_PROXY
 	'GPS',
 	1,
 	'GPS',
-	'',
+	'Simulates a GPS.',
 	"00000000-0000-0000-0000-000000000000",
 	'../GPS.xtuml');
