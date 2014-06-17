@@ -11,8 +11,6 @@ from the pulse monitor or a lap marker.
 
 During workout the TrackLog keeps track of certain measurements derived
 from the sequence of events that has occurred.',
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_TFR
 	VALUES ("0f45bbc6-da36-4b5b-a2dd-f739a6f0cbdd",
@@ -24,13 +22,12 @@ INSERT INTO O_TFR
 	'// Add a track point to this track log, update the accumulated distance
 // and current speed, and then notify the UI.
 
-// Create a new track point.
+// Create a new track point, retrieving the current location from the GPS.
 create object instance trackPoint of TrackPoint;
 select one workoutTimer related by 
   self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
-trackPoint.time      = workoutTimer.time;
-trackPoint.longitude = param.longitude;
-trackPoint.latitude  = param.latitude;
+trackPoint.time = workoutTimer.time;
+send LOC::getLocation( latitude: trackPoint.latitude, longitude: trackPoint.longitude );
 
 // Add the newly created track point to the track log.
 select one firstPoint related by self->TrackPoint[R1];
@@ -57,7 +54,7 @@ end if;
 distance = 0.0;
 if (not isFirstTrackPoint)
   send distance = UTIL::getDistance( fromLat: lastLatitude, fromLong: lastLongitude,
-                                     toLat: param.latitude, toLong: param.longitude );
+                                     toLat: trackPoint.latitude, toLong: trackPoint.longitude );
 end if;
 
 select one session related by self->WorkoutSession[R4.''represents path for''];
@@ -68,24 +65,6 @@ generate Display_A2:refresh() to Display class;',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO O_TPARM
-	VALUES ("aaeac00c-f771-40de-8ed2-f7156bca384b",
-	"0f45bbc6-da36-4b5b-a2dd-f739a6f0cbdd",
-	'latitude',
-	"ba5eda7a-def5-0000-0000-000000000003",
-	0,
-	'',
-	"00000000-0000-0000-0000-000000000000",
-	'');
-INSERT INTO O_TPARM
-	VALUES ("f7d42a65-2ad9-4471-aca8-fa8ca8b8d9b6",
-	"0f45bbc6-da36-4b5b-a2dd-f739a6f0cbdd",
-	'longitude',
-	"ba5eda7a-def5-0000-0000-000000000003",
-	0,
-	'',
-	"aaeac00c-f771-40de-8ed2-f7156bca384b",
-	'');
 INSERT INTO O_TFR
 	VALUES ("7dbac40f-6e89-4ad2-a576-0f1fcfbe2dc5",
 	"d2828038-110a-4559-8452-91651af0adcb",

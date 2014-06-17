@@ -312,23 +312,6 @@ INSERT INTO C_P
 	'',
 	'Location::LOC::LocationProvider');
 INSERT INTO SPR_PEP
-	VALUES ("cf211cfa-7c9b-483f-b703-e845a95639d6",
-	"c85ccd2f-994b-4dac-99c9-6e4b96e73d3d",
-	"f5aac2f0-f369-43f5-9c93-082599586590");
-INSERT INTO SPR_PS
-	VALUES ("cf211cfa-7c9b-483f-b703-e845a95639d6",
-	'locationUpdate',
-	'',
-	'',
-	1);
-INSERT INTO C_EP_PROXY
-	VALUES ("c85ccd2f-994b-4dac-99c9-6e4b96e73d3d",
-	"de38d4b0-e70e-49ee-a5b9-590645243ae5",
-	-1,
-	'locationUpdate',
-	'',
-	'../../LocationInterfaces/LocationProvider/LocationProvider.xtuml');
-INSERT INTO SPR_PEP
 	VALUES ("55d56674-a44b-4b05-8204-464a33fc6490",
 	"9ddd9205-9116-4aff-b118-91037de23593",
 	"f5aac2f0-f369-43f5-9c93-082599586590");
@@ -360,6 +343,28 @@ INSERT INTO C_EP_PROXY
 	"de38d4b0-e70e-49ee-a5b9-590645243ae5",
 	-1,
 	'unregisterListener',
+	'',
+	'../../LocationInterfaces/LocationProvider/LocationProvider.xtuml');
+INSERT INTO SPR_PEP
+	VALUES ("3b51d452-6b02-4bcf-bc83-8fccc1fa18a9",
+	"244d2b45-5908-40ff-99d3-a37dc791609a",
+	"f5aac2f0-f369-43f5-9c93-082599586590");
+INSERT INTO SPR_PO
+	VALUES ("3b51d452-6b02-4bcf-bc83-8fccc1fa18a9",
+	'getLocation',
+	'',
+	'// Return, via reference arguments, the current position of the singleton 
+// instance of the simulated GPS.
+
+select any gps from instances of GPS;
+param.latitude = gps.currentLatitude;
+param.longitude = gps.currentLongitude;',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("244d2b45-5908-40ff-99d3-a37dc791609a",
+	"de38d4b0-e70e-49ee-a5b9-590645243ae5",
+	-1,
+	'getLocation',
 	'',
 	'../../LocationInterfaces/LocationProvider/LocationProvider.xtuml');
 INSERT INTO C_I_PROXY

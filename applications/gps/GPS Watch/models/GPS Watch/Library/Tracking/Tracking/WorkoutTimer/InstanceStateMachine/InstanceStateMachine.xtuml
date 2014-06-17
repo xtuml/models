@@ -338,11 +338,15 @@ INSERT INTO SM_ACT
 	VALUES ("e1cd66da-563e-426d-bc06-88e2c9e757f1",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
-	'//create event instance evt of WorkoutTimer3:tick() to self;
-//self.timer = TIM::timer_start(event_inst: evt, microseconds: 1000000);
-self.time = self.time + 1;
+	'// Update the stopwatch time.
+self.time = self.time + timerPeriod;
 
-// refresh the user interface
+// Store a new track point.
+select one trackLog related by 
+  self->WorkoutSession[R8.''acts as the stopwatch for'']->TrackLog[R4.''captures path in''];
+trackLog.addTrackPoint();
+
+// Refresh the user interface.
 send UI::setTime(time: self.time);',
 	'');
 INSERT INTO GD_MD
@@ -362,7 +366,7 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'4.1.10',
+	'4.1.12',
 	'GPS Watch::Library::Tracking::Tracking::WorkoutTimer::Instance State Machine');
 INSERT INTO GD_GE
 	VALUES ("8e6563ea-9d7f-4127-b681-f8875cfed071",
@@ -1219,7 +1223,5 @@ this class also knows:
 stopwatch is currently running.
 
 ',
-	"00000000-0000-0000-0000-000000000000",
-	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	"00000000-0000-0000-0000-000000000000",
 	'../WorkoutTimer.xtuml');

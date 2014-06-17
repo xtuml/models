@@ -26,8 +26,8 @@ INSERT INTO GD_MD
 	1,
 	0,
 	0,
-	0,
-	0,
+	200,
+	150,
 	0,
 	'',
 	'GPS Watch::Library::Tracking');
@@ -499,6 +499,30 @@ INSERT INTO DIM_ELE
 	VALUES ("d8677561-de3d-426c-bcce-92e25ff4e087",
 	0,
 	"1f51b134-2b1d-4529-91cb-a5458f99aff4");
+INSERT INTO GD_GE
+	VALUES ("f9c3ec82-219d-4f4c-86e6-14892d5f2124",
+	"af703f34-a5d6-467e-ad32-c2fc2af9ed45",
+	"37e62abd-d1c2-4241-a4cb-9aa88fabd6e8",
+	108,
+	0,
+	'GPS Watch::Library::Tracking::TrackingDataTypes');
+INSERT INTO GD_SHP
+	VALUES ("f9c3ec82-219d-4f4c-86e6-14892d5f2124");
+INSERT INTO GD_NCS
+	VALUES ("f9c3ec82-219d-4f4c-86e6-14892d5f2124");
+INSERT INTO DIM_ND
+	VALUES (200.000000,
+	150.000000,
+	"f9c3ec82-219d-4f4c-86e6-14892d5f2124");
+INSERT INTO DIM_GE
+	VALUES (2240.000000,
+	1344.000000,
+	"f9c3ec82-219d-4f4c-86e6-14892d5f2124",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("f9c3ec82-219d-4f4c-86e6-14892d5f2124",
+	0,
+	"1f51b134-2b1d-4529-91cb-a5458f99aff4");
 INSERT INTO DIM_DIA
 	VALUES ("af703f34-a5d6-467e-ad32-c2fc2af9ed45",
 	'',
@@ -523,34 +547,6 @@ INSERT INTO C_R
 	'',
 	'Unnamed Interface',
 	'Tracking::LOC::LocationProvider');
-INSERT INTO SPR_REP
-	VALUES ("6ad4a18f-34d4-4d38-b701-6d95cc9cb6b3",
-	"c85ccd2f-994b-4dac-99c9-6e4b96e73d3d",
-	"b945d9de-e8b2-4a09-8727-391d7b0799a6");
-INSERT INTO SPR_RS
-	VALUES ("6ad4a18f-34d4-4d38-b701-6d95cc9cb6b3",
-	'locationUpdate',
-	'',
-	'// Log the newly received location data.
-LOG::LogInfo(message: "location updated: ");
-LOG::LogReal(message: "longitude", r: param.longitude);
-LOG::LogReal(message: "latitude",  r: param.latitude );
-
-// Add a track point to track log related to the singleton instance of 
-// the workout session.
-select any session from instances of WorkoutSession;
-if ( not empty session )
-  select one trackLog related by session->TrackLog[R4.''captures path in''];
-  trackLog.addTrackPoint( latitude: param.latitude, longitude: param.longitude );
-end if;',
-	1);
-INSERT INTO C_EP_PROXY
-	VALUES ("c85ccd2f-994b-4dac-99c9-6e4b96e73d3d",
-	"de38d4b0-e70e-49ee-a5b9-590645243ae5",
-	-1,
-	'locationUpdate',
-	'',
-	'../../LocationInterfaces/LocationProvider/LocationProvider.xtuml');
 INSERT INTO SPR_REP
 	VALUES ("7ba2b57b-db0c-47c6-ab55-14027d26ae91",
 	"9ddd9205-9116-4aff-b118-91037de23593",
@@ -583,6 +579,23 @@ INSERT INTO C_EP_PROXY
 	"de38d4b0-e70e-49ee-a5b9-590645243ae5",
 	-1,
 	'unregisterListener',
+	'',
+	'../../LocationInterfaces/LocationProvider/LocationProvider.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("569e79bb-0bb1-4721-9f91-36a7d72204b2",
+	"244d2b45-5908-40ff-99d3-a37dc791609a",
+	"b945d9de-e8b2-4a09-8727-391d7b0799a6");
+INSERT INTO SPR_RO
+	VALUES ("569e79bb-0bb1-4721-9f91-36a7d72204b2",
+	'getLocation',
+	'',
+	'',
+	3);
+INSERT INTO C_EP_PROXY
+	VALUES ("244d2b45-5908-40ff-99d3-a37dc791609a",
+	"de38d4b0-e70e-49ee-a5b9-590645243ae5",
+	-1,
+	'getLocation',
 	'',
 	'../../LocationInterfaces/LocationProvider/LocationProvider.xtuml');
 INSERT INTO C_I_PROXY
