@@ -148,10 +148,12 @@ unrelate self from session across R11.''is currently executing within'';
 
 // Finally, find the next goal specification in the sequence and start executing it, if it exists.
 select one currentGoalSpec related by self->GoalSpec[R9.''specified by''];
-select any nextGoalSpec related by session->GoalSpec[R10.includes]
+
+select any nextGoalSpec related by session->GoalSpec[R10.''includes'']
   where ( selected.SequenceNumber == (currentGoalSpec.SequenceNumber + 1) );
+  
 if ( not empty nextGoalSpec )
-  Goal::create( sequenceNumber: (currentGoalSpec + 1) );
+  Goal::create( sequenceNumber: (currentGoalSpec.SequenceNumber + 1) );
 end if;
 ',
 	'');
