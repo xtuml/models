@@ -69,7 +69,7 @@ INSERT INTO SM_STATE
 	'Completed',
 	2,
 	0);
-INSERT INTO SM_CH
+INSERT INTO SM_EIGN
 	VALUES ("a1b65a1d-af9d-48cc-9c30-f5d1135883a7",
 	"31e33f61-ebe2-4812-ac85-09e65cd0180d",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
@@ -80,7 +80,7 @@ INSERT INTO SM_SEME
 	"31e33f61-ebe2-4812-ac85-09e65cd0180d",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO SM_CH
+INSERT INTO SM_EIGN
 	VALUES ("a1b65a1d-af9d-48cc-9c30-f5d1135883a7",
 	"5706c37b-a57c-4258-ad16-eba5b972f5bf",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
@@ -186,7 +186,7 @@ select any nextGoalSpec related by session->GoalSpec[R10.''includes'']
   where ( selected.SequenceNumber == (currentGoalSpec.SequenceNumber + 1) );
   
 if ( not empty nextGoalSpec )
-  Goal::create( sequenceNumber: (currentGoalSpec.SequenceNumber + 1) );
+  Goal::create( sequenceNumber: nextGoalSpec.SequenceNumber );
 end if;
 ',
 	'');
