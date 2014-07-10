@@ -125,7 +125,31 @@ INSERT INTO SM_ACT
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
 	1,
 	'// Determine whether this goal is currently being achieved.
-self.evaluateAchievement();
+disposition = self.evaluateAchievement();
+
+// Update achievement records if necessary.  There are four cases:
+//   0. Still not achieving this goal. 
+//   1. Just started achieving this goal.
+//   2. Just stopped achieving this goal.
+//   3. Still achieving this goal.
+// For cases 0 and 3, there is nothing to be done for achievement records.
+// Case 1 requires the creation of a new achievment record, storing the start time.
+// Case 2 requires the storing of the end time for the open achievement record.
+if ( (self.disposition != GoalDisposition::Achieving) and (disposition == GoalDisposition::Achieving) )
+  // Case 1, create achievement record, store start time, relate it as open record.
+  create object instance achievement of Achievement;
+  relate self to achievement across R14.''has open'';
+  select one workoutTimer related by 
+    self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
+  achievement.startTime = workoutTimer.time;
+elif ( (self.disposition == GoalDisposition::Achieving) and (disposition != GoalDisposition::Achieving) )
+  // Case 2, store end time, relate as recorded record, unrelate as open record.
+  select one achievement related by self->Achievement[R14.''has open''];
+  achievement.close();
+end if;
+
+// Update disposition of this goal.
+self.disposition = disposition;
 
 // Determine whether execution of this goal is complete, 
 //  and if so, advance to the next one if it exists.
@@ -176,7 +200,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("2dc59cdd-01b1-43c9-acb1-a07fd46b57aa",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO SM_TAH
@@ -189,7 +213,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("cb9002c9-d6c7-4e38-b011-9821a4b28430",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO GD_MD
@@ -223,11 +247,11 @@ INSERT INTO GD_SHP
 INSERT INTO GD_NCS
 	VALUES ("11ca3dfe-8c51-49db-951f-4bcf9c349dd7");
 INSERT INTO DIM_ND
-	VALUES (349.000000,
-	144.000000,
+	VALUES (565.000000,
+	541.000000,
 	"11ca3dfe-8c51-49db-951f-4bcf9c349dd7");
 INSERT INTO DIM_GE
-	VALUES (4104.000000,
+	VALUES (4032.000000,
 	3084.000000,
 	"11ca3dfe-8c51-49db-951f-4bcf9c349dd7",
 	"00000000-0000-0000-0000-000000000000");
@@ -237,7 +261,7 @@ INSERT INTO DIM_ELE
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_CON
 	VALUES ("bf1c05cb-62f4-4158-a22c-f1eea42f07d2",
-	4453.000000,
+	4597.000000,
 	3132.000000,
 	"11ca3dfe-8c51-49db-951f-4bcf9c349dd7");
 INSERT INTO DIM_CON
@@ -247,13 +271,13 @@ INSERT INTO DIM_CON
 	"11ca3dfe-8c51-49db-951f-4bcf9c349dd7");
 INSERT INTO DIM_CON
 	VALUES ("0bbfb44f-3419-4927-b876-00cde45ded43",
-	4104.000000,
-	3168.000000,
+	4597.000000,
+	3324.000000,
 	"11ca3dfe-8c51-49db-951f-4bcf9c349dd7");
 INSERT INTO DIM_CON
 	VALUES ("2d90f4e2-522a-43ad-8a6e-a8f46ac81cd9",
-	4320.000000,
-	3228.000000,
+	4500.000000,
+	3625.000000,
 	"11ca3dfe-8c51-49db-951f-4bcf9c349dd7");
 INSERT INTO GD_GE
 	VALUES ("70725233-fd31-4b3f-8009-40b0e332d040",
@@ -271,7 +295,7 @@ INSERT INTO DIM_ND
 	409.000000,
 	"70725233-fd31-4b3f-8009-40b0e332d040");
 INSERT INTO DIM_GE
-	VALUES (4704.000000,
+	VALUES (4848.000000,
 	3084.000000,
 	"70725233-fd31-4b3f-8009-40b0e332d040",
 	"00000000-0000-0000-0000-000000000000");
@@ -281,7 +305,7 @@ INSERT INTO DIM_ELE
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_CON
 	VALUES ("6671936b-d4ef-4c36-95c4-d01cd8e0969b",
-	4704.000000,
+	4848.000000,
 	3132.000000,
 	"70725233-fd31-4b3f-8009-40b0e332d040");
 INSERT INTO DIM_CON
@@ -329,7 +353,7 @@ INSERT INTO DIM_ND
 	0.000000,
 	"70c82ccc-754d-4204-969b-f9f10d735b95");
 INSERT INTO DIM_GE
-	VALUES (4461.500000,
+	VALUES (4605.500000,
 	3103.000000,
 	"70c82ccc-754d-4204-969b-f9f10d735b95",
 	"00000000-0000-0000-0000-000000000000");
@@ -364,14 +388,14 @@ INSERT INTO GD_LS
 	"c7c86751-1ec7-4a14-bfc5-6efe3cf22dc0");
 INSERT INTO DIM_WAY
 	VALUES ("fc9c1379-7b56-49eb-ae7d-9e56700c41de",
-	4453.000000,
+	4597.000000,
 	3132.000000,
 	"a8cd31e1-a403-49b2-82c8-0177f95634c1",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_WAY
 	VALUES ("c7c86751-1ec7-4a14-bfc5-6efe3cf22dc0",
-	4704.000000,
+	4848.000000,
 	3132.000000,
 	"a8cd31e1-a403-49b2-82c8-0177f95634c1",
 	"00000000-0000-0000-0000-000000000000",
@@ -429,7 +453,7 @@ INSERT INTO DIM_ND
 	0.000000,
 	"e1d94218-45bd-4a86-b11b-6f59bcb293cf");
 INSERT INTO DIM_GE
-	VALUES (4063.000000,
+	VALUES (4612.000000,
 	3288.000000,
 	"e1d94218-45bd-4a86-b11b-6f59bcb293cf",
 	"00000000-0000-0000-0000-000000000000");
@@ -482,36 +506,36 @@ INSERT INTO GD_LS
 	"2eaff31b-b4cc-40a6-85bb-c6fe24d1a178");
 INSERT INTO DIM_WAY
 	VALUES ("50902b0d-47ea-4166-939d-cde182942486",
-	4104.000000,
-	3168.000000,
+	4597.000000,
+	3324.000000,
 	"0907b6e7-e62c-41be-99cd-693a2cd24c46",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_WAY
 	VALUES ("2eaff31b-b4cc-40a6-85bb-c6fe24d1a178",
-	4320.000000,
-	3228.000000,
+	4500.000000,
+	3625.000000,
 	"0907b6e7-e62c-41be-99cd-693a2cd24c46",
 	"00000000-0000-0000-0000-000000000000",
 	"50902b0d-47ea-4166-939d-cde182942486");
 INSERT INTO DIM_WAY
 	VALUES ("58a283a5-d132-4f2e-8367-6207efd9ca28",
-	4054.000000,
-	3168.000000,
+	4692.000000,
+	3324.000000,
 	"0907b6e7-e62c-41be-99cd-693a2cd24c46",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_WAY
 	VALUES ("83eee3fc-a8fa-4232-a079-2b24acf13826",
-	4054.000000,
-	3276.000000,
+	4692.000000,
+	3696.000000,
 	"0907b6e7-e62c-41be-99cd-693a2cd24c46",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_WAY
 	VALUES ("d8153263-61d3-4146-9854-5211354cb02b",
-	4320.000000,
-	3276.000000,
+	4500.000000,
+	3696.000000,
 	"0907b6e7-e62c-41be-99cd-693a2cd24c46",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");

@@ -80,10 +80,11 @@ INSERT INTO O_TFR
 	"c1022670-c44d-401e-bb23-dfcef6084fba",
 	'evaluateAchievement',
 	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
+	"e153b5eb-d36e-485d-b6a4-0b55cde4ed29",
 	1,
 	'// Based on the type of goal, determine whether this one is 
-//   currently being achieved and update the appropriate attribute.
+//   currently being achieved and return a value indicating
+//   the disposition of the this goal.    
 
 // Find the related goal specification and workout session for this goal.
 select one goalSpec related by self->GoalSpec[R9.''specified by''];
@@ -99,41 +100,26 @@ elif ( goalSpec.CriteriaType == GoalCriteria::Pace )
 else
   LOG::LogFailure( message: "Goal.evaluateAchievement: Unknown Goal Criteria Type." );
 end if;
-
-// Save current value for handling of achievement records.
-previousAchievement = self.isBeingAchieved;  
  
-// Compare the current value against the criteria and update the attribute 
-//   indicating goal achievement status.
-if ( (goalSpec.Minimum <= currentValue) and (currentValue <= goalSpec.Maximum) )
-  self.isBeingAchieved = true;
-else
-  self.isBeingAchieved = false;
+// Compare the current value against the criteria to calculate the return value.
+goalDisposition = GoalDisposition::Achieving; 
+if ( currentValue < goalSpec.Minimum )
+  goalDisposition = GoalDisposition::Increase;
+elif ( currentValue > goalSpec.Maximum )
+  goalDisposition = GoalDisposition::Decrease;
 end if;
-
-// Update achievement records if necessary.  There are four cases:
-//   0. Still not achieving this goal. 
-//   1. Just started achieving this goal.
-//   2. Just stopped achieving this goal.
-//   3. Still achieving this goal.
-// For cases 0 and 3, there is nothing to be done for achievement records.
-// Case 1 requires the creation of a new achievment record, storing the start time.
-// Case 2 requires the storing of the end time for the open achievement record.
-if ( (not previousAchievement) and self.isBeingAchieved )
-  // Case 1, create achievement record, store start time, relate it as open record.
-  create object instance achievement of Achievement;
-  relate self to achievement across R14.''has open'';
-  select one workoutTimer related by session->WorkoutTimer[R8.''is timed by''];
-  achievement.startTime = workoutTimer.time;
-elif ( previousAchievement and (not self.isBeingAchieved) )
-  // Case 2, store end time, relate as recorded record, unrelate as open record.
-  select one achievement related by self->Achievement[R14.''has open''];
-  achievement.close();
-end if;
-',
+ 
+return( goalDisposition );',
 	1,
 	'',
 	"b3215204-3d02-48ba-9794-25ddbc40009c");
+INSERT INTO S_DT_PROXY
+	VALUES ("e153b5eb-d36e-485d-b6a4-0b55cde4ed29",
+	"00000000-0000-0000-0000-000000000000",
+	'GoalDisposition',
+	'Disposition of a currently executing goal.',
+	'',
+	'../../TrackingDataTypes/TrackingDataTypes.xtuml');
 INSERT INTO O_TFR
 	VALUES ("7090ad22-2865-4836-a89f-a46b868d3ac0",
 	"c1022670-c44d-401e-bb23-dfcef6084fba",
@@ -185,12 +171,12 @@ INSERT INTO O_ATTR
 	VALUES ("fa9000ac-0495-47fe-bbaf-66bc8f9a4f0a",
 	"c1022670-c44d-401e-bb23-dfcef6084fba",
 	"7d60ba72-b691-4687-9636-20d33798168c",
-	'isBeingAchieved',
-	'True whenver the goal is currently being achieved, false otherwise.',
+	'disposition',
+	'The disposition of this goal.  See data type descriptions for details.',
 	'',
-	'isBeingAchieved',
+	'disposition',
 	0,
-	"ba5eda7a-def5-0000-0000-000000000001",
+	"e153b5eb-d36e-485d-b6a4-0b55cde4ed29",
 	'',
 	'');
 INSERT INTO O_NBATTR
