@@ -22,11 +22,11 @@ INSERT INTO SM_EVT
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
 	"00000000-0000-0000-0000-000000000000",
 	1,
-	'SpanExhausted',
+	'Completed',
 	0,
 	'',
 	'Goal1',
-	'Indicates that the span for this particular goal has been exhausted.');
+	'Indicates that execution of this goal has been completed.  ');
 INSERT INTO SM_LEVT
 	VALUES ("5706c37b-a57c-4258-ad16-eba5b972f5bf",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
@@ -123,8 +123,13 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("68a5f818-7dab-42d9-8593-79e79e2cc28b",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
-	3,
-	'',
+	1,
+	'// Determine whether this goal is currently being achieved.
+self.evaluateAchievement();
+
+// Determine whether execution of this goal is complete, 
+//  and if so, advance to the next one if it exists.
+self.evaluateCompletion();',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("4c799586-a213-493c-8525-7d7046820ad2",
@@ -139,14 +144,18 @@ INSERT INTO SM_ACT
 	1,
 	'// Stop executing this goal and begin executing the next one, if there is one.
 
-// First, add this goal to the collection of those that have already executed.
+// Stop the goal-evaluation timer, ignoring the return code which indicates 
+//   whether a timer event was in flight when the timer was cancelled.
+cancelSucceeded = TIM::timer_cancel( timer_inst_ref: self.evaluationTimer );
+
+// Add this goal to the collection of those that have already executed.
 select one session related by self->WorkoutSession[R11.''is currently executing within''];
 relate self to session across R13.''was executed within'';
 
-// Next, remove this goal from the collection of currently executing ones.
+// Remove this goal from the collection of currently executing ones.
 unrelate self from session across R11.''is currently executing within'';
 
-// Finally, find the next goal specification in the sequence and start executing it, if it exists.
+// Find the next goal specification in the sequence and start executing it, if it exists.
 select one currentGoalSpec related by self->GoalSpec[R9.''specified by''];
 
 select any nextGoalSpec related by session->GoalSpec[R10.''includes'']
@@ -214,11 +223,11 @@ INSERT INTO GD_SHP
 INSERT INTO GD_NCS
 	VALUES ("11ca3dfe-8c51-49db-951f-4bcf9c349dd7");
 INSERT INTO DIM_ND
-	VALUES (204.000000,
+	VALUES (349.000000,
 	144.000000,
 	"11ca3dfe-8c51-49db-951f-4bcf9c349dd7");
 INSERT INTO DIM_GE
-	VALUES (4200.000000,
+	VALUES (4104.000000,
 	3084.000000,
 	"11ca3dfe-8c51-49db-951f-4bcf9c349dd7",
 	"00000000-0000-0000-0000-000000000000");
@@ -228,7 +237,7 @@ INSERT INTO DIM_ELE
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_CON
 	VALUES ("bf1c05cb-62f4-4158-a22c-f1eea42f07d2",
-	4404.000000,
+	4453.000000,
 	3132.000000,
 	"11ca3dfe-8c51-49db-951f-4bcf9c349dd7");
 INSERT INTO DIM_CON
@@ -238,7 +247,7 @@ INSERT INTO DIM_CON
 	"11ca3dfe-8c51-49db-951f-4bcf9c349dd7");
 INSERT INTO DIM_CON
 	VALUES ("0bbfb44f-3419-4927-b876-00cde45ded43",
-	4200.000000,
+	4104.000000,
 	3168.000000,
 	"11ca3dfe-8c51-49db-951f-4bcf9c349dd7");
 INSERT INTO DIM_CON
@@ -258,11 +267,11 @@ INSERT INTO GD_SHP
 INSERT INTO GD_NCS
 	VALUES ("70725233-fd31-4b3f-8009-40b0e332d040");
 INSERT INTO DIM_ND
-	VALUES (204.000000,
-	156.000000,
+	VALUES (481.000000,
+	409.000000,
 	"70725233-fd31-4b3f-8009-40b0e332d040");
 INSERT INTO DIM_GE
-	VALUES (4656.000000,
+	VALUES (4704.000000,
 	3084.000000,
 	"70725233-fd31-4b3f-8009-40b0e332d040",
 	"00000000-0000-0000-0000-000000000000");
@@ -272,7 +281,7 @@ INSERT INTO DIM_ELE
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_CON
 	VALUES ("6671936b-d4ef-4c36-95c4-d01cd8e0969b",
-	4656.000000,
+	4704.000000,
 	3132.000000,
 	"70725233-fd31-4b3f-8009-40b0e332d040");
 INSERT INTO DIM_CON
@@ -286,7 +295,7 @@ INSERT INTO GD_GE
 	"4d3b865b-a2b5-49a9-8f19-a163f108922a",
 	42,
 	0,
-	'GPS Watch::Library::Tracking::Tracking::Goal::Instance State Machine::Executing::Goal1: SpanExhausted');
+	'GPS Watch::Library::Tracking::Tracking::Goal::Instance State Machine::Executing::Goal1: Completed');
 INSERT INTO GD_CON
 	VALUES ("a8cd31e1-a403-49b2-82c8-0177f95634c1",
 	"00000000-0000-0000-0000-000000000000");
@@ -320,7 +329,7 @@ INSERT INTO DIM_ND
 	0.000000,
 	"70c82ccc-754d-4204-969b-f9f10d735b95");
 INSERT INTO DIM_GE
-	VALUES (4413.000000,
+	VALUES (4461.500000,
 	3103.000000,
 	"70c82ccc-754d-4204-969b-f9f10d735b95",
 	"00000000-0000-0000-0000-000000000000");
@@ -355,14 +364,14 @@ INSERT INTO GD_LS
 	"c7c86751-1ec7-4a14-bfc5-6efe3cf22dc0");
 INSERT INTO DIM_WAY
 	VALUES ("fc9c1379-7b56-49eb-ae7d-9e56700c41de",
-	4404.000000,
+	4453.000000,
 	3132.000000,
 	"a8cd31e1-a403-49b2-82c8-0177f95634c1",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_WAY
 	VALUES ("c7c86751-1ec7-4a14-bfc5-6efe3cf22dc0",
-	4656.000000,
+	4704.000000,
 	3132.000000,
 	"a8cd31e1-a403-49b2-82c8-0177f95634c1",
 	"00000000-0000-0000-0000-000000000000",
@@ -420,8 +429,8 @@ INSERT INTO DIM_ND
 	0.000000,
 	"e1d94218-45bd-4a86-b11b-6f59bcb293cf");
 INSERT INTO DIM_GE
-	VALUES (4081.000000,
-	3136.000000,
+	VALUES (4063.000000,
+	3288.000000,
 	"e1d94218-45bd-4a86-b11b-6f59bcb293cf",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -473,7 +482,7 @@ INSERT INTO GD_LS
 	"2eaff31b-b4cc-40a6-85bb-c6fe24d1a178");
 INSERT INTO DIM_WAY
 	VALUES ("50902b0d-47ea-4166-939d-cde182942486",
-	4200.000000,
+	4104.000000,
 	3168.000000,
 	"0907b6e7-e62c-41be-99cd-693a2cd24c46",
 	"00000000-0000-0000-0000-000000000000",
@@ -487,22 +496,22 @@ INSERT INTO DIM_WAY
 	"50902b0d-47ea-4166-939d-cde182942486");
 INSERT INTO DIM_WAY
 	VALUES ("58a283a5-d132-4f2e-8367-6207efd9ca28",
-	4150.000000,
+	4054.000000,
 	3168.000000,
 	"0907b6e7-e62c-41be-99cd-693a2cd24c46",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_WAY
 	VALUES ("83eee3fc-a8fa-4232-a079-2b24acf13826",
-	4150.000000,
-	3277.000000,
+	4054.000000,
+	3276.000000,
 	"0907b6e7-e62c-41be-99cd-693a2cd24c46",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_WAY
 	VALUES ("d8153263-61d3-4146-9854-5211354cb02b",
 	4320.000000,
-	3277.000000,
+	3276.000000,
 	"0907b6e7-e62c-41be-99cd-693a2cd24c46",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");

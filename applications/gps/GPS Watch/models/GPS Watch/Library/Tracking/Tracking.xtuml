@@ -713,7 +713,16 @@ INSERT INTO SPR_RS
 	VALUES ("d9d00089-99ea-429a-9af0-86fc7db383e8",
 	'setTargetPressed',
 	'',
-	'',
+	'// Find the singleton instance of workout session, and if there is a 
+//   goal currently executing for it, notify it that its execution
+//   has completed.
+select any session from instances of WorkoutSession;
+if ( not empty session )
+  select one goal related by session->Goal[R11.''is currently executing''];
+  if ( not empty goal )
+    generate Goal1:Completed to goal;
+  end if;
+end if;',
 	1);
 INSERT INTO C_EP_PROXY
 	VALUES ("3e2d7574-ba3f-4a52-90c2-6787610b555a",

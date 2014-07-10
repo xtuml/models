@@ -8,6 +8,27 @@ INSERT INTO O_OBJ
 	'Each instance represents one contiguous period of time during 
 which a particular goal was being met (achieved).',
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("6fac41c9-c339-4dbe-8651-11ff5f9db899",
+	"313e48f7-0516-49bd-9401-5c67c2e55db9",
+	'close',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Close this open achievement record by storing the end time, relating this
+//   record as a recorded one and unrelating it as the open one.
+select one goal related by self->Goal[R14.''is open for''];
+select one workoutTimer related by 
+  goal->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
+  self.endTime = workoutTimer.time;
+unrelate self from goal across R14.''is open for'';
+relate self to goal across R12.''specifies achievement of'';
+
+
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_NBATTR
 	VALUES ("b3949e0b-65ec-4e72-82be-b899f2e3b63b",
 	"313e48f7-0516-49bd-9401-5c67c2e55db9");
