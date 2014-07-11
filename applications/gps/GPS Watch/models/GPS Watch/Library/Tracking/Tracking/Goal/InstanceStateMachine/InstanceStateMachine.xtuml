@@ -172,6 +172,12 @@ INSERT INTO SM_ACT
 //   whether a timer event was in flight when the timer was cancelled.
 cancelSucceeded = TIM::timer_cancel( timer_inst_ref: self.evaluationTimer );
 
+// If this goal has an open achievement record, close it.
+select one openAchievement related by self->Achievement[R14.''has open''];
+if ( not empty openAchievement )
+  openAchievement.close();
+end if;
+
 // Add this goal to the collection of those that have already executed.
 select one session related by self->WorkoutSession[R11.''is currently executing within''];
 relate self to session across R13.''was executed within'';

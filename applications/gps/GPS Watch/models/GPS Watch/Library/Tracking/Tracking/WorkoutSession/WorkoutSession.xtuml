@@ -115,7 +115,8 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'// Reset this session, including the timer and track log.
+	'// Reset this session, including the timer, track log, goal specifications,
+// goals, and achievement records.
 
 // Reset the timer.
 select one workoutTimer related by self->WorkoutTimer[R8.''is timed by''];
@@ -125,6 +126,37 @@ workoutTimer.initialize();
 select one trackLog related by self->TrackLog[R4.''captures path in''];
 trackLog.clearTrackPoints();
 trackLog.clearLapMarkers();
+
+// Remove all goal specifications.
+select many goalSpecs related by self->GoalSpec[R10.''includes''];
+for each goalSpec in goalSpecs
+  unrelate self from goalSpec across R10.''includes'';
+  delete object instance goalSpec;
+end for;
+
+// Remove any currently executing goal and open achievement record.
+select one executingGoal related by self->Goal[R11.''is currently executing''];
+if ( not empty executingGoal )
+  select one openAchievement related by executingGoal->Achievement[R14.''has open''];
+  if ( not empty openAchievement )
+    unrelate openAchievement from executingGoal across R14.''is open for'';
+    delete object instance openAchievement;
+  end if;
+  unrelate self from executingGoal across R11.''is currently executing'';
+  delete object instance executingGoal;
+end if;
+
+// Remove all other goals and achievement records.
+select many goals related by self->Goal[R13.''has executed''];
+for each goal in goals
+  select many achievements related by goal->Achievement[R12.''has recorded''];
+  for each achievement in achievements
+    unrelate goal from achievement across R12.''has recorded'';
+    delete object instance achievement;
+  end for;
+  unrelate self from goal across R13.''has executed'';
+  delete object instance goal;
+end for;
 
 // Reset the session.
 self.accumulatedDistance = 0.0;

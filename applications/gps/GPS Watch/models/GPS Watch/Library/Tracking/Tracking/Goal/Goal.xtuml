@@ -17,27 +17,28 @@ INSERT INTO O_TFR
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
 	'// Create and activate an instance of a goal specified by
-//   the goal specification identified by the incoming parameter.
+//   the goal specification, if it exists, identified by 
+//   the incoming parameter.
 
 // Find the goal specification for this goal, then
 //   create and relate this goal to the specification
 //   and to the singleton workout session.
 select any goalSpec from instances of GoalSpec 
   where ( selected.sequenceNumber == param.sequenceNumber );
-create object instance goal of Goal;
-relate goal to goalSpec across R9.''specified by'';
-select any session from instances of WorkoutSession;
-relate goal to session across R11.''is currently executing within'';
+if ( not empty goalSpec )
+  create object instance goal of Goal;
+  relate goal to goalSpec across R9.''specified by'';
+  select any session from instances of WorkoutSession;  // WorkoutSession is a singleton
+  relate goal to session across R11.''is currently executing within'';
 
-// Initialize this goal.
-goal.calculateStart();
-goal.disposition = GoalDisposition::Increase;
+  // Initialize this goal.
+  goal.calculateStart();
+  goal.disposition = GoalDisposition::Increase;
 
-// Start a timer that periodically causes evaluation of goal achievement.
-create event instance evaluateEvent of Goal2:Evaluate to goal;
-goal.evaluationTimer = TIM::timer_start_recurring( event_inst: evaluateEvent, microseconds: evaluationPeriod );
-
-
+  // Start a timer that periodically causes evaluation of goal achievement.
+  create event instance evaluateEvent of Goal2:Evaluate to goal;
+  goal.evaluationTimer = TIM::timer_start_recurring( event_inst: evaluateEvent, microseconds: evaluationPeriod );
+end if;
 
 ',
 	1,
@@ -80,7 +81,7 @@ INSERT INTO O_TFR
 	"c1022670-c44d-401e-bb23-dfcef6084fba",
 	'evaluateAchievement',
 	'',
-	"e153b5eb-d36e-485d-b6a4-0b55cde4ed29",
+	"ca91d910-53ec-403c-9551-bfc1a9aa9b73",
 	1,
 	'// Based on the type of goal, determine whether this one is 
 //   currently being achieved and return a value indicating
@@ -114,12 +115,12 @@ return( goalDisposition );',
 	'',
 	"b3215204-3d02-48ba-9794-25ddbc40009c");
 INSERT INTO S_DT_PROXY
-	VALUES ("e153b5eb-d36e-485d-b6a4-0b55cde4ed29",
+	VALUES ("ca91d910-53ec-403c-9551-bfc1a9aa9b73",
 	"00000000-0000-0000-0000-000000000000",
 	'GoalDisposition',
 	'Disposition of a currently executing goal.',
 	'',
-	'../../TrackingDataTypes/TrackingDataTypes.xtuml');
+	'../../../../TrackingDataTypes/TrackingDataTypes.xtuml');
 INSERT INTO O_TFR
 	VALUES ("7090ad22-2865-4836-a89f-a46b868d3ac0",
 	"c1022670-c44d-401e-bb23-dfcef6084fba",
@@ -161,6 +162,32 @@ end if;
 	1,
 	'',
 	"2b884ff8-637a-468b-a2fa-f96b8ef98b0a");
+INSERT INTO O_TFR
+	VALUES ("902f97d2-b056-4461-89c5-6454f9f253d7",
+	"c1022670-c44d-401e-bb23-dfcef6084fba",
+	'nextGoal',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// Advance to the next goal or start the first one if one
+//   is currently not exectuing.
+
+//  If there is a goal currently executing, notify it that its execution
+//    has completed.
+//  Otherwise, create and start a goal for the first goal specification
+//    if one exists.
+select any session from instances of WorkoutSession;  // WorkoutSession is a singleton.
+if ( not empty session )
+  select one goal related by session->Goal[R11.''is currently executing''];
+  if ( not empty goal )
+    generate Goal1:Completed to goal;
+  else
+    Goal::create( sequenceNumber: GoalSpecOrigin );
+  end if;
+end if;',
+	1,
+	'',
+	"7090ad22-2865-4836-a89f-a46b868d3ac0");
 INSERT INTO O_NBATTR
 	VALUES ("fa9000ac-0495-47fe-bbaf-66bc8f9a4f0a",
 	"c1022670-c44d-401e-bb23-dfcef6084fba");
@@ -176,7 +203,7 @@ INSERT INTO O_ATTR
 	'',
 	'disposition',
 	0,
-	"e153b5eb-d36e-485d-b6a4-0b55cde4ed29",
+	"ca91d910-53ec-403c-9551-bfc1a9aa9b73",
 	'',
 	'');
 INSERT INTO O_NBATTR

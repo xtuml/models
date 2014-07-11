@@ -29,7 +29,7 @@ INSERT INTO GD_MD
 	200,
 	150,
 	0,
-	'',
+	'4.1.12',
 	'GPS Watch::Library::Tracking');
 INSERT INTO GD_GE
 	VALUES ("1f51b134-2b1d-4529-91cb-a5458f99aff4",
@@ -115,8 +115,8 @@ INSERT INTO DIM_ND
 	0.000000,
 	"63530199-470d-4f74-8e27-c7f04690b20a");
 INSERT INTO DIM_GE
-	VALUES (0.000000,
-	0.000000,
+	VALUES (1958.000000,
+	1532.000000,
 	"63530199-470d-4f74-8e27-c7f04690b20a",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -215,8 +215,8 @@ INSERT INTO DIM_ND
 	0.000000,
 	"92b33c3f-7397-435a-b45f-e4cb8a8742ea");
 INSERT INTO DIM_GE
-	VALUES (0.000000,
-	0.000000,
+	VALUES (2694.000000,
+	1292.000000,
 	"92b33c3f-7397-435a-b45f-e4cb8a8742ea",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -315,8 +315,8 @@ INSERT INTO DIM_ND
 	0.000000,
 	"ea53cfaa-ac3b-4e9a-ac9d-45add2663332");
 INSERT INTO DIM_GE
-	VALUES (0.000000,
-	0.000000,
+	VALUES (3209.000000,
+	1530.000000,
 	"ea53cfaa-ac3b-4e9a-ac9d-45add2663332",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -415,8 +415,8 @@ INSERT INTO DIM_ND
 	0.000000,
 	"bc9c5a1a-638e-4581-94bb-5e96323ab875");
 INSERT INTO DIM_GE
-	VALUES (0.000000,
-	0.000000,
+	VALUES (1971.000000,
+	1574.000000,
 	"bc9c5a1a-638e-4581-94bb-5e96323ab875",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -497,30 +497,6 @@ INSERT INTO DIM_GE
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
 	VALUES ("d8677561-de3d-426c-bcce-92e25ff4e087",
-	0,
-	"1f51b134-2b1d-4529-91cb-a5458f99aff4");
-INSERT INTO GD_GE
-	VALUES ("f9c3ec82-219d-4f4c-86e6-14892d5f2124",
-	"af703f34-a5d6-467e-ad32-c2fc2af9ed45",
-	"37e62abd-d1c2-4241-a4cb-9aa88fabd6e8",
-	108,
-	0,
-	'GPS Watch::Library::Tracking::TrackingDataTypes');
-INSERT INTO GD_SHP
-	VALUES ("f9c3ec82-219d-4f4c-86e6-14892d5f2124");
-INSERT INTO GD_NCS
-	VALUES ("f9c3ec82-219d-4f4c-86e6-14892d5f2124");
-INSERT INTO DIM_ND
-	VALUES (200.000000,
-	150.000000,
-	"f9c3ec82-219d-4f4c-86e6-14892d5f2124");
-INSERT INTO DIM_GE
-	VALUES (2240.000000,
-	1344.000000,
-	"f9c3ec82-219d-4f4c-86e6-14892d5f2124",
-	"00000000-0000-0000-0000-000000000000");
-INSERT INTO DIM_ELE
-	VALUES ("f9c3ec82-219d-4f4c-86e6-14892d5f2124",
 	0,
 	"1f51b134-2b1d-4529-91cb-a5458f99aff4");
 INSERT INTO DIM_DIA
@@ -713,16 +689,9 @@ INSERT INTO SPR_RS
 	VALUES ("d9d00089-99ea-429a-9af0-86fc7db383e8",
 	'setTargetPressed',
 	'',
-	'// Find the singleton instance of workout session, and if there is a 
-//   goal currently executing for it, notify it that its execution
-//   has completed.
-select any session from instances of WorkoutSession;
-if ( not empty session )
-  select one goal related by session->Goal[R11.''is currently executing''];
-  if ( not empty goal )
-    generate Goal1:Completed to goal;
-  end if;
-end if;',
+	'// If a goal is currently executing, advance to the next one,
+//   otherwise start the first specified goal, if it exists.
+Goal::nextGoal();',
 	1);
 INSERT INTO C_EP_PROXY
 	VALUES ("3e2d7574-ba3f-4a52-90c2-6787610b555a",
@@ -788,15 +757,44 @@ INSERT INTO SPR_REP
 	"f093414e-3df2-4f9c-a0b4-61ba8e8a6ed9");
 INSERT INTO SPR_RO
 	VALUES ("5f7ab889-a4f4-42b2-b9f0-a27fd3fd8c85",
-	'setInidicator',
+	'setIndicator',
 	'',
 	'',
-	3);
+	1);
 INSERT INTO C_EP_PROXY
 	VALUES ("40870179-79b6-44a6-a9e4-b4e5dd344842",
 	"06e358bd-8488-4092-af9c-7c359b158f4d",
 	-1,
-	'setInidicator',
+	'setIndicator',
+	'',
+	'../../UIInterfaces/UI/UI.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("e38e0ea8-25a0-41da-a405-23297abac860",
+	"a743f1f4-69fc-421a-b716-6a090a8c2f25",
+	"f093414e-3df2-4f9c-a0b4-61ba8e8a6ed9");
+INSERT INTO SPR_RS
+	VALUES ("e38e0ea8-25a0-41da-a405-23297abac860",
+	'newGoalSpec',
+	'',
+	'// Create a new goal specification and relate it to the
+//   singleton instance of workout session if it exists.
+select any session from instances of WorkoutSession;
+if ( not empty session )
+  create object instance goalSpec of GoalSpec;
+  goalSpec.sequenceNumber = param.sequenceNumber;
+  goalSpec.minimum = param.minimum;
+  goalSpec.maximum = param.maximum;
+  goalSpec.span = param.span;
+  goalSpec.criteriaType = param.criteriaType;
+  goalSpec.spanType = param.spanType;
+  relate goalSpec to session across R10.''included in'';
+end if;',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("a743f1f4-69fc-421a-b716-6a090a8c2f25",
+	"06e358bd-8488-4092-af9c-7c359b158f4d",
+	-1,
+	'newGoalSpec',
 	'',
 	'../../UIInterfaces/UI/UI.xtuml');
 INSERT INTO C_I_PROXY
