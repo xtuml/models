@@ -183,10 +183,10 @@ unrelate self from session across R11.''is currently executing within'';
 select one currentGoalSpec related by self->GoalSpec[R9.''specified by''];
 
 select any nextGoalSpec related by session->GoalSpec[R10.''includes'']
-  where ( selected.SequenceNumber == (currentGoalSpec.SequenceNumber + 1) );
+  where ( selected.sequenceNumber == (currentGoalSpec.sequenceNumber + 1) );
   
 if ( not empty nextGoalSpec )
-  Goal::create( sequenceNumber: nextGoalSpec.SequenceNumber );
+  Goal::create( sequenceNumber: nextGoalSpec.sequenceNumber );
 end if;
 ',
 	'');

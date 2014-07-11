@@ -23,7 +23,7 @@ INSERT INTO O_TFR
 //   create and relate this goal to the specification
 //   and to the singleton workout session.
 select any goalSpec from instances of GoalSpec 
-  where ( selected.SequenceNumber == param.sequenceNumber );
+  where ( selected.sequenceNumber == param.sequenceNumber );
 create object instance goal of Goal;
 relate goal to goalSpec across R9.''specified by'';
 select any session from instances of WorkoutSession;
@@ -62,11 +62,11 @@ INSERT INTO O_TFR
 	'// Based on the span type for this goal, calculate and
 //   store the value of the start attribute.
 select one goalSpec related by self->GoalSpec[R9.''specified by''];
-if ( goalSpec.SpanType == GoalSpan::Time )
+if ( goalSpec.spanType == GoalSpan::Time )
   select one workoutTimer related by 
     self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
   self.start = workoutTimer.time;
-elif ( goalSpec.SpanType == GoalSpan::Distance )
+elif ( goalSpec.spanType == GoalSpan::Distance )
   select one session related by self->WorkoutSession[R11.''is currently executing within''];
   self.start = session.accumulatedDistance;
 else
@@ -93,9 +93,9 @@ select one session related by self->WorkoutSession[R11.''is currently executing 
 // Based on the goal criteria type, get the appropriate current value
 //   for comparison against the criteria (minimum and maximum).
 currentValue = 0.0;  // Explicit declaration
-if ( goalSpec.CriteriaType == GoalCriteria::HeartRate )
+if ( goalSpec.criteriaType == GoalCriteria::HeartRate )
   currentValue = session.currentHeartRate;
-elif ( goalSpec.CriteriaType == GoalCriteria::Pace )
+elif ( goalSpec.criteriaType == GoalCriteria::Pace )
   currentValue = session.currentPace;
 else
   LOG::LogFailure( message: "Goal.evaluateAchievement: Unknown Goal Criteria Type." );
@@ -103,9 +103,9 @@ end if;
  
 // Compare the current value against the criteria to calculate the return value.
 goalDisposition = GoalDisposition::Achieving; 
-if ( currentValue < goalSpec.Minimum )
+if ( currentValue < goalSpec.minimum )
   goalDisposition = GoalDisposition::Increase;
-elif ( currentValue > goalSpec.Maximum )
+elif ( currentValue > goalSpec.maximum )
   goalDisposition = GoalDisposition::Decrease;
 end if;
  
@@ -137,10 +137,10 @@ select one goalSpec related by self->GoalSpec[R9.''specified by''];
 // Based on the span type for the goal, get the elapsed span 
 //   for comparison against the specified span for the goal.
 elapsedSpan = 0.0;  // Explicit declaration
-if ( goalSpec.SpanType == GoalSpan::Distance )
+if ( goalSpec.spanType == GoalSpan::Distance )
   select one session related by self->WorkoutSession[R11.''is currently executing within''];
   elapsedSpan = session.accumulatedDistance - self.start;
-elif ( goalSpec.SpanType == GoalSpan::Time )
+elif ( goalSpec.spanType == GoalSpan::Time )
   select one workoutTimer related by 
     self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
   elapsedSpan = workoutTimer.time - self.start;
@@ -150,7 +150,7 @@ end if;
 
 // Compare the current value against the specified span to determine 
 //   whether the execution of this workout goal is complete.
-if ( elapsedSpan >= goalSpec.Span )
+if ( elapsedSpan >= goalSpec.span )
   select one openAchievement related by self->Achievement[R14.''has open''];
   if ( not empty openAchievement )
     openAchievement.close();
