@@ -15,20 +15,23 @@ INSERT INTO O_TFR
 	"0c2280ac-677d-4cc7-a34f-fde18b6c9506",
 	0,
 	'// Return the indicator value representing the disposition of 
-// the currently executing goal.
+// the currently executing goal, if one exists.  If there is
+// no currently executing goal, return Flat.
 
-// Find the currently executing goal associated with the singleton
-// instance of the workout session.
+// Find the currently executing goal (if one exists) associated 
+// with the singleton instance of the workout session.
 select any session from instances of WorkoutSession;
 select one goal related by session->Goal[R11.''is currently executing''];
 
 // Convert the disposition of the currently executing goal
-// to a UI indicator.
+// (if it exists) to a UI indicator.
 indicator = Indicator::Flat;
-if ( goal.disposition == GoalDisposition::Increase )
-  indicator = Indicator::Up;
-elif ( goal.disposition == GoalDisposition::Decrease )
-  indicator = Indicator::Down;
+if ( not empty goal )
+  if ( goal.disposition == GoalDisposition::Increase )
+    indicator = Indicator::Up;
+  elif ( goal.disposition == GoalDisposition::Decrease )
+    indicator = Indicator::Down;
+  end if;
 end if;
 
 return( indicator );',
