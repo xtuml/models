@@ -289,7 +289,8 @@ select any session from instances of WorkoutSession;
 if (not empty session)
   speed = session.currentSpeed;
 end if;
-send UI::setData(value: speed, unit: Unit::kmPerHour);',
+send UI::setData(value: speed, unit: Unit::kmPerHour);
+send UI::setIndicator( indicator: Display::goalDispositionIndicator() );',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("98bf84d6-1cee-4a42-88d2-9367aa5ff2c7",
@@ -308,7 +309,8 @@ if (not empty session)
   pace = session.currentPace;
 end if;
 
-send UI::setData(value: pace, unit: Unit::minPerKm);',
+send UI::setData(value: pace, unit: Unit::minPerKm);
+send UI::setIndicator( indicator: Display::goalDispositionIndicator() );',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("82ae96eb-a18e-470a-bcd7-4e7b27e29390",
@@ -327,7 +329,8 @@ if (not empty session)
     heartRate = session.currentHeartRate;
 end if;
 
-send UI::setData(value: heartRate, unit: Unit::bpm);',
+send UI::setData(value: heartRate, unit: Unit::bpm);
+send UI::setIndicator( indicator: Display::goalDispositionIndicator() );',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("2370d1a4-2f63-477b-b55f-16f87477e1bc",
@@ -491,7 +494,7 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'4.1.10',
+	'4.1.12',
 	'GPS Watch::Library::Tracking::Tracking::Display::Class State Machine');
 INSERT INTO GD_GE
 	VALUES ("7aa1a79a-0493-4554-a792-cdb82b5c7cb0",
@@ -1883,6 +1886,4 @@ INSERT INTO O_OBJ_PROXY
 	'Display',
 	'Controls the currently displayed measurement.',
 	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"15cd4220-e58d-3b4c-3acb-5eeed03d2b03",
 	'../Display.xtuml');

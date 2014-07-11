@@ -6,9 +6,42 @@ INSERT INTO O_OBJ
 	6,
 	'Display',
 	'Controls the currently displayed measurement.',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("a29d7ebd-8df6-44b9-a088-55d69709c957",
+	"e4f33430-b3cd-4e2a-8dff-b91094d7d095",
+	'goalDispositionIndicator',
+	'',
+	"0c2280ac-677d-4cc7-a34f-fde18b6c9506",
+	0,
+	'// Return the indicator value representing the disposition of 
+// the currently executing goal.
+
+// Find the currently executing goal associated with the singleton
+// instance of the workout session.
+select any session from instances of WorkoutSession;
+select one goal related by session->Goal[R11.''is currently executing''];
+
+// Convert the disposition of the currently executing goal
+// to a UI indicator.
+indicator = Indicator::Flat;
+if ( goal.disposition == GoalDisposition::Increase )
+  indicator = Indicator::Up;
+elif ( goal.disposition == GoalDisposition::Decrease )
+  indicator = Indicator::Down;
+end if;
+
+return( indicator );',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("0c2280ac-677d-4cc7-a34f-fde18b6c9506",
 	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"15cd4220-e58d-3b4c-3acb-5eeed03d2b03");
+	'Indicator',
+	'Graphical indicator.',
+	'',
+	'../../../../UIDataTypes/UIDataTypes.xtuml');
 INSERT INTO O_ID
 	VALUES (0,
 	"e4f33430-b3cd-4e2a-8dff-b91094d7d095");
