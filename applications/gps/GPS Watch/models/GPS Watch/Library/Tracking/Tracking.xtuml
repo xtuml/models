@@ -672,7 +672,15 @@ INSERT INTO SPR_RS
 	VALUES ("63de814e-aedc-4524-85e5-c9491e2163ee",
 	'modePressed',
 	'',
-	'',
+	'// Notify the display to change modes.
+
+// Find the display related to the singleton instance of 
+//   workout session (if it exists), and notify it.
+select any session from instances of WorkoutSession;
+if ( not empty session )
+  select one display related by session->Display[R7.''current status indicated on''];
+  generate Display1:modeChange to display;
+end if;',
 	1);
 INSERT INTO C_EP_PROXY
 	VALUES ("ee5ab291-e2a1-4940-9017-d4eb26f24014",

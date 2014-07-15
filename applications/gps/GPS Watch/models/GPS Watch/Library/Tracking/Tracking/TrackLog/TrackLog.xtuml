@@ -60,8 +60,8 @@ end if;
 select one session related by self->WorkoutSession[R4.''represents path for''];
 session.accumulatedDistance = session.accumulatedDistance + distance;
 
-// Notify UI of of the updated values.
-generate Display_A2:refresh() to Display class;',
+// Notify display of of the updated values.
+self.updateDisplay();',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");
@@ -105,10 +105,10 @@ INSERT INTO O_TFR
 	'select one timer related by self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
 create object instance lapMarker of LapMarker;
 lapMarker.lapTime = timer.time; 
-relate self to lapMarker across R5;
+relate self to lapMarker across R5.''has laps defined by'';
 
-// notify UI of the new value
-generate Display_A2:refresh() to Display class;',
+// Notify display of the new value.
+self.updateDisplay();',
 	1,
 	'',
 	"7dbac40f-6e89-4ad2-a576-0f1fcfbe2dc5");
@@ -127,6 +127,20 @@ end for;',
 	1,
 	'',
 	"83ad7ae5-197c-4e8a-b9f5-b7d1c03db0b7");
+INSERT INTO O_TFR
+	VALUES ("9723d50b-bb3d-4fed-86de-6413406a6a2e",
+	"d2828038-110a-4559-8452-91651af0adcb",
+	'updateDisplay',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Update the display so that newly updated values will be shown.
+select one display related by 
+  self->WorkoutSession[R4.''represents path for'']->Display[R7.''current status indicated on''];
+generate Display2:refresh to display;',
+	1,
+	'',
+	"9d05da67-cf3d-4220-b15a-0f2e28652584");
 INSERT INTO O_ID
 	VALUES (0,
 	"d2828038-110a-4559-8452-91651af0adcb");

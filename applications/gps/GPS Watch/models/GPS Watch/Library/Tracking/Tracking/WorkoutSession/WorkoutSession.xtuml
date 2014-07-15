@@ -31,7 +31,8 @@ sample.time = workoutTimer.time;
 relate self to sample across R6.''tracks heart rate over time as'';
 
 // Notify UI of the new heart rate.
-generate Display_A2:refresh() to Display class;',
+select one display related by self->Display[R7.''current status indicated on''];
+generate Display2:refresh to display;',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");
@@ -98,10 +99,14 @@ if ( empty session )
 
   // Create a track log.
   create object instance trackLog of TrackLog;
+  
+  // Create a display.
+  create object instance display of Display;
 
   // Relate them all together.
   relate trackLog to session across R4.''represents path for'';
   relate workoutTimer to session across R8.''acts as the stopwatch for'';
+  relate display to session across R7.''indicates current status of'';
   
 end if;
 ',
@@ -292,7 +297,11 @@ for each sample in samples
   numberOfSamples = numberOfSamples + 1;
   sum = sum + sample.heartRate;
 end for;
-self.currentHeartRate = sum / numberOfSamples;
+if ( numberOfSamples > 0 )
+  self.currentHeartRate = sum / numberOfSamples;
+else
+  self.currentHeartRate = 0;
+end if;
 ',
 	1);
 INSERT INTO O_BATTR
