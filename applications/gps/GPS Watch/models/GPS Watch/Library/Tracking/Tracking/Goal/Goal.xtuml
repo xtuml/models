@@ -109,6 +109,16 @@ if ( currentValue < goalSpec.minimum )
 elif ( currentValue > goalSpec.maximum )
   goalDisposition = GoalDisposition::Decrease;
 end if;
+
+// Invert the disposition value to produce a logical, semantic disposition for
+//   goal types, such as pace, that require it.
+if ( goalSpec.criteriaType == GoalCriteria::Pace )
+  if ( goalDisposition == GoalDisposition::Increase )
+    goalDisposition = GoalDisposition::Decrease;
+  elif ( goalDisposition == GoalDisposition::Decrease )
+    goalDisposition = GoalDisposition::Increase;
+  end if;
+end if;
  
 return( goalDisposition );',
 	1,
@@ -199,7 +209,13 @@ INSERT INTO O_ATTR
 	"c1022670-c44d-401e-bb23-dfcef6084fba",
 	"7d60ba72-b691-4687-9636-20d33798168c",
 	'disposition',
-	'The disposition of this goal.  See data type descriptions for details.',
+	'The disposition of this goal.  See data type descriptions for details.
+This attribute represents the logical or semantic disposition of the goal.
+For example, a disposition indicating the need to increase the value in question
+for a heart-rate goal means that activity should be increased to drive up the 
+heart rate.  Since pace is the inverse of speed, a disposition indicating 
+the need to increase the value in question (pace) means that the user must
+increase speed, causing a lower (faster) pace number.',
 	'',
 	'disposition',
 	0,
