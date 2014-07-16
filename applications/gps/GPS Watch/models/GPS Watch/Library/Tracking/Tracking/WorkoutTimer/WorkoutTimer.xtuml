@@ -23,9 +23,18 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'create event instance evt of WorkoutTimer3:tick() to self;
+	'// Start the underlying timer that drives the workout timer.
+create event instance evt of WorkoutTimer3:tick() to self;
 self.timer = TIM::timer_start_recurring( event_inst: evt, microseconds: (timerPeriod * 1000000) );
 
+// Resume evaluation of the currently executing goal, if there is one.
+select one executingGoal related by
+  self->WorkoutSession[R8.''acts as the stopwatch for'']->Goal[R11.''is currently executing''];
+if ( not empty executingGoal )
+  generate Goal2:Evaluate to executingGoal;
+end if;
+
+// Resume listening for updates from the GPS and heart monitor.
 send LocationProvider::registerListener();
 send HeartRateProvider::registerListener();',
 	1,
@@ -38,7 +47,17 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'res = TIM::timer_cancel(timer_inst_ref: self.timer);
+	'// Cancel the timer driving the workout timer, ignoring the return code.
+cancelSucceeded = TIM::timer_cancel(timer_inst_ref: self.timer);
+
+// Pause evaluation of the currently executing goal, if there is one.
+select one executingGoal related by
+  self->WorkoutSession[R8.''acts as the stopwatch for'']->Goal[R11.''is currently executing''];
+if ( not empty executingGoal )
+  generate Goal3:Pause to executingGoal;
+end if;
+
+// Stop listening for updates from the GPS and heart monitor.
 send LocationProvider::unregisterListener();
 send HeartRateProvider::unregisterListener();',
 	1,

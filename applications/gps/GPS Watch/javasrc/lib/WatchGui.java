@@ -26,6 +26,7 @@ public class WatchGui extends JFrame {
 	
 	public static final int LARGE_Y = 355;
 	public static final int SMALL_Y = 295;
+	public static final int INDICATOR_Y = SMALL_Y + ((LARGE_Y - SMALL_Y) / 2);
 	
 	public static final String[] UNIT_LABELS = new String[] {
 		  "km", 
@@ -51,6 +52,11 @@ public class WatchGui extends JFrame {
 	public static final int UNIT_MPH          = 8;
 	public static final int UNIT_BPM          = 9;
 	public static final int UNIT_LAPS         = 10;
+	
+	public static final int INDICATOR_BLANK   = 0;
+	public static final int INDICATOR_DOWN    = 1;
+	public static final int INDICATOR_FLAT    = 2;
+	public static final int INDICATOR_UP      = 3;
 
 	private WatchGui.ApplicationConnection server;
 	private JPanel holdAll = new JPanel();
@@ -69,6 +75,10 @@ public class WatchGui extends JFrame {
 	protected ImageIcon startStopPressed;
 	protected ImageIcon smallSeparator;
 	protected ImageIcon largeDots;
+	protected ImageIcon upArrow;
+	protected ImageIcon downArrow;
+	protected ImageIcon flat;
+	protected ImageIcon blank;
 	protected ImageIcon smallDigit[] = new ImageIcon[10];
 	protected ImageIcon largeDigit[] = new ImageIcon[10];
 	
@@ -81,6 +91,7 @@ public class WatchGui extends JFrame {
 	private JLabel smallSeparatorLabel = new JLabel();
 	private JLabel largeDotsLabel = new JLabel();
 	private JLabel unitsLabel     = new JLabel();
+	private JLabel indicatorLabel = new JLabel();
 	
 	private JLabel[] smallDigitLabel = new JLabel[4];
 	private JLabel[] largeDigitLabel = new JLabel[4];
@@ -107,8 +118,12 @@ public class WatchGui extends JFrame {
 		lapResetPressed  = createStandaloneImageIcon("lib/img/lap_reset_pressed.png");
 		startStopHover   = createStandaloneImageIcon("lib/img/start_stop_hover.png");
 		startStopPressed = createStandaloneImageIcon("lib/img/start_stop_pressed.png");
-		smallSeparator        = createStandaloneImageIcon("lib/img/dots_small.png");
+		smallSeparator   = createStandaloneImageIcon("lib/img/dots_small.png");
 		largeDots        = createStandaloneImageIcon("lib/img/dots_large.png");
+		upArrow          = createStandaloneImageIcon("lib/img/up.png");
+		downArrow        = createStandaloneImageIcon("lib/img/down.png");
+		blank            = createStandaloneImageIcon("lib/img/blank.png");
+		flat             = createStandaloneImageIcon("lib/img/flat.png");
 		for (int i = 0; i < largeDigit.length; i++) {
 			largeDigit[i] = createStandaloneImageIcon("lib/img/" + i + "_large.png");
 			smallDigit[i] = createStandaloneImageIcon("lib/img/" + i + "_small.png");
@@ -171,6 +186,9 @@ public class WatchGui extends JFrame {
 		largeDotsLabel.setBounds(242, LARGE_Y + 28, 13, 35);
 		largeDotsLabel.setIcon(largeDots);
 		
+		indicatorLabel.setBounds(120, INDICATOR_Y, 26, 51);
+		indicatorLabel.setIcon(blank);
+		
 		unitsLabel.setText("");
 		unitsLabel.setBounds(275, SMALL_Y + 28, 100, 25);
 		unitsLabel.setForeground(Color.DARK_GRAY);
@@ -186,6 +204,7 @@ public class WatchGui extends JFrame {
 		pane.add(smallSeparatorLabel, JLayeredPane.POPUP_LAYER);
 		pane.add(largeDotsLabel, JLayeredPane.POPUP_LAYER);
 		pane.add(unitsLabel,     JLayeredPane.POPUP_LAYER);
+		pane.add(indicatorLabel, JLayeredPane.POPUP_LAYER);
 		
 		for (int i = 0; i < largeDigitLabel.length; i++) {
 			smallDigitLabel[i] = new JLabel();
@@ -290,6 +309,24 @@ public class WatchGui extends JFrame {
 			break;
 		}
 		setUnit(UNIT_LABELS[unit]);
+	}
+	public void setIndicator(int value){
+		switch (value) {
+			
+		case INDICATOR_DOWN:
+			indicatorLabel.setIcon(downArrow);
+			break;
+		case INDICATOR_FLAT:
+			indicatorLabel.setIcon(flat);
+			break;
+		case INDICATOR_UP:
+			indicatorLabel.setIcon(upArrow);
+			break;
+		case INDICATOR_BLANK:
+			indicatorLabel.setIcon(blank);
+		default:
+			break;
+		}
 	}
 	
 	/**
@@ -425,6 +462,15 @@ public class WatchGui extends JFrame {
 								@Override
 								public void run() {
 									setTime(time);
+								}
+							};
+							break;
+						case SignalData.SIGNAL_NO_SET_INDICATOR:
+							data = new SetIndicator() {
+								public static final long serialVersionUID = 0;
+								@Override
+								public void run() {
+									setIndicator(value);
 								}
 							};
 							break;

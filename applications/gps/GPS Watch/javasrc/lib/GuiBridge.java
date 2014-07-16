@@ -79,6 +79,16 @@ public class GuiBridge {
 	}
 	
 	/**
+	 * Send message setIndicator to GUI.
+	 * @param value
+	 */
+	public static void setIndicator(int value) {
+		if (requester != null) {
+			requester.sendMessage( new SetIndicator(value));
+		}
+	}
+	
+	/**
 	 * When instantiated, the <code>GuiConnection</code> will connect to the
 	 * Watch GUI. It will then sit in a loop waiting for signals from the GUI.
 	 * The loop is terminated when the GUI is closed or some other client
