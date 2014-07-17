@@ -20,11 +20,12 @@ allow generated code to connect to the exact same GUI.
 */
 
 #include "GPSWatch_sys_types.h"
-void UI_UI_init( void );
 void UI_UI_lapResetPressed( void );
 void UI_UI_lightPressed( void );
 void UI_UI_modePressed( void );
+void UI_UI_newGoalSpec( const GPSWatch_GoalCriteria_t, const r_t, const r_t, const i_t, const r_t, const GPSWatch_GoalSpan_t );
 void UI_UI_setData( const GPSWatch_Unit_t, const r_t );
+void UI_UI_setIndicator( const GPSWatch_Indicator_t );
 void UI_UI_setTargetPressed( void );
 void UI_UI_setTime( const i_t );
 void UI_UI_startStopPressed( void );

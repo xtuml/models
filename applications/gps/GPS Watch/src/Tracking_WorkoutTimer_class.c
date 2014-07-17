@@ -19,13 +19,30 @@
 void
 Tracking_WorkoutTimer_op_activate( Tracking_WorkoutTimer * self)
 {
-  Escher_xtUMLEvent_t * evt;
+  Escher_xtUMLEvent_t * evt;Tracking_Goal * executingGoal=0;
   /* CREATE EVENT INSTANCE evt(  ) TO self */
   XTUML_OAL_STMT_TRACE( 1, "CREATE EVENT INSTANCE evt(  ) TO self" );
   evt = Escher_NewxtUMLEvent( (void *) self, &Tracking_WorkoutTimerevent3c );
-  /* ASSIGN self.timer = TIM::timer_start_recurring(event_inst:evt, microseconds:1000000) */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN self.timer = TIM::timer_start_recurring(event_inst:evt, microseconds:1000000)" );
-  self->timer = TIM_timer_start_recurring( (Escher_xtUMLEvent_t *)evt, 1000000 );
+  /* ASSIGN self.timer = TIM::timer_start_recurring(event_inst:evt, microseconds:( timerPeriod * 1000000 )) */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN self.timer = TIM::timer_start_recurring(event_inst:evt, microseconds:( timerPeriod * 1000000 ))" );
+  self->timer = TIM_timer_start_recurring( (Escher_xtUMLEvent_t *)evt, ( 1 * 1000000 ) );
+  /* SELECT one executingGoal RELATED BY self->WorkoutSession[R8.acts as the stopwatch for]->Goal[R11.is currently executing] */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT one executingGoal RELATED BY self->WorkoutSession[R8.acts as the stopwatch for]->Goal[R11.is currently executing]" );
+  executingGoal = 0;
+  {  if ( 0 != self ) {
+  Tracking_WorkoutSession * WorkoutSession_R8_acts_as_the_stopwatch_for = self->WorkoutSession_R8_acts_as_the_stopwatch_for;
+  if ( 0 != WorkoutSession_R8_acts_as_the_stopwatch_for ) {
+  executingGoal = WorkoutSession_R8_acts_as_the_stopwatch_for->Goal_R11_is_currently_executing;
+}}}
+  /* IF ( not empty executingGoal ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty executingGoal )" );
+  if ( !( 0 == executingGoal ) ) {
+    /* GENERATE Goal2:Evaluate() TO executingGoal */
+    XTUML_OAL_STMT_TRACE( 2, "GENERATE Goal2:Evaluate() TO executingGoal" );
+    { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( executingGoal, &Tracking_Goalevent2c );
+      Escher_SendEvent( e );
+    }
+  }
   /* SEND LOC::registerListener() */
   XTUML_OAL_STMT_TRACE( 1, "SEND LOC::registerListener()" );
   Tracking_LOC_registerListener();
@@ -41,10 +58,27 @@ Tracking_WorkoutTimer_op_activate( Tracking_WorkoutTimer * self)
 void
 Tracking_WorkoutTimer_op_deactivate( Tracking_WorkoutTimer * self)
 {
-  bool res;
-  /* ASSIGN res = TIM::timer_cancel(timer_inst_ref:self.timer) */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN res = TIM::timer_cancel(timer_inst_ref:self.timer)" );
-  res = TIM_timer_cancel( self->timer );
+  bool cancelSucceeded;Tracking_Goal * executingGoal=0;
+  /* ASSIGN cancelSucceeded = TIM::timer_cancel(timer_inst_ref:self.timer) */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN cancelSucceeded = TIM::timer_cancel(timer_inst_ref:self.timer)" );
+  cancelSucceeded = TIM_timer_cancel( self->timer );
+  /* SELECT one executingGoal RELATED BY self->WorkoutSession[R8.acts as the stopwatch for]->Goal[R11.is currently executing] */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT one executingGoal RELATED BY self->WorkoutSession[R8.acts as the stopwatch for]->Goal[R11.is currently executing]" );
+  executingGoal = 0;
+  {  if ( 0 != self ) {
+  Tracking_WorkoutSession * WorkoutSession_R8_acts_as_the_stopwatch_for = self->WorkoutSession_R8_acts_as_the_stopwatch_for;
+  if ( 0 != WorkoutSession_R8_acts_as_the_stopwatch_for ) {
+  executingGoal = WorkoutSession_R8_acts_as_the_stopwatch_for->Goal_R11_is_currently_executing;
+}}}
+  /* IF ( not empty executingGoal ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty executingGoal )" );
+  if ( !( 0 == executingGoal ) ) {
+    /* GENERATE Goal3:Pause() TO executingGoal */
+    XTUML_OAL_STMT_TRACE( 2, "GENERATE Goal3:Pause() TO executingGoal" );
+    { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( executingGoal, &Tracking_Goalevent3c );
+      Escher_SendEvent( e );
+    }
+  }
   /* SEND LOC::unregisterListener() */
   XTUML_OAL_STMT_TRACE( 1, "SEND LOC::unregisterListener()" );
   Tracking_LOC_unregisterListener();
@@ -115,7 +149,7 @@ static void Tracking_WorkoutTimer_act1( Tracking_WorkoutTimer *, const Escher_xt
 static void
 Tracking_WorkoutTimer_act1( Tracking_WorkoutTimer * self, const Escher_xtUMLEvent_t * const event )
 {
-  Tracking_WorkoutSession * session=0;
+  Tracking_Display * display=0;Tracking_WorkoutSession * session=0;
   /* SELECT one session RELATED BY self->WorkoutSession[R8.acts as the stopwatch for] */
   XTUML_OAL_STMT_TRACE( 1, "SELECT one session RELATED BY self->WorkoutSession[R8.acts as the stopwatch for]" );
   session = ( 0 != self ) ? self->WorkoutSession_R8_acts_as_the_stopwatch_for : 0;
@@ -125,9 +159,17 @@ Tracking_WorkoutTimer_act1( Tracking_WorkoutTimer * self, const Escher_xtUMLEven
   /* UI::setTime(time:self.time) */
   XTUML_OAL_STMT_TRACE( 1, "UI::setTime(time:self.time)" );
   Tracking_UI_setTime( self->time );
-  /* GENERATE Display_A2:refresh() TO Display CLASS */
-  XTUML_OAL_STMT_TRACE( 1, "GENERATE Display_A2:refresh() TO Display CLASS" );
-  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( 0, &Tracking_Display_CBevent2c );
+  /* SELECT one display RELATED BY self->WorkoutSession[R8.acts as the stopwatch for]->Display[R7.current status indicated on] */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT one display RELATED BY self->WorkoutSession[R8.acts as the stopwatch for]->Display[R7.current status indicated on]" );
+  display = 0;
+  {  if ( 0 != self ) {
+  Tracking_WorkoutSession * WorkoutSession_R8_acts_as_the_stopwatch_for = self->WorkoutSession_R8_acts_as_the_stopwatch_for;
+  if ( 0 != WorkoutSession_R8_acts_as_the_stopwatch_for ) {
+  display = WorkoutSession_R8_acts_as_the_stopwatch_for->Display_R7_current_status_indicated_on;
+}}}
+  /* GENERATE Display2:refresh() TO display */
+  XTUML_OAL_STMT_TRACE( 1, "GENERATE Display2:refresh() TO display" );
+  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( display, &Tracking_Displayevent2c );
     Escher_SendEvent( e );
   }
 }
@@ -208,9 +250,21 @@ static void Tracking_WorkoutTimer_xact5( Tracking_WorkoutTimer *, const Escher_x
 static void
 Tracking_WorkoutTimer_xact5( Tracking_WorkoutTimer * self, const Escher_xtUMLEvent_t * const event )
 {
-  /* ASSIGN self.time = ( self.time + 1 ) */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN self.time = ( self.time + 1 )" );
+  Tracking_TrackLog * trackLog=0;
+  /* ASSIGN self.time = ( self.time + timerPeriod ) */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN self.time = ( self.time + timerPeriod )" );
   self->time = ( self->time + 1 );
+  /* SELECT one trackLog RELATED BY self->WorkoutSession[R8.acts as the stopwatch for]->TrackLog[R4.captures path in] */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT one trackLog RELATED BY self->WorkoutSession[R8.acts as the stopwatch for]->TrackLog[R4.captures path in]" );
+  trackLog = 0;
+  {  if ( 0 != self ) {
+  Tracking_WorkoutSession * WorkoutSession_R8_acts_as_the_stopwatch_for = self->WorkoutSession_R8_acts_as_the_stopwatch_for;
+  if ( 0 != WorkoutSession_R8_acts_as_the_stopwatch_for ) {
+  trackLog = WorkoutSession_R8_acts_as_the_stopwatch_for->TrackLog_R4_captures_path_in;
+}}}
+  /* trackLog.addTrackPoint() */
+  XTUML_OAL_STMT_TRACE( 1, "trackLog.addTrackPoint()" );
+  Tracking_TrackLog_op_addTrackPoint( trackLog );
   /* UI::setTime(time:self.time) */
   XTUML_OAL_STMT_TRACE( 1, "UI::setTime(time:self.time)" );
   Tracking_UI_setTime( self->time );

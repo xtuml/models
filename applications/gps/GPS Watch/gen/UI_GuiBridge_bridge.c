@@ -23,6 +23,7 @@
 #define WIN32_LEAN_AND_MEAN        /* define win 32 only */
 #define SIGNAL_NO_SET_DATA 0
 #define SIGNAL_NO_SET_TIME 1
+#define SIGNAL_NO_SET_INDICATOR 2
 
 
 SOCKET sock;                       /* socket details */
@@ -102,7 +103,17 @@ UI_GuiBridge_setData( i_t p_unit, r_t p_value )
   err = send(sock,buf,strlen(buf),0); 
 }
 
-
+/*
+ * Bridge:  setIndicator
+ */
+void
+UI_GuiBridge_setIndicator( i_t p_value )
+{
+  int err;
+  char buf[50];
+  sprintf(buf, "%d,%d\n", SIGNAL_NO_SET_INDICATOR, p_value );
+  err = send(sock,buf,strlen(buf),0);
+}
 /*
  * Bridge:  setTime
  */
@@ -128,7 +139,7 @@ UI_GuiBridge_connect( void )
   float socklib_ver;               /* socket dll version */
   char cIP[50];
   
-  while (true) /* continue till a connection has been made */ 
+  while (TRUE) /* continue till a connection has been made */
   {
     wVersionRequested = MAKEWORD( 1, 1 );
     if ( WSAStartup( wVersionRequested, &wsaData ) != 0 )

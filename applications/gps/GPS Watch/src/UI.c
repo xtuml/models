@@ -26,16 +26,6 @@ allow generated code to connect to the exact same GUI.
 /*
  * Interface:  UI
  * Provided Port:  UI
- * To Provider Message:  init
- */
-void
-UI_UI_init()
-{
-}
-
-/*
- * Interface:  UI
- * Provided Port:  UI
  * From Provider Message:  lapResetPressed
  */
 void
@@ -64,6 +54,17 @@ void
 UI_UI_modePressed()
 {
   Tracking_UI_modePressed();
+}
+
+/*
+ * Interface:  UI
+ * Provided Port:  UI
+ * From Provider Message:  newGoalSpec
+ */
+void
+UI_UI_newGoalSpec( const GPSWatch_GoalCriteria_t p_criteriaType, const r_t p_maximum, const r_t p_minimum, const i_t p_sequenceNumber, const r_t p_span, const GPSWatch_GoalSpan_t p_spanType )
+{
+  Tracking_UI_newGoalSpec(  p_criteriaType, p_maximum, p_minimum, p_sequenceNumber, p_span, p_spanType );
 }
 
 /*
@@ -136,6 +137,38 @@ UI_UI_setData( const GPSWatch_Unit_t p_unit, const r_t p_value )
 /*
  * Interface:  UI
  * Provided Port:  UI
+ * To Provider Message:  setIndicator
+ */
+void
+UI_UI_setIndicator( const GPSWatch_Indicator_t p_indicator )
+{
+  /* IF ( ( PARAM.indicator == Blank ) ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( ( PARAM.indicator == Blank ) )" );
+  if ( ( p_indicator == GPSWatch_Indicator_Blank_e ) ) {
+    /* GuiBridge::setIndicator( value:0 ) */
+    XTUML_OAL_STMT_TRACE( 2, "GuiBridge::setIndicator( value:0 )" );
+    UI_GuiBridge_setIndicator( 0 );
+  }
+  else if ( ( p_indicator == GPSWatch_Indicator_Down_e ) ) {
+    /* GuiBridge::setIndicator( value:1 ) */
+    XTUML_OAL_STMT_TRACE( 2, "GuiBridge::setIndicator( value:1 )" );
+    UI_GuiBridge_setIndicator( 1 );
+  }
+  else if ( ( p_indicator == GPSWatch_Indicator_Flat_e ) ) {
+    /* GuiBridge::setIndicator( value:2 ) */
+    XTUML_OAL_STMT_TRACE( 2, "GuiBridge::setIndicator( value:2 )" );
+    UI_GuiBridge_setIndicator( 2 );
+  }
+  else if ( ( p_indicator == GPSWatch_Indicator_Up_e ) ) {
+    /* GuiBridge::setIndicator( value:3 ) */
+    XTUML_OAL_STMT_TRACE( 2, "GuiBridge::setIndicator( value:3 )" );
+    UI_GuiBridge_setIndicator( 3 );
+  }
+}
+
+/*
+ * Interface:  UI
+ * Provided Port:  UI
  * From Provider Message:  setTargetPressed
  */
 void
@@ -176,6 +209,12 @@ UI_UI_startStopPressed()
 void
 UI_UI_startTest()
 {
+  /* GENERATE TestCase2:start(iterations:2) TO TestCase CREATOR */
+  XTUML_OAL_STMT_TRACE( 1, "GENERATE TestCase2:start(iterations:2) TO TestCase CREATOR" );
+  { UI_TestCaseevent2 * e = (UI_TestCaseevent2 *) Escher_NewxtUMLEvent( 0, &UI_TestCaseevent2c );
+    e->p_iterations = 2;
+    Escher_SendEvent( (Escher_xtUMLEvent_t *) e );
+  }
 }
 
 /*
@@ -191,6 +230,27 @@ UI_RunTestCase()
   /* TestCase::execute() */
   XTUML_OAL_STMT_TRACE( 1, "TestCase::execute()" );
   UI_TestCase_op_execute();
+
+}
+
+/*
+ * Domain Function:  createGoals_1
+ */
+void
+UI_createGoals_1()
+{
+  /* SEND UI::newGoalSpec(criteriaType:Pace, maximum:8.0, minimum:2.0, sequenceNumber:1, span:150.0, spanType:Distance) */
+  XTUML_OAL_STMT_TRACE( 1, "SEND UI::newGoalSpec(criteriaType:Pace, maximum:8.0, minimum:2.0, sequenceNumber:1, span:150.0, spanType:Distance)" );
+  UI_UI_newGoalSpec( GPSWatch_GoalCriteria_Pace_e, 8.0, 2.0, 1, 150.0, GPSWatch_GoalSpan_Distance_e );
+  /* SEND UI::newGoalSpec(criteriaType:HeartRate, maximum:80.0, minimum:60.0, sequenceNumber:2, span:10, spanType:Time) */
+  XTUML_OAL_STMT_TRACE( 1, "SEND UI::newGoalSpec(criteriaType:HeartRate, maximum:80.0, minimum:60.0, sequenceNumber:2, span:10, spanType:Time)" );
+  UI_UI_newGoalSpec( GPSWatch_GoalCriteria_HeartRate_e, 80.0, 60.0, 2, 10, GPSWatch_GoalSpan_Time_e );
+  /* SEND UI::newGoalSpec(criteriaType:Pace, maximum:6.0, minimum:5.0, sequenceNumber:3, span:15, spanType:Time) */
+  XTUML_OAL_STMT_TRACE( 1, "SEND UI::newGoalSpec(criteriaType:Pace, maximum:6.0, minimum:5.0, sequenceNumber:3, span:15, spanType:Time)" );
+  UI_UI_newGoalSpec( GPSWatch_GoalCriteria_Pace_e, 6.0, 5.0, 3, 15, GPSWatch_GoalSpan_Time_e );
+  /* SEND UI::newGoalSpec(criteriaType:Pace, maximum:2.0, minimum:1.0, sequenceNumber:4, span:15, spanType:Time) */
+  XTUML_OAL_STMT_TRACE( 1, "SEND UI::newGoalSpec(criteriaType:Pace, maximum:2.0, minimum:1.0, sequenceNumber:4, span:15, spanType:Time)" );
+  UI_UI_newGoalSpec( GPSWatch_GoalCriteria_Pace_e, 2.0, 1.0, 4, 15, GPSWatch_GoalSpan_Time_e );
 
 }
 

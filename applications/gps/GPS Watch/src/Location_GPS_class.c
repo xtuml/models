@@ -13,7 +13,49 @@
 #include "TIM_bridge.h"
 #include "Location_classes.h"
 
+/*
+ * class operation:  activate
+ */
+void
+Location_GPS_op_activate()
+{
+  Escher_xtUMLEvent_t * tick;Location_GPS * gps=0;
+  /* SELECT any gps FROM INSTANCES OF GPS */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any gps FROM INSTANCES OF GPS" );
+  gps = (Location_GPS *) Escher_SetGetAny( &pG_Location_GPS_extent.active );
+  /* IF ( empty gps ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( empty gps )" );
+  if ( ( 0 == gps ) ) {
+    /* CREATE OBJECT INSTANCE gps OF GPS */
+    XTUML_OAL_STMT_TRACE( 2, "CREATE OBJECT INSTANCE gps OF GPS" );
+    gps = (Location_GPS *) Escher_CreateInstance( Location_DOMAIN_ID, Location_GPS_CLASS_NUMBER );
+    /* ASSIGN gps.motionSegments = 0 */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN gps.motionSegments = 0" );
+    gps->motionSegments = 0;
+    /* ASSIGN gps.currentLatitude = initialLatitude */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN gps.currentLatitude = initialLatitude" );
+    gps->currentLatitude = 32.432237;
+    /* ASSIGN gps.currentLongitude = initialLongitude */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN gps.currentLongitude = initialLongitude" );
+    gps->currentLongitude = -110.812283;
+  }
+  /* CREATE EVENT INSTANCE tick(  ) TO CLASS */
+  XTUML_OAL_STMT_TRACE( 1, "CREATE EVENT INSTANCE tick(  ) TO CLASS" );
+  tick = Escher_NewxtUMLEvent( (void *) 0, &Location_GPS_CBevent1c );
+  /* ASSIGN gps.timer = TIM::timer_start_recurring(event_inst:tick, microseconds:updatePeriod) */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN gps.timer = TIM::timer_start_recurring(event_inst:tick, microseconds:updatePeriod)" );
+  gps->timer = TIM_timer_start_recurring( (Escher_xtUMLEvent_t *)tick, 1000000 );
 
+}
+
+
+
+/*----------------------------------------------------------------------------
+ * Operation action methods implementation for the following class:
+ *
+ * Class:      GPS  (GPS)
+ * Component:  Location
+ *--------------------------------------------------------------------------*/
 /*
  * Statically allocate space for the instance population for this class.
  * Allocate space for the class instance and its attribute values.
@@ -51,14 +93,9 @@ Location_GPS_CB_act1( Location_GPS * self, const Escher_xtUMLEvent_t * const eve
   /* LOG::LogInfo( message:Location listener unregistered. ) */
   XTUML_OAL_STMT_TRACE( 1, "LOG::LogInfo( message:Location listener unregistered. )" );
   LOG_LogInfo( "Location listener unregistered." );
-  /* IF ( res ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( res )" );
-  if ( res ) {
-    /* LOG::LogSuccess( message:Location listener: timer_cancel() succeeded. ) */
-    XTUML_OAL_STMT_TRACE( 2, "LOG::LogSuccess( message:Location listener: timer_cancel() succeeded. )" );
-    LOG_LogSuccess( "Location listener: timer_cancel() succeeded." );
-  }
-  else {
+  /* IF ( not res ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not res )" );
+  if ( !res ) {
     /* LOG::LogFailure( message:Location listener: timer_cancel() failed. ) */
     XTUML_OAL_STMT_TRACE( 2, "LOG::LogFailure( message:Location listener: timer_cancel() failed. )" );
     LOG_LogFailure( "Location listener: timer_cancel() failed." );
@@ -76,18 +113,32 @@ Location_GPS_CB_act2( Location_GPS * self, const Escher_xtUMLEvent_t * const eve
   /* SELECT any gps FROM INSTANCES OF GPS */
   XTUML_OAL_STMT_TRACE( 1, "SELECT any gps FROM INSTANCES OF GPS" );
   gps = (Location_GPS *) Escher_SetGetAny( &pG_Location_GPS_extent.active );
-  /* ASSIGN gps.currentLocation.longitude = ( gps.currentLocation.longitude + 2.0 ) */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN gps.currentLocation.longitude = ( gps.currentLocation.longitude + 2.0 )" );
-  gps->currentLocation.longitude = ( gps->currentLocation.longitude + 2.0 );
-  /* ASSIGN gps.currentLocation.latitude = ( gps.currentLocation.latitude + 3.0 ) */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN gps.currentLocation.latitude = ( gps.currentLocation.latitude + 3.0 )" );
-  gps->currentLocation.latitude = ( gps->currentLocation.latitude + 3.0 );
-  /* ASSIGN gps.currentLocation.speed = ( ( gps.currentLocation.latitude - gps.currentLocation.longitude ) / 5.0 ) */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN gps.currentLocation.speed = ( ( gps.currentLocation.latitude - gps.currentLocation.longitude ) / 5.0 )" );
-  gps->currentLocation.speed = ( ( gps->currentLocation.latitude - gps->currentLocation.longitude ) / 5.0 );
-  /* SEND LOC::locationUpdate(location:gps.currentLocation) */
-  XTUML_OAL_STMT_TRACE( 1, "SEND LOC::locationUpdate(location:gps.currentLocation)" );
-  Location_LOC_locationUpdate( gps->currentLocation );
+  /* IF ( ( ( gps.motionSegments % 3 ) == 0 ) ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( ( ( gps.motionSegments % 3 ) == 0 ) )" );
+  if ( ( ( gps->motionSegments % 3 ) == 0 ) ) {
+    /* ASSIGN gps.currentLongitude = ( gps.currentLongitude + ( longitudeIncrement * 2 ) ) */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN gps.currentLongitude = ( gps.currentLongitude + ( longitudeIncrement * 2 ) )" );
+    gps->currentLongitude = ( gps->currentLongitude + ( 0.00002 * 2 ) );
+    /* ASSIGN gps.currentLatitude = ( gps.currentLatitude + latitudeIncrement ) */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN gps.currentLatitude = ( gps.currentLatitude + latitudeIncrement )" );
+    gps->currentLatitude = ( gps->currentLatitude + 0.00001 );
+  }
+  else if ( ( ( gps->motionSegments % 5 ) == 0 ) ) {
+    /* ASSIGN gps.currentLongitude = ( gps.currentLongitude + longitudeIncrement ) */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN gps.currentLongitude = ( gps.currentLongitude + longitudeIncrement )" );
+    gps->currentLongitude = ( gps->currentLongitude + 0.00002 );
+    /* ASSIGN gps.currentLatitude = ( gps.currentLatitude + ( latitudeIncrement * 3 ) ) */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN gps.currentLatitude = ( gps.currentLatitude + ( latitudeIncrement * 3 ) )" );
+    gps->currentLatitude = ( gps->currentLatitude + ( 0.00001 * 3 ) );
+  }
+  else {
+    /* ASSIGN gps.currentLongitude = ( gps.currentLongitude + longitudeIncrement ) */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN gps.currentLongitude = ( gps.currentLongitude + longitudeIncrement )" );
+    gps->currentLongitude = ( gps->currentLongitude + 0.00002 );
+    /* ASSIGN gps.currentLatitude = ( gps.currentLatitude + latitudeIncrement ) */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN gps.currentLatitude = ( gps.currentLatitude + latitudeIncrement )" );
+    gps->currentLatitude = ( gps->currentLatitude + 0.00001 );
+  }
 }
 
 /*
@@ -96,35 +147,27 @@ static void Location_GPS_CB_xact1( Location_GPS *, const Escher_xtUMLEvent_t * c
 static void
 Location_GPS_CB_xact1( Location_GPS * self, const Escher_xtUMLEvent_t * const event )
 {
-  Escher_xtUMLEvent_t * timeout;Location_GPS * gps=0;
-  /* SELECT any gps FROM INSTANCES OF GPS */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any gps FROM INSTANCES OF GPS" );
-  gps = (Location_GPS *) Escher_SetGetAny( &pG_Location_GPS_extent.active );
-  /* IF ( empty gps ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( empty gps )" );
-  if ( ( 0 == gps ) ) {
-    /* CREATE OBJECT INSTANCE gps OF GPS */
-    XTUML_OAL_STMT_TRACE( 2, "CREATE OBJECT INSTANCE gps OF GPS" );
-    gps = (Location_GPS *) Escher_CreateInstance( Location_DOMAIN_ID, Location_GPS_CLASS_NUMBER );
-  }
-  /* ASSIGN gps.currentLocation.longitude = 0.0 */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN gps.currentLocation.longitude = 0.0" );
-  gps->currentLocation.longitude = 0.0;
-  /* ASSIGN gps.currentLocation.latitude = 0.0 */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN gps.currentLocation.latitude = 0.0" );
-  gps->currentLocation.latitude = 0.0;
-  /* ASSIGN gps.currentLocation.speed = 0.0 */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN gps.currentLocation.speed = 0.0" );
-  gps->currentLocation.speed = 0.0;
+  /* GPS::activate() */
+  XTUML_OAL_STMT_TRACE( 1, "GPS::activate()" );
+  Location_GPS_op_activate();
   /* LOG::LogInfo( message:Location listener registered. ) */
   XTUML_OAL_STMT_TRACE( 1, "LOG::LogInfo( message:Location listener registered. )" );
   LOG_LogInfo( "Location listener registered." );
-  /* CREATE EVENT INSTANCE timeout(  ) TO CLASS */
-  XTUML_OAL_STMT_TRACE( 1, "CREATE EVENT INSTANCE timeout(  ) TO CLASS" );
-  timeout = Escher_NewxtUMLEvent( (void *) 0, &Location_GPS_CBevent1c );
-  /* ASSIGN gps.timer = TIM::timer_start_recurring(event_inst:timeout, microseconds:2000000) */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN gps.timer = TIM::timer_start_recurring(event_inst:timeout, microseconds:2000000)" );
-  gps->timer = TIM_timer_start_recurring( (Escher_xtUMLEvent_t *)timeout, 2000000 );
+}
+
+/*
+ */
+static void Location_GPS_CB_xact2( Location_GPS *, const Escher_xtUMLEvent_t * const );
+static void
+Location_GPS_CB_xact2( Location_GPS * self, const Escher_xtUMLEvent_t * const event )
+{
+  Location_GPS * gps=0;
+  /* SELECT any gps FROM INSTANCES OF GPS */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any gps FROM INSTANCES OF GPS" );
+  gps = (Location_GPS *) Escher_SetGetAny( &pG_Location_GPS_extent.active );
+  /* ASSIGN gps.motionSegments = ( gps.motionSegments + 1 ) */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN gps.motionSegments = ( gps.motionSegments + 1 )" );
+  gps->motionSegments = ( gps->motionSegments + 1 );
 }
 
 const Escher_xtUMLEventConstant_t Location_GPS_CBevent1c = {
@@ -153,7 +196,7 @@ static const Escher_SEMcell_t Location_GPS_CB_StateEventMatrix[ 2 + 1 ][ 3 ] = {
   /* row 1:  Location_GPS_CB_STATE_1 (idle) */
   { EVENT_IS_IGNORED, EVENT_CANT_HAPPEN, (1<<8) + Location_GPS_CB_STATE_2 },
   /* row 2:  Location_GPS_CB_STATE_2 (locating) */
-  { Location_GPS_CB_STATE_2, Location_GPS_CB_STATE_1, EVENT_CANT_HAPPEN }
+  { (2<<8) + Location_GPS_CB_STATE_2, Location_GPS_CB_STATE_1, EVENT_CANT_HAPPEN }
 };
 
   /*
@@ -180,8 +223,9 @@ static const Escher_SEMcell_t Location_GPS_CB_StateEventMatrix[ 2 + 1 ][ 3 ] = {
    * Array of pointers to the class transition action procedures.
    * Index is the (MC enumerated) number of the transition action to execute.
    */
-  static const StateAction_t Location_GPS_CB_xacts[ 1 ] = {
-    (StateAction_t) Location_GPS_CB_xact1
+  static const StateAction_t Location_GPS_CB_xacts[ 2 ] = {
+    (StateAction_t) Location_GPS_CB_xact1,
+    (StateAction_t) Location_GPS_CB_xact2
   };
 
 /*

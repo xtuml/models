@@ -16,10 +16,10 @@ Simulates a the GPS hardware/firmware. This component is only behavioral and inc
 */
 
 #include "GPSWatch_sys_types.h"
-void Location_LOC_locationUpdate( GPSWatch_sdt_Location );
+void Location_LOC_getLocation( r_t *, r_t * );
 void Location_LOC_registerListener( void );
 void Location_LOC_unregisterListener( void );
-r_t Location_UTIL_getDistance( GPSWatch_sdt_Location, GPSWatch_sdt_Location );
+r_t Location_UTIL_getDistance( const r_t, const r_t, const r_t, const r_t );
 
 
 #ifdef	__cplusplus

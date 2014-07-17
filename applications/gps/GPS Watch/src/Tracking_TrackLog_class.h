@@ -28,10 +28,11 @@ struct Tracking_TrackLog {
   Tracking_WorkoutSession * WorkoutSession_R4_represents_path_for;
   Escher_ObjectSet_s LapMarker_R5_has_laps_defined_by;
 };
-void Tracking_TrackLog_op_addTrackPoint( Tracking_TrackLog *, GPSWatch_sdt_Location );
+void Tracking_TrackLog_op_addTrackPoint( Tracking_TrackLog * );
 void Tracking_TrackLog_op_clearTrackPoints( Tracking_TrackLog * );
 void Tracking_TrackLog_op_addLapMarker( Tracking_TrackLog * );
 void Tracking_TrackLog_op_clearLapMarkers( Tracking_TrackLog * );
+void Tracking_TrackLog_op_updateDisplay( Tracking_TrackLog * );
 
 void Tracking_TrackLog_R3_Link_is_last_for( Tracking_TrackPoint *, Tracking_TrackLog * );
 void Tracking_TrackLog_R3_Unlink_is_last_for( Tracking_TrackPoint *, Tracking_TrackLog * );

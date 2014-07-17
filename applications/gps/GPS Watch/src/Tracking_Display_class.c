@@ -13,7 +13,70 @@
 #include "TIM_bridge.h"
 #include "Tracking_classes.h"
 
+/*
+ * class operation:  goalDispositionIndicator
+ */
+GPSWatch_Indicator_t
+Tracking_Display_op_goalDispositionIndicator()
+{
+  GPSWatch_Indicator_t indicator;Tracking_WorkoutSession * session=0;Tracking_Goal * goal=0;
+  /* SELECT any session FROM INSTANCES OF WorkoutSession */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
+  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
+  /* SELECT one goal RELATED BY session->Goal[R11.is currently executing] */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT one goal RELATED BY session->Goal[R11.is currently executing]" );
+  goal = ( 0 != session ) ? session->Goal_R11_is_currently_executing : 0;
+  /* ASSIGN indicator = Blank */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN indicator = Blank" );
+  indicator = GPSWatch_Indicator_Blank_e;
+  /* IF ( not empty goal ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty goal )" );
+  if ( !( 0 == goal ) ) {
+    /* IF ( ( goal.disposition == Increase ) ) */
+    XTUML_OAL_STMT_TRACE( 2, "IF ( ( goal.disposition == Increase ) )" );
+    if ( ( goal->disposition == GPSWatch_GoalDisposition_Increase_e ) ) {
+      /* ASSIGN indicator = Up */
+      XTUML_OAL_STMT_TRACE( 3, "ASSIGN indicator = Up" );
+      indicator = GPSWatch_Indicator_Up_e;
+    }
+    else if ( ( goal->disposition == GPSWatch_GoalDisposition_Decrease_e ) ) {
+      /* ASSIGN indicator = Down */
+      XTUML_OAL_STMT_TRACE( 3, "ASSIGN indicator = Down" );
+      indicator = GPSWatch_Indicator_Down_e;
+    }
+    else {
+      /* ASSIGN indicator = Flat */
+      XTUML_OAL_STMT_TRACE( 3, "ASSIGN indicator = Flat" );
+      indicator = GPSWatch_Indicator_Flat_e;
+    }
+  }
+  /* RETURN indicator */
+  XTUML_OAL_STMT_TRACE( 1, "RETURN indicator" );
+  return indicator;
+}
 
+
+/*
+ * RELATE WorkoutSession TO Display ACROSS R7
+ */
+void
+Tracking_Display_R7_Link_current_status_indicated_on( Tracking_WorkoutSession * part, Tracking_Display * form )
+{
+  if ( (part == 0) || (form == 0) ) {
+    XTUML_EMPTY_HANDLE_TRACE( "Display", "Tracking_Display_R7_Link_current_status_indicated_on" );
+    return;
+  }
+  form->WorkoutSession_R7_indicates_current_status_of = part;
+  part->Display_R7_current_status_indicated_on = form;
+}
+
+
+/*----------------------------------------------------------------------------
+ * Operation action methods implementation for the following class:
+ *
+ * Class:      Display  (Display)
+ * Component:  Tracking
+ *--------------------------------------------------------------------------*/
 /*
  * Statically allocate space for the instance population for this class.
  * Allocate space for the class instance and its attribute values.
@@ -25,7 +88,7 @@ static Tracking_Display Tracking_Display_instances[ Tracking_Display_MAX_EXTENT_
 Escher_Extent_t pG_Tracking_Display_extent = {
   {0}, {0}, &Tracking_Display_container[ 0 ],
   (Escher_iHandle_t) &Tracking_Display_instances,
-  sizeof( Tracking_Display ), 0, Tracking_Display_MAX_EXTENT_SIZE
+  sizeof( Tracking_Display ), Tracking_Display_STATE_1, Tracking_Display_MAX_EXTENT_SIZE
   };
 /*----------------------------------------------------------------------------
  * State and transition action implementations for the following class:
@@ -37,24 +100,17 @@ Escher_Extent_t pG_Tracking_Display_extent = {
 /*
  * State 1:  [displayDistance]
  */
-static void Tracking_Display_CB_act1( Tracking_Display *, const Escher_xtUMLEvent_t * const );
+static void Tracking_Display_act1( Tracking_Display *, const Escher_xtUMLEvent_t * const );
 static void
-Tracking_Display_CB_act1( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
+Tracking_Display_act1( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
 {
   r_t distance;Tracking_WorkoutSession * session=0;
-  /* ASSIGN distance = 0.0 */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN distance = 0.0" );
-  distance = 0.0;
-  /* SELECT any session FROM INSTANCES OF WorkoutSession */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
-  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
-  /* IF ( not empty session ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
-  if ( !( 0 == session ) ) {
-    /* ASSIGN distance = session.accumulatedDistance */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN distance = session.accumulatedDistance" );
-    distance = session->accumulatedDistance;
-  }
+  /* SELECT one session RELATED BY self->WorkoutSession[R7.indicates current status of] */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT one session RELATED BY self->WorkoutSession[R7.indicates current status of]" );
+  session = ( 0 != self ) ? self->WorkoutSession_R7_indicates_current_status_of : 0;
+  /* ASSIGN distance = session.accumulatedDistance */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN distance = session.accumulatedDistance" );
+  distance = session->accumulatedDistance;
   /* IF ( ( distance > 1000.0 ) ) */
   XTUML_OAL_STMT_TRACE( 1, "IF ( ( distance > 1000.0 ) )" );
   if ( ( distance > 1000.0 ) ) {
@@ -67,110 +123,116 @@ Tracking_Display_CB_act1( Tracking_Display * self, const Escher_xtUMLEvent_t * c
     XTUML_OAL_STMT_TRACE( 2, "UI::setData(unit:meters, value:distance)" );
     Tracking_UI_setData( GPSWatch_Unit_meters_e, distance );
   }
+  /* UI::setIndicator(Display::goalDispositionIndicator()) */
+  XTUML_OAL_STMT_TRACE( 1, "UI::setIndicator(Display::goalDispositionIndicator())" );
+  Tracking_UI_setIndicator( Tracking_Display_op_goalDispositionIndicator() );
 }
 
 /*
  * State 2:  [displaySpeed]
  */
-static void Tracking_Display_CB_act2( Tracking_Display *, const Escher_xtUMLEvent_t * const );
+static void Tracking_Display_act2( Tracking_Display *, const Escher_xtUMLEvent_t * const );
 static void
-Tracking_Display_CB_act2( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
+Tracking_Display_act2( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
 {
   r_t speed;Tracking_WorkoutSession * session=0;
-  /* ASSIGN speed = 0.0 */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN speed = 0.0" );
-  speed = 0.0;
-  /* SELECT any session FROM INSTANCES OF WorkoutSession */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
-  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
-  /* IF ( not empty session ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
-  if ( !( 0 == session ) ) {
-    /* ASSIGN speed = session.currentSpeed */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN speed = session.currentSpeed" );
-    speed = session->currentSpeed;
-  }
+  /* SELECT one session RELATED BY self->WorkoutSession[R7.indicates current status of] */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT one session RELATED BY self->WorkoutSession[R7.indicates current status of]" );
+  session = ( 0 != self ) ? self->WorkoutSession_R7_indicates_current_status_of : 0;
+  /* ASSIGN speed = session.currentSpeed */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN speed = session.currentSpeed" );
+  speed = Tracking_WorkoutSession_MDA_currentSpeed( session );
   /* UI::setData(unit:kmPerHour, value:speed) */
   XTUML_OAL_STMT_TRACE( 1, "UI::setData(unit:kmPerHour, value:speed)" );
   Tracking_UI_setData( GPSWatch_Unit_kmPerHour_e, speed );
+  /* UI::setIndicator(Display::goalDispositionIndicator()) */
+  XTUML_OAL_STMT_TRACE( 1, "UI::setIndicator(Display::goalDispositionIndicator())" );
+  Tracking_UI_setIndicator( Tracking_Display_op_goalDispositionIndicator() );
 }
 
 /*
  * State 3:  [displayPace]
  */
-static void Tracking_Display_CB_act3( Tracking_Display *, const Escher_xtUMLEvent_t * const );
+static void Tracking_Display_act3( Tracking_Display *, const Escher_xtUMLEvent_t * const );
 static void
-Tracking_Display_CB_act3( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
+Tracking_Display_act3( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
 {
   r_t pace;Tracking_WorkoutSession * session=0;
-  /* ASSIGN pace = 0.0 */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN pace = 0.0" );
-  pace = 0.0;
-  /* SELECT any session FROM INSTANCES OF WorkoutSession */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
-  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
-  /* IF ( not empty session ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
-  if ( !( 0 == session ) ) {
-    /* ASSIGN pace = session.currentPace */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN pace = session.currentPace" );
-    pace = Tracking_WorkoutSession_MDA_currentPace( session );
-  }
+  /* SELECT one session RELATED BY self->WorkoutSession[R7.indicates current status of] */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT one session RELATED BY self->WorkoutSession[R7.indicates current status of]" );
+  session = ( 0 != self ) ? self->WorkoutSession_R7_indicates_current_status_of : 0;
+  /* ASSIGN pace = session.currentPace */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN pace = session.currentPace" );
+  pace = Tracking_WorkoutSession_MDA_currentPace( session );
   /* UI::setData(unit:minPerKm, value:pace) */
   XTUML_OAL_STMT_TRACE( 1, "UI::setData(unit:minPerKm, value:pace)" );
   Tracking_UI_setData( GPSWatch_Unit_minPerKm_e, pace );
+  /* UI::setIndicator(Display::goalDispositionIndicator()) */
+  XTUML_OAL_STMT_TRACE( 1, "UI::setIndicator(Display::goalDispositionIndicator())" );
+  Tracking_UI_setIndicator( Tracking_Display_op_goalDispositionIndicator() );
 }
 
 /*
  * State 4:  [displayHeartRate]
  */
-static void Tracking_Display_CB_act4( Tracking_Display *, const Escher_xtUMLEvent_t * const );
+static void Tracking_Display_act4( Tracking_Display *, const Escher_xtUMLEvent_t * const );
 static void
-Tracking_Display_CB_act4( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
+Tracking_Display_act4( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
 {
-  r_t heartRate;Tracking_WorkoutSession * session=0;
-  /* ASSIGN heartRate = 0.0 */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN heartRate = 0.0" );
-  heartRate = 0.0;
-  /* SELECT any session FROM INSTANCES OF WorkoutSession */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
-  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
-  /* IF ( not empty session ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
-  if ( !( 0 == session ) ) {
-    /* ASSIGN heartRate = session.currentHeartRate */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN heartRate = session.currentHeartRate" );
-    heartRate = Tracking_WorkoutSession_MDA_currentHeartRate( session );
-  }
+  i_t heartRate;Tracking_WorkoutSession * session=0;
+  /* SELECT one session RELATED BY self->WorkoutSession[R7.indicates current status of] */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT one session RELATED BY self->WorkoutSession[R7.indicates current status of]" );
+  session = ( 0 != self ) ? self->WorkoutSession_R7_indicates_current_status_of : 0;
+  /* ASSIGN heartRate = session.currentHeartRate */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN heartRate = session.currentHeartRate" );
+  heartRate = Tracking_WorkoutSession_MDA_currentHeartRate( session );
   /* UI::setData(unit:bpm, value:heartRate) */
   XTUML_OAL_STMT_TRACE( 1, "UI::setData(unit:bpm, value:heartRate)" );
   Tracking_UI_setData( GPSWatch_Unit_bpm_e, heartRate );
+  /* UI::setIndicator(Display::goalDispositionIndicator()) */
+  XTUML_OAL_STMT_TRACE( 1, "UI::setIndicator(Display::goalDispositionIndicator())" );
+  Tracking_UI_setIndicator( Tracking_Display_op_goalDispositionIndicator() );
 }
 
 /*
  * State 5:  [displayLapCount]
  */
-static void Tracking_Display_CB_act5( Tracking_Display *, const Escher_xtUMLEvent_t * const );
+static void Tracking_Display_act5( Tracking_Display *, const Escher_xtUMLEvent_t * const );
 static void
-Tracking_Display_CB_act5( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
+Tracking_Display_act5( Tracking_Display * self, const Escher_xtUMLEvent_t * const event )
 {
   Escher_ObjectSet_s lapMarkers_space={0}; Escher_ObjectSet_s * lapMarkers = &lapMarkers_space;
-  /* SELECT many lapMarkers FROM INSTANCES OF LapMarker */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT many lapMarkers FROM INSTANCES OF LapMarker" );
-  Escher_CopySet( lapMarkers, &pG_Tracking_LapMarker_extent.active );
+  /* SELECT many lapMarkers RELATED BY self->WorkoutSession[R7.indicates current status of]->TrackLog[R4.captures path in]->LapMarker[R5.has laps defined by] */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT many lapMarkers RELATED BY self->WorkoutSession[R7.indicates current status of]->TrackLog[R4.captures path in]->LapMarker[R5.has laps defined by]" );
+  Escher_ClearSet( lapMarkers );
+  {  if ( 0 != self ) {
+  Tracking_WorkoutSession * WorkoutSession_R7_indicates_current_status_of = self->WorkoutSession_R7_indicates_current_status_of;
+  if ( 0 != WorkoutSession_R7_indicates_current_status_of ) {
+  Tracking_TrackLog * TrackLog_R4_captures_path_in = WorkoutSession_R7_indicates_current_status_of->TrackLog_R4_captures_path_in;
+  if ( 0 != TrackLog_R4_captures_path_in ) {
+  Tracking_LapMarker * LapMarker_R5_has_laps_defined_by;
+  Escher_Iterator_s iLapMarker_R5_has_laps_defined_by;
+  Escher_IteratorReset( &iLapMarker_R5_has_laps_defined_by, &TrackLog_R4_captures_path_in->LapMarker_R5_has_laps_defined_by );
+  while ( 0 != ( LapMarker_R5_has_laps_defined_by = (Tracking_LapMarker *) Escher_IteratorNext( &iLapMarker_R5_has_laps_defined_by ) ) ) {
+    if ( ! Escher_SetContains( (Escher_ObjectSet_s *) lapMarkers, LapMarker_R5_has_laps_defined_by ) ) {
+      Escher_SetInsertElement( (Escher_ObjectSet_s *) lapMarkers, LapMarker_R5_has_laps_defined_by );
+  }}}}}}
   /* UI::setData(unit:laps, value:cardinality lapMarkers) */
   XTUML_OAL_STMT_TRACE( 1, "UI::setData(unit:laps, value:cardinality lapMarkers)" );
   Tracking_UI_setData( GPSWatch_Unit_laps_e, Escher_SetCardinality( lapMarkers ) );
-  Escher_ClearSet( lapMarkers );
+  /* UI::setIndicator(Display::goalDispositionIndicator()) */
+  XTUML_OAL_STMT_TRACE( 1, "UI::setIndicator(Display::goalDispositionIndicator())" );
+  Tracking_UI_setIndicator( Tracking_Display_op_goalDispositionIndicator() );
+  Escher_ClearSet( lapMarkers ); 
 }
 
-const Escher_xtUMLEventConstant_t Tracking_Display_CBevent1c = {
-  Tracking_DOMAIN_ID, Tracking_Display_CLASS_NUMBER_CB, TRACKING_DISPLAY_CBEVENT1NUM,
-  ESCHER_IS_ASSIGNER_EVENT };
+const Escher_xtUMLEventConstant_t Tracking_Displayevent1c = {
+  Tracking_DOMAIN_ID, Tracking_Display_CLASS_NUMBER, TRACKING_DISPLAYEVENT1NUM,
+  ESCHER_IS_INSTANCE_EVENT };
 
-const Escher_xtUMLEventConstant_t Tracking_Display_CBevent2c = {
-  Tracking_DOMAIN_ID, Tracking_Display_CLASS_NUMBER_CB, TRACKING_DISPLAY_CBEVENT2NUM,
-  ESCHER_IS_ASSIGNER_EVENT };
+const Escher_xtUMLEventConstant_t Tracking_Displayevent2c = {
+  Tracking_DOMAIN_ID, Tracking_Display_CLASS_NUMBER, TRACKING_DISPLAYEVENT2NUM,
+  ESCHER_IS_INSTANCE_EVENT };
 
 
 
@@ -180,39 +242,39 @@ const Escher_xtUMLEventConstant_t Tracking_Display_CBevent2c = {
  * Row zero is the uninitialized state (e.g., for creation event transitions).
  * Column index is (MC enumerated) state machine events.
  */
-static const Escher_SEMcell_t Tracking_Display_CB_StateEventMatrix[ 5 + 1 ][ 2 ] = {
+static const Escher_SEMcell_t Tracking_Display_StateEventMatrix[ 5 + 1 ][ 2 ] = {
   /* row 0:  uninitialized state (for creation events) */
   { EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN },
-  /* row 1:  Tracking_Display_CB_STATE_1 (displayDistance) */
-  { Tracking_Display_CB_STATE_1, Tracking_Display_CB_STATE_2 },
-  /* row 2:  Tracking_Display_CB_STATE_2 (displaySpeed) */
-  { Tracking_Display_CB_STATE_2, Tracking_Display_CB_STATE_3 },
-  /* row 3:  Tracking_Display_CB_STATE_3 (displayPace) */
-  { Tracking_Display_CB_STATE_3, Tracking_Display_CB_STATE_4 },
-  /* row 4:  Tracking_Display_CB_STATE_4 (displayHeartRate) */
-  { Tracking_Display_CB_STATE_4, Tracking_Display_CB_STATE_5 },
-  /* row 5:  Tracking_Display_CB_STATE_5 (displayLapCount) */
-  { Tracking_Display_CB_STATE_5, Tracking_Display_CB_STATE_1 }
+  /* row 1:  Tracking_Display_STATE_1 (displayDistance) */
+  { Tracking_Display_STATE_2, Tracking_Display_STATE_1 },
+  /* row 2:  Tracking_Display_STATE_2 (displaySpeed) */
+  { Tracking_Display_STATE_3, Tracking_Display_STATE_2 },
+  /* row 3:  Tracking_Display_STATE_3 (displayPace) */
+  { Tracking_Display_STATE_4, Tracking_Display_STATE_3 },
+  /* row 4:  Tracking_Display_STATE_4 (displayHeartRate) */
+  { Tracking_Display_STATE_5, Tracking_Display_STATE_4 },
+  /* row 5:  Tracking_Display_STATE_5 (displayLapCount) */
+  { Tracking_Display_STATE_1, Tracking_Display_STATE_5 }
 };
 
   /*
    * Array of pointers to the class state action procedures.
    * Index is the (MC enumerated) number of the state action to execute.
    */
-  static const StateAction_t Tracking_Display_CB_acts[ 6 ] = {
+  static const StateAction_t Tracking_Display_acts[ 6 ] = {
     (StateAction_t) 0,
-    (StateAction_t) Tracking_Display_CB_act1,  /* displayDistance */
-    (StateAction_t) Tracking_Display_CB_act2,  /* displaySpeed */
-    (StateAction_t) Tracking_Display_CB_act3,  /* displayPace */
-    (StateAction_t) Tracking_Display_CB_act4,  /* displayHeartRate */
-    (StateAction_t) Tracking_Display_CB_act5  /* displayLapCount */
+    (StateAction_t) Tracking_Display_act1,  /* displayDistance */
+    (StateAction_t) Tracking_Display_act2,  /* displaySpeed */
+    (StateAction_t) Tracking_Display_act3,  /* displayPace */
+    (StateAction_t) Tracking_Display_act4,  /* displayHeartRate */
+    (StateAction_t) Tracking_Display_act5  /* displayLapCount */
   };
 
   /*
    * Array of string names of the state machine names.
    * Index is the (MC enumerated) number of the state.
    */
-  static const c_t * const state_name_strings_CB[ 6 ] = {
+  static const c_t * const state_name_strings[ 6 ] = {
     "",
     "displayDistance",
     "displaySpeed",
@@ -222,32 +284,32 @@ static const Escher_SEMcell_t Tracking_Display_CB_StateEventMatrix[ 5 + 1 ][ 2 ]
   };
 
 /*
- * class-based state machine event dispatching
+ * instance state machine event dispatching
  */
 void
-Tracking_Display_CBDispatch( Escher_xtUMLEvent_t * event )
+Tracking_Display_Dispatch( Escher_xtUMLEvent_t * event )
 {
-  static Escher_InstanceBase_t class_based_singleton = { Tracking_Display_CB_STATE_1 };
+  Escher_iHandle_t instance = GetEventTargetInstance( event );
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
-  Escher_StateNumber_t current_state = class_based_singleton.current_state;
-  Escher_StateNumber_t next_state = Tracking_Display_CB_StateEventMatrix[ current_state ][ event_number ];
-
-  if ( next_state <= 5 ) {
-    STATE_TXN_START_TRACE( "Display", current_state, state_name_strings_CB[ current_state ] );
-    /* Execute the state action and update the current state.  */
-    ( *Tracking_Display_CB_acts[ next_state ] )( &class_based_singleton, event );
-    class_based_singleton.current_state = next_state;
-    STATE_TXN_END_TRACE( "Display", next_state, state_name_strings_CB[ next_state ] );
-  } else {
-    if ( EVENT_CANT_HAPPEN == next_state ) {
-      /* Event cannot happen.  */
-      UserEventCantHappenCallout( current_state, next_state, event_number );
-      STATE_TXN_CH_TRACE( "Display", current_state );
-    } else if ( EVENT_IS_IGNORED == next_state ) {
-      /* Event ignored */
-      STATE_TXN_IG_TRACE( "Display", current_state );
+  Escher_StateNumber_t current_state;
+  Escher_StateNumber_t next_state;
+  
+  if ( 0 != instance ) {
+    current_state = instance->current_state;
+    if ( current_state > 5 ) {
+      /* instance validation failure (object deleted while event in flight) */
+      UserEventNoInstanceCallout( event_number );
     } else {
-      /* Translation/memory/stack error, etc - TBD */
+      next_state = Tracking_Display_StateEventMatrix[ current_state ][ event_number ];
+      if ( next_state <= 5 ) {
+        STATE_TXN_START_TRACE( "Display", current_state, state_name_strings[ current_state ] );
+        /* Execute the state action and update the current state.  */
+        ( *Tracking_Display_acts[ next_state ] )( instance, event );
+        STATE_TXN_END_TRACE( "Display", next_state, state_name_strings[ next_state ] );
+        instance->current_state = next_state;
+      } else {
+        /* empty else */
+      }
     }
   }
 }

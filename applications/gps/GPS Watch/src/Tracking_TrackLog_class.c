@@ -17,9 +17,9 @@
  * instance operation:  addTrackPoint
  */
 void
-Tracking_TrackLog_op_addTrackPoint( Tracking_TrackLog * self, GPSWatch_sdt_Location p_location )
+Tracking_TrackLog_op_addTrackPoint( Tracking_TrackLog * self)
 {
-  r_t distance;GPSWatch_sdt_Location lastKnownLocation;bool isFirstTrackPoint;Tracking_TrackPoint * trackPoint;Tracking_WorkoutSession * session=0;Tracking_TrackPoint * lastPoint=0;Tracking_TrackPoint * firstPoint=0;Tracking_WorkoutTimer * workoutTimer=0;
+  r_t distance;r_t lastLongitude;r_t lastLatitude;bool isFirstTrackPoint;Tracking_TrackPoint * trackPoint;Tracking_WorkoutSession * session=0;Tracking_TrackPoint * lastPoint=0;Tracking_TrackPoint * firstPoint=0;Tracking_WorkoutTimer * workoutTimer=0;
   /* CREATE OBJECT INSTANCE trackPoint OF TrackPoint */
   XTUML_OAL_STMT_TRACE( 1, "CREATE OBJECT INSTANCE trackPoint OF TrackPoint" );
   trackPoint = (Tracking_TrackPoint *) Escher_CreateInstance( Tracking_DOMAIN_ID, Tracking_TrackPoint_CLASS_NUMBER );
@@ -34,15 +34,9 @@ Tracking_TrackLog_op_addTrackPoint( Tracking_TrackLog * self, GPSWatch_sdt_Locat
   /* ASSIGN trackPoint.time = workoutTimer.time */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN trackPoint.time = workoutTimer.time" );
   trackPoint->time = workoutTimer->time;
-  /* ASSIGN trackPoint.longitude = PARAM.location.longitude */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN trackPoint.longitude = PARAM.location.longitude" );
-  trackPoint->longitude = p_location.longitude;
-  /* ASSIGN trackPoint.latitude = PARAM.location.latitude */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN trackPoint.latitude = PARAM.location.latitude" );
-  trackPoint->latitude = p_location.latitude;
-  /* ASSIGN trackPoint.speed = PARAM.location.speed */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN trackPoint.speed = PARAM.location.speed" );
-  trackPoint->speed = p_location.speed;
+  /* LOC::getLocation(latitude:trackPoint.latitude, longitude:trackPoint.longitude) */
+  XTUML_OAL_STMT_TRACE( 1, "LOC::getLocation(latitude:trackPoint.latitude, longitude:trackPoint.longitude)" );
+  Tracking_LOC_getLocation( &(trackPoint->latitude), &(trackPoint->longitude) );
   /* SELECT one firstPoint RELATED BY self->TrackPoint[R1] */
   XTUML_OAL_STMT_TRACE( 1, "SELECT one firstPoint RELATED BY self->TrackPoint[R1]" );
   firstPoint = ( 0 != self ) ? self->TrackPoint_R1_has_first : 0;
@@ -52,9 +46,12 @@ Tracking_TrackLog_op_addTrackPoint( Tracking_TrackLog * self, GPSWatch_sdt_Locat
   /* ASSIGN isFirstTrackPoint = FALSE */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN isFirstTrackPoint = FALSE" );
   isFirstTrackPoint = FALSE;
-  /* ASSIGN lastKnownLocation = PARAM.location */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN lastKnownLocation = PARAM.location" );
-  lastKnownLocation = p_location;
+  /* ASSIGN lastLatitude = 0.0 */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN lastLatitude = 0.0" );
+  lastLatitude = 0.0;
+  /* ASSIGN lastLongitude = 0.0 */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN lastLongitude = 0.0" );
+  lastLongitude = 0.0;
   /* IF ( empty firstPoint ) */
   XTUML_OAL_STMT_TRACE( 1, "IF ( empty firstPoint )" );
   if ( ( 0 == firstPoint ) ) {
@@ -69,12 +66,12 @@ Tracking_TrackLog_op_addTrackPoint( Tracking_TrackLog * self, GPSWatch_sdt_Locat
     Tracking_TrackLog_R3_Link_is_last_for( trackPoint, self );
   }
   else {
-    /* ASSIGN lastKnownLocation.longitude = lastPoint.longitude */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN lastKnownLocation.longitude = lastPoint.longitude" );
-    lastKnownLocation.longitude = lastPoint->longitude;
-    /* ASSIGN lastKnownLocation.latitude = lastPoint.latitude */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN lastKnownLocation.latitude = lastPoint.latitude" );
-    lastKnownLocation.latitude = lastPoint->latitude;
+    /* ASSIGN lastLatitude = lastPoint.latitude */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN lastLatitude = lastPoint.latitude" );
+    lastLatitude = lastPoint->latitude;
+    /* ASSIGN lastLongitude = lastPoint.longitude */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN lastLongitude = lastPoint.longitude" );
+    lastLongitude = lastPoint->longitude;
     /* UNRELATE self FROM lastPoint ACROSS R3 */
     XTUML_OAL_STMT_TRACE( 2, "UNRELATE self FROM lastPoint ACROSS R3" );
     Tracking_TrackLog_R3_Unlink_is_last_for( lastPoint, self );
@@ -91,9 +88,9 @@ Tracking_TrackLog_op_addTrackPoint( Tracking_TrackLog * self, GPSWatch_sdt_Locat
   /* IF ( not isFirstTrackPoint ) */
   XTUML_OAL_STMT_TRACE( 1, "IF ( not isFirstTrackPoint )" );
   if ( !isFirstTrackPoint ) {
-    /* ASSIGN distance = UTIL::getDistance(fromLocation:lastKnownLocation, toLocation:PARAM.location) */
-    XTUML_OAL_STMT_TRACE( 2, "ASSIGN distance = UTIL::getDistance(fromLocation:lastKnownLocation, toLocation:PARAM.location)" );
-    distance = Tracking_UTIL_getDistance( lastKnownLocation, p_location );
+    /* ASSIGN distance = UTIL::getDistance(fromLat:lastLatitude, fromLong:lastLongitude, toLat:trackPoint.latitude, toLong:trackPoint.longitude) */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN distance = UTIL::getDistance(fromLat:lastLatitude, fromLong:lastLongitude, toLat:trackPoint.latitude, toLong:trackPoint.longitude)" );
+    distance = Tracking_UTIL_getDistance( lastLatitude, lastLongitude, trackPoint->latitude, trackPoint->longitude );
   }
   /* SELECT one session RELATED BY self->WorkoutSession[R4.represents path for] */
   XTUML_OAL_STMT_TRACE( 1, "SELECT one session RELATED BY self->WorkoutSession[R4.represents path for]" );
@@ -101,14 +98,9 @@ Tracking_TrackLog_op_addTrackPoint( Tracking_TrackLog * self, GPSWatch_sdt_Locat
   /* ASSIGN session.accumulatedDistance = ( session.accumulatedDistance + distance ) */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN session.accumulatedDistance = ( session.accumulatedDistance + distance )" );
   session->accumulatedDistance = ( session->accumulatedDistance + distance );
-  /* ASSIGN session.currentSpeed = PARAM.location.speed */
-  XTUML_OAL_STMT_TRACE( 1, "ASSIGN session.currentSpeed = PARAM.location.speed" );
-  session->currentSpeed = p_location.speed;
-  /* GENERATE Display_A2:refresh() TO Display CLASS */
-  XTUML_OAL_STMT_TRACE( 1, "GENERATE Display_A2:refresh() TO Display CLASS" );
-  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( 0, &Tracking_Display_CBevent2c );
-    Escher_SendEvent( e );
-  }
+  /* self.updateDisplay() */
+  XTUML_OAL_STMT_TRACE( 1, "self.updateDisplay()" );
+  Tracking_TrackLog_op_updateDisplay( self );
 
 }
 
@@ -190,11 +182,9 @@ Tracking_TrackLog_op_addLapMarker( Tracking_TrackLog * self)
   /* RELATE self TO lapMarker ACROSS R5 */
   XTUML_OAL_STMT_TRACE( 1, "RELATE self TO lapMarker ACROSS R5" );
   Tracking_LapMarker_R5_Link_has_laps_defined_by( self, lapMarker );
-  /* GENERATE Display_A2:refresh() TO Display CLASS */
-  XTUML_OAL_STMT_TRACE( 1, "GENERATE Display_A2:refresh() TO Display CLASS" );
-  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( 0, &Tracking_Display_CBevent2c );
-    Escher_SendEvent( e );
-  }
+  /* self.updateDisplay() */
+  XTUML_OAL_STMT_TRACE( 1, "self.updateDisplay()" );
+  Tracking_TrackLog_op_updateDisplay( self );
 
 }
 
@@ -229,6 +219,29 @@ Tracking_TrackLog_op_clearLapMarkers( Tracking_TrackLog * self)
     Escher_DeleteInstance( (Escher_iHandle_t) lapMarker, Tracking_DOMAIN_ID, Tracking_LapMarker_CLASS_NUMBER );
   }}}
   Escher_ClearSet( lapMarkers ); 
+
+}
+
+/*
+ * instance operation:  updateDisplay
+ */
+void
+Tracking_TrackLog_op_updateDisplay( Tracking_TrackLog * self)
+{
+  Tracking_Display * display=0;
+  /* SELECT one display RELATED BY self->WorkoutSession[R4.represents path for]->Display[R7.current status indicated on] */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT one display RELATED BY self->WorkoutSession[R4.represents path for]->Display[R7.current status indicated on]" );
+  display = 0;
+  {  if ( 0 != self ) {
+  Tracking_WorkoutSession * WorkoutSession_R4_represents_path_for = self->WorkoutSession_R4_represents_path_for;
+  if ( 0 != WorkoutSession_R4_represents_path_for ) {
+  display = WorkoutSession_R4_represents_path_for->Display_R7_current_status_indicated_on;
+}}}
+  /* GENERATE Display2:refresh() TO display */
+  XTUML_OAL_STMT_TRACE( 1, "GENERATE Display2:refresh() TO display" );
+  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( display, &Tracking_Displayevent2c );
+    Escher_SendEvent( e );
+  }
 
 }
 

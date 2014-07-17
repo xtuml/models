@@ -6,8 +6,8 @@
  *--------------------------------------------------------------------------*/
 
 #include "GPSWatch_sys_types.h"
-#include "Tracking_classes.h"
 #include "UI_classes.h"
+#include "Tracking_classes.h"
 #include "Location_classes.h"
 #include "HeartRateMonitor_classes.h"
 

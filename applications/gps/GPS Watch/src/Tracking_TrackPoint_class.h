@@ -24,7 +24,6 @@ struct Tracking_TrackPoint {
   i_t time;  /* - time */
   r_t longitude;  /* - longitude */
   r_t latitude;  /* - latitude */
-  r_t speed;  /* - speed */
 
   /* relationship storage */
   /* Note:  No storage needed for TrackPoint->TrackLog[R1] */

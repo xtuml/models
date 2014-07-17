@@ -6,8 +6,8 @@
  *--------------------------------------------------------------------------*/
 
 #include "GPSWatch_sys_types.h"
-#include "Tracking_classes.h"
 #include "UI_classes.h"
+#include "Tracking_classes.h"
 #include "Location_classes.h"
 #include "HeartRateMonitor_classes.h"
 
@@ -52,8 +52,8 @@ main( int argc, char ** argv )
   InitializeOoaEventPool();
   ApplicationLevelInitialization();
   UserPreOoaInitializationCallout();
-  Tracking_execute_initialization();
   UI_execute_initialization();
+  Tracking_execute_initialization();
   Location_execute_initialization();
   HeartRateMonitor_execute_initialization();
   UserPostOoaInitializationCallout();

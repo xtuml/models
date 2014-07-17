@@ -50,6 +50,7 @@ typedef struct UI_UI_CB UI_UI_CB;
  * UML Domain Functions (Synchronous Services)
  */
 void UI_RunTestCase( void );
+void UI_createGoals_1( void );
 void UI_init( void );
 void UI_sendLapResetPressed( void );
 void UI_sendLightPressed( void );

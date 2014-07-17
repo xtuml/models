@@ -17,80 +17,10 @@ product.
 #include "MATH_bridge.h"
 #include "TIM_bridge.h"
 #include "LOG_bridge.h"
-#include "Location.h"
 #include "UI.h"
+#include "Location.h"
 #include "HeartRateMonitor.h"
 #include "Tracking_classes.h"
-
-/*
- * Interface:  LocationProvider
- * Required Port:  LOC
- * From Provider Message:  locationUpdate
- */
-void
-Tracking_LOC_locationUpdate( GPSWatch_sdt_Location p_location )
-{
-  Tracking_WorkoutSession * session=0;
-  /* LOG::LogInfo( message:location updated:  ) */
-  XTUML_OAL_STMT_TRACE( 1, "LOG::LogInfo( message:location updated:  )" );
-  LOG_LogInfo( "location updated: " );
-  /* LOG::LogReal( message:longitude, r:PARAM.location.longitude ) */
-  XTUML_OAL_STMT_TRACE( 1, "LOG::LogReal( message:longitude, r:PARAM.location.longitude )" );
-  LOG_LogReal( "longitude", p_location.longitude );
-  /* LOG::LogReal( message:latitude, r:PARAM.location.latitude ) */
-  XTUML_OAL_STMT_TRACE( 1, "LOG::LogReal( message:latitude, r:PARAM.location.latitude )" );
-  LOG_LogReal( "latitude", p_location.latitude );
-  /* LOG::LogReal( message:speed, r:PARAM.location.speed ) */
-  XTUML_OAL_STMT_TRACE( 1, "LOG::LogReal( message:speed, r:PARAM.location.speed )" );
-  LOG_LogReal( "speed", p_location.speed );
-  /* SELECT any session FROM INSTANCES OF WorkoutSession */
-  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
-  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
-  /* IF ( not empty session ) */
-  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
-  if ( !( 0 == session ) ) {
-    Tracking_TrackLog * trackLog=0;
-    /* SELECT one trackLog RELATED BY session->TrackLog[R4.captures path in] */
-    XTUML_OAL_STMT_TRACE( 2, "SELECT one trackLog RELATED BY session->TrackLog[R4.captures path in]" );
-    trackLog = ( 0 != session ) ? session->TrackLog_R4_captures_path_in : 0;
-    /* trackLog.addTrackPoint( location:PARAM.location ) */
-    XTUML_OAL_STMT_TRACE( 2, "trackLog.addTrackPoint( location:PARAM.location )" );
-    Tracking_TrackLog_op_addTrackPoint( trackLog,  p_location );
-  }
-}
-
-/*
- * Interface:  LocationProvider
- * Required Port:  LOC
- * To Provider Message:  registerListener
- */
-void
-Tracking_LOC_registerListener()
-{
-  Location_LOC_registerListener();
-}
-
-/*
- * Interface:  LocationProvider
- * Required Port:  LOC
- * To Provider Message:  unregisterListener
- */
-void
-Tracking_LOC_unregisterListener()
-{
-  Location_LOC_unregisterListener();
-}
-
-/*
- * Interface:  UI
- * Required Port:  UI
- * To Provider Message:  init
- */
-void
-Tracking_UI_init()
-{
-  UI_UI_init();
-}
 
 /*
  * Interface:  UI
@@ -138,10 +68,66 @@ Tracking_UI_lightPressed()
 void
 Tracking_UI_modePressed()
 {
-  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( (void *) 0, &Tracking_Display_CBevent1c );
-    Escher_SendEvent( e );
+  Tracking_WorkoutSession * session=0;
+  /* SELECT any session FROM INSTANCES OF WorkoutSession */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
+  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
+  /* IF ( not empty session ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
+  if ( !( 0 == session ) ) {
+    Tracking_Display * display=0;
+    /* SELECT one display RELATED BY session->Display[R7.current status indicated on] */
+    XTUML_OAL_STMT_TRACE( 2, "SELECT one display RELATED BY session->Display[R7.current status indicated on]" );
+    display = ( 0 != session ) ? session->Display_R7_current_status_indicated_on : 0;
+    /* GENERATE Display1:modeChange() TO display */
+    XTUML_OAL_STMT_TRACE( 2, "GENERATE Display1:modeChange() TO display" );
+    { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( display, &Tracking_Displayevent1c );
+      Escher_SendEvent( e );
+    }
   }
+}
 
+/*
+ * Interface:  UI
+ * Required Port:  UI
+ * From Provider Message:  newGoalSpec
+ */
+void
+Tracking_UI_newGoalSpec( const GPSWatch_GoalCriteria_t p_criteriaType, const r_t p_maximum, const r_t p_minimum, const i_t p_sequenceNumber, const r_t p_span, const GPSWatch_GoalSpan_t p_spanType )
+{
+  Tracking_WorkoutSession * session=0;
+  /* SELECT any session FROM INSTANCES OF WorkoutSession */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT any session FROM INSTANCES OF WorkoutSession" );
+  session = (Tracking_WorkoutSession *) Escher_SetGetAny( &pG_Tracking_WorkoutSession_extent.active );
+  /* IF ( not empty session ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( not empty session )" );
+  if ( !( 0 == session ) ) {
+    Tracking_GoalSpec * goalSpec;
+    /* CREATE OBJECT INSTANCE goalSpec OF GoalSpec */
+    XTUML_OAL_STMT_TRACE( 2, "CREATE OBJECT INSTANCE goalSpec OF GoalSpec" );
+    goalSpec = (Tracking_GoalSpec *) Escher_CreateInstance( Tracking_DOMAIN_ID, Tracking_GoalSpec_CLASS_NUMBER );
+    /* ASSIGN goalSpec.sequenceNumber = PARAM.sequenceNumber */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN goalSpec.sequenceNumber = PARAM.sequenceNumber" );
+    goalSpec->sequenceNumber = p_sequenceNumber;
+    /* ASSIGN goalSpec.minimum = PARAM.minimum */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN goalSpec.minimum = PARAM.minimum" );
+    goalSpec->minimum = p_minimum;
+    /* ASSIGN goalSpec.maximum = PARAM.maximum */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN goalSpec.maximum = PARAM.maximum" );
+    goalSpec->maximum = p_maximum;
+    /* ASSIGN goalSpec.span = PARAM.span */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN goalSpec.span = PARAM.span" );
+    goalSpec->span = p_span;
+    /* ASSIGN goalSpec.criteriaType = PARAM.criteriaType */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN goalSpec.criteriaType = PARAM.criteriaType" );
+    goalSpec->criteriaType = p_criteriaType;
+    /* ASSIGN goalSpec.spanType = PARAM.spanType */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN goalSpec.spanType = PARAM.spanType" );
+    goalSpec->spanType = p_spanType;
+    /* RELATE goalSpec TO session ACROSS R10 */
+    XTUML_OAL_STMT_TRACE( 2, "RELATE goalSpec TO session ACROSS R10" );
+    Tracking_GoalSpec_R10_Link_includes( session, goalSpec );
+  }
 }
 
 /*
@@ -158,11 +144,25 @@ Tracking_UI_setData( const GPSWatch_Unit_t p_unit, const r_t p_value )
 /*
  * Interface:  UI
  * Required Port:  UI
+ * To Provider Message:  setIndicator
+ */
+void
+Tracking_UI_setIndicator( const GPSWatch_Indicator_t p_indicator )
+{
+  UI_UI_setIndicator(  p_indicator );
+}
+
+/*
+ * Interface:  UI
+ * Required Port:  UI
  * From Provider Message:  setTargetPressed
  */
 void
 Tracking_UI_setTargetPressed()
 {
+  /* Goal::nextGoal() */
+  XTUML_OAL_STMT_TRACE( 1, "Goal::nextGoal()" );
+  Tracking_Goal_op_nextGoal();
 }
 
 /*
@@ -207,6 +207,39 @@ void
 Tracking_UI_startTest()
 {
   UI_UI_startTest();
+}
+
+/*
+ * Interface:  LocationProvider
+ * Required Port:  LOC
+ * To Provider Message:  getLocation
+ */
+void
+Tracking_LOC_getLocation( r_t * p_latitude, r_t * p_longitude )
+{
+  Location_LOC_getLocation(  p_latitude, p_longitude );
+}
+
+/*
+ * Interface:  LocationProvider
+ * Required Port:  LOC
+ * To Provider Message:  registerListener
+ */
+void
+Tracking_LOC_registerListener()
+{
+  Location_LOC_registerListener();
+}
+
+/*
+ * Interface:  LocationProvider
+ * Required Port:  LOC
+ * To Provider Message:  unregisterListener
+ */
+void
+Tracking_LOC_unregisterListener()
+{
+  Location_LOC_unregisterListener();
 }
 
 /*
@@ -258,25 +291,63 @@ Tracking_HR_unregisterListener()
  * To Provider Message:  getDistance
  */
 r_t
-Tracking_UTIL_getDistance( GPSWatch_sdt_Location p_fromLocation, GPSWatch_sdt_Location p_toLocation )
+Tracking_UTIL_getDistance( const r_t p_fromLat, const r_t p_fromLong, const r_t p_toLat, const r_t p_toLong )
 {
-return   Location_UTIL_getDistance(  p_fromLocation, p_toLocation );
+return   Location_UTIL_getDistance(  p_fromLat, p_fromLong, p_toLat, p_toLong );
 }
 
 /*
  * UML Domain Functions (Synchronous Services)
  */
 
+/*
+ * Domain Function:  GoalTest_1
+ */
+void
+Tracking_GoalTest_1()
+{
+  /* ::Initialize(  ) */
+  XTUML_OAL_STMT_TRACE( 1, "::Initialize(  )" );
+  Tracking_Initialize();
+  /* SEND UI::newGoalSpec(criteriaType:Pace, maximum:8.0, minimum:2.0, sequenceNumber:1, span:150.0, spanType:Distance) */
+  XTUML_OAL_STMT_TRACE( 1, "SEND UI::newGoalSpec(criteriaType:Pace, maximum:8.0, minimum:2.0, sequenceNumber:1, span:150.0, spanType:Distance)" );
+  Tracking_UI_newGoalSpec( GPSWatch_GoalCriteria_Pace_e, 8.0, 2.0, 1, 150.0, GPSWatch_GoalSpan_Distance_e );
+  /* SEND UI::newGoalSpec(criteriaType:HeartRate, maximum:80.0, minimum:60.0, sequenceNumber:2, span:10, spanType:Time) */
+  XTUML_OAL_STMT_TRACE( 1, "SEND UI::newGoalSpec(criteriaType:HeartRate, maximum:80.0, minimum:60.0, sequenceNumber:2, span:10, spanType:Time)" );
+  Tracking_UI_newGoalSpec( GPSWatch_GoalCriteria_HeartRate_e, 80.0, 60.0, 2, 10, GPSWatch_GoalSpan_Time_e );
+  /* SEND UI::newGoalSpec(criteriaType:Pace, maximum:6.0, minimum:5.0, sequenceNumber:3, span:15, spanType:Time) */
+  XTUML_OAL_STMT_TRACE( 1, "SEND UI::newGoalSpec(criteriaType:Pace, maximum:6.0, minimum:5.0, sequenceNumber:3, span:15, spanType:Time)" );
+  Tracking_UI_newGoalSpec( GPSWatch_GoalCriteria_Pace_e, 6.0, 5.0, 3, 15, GPSWatch_GoalSpan_Time_e );
+  /* SEND UI::newGoalSpec(criteriaType:Pace, maximum:2.0, minimum:1.0, sequenceNumber:4, span:15, spanType:Time) */
+  XTUML_OAL_STMT_TRACE( 1, "SEND UI::newGoalSpec(criteriaType:Pace, maximum:2.0, minimum:1.0, sequenceNumber:4, span:15, spanType:Time)" );
+  Tracking_UI_newGoalSpec( GPSWatch_GoalCriteria_Pace_e, 2.0, 1.0, 4, 15, GPSWatch_GoalSpan_Time_e );
+
+}
+
+/*
+ * Domain Function:  Initialize
+ */
+void
+Tracking_Initialize()
+{
+  /* WorkoutSession::create() */
+  XTUML_OAL_STMT_TRACE( 1, "WorkoutSession::create()" );
+  Tracking_WorkoutSession_op_create();
+
+}
+
 /* xtUML class info (collections, sizes, etc.) */
 Escher_Extent_t * const Tracking_class_info[ Tracking_MAX_CLASS_NUMBERS ] = {
   &pG_Tracking_WorkoutTimer_extent,
   &pG_Tracking_Display_extent,
-  0,
+  &pG_Tracking_Goal_extent,
+  &pG_Tracking_Achievement_extent,
   &pG_Tracking_TrackLog_extent,
   &pG_Tracking_TrackPoint_extent,
   &pG_Tracking_LapMarker_extent,
   &pG_Tracking_HeartRateSample_extent,
-  &pG_Tracking_WorkoutSession_extent
+  &pG_Tracking_WorkoutSession_extent,
+  &pG_Tracking_GoalSpec_extent
 };
 
 /*
@@ -289,4 +360,10 @@ const EventTaker_t Tracking_EventDispatcher[ Tracking_STATE_MODELS ] = {
 
 void Tracking_execute_initialization()
 {
+  /*
+   * Initialization Function:  GoalTest_1
+   * Component:  Tracking
+   */
+  Tracking_GoalTest_1();
+
 }

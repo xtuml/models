@@ -15,7 +15,7 @@
  * MaxSelectExtent:  0
  * MaxSelfEvents:  0
  * MaxNonSelfEvents:  0
- * MaxTimers:  17
+ * MaxTimers:  25
  * MaxInterleavedBridges:  0
  * MaxInterleavedBridgeDataSize:  8
  * CollectionsFlavor:  0
@@ -25,28 +25,28 @@
  * PersistInstanceCacheDepth:  128
  * PersistLinkCacheDepth:  128
  *
- * Component Name:  Tracking
- * MaxObjExtent:  1400
- * MaxRelExtent:  400
- * MaxSelectExtent:  200
+ * Component Name:  UI
+ * MaxObjExtent:  400
+ * MaxRelExtent:  0
+ * MaxSelectExtent:  600
  * MaxSelfEvents:  2
  * MaxNonSelfEvents:  5
  * MaxPriorityEvents:  0
- * MaxTimers:  4
+ * MaxTimers:  6
  * InterleavedBridges:  0
  * PEIClassCount:  0
  * PersistentClassCount:  0
  * InterleavedDataSize:  8
  * CollectionsFlavor:  0
  *
- * Component Name:  UI
- * MaxObjExtent:  400
- * MaxRelExtent:  0
- * MaxSelectExtent:  200
+ * Component Name:  Tracking
+ * MaxObjExtent:  2000
+ * MaxRelExtent:  1200
+ * MaxSelectExtent:  600
  * MaxSelfEvents:  2
  * MaxNonSelfEvents:  5
  * MaxPriorityEvents:  0
- * MaxTimers:  4
+ * MaxTimers:  6
  * InterleavedBridges:  0
  * PEIClassCount:  0
  * PersistentClassCount:  0
@@ -56,11 +56,11 @@
  * Component Name:  Location
  * MaxObjExtent:  200
  * MaxRelExtent:  0
- * MaxSelectExtent:  200
+ * MaxSelectExtent:  600
  * MaxSelfEvents:  2
  * MaxNonSelfEvents:  5
  * MaxPriorityEvents:  0
- * MaxTimers:  4
+ * MaxTimers:  6
  * InterleavedBridges:  0
  * PEIClassCount:  0
  * PersistentClassCount:  0
@@ -70,11 +70,11 @@
  * Component Name:  HeartRateMonitor
  * MaxObjExtent:  200
  * MaxRelExtent:  0
- * MaxSelectExtent:  200
+ * MaxSelectExtent:  600
  * MaxSelfEvents:  2
  * MaxNonSelfEvents:  5
  * MaxPriorityEvents:  0
- * MaxTimers:  4
+ * MaxTimers:  6
  * InterleavedBridges:  0
  * PEIClassCount:  0
  * PersistentClassCount:  0
@@ -120,13 +120,13 @@ typedef unsigned char bool;
 #define ESCHER_SYS_MAX_STRING_LEN 32
 #define ESCHER_PERSIST_INST_CACHE_DEPTH 128
 #define ESCHER_PERSIST_LINK_CACHE_DEPTH 128
-#define ESCHER_SYS_MAX_ASSOCIATION_EXTENT 400
-#define ESCHER_SYS_MAX_TRANSIENT_EXTENT 800
+#define ESCHER_SYS_MAX_ASSOCIATION_EXTENT 1200
+#define ESCHER_SYS_MAX_TRANSIENT_EXTENT 2400
 #define SYS_MAX_CONTAINERS ( ESCHER_SYS_MAX_ASSOCIATION_EXTENT + ESCHER_SYS_MAX_TRANSIENT_EXTENT )
 #define ESCHER_SYS_MAX_SELF_EVENTS 9
 #define ESCHER_SYS_MAX_NONSELF_EVENTS 21
 #define ESCHER_SYS_MAX_XTUML_EVENTS ( ESCHER_SYS_MAX_SELF_EVENTS + ESCHER_SYS_MAX_NONSELF_EVENTS )
-#define ESCHER_SYS_MAX_XTUML_TIMERS 17
+#define ESCHER_SYS_MAX_XTUML_TIMERS 25
 #define ESCHER_SYS_MAX_INTERLEAVED_BRIDGES 0
 #define ESCHER_SYS_MAX_INTERLEAVED_BRIDGE_DATA 8
 
@@ -362,15 +362,46 @@ typedef enum {
  GPSWatch_Unit_laps_e = 10
 } GPSWatch_Unit_t;
 
+/*
+ * Enumerated Data Type:  Indicator
+ */
+typedef enum {
+ GPSWatch_Indicator__UNINITIALIZED__e = -1,
+ GPSWatch_Indicator_Blank_e = 0,
+ GPSWatch_Indicator_Down_e = 1,
+ GPSWatch_Indicator_Flat_e = 2,
+ GPSWatch_Indicator_Up_e = 3
+} GPSWatch_Indicator_t;
 
 /*
- * Location:
+ * Enumerated Data Type:  GoalDisposition
  */
-typedef struct {
-  r_t longitude;
-  r_t latitude;
-  r_t speed;
-} GPSWatch_sdt_Location;
+typedef enum {
+ GPSWatch_GoalDisposition__UNINITIALIZED__e = -1,
+ GPSWatch_GoalDisposition_Achieving_e = 0,
+ GPSWatch_GoalDisposition_Increase_e = 1,
+ GPSWatch_GoalDisposition_Decrease_e = 2
+} GPSWatch_GoalDisposition_t;
+
+/*
+ * Enumerated Data Type:  GoalSpan
+ */
+typedef enum {
+ GPSWatch_GoalSpan__UNINITIALIZED__e = -1,
+ GPSWatch_GoalSpan_Distance_e = 0,
+ GPSWatch_GoalSpan_Time_e = 1
+} GPSWatch_GoalSpan_t;
+
+/*
+ * Enumerated Data Type:  GoalCriteria
+ */
+typedef enum {
+ GPSWatch_GoalCriteria__UNINITIALIZED__e = -1,
+ GPSWatch_GoalCriteria_HeartRate_e = 0,
+ GPSWatch_GoalCriteria_Pace_e = 1
+} GPSWatch_GoalCriteria_t;
+
+
 
 #define SYSTEM_DOMAIN_COUNT 4
 /* xtUML domain identification numbers */

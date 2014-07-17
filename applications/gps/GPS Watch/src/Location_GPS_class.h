@@ -21,10 +21,13 @@ extern	"C"	{
 struct Location_GPS {
 
   /* application analysis class attributes */
-  GPSWatch_sdt_Location currentLocation;  /* - currentLocation */
+  r_t currentLatitude;  /* - currentLatitude */
+  r_t currentLongitude;  /* - currentLongitude */
+  i_t motionSegments;  /* - motionSegments */
   Escher_Timer_t * timer;  /* - timer */
 
 };
+void Location_GPS_op_activate( void );
 
 
 
@@ -32,7 +35,7 @@ struct Location_GPS {
 extern Escher_Extent_t pG_Location_GPS_extent;
 
 /*
- * class-based event:  GPS_A1:'timeout'
+ * class-based event:  GPS_A1:'tick'
  */
 typedef struct {
   EVENT_BASE_ATTRIBUTE_LIST         /* base attributes of all event classes */
@@ -76,7 +79,7 @@ typedef union {
 /*
  * enumeration of state model event numbers
  */
-#define LOCATION_GPS_CBEVENT1NUM 0  /* GPS_A1:'timeout' */
+#define LOCATION_GPS_CBEVENT1NUM 0  /* GPS_A1:'tick' */
 #define LOCATION_GPS_CBEVENT3NUM 1  /* LOC::unregisterListener:'unregisterListener' */
 #define LOCATION_GPS_CBEVENT2NUM 2  /* LOC::registerListener:'registerListener' */
 
