@@ -1927,7 +1927,12 @@ INSERT INTO R_SIMP
 INSERT INTO R_REL
 	VALUES ("7ea6b294-af80-4908-a92d-d4dd2302915f",
 	1,
-	'',
+	'Indicates the first track point for a track log.  In
+other words, this is the first recorded location in 
+a chronological series of track points that make up
+a track log.
+Established when the first track point is recorded and 
+exists for the lifetime of the track log.',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO R_PART
 	VALUES ("d2828038-110a-4559-8452-91651af0adcb",
@@ -1951,12 +1956,12 @@ INSERT INTO O_OBJ_PROXY
 	'TrackLog',
 	2,
 	'TrackLog',
-	'A TrackLog is a record of events that take place during a workout.
-An event can be a location updates from the GPS, a heart rate sample
-from the pulse monitor or a lap marker.
+	'The collection of track points stored during a workout session.
 
-During workout the TrackLog keeps track of certain measurements derived
-from the sequence of events that has occurred.',
+Presently the device supports only a single track log, and it 
+is always the active one for the current workout session.
+However, future releases may add a capability for storing
+multiple track logs on the device.',
 	"00000000-0000-0000-0000-000000000000",
 	'./TrackLog/TrackLog.xtuml');
 INSERT INTO R_PART
@@ -1981,7 +1986,8 @@ INSERT INTO O_OBJ_PROXY
 	'TrackPoint',
 	3,
 	'TrackPoint',
-	'',
+	'Each instance represents a single location through which the device
+passed during a workout session.',
 	"00000000-0000-0000-0000-000000000000",
 	'./TrackPoint/TrackPoint.xtuml');
 INSERT INTO PE_PE
@@ -1995,7 +2001,9 @@ INSERT INTO R_SIMP
 INSERT INTO R_REL
 	VALUES ("b5d1ed4c-39ee-437a-9c92-ec8cb996b239",
 	2,
-	'',
+	'Chronologically sequences the track points in a track log.
+Established each time a new track point is recorded and 
+exists for the lifetime of the track log.',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO R_PART
 	VALUES ("66920350-b77d-4876-9b05-0c545b5437ae",
@@ -2042,7 +2050,10 @@ INSERT INTO R_SIMP
 INSERT INTO R_REL
 	VALUES ("aa6b0d93-73c8-47bd-8bb3-254041981d6a",
 	3,
-	'',
+	'Represents the most recently recorded track point
+in a track log.  
+Established each time a new track point is recorded and
+removed from the previously recorded track point at the same time.',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO R_PART
 	VALUES ("66920350-b77d-4876-9b05-0c545b5437ae",
@@ -2089,7 +2100,8 @@ INSERT INTO R_SIMP
 INSERT INTO R_REL
 	VALUES ("d62976b4-4258-4aa6-8a5b-a1bb8dea1e60",
 	5,
-	'',
+	'Established when a lap marker is created and exists
+for the lifetime of the track log.',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO R_PART
 	VALUES ("21bd91e4-0a7e-4836-84f1-253f2298df88",
@@ -2113,7 +2125,7 @@ INSERT INTO O_OBJ_PROXY
 	'LapMarker',
 	4,
 	'LapMarker',
-	'',
+	'Each instance represents a single lap marker.',
 	"00000000-0000-0000-0000-000000000000",
 	'./LapMarker/LapMarker.xtuml');
 INSERT INTO R_PART
@@ -2144,7 +2156,8 @@ INSERT INTO R_SIMP
 INSERT INTO R_REL
 	VALUES ("624a7f7e-f307-4c75-9412-3258327be18a",
 	7,
-	'',
+	'Established when a workout session is created and 
+exists for the duration of the session.',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO R_PART
 	VALUES ("2522ffa2-db69-4807-ab45-06acf4cf893a",
@@ -2199,7 +2212,11 @@ INSERT INTO O_OBJ_PROXY
 	'Display',
 	6,
 	'Display',
-	'Controls the currently displayed measurement.',
+	'Represents the display for the device, managing the sequence of screens
+and displaying the appropriate values based on the current mode of the 
+display.  
+This is a singleton instance.
+',
 	"00000000-0000-0000-0000-000000000000",
 	'./Display/Display.xtuml');
 INSERT INTO PE_PE
@@ -2213,7 +2230,8 @@ INSERT INTO R_SIMP
 INSERT INTO R_REL
 	VALUES ("b04987ba-d80b-4527-a1fd-894139a710d8",
 	8,
-	'',
+	'Established when a workout session is created and exists for the duration
+of the session.',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO R_PART
 	VALUES ("2522ffa2-db69-4807-ab45-06acf4cf893a",
@@ -2254,15 +2272,15 @@ INSERT INTO O_OBJ_PROXY
 	'WorkoutTimer',
 	1,
 	'WorkoutTimer',
-	'As a singleton, no more than one instance of this class exists 
-at any given time.
-
-Along with managing the stopwatch portion of the application,
-this class also knows:
+	'Represents the stopwatch portion of the device.
+This class also knows:
 - Track points are stored only when the stopwatch is running.
+- If a goal is executing, evaluation of it must be paused when
+the timer pauses.
 - How to handle the lap/reset signal based on whether the 
 stopwatch is currently running.
 
+This is a singleton instance.
 ',
 	"00000000-0000-0000-0000-000000000000",
 	'./WorkoutTimer/WorkoutTimer.xtuml');
@@ -2277,7 +2295,8 @@ INSERT INTO R_SIMP
 INSERT INTO R_REL
 	VALUES ("f84935c8-946a-434d-91c1-1a845ca84868",
 	4,
-	'',
+	'Established when a workout session is created and
+exists for the duration of the session.',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO R_PART
 	VALUES ("2522ffa2-db69-4807-ab45-06acf4cf893a",
@@ -2324,7 +2343,8 @@ INSERT INTO R_SIMP
 INSERT INTO R_REL
 	VALUES ("8d48a562-6b17-4277-80b8-dbf2efbb84f7",
 	6,
-	'',
+	'Established when a heart rate sample is created and exists for
+the duration of the workout session.',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO R_PART
 	VALUES ("33894e85-2ad5-4d7d-a0be-aa0cf2025ab7",
@@ -2348,7 +2368,7 @@ INSERT INTO O_OBJ_PROXY
 	'HeartRateSample',
 	5,
 	'HeartRateSample',
-	'',
+	'Each instance represents a single heart-rate sample.',
 	"00000000-0000-0000-0000-000000000000",
 	'./HeartRateSample/HeartRateSample.xtuml');
 INSERT INTO R_PART
