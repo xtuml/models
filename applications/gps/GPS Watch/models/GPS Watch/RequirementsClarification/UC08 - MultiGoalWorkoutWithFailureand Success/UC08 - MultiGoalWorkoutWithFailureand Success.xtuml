@@ -289,49 +289,53 @@ INSERT INTO IA_UCP
 	'UC08 - MultiGoalWorkoutWithFailureandSuccess',
 	'Pre-conditions
 	No Track logs exist on the device.
-	Timer has been reset.
-	Elapse time is zero.
+	Timer is stopped.
+	Elapsed time is zero. 
 	Accumulated distance is zero.
 	Display shows elapsed time and accumulated distance.
 
 Post-conditions
-	A Pace Over Distance goal exists on the device
-	A Heart Rate Over Time goal exists on the device
-	A track log exists on the devive.
+	A track log exists on the device.
+	A pace over distance goal exists on the device.
+	A heart rate over time goal exists on the device.
 	A heart rate log exists on the device.
-	An indication of when during the workout the active goal was being met exists on the device.  In this 
-	  case the log shows that the Pace over distance goal was being met after 45% of the workout was completed and the 
-	  Heart rate over time goal failed at the conclusion of the workout.
+	An indication of when during the workout the active goal was being met exists on the device.
 	Timer is stopped.
-	Display shows Elapsed time, accummulated distance.
+	Current heart rate and elapsed time are displayed.
 
 Scenario
-	1.  User establishes a goal for maintaining a particular pace over a certain distance.
-	2.	User establishes a goal for maintaining a particular heart rate over a certain time period
-	2.	User pushes the start/stop button and begins moving (walking, running, flying, cycling, etc.).
-	3.	The timer starts.
-	4.	Throughout the workout, the display shows:
-		a.	Accumulated distance
+	1.  User establishes a goal for maintaining a bounded pace over a certain distance.
+	2.	User establishes a goal for maintaining a bounded heart rate over a certain time period.
+	3.	User pushes the start/stop button and begins moving (walking, running, flying, cycling, etc.).
+	4.	The timer starts.
+	5.  User pushes the Mode button until pace is displayed.
+	6.	The display shows:
+		a.	Current pace
 		b.	Elapsed time
-	5.	At one-second intervals, throughout the workout the device stores, in the active track log, 
+	7.	Periodically throughout the workout the device stores, in the active track log, 
 	    the current location of the device.
-	6.  At three-second intervals, throughout the workout, the device stores, in a log, 
+	8.  Periodically throughout the workout, the device stores, in a log, 
 		the heart rate of the user.
-	7.	User pushes Set Target button.
-	8.	The tracking of the goal starts.
-	9.  The device stores an indication of when during the workout the goal is active and 
-		success condition is being met.
-	10	The display shows:
-		a.	Accumulated distance
+	9.	User pushes Set Target button.
+	10.	Evaluation of the pace over distance goal starts.
+	11. The device stores an indication of when during the workout the pace goal being met. 
+	12.	The display shows:
+		a.	Current pace
 		b.	Elapsed time
-		c.  An indication of whether the current goal conditon is being met.
-	11. After covering the distance of the pace goal, device switches to heart rate goal.
-	12.	User pushes the start/stop button.
-	13.	The timer stops.
-	14.	Goal is evaluated at the conclusion of user activity and failure status determined.
-	15. Stop storing heart rate and current location on the device.
-	16. The timer stops.
-	17. Heart rate goal is evaluated 
+		c.  An indication of whether the current goal is being met.
+	13. After covering the distance of the pace goal, device switches to heart rate goal.
+	14. Evaluation of the heart rate over time goal starts.
+	15. User pushes the Mode button until heart rate is displayed.
+	16. The display shows:
+	    a.  Current heart rate
+	    b.  Elapsed time
+	    c.  An indication of whether the current goal is being met.
+	15. The device stores an indication of when during the workout the heart rate goal is being met.
+	16. When the specified time for the heart rate goal elapses the device stops evaluating goals.
+	17.	User pushes the start/stop button.
+	18.	The timer stops.
+	19. The elasped time, distance, and heart rate samples stop accumulating.
+
 	');
 INSERT INTO PE_PE
 	VALUES ("724ed864-1684-4563-8ada-138d980c3d2f",

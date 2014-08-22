@@ -289,43 +289,39 @@ INSERT INTO IA_UCP
 	'UC07 - FailingPaceOverDistanceGoal',
 	'Pre-conditions
 	No Track logs exist on the device.
-	Timer has been reset.
+	Timer is stopped.
 	Elapsed time is zero. 
 	Accumulated distance is zero.
-	Display shows no elapsed time and no accumulated distance.
+	Display shows elapsed time and accumulated distance.
 
 Post-conditions
-	A track log exists on the device
-	A log of the pace over distance goal exists on the device.
-	An indication of when during the workout the goal was being met exists on the device.  In this 
-	  case the log shows that the goal was activated 10% in to the workout and was being met for 
-	  only the initial 40% of the workout.
+	A track log exists on the device.
+	A pace over distance goal exists on the device.
+	An indication of when during the workout the goal was being met exists on the device.
 	Timer is stopped.
-	Display shows Elapsed time and accummulated distance.
+	Elapsed time and pace are displayed.
 
 Scenario
-	1.  User establishes a single goal for maintaining a particular pace over a certain distance.
+	1.  User establishes a single goal for maintaining a bounded pace over a certain distance.
 	2.	User pushes the start/stop button and begins moving (walking, running, flying, cycling, etc.).
 	3.	The timer starts.
-	4.	The display shows:
-		a.	Accumulated distance
+	4.  User pushes the Mode button until pace is displayed.
+	5.	The display shows:
+		a.	Current pace
 		b.	Elapsed time
-	5.	At one-second intervals throughout the workout the device stores, in the active track log, 
+	6.	Periodically throughout the workout the device stores, in the active track log, 
 	    the current location of the device.
-	6.  User pushes Set Target button
-	7.	The tracking of the goal starts.
-	8.  The device stores an indication of when during the workout the goal conditon is satisfied.
-	9.	The display shows:
-		a.	Accumulated distance
+	7.  User pushes Set Target button
+	8.	Evaluation of the goal starts.
+	9.  The device stores an indication of when during the workout the goal is being met.
+	    In this case the goal is being met across only a portion of the distance specified.
+	10.	The display shows:
+		a.	Current pace
 		b.	Elapsed time
-		c.  An indication of whether the current goal conditon is being met.
-	10.	User pushes the start/stop button.
-	11. The device also stores an indication of when during the workout the goal of maintaining 
-		a certain pace was being met.
-	12. Success condition is no longer satisfied, goal marked as failed and user continues activity. 
-	13.	User pushes the start/stop button.
-	14.	The timer stops.
-	15. The elasped time and distance stop accumulating.
+		c.  An indication of whether the current goal is being met.
+	11.	User pushes the start/stop button.
+	12.	The timer stops.
+	13. The elasped time and distance stop accumulating.
 	');
 INSERT INTO PE_PE
 	VALUES ("54a7f6d9-5e5d-4bc4-b0dc-dbac3327332f",
