@@ -1,0 +1,272 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	"00000000-0000-0000-0000-000000000000",
+	"d111b2da-48d9-44eb-9f3d-1d53e767f863",
+	'Test',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("95e10818-dade-47a8-949d-5f0ac416078e",
+	112,
+	"24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	200,
+	150,
+	0,
+	'4.1.12',
+	'Pub::Library::Pub::Test');
+INSERT INTO GD_GE
+	VALUES ("50d5a2a8-0b68-48b8-94b0-a11f4dbd9213",
+	"95e10818-dade-47a8-949d-5f0ac416078e",
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0",
+	21,
+	0,
+	'Pub::Library::Pub::Test::Scenario1');
+INSERT INTO GD_SHP
+	VALUES ("50d5a2a8-0b68-48b8-94b0-a11f4dbd9213");
+INSERT INTO GD_NCS
+	VALUES ("50d5a2a8-0b68-48b8-94b0-a11f4dbd9213");
+INSERT INTO DIM_ND
+	VALUES (200.000000,
+	150.000000,
+	"50d5a2a8-0b68-48b8-94b0-a11f4dbd9213");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"50d5a2a8-0b68-48b8-94b0-a11f4dbd9213",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("50d5a2a8-0b68-48b8-94b0-a11f4dbd9213",
+	0,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_DIA
+	VALUES ("95e10818-dade-47a8-949d-5f0ac416078e",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("9b499ec9-3161-4ee5-8094-df3805d0e1a9",
+	"00000000-0000-0000-0000-000000000000",
+	'Setup',
+	'',
+	'create object instance FredsPlace of Pub;
+FredsPlace.Name = "FredsPlace";
+
+// Snooker Table 1:  Available
+create object instance table of SnookerTable;
+table.Number = 1;
+table.available = true;
+
+relate FredsPlace to table across R4.contains;
+
+// Hugo:  Outside
+create object instance Hugo of Patron;
+Hugo.Name = "Hugo";
+
+// Debbie:  Drinking
+create object instance Debbie of Patron;
+Debbie.Name = "Debbie";
+generate Patron1:Thirsty to Debbie;
+generate Patron2:Served to Debbie;
+
+// Tiny:  Drinking
+create object instance Tiny of Patron;
+Tiny.Name = "Tiny";
+generate Patron1:Thirsty to Tiny;
+generate Patron2:Served to Tiny;
+
+// Zoltan:  Thirsty
+create object instance Zoltan of Patron;
+Zoltan.Name = "Zoltan";
+generate Patron1:Thirsty to Zoltan;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("9b499ec9-3161-4ee5-8094-df3805d0e1a9",
+	1,
+	"24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("293254b0-3a35-48f5-904a-59e8905b43a6",
+	"00000000-0000-0000-0000-000000000000",
+	'Thirsty',
+	'',
+	'select any patron from instances of Patron
+  where ( selected.Name == "Tiny" );
+generate Patron1:Thirsty to patron;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("293254b0-3a35-48f5-904a-59e8905b43a6",
+	1,
+	"24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("4df8566c-ccb2-4e2b-9aa9-4399eee69b1e",
+	"00000000-0000-0000-0000-000000000000",
+	'Served',
+	'',
+	'select any patron from instances of Patron
+  where ( selected.Name == "Debbie" );
+generate Patron2:Served to patron;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("4df8566c-ccb2-4e2b-9aa9-4399eee69b1e",
+	1,
+	"24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("67fbbaab-90db-4691-a669-bda6d847d3fa",
+	"00000000-0000-0000-0000-000000000000",
+	'Bored',
+	'',
+	'select any patron from instances of Patron
+  where ( selected.Name == "Tiny" );
+generate Patron3:Bored to patron;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("67fbbaab-90db-4691-a669-bda6d847d3fa",
+	1,
+	"24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("919031cf-70d1-43d4-aa0f-922cf0392eec",
+	"00000000-0000-0000-0000-000000000000",
+	'Sated',
+	'',
+	'select any patron from instances of Patron
+  where ( selected.Name == "Tiny" );
+generate Patron5:Sated to patron;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("919031cf-70d1-43d4-aa0f-922cf0392eec",
+	1,
+	"24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("08dc944f-9389-42b4-b0a4-0f74312870c7",
+	"00000000-0000-0000-0000-000000000000",
+	'LastBall',
+	'',
+	'select any table from instances of SnookerTable;
+generate SnookerTable2:LastBallPlayed to table;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("08dc944f-9389-42b4-b0a4-0f74312870c7",
+	1,
+	"24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("1ec17fb4-a623-4345-9d38-85604863040a",
+	"00000000-0000-0000-0000-000000000000",
+	'Scenario1',
+	'',
+	'// Initialize instance handles.
+select any Hugo from instances of Patron 
+  where ( selected.Name == "Hugo" );
+select any Debbie from instances of Patron 
+  where ( selected.Name == "Debbie" );
+select any Tiny from instances of Patron 
+  where ( selected.Name == "Tiny" );
+select any Zoltan from instances of Patron 
+  where ( selected.Name == "Zoltan" );
+select any Table1 from instances of SnookerTable
+  where ( selected.Number == 1 );
+
+// Execute the scenario
+generate Patron1:Thirsty to Tiny;   // 1
+generate Patron1:Thirsty to Hugo;   // 2
+generate Patron2:Served to Zoltan;  // 3
+generate Patron3:Bored to Zoltan;   // 4
+generate Patron2:Served to Tiny;    // 5
+
+select one PlayerZoltan 
+  related by Zoltan->Player[R2.''is currently''];
+generate  Player1:LookForTable to PlayerZoltan;  // 6
+
+generate Patron2:Served to Hugo;    // 7
+generate Patron3:Bored to Debbie;   // 8
+generate Patron1:Thirsty to Tiny;   // 9
+
+select one PlayerDebbie
+  related by Debbie->Player[R2.''is currently''];
+generate  Player1:LookForTable to PlayerDebbie;  // 10
+
+generate Player2:FoundTable( TableNumber: 1 )
+  to PlayerZoltan;                               // 11
+  
+generate Player2:FoundTable( TableNumber: 1 )
+  to PlayerDebbie;                               // 12
+  
+generate Patron2:Served to Tiny;    // 13
+generate Patron1:Thirsty to Tiny;   // 14
+generate Patron2:Served to Tiny;    // 15
+
+generate SnookerTable2:LastBallPlayed to Table1;  // 16
+
+generate Patron1:Thirsty to Zoltan;   // 17
+generate Patron5:Sated to Debbie;     // 18
+generate Patron1:Thirsty to Tiny;     // 19
+
+  
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("1ec17fb4-a623-4345-9d38-85604863040a",
+	1,
+	"24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"4bf7e02c-56a7-4756-9ee7-9adcb1a33745",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("4bf7e02c-56a7-4756-9ee7-9adcb1a33745",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Pub',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../Pub.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("d111b2da-48d9-44eb-9f3d-1d53e767f863",
+	'Pub',
+	1,
+	'../../../Pub.xtuml');

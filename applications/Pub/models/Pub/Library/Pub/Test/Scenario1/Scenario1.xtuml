@@ -1,0 +1,118 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("f265cbe5-ca7d-421b-bef9-0385cecd37d0",
+	'Scenario1',
+	1,
+	'Scenario1',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("894af7eb-8871-405b-a6ed-3afcd97a0dc3",
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0",
+	'VerifyPostconditions',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("ae0c9842-a350-4516-a78b-ffd0694fdd5d",
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0",
+	'Run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// Create pre-existing instances and push them into specified states.
+::Setup();
+
+// Create an instance of this test case and start it running.
+create object instance testCase of Scenario1;
+
+// Initialize instance handles.
+select any Hugo from instances of Patron 
+  where ( selected.Name == "Hugo" );
+select any Debbie from instances of Patron 
+  where ( selected.Name == "Debbie" );
+select any Tiny from instances of Patron 
+  where ( selected.Name == "Tiny" );
+select any Zoltan from instances of Patron 
+  where ( selected.Name == "Zoltan" );
+select any Table1 from instances of SnookerTable
+  where ( selected.Number == 1 );
+
+// Inject some stimuli.
+generate Patron1:Thirsty to Tiny;   // 1
+generate Patron1:Thirsty to Hugo;   // 2
+generate Patron2:Served to Zoltan;  // 3
+generate Patron3:Bored to Zoltan;   // 4
+generate Patron2:Served to Tiny;    // 5
+
+// Wait for events to be processed.
+create event instance next of Scenario11:Next to testCase;
+timer = TIM::timer_start( event_inst: next, microseconds: 1000000 );',
+	1,
+	'',
+	"894af7eb-8871-405b-a6ed-3afcd97a0dc3");
+INSERT INTO O_NBATTR
+	VALUES ("651a26e8-8617-4b32-917b-4699a575581a",
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0");
+INSERT INTO O_BATTR
+	VALUES ("651a26e8-8617-4b32-917b-4699a575581a",
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0");
+INSERT INTO O_ATTR
+	VALUES ("651a26e8-8617-4b32-917b-4699a575581a",
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0",
+	"f141b13e-3259-4b0a-8787-c3a67ecce9e3",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("f141b13e-3259-4b0a-8787-c3a67ecce9e3",
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0");
+INSERT INTO O_BATTR
+	VALUES ("f141b13e-3259-4b0a-8787-c3a67ecce9e3",
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0");
+INSERT INTO O_ATTR
+	VALUES ("f141b13e-3259-4b0a-8787-c3a67ecce9e3",
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0",
+	"00000000-0000-0000-0000-000000000000",
+	'Passed',
+	'True if this test case executes successfully and the 
+expected post-conditions match the actual ones.',
+	'',
+	'Passed',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0");
+INSERT INTO O_ID
+	VALUES (1,
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0");
+INSERT INTO O_ID
+	VALUES (2,
+	"f265cbe5-ca7d-421b-bef9-0385cecd37d0");
+INSERT INTO PE_PE
+	VALUES ("f265cbe5-ca7d-421b-bef9-0385cecd37d0",
+	1,
+	"24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("24a0caf7-dc2f-4cc8-8acd-e4fb357427a0",
+	"00000000-0000-0000-0000-000000000000",
+	"d111b2da-48d9-44eb-9f3d-1d53e767f863",
+	'Test',
+	'',
+	0,
+	'../Test.xtuml');
