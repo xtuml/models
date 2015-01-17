@@ -14,15 +14,30 @@
 /*
  * instance operation:  rstr
  */
-c_t *
+xtuml_string
 stringtest_host_op_rstr( stringtest_host * self)
 {
   /* RETURN self.upper */
-  {c_t * xtumlOALrv = self->upper;
+  {xtuml_string xtumlOALrv;
+  Escher_strcpy( xtumlOALrv.s, self->upper );
   return xtumlOALrv;}
 
 }
 
+
+/*
+ * RELATE buffer TO host ACROSS R1
+ */
+void
+stringtest_host_R1_Link( stringtest_buffer * part, stringtest_host * form )
+{
+  if ( (part == 0) || (form == 0) ) {
+    XTUML_EMPTY_HANDLE_TRACE( "host", "stringtest_host_R1_Link" );
+    return;
+  }
+  /* Note:  host->buffer[R1] not navigated */
+  /* Note:  buffer->host[R1] not navigated */
+}
 
 
 /*----------------------------------------------------------------------------
@@ -59,13 +74,13 @@ static void
 stringtest_host_act1( stringtest_host * self, const Escher_xtUMLEvent_t * const event )
 {
   stringtest_hostevent2 * rcvd_evt = (stringtest_hostevent2 *) event;
-  c_t v_sretval5trv34[ESCHER_SYS_MAX_STRING_LEN];c_t u[ESCHER_SYS_MAX_STRING_LEN];stringtest_device * d;
+  stringtest_device * d;c_t u[ESCHER_SYS_MAX_STRING_LEN];
   /* ASSIGN d = PARAM.d */
   d = rcvd_evt->p_d;
   /* ASSIGN u = buffer::scmp(s1:d.lower, s2:PARAM.s) */
-  Escher_strcpy( u, stringtest_buffer_op_scmp(d->lower, rcvd_evt->p_s) );
-  /* ASSIGN u = buffer::scmp(s1:self.upper, self.rstr()) */
-  Escher_strcpy( u, stringtest_buffer_op_scmp(self->upper, Escher_strcpy( v_sretval5trv34, stringtest_host_op_rstr(self))) );
+  Escher_strcpy( u, stringtest_buffer_op_scmp(d->lower, rcvd_evt->p_s).s );
+  /* ASSIGN u = buffer::scmp(s1:self.upper, s2:) */
+  Escher_strcpy( u, stringtest_buffer_op_scmp(self->upper, stringtest_host_op_rstr(self).s).s );
   /* GENERATE device1:send(s:u, h:self) TO d */
   { stringtest_deviceevent1 * e = (stringtest_deviceevent1 *) Escher_NewxtUMLEvent( d, &stringtest_deviceevent1c );
     Escher_strcpy( e->p_s, u );    e->p_h = self;
@@ -81,13 +96,13 @@ static void
 stringtest_host_act2( stringtest_host * self, const Escher_xtUMLEvent_t * const event )
 {
   stringtest_hostevent1 * rcvd_evt = (stringtest_hostevent1 *) event;
-  c_t v_sretval5trv34[ESCHER_SYS_MAX_STRING_LEN];c_t u[ESCHER_SYS_MAX_STRING_LEN];stringtest_device * d;
+  stringtest_device * d;c_t u[ESCHER_SYS_MAX_STRING_LEN];
   /* ASSIGN d = PARAM.d */
   d = rcvd_evt->p_d;
   /* ASSIGN u = buffer::scmp(s1:d.lower, s2:PARAM.s) */
-  Escher_strcpy( u, stringtest_buffer_op_scmp(d->lower, rcvd_evt->p_s) );
-  /* ASSIGN u = buffer::scmp(s1:self.upper, self.rstr()) */
-  Escher_strcpy( u, stringtest_buffer_op_scmp(self->upper, Escher_strcpy( v_sretval5trv34, stringtest_host_op_rstr(self))) );
+  Escher_strcpy( u, stringtest_buffer_op_scmp(d->lower, rcvd_evt->p_s).s );
+  /* ASSIGN u = buffer::scmp(s1:self.upper, s2:) */
+  Escher_strcpy( u, stringtest_buffer_op_scmp(self->upper, stringtest_host_op_rstr(self).s).s );
   /* GENERATE device2:recv(s:u, h:self) TO d */
   { stringtest_deviceevent2 * e = (stringtest_deviceevent2 *) Escher_NewxtUMLEvent( d, &stringtest_deviceevent2c );
     Escher_strcpy( e->p_s, u );    e->p_h = self;

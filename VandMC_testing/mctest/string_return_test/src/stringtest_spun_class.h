@@ -42,7 +42,7 @@ extern const Escher_xtUMLEventConstant_t stringtest_spunevent1c;
  * union of events targeted towards 'spun' state machine
  */
 typedef union {
-  stringtest_spunevent1 spun11;  
+  stringtest_spunevent1 spun1_1;  
 } stringtest_spun_Events_u;
 
 /*

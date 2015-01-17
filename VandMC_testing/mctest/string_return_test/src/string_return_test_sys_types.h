@@ -9,7 +9,7 @@
  * Model Compiler Product Information:
  * Product:  
  * System default/colored values:
- * MaxStringLen:  250
+ * MaxStringLen:  32
  * MaxObjExtent:  0
  * MaxRelExtent:  0
  * MaxSelectExtent:  0
@@ -75,7 +75,7 @@ typedef unsigned char bool;
 #define FALSE ( (bool) 0 )
 #define TRUE  ( (bool) (!FALSE) )
 
-#define ESCHER_SYS_MAX_STRING_LEN 250
+#define ESCHER_SYS_MAX_STRING_LEN 32
 #define ESCHER_PERSIST_INST_CACHE_DEPTH 128
 #define ESCHER_PERSIST_LINK_CACHE_DEPTH 128
 #define ESCHER_SYS_MAX_ASSOCIATION_EXTENT 0
@@ -108,6 +108,7 @@ typedef          double r_t;
 typedef          float  r4_t;
 typedef          double r8_t;
 typedef /*size_t*/ u4_t Escher_size_t;
+typedef struct { char s[ ESCHER_SYS_MAX_STRING_LEN ]; } xtuml_string;
 
 /*
  * These are some of the fundamental types used universally.

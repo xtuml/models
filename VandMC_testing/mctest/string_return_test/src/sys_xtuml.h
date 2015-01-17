@@ -107,7 +107,6 @@ void Escher_memset( void * const, const u1_t, Escher_size_t );
    that invoked the compiler (C library) supplied memmove.  */
 void Escher_memmove( void * const, const void * const, Escher_size_t );
 c_t * Escher_strcpy( c_t *, const c_t * );
-c_t * Escher_strcpy2( c_t *, const c_t * );
 c_t * Escher_stradd( const c_t *, const c_t * );
 /* We could easily replace this function declaration with a macro
    that invoked the compiler (C library) supplied strcmp.  */

@@ -40,7 +40,7 @@ static void
 stringtest_ping_act1( stringtest_ping * self, const Escher_xtUMLEvent_t * const event )
 {
   stringtest_pingevent1 * rcvd_evt = (stringtest_pingevent1 *) event;
-  c_t r[ESCHER_SYS_MAX_STRING_LEN];c_t t[ESCHER_SYS_MAX_STRING_LEN];stringtest_pong * p;c_t s[ESCHER_SYS_MAX_STRING_LEN];
+  c_t s[ESCHER_SYS_MAX_STRING_LEN];stringtest_pong * p;c_t t[ESCHER_SYS_MAX_STRING_LEN];c_t r[ESCHER_SYS_MAX_STRING_LEN];
   /* ASSIGN s = PARAM.s */
   Escher_strcpy( s, rcvd_evt->p_s );
   /* ASSIGN p = PARAM.p */
@@ -48,7 +48,7 @@ stringtest_ping_act1( stringtest_ping * self, const Escher_xtUMLEvent_t * const 
   /* ASSIGN t = ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string */
   Escher_strcpy( t, "ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string" );
   /* ASSIGN r = buffer::scmp(s1:s, s2:t) */
-  Escher_strcpy( r, stringtest_buffer_op_scmp(s, t) );
+  Escher_strcpy( r, stringtest_buffer_op_scmp(s, t).s );
   /* GENERATE pong1:fly(p:self, s:s) TO p */
   { stringtest_pongevent1 * e = (stringtest_pongevent1 *) Escher_NewxtUMLEvent( p, &stringtest_pongevent1c );
     e->p_p = self;    Escher_strcpy( e->p_s, s );

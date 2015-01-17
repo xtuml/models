@@ -43,7 +43,7 @@ extern const Escher_xtUMLEventConstant_t stringtest_pongevent1c;
  * union of events targeted towards 'pong' state machine
  */
 typedef union {
-  stringtest_pongevent1 pong11;  
+  stringtest_pongevent1 pong1_1;  
 } stringtest_pong_Events_u;
 
 /*
