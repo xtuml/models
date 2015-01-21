@@ -10,7 +10,7 @@
  * indeterminate) delay between the expiration of a timer and the delivery
  * of the associated event to the receiving state machine.
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef TIM_BRIDGE_H

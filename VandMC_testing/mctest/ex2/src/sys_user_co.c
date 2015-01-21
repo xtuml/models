@@ -13,7 +13,7 @@
  * additional functionality (if necessary) to be performed at these
  * callout points.
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "ex2_sys_types.h"
@@ -85,7 +85,7 @@ UserPostOoaInitializationCalloutf( void )
 void
 UserBackgroundProcessingCalloutf( void )
 {
-/* Activate this invocation to periodically tick the example simple TIM.  */
+  /* Activate this invocation to periodically tick the example simple TIM.  */
   #if ESCHER_SYS_MAX_XTUML_TIMERS > 0
   TIM_tick();
   #endif
