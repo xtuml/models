@@ -26,8 +26,10 @@ struct stringtest_host {
   /* relationship storage */
   /* Note:  No storage needed for host->buffer[R1] */
 };
-c_t * stringtest_host_op_rstr( stringtest_host * );
+xtuml_string stringtest_host_op_rstr( stringtest_host * );
 
+void stringtest_host_R1_Link( stringtest_buffer *, stringtest_host * );
+/* Note:  buffer<-R1->host unrelate accessor not needed */
 
 
 #define stringtest_host_MAX_EXTENT_SIZE 10
@@ -57,8 +59,8 @@ extern const Escher_xtUMLEventConstant_t stringtest_hostevent2c;
  * union of events targeted towards 'host' state machine
  */
 typedef union {
-  stringtest_hostevent1 host11;  
-  stringtest_hostevent2 host22;  
+  stringtest_hostevent1 host1_1;  
+  stringtest_hostevent2 host2_2;  
 } stringtest_host_Events_u;
 
 /*

@@ -4,7 +4,7 @@
  * Class:       Driver  (DR)
  * Component:   ex2
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef EX2_DR_CLASS_H
@@ -79,11 +79,11 @@ extern const Escher_xtUMLEventConstant_t ex2_DRevent5c;
  * union of events targeted towards 'DR' state machine
  */
 typedef union {
-  ex2_DRevent1 dr11;  
-  ex2_DRevent2 dr22;  
-  ex2_DRevent3 dr33;  
-  ex2_DRevent4 dr44;  
-  ex2_DRevent5 dr55;  
+  ex2_DRevent1 dr1_1;  
+  ex2_DRevent2 dr2_2;  
+  ex2_DRevent3 dr3_3;  
+  ex2_DRevent4 dr4_4;  
+  ex2_DRevent5 dr5_5;  
 } ex2_DR_Events_u;
 
 /*

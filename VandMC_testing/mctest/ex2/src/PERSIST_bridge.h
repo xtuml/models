@@ -6,7 +6,7 @@
  *
  * External Entity:  Persistence Services (PERSIST)
  * 
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef PERSIST_BRIDGE_H

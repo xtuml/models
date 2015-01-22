@@ -14,10 +14,10 @@
 /*
  * class operation:  scmp
  */
-c_t *
+xtuml_string
 stringtest_buffer_op_scmp( c_t p_s1[ESCHER_SYS_MAX_STRING_LEN], c_t p_s2[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  c_t s2[ESCHER_SYS_MAX_STRING_LEN];c_t s1[ESCHER_SYS_MAX_STRING_LEN];c_t sum[ESCHER_SYS_MAX_STRING_LEN];c_t jstr2[ESCHER_SYS_MAX_STRING_LEN];c_t jstr1[ESCHER_SYS_MAX_STRING_LEN];
+  c_t jstr1[ESCHER_SYS_MAX_STRING_LEN];c_t jstr2[ESCHER_SYS_MAX_STRING_LEN];c_t sum[ESCHER_SYS_MAX_STRING_LEN];c_t s1[ESCHER_SYS_MAX_STRING_LEN];c_t s2[ESCHER_SYS_MAX_STRING_LEN];
   /* ASSIGN jstr1 = hello */
   Escher_strcpy( jstr1, "hello" );
   /* ASSIGN jstr2 = world */
@@ -30,25 +30,26 @@ stringtest_buffer_op_scmp( c_t p_s1[ESCHER_SYS_MAX_STRING_LEN], c_t p_s2[ESCHER_
   Escher_strcpy( s2, p_s2 );
   /* IF ( ( s1 == s2 ) ) */
   if ( ( Escher_strcmp( s1, s2 ) == 0 ) ) {
-    i_t count;c_t c[ESCHER_SYS_MAX_STRING_LEN];
+    c_t c[ESCHER_SYS_MAX_STRING_LEN];i_t count;
     /* ASSIGN c =  */
     Escher_strcpy( c, "" );
     /* ASSIGN count = 2000 */
     count = 2000;
     /* WHILE ( ( count > 0 ) ) */
     while ( ( count > 0 ) ) {
-      c_t ss2[ESCHER_SYS_MAX_STRING_LEN];c_t ss1[ESCHER_SYS_MAX_STRING_LEN];
+      c_t ss1[ESCHER_SYS_MAX_STRING_LEN];c_t ss2[ESCHER_SYS_MAX_STRING_LEN];
       /* ASSIGN count = ( count - 1 ) */
       count = ( count - 1 );
       /* ASSIGN ss1 = s1 */
       Escher_strcpy( ss1, s1 );
       /* ASSIGN ss2 = s2 */
       Escher_strcpy( ss2, s2 );
-      /* ASSIGN c = buffer::twist(s1:jstr1, s2:ss2, s3:sum, s4:ss1) */
-      Escher_strcpy2( c, stringtest_buffer_op_twist(jstr1, ss2, sum, ss1) );
+      /* ASSIGN c = buffer::twist(s1:jstr1, s2:ss2, s3:sum, s4:) */
+      Escher_strcpy( c, stringtest_buffer_op_twist(jstr1, ss2, sum, stringtest_buffer_op_justone(ss1, ss2).s).s );
     }
     /* RETURN c */
-    {c_t * xtumlOALrv = c;
+    {xtuml_string xtumlOALrv;
+    Escher_strcpy( xtumlOALrv.s, c );
     return xtumlOALrv;}
   }
   else {
@@ -58,7 +59,8 @@ stringtest_buffer_op_scmp( c_t p_s1[ESCHER_SYS_MAX_STRING_LEN], c_t p_s2[ESCHER_
     while ( TRUE ) {
     }
     /* RETURN junk */
-    {c_t * xtumlOALrv = "junk";
+    {xtuml_string xtumlOALrv;
+    Escher_strcpy( xtumlOALrv.s, "junk" );
     return xtumlOALrv;}
   }
 
@@ -67,10 +69,10 @@ stringtest_buffer_op_scmp( c_t p_s1[ESCHER_SYS_MAX_STRING_LEN], c_t p_s2[ESCHER_
 /*
  * class operation:  twist
  */
-c_t *
+xtuml_string
 stringtest_buffer_op_twist( c_t p_s1[ESCHER_SYS_MAX_STRING_LEN], c_t p_s2[ESCHER_SYS_MAX_STRING_LEN], c_t p_s3[ESCHER_SYS_MAX_STRING_LEN], c_t p_s4[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  c_t c[ESCHER_SYS_MAX_STRING_LEN];c_t b[ESCHER_SYS_MAX_STRING_LEN];c_t a[ESCHER_SYS_MAX_STRING_LEN];c_t s4[ESCHER_SYS_MAX_STRING_LEN];c_t s3[ESCHER_SYS_MAX_STRING_LEN];c_t s2[ESCHER_SYS_MAX_STRING_LEN];c_t s1[ESCHER_SYS_MAX_STRING_LEN];
+  c_t s1[ESCHER_SYS_MAX_STRING_LEN];c_t s2[ESCHER_SYS_MAX_STRING_LEN];c_t s3[ESCHER_SYS_MAX_STRING_LEN];c_t s4[ESCHER_SYS_MAX_STRING_LEN];c_t a[ESCHER_SYS_MAX_STRING_LEN];c_t b[ESCHER_SYS_MAX_STRING_LEN];c_t c[ESCHER_SYS_MAX_STRING_LEN];
   /* ASSIGN s1 = PARAM.s1 */
   Escher_strcpy( s1, p_s1 );
   /* ASSIGN s2 = PARAM.s2 */
@@ -86,39 +88,38 @@ stringtest_buffer_op_twist( c_t p_s1[ESCHER_SYS_MAX_STRING_LEN], c_t p_s2[ESCHER
   /* ASSIGN c = ( a + b ) */
   Escher_strcpy( c, Escher_stradd( a, b ) );
   /* RETURN s4 */
-  {c_t * xtumlOALrv = s4;
+  {xtuml_string xtumlOALrv;
+  Escher_strcpy( xtumlOALrv.s, s4 );
   return xtumlOALrv;}
 
 }
 
-
 /*
- * RELATE host TO buffer ACROSS R1
+ * class operation:  simple
  */
-void
-stringtest_buffer_R1_Link( stringtest_host * part, stringtest_buffer * form )
+xtuml_string
+stringtest_buffer_op_simple()
 {
-  if ( (part == 0) || (form == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "buffer", "stringtest_buffer_R1_Link" );
-    return;
-  }
-  /* Note:  buffer->host[R1] not navigated */
-  /* Note:  host->buffer[R1] not navigated */
+  /* RETURN XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX */
+  {xtuml_string xtumlOALrv;
+  Escher_strcpy( xtumlOALrv.s, "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" );
+  return xtumlOALrv;}
+
 }
 
 /*
- * RELATE device TO buffer ACROSS R2
+ * class operation:  justone
  */
-void
-stringtest_buffer_R2_Link( stringtest_device * part, stringtest_buffer * form )
+xtuml_string
+stringtest_buffer_op_justone( c_t p_one[ESCHER_SYS_MAX_STRING_LEN], c_t p_two[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  if ( (part == 0) || (form == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "buffer", "stringtest_buffer_R2_Link" );
-    return;
-  }
-  /* Note:  buffer->device[R2] not navigated */
-  /* Note:  device->buffer[R2] not navigated */
+  /* RETURN PARAM.one */
+  {xtuml_string xtumlOALrv;
+  Escher_strcpy( xtumlOALrv.s, p_one );
+  return xtumlOALrv;}
+
 }
+
 
 
 /*----------------------------------------------------------------------------

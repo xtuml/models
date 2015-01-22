@@ -25,7 +25,7 @@ if ( s1 == s2 )
     count = count - 1;
     ss1 = s1;
     ss2 = s2;
-    c = buffer::twist( s1:jstr1, s2:ss2, s3:sum, s4:ss1 );
+    c = buffer::twist( s1:jstr1, s2:ss2, s3:sum, s4:buffer::justone( one:ss1,two:ss2 ) );
   end while;
   return c;
 else
@@ -66,6 +66,7 @@ INSERT INTO O_TFR
 a = s1 + s2;
 b = s3 + s4;
 c = a + b;
+//LOG::LogInfo( message:buffer::simple() );
 return s4;',
 	1,
 	'',
@@ -105,6 +106,46 @@ INSERT INTO O_TPARM
 	0,
 	'',
 	"5e057ea7-3e2d-4745-a862-216a67ff88b2",
+	'');
+INSERT INTO O_TFR
+	VALUES ("888cc0ef-dfcc-4955-b78b-c4988cd3326c",
+	"ad7bde67-c984-44e4-9a4b-9656b30a88be",
+	'simple',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'return "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";',
+	1,
+	'',
+	"ae57f5c4-7345-4cbb-9347-07f390179995");
+INSERT INTO O_TFR
+	VALUES ("7daec356-fdbb-45cb-b22b-dcc549e855b0",
+	"ad7bde67-c984-44e4-9a4b-9656b30a88be",
+	'justone',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'return param.one;',
+	1,
+	'',
+	"888cc0ef-dfcc-4955-b78b-c4988cd3326c");
+INSERT INTO O_TPARM
+	VALUES ("fd76d66a-c81c-4f26-b09a-d5b1807c9d0b",
+	"7daec356-fdbb-45cb-b22b-dcc549e855b0",
+	'one',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("5f06bd90-152f-4b27-b277-a7eb7b6d08fc",
+	"7daec356-fdbb-45cb-b22b-dcc549e855b0",
+	'two',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"fd76d66a-c81c-4f26-b09a-d5b1807c9d0b",
 	'');
 INSERT INTO O_NBATTR
 	VALUES ("879907b8-a0c3-4d6d-b737-a554bc320f09",
