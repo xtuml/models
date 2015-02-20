@@ -1,0 +1,89 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("3cd0e2fc-7384-4b45-a7e6-55e3f197d906",
+	"00000000-0000-0000-0000-000000000000",
+	"fdbc24e7-1020-4ffe-a0bc-5e7d3bf3973f",
+	'Test Initiator',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("46b56fa9-8e0c-459f-9acc-719134c8a965",
+	112,
+	"3cd0e2fc-7384-4b45-a7e6-55e3f197d906",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'dts0100807430::Test Signal Param Computation::Signal Param Sender::Test Initiator');
+INSERT INTO DIM_DIA
+	VALUES ("46b56fa9-8e0c-459f-9acc-719134c8a965",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("428cdac4-1d70-4a77-a387-d2473f7f9c35",
+	"00000000-0000-0000-0000-000000000000",
+	'paramProvider',
+	'',
+	'return 3 + 2;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("428cdac4-1d70-4a77-a387-d2473f7f9c35",
+	1,
+	"3cd0e2fc-7384-4b45-a7e6-55e3f197d906",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("66d5a459-8fb6-4cab-aaca-49bd865437d4",
+	"00000000-0000-0000-0000-000000000000",
+	'startTest',
+	'',
+	'preComputed = 5;
+send Port1::testSig(literalParam: 2, computedParam: preComputed);
+send Port1::testSig(literalParam: 2, computedParam: ::paramProvider());',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("66d5a459-8fb6-4cab-aaca-49bd865437d4",
+	1,
+	"3cd0e2fc-7384-4b45-a7e6-55e3f197d906",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("3cd0e2fc-7384-4b45-a7e6-55e3f197d906",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"37975c65-dd89-4a18-a5ac-2dc8a8e95313",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("37975c65-dd89-4a18-a5ac-2dc8a8e95313",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Signal Param Sender',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../Signal Param Sender.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("fdbc24e7-1020-4ffe-a0bc-5e7d3bf3973f",
+	'dts0100807430',
+	1,
+	'../../../dts0100807430.xtuml');
