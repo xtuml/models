@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import testdatatypes.Sdt_t;
 
-import com.mentor.nucleus.bp.core.ComponentInstance_c;
+import org.xtuml.bp.core.ComponentInstance_c;
 
 import lib.BPInteger;
 
