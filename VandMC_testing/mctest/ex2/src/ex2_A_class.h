@@ -4,7 +4,7 @@
  * Class:       A  (A)
  * Component:   ex2
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef EX2_A_CLASS_H

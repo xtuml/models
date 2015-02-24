@@ -6,7 +6,7 @@
  *
  * External Entity:  Architecture (ARCH)
  * 
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef ARCH_BRIDGE_H
