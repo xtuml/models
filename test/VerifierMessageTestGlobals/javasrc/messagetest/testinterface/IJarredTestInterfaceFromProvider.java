@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import lib.BPInteger;
 import testdatatypes.Jarred_Sdt_t;
 
-import com.mentor.nucleus.bp.core.ComponentInstance_c;
+import org.xtuml.bp.core.ComponentInstance_c;
 
 public interface IJarredTestInterfaceFromProvider {
 	public void pingRequirer(ComponentInstance_c senderReceiver, int simpleBV_p,

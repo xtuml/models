@@ -6,7 +6,7 @@ import lib.BPInteger;
 import lib.BPString;
 import lib.LOG;
 
-import com.mentor.nucleus.bp.core.ComponentInstance_c;
+import org.xtuml.bp.core.ComponentInstance_c;
 
 public class Realized implements IExceptionTestInterfaceFromProvider {
 

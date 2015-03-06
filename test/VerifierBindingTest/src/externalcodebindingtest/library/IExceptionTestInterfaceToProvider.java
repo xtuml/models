@@ -5,7 +5,7 @@ import lib.BPFloat;
 import lib.BPInteger;
 import lib.BPString;
 
-import com.mentor.nucleus.bp.core.ComponentInstance_c;
+import org.xtuml.bp.core.ComponentInstance_c;
 
 public interface IExceptionTestInterfaceToProvider {
 	void MissingMessage(ComponentInstance_c comp);
