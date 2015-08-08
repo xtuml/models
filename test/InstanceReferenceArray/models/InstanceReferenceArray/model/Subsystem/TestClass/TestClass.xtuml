@@ -1,0 +1,1008 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("84240d28-2dd1-4d0d-ad86-6e34f434a579",
+	'TestClass',
+	1,
+	'TestClass',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("d54d6770-a0f2-464b-a7d2-272dc066fed6",
+	"84240d28-2dd1-4d0d-ad86-6e34f434a579",
+	'setup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'create object instance fixedSingle of FSIA;
+create object instance dynamicSingle of DSIA;
+create object instance mixedMulti of MMIA;
+
+create object instance dummy1 of Dummy;
+create object instance dummy2 of Dummy;
+create object instance dummy3 of Dummy;
+create object instance dummy4 of Dummy;
+create object instance dummy5 of Dummy;
+create object instance dummy6 of Dummy;
+
+
+
+fixedSingle.Fixed_SingleDimension[7] = dummy1;
+fixedSingle.memberFixed.fixedArray[5] = dummy2;
+dynamicSingle.Dynamic_SingleDimension[10] = dummy3;
+dynamicSingle.memberDynamic.dynamicArray[10] = dummy4;
+//mixedMulti.Mixed_MultiDimension[0][10] = dummy5;  // Verifier Bug - dts0100746279
+mixedMulti.Mixed_MultiDimension[0][4] = dummy5;
+//mixedMulti.memberMixed.multiArray[10][0] = dummy6; // Verifier Bug = dts0100746279
+mixedMulti.memberMixed.multiArray[4][0] = dummy6; 
+
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("c4c31f4b-92db-4a9f-a859-09eb17932406",
+	"84240d28-2dd1-4d0d-ad86-6e34f434a579",
+	'parserErrors',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'
+select any fixed from instances of FSIA;
+select any dynamic from instances of DSIA;
+select any mixed from instances of MMIA;
+create object instance dummy of Dummy;
+dummyArray[7] = dummy;
+
+		// Missing dimension errors
+//fixed.Fixed_SingleDimension.array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - Variable ->Fixed_SingleDimension<- is an array.
+  - expecting TOK_EQUAL, found '';''
+*/
+//fixed.Fixed_SingleDimension = dummy; 
+/* Expected Parser Error : 
+Attribute ->Fixed_SingleDimension<- has incompatible array depth.
+*/
+
+
+//dynamic.Dynamic_SingleDimension.array[0] = 1; 
+/* Expected Parser Error :   
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->Dynamic_SingleDimension<- is an array.
+*/
+//dynamic.Dynamic_SingleDimension = dummy; 
+/* Expected Parser Error :   
+Attribute ->Dynamic_SingleDimension<- has incompatible array depth.
+*/
+
+//mixed.Mixed_MultiDimension.array[0] = 1; 
+/* Expected Parser Error 
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->Mixed_MultiDimension<- is an array.
+*/
+//mixed.Mixed_MultiDimension[1] = dummy; 
+/* Expected Parser Error 
+Variable ->Mixed_MultiDimension<- has incompatible array depth.
+*/
+
+
+		// Extra dimension errors
+		
+//fixed.Fixed_SingleDimension[1][1].array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - Variable ->Fixed_SingleDimension<- has too many array indices.
+  - expecting TOK_EQUAL, found '';''
+*/
+//fixed.Fixed_SingleDimension[1][1] = dummy; 
+/* Expected Parser Error : 
+Variable ->Fixed_SingleDimension<- has incompatible array depth.
+*/
+
+//dynamic.Dynamic_SingleDimension[0][0].array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - Variable ->Dynamic_SingleDimension<- has too many array indices.
+  - expecting TOK_EQUAL, found '';''
+*/
+//dynamic.Dynamic_SingleDimension[0][0] = dummy; 
+/* Expected Parser Error : 
+Variable ->Dynamic_SingleDimension<- has incompatible array depth.
+*/
+
+//mixed.Mixed_MultiDimension[0][1][2].array[0] = 1; 
+/* Expected Parser Error 
+Multiple markers at this line
+  - Variable ->Mixed_MultiDimension<- has too many array indices.
+  - expecting TOK_EQUAL, found '';''
+*/
+//mixed.Mixed_MultiDimension[0][1][2] = dummy; 
+/* Expected Parser Error 
+Variable ->Mixed_MultiDimension<- has incompatible array depth.
+*/
+
+			// Out of Bound index errors
+//fixed.Fixed_SingleDimension[10].array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - Variable ->Fixed_SingleDimension<- has index out of bounds.
+  - expecting TOK_EQUAL, found '';''
+*/
+//fixed.Fixed_SingleDimension[10] = dummy; 
+/* Expected Parser Error : 
+Variable ->Fixed_SingleDimension<- contains an Array Index Out of Bounds.
+*/
+
+dynamic.Dynamic_SingleDimension[11].array[0] = 1;   
+
+
+//mixed.Mixed_MultiDimension[10][4].array[0] = 1; 
+/* Expected Parser Error 
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->Mixed_MultiDimension<- has index out of bounds.
+*/
+//mixed.Mixed_MultiDimension[10][4] = dummy; 
+/* Expected Parser Error 
+Variable ->Mixed_MultiDimension<- contains an Array Index Out of Bounds.
+*/
+			
+mixed.Mixed_MultiDimension[1][14].array[0] = 1; 
+
+fixed.Fixed_SingleDimension[1].array[0] = dynamic.Dynamic_SingleDimension[11].array[0];
+fixed.Fixed_SingleDimension[1].array[0] = mixed.Mixed_MultiDimension[1][14].array[0];
+
+
+//fixed.Fixed_SingleDimension[1] = dynamic.Dynamic_SingleDimension[11];   //  Known Bug dts0100744728
+/* Expected Parser Error 
+Variable ->Fixed_SingleDimension<- has incompatible dimension size with the rvalue.
+*/
+//fixed.Fixed_SingleDimension[1] = mixed.Mixed_MultiDimension[1][14];     // Known  Bug dts0100744728
+/* Expected Parser Error
+Variable ->Fixed_SingleDimension<- has incompatible dimension size with the rvalue.
+*/
+
+//fixed.Fixed_SingleDimension = dynamic.Dynamic_SingleDimension;  // Known  Bug dts0100744728 
+/* Expected Parser Error
+none
+*/
+
+
+   /**********************************
+   		 SDT Member test
+   **********************************/
+   
+
+		// Missing dimension errors
+//fixed.memberFixed.fixedArray.array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - Variable ->fixedArray<- is an array.
+  - expecting TOK_EQUAL, found '';''
+*/
+//fixed.memberFixed.fixedArray = dummy; 
+/* Expected Parser Error : 
+Variable ->fixedArray<- has incompatible array depth.
+*/
+
+//dynamic.memberDynamic.dynamicArray.array[0] = 1; 
+/* Expected Parser Error :   
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->dynamicArray<- is an array.
+*/
+//dynamic.memberDynamic.dynamicArray = dummy; 
+/* Expected Parser Error :   
+Variable ->dynamicArray<- has incompatible array depth.
+*/
+
+//mixed.memberMixed.multiArray.array[0] = 1; 
+/* Expected Parser Error 
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->multiArray<- is an array.
+*/
+//mixed.memberMixed.multiArray= dummy; 
+/* Expected Parser Error 
+Variable ->multiArray<- has incompatible array depth.
+*/
+
+
+		// Extra dimension errors
+		
+//fixed.memberFixed.fixedArray[1][1].array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - Variable ->fixedArray<- has too many array indices.
+  - expecting TOK_EQUAL, found '';''
+*/
+//fixed.memberFixed.fixedArray[1][1] = dummy; 
+/* Expected Parser Error : 
+Variable ->fixedArray<- has incompatible array depth.
+*/
+
+//dynamic.memberDynamic.dynamicArray[0][0].array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - Variable ->dynamicArray<- has too many array indices.
+  - expecting TOK_EQUAL, found '';''
+*/
+//dynamic.memberDynamic.dynamicArray[0][0] = dummy; 
+/* Expected Parser Error : 
+Variable ->dynamicArray<- has incompatible array depth.
+*/
+
+//mixed.memberMixed.multiArray[0][1][2].array[0] = 1; 
+/* Expected Parser Error 
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->multiArray<- has too many array indices.
+*/
+//mixed.memberMixed.multiArray[0][1][2] = dummy; 
+/* Expected Parser Error 
+Variable ->multiArray<- has incompatible array depth.
+*/
+
+			// Out of Bound index errors
+			
+//fixed.memberFixed.fixedArray[10].array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - Variable ->fixedArray<- has index out of bounds.
+  - expecting TOK_EQUAL, found '';''
+*/
+//fixed.memberFixed.fixedArray[10] = dummy; 
+/* Expected Parser Error : 
+Variable ->fixedArray<- contains an Array Index Out of Bounds.
+*/
+
+dynamic.memberDynamic.dynamicArray[11].array[0] = 1;   
+
+
+//mixed.memberMixed.multiArray[2][10].array[0] = 1; 
+/* Expected Parser Error 
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->multiArray<- has index out of bounds.
+*/
+//mixed.memberMixed.multiArray[2][10] = dummy; 
+/* Expected Parser Error 
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->multiArray<- has index out of bounds.
+*/
+			
+mixed.memberMixed.multiArray[14][1].array[0] = 1; 
+
+fixed.memberFixed.fixedArray[1].array[0] = dynamic.memberDynamic.dynamicArray[11].array[0];
+fixed.memberFixed.fixedArray[1].array[0] = mixed.memberMixed.multiArray[12][1].array[0];
+
+//fixed.memberFixed.fixedArray[1] = dynamic.memberDynamic.dynamicArray[11];   //  Known Bug dts0100744728
+//fixed.memberFixed.fixedArray[1] = mixed.memberMixed.multiArray[1][14];     // Known  Bug dts0100744728
+
+//fixed.memberFixed.fixedArray = dynamic.memberDynamic.dynamicArray;  // Known  Bug dts0100744728
+   
+   
+  
+  /**********************************
+   		 Transient Test
+   **********************************/
+  
+fixed_single = fixed.Fixed_SingleDimension;  
+dynamic_single = dynamic.Dynamic_SingleDimension;
+mixed_multi = mixed.Mixed_MultiDimension;
+  
+  
+  	// Missing dimension errors
+//fixed_single.array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->fixed_single<- is an array.
+*/
+fixed_single = dummy;   	// Parser Bug
+
+
+
+//dynamic_single.array[0] = 1; 
+/* Expected Parser Error :   
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->dynamic_single<- is an array.
+*/
+dynamic_single = dummy;  // Parser Bug
+
+//mixed_multi.array[0] = 1; 
+/* Expected Parser Error 
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->mixed_multi<- is an array.
+*/
+mixed_multi = dummy; // Parser Bug
+
+//mixed_multi[1] = dummy;
+/* Expected Parser Error 
+Variable ->mixed_multi<- has incompatible array depth.
+*/ 
+
+
+		// Extra dimension errors
+		
+//fixed_single[1][1].array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - Variable ->fixed_single<- has too many array indices.
+  - expecting TOK_EQUAL, found '';''
+*/
+
+//fixed_single[1][1] = dummyArray[4];
+/* Expected Parser Error : 
+Variable ->fixed_single<- has incompatible dimension size with the rvalue.
+*/
+
+//dynamic_single[0][0].array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - Variable ->dynamic_single<- has too many array indices.
+  - expecting TOK_EQUAL, found '';''
+*/
+//dynamic_single[0][0] = dummyArray[3]; 
+/* Expected Parser Error : 
+Variable ->dynamic_single<- has incompatible dimension size with the rvalue.
+*/
+
+//mixed_multi[0][1][2].array[0] = 1; 
+/* Expected Parser Error 
+Multiple markers at this line
+  - expecting TOK_EQUAL, found '';''
+  - Variable ->mixed_multi<- has too many array indices.
+*/
+
+//mixed_multi[0][1][2] = dummyArray[1]; 
+/* Expected Parser Error 
+Variable ->mixed_multi<- has incompatible dimension size with the rvalue.
+*/
+
+			// Out of Bound index errors
+//fixed_single[10].array[0] = 1; 
+/* Expected Parser Error : 
+Multiple markers at this line
+  - Variable ->Fixed_SingleDimension<- has index out of bounds.
+  - expecting TOK_EQUAL, found '';''
+*/
+//fixed_single[10] = dummyArray[1]; 
+/* Expected Parser Error : 
+Variable ->fixed_single<- contains an Array Index Out of Bounds.
+*/
+
+dynamic_single[11].array[0] = 1;   
+
+
+
+//mixed_multi[10][4].array[0] = 1; 
+/* Expected Parser Error 
+Multiple markers at this line
+  - Variable ->mixed_multi<- has index out of bounds.
+  - expecting TOK_EQUAL, found '';''
+  */
+  
+//mixed_multi[10][4] = dummy; 
+/* Expected Parser Error 
+Variable ->mixed_multi<- contains an Array Index Out of Bounds.
+*/
+			
+mixed_multi[1][14].array[0] = 1; 
+
+fixed_single[1].array[0] = dynamic_single[11].array[0];
+fixed_single[1].array[0] = mixed_multi[1][14].array[0];
+
+
+//fixed_single[1] = dynamic_single[11];   //  Known Bug dts0100744728
+/* Expected Parser Error
+expecting Semicolon, found ''null''
+Variable ->fixed_single<- has incompatible dimension size with the rvalue.
+*/
+//fixed_single[1] = mixed_multi[1][14];     // Known  Bug dts0100744728
+/* Expected Parser Error
+expecting Semicolon, found ''null''
+Variable ->fixed_single<- has incompatible dimension size with the rvalue.
+*/
+
+//fixed_single = dynamic_single;  // Known  Bug dts0100744728 
+/* Expected Parser Error
+none
+*/
+  
+  
+  ',
+	1,
+	'',
+	"d54d6770-a0f2-464b-a7d2-272dc066fed6");
+INSERT INTO O_TFR
+	VALUES ("00d49b74-f8c9-4148-9fca-7461735bd849",
+	"84240d28-2dd1-4d0d-ad86-6e34f434a579",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select any fixedSingle from instances of FSIA;
+select any dynamicSingle from instances of DSIA;
+select any mixedMulti from instances of MMIA;
+
+
+create object instance dummy1 of Dummy;
+create object instance dummy2 of Dummy;
+create object instance dummy3 of Dummy;
+create object instance dummy4 of Dummy;
+create object instance dummy5 of Dummy;
+
+			// Assigment  and Comparison Testing
+//Attribute fixed single array			
+fixedSingle.Fixed_SingleDimension[1] = dummy1; 
+/* Test Action : Check the Variable view */
+// Expand fixedSingle.Fixed_SingleDimension in variable view. 
+// Expected result :  [7] ==  5::Dummy 
+// 				      [1] ==  11::Dummy
+
+if ( fixedSingle.Fixed_SingleDimension[1] == dummy1 ) 
+	LOG::LogSuccess(message:"Fixed single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Fixed single instance reference array assignement failed");
+end if;
+
+// SDT fixed single array
+fixedSingle.memberFixed.fixedArray[1]= dummy2; 
+/* Test Action : Check the Variable view */
+// Expand fixedSingle.memberFixed.fixedArray in variable view. 
+// Expected result : [5] == 6::Dummy 
+//					[1] == 12::Dummy
+
+if ( fixedSingle.memberFixed.fixedArray[1] == dummy2 ) 
+	LOG::LogSuccess(message:"SDT Fixed single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Fixed single instance reference array assignement failed");
+end if;
+
+
+// Attribute Dynamic single array
+dynamicSingle.Dynamic_SingleDimension[1]= dummy1;  
+/* Test Action : Check the Variable view */
+// Expand dynamicSingle.Dynamic_SingleDimension in variable view. 
+// Expected result : [10] == 7:Dummy
+//					[1] == 11:Dummy
+
+if ( dynamicSingle.Dynamic_SingleDimension[1]== dummy1 ) 
+	LOG::LogSuccess(message:"Dynamic single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Dynamic single instance reference array assignement failed");
+end if;
+
+// SDT Dynamic single array
+dynamicSingle.memberDynamic.dynamicArray[1]= dummy2;  
+/* Test Action : Check the Variable view */
+// Expand dynamicSingle.memberDynamic.dynamicArray in variable view. 
+// Expected result : [10] == 7:Dummy 
+//					[1] == 12:Dummy
+if ( dynamicSingle.memberDynamic.dynamicArray[1] == dummy2 ) 
+	LOG::LogSuccess(message:"SDT Dynamic single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Dynamic single instance reference array assignement failed");
+end if;
+
+
+
+// Attribute mixed multi array
+mixedMulti.Mixed_MultiDimension[1][2]= dummy1;  
+/* Test Action : Check the Variable view */
+// Expand mixedMulti.Mixed_MultiDimension[1][2] in variable view. 
+// Expected result :  [0] == [0][5] 
+//						[4] == 9:Dummy
+//					  [1] == [1][3]
+//						[2] == 11:Dummy
+
+if ( mixedMulti.Mixed_MultiDimension[1][2] == dummy1 ) 
+	LOG::LogSuccess(message:"Mixed Multi instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Mixed Multi instance reference array assignement failed");
+end if;
+
+// SDT mixed multi array
+mixedMulti.memberMixed.multiArray[2][1]= dummy2;  
+/* Test Action : Check the Variable view */
+// Expand mixedMulti.memberMixed.multiArray in variable view. 
+// Expected result :  [4] == [4][1] 
+//					   [0] == 10:Dummy
+//					  [2] ==  [2][2]
+//					   [1] == 12:Dummy
+if ( mixedMulti.memberMixed.multiArray[2][1] == dummy2 ) 
+	LOG::LogSuccess(message:"SDT Mixed Multi instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Mixed Multi instance reference array assignement failed");
+end if;
+
+
+/* ========================================================================= */
+// Nested Assigment  and Comparison Testing
+//Attribute fixed single array			
+fixedSingle.Fixed_SingleDimension[1].array[2] = 1; 
+
+if ( fixedSingle.Fixed_SingleDimension[1].array[2] == 1 ) 
+	LOG::LogSuccess(message:"Fixed single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Fixed single instance reference array assignement failed");
+end if;
+
+// SDT fixed single array
+fixedSingle.memberFixed.fixedArray[1].array[2] = 1; 
+
+
+if ( fixedSingle.memberFixed.fixedArray[1].array[2] == 1 ) 
+	LOG::LogSuccess(message:"SDT Fixed single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Fixed single instance reference array assignement failed");
+end if;
+
+
+// Attribute Dynamic single array
+dynamicSingle.Dynamic_SingleDimension[1].array[2] =2;  
+
+
+if ( dynamicSingle.Dynamic_SingleDimension[1].array[2] == 2 ) 
+	LOG::LogSuccess(message:"Dynamic single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Dynamic single instance reference array assignement failed");
+end if;
+
+// SDT Dynamic single array
+dynamicSingle.memberDynamic.dynamicArray[1].array[2] = 2;  
+
+if ( dynamicSingle.memberDynamic.dynamicArray[1].array[2] == 2)
+	LOG::LogSuccess(message:"SDT Dynamic single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Dynamic single instance reference array assignement failed");
+end if;
+
+
+
+// Attribute mixed multi array
+mixedMulti.Mixed_MultiDimension[1][2].array[2] = 3;  
+
+
+
+if ( mixedMulti.Mixed_MultiDimension[1][2].array[2] == 3 ) 
+	LOG::LogSuccess(message:"Mixed Multi instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Mixed Multi instance reference array assignement failed");
+end if;
+
+// SDT mixed multi array
+mixedMulti.memberMixed.multiArray[2][1].array[2] = 3;  
+
+
+if ( mixedMulti.memberMixed.multiArray[2][1].array[2] == 3 ) 
+	LOG::LogSuccess(message:"SDT Mixed Multi instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Mixed Multi instance reference array assignement failed");
+end if;
+
+
+
+/* ========================================================================= */
+// Index OOB 
+OOB = 15;	
+
+//Attribute fixed single array		
+/* Test Action : Uncomment the line and rerun the function  */
+//fixedSingle.Fixed_SingleDimension[OOB]  = dummy3;  
+// Expected Verifier Error  : Index Out-of-Bounds
+
+
+// SDT fixed single array
+/* Test Action : Uncomment the line and rerun the function  */
+//fixedSingle.memberFixed.fixedArray[OOB]  = dummy3;  
+// Expected Verifier Error  : Index Out-of-Bounds
+
+
+
+
+// Attribute Dynamic single array
+dynamicSingle.Dynamic_SingleDimension[OOB] = dummy3;  
+
+
+
+
+// SDT Dynamic single array
+dynamicSingle.memberDynamic.dynamicArray[OOB] = dummy3;  
+
+
+
+// Attribute mixed multi array
+mixedMulti.Mixed_MultiDimension[OOB][2]= dummy3; // Known Verifier Bug dts0100746279  - The code should fail 
+
+
+
+// SDT mixed multi array
+mixedMulti.memberMixed.multiArray[2][OOB]= dummy3; // Knwon Verifier Bug dts0100746279 - The code should fail
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+// Transient Variable Testing
+
+SingleDimension[9] = dummy5;
+//MultiArray[2][5] = dummy5;		// Verifier Bug - dts0100746283
+
+
+			// Assigment  and Comparison Testing
+
+
+//Attribute fixed single array			
+fixed_single = fixedSingle.Fixed_SingleDimension; 
+fixed_single[1]=dummy3;
+temp = fixed_single[1];
+// Variable view bug :  fixed_single array is displaed in the variable view as "empty" - dts0100746285
+// Notice that  temp is not empty.
+
+
+if ( fixed_single[1] == dummy3 ) 
+	LOG::LogSuccess(message:"Fixed single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Fixed single instance reference array assignement failed");
+end if;
+
+// SDT fixed single array
+member_fixed_single = fixedSingle.memberFixed.fixedArray; 
+member_fixed_single[1]= dummy4;
+
+
+if ( member_fixed_single[1] == dummy4 ) 
+	LOG::LogSuccess(message:"SDT Fixed single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Fixed single instance reference array assignement failed");
+end if;
+
+
+// Attribute Dynamic single array
+dynamic_single = dynamicSingle.Dynamic_SingleDimension;  
+dynamic_single[1]= dummy3;
+
+
+if ( dynamic_single[1]== dummy3 ) 
+	LOG::LogSuccess(message:"Dynamic single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Dynamic single instance reference array assignement failed");
+end if;
+
+// SDT Dynamic single array
+member_dynamic_single = dynamicSingle.memberDynamic.dynamicArray;  
+member_dynamic_single[1] = dummy4;
+
+if ( member_dynamic_single[1] == dummy4 ) 
+	LOG::LogSuccess(message:"SDT Dynamic single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Dynamic single instance reference array assignement failed");
+end if;
+
+
+
+// Attribute mixed multi array
+mixed_multi = mixedMulti.Mixed_MultiDimension;  
+mixed_multi[1][2] = dummy3;
+
+if ( mixed_multi[1][2] == dummy3 ) 
+	LOG::LogSuccess(message:"Mixed Multi instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Mixed Multi instance reference array assignement failed");
+end if;
+
+// SDT mixed multi array
+member_mixed_multi = mixedMulti.memberMixed.multiArray;
+member_mixed_multi[2][1]= dummy4;  
+
+
+if (member_mixed_multi[2][1] == dummy4 ) 
+	LOG::LogSuccess(message:"SDT Mixed Multi instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Mixed Multi instance reference array assignement failed");
+end if;
+
+
+/* ========================================================================= */
+// Nested Assigment  and Comparison Testing
+//Attribute fixed single array			
+fixed_single[1].array[2] = 1; 
+
+if ( fixed_single[1].array[2] == 1 ) 
+	LOG::LogSuccess(message:"Fixed single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Fixed single instance reference array assignement failed");
+end if;
+
+// SDT fixed single array
+member_fixed_single[1].array[2] = 1; 
+
+
+if ( member_fixed_single[1].array[2] == 1 ) 
+	LOG::LogSuccess(message:"SDT Fixed single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Fixed single instance reference array assignement failed");
+end if;
+
+
+// Attribute Dynamic single array
+dynamic_single[1].array[2] =2;  
+
+
+if ( dynamic_single[1].array[2] == 2 ) 
+	LOG::LogSuccess(message:"Dynamic single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Dynamic single instance reference array assignement failed");
+end if;
+
+// SDT Dynamic single array
+member_dynamic_single[1] .array[2] = 2;  
+
+if ( member_dynamic_single[1].array[2] == 2)
+	LOG::LogSuccess(message:"SDT Dynamic single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Dynamic single instance reference array assignement failed");
+end if;
+
+
+
+// Attribute mixed multi array
+mixed_multi[1][2].array[2] = 3;  
+
+
+
+if ( mixed_multi[1][2].array[2] == 3 ) 
+	LOG::LogSuccess(message:"Mixed Multi instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Mixed Multi instance reference array assignement failed");
+end if;
+
+// SDT mixed multi array
+member_mixed_multi[2][1].array[2] = 3;  
+
+
+if ( member_mixed_multi[2][1].array[2] == 3 ) 
+	LOG::LogSuccess(message:"SDT Mixed Multi instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"SDT Mixed Multi instance reference array assignement failed");
+end if;
+
+
+//===============================================================
+
+// Parameter Testing
+
+
+//Parameter fixed single array			
+param.pfixed_single[1] = dummy5; 
+/* Test Action : Check the Variable view */
+// Expand param.pfixed_single in variable view. 
+// Expected result :  [7] ==  5::Dummy 
+// 				      [1] ==  11::Dummy
+
+if ( param.pfixed_single[1] == dummy5 ) 
+	LOG::LogSuccess(message:"Parameter Fixed single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Parameter Fixed single instance reference array assignement failed");
+end if;
+
+
+
+// Parameter Dynamic single array
+param.pdynamic_single[1]= dummy5;  
+/* Test Action : Check the Variable view */
+// Expand param.pdynamic_single in variable view. 
+// Expected result : [10] == 7:Dummy
+//					[1] == 11:Dummy
+
+if ( param.pdynamic_single[1]== dummy5 ) 
+	LOG::LogSuccess(message:"Parameter Dynamic single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Parameter Dynamic single instance reference array assignement failed");
+end if;
+
+
+
+
+
+// Parameter mixed multi array
+param.pmixed_multi[1][2]= dummy5;  
+
+/* Test Action : Check the Variable view */
+// Expand pmixed_multi[1][2] in variable view. 
+// Expected result :  [0] == [0][5] 
+//						[4] == 9:Dummy
+//					  [1] == [1][3]
+//						[2] == 11:Dummy
+
+if ( param.pmixed_multi[1][2] == dummy5 ) 
+	LOG::LogSuccess(message:"Parameter Mixed Multi instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Parameter Mixed Multi instance reference array assignement failed");
+end if;
+
+
+
+/* ========================================================================= */
+// Nested Assigment  and Comparison Testing
+//Parameter  fixed single array			
+param.pfixed_single[1].array[2] = 1; 
+
+if ( param.pfixed_single[1].array[2] == 1 ) 
+	LOG::LogSuccess(message:"Parameter Fixed single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Parameter Fixed single instance reference array assignement failed");
+end if;
+
+
+
+// Parameter  Dynamic single array
+param.pdynamic_single[1].array[2] =2;  
+
+
+if ( param.pdynamic_single[1].array[2] == 2 ) 
+	LOG::LogSuccess(message:"Parameter Dynamic single instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Parameter Dynamic single instance reference array assignement failed");
+end if;
+
+
+
+
+// Parameter  mixed multi array
+param.pmixed_multi[1][2].array[2] = 3;  
+
+
+
+if ( param.pmixed_multi[1][2].array[2] == 3 ) 
+	LOG::LogSuccess(message:"Parameter Mixed Multi instance reference array assignement passed");
+else
+	LOG::LogFailure(message:"Parameter Mixed Multi instance reference array assignement failed");
+end if;
+
+
+',
+	1,
+	'',
+	"c4c31f4b-92db-4a9f-a859-09eb17932406");
+INSERT INTO O_TPARM
+	VALUES ("630076ab-8c78-43e3-857e-80f197c1c413",
+	"00d49b74-f8c9-4148-9fca-7461735bd849",
+	'pfixed_single',
+	"71f68e3d-4a8b-4ef2-bdb3-6414dd133e9e",
+	1,
+	'[8]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (8,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"630076ab-8c78-43e3-857e-80f197c1c413",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"5b665678-0597-4021-9a7a-9519a9407ad1",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("71f68e3d-4a8b-4ef2-bdb3-6414dd133e9e",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Dummy>',
+	'',
+	'',
+	'../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("233b4884-f553-4baa-b96d-3a46f0ef02a7",
+	"00d49b74-f8c9-4148-9fca-7461735bd849",
+	'pdynamic_single',
+	"71f68e3d-4a8b-4ef2-bdb3-6414dd133e9e",
+	1,
+	'[]',
+	"630076ab-8c78-43e3-857e-80f197c1c413",
+	'');
+INSERT INTO S_DIM
+	VALUES (0,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"233b4884-f553-4baa-b96d-3a46f0ef02a7",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"67ad9677-34d5-4c57-9c5f-0ac20696d0c2",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("ae68622c-211d-4c53-8d4c-0e644d2b9af3",
+	"00d49b74-f8c9-4148-9fca-7461735bd849",
+	'pmixed_multi',
+	"71f68e3d-4a8b-4ef2-bdb3-6414dd133e9e",
+	1,
+	'[5][]',
+	"233b4884-f553-4baa-b96d-3a46f0ef02a7",
+	'');
+INSERT INTO S_DIM
+	VALUES (5,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"ae68622c-211d-4c53-8d4c-0e644d2b9af3",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"ddf6438f-ccff-43a3-b440-6bf6d11e70f5",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (0,
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"ae68622c-211d-4c53-8d4c-0e644d2b9af3",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"d255cca2-c0b3-49d5-b5d4-5ad447a6d72f",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ID
+	VALUES (0,
+	"84240d28-2dd1-4d0d-ad86-6e34f434a579");
+INSERT INTO O_ID
+	VALUES (1,
+	"84240d28-2dd1-4d0d-ad86-6e34f434a579");
+INSERT INTO O_ID
+	VALUES (2,
+	"84240d28-2dd1-4d0d-ad86-6e34f434a579");
+INSERT INTO PE_PE
+	VALUES ("84240d28-2dd1-4d0d-ad86-6e34f434a579",
+	1,
+	"1bb2ff39-4ca9-45fc-9cc7-1a4426da35ad",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("1bb2ff39-4ca9-45fc-9cc7-1a4426da35ad",
+	"00000000-0000-0000-0000-000000000000",
+	"2e73c4dd-4697-4cc9-a413-cccceab4895a",
+	'Subsystem',
+	'',
+	0,
+	'../Subsystem.xtuml');

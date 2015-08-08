@@ -6,7 +6,7 @@ import testdatatypes.Jarred_Sdt_t;
 
 import lib.BPInteger;
 
-import com.mentor.nucleus.bp.core.ComponentInstance_c;
+import org.xtuml.bp.core.ComponentInstance_c;
 
 public interface IJarredTestInterfaceToProvider {
 	public void pingProvider(ComponentInstance_c senderReceiver, int simpleBV_p,

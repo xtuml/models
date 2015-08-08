@@ -2,7 +2,7 @@ package testdatatypes;
 
 import java.util.ArrayList;
 
-import com.mentor.nucleus.bp.core.ComponentInstance_c;
+import org.xtuml.bp.core.ComponentInstance_c;
 
 
 public class Sdt_t {

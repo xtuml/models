@@ -1,0 +1,163 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("2efbd582-6f99-42ee-9555-3cb59dafbfd4",
+	'TestClass',
+	1,
+	'TC',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("28469d82-1074-4095-b06d-7fa4202a925f",
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4",
+	'Run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'create object instance test of TC; 
+create object instance st of SCT;
+st.intArray[0] = 345;
+st.complexArray[0].re = 567;
+st.complexArray[0].im = 789;
+
+
+test.member.StructPointer[0] = st;
+test.member.StructComplex[0].re = 890; 
+test.member.StructComplex[0].im = 012;
+test.ArrayTest(input:test.member ); ',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("99743ef4-19a6-4765-ba40-9a62d7032894",
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4",
+	'ArrayTest',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'var = param.input.StructComplex[0].re; 
+temp = param.input.StructPointer[0].intArray[0]; 
+complex = param.input.StructPointer[0].complexArray[0];
+real = param.input.StructPointer[0].complexArray[0].re;
+inst_refeerence = param.input.StructPointer[2];
+inst_refeerenceArray = param.input.StructPointer;
+
+
+
+//var1 = param.input.StructPointer[1].complexArray[20]; // Expected Err : The rvalue contains an Array Index Out of Bounds
+//var1 = param.input.StructPointer[1].complexArray[20].re; // Expected Err : Variable ->complexArray<- has index out of bounds.
+//var1 = param.input.StructPointer[10].complexArray[2].re; // Expected Err :  Variable ->StructPointer<- has index out of bounds.
+
+
+//var1 = param.input.StructPointer.complexArray[2].re; //  Expected Err : Variable ->StructPointer<- is an array.
+//var1 = param.input.StructPointer[2][1].complexArray[2].re; // Expected Err : Variable ->StructPointer<- has too many array indices.
+//var1 = param.input.StructPointer[1].complexArray.re; // Expected Err : Variable ->complexArray<- is an array.
+//var1 = param.input.StructPointer[1].complexArray[1][2].re; // Expected Err :Variable ->complexArray<- has too many array indices.
+
+
+',
+	1,
+	'',
+	"28469d82-1074-4095-b06d-7fa4202a925f");
+INSERT INTO O_TPARM
+	VALUES ("db6473b1-0fee-453c-b973-83c613ce678e",
+	"99743ef4-19a6-4765-ba40-9a62d7032894",
+	'input',
+	"b7be2512-9e66-4e9d-9802-120f512d24f8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("b7be2512-9e66-4e9d-9802-120f512d24f8",
+	"00000000-0000-0000-0000-000000000000",
+	'StructType',
+	'',
+	'',
+	'../../Datatypes/UserDataTypes/UserDataTypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("44157d33-e4dc-4308-aa7a-544ea0da56fd",
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4",
+	'test',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"99743ef4-19a6-4765-ba40-9a62d7032894");
+INSERT INTO O_TPARM
+	VALUES ("ed376bd2-eb92-493b-aea7-c310c9d915a7",
+	"44157d33-e4dc-4308-aa7a-544ea0da56fd",
+	'input',
+	"d229fbb2-766b-4511-8575-4a33b4fb11c5",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d229fbb2-766b-4511-8575-4a33b4fb11c5",
+	"00000000-0000-0000-0000-000000000000",
+	'Test',
+	'',
+	'',
+	'../../Datatypes/UserDataTypes/UserDataTypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("ddb9667b-7008-4f4e-9c1d-3a91d71863b8",
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4");
+INSERT INTO O_BATTR
+	VALUES ("ddb9667b-7008-4f4e-9c1d-3a91d71863b8",
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4");
+INSERT INTO O_ATTR
+	VALUES ("ddb9667b-7008-4f4e-9c1d-3a91d71863b8",
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4",
+	"00000000-0000-0000-0000-000000000000",
+	'member',
+	'',
+	'',
+	'member',
+	0,
+	"b7be2512-9e66-4e9d-9802-120f512d24f8",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("f17547e6-9f82-46e2-a4ef-c2157c70ff38",
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4");
+INSERT INTO O_BATTR
+	VALUES ("f17547e6-9f82-46e2-a4ef-c2157c70ff38",
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4");
+INSERT INTO O_ATTR
+	VALUES ("f17547e6-9f82-46e2-a4ef-c2157c70ff38",
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4",
+	"ddb9667b-7008-4f4e-9c1d-3a91d71863b8",
+	'arr',
+	'',
+	'',
+	'arr',
+	0,
+	"d229fbb2-766b-4511-8575-4a33b4fb11c5",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4");
+INSERT INTO O_ID
+	VALUES (1,
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4");
+INSERT INTO O_ID
+	VALUES (2,
+	"2efbd582-6f99-42ee-9555-3cb59dafbfd4");
+INSERT INTO PE_PE
+	VALUES ("2efbd582-6f99-42ee-9555-3cb59dafbfd4",
+	1,
+	"ad423e9b-4ce3-4e61-91c7-f1b2c6879906",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("ad423e9b-4ce3-4e61-91c7-f1b2c6879906",
+	"00000000-0000-0000-0000-000000000000",
+	"15fd188e-058f-4759-b678-d14072564aa9",
+	'Subsystem',
+	'',
+	0,
+	'../Subsystem.xtuml');

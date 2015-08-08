@@ -4,26 +4,27 @@
  * Class:       Transformer  (TRAN)
  * Component:   ex2
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "ex2_sys_types.h"
-#include "ex2_BR_bridge.h"
 #include "ARCH_bridge.h"
+#include "LOG_bridge.h"
 #include "NVS_bridge.h"
 #include "PERSIST_bridge.h"
-#include "LOG_bridge.h"
 #include "TIM_bridge.h"
+#include "ex2_BR_bridge.h"
 #include "ex2_classes.h"
 
 /*
  * class operation:  ret_int
  */
 i_t
-ex2_TRAN_op_ret_int( i_t p_i)
+ex2_TRAN_op_ret_int( const i_t p_i )
 {
   /* RETURN PARAM.i */
-  return p_i;
+  {i_t xtumlOALrv = p_i;
+  return xtumlOALrv;}
 
 }
 
@@ -31,24 +32,24 @@ ex2_TRAN_op_ret_int( i_t p_i)
  * class operation:  ret_string
  */
 c_t *
-ex2_TRAN_op_ret_string( c_t p_s[ESCHER_SYS_MAX_STRING_LEN])
+ex2_TRAN_op_ret_string( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], c_t p_s[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  i_t i; 
+  i_t i;
   /* ASSIGN i = 9 */
   i = 9;
   /* WHILE ( ( i > 0 ) ) */
   while ( ( i > 0 ) ) {
-    c_t localstring[ESCHER_SYS_MAX_STRING_LEN]; c_t str[ESCHER_SYS_MAX_STRING_LEN]; 
-    /* ASSIGN localstring = 'abc' */
+    c_t vtrv6ex2_TRAN_op_ret_string215[ESCHER_SYS_MAX_STRING_LEN];c_t localstring[ESCHER_SYS_MAX_STRING_LEN];c_t str[ESCHER_SYS_MAX_STRING_LEN];
+    /* ASSIGN localstring = abc */
     Escher_strcpy( localstring, "abc" );
     /* ASSIGN str = TRAN::ret_string2(s:localstring) */
-    Escher_strcpy( str, ex2_TRAN_op_ret_string2(localstring) );
+    Escher_strcpy( str, ex2_TRAN_op_ret_string2(vtrv6ex2_TRAN_op_ret_string215, localstring) );
     /* ASSIGN i = ( i - 1 ) */
     i = ( i - 1 );
   }
   /* RETURN PARAM.s */
-  {c_t*  xtumlOALrv = p_s;
-  return xtumlOALrv;}
+  {c_t * xtumlOALrv = p_s;
+  return Escher_strcpy( A0xtumlsret, xtumlOALrv );}
 
 }
 
@@ -56,10 +57,11 @@ ex2_TRAN_op_ret_string( c_t p_s[ESCHER_SYS_MAX_STRING_LEN])
  * class operation:  ret_bool
  */
 bool
-ex2_TRAN_op_ret_bool( bool p_b)
+ex2_TRAN_op_ret_bool( const bool p_b )
 {
   /* RETURN PARAM.b */
-  return p_b;
+  {bool xtumlOALrv = p_b;
+  return xtumlOALrv;}
 
 }
 
@@ -67,10 +69,11 @@ ex2_TRAN_op_ret_bool( bool p_b)
  * class operation:  ret_real
  */
 r_t
-ex2_TRAN_op_ret_real( r_t p_r)
+ex2_TRAN_op_ret_real( const r_t p_r )
 {
   /* RETURN PARAM.r */
-  return p_r;
+  {r_t xtumlOALrv = p_r;
+  return xtumlOALrv;}
 
 }
 
@@ -78,14 +81,14 @@ ex2_TRAN_op_ret_real( r_t p_r)
  * class operation:  ret_string2
  */
 c_t *
-ex2_TRAN_op_ret_string2( c_t p_s[ESCHER_SYS_MAX_STRING_LEN])
+ex2_TRAN_op_ret_string2( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], c_t p_s[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
-  /* ASSIGN s = ( PARAM.s + 'xyz' ) */
+  c_t s[ESCHER_SYS_MAX_STRING_LEN];
+  /* ASSIGN s = ( PARAM.s + xyz ) */
   Escher_strcpy( s, Escher_stradd( p_s, "xyz" ) );
   /* RETURN s */
-  {c_t*  xtumlOALrv = s;
-  return xtumlOALrv;}
+  {c_t * xtumlOALrv = s;
+  return Escher_strcpy( A0xtumlsret, xtumlOALrv );}
 
 }
 
@@ -93,13 +96,25 @@ ex2_TRAN_op_ret_string2( c_t p_s[ESCHER_SYS_MAX_STRING_LEN])
  * instance operation:  ret_string3
  */
 c_t *
-ex2_TRAN_op_ret_string3( ex2_TRAN * self, c_t p_s[ESCHER_SYS_MAX_STRING_LEN])
+ex2_TRAN_op_ret_string3( ex2_TRAN * self, c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], c_t p_s[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  c_t v_sretval2[ESCHER_SYS_MAX_STRING_LEN];c_t s[ESCHER_SYS_MAX_STRING_LEN]; 
+  c_t vtrv1ex2_TRAN_op_ret_string33[ESCHER_SYS_MAX_STRING_LEN];c_t vtrv1ex2_TRAN_op_ret_string211[ESCHER_SYS_MAX_STRING_LEN];c_t s[ESCHER_SYS_MAX_STRING_LEN];
   /* ASSIGN s = TRAN::ret_string2(s:) */
-  Escher_strcpy( s, ex2_TRAN_op_ret_string2(Escher_strcpy( v_sretval2, ex2_TRAN_op_ret_string(p_s))) );
+  Escher_strcpy( s, ex2_TRAN_op_ret_string2(vtrv1ex2_TRAN_op_ret_string211, ex2_TRAN_op_ret_string(vtrv1ex2_TRAN_op_ret_string33, p_s)) );
   /* RETURN s */
-  {c_t*  xtumlOALrv = s;
+  {c_t * xtumlOALrv = s;
+  return Escher_strcpy( A0xtumlsret, xtumlOALrv );}
+
+}
+
+/*
+ * class operation:  ret_int_from_real
+ */
+i_t
+ex2_TRAN_op_ret_int_from_real( const r_t p_r )
+{
+  /* RETURN PARAM.r */
+  {i_t xtumlOALrv = (i_t)(p_r);
   return xtumlOALrv;}
 
 }

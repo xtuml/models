@@ -6,14 +6,14 @@
  *
  * External Entity:  Architecture (ARCH)
  * 
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "ex2_sys_types.h"
 #include "ARCH_bridge.h"
+#include "LOG_bridge.h"
 #include "NVS_bridge.h"
 #include "PERSIST_bridge.h"
-#include "LOG_bridge.h"
 #include "TIM_bridge.h"
 #include "ARCH_bridge.h"
 #include "ex2_sys_types.h"

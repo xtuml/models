@@ -11,8 +11,8 @@ import messagetest.testinterface.ITestReplyToProvider;
 import testdatatypes.Sdt_t;
 import testdatatypes.Simple_sdt_t;
 
-import com.mentor.nucleus.bp.core.ComponentInstance_c;
-import com.mentor.nucleus.bp.core.CorePlugin;
+import org.xtuml.bp.core.ComponentInstance_c;
+import org.xtuml.bp.core.CorePlugin;
 
 public class TestProvider implements ITestInterfaceToProvider,
 		ITestReplyFromProvider {
