@@ -103,8 +103,8 @@ void Capsule_HeartRateMonitor::entryaction_____top__onRegisterListener__ActionCh
     uint8_t buff0[msg.sizeDecoded()];
     void * const rtdata = buff0;
     msg.decode( rtdata );
-    timerId=timer().informIn(UMLRTTimespec(60,0));
-    HeartRatePort.updateHeartRate.send();
+    timerID=timer().informIn(UMLRTTimespec(60,0));
+    HeartRatePort().updateHeartRate(5).send();
     msg.destroy( (void *)buff0 );
 }
 
