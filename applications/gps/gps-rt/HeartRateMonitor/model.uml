@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:UMLRealTime="http://www.eclipse.org/papyrus/umlrt" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML">
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:RTCppProperties="http:///schemas/RTCppProperties/_x_RDwDbbEeWD0t7DG7rk2g/4" xmlns:UMLRealTime="http://www.eclipse.org/papyrus/umlrt" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/RTCppProperties/_x_RDwDbbEeWD0t7DG7rk2g/4 pathmap://UMLRT_CPP/RTCppProperties.profile.uml#_x_WjUDbbEeWD0t7DG7rk2g">
   <uml:Model xmi:id="_2marEDwrEeWGsfTt0s_XkQ" name="HeartRateMonitor">
     <packageImport xmi:type="uml:PackageImport" xmi:id="_2yXcYDwrEeWGsfTt0s_XkQ">
       <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
@@ -17,12 +17,25 @@
       </ownedAttribute>
       <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_SAQk8D44EeWrrcZfkKNPAg" name="HeartRateMonitor_SM">
         <region xmi:type="uml:Region" xmi:id="_UYYS4D44EeWrrcZfkKNPAg" name="Region1">
-          <transition xmi:type="uml:Transition" xmi:id="_iFjYED45EeWrrcZfkKNPAg" source="_YZT8QD45EeWrrcZfkKNPAg" target="_dTLOMD45EeWrrcZfkKNPAg"/>
+          <transition xmi:type="uml:Transition" xmi:id="_iFjYED45EeWrrcZfkKNPAg" source="_YZT8QD45EeWrrcZfkKNPAg" target="_dTLOMD45EeWrrcZfkKNPAg">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_XviM4D-hEeWyF-87NFNwWw" name="onInit">
+              <language>C++</language>
+              <body>std::cout &lt;&lt; getName() &lt;&lt; &quot; initialized&quot; &lt;&lt; std::endl;</body>
+            </effect>
+          </transition>
           <transition xmi:type="uml:Transition" xmi:id="_0uQ_oD45EeWrrcZfkKNPAg" name="onRegisterListener" source="_dTLOMD45EeWrrcZfkKNPAg" target="_d08egD45EeWrrcZfkKNPAg">
-            <trigger xmi:type="uml:Trigger" xmi:id="_SBhvQD5DEeWrrcZfkKNPAg" event="_K1a2QD41EeWrrcZfkKNPAg" port="_ZhQmYD12EeWrrcZfkKNPAg"/>
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_sHT6sEAXEeWuMdCV7Og4wQ">
+              <language>C++</language>
+              <body>std::cout &lt;&lt; getName() &lt;&lt; &quot;: Listener Registered&quot; &lt;&lt; std::endl;</body>
+            </effect>
+            <trigger xmi:type="uml:Trigger" xmi:id="_SBhvQD5DEeWrrcZfkKNPAg" name="onRegisterListener" event="_K1a2QD41EeWrrcZfkKNPAg" port="_ZhQmYD12EeWrrcZfkKNPAg"/>
           </transition>
           <transition xmi:type="uml:Transition" xmi:id="_1pqQ4D45EeWrrcZfkKNPAg" name="onUnregisterListener" source="_d08egD45EeWrrcZfkKNPAg" target="_dTLOMD45EeWrrcZfkKNPAg">
-            <trigger xmi:type="uml:Trigger" xmi:id="_aRRX4D5DEeWrrcZfkKNPAg" event="_ODdfkD41EeWrrcZfkKNPAg" port="_ZhQmYD12EeWrrcZfkKNPAg"/>
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_2OfmEEAXEeWuMdCV7Og4wQ">
+              <language>C++</language>
+              <body>std::cout &lt;&lt; getName() &lt;&lt; &quot;: Listener Unregistered&quot; &lt;&lt; std::endl;</body>
+            </effect>
+            <trigger xmi:type="uml:Trigger" xmi:id="_aRRX4D5DEeWrrcZfkKNPAg" name="onUnregisterListener" event="_ODdfkD41EeWrrcZfkKNPAg" port="_ZhQmYD12EeWrrcZfkKNPAg"/>
           </transition>
           <transition xmi:type="uml:Transition" xmi:id="_4CP44D45EeWrrcZfkKNPAg" name="onTimeout" source="_d08egD45EeWrrcZfkKNPAg" target="_d08egD45EeWrrcZfkKNPAg">
             <trigger xmi:type="uml:Trigger" xmi:id="_y7wfMD5EEeWrrcZfkKNPAg" port="__7bQED5DEeWrrcZfkKNPAg">
@@ -34,8 +47,9 @@
           <subvertex xmi:type="uml:State" xmi:id="_d08egD45EeWrrcZfkKNPAg" name="monitoring">
             <entry xmi:type="uml:OpaqueBehavior" xmi:id="_5q8qID47EeWrrcZfkKNPAg" name="onEntry">
               <language>C++</language>
-              <body>timerID=timer().informIn(UMLRTTimespec(60,0));
-HeartRatePort().updateHeartRate(5).send();
+              <body>std::cout &lt;&lt; getName() &lt;&lt; &quot;: Updating heartbeat&quot; &lt;&lt; std::endl;
+timerID=timer().informIn(UMLRTTimespec(6,0));
+HeartRatePort().updateHeartRate(6).send();
 </body>
             </entry>
           </subvertex>
@@ -44,21 +58,20 @@ HeartRatePort().updateHeartRate(5).send();
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="_Me69gDwuEeWGsfTt0s_XkQ" name="HeartRateMonitorProtocol">
       <packagedElement xmi:type="uml:Collaboration" xmi:id="_Mh5ZADwuEeWGsfTt0s_XkQ" name="HeartRateMonitorProtocol"/>
-      <packagedElement xmi:type="uml:Interface" xmi:id="_Mh6AETwuEeWGsfTt0s_XkQ" name="HeartRateMonitorProtocol">
+      <packagedElement xmi:type="uml:Interface" xmi:id="_Mh6AETwuEeWGsfTt0s_XkQ" name="HeartRateMonitorProtocol"/>
+      <packagedElement xmi:type="uml:Realization" xmi:id="_Mh7OMDwuEeWGsfTt0s_XkQ" name="ProtocolRealizesIncomingInterface" client="_Mh5ZADwuEeWGsfTt0s_XkQ" supplier="_Mh6AETwuEeWGsfTt0s_XkQ"/>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_Mh7OMTwuEeWGsfTt0s_XkQ" name="HeartRateMonitorProtocol~"/>
+      <packagedElement xmi:type="uml:Usage" xmi:id="_Mh71QTwuEeWGsfTt0s_XkQ" name="ProtocolUsesOutgoingInterface" client="_Mh5ZADwuEeWGsfTt0s_XkQ" supplier="_Mh7OMTwuEeWGsfTt0s_XkQ"/>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_Mh8cUDwuEeWGsfTt0s_XkQ" name="HeartRateMonitorProtocolSym">
         <ownedOperation xmi:type="uml:Operation" xmi:id="_K1YaAD41EeWrrcZfkKNPAg" name="registerListener"/>
         <ownedOperation xmi:type="uml:Operation" xmi:id="_ODcRcD41EeWrrcZfkKNPAg" name="unregisterListener"/>
-      </packagedElement>
-      <packagedElement xmi:type="uml:Realization" xmi:id="_Mh7OMDwuEeWGsfTt0s_XkQ" name="ProtocolRealizesIncomingInterface" client="_Mh5ZADwuEeWGsfTt0s_XkQ" supplier="_Mh6AETwuEeWGsfTt0s_XkQ"/>
-      <packagedElement xmi:type="uml:Interface" xmi:id="_Mh7OMTwuEeWGsfTt0s_XkQ" name="HeartRateMonitorProtocol~">
         <ownedOperation xmi:type="uml:Operation" xmi:id="_dzMH0D41EeWrrcZfkKNPAg" name="updateHeartRate">
           <ownedParameter xmi:type="uml:Parameter" xmi:id="_s-xAgD49EeWrrcZfkKNPAg" name="heartRate">
             <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
           </ownedParameter>
         </ownedOperation>
       </packagedElement>
-      <packagedElement xmi:type="uml:Usage" xmi:id="_Mh71QTwuEeWGsfTt0s_XkQ" name="ProtocolUsesOutgoingInterface" client="_Mh5ZADwuEeWGsfTt0s_XkQ" supplier="_Mh7OMTwuEeWGsfTt0s_XkQ"/>
-      <packagedElement xmi:type="uml:Interface" xmi:id="_Mh8cUDwuEeWGsfTt0s_XkQ" name="HeartRateMonitorProtocolSym"/>
-      <packagedElement xmi:type="uml:Realization" xmi:id="_Mh9DYDwuEeWGsfTt0s_XkQ" name="ProtocolRealizesSymInterface" client="_Mh5ZADwuEeWGsfTt0s_XkQ" supplier="_Mh8cUDwuEeWGsfTt0s_XkQ"/>
+      <packagedElement xmi:type="uml:Realization" xmi:id="_Mh9DYDwuEeWGsfTt0s_XkQ" name="ProtocolRealizesSymInterface" client="_Mh5ZADwuEeWGsfTt0s_XkQ" supplier="_Me69gDwuEeWGsfTt0s_XkQ"/>
       <packagedElement xmi:type="uml:Usage" xmi:id="_Mh9DYTwuEeWGsfTt0s_XkQ" name="ProtocolUsesSymInterface" client="_Mh5ZADwuEeWGsfTt0s_XkQ" supplier="_Mh8cUDwuEeWGsfTt0s_XkQ"/>
       <packagedElement xmi:type="uml:AnyReceiveEvent" xmi:id="_Mh9DYjwuEeWGsfTt0s_XkQ" name="*"/>
       <packagedElement xmi:type="uml:CallEvent" xmi:id="_K1a2QD41EeWrrcZfkKNPAg" name="registerListener" operation="_K1YaAD41EeWrrcZfkKNPAg"/>
@@ -74,8 +87,37 @@ HeartRatePort().updateHeartRate(5).send();
         <end xmi:type="uml:ConnectorEnd" xmi:id="_tYgO4T18EeWrrcZfkKNPAg" partWithPort="_mWp5kD14EeWrrcZfkKNPAg" role="_5_jy0D14EeWrrcZfkKNPAg"/>
       </ownedConnector>
     </packagedElement>
-    <packagedElement xmi:type="uml:Class" xmi:id="_gkREMD14EeWrrcZfkKNPAg" name="GPSWatch" isActive="true">
+    <packagedElement xmi:type="uml:Class" xmi:id="_gkREMD14EeWrrcZfkKNPAg" name="GPSWatch" classifierBehavior="_BR7W8EAbEeWuMdCV7Og4wQ" isActive="true">
       <ownedAttribute xmi:type="uml:Port" xmi:id="_5_jy0D14EeWrrcZfkKNPAg" name="GPSPort" type="_Mh5ZADwuEeWGsfTt0s_XkQ" aggregation="composite"/>
+      <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_BR7W8EAbEeWuMdCV7Og4wQ" name="StateMachine1">
+        <region xmi:type="uml:Region" xmi:id="_Csi60EAbEeWuMdCV7Og4wQ" name="Region1">
+          <transition xmi:type="uml:Transition" xmi:id="_HlTZgEAbEeWuMdCV7Og4wQ" name="initialize" source="_DlnQ0EAbEeWuMdCV7Og4wQ" target="_ECVCAEAbEeWuMdCV7Og4wQ">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_U4-PAEAbEeWuMdCV7Og4wQ" name="onInit">
+              <language>C++</language>
+              <body>std::cout &lt;&lt; getName() &lt;&lt; &quot;: Initialized&quot; &lt;&lt; std::endl;</body>
+            </effect>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_b0fA4EAhEeWuMdCV7Og4wQ" name="update" source="_ECVCAEAbEeWuMdCV7Og4wQ" target="_YTPHsEAhEeWuMdCV7Og4wQ">
+            <trigger xmi:type="uml:Trigger" xmi:id="_mD2-8EAhEeWuMdCV7Og4wQ" event="_dzMu4D41EeWrrcZfkKNPAg" port="_5_jy0D14EeWrrcZfkKNPAg"/>
+          </transition>
+          <transition xmi:type="uml:Transition" xmi:id="_cSDtsEAhEeWuMdCV7Og4wQ" name="reupdate" source="_YTPHsEAhEeWuMdCV7Og4wQ" target="_YTPHsEAhEeWuMdCV7Og4wQ">
+            <trigger xmi:type="uml:Trigger" xmi:id="_tnFf0EAhEeWuMdCV7Og4wQ" event="_dzMu4D41EeWrrcZfkKNPAg" port="_5_jy0D14EeWrrcZfkKNPAg"/>
+          </transition>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_DlnQ0EAbEeWuMdCV7Og4wQ" name="Initial1"/>
+          <subvertex xmi:type="uml:State" xmi:id="_ECVCAEAbEeWuMdCV7Og4wQ" name="Initializing">
+            <entry xmi:type="uml:OpaqueBehavior" xmi:id="_eYLUYEAbEeWuMdCV7Og4wQ" name="onEntry">
+              <language>C++</language>
+              <body>GPSPort().registerListener().send();</body>
+            </entry>
+          </subvertex>
+          <subvertex xmi:type="uml:State" xmi:id="_YTPHsEAhEeWuMdCV7Og4wQ" name="Updating">
+            <entry xmi:type="uml:OpaqueBehavior" xmi:id="_yNKTEEAhEeWuMdCV7Og4wQ" name="onEntry">
+              <language>C++</language>
+              <body>std::cout &lt;&lt; getName() &lt;&lt; &quot;: Heart rate update&quot; &lt;&lt; std::endl;</body>
+            </entry>
+          </subvertex>
+        </region>
+      </ownedBehavior>
     </packagedElement>
     <packagedElement xmi:type="uml:Usage" xmi:id="_-t9mMD15EeWrrcZfkKNPAg" client="_gkREMD14EeWrrcZfkKNPAg" supplier="_Mh5ZADwuEeWGsfTt0s_XkQ"/>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_2marETwrEeWGsfTt0s_XkQ">
@@ -83,6 +125,19 @@ HeartRatePort().updateHeartRate(5).send();
         <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt#/"/>
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_RT_PROFILE/uml-rt.profile.uml#_1h74oEeVEeO0lv5O1DTHOQ"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_LnUb0EB7EeWkof8MBMoFQQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Lnh3MEB7EeWkof8MBMoFQQ" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Lnh3MUB7EeWkof8MBMoFQQ" key="Version" value="0.0.5"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Lnh3MkB7EeWkof8MBMoFQQ" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Lnh3M0B7EeWkof8MBMoFQQ" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Lnh3NEB7EeWkof8MBMoFQQ" key="Date" value="2015-07-30"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Lnh3NUB7EeWkof8MBMoFQQ" key="Author" value=""/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_LncXoEB7EeWkof8MBMoFQQ" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="pathmap://UMLRT_CPP/RTCppProperties.profile.uml#_x_WjUDbbEeWD0t7DG7rk2g"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://UMLRT_CPP/RTCppProperties.profile.uml#_vl5LALs8EeSTjNEQkASznQ"/>
     </profileApplication>
   </uml:Model>
   <UMLRealTime:Capsule xmi:id="_KsGxgDwtEeWGsfTt0s_XkQ" base_Class="_-VR-wDwsEeWGsfTt0s_XkQ"/>
@@ -99,4 +154,6 @@ HeartRatePort().updateHeartRate(5).send();
   <UMLRealTime:RTPort xmi:id="_5_mPED14EeWrrcZfkKNPAg" base_Port="_5_jy0D14EeWrrcZfkKNPAg"/>
   <UMLRealTime:RTConnector xmi:id="_2JQS0D18EeWrrcZfkKNPAg" base_Connector="_tYfn0D18EeWrrcZfkKNPAg"/>
   <UMLRealTime:RTPort xmi:id="__7dFQD5DEeWrrcZfkKNPAg" base_Port="__7bQED5DEeWrrcZfkKNPAg"/>
+  <RTCppProperties:CapsuleProperties xmi:id="_e58jEEB7EeWkof8MBMoFQQ" implementationPreface="#include &lt;iostream>" base_Class="_-VR-wDwsEeWGsfTt0s_XkQ"/>
+  <RTCppProperties:CapsuleProperties xmi:id="_pLUFMEB7EeWkof8MBMoFQQ" implementationPreface="#include &lt;iostream>" base_Class="_gkREMD14EeWrrcZfkKNPAg"/>
 </xmi:XMI>

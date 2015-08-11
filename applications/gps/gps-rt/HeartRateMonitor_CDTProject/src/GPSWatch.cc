@@ -1,18 +1,28 @@
 
 #include "GPSWatch.hh"
 
+#include "HeartRateMonitorProtocol.hh"
+#include "umlrtcommsportrole.hh"
+#include "umlrtinmessage.hh"
+#include "umlrtobjectclass.hh"
+#include "umlrtslot.hh"
 #include <cstddef>
 #include "umlrtcapsuleclass.hh"
 #include "umlrtcommsportrole.hh"
 #include "umlrtframeservice.hh"
-#include "umlrtslot.hh"
+#include "umlrtinmessage.hh"
 #include <cstddef>
+#include <stdint.h>
 class UMLRTRtsInterface;
 struct UMLRTCommsPort;
 
+#include <iostream>
 Capsule_GPSWatch::Capsule_GPSWatch( const UMLRTCapsuleClass * cd, UMLRTSlot * st, const UMLRTCommsPort * * border, const UMLRTCommsPort * internal, bool isStat )
 : UMLRTCapsule( NULL, cd, st, border, internal, isStat )
+, currentState( SPECIAL_INTERNAL_STATE_UNVISITED )
 {
+    stateNames[top__Updating] = "top__Updating";
+    stateNames[top__Initializing] = "top__Initializing";
 }
 
 
@@ -46,12 +56,118 @@ void Capsule_GPSWatch::unbindPort( bool isBorder, int portId, int index )
         }
 }
 
-void Capsule_GPSWatch::initialize( const UMLRTInMessage & msg )
+void Capsule_GPSWatch::inject( const UMLRTInMessage & message )
 {
+    msg = &message;
+    switch( currentState )
+    {
+    case top__Initializing:
+        currentState = state_____top__Initializing( message );
+        break;
+    case top__Updating:
+        currentState = state_____top__Updating( message );
+        break;
+    default:
+        break;
+    }
 }
 
-void Capsule_GPSWatch::inject( const UMLRTInMessage & msg )
+void Capsule_GPSWatch::initialize( const UMLRTInMessage & message )
 {
+    msg = &message;
+    actionchain_____top__initialize__ActionChain2( message );
+    currentState = top__Initializing;
+}
+
+const char * Capsule_GPSWatch::getCurrentStateString() const
+{
+    return stateNames[currentState];
+}
+
+
+
+
+void Capsule_GPSWatch::entryaction_____top__initialize__ActionChain2__onEntry( const UMLRTInMessage & msg )
+{
+    uint8_t buff0[msg.sizeDecoded()];
+    void * const rtdata = buff0;
+    msg.decode( rtdata );
+    GPSPort().registerListener().send();
+    msg.destroy( (void *)buff0 );
+}
+
+void Capsule_GPSWatch::entryaction_____top__update__ActionChain4__onEntry( const UMLRTInMessage & msg )
+{
+    uint8_t buff0[msg.sizeDecoded()];
+    int & rtdata = *(int *)buff0;
+    msg.decode( &rtdata );
+    std::cout << getName() << ": Heart rate update" << std::endl;
+    msg.destroy( (void *)buff0 );
+}
+
+void Capsule_GPSWatch::transitionaction_____top__initialize__ActionChain2__onInit( const UMLRTInMessage & msg )
+{
+    uint8_t buff0[msg.sizeDecoded()];
+    void * const rtdata = buff0;
+    msg.decode( rtdata );
+    std::cout << getName() << ": Initialized" << std::endl;
+    msg.destroy( (void *)buff0 );
+}
+
+void Capsule_GPSWatch::actionchain_____top__initialize__ActionChain2( const UMLRTInMessage & msg )
+{
+    transitionaction_____top__initialize__ActionChain2__onInit( msg );
+    entryaction_____top__initialize__ActionChain2__onEntry( msg );
+}
+
+void Capsule_GPSWatch::actionchain_____top__update__ActionChain4( const UMLRTInMessage & msg )
+{
+    entryaction_____top__update__ActionChain4__onEntry( msg );
+}
+
+Capsule_GPSWatch::State Capsule_GPSWatch::state_____top__Updating( const UMLRTInMessage & msg )
+{
+    switch( msg.destPort->role()->id )
+    {
+    case port_GPSPort:
+        switch( msg.getSignalId() )
+        {
+        case HeartRateMonitorProtocol::signal_updateHeartRate:
+            msg.decodeInit( UMLRTType_int );
+            return top__Updating;
+        default:
+            this->unexpectedMessage();
+            break;
+        }
+        return currentState;
+    default:
+        this->unexpectedMessage();
+        break;
+    }
+    return currentState;
+}
+
+Capsule_GPSWatch::State Capsule_GPSWatch::state_____top__Initializing( const UMLRTInMessage & msg )
+{
+    switch( msg.destPort->role()->id )
+    {
+    case port_GPSPort:
+        switch( msg.getSignalId() )
+        {
+        case HeartRateMonitorProtocol::signal_updateHeartRate:
+            msg.decodeInit( UMLRTType_int );
+            actionchain_____top__update__ActionChain4( msg );
+            return top__Updating;
+        default:
+            this->unexpectedMessage();
+            break;
+        }
+        return currentState;
+    default:
+        this->unexpectedMessage();
+        break;
+    }
+    return currentState;
 }
 
 static const UMLRTCommsPortRole portroles_border[] = 
