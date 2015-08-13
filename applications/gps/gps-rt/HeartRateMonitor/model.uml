@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:RTCppProperties="http:///schemas/RTCppProperties/_x_RDwDbbEeWD0t7DG7rk2g/4" xmlns:UMLRealTime="http://www.eclipse.org/papyrus/umlrt" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/RTCppProperties/_x_RDwDbbEeWD0t7DG7rk2g/4 pathmap://UMLRT_CPP/RTCppProperties.profile.uml#_x_WjUDbbEeWD0t7DG7rk2g">
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:RTCppProperties="http:///schemas/RTCppProperties/_x_RDwDbbEeWD0t7DG7rk2g/4" xmlns:UMLRealTime="http://www.eclipse.org/papyrus/umlrt" xmlns:UMLRealTimeStateMach="http://www.eclipse.org/papyrus/umlrt/statemachine" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/RTCppProperties/_x_RDwDbbEeWD0t7DG7rk2g/4 pathmap://UMLRT_CPP/RTCppProperties.profile.uml#_x_WjUDbbEeWD0t7DG7rk2g">
   <uml:Model xmi:id="_2marEDwrEeWGsfTt0s_XkQ" name="HeartRateMonitor">
     <packageImport xmi:type="uml:PackageImport" xmi:id="_2yXcYDwrEeWGsfTt0s_XkQ">
       <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
@@ -9,15 +9,15 @@
     </packageImport>
     <packagedElement xmi:type="uml:Class" xmi:id="_-VR-wDwsEeWGsfTt0s_XkQ" name="HeartRateMonitor" classifierBehavior="_SAQk8D44EeWrrcZfkKNPAg">
       <ownedAttribute xmi:type="uml:Port" xmi:id="_ZhQmYD12EeWrrcZfkKNPAg" name="HeartRatePort" type="_Mh5ZADwuEeWGsfTt0s_XkQ" aggregation="composite"/>
-      <ownedAttribute xmi:type="uml:Port" xmi:id="__7bQED5DEeWrrcZfkKNPAg" name="timer" aggregation="composite">
+      <ownedAttribute xmi:type="uml:Port" xmi:id="__7bQED5DEeWrrcZfkKNPAg" name="timer" isOrdered="true" aggregation="composite" isBehavior="true" isService="false">
         <type xmi:type="uml:Collaboration" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_MxQZgGXsEeS_4daqvwyFrg"/>
       </ownedAttribute>
-      <ownedAttribute xmi:type="uml:Property" xmi:id="_M49WID5HEeWrrcZfkKNPAg" name="timerID">
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_M49WID5HEeWrrcZfkKNPAg" name="timerID" aggregation="composite">
         <type xmi:type="uml:Class" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_6qkTMGXmEeS_4daqvwyFrg"/>
       </ownedAttribute>
       <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_SAQk8D44EeWrrcZfkKNPAg" name="HeartRateMonitor_SM">
         <region xmi:type="uml:Region" xmi:id="_UYYS4D44EeWrrcZfkKNPAg" name="Region1">
-          <transition xmi:type="uml:Transition" xmi:id="_iFjYED45EeWrrcZfkKNPAg" source="_YZT8QD45EeWrrcZfkKNPAg" target="_dTLOMD45EeWrrcZfkKNPAg">
+          <transition xmi:type="uml:Transition" xmi:id="_iFjYED45EeWrrcZfkKNPAg" name="init" source="_YZT8QD45EeWrrcZfkKNPAg" target="_dTLOMD45EeWrrcZfkKNPAg">
             <effect xmi:type="uml:OpaqueBehavior" xmi:id="_XviM4D-hEeWyF-87NFNwWw" name="onInit">
               <language>C++</language>
               <body>std::cout &lt;&lt; getName() &lt;&lt; &quot; initialized&quot; &lt;&lt; std::endl;</body>
@@ -38,7 +38,7 @@
             <trigger xmi:type="uml:Trigger" xmi:id="_aRRX4D5DEeWrrcZfkKNPAg" name="onUnregisterListener" event="_ODdfkD41EeWrrcZfkKNPAg" port="_ZhQmYD12EeWrrcZfkKNPAg"/>
           </transition>
           <transition xmi:type="uml:Transition" xmi:id="_4CP44D45EeWrrcZfkKNPAg" name="onTimeout" source="_d08egD45EeWrrcZfkKNPAg" target="_d08egD45EeWrrcZfkKNPAg">
-            <trigger xmi:type="uml:Trigger" xmi:id="_y7wfMD5EEeWrrcZfkKNPAg" port="__7bQED5DEeWrrcZfkKNPAg">
+            <trigger xmi:type="uml:Trigger" xmi:id="_y7wfMD5EEeWrrcZfkKNPAg" name="onTimeout" port="__7bQED5DEeWrrcZfkKNPAg">
               <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_IaEO8HDxEeSwWKwNKw1iAA"/>
             </trigger>
           </transition>
@@ -139,6 +139,18 @@ HeartRatePort().updateHeartRate(6).send();
       </eAnnotations>
       <appliedProfile xmi:type="uml:Profile" href="pathmap://UMLRT_CPP/RTCppProperties.profile.uml#_vl5LALs8EeSTjNEQkASznQ"/>
     </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_skeJAEDhEeWvDaLCVFSwpw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_skn6AEDhEeWvDaLCVFSwpw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/C_Cpp/1#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://PapyrusC_Cpp_PROFILES/C_Cpp.profile.uml#_j9REUByGEduN1bTiWJ0lyw"/>
+    </profileApplication>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_vDmd4EDhEeWvDaLCVFSwpw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_vDoTEEDhEeWvDaLCVFSwpw" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/papyrus/umlrt/statemachine#/"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="pathmap://UML_RT_PROFILE/UMLRealTimeSM-addendum.profile.uml#_KLcn0FDtEeOA4ecmvfqvaw"/>
+    </profileApplication>
   </uml:Model>
   <UMLRealTime:Capsule xmi:id="_KsGxgDwtEeWGsfTt0s_XkQ" base_Class="_-VR-wDwsEeWGsfTt0s_XkQ"/>
   <UMLRealTime:ProtocolContainer xmi:id="_Me-n4DwuEeWGsfTt0s_XkQ" base_Package="_Me69gDwuEeWGsfTt0s_XkQ"/>
@@ -153,7 +165,15 @@ HeartRatePort().updateHeartRate(6).send();
   <UMLRealTime:CapsulePart xmi:id="_mWsV0D14EeWrrcZfkKNPAg" base_Property="_mWp5kD14EeWrrcZfkKNPAg"/>
   <UMLRealTime:RTPort xmi:id="_5_mPED14EeWrrcZfkKNPAg" base_Port="_5_jy0D14EeWrrcZfkKNPAg"/>
   <UMLRealTime:RTConnector xmi:id="_2JQS0D18EeWrrcZfkKNPAg" base_Connector="_tYfn0D18EeWrrcZfkKNPAg"/>
-  <UMLRealTime:RTPort xmi:id="__7dFQD5DEeWrrcZfkKNPAg" base_Port="__7bQED5DEeWrrcZfkKNPAg"/>
+  <UMLRealTime:RTPort xmi:id="__7dFQD5DEeWrrcZfkKNPAg" isNotification="true" isWired="false" base_Port="__7bQED5DEeWrrcZfkKNPAg"/>
   <RTCppProperties:CapsuleProperties xmi:id="_e58jEEB7EeWkof8MBMoFQQ" implementationPreface="#include &lt;iostream>" base_Class="_-VR-wDwsEeWGsfTt0s_XkQ"/>
   <RTCppProperties:CapsuleProperties xmi:id="_pLUFMEB7EeWkof8MBMoFQQ" implementationPreface="#include &lt;iostream>" base_Class="_gkREMD14EeWrrcZfkKNPAg"/>
+  <UMLRealTimeStateMach:RTState xmi:id="_tCbh0EFZEeWKlPoc4JJJ5w" base_State="_d08egD45EeWrrcZfkKNPAg"/>
+  <UMLRealTimeStateMach:RTState xmi:id="_uVBLEEFZEeWKlPoc4JJJ5w" base_State="_dTLOMD45EeWrrcZfkKNPAg"/>
+  <UMLRealTimeStateMach:RTStateMachine xmi:id="_wgVMEEFZEeWKlPoc4JJJ5w" base_StateMachine="_SAQk8D44EeWrrcZfkKNPAg"/>
+  <UMLRealTimeStateMach:RTStateMachine xmi:id="_5uHxUEFZEeWKlPoc4JJJ5w" base_StateMachine="_BR7W8EAbEeWuMdCV7Og4wQ"/>
+  <UMLRealTimeStateMach:RTState xmi:id="_9RCecEFZEeWKlPoc4JJJ5w" base_State="_ECVCAEAbEeWuMdCV7Og4wQ"/>
+  <UMLRealTimeStateMach:RTState xmi:id="_-UjJ4EFZEeWKlPoc4JJJ5w" base_State="_YTPHsEAhEeWuMdCV7Og4wQ"/>
+  <UMLRealTimeStateMach:RTRegion xmi:id="_AoHH8EFaEeWKlPoc4JJJ5w" base_Region="_Csi60EAbEeWuMdCV7Og4wQ"/>
+  <UMLRealTimeStateMach:RTRegion xmi:id="_Cc0m0EFaEeWKlPoc4JJJ5w" base_Region="_UYYS4D44EeWrrcZfkKNPAg"/>
 </xmi:XMI>
