@@ -39,7 +39,9 @@ public:
     };
     virtual void bindPort( bool isBorder, int portId, int index );
     virtual void unbindPort( bool isBorder, int portId, int index );
+protected:
     UMLRTTimerId timerID;
+public:
     virtual void inject( const UMLRTInMessage & message );
     virtual void initialize( const UMLRTInMessage & message );
     const char * getCurrentStateString() const;
@@ -52,13 +54,17 @@ private:
     };
     const char * stateNames[2];
     State currentState;
-    void entryaction_____top__onRegisterListener__ActionChain4__onEntry( const UMLRTInMessage & msg );
+    void entryaction_____top__init__ActionChain3__EntryAction10( const UMLRTInMessage & msg );
+    void entryaction_____top__updateHeartbeat__ActionChain7__EntryAction14( const UMLRTInMessage & msg );
     void transitionaction_____top__init__ActionChain3__onInit( const UMLRTInMessage & msg );
-    void transitionaction_____top__onRegisterListener__ActionChain4__TransitionAction9( const UMLRTInMessage & msg );
-    void transitionaction_____top__onUnregisterListener__ActionChain5__TransitionAction10( const UMLRTInMessage & msg );
+    void transitionaction_____top__onRegisterListener__ActionChain4__TransitionAction11( const UMLRTInMessage & msg );
+    void transitionaction_____top__onUnregisterListener__ActionChain5__TransitionAction12( const UMLRTInMessage & msg );
+    void transitionaction_____top__updateHeartbeat__ActionChain7__TransitionAction13( const UMLRTInMessage & msg );
     void actionchain_____top__init__ActionChain3( const UMLRTInMessage & msg );
     void actionchain_____top__onRegisterListener__ActionChain4( const UMLRTInMessage & msg );
     void actionchain_____top__onUnregisterListener__ActionChain5( const UMLRTInMessage & msg );
+    void actionchain_____top__updateHeartbeat__ActionChain7( const UMLRTInMessage & msg );
+    State junction_____top__Junction1( const UMLRTInMessage & msg );
     State state_____top__monitoring( const UMLRTInMessage & msg );
     State state_____top__idle( const UMLRTInMessage & msg );
 };

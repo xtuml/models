@@ -9,10 +9,10 @@
     </packageImport>
     <packagedElement xmi:type="uml:Class" xmi:id="_-VR-wDwsEeWGsfTt0s_XkQ" name="HeartRateMonitor" classifierBehavior="_SAQk8D44EeWrrcZfkKNPAg">
       <ownedAttribute xmi:type="uml:Port" xmi:id="_ZhQmYD12EeWrrcZfkKNPAg" name="HeartRatePort" type="_Mh5ZADwuEeWGsfTt0s_XkQ" aggregation="composite"/>
-      <ownedAttribute xmi:type="uml:Port" xmi:id="__7bQED5DEeWrrcZfkKNPAg" name="timer" isOrdered="true" aggregation="composite" isBehavior="true" isService="false">
+      <ownedAttribute xmi:type="uml:Port" xmi:id="__7bQED5DEeWrrcZfkKNPAg" name="timer" visibility="protected" isOrdered="true" aggregation="composite" isBehavior="true" isService="false">
         <type xmi:type="uml:Collaboration" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_MxQZgGXsEeS_4daqvwyFrg"/>
       </ownedAttribute>
-      <ownedAttribute xmi:type="uml:Property" xmi:id="_M49WID5HEeWrrcZfkKNPAg" name="timerID" aggregation="composite">
+      <ownedAttribute xmi:type="uml:Property" xmi:id="_M49WID5HEeWrrcZfkKNPAg" name="timerID" visibility="protected" aggregation="composite">
         <type xmi:type="uml:Class" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_6qkTMGXmEeS_4daqvwyFrg"/>
       </ownedAttribute>
       <ownedBehavior xmi:type="uml:StateMachine" xmi:id="_SAQk8D44EeWrrcZfkKNPAg" name="HeartRateMonitor_SM">
@@ -23,10 +23,14 @@
               <body>std::cout &lt;&lt; getName() &lt;&lt; &quot; initialized&quot; &lt;&lt; std::endl;</body>
             </effect>
           </transition>
-          <transition xmi:type="uml:Transition" xmi:id="_0uQ_oD45EeWrrcZfkKNPAg" name="onRegisterListener" source="_dTLOMD45EeWrrcZfkKNPAg" target="_d08egD45EeWrrcZfkKNPAg">
+          <transition xmi:type="uml:Transition" xmi:id="_0uQ_oD45EeWrrcZfkKNPAg" name="onRegisterListener" source="_dTLOMD45EeWrrcZfkKNPAg" target="_VemigEIGEeWokcdArFCMyQ">
             <effect xmi:type="uml:OpaqueBehavior" xmi:id="_sHT6sEAXEeWuMdCV7Og4wQ">
               <language>C++</language>
-              <body>std::cout &lt;&lt; getName() &lt;&lt; &quot;: Listener Registered&quot; &lt;&lt; std::endl;</body>
+              <body>std::cout &lt;&lt; getName() &lt;&lt; &quot;: Listener Registered&quot; &lt;&lt; std::endl;
+
+timerID=timer().informEvery(UMLRTTimespec(6,0));  // Send a timeout signal every 6 seconds.
+if(!timerID.isValid()) { std::cout &lt;&lt; &quot;Error setting timer&quot; &lt;&lt; std::endl; } else {{ std::cout &lt;&lt; &quot;timer set&quot; &lt;&lt; std::endl; }};
+</body>
             </effect>
             <trigger xmi:type="uml:Trigger" xmi:id="_SBhvQD5DEeWrrcZfkKNPAg" name="onRegisterListener" event="_K1a2QD41EeWrrcZfkKNPAg" port="_ZhQmYD12EeWrrcZfkKNPAg"/>
           </transition>
@@ -37,22 +41,34 @@
             </effect>
             <trigger xmi:type="uml:Trigger" xmi:id="_aRRX4D5DEeWrrcZfkKNPAg" name="onUnregisterListener" event="_ODdfkD41EeWrrcZfkKNPAg" port="_ZhQmYD12EeWrrcZfkKNPAg"/>
           </transition>
-          <transition xmi:type="uml:Transition" xmi:id="_4CP44D45EeWrrcZfkKNPAg" name="onTimeout" source="_d08egD45EeWrrcZfkKNPAg" target="_d08egD45EeWrrcZfkKNPAg">
+          <transition xmi:type="uml:Transition" xmi:id="_4CP44D45EeWrrcZfkKNPAg" name="onTimeout" source="_d08egD45EeWrrcZfkKNPAg" target="_VemigEIGEeWokcdArFCMyQ">
             <trigger xmi:type="uml:Trigger" xmi:id="_y7wfMD5EEeWrrcZfkKNPAg" name="onTimeout" port="__7bQED5DEeWrrcZfkKNPAg">
               <event xmi:type="uml:CallEvent" href="pathmap://UMLRTRTSLIB/UMLRT-RTS.uml#_IaEO8HDxEeSwWKwNKw1iAA"/>
             </trigger>
           </transition>
-          <subvertex xmi:type="uml:Pseudostate" xmi:id="_YZT8QD45EeWrrcZfkKNPAg" name="Initial"/>
-          <subvertex xmi:type="uml:State" xmi:id="_dTLOMD45EeWrrcZfkKNPAg" name="idle"/>
-          <subvertex xmi:type="uml:State" xmi:id="_d08egD45EeWrrcZfkKNPAg" name="monitoring">
-            <entry xmi:type="uml:OpaqueBehavior" xmi:id="_5q8qID47EeWrrcZfkKNPAg" name="onEntry">
+          <transition xmi:type="uml:Transition" xmi:id="_Zev-MEIGEeWokcdArFCMyQ" name="updateHeartbeat" source="_VemigEIGEeWokcdArFCMyQ" target="_d08egD45EeWrrcZfkKNPAg">
+            <effect xmi:type="uml:OpaqueBehavior" xmi:id="_kb5BMEIGEeWokcdArFCMyQ">
               <language>C++</language>
-              <body>std::cout &lt;&lt; getName() &lt;&lt; &quot;: Updating heartbeat&quot; &lt;&lt; std::endl;
-timerID=timer().informIn(UMLRTTimespec(6,0));
+              <body>std::cout &lt;&lt; &quot;updating heartbeat&quot; &lt;&lt; std::endl;
+
 HeartRatePort().updateHeartRate(6).send();
 </body>
+            </effect>
+          </transition>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_YZT8QD45EeWrrcZfkKNPAg" name="Initial"/>
+          <subvertex xmi:type="uml:State" xmi:id="_dTLOMD45EeWrrcZfkKNPAg" name="idle">
+            <entry xmi:type="uml:OpaqueBehavior" xmi:id="_7iWmcEIGEeWokcdArFCMyQ">
+              <language>C++</language>
+              <body>std::cout &lt;&lt; &quot;Idle&quot; &lt;&lt; std::endl;</body>
             </entry>
           </subvertex>
+          <subvertex xmi:type="uml:State" xmi:id="_d08egD45EeWrrcZfkKNPAg" name="monitoring">
+            <entry xmi:type="uml:OpaqueBehavior" xmi:id="_24TSIEIGEeWokcdArFCMyQ">
+              <language>C++</language>
+              <body>std::cout &lt;&lt; &quot;Monitoring&quot; &lt;&lt; std::endl;</body>
+            </entry>
+          </subvertex>
+          <subvertex xmi:type="uml:Pseudostate" xmi:id="_VemigEIGEeWokcdArFCMyQ" name="Junction1" kind="junction"/>
         </region>
       </ownedBehavior>
     </packagedElement>

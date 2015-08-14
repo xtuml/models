@@ -95,14 +95,21 @@ const char * Capsule_HeartRateMonitor::getCurrentStateString() const
 
 
 
-void Capsule_HeartRateMonitor::entryaction_____top__onRegisterListener__ActionChain4__onEntry( const UMLRTInMessage & msg )
+void Capsule_HeartRateMonitor::entryaction_____top__init__ActionChain3__EntryAction10( const UMLRTInMessage & msg )
 {
     uint8_t buff0[msg.sizeDecoded()];
     void * const rtdata = buff0;
     msg.decode( rtdata );
-    std::cout << getName() << ": Updating heartbeat" << std::endl;
-    timerID=timer().informIn(UMLRTTimespec(6,0));
-    HeartRatePort().updateHeartRate(6).send();
+    std::cout << "Idle" << std::endl;
+    msg.destroy( (void *)buff0 );
+}
+
+void Capsule_HeartRateMonitor::entryaction_____top__updateHeartbeat__ActionChain7__EntryAction14( const UMLRTInMessage & msg )
+{
+    uint8_t buff0[msg.sizeDecoded()];
+    void * const rtdata = buff0;
+    msg.decode( rtdata );
+    std::cout << "Monitoring" << std::endl;
     msg.destroy( (void *)buff0 );
 }
 
@@ -115,16 +122,19 @@ void Capsule_HeartRateMonitor::transitionaction_____top__init__ActionChain3__onI
     msg.destroy( (void *)buff0 );
 }
 
-void Capsule_HeartRateMonitor::transitionaction_____top__onRegisterListener__ActionChain4__TransitionAction9( const UMLRTInMessage & msg )
+void Capsule_HeartRateMonitor::transitionaction_____top__onRegisterListener__ActionChain4__TransitionAction11( const UMLRTInMessage & msg )
 {
     uint8_t buff0[msg.sizeDecoded()];
     void * const rtdata = buff0;
     msg.decode( rtdata );
     std::cout << getName() << ": Listener Registered" << std::endl;
+
+    timerID=timer().informEvery(UMLRTTimespec(6,0));  // Send a timeout signal every 6 seconds.
+    if(!timerID.isValid()) { std::cout << "Error setting timer" << std::endl; } else {{ std::cout << "timer set" << std::endl; }};
     msg.destroy( (void *)buff0 );
 }
 
-void Capsule_HeartRateMonitor::transitionaction_____top__onUnregisterListener__ActionChain5__TransitionAction10( const UMLRTInMessage & msg )
+void Capsule_HeartRateMonitor::transitionaction_____top__onUnregisterListener__ActionChain5__TransitionAction12( const UMLRTInMessage & msg )
 {
     uint8_t buff0[msg.sizeDecoded()];
     void * const rtdata = buff0;
@@ -133,20 +143,43 @@ void Capsule_HeartRateMonitor::transitionaction_____top__onUnregisterListener__A
     msg.destroy( (void *)buff0 );
 }
 
+void Capsule_HeartRateMonitor::transitionaction_____top__updateHeartbeat__ActionChain7__TransitionAction13( const UMLRTInMessage & msg )
+{
+    uint8_t buff0[msg.sizeDecoded()];
+    void * const rtdata = buff0;
+    msg.decode( rtdata );
+    std::cout << "updating heartbeat" << std::endl;
+
+    HeartRatePort().updateHeartRate(6).send();
+    msg.destroy( (void *)buff0 );
+}
+
 void Capsule_HeartRateMonitor::actionchain_____top__init__ActionChain3( const UMLRTInMessage & msg )
 {
     transitionaction_____top__init__ActionChain3__onInit( msg );
+    entryaction_____top__init__ActionChain3__EntryAction10( msg );
 }
 
 void Capsule_HeartRateMonitor::actionchain_____top__onRegisterListener__ActionChain4( const UMLRTInMessage & msg )
 {
-    transitionaction_____top__onRegisterListener__ActionChain4__TransitionAction9( msg );
-    entryaction_____top__onRegisterListener__ActionChain4__onEntry( msg );
+    transitionaction_____top__onRegisterListener__ActionChain4__TransitionAction11( msg );
 }
 
 void Capsule_HeartRateMonitor::actionchain_____top__onUnregisterListener__ActionChain5( const UMLRTInMessage & msg )
 {
-    transitionaction_____top__onUnregisterListener__ActionChain5__TransitionAction10( msg );
+    transitionaction_____top__onUnregisterListener__ActionChain5__TransitionAction12( msg );
+}
+
+void Capsule_HeartRateMonitor::actionchain_____top__updateHeartbeat__ActionChain7( const UMLRTInMessage & msg )
+{
+    transitionaction_____top__updateHeartbeat__ActionChain7__TransitionAction13( msg );
+    entryaction_____top__updateHeartbeat__ActionChain7__EntryAction14( msg );
+}
+
+Capsule_HeartRateMonitor::State Capsule_HeartRateMonitor::junction_____top__Junction1( const UMLRTInMessage & msg )
+{
+    actionchain_____top__updateHeartbeat__ActionChain7( msg );
+    return top__monitoring;
 }
 
 Capsule_HeartRateMonitor::State Capsule_HeartRateMonitor::state_____top__monitoring( const UMLRTInMessage & msg )
@@ -170,7 +203,7 @@ Capsule_HeartRateMonitor::State Capsule_HeartRateMonitor::state_____top__monitor
         {
         case UMLRTTimerProtocol::signal_timeout:
             msg.decodeInit( NULL );
-            return top__monitoring;
+            return junction_____top__Junction1( msg );
         default:
             this->unexpectedMessage();
             break;
@@ -193,7 +226,7 @@ Capsule_HeartRateMonitor::State Capsule_HeartRateMonitor::state_____top__idle( c
         case HeartRateMonitorProtocol::signal_registerListener:
             msg.decodeInit( NULL );
             actionchain_____top__onRegisterListener__ActionChain4( msg );
-            return top__monitoring;
+            return junction_____top__Junction1( msg );
         default:
             this->unexpectedMessage();
             break;
