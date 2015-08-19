@@ -1,0 +1,92 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("313e48f7-0516-49bd-9401-5c67c2e55db9",
+	'Achievement',
+	10,
+	'Achievement',
+	'Each instance represents one contiguous period of time during 
+which a particular goal was being met (achieved).',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("6fac41c9-c339-4dbe-8651-11ff5f9db899",
+	"313e48f7-0516-49bd-9401-5c67c2e55db9",
+	'close',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Close this open achievement record by storing the end time, relating this
+//   record as a recorded one and unrelating it as the open one.
+select one goal related by self->Goal[R14.''is open for''];
+select one workoutTimer related by 
+  goal->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
+  self.endTime = workoutTimer.time;
+unrelate self from goal across R14.''is open for'';
+relate self to goal across R12.''specifies achievement of'';
+
+
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("b3949e0b-65ec-4e72-82be-b899f2e3b63b",
+	"313e48f7-0516-49bd-9401-5c67c2e55db9");
+INSERT INTO O_BATTR
+	VALUES ("b3949e0b-65ec-4e72-82be-b899f2e3b63b",
+	"313e48f7-0516-49bd-9401-5c67c2e55db9");
+INSERT INTO O_ATTR
+	VALUES ("b3949e0b-65ec-4e72-82be-b899f2e3b63b",
+	"313e48f7-0516-49bd-9401-5c67c2e55db9",
+	"00000000-0000-0000-0000-000000000000",
+	'startTime',
+	'Starting time for this achievement, expressed as the number of seconds
+since the beginning of the associated workout session.',
+	'',
+	'startTime',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("46b6c2f4-87ac-494d-b31e-62f1d0581155",
+	"313e48f7-0516-49bd-9401-5c67c2e55db9");
+INSERT INTO O_BATTR
+	VALUES ("46b6c2f4-87ac-494d-b31e-62f1d0581155",
+	"313e48f7-0516-49bd-9401-5c67c2e55db9");
+INSERT INTO O_ATTR
+	VALUES ("46b6c2f4-87ac-494d-b31e-62f1d0581155",
+	"313e48f7-0516-49bd-9401-5c67c2e55db9",
+	"b3949e0b-65ec-4e72-82be-b899f2e3b63b",
+	'endTime',
+	'Ending time for this achievement, expressed as the number of seconds
+since the beginning of the associated workout session.',
+	'',
+	'endTime',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"313e48f7-0516-49bd-9401-5c67c2e55db9");
+INSERT INTO O_ID
+	VALUES (1,
+	"313e48f7-0516-49bd-9401-5c67c2e55db9");
+INSERT INTO O_ID
+	VALUES (2,
+	"313e48f7-0516-49bd-9401-5c67c2e55db9");
+INSERT INTO PE_PE
+	VALUES ("313e48f7-0516-49bd-9401-5c67c2e55db9",
+	1,
+	"a09220a4-d685-4338-83fd-0d42f7c7e308",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a09220a4-d685-4338-83fd-0d42f7c7e308",
+	"00000000-0000-0000-0000-000000000000",
+	"36a41cf7-d411-488d-99fc-74866d4fea39",
+	'Tracking',
+	'',
+	0,
+	'../Tracking.xtuml');

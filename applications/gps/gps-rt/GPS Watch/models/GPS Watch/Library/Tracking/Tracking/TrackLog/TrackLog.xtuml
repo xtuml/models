@@ -1,0 +1,166 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("d2828038-110a-4559-8452-91651af0adcb",
+	'TrackLog',
+	2,
+	'TrackLog',
+	'The collection of track points stored during a workout session.
+
+Presently the device supports only a single track log, and it 
+is always the active one for the current workout session.
+However, future releases may add a capability for storing
+multiple track logs on the device.',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("0f45bbc6-da36-4b5b-a2dd-f739a6f0cbdd",
+	"d2828038-110a-4559-8452-91651af0adcb",
+	'addTrackPoint',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Add a track point to this track log, update the accumulated distance
+// and current speed, and then notify the UI.
+
+// Create a new track point, retrieving the current location from the GPS.
+create object instance trackPoint of TrackPoint;
+select one workoutTimer related by 
+  self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
+trackPoint.time = workoutTimer.time;
+send LOC::getLocation( latitude: trackPoint.latitude, longitude: trackPoint.longitude );
+
+// Add the newly created track point to the track log.
+select one firstPoint related by self->TrackPoint[R1];
+select one lastPoint related by self->TrackPoint[R3];
+
+// Explicit variable declarations for later use outside if-else clause.
+isFirstTrackPoint = false;
+lastLatitude = 0.0;
+lastLongitude = 0.0;  
+if (empty firstPoint)
+  isFirstTrackPoint = true;
+  relate self to trackPoint across R1.''has first'';
+  relate self to trackPoint across R3.''has last'';
+else 
+  // Save last location for use in updating accumulated distance.
+  lastLatitude = lastPoint.latitude;
+  lastLongitude = lastPoint.longitude;
+  unrelate self from lastPoint across R3.''has last'';
+  relate self to trackPoint across R3.''has last'';
+  relate lastPoint to trackPoint across R2.''follows'';
+end if;
+
+// Update accumulated distance and current speed.
+distance = 0.0;
+if (not isFirstTrackPoint)
+  send distance = UTIL::getDistance( fromLat: lastLatitude, fromLong: lastLongitude,
+                                     toLat: trackPoint.latitude, toLong: trackPoint.longitude );
+end if;
+
+select one session related by self->WorkoutSession[R4.''represents path for''];
+session.accumulatedDistance = session.accumulatedDistance + distance;
+
+// Notify display of of the updated values.
+self.updateDisplay();',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("7dbac40f-6e89-4ad2-a576-0f1fcfbe2dc5",
+	"d2828038-110a-4559-8452-91651af0adcb",
+	'clearTrackPoints',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one nextPoint related by self->TrackPoint[R1];
+select one lastPoint related by self->TrackPoint[R3];
+
+if (not empty lastPoint)
+  unrelate self from lastPoint across R3;
+end if;
+
+if (not empty nextPoint)
+  unrelate self from nextPoint across R1;
+end if;
+
+while (not empty nextPoint)
+  prevPoint = nextPoint;
+  select one nextPoint related by nextPoint->TrackPoint[R2.''follows''];
+  if ( not_empty nextPoint )
+    unrelate prevPoint from nextPoint across R2.''follows'';
+  end if;
+  delete object instance prevPoint;
+end while;
+',
+	1,
+	'',
+	"0f45bbc6-da36-4b5b-a2dd-f739a6f0cbdd");
+INSERT INTO O_TFR
+	VALUES ("83ad7ae5-197c-4e8a-b9f5-b7d1c03db0b7",
+	"d2828038-110a-4559-8452-91651af0adcb",
+	'addLapMarker',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one timer related by self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
+create object instance lapMarker of LapMarker;
+lapMarker.lapTime = timer.time; 
+relate self to lapMarker across R5.''has laps defined by'';
+
+// Notify display of the new value.
+self.updateDisplay();',
+	1,
+	'',
+	"7dbac40f-6e89-4ad2-a576-0f1fcfbe2dc5");
+INSERT INTO O_TFR
+	VALUES ("9d05da67-cf3d-4220-b15a-0f2e28652584",
+	"d2828038-110a-4559-8452-91651af0adcb",
+	'clearLapMarkers',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select many lapMarkers related by self->LapMarker[R5];
+for each lapMarker in lapMarkers
+  unrelate self from lapMarker across R5;
+  delete object instance lapMarker;
+end for;',
+	1,
+	'',
+	"83ad7ae5-197c-4e8a-b9f5-b7d1c03db0b7");
+INSERT INTO O_TFR
+	VALUES ("9723d50b-bb3d-4fed-86de-6413406a6a2e",
+	"d2828038-110a-4559-8452-91651af0adcb",
+	'updateDisplay',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Update the display so that newly updated values will be shown.
+select one display related by 
+  self->WorkoutSession[R4.''represents path for'']->Display[R7.''current status indicated on''];
+generate Display2:refresh to display;',
+	1,
+	'',
+	"9d05da67-cf3d-4220-b15a-0f2e28652584");
+INSERT INTO O_ID
+	VALUES (0,
+	"d2828038-110a-4559-8452-91651af0adcb");
+INSERT INTO O_ID
+	VALUES (1,
+	"d2828038-110a-4559-8452-91651af0adcb");
+INSERT INTO O_ID
+	VALUES (2,
+	"d2828038-110a-4559-8452-91651af0adcb");
+INSERT INTO PE_PE
+	VALUES ("d2828038-110a-4559-8452-91651af0adcb",
+	1,
+	"a09220a4-d685-4338-83fd-0d42f7c7e308",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a09220a4-d685-4338-83fd-0d42f7c7e308",
+	"00000000-0000-0000-0000-000000000000",
+	"36a41cf7-d411-488d-99fc-74866d4fea39",
+	'Tracking',
+	'',
+	0,
+	'../Tracking.xtuml');
