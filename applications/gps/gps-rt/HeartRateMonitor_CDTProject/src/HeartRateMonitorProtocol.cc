@@ -54,6 +54,7 @@ UMLRTOutSignal HeartRateMonitorProtocol::InSignals::updateHeartRate( const UMLRT
 
 
 
+
 HeartRateMonitorProtocol_baserole::HeartRateMonitorProtocol_baserole( const UMLRTCommsPort * srcPort )
 : UMLRTProtocol( srcPort )
 {
@@ -74,6 +75,7 @@ UMLRTOutSignal HeartRateMonitorProtocol_baserole::updateHeartRate( int heartRate
     return HeartRateMonitorProtocol::Base::updateHeartRate( srcPort, heartRate );
 }
 
+
 HeartRateMonitorProtocol_conjrole::HeartRateMonitorProtocol_conjrole( const UMLRTCommsPort * srcPort )
 : UMLRTProtocol( srcPort )
 {
@@ -93,4 +95,5 @@ UMLRTOutSignal HeartRateMonitorProtocol_conjrole::updateHeartRate( int heartRate
 {
     return HeartRateMonitorProtocol::Conjugate::updateHeartRate( srcPort, heartRate );
 }
+
 

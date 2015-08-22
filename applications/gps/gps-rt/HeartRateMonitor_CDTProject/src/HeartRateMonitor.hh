@@ -14,7 +14,7 @@ struct UMLRTSlot;
 class Capsule_HeartRateMonitor : public UMLRTCapsule
 {
 public:
-    Capsule_HeartRateMonitor( const UMLRTCapsuleClass * cd, UMLRTSlot * st, const UMLRTCommsPort * * border, const UMLRTCommsPort * internal, bool isStat );
+    Capsule_HeartRateMonitor( const UMLRTCapsuleClass * cd, UMLRTSlot * st, const UMLRTCommsPort * * border, const UMLRTCommsPort * * internal, bool isStat );
     enum BorderPortId
     {
         borderport_HeartRatePort
@@ -55,11 +55,12 @@ private:
     const char * stateNames[2];
     State currentState;
     void entryaction_____top__init__ActionChain3__EntryAction10( const UMLRTInMessage & msg );
-    void entryaction_____top__updateHeartbeat__ActionChain7__EntryAction14( const UMLRTInMessage & msg );
+    void entryaction_____top__onUnregisterListener__ActionChain5__EntryAction13( const UMLRTInMessage & msg );
+    void entryaction_____top__updateHeartbeat__ActionChain7__EntryAction15( const UMLRTInMessage & msg );
     void transitionaction_____top__init__ActionChain3__onInit( const UMLRTInMessage & msg );
     void transitionaction_____top__onRegisterListener__ActionChain4__TransitionAction11( const UMLRTInMessage & msg );
     void transitionaction_____top__onUnregisterListener__ActionChain5__TransitionAction12( const UMLRTInMessage & msg );
-    void transitionaction_____top__updateHeartbeat__ActionChain7__TransitionAction13( const UMLRTInMessage & msg );
+    void transitionaction_____top__updateHeartbeat__ActionChain7__TransitionAction14( const UMLRTInMessage & msg );
     void actionchain_____top__init__ActionChain3( const UMLRTInMessage & msg );
     void actionchain_____top__onRegisterListener__ActionChain4( const UMLRTInMessage & msg );
     void actionchain_____top__onUnregisterListener__ActionChain5( const UMLRTInMessage & msg );
