@@ -39,45 +39,6 @@ static UMLRTCapsulePart parts_Top[] =
     }
 };
 
-static UMLRTCommsPortFarEnd borderfarEndList_Top_GPSWatch[] = 
-{
-    {
-        0,
-        &borderports_Top_HeartRateMonitor[Capsule_HeartRateMonitor::borderport_HeartRatePort]
-    }
-};
-
-UMLRTCommsPort borderports_Top_GPSWatch[] = 
-{
-    {
-        &GPSWatch,
-        Capsule_GPSWatch::borderport_GPSPort,
-        &Top_slots[InstId_Top_GPSWatch],
-        1,
-        borderfarEndList_Top_GPSWatch,
-        NULL,
-        NULL,
-        true,
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        true
-    }
-};
-
-static const UMLRTCommsPort * borderports_Top_GPSWatch_ptrs[] = 
-{
-    &borderports_Top_GPSWatch[0]
-};
-
-static Capsule_GPSWatch top_GPSWatch( &GPSWatch, &Top_slots[InstId_Top_GPSWatch], borderports_Top_GPSWatch_ptrs, NULL, true );
-
 static UMLRTCommsPortFarEnd borderfarEndList_Top_HeartRateMonitor[] = 
 {
     {
@@ -154,6 +115,45 @@ static const UMLRTCommsPort * internalports_Top_HeartRateMonitor_ptrs[] =
 
 static Capsule_HeartRateMonitor top_HeartRateMonitor( &HeartRateMonitor, &Top_slots[InstId_Top_HeartRateMonitor], borderports_Top_HeartRateMonitor_ptrs, internalports_Top_HeartRateMonitor_ptrs, true );
 
+static UMLRTCommsPortFarEnd borderfarEndList_Top_GPSWatch[] = 
+{
+    {
+        0,
+        &borderports_Top_HeartRateMonitor[Capsule_HeartRateMonitor::borderport_HeartRatePort]
+    }
+};
+
+UMLRTCommsPort borderports_Top_GPSWatch[] = 
+{
+    {
+        &GPSWatch,
+        Capsule_GPSWatch::borderport_GPSPort,
+        &Top_slots[InstId_Top_GPSWatch],
+        1,
+        borderfarEndList_Top_GPSWatch,
+        NULL,
+        NULL,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+    }
+};
+
+static const UMLRTCommsPort * borderports_Top_GPSWatch_ptrs[] = 
+{
+    &borderports_Top_GPSWatch[0]
+};
+
+static Capsule_GPSWatch top_GPSWatch( &GPSWatch, &Top_slots[InstId_Top_GPSWatch], borderports_Top_GPSWatch_ptrs, NULL, true );
+
 UMLRTSlot Top_slots[] = 
 {
     {
@@ -173,22 +173,6 @@ UMLRTSlot Top_slots[] =
         false
     },
     {
-        "Top.GPSWatch",
-        0,
-        &GPSWatch,
-        &Top,
-        Capsule_Top::part_GPSWatch,
-        &top_GPSWatch,
-        &DefaultController,
-        0,
-        NULL,
-        1,
-        borderports_Top_GPSWatch,
-        NULL,
-        true,
-        false
-    },
-    {
         "Top.HeartRateMonitor",
         0,
         &HeartRateMonitor,
@@ -200,6 +184,22 @@ UMLRTSlot Top_slots[] =
         NULL,
         1,
         borderports_Top_HeartRateMonitor,
+        NULL,
+        true,
+        false
+    },
+    {
+        "Top.GPSWatch",
+        0,
+        &GPSWatch,
+        &Top,
+        Capsule_Top::part_GPSWatch,
+        &top_GPSWatch,
+        &DefaultController,
+        0,
+        NULL,
+        1,
+        borderports_Top_GPSWatch,
         NULL,
         true,
         false

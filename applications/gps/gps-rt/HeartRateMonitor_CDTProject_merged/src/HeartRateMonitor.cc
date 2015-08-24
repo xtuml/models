@@ -28,11 +28,11 @@ Capsule_HeartRateMonitor::Capsule_HeartRateMonitor( const UMLRTCapsuleClass * cd
 }
 
 
-
 HeartRateMonitorProtocol_baserole Capsule_HeartRateMonitor::HeartRatePort() const
 {
     return HeartRateMonitorProtocol_baserole( borderPorts[borderport_HeartRatePort] );
 }
+
 
 UMLRTTimerProtocol_baserole Capsule_HeartRateMonitor::timer() const
 {
@@ -153,6 +153,8 @@ void Capsule_HeartRateMonitor::transitionaction_____top__onUnregisterListener__A
     void * const rtdata = buff0;
     msg.decode( rtdata );
     std::cout << getName() << ": Listener Unregistered" << std::endl;
+    if (false == timer().cancelTimer(timerID))
+       std::cout << getName() << " Timer cancel failed." << std::endl;
     msg.destroy( (void *)buff0 );
 }
 
@@ -202,17 +204,6 @@ Capsule_HeartRateMonitor::State Capsule_HeartRateMonitor::state_____top__monitor
 {
     switch( msg.destPort->role()->id )
     {
-    case port_timer:
-        switch( msg.getSignalId() )
-        {
-        case UMLRTTimerProtocol::signal_timeout:
-            msg.decodeInit( NULL );
-            return junction_____top__Junction1( msg );
-        default:
-            this->unexpectedMessage();
-            break;
-        }
-        return currentState;
     case port_HeartRatePort:
         switch( msg.getSignalId() )
         {
@@ -220,6 +211,17 @@ Capsule_HeartRateMonitor::State Capsule_HeartRateMonitor::state_____top__monitor
             msg.decodeInit( NULL );
             actionchain_____top__onUnregisterListener__ActionChain5( msg );
             return top__idle;
+        default:
+            this->unexpectedMessage();
+            break;
+        }
+        return currentState;
+    case port_timer:
+        switch( msg.getSignalId() )
+        {
+        case UMLRTTimerProtocol::signal_timeout:
+            msg.decodeInit( NULL );
+            return junction_____top__Junction1( msg );
         default:
             this->unexpectedMessage();
             break;

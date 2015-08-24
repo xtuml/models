@@ -1,4 +1,4 @@
-#include <iostream>
+
 #include "HeartRateMonitorProtocol.hh"
 
 #include "umlrtobjectclass.hh"
@@ -23,7 +23,6 @@ UMLRTOutSignal HeartRateMonitorProtocol::OutSignals::unregisterListener( const U
 UMLRTOutSignal HeartRateMonitorProtocol::OutSignals::updateHeartRate( const UMLRTCommsPort * sourcePort, int heartRate ) const
 {
     UMLRTOutSignal signal;
-    std::cout << "updating heartbeat OutSignals" << std::endl;
     signal.initialize( signal_updateHeartRate, sourcePort, UMLRTType_int->sizeDecoded );
     signal.encode( UMLRTType_int, &heartRate );
     return signal;
@@ -47,7 +46,6 @@ UMLRTOutSignal HeartRateMonitorProtocol::InSignals::unregisterListener( const UM
 UMLRTOutSignal HeartRateMonitorProtocol::InSignals::updateHeartRate( const UMLRTCommsPort * sourcePort, int heartRate ) const
 {
     UMLRTOutSignal signal;
-    std::cout << "updating heartbeat InSignals" << std::endl;
     signal.initialize( signal_updateHeartRate, sourcePort, UMLRTType_int->sizeDecoded );
     signal.encode( UMLRTType_int, &heartRate );
     return signal;
