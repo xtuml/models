@@ -17,6 +17,11 @@
 #include "HRM_bridge.h"
 #include "GPSWatch_sys_types.h"
 
+extern "C" {
+   void call_sendRegisterListener();
+   void call_sendUnRegisterListener();
+}
+
 /*
  * Bridge:  registerListener
  */
@@ -24,6 +29,7 @@ void
 HRM_registerListener()
 {
   /* Replace/Insert your implementation code here... */
+  call_sendRegisterListener();
 }
 
 
@@ -34,6 +40,7 @@ void
 HRM_unregisterListener()
 {
   /* Replace/Insert your implementation code here... */
+   call_sendUnRegisterListener();
 }
 
 

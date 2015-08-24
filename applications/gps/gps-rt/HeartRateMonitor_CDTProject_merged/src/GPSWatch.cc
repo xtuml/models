@@ -18,12 +18,15 @@ struct UMLRTCommsPort;
 
 #include <iostream>
 
+static Capsule_GPSWatch *m_pInstance;
+
 Capsule_GPSWatch::Capsule_GPSWatch( const UMLRTCapsuleClass * cd, UMLRTSlot * st, const UMLRTCommsPort * * border, const UMLRTCommsPort * * internal, bool isStat )
 : UMLRTCapsule( NULL, cd, st, border, internal, isStat )
 , currentState( SPECIAL_INTERNAL_STATE_UNVISITED )
 {
     stateNames[top__Updating] = "top__Updating";
     stateNames[top__Initializing] = "top__Initializing";
+    m_pInstance = this;
 }
 
 
@@ -85,15 +88,23 @@ const char * Capsule_GPSWatch::getCurrentStateString() const
     return stateNames[currentState];
 }
 
+void Capsule_GPSWatch::sendRegisterListener()
+{
+   GPSPort().registerListener().send();
+}
 
+void Capsule_GPSWatch::sendUnRegisterListener()
+{
+   GPSPort().unregisterListener().send();
+}
 
 
 void Capsule_GPSWatch::entryaction_____top__initialize__ActionChain2__onEntry( const UMLRTInMessage & msg )
 {
     uint8_t buff0[msg.sizeDecoded()];
     void * const rtdata = buff0;
+    std::cout << getName() << ": initialize" << std::endl;
     msg.decode( rtdata );
-    GPSPort().registerListener().send();
     msg.destroy( (void *)buff0 );
 }
 
@@ -187,6 +198,10 @@ Capsule_GPSWatch::State Capsule_GPSWatch::state_____top__Initializing( const UML
     return currentState;
 }
 
+Capsule_GPSWatch *Capsule_GPSWatch::getInstance()
+{
+   return m_pInstance;
+}
 
 static const UMLRTCommsPortRole portroles_border[] = 
 {
@@ -223,4 +238,14 @@ const UMLRTCapsuleClass GPSWatch =
     0,
     NULL
 };
+
+extern "C" void call_sendRegisterListener()
+{
+   Capsule_GPSWatch::getInstance()->sendRegisterListener();
+}
+
+extern "C" void call_sendUnRegisterListener()
+{
+   Capsule_GPSWatch::getInstance()->sendUnRegisterListener();
+}
 

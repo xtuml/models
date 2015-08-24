@@ -32,6 +32,9 @@ public:
     virtual void inject( const UMLRTInMessage & message );
     virtual void initialize( const UMLRTInMessage & message );
     const char * getCurrentStateString() const;
+    static Capsule_GPSWatch *getInstance();
+    void sendRegisterListener();
+    void sendUnRegisterListener();
 private:
     enum State
     {
