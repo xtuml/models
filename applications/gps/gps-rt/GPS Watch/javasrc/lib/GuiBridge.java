@@ -14,8 +14,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
-import com.mentor.nucleus.bp.core.CorePlugin;
-import com.mentor.nucleus.bp.core.PendingEvent_c;
+import org.xtuml.bp.core.CorePlugin;
+import org.xtuml.bp.core.PendingEvent_c;
 
 
 public class GuiBridge {
