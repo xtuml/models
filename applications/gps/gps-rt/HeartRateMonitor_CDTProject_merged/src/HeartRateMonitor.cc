@@ -164,7 +164,7 @@ void Capsule_HeartRateMonitor::transitionaction_____top__updateHeartbeat__Action
     uint8_t buff0[msg.sizeDecoded()];
     void * const rtdata = buff0;
     msg.decode( rtdata );
-    std::cout << getName() << ": updating heartbeat" << std::endl;
+    std::cout << getName() << " updating heartbeat" << std::endl;
 
     HeartRatePort().updateHeartRate(6).send();
     Tracking_HR_heartRateChanged(6);

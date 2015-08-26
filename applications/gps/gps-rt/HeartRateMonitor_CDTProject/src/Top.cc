@@ -70,9 +70,9 @@ static const UMLRTCapsuleRole roles[] =
 
 static void instantiate_Top( const UMLRTRtsInterface * rts, UMLRTSlot * slot, const UMLRTCommsPort * * borderPorts )
 {
-    UMLRTFrameService::connectPorts( &slot->parts[Capsule_Top::part_HeartRateMonitor].slots[0]->ports[Capsule_HeartRateMonitor::borderport_HeartRatePort], 0, &slot->parts[Capsule_Top::part_GPSWatch].slots[0]->ports[Capsule_GPSWatch::borderport_GPSPort], 0 );
-    HeartRateMonitor.instantiate( NULL, slot->parts[Capsule_Top::part_HeartRateMonitor].slots[0], UMLRTFrameService::createBorderPorts( slot->parts[Capsule_Top::part_HeartRateMonitor].slots[0], HeartRateMonitor.numPortRolesBorder ) );
+    UMLRTFrameService::connectPorts( &slot->parts[Capsule_Top::part_GPSWatch].slots[0]->ports[Capsule_GPSWatch::borderport_GPSPort], 0, &slot->parts[Capsule_Top::part_HeartRateMonitor].slots[0]->ports[Capsule_HeartRateMonitor::borderport_HeartRatePort], 0 );
     GPSWatch.instantiate( NULL, slot->parts[Capsule_Top::part_GPSWatch].slots[0], UMLRTFrameService::createBorderPorts( slot->parts[Capsule_Top::part_GPSWatch].slots[0], GPSWatch.numPortRolesBorder ) );
+    HeartRateMonitor.instantiate( NULL, slot->parts[Capsule_Top::part_HeartRateMonitor].slots[0], UMLRTFrameService::createBorderPorts( slot->parts[Capsule_Top::part_HeartRateMonitor].slots[0], HeartRateMonitor.numPortRolesBorder ) );
     slot->capsule = new Capsule_Top( &Top, slot, borderPorts, NULL, false );
 }
 
