@@ -27,11 +27,11 @@ Capsule_HeartRateMonitor::Capsule_HeartRateMonitor( const UMLRTCapsuleClass * cd
 }
 
 
+
 HeartRateMonitorProtocol_baserole Capsule_HeartRateMonitor::HeartRatePort() const
 {
     return HeartRateMonitorProtocol_baserole( borderPorts[borderport_HeartRatePort] );
 }
-
 
 UMLRTTimerProtocol_baserole Capsule_HeartRateMonitor::timer() const
 {
@@ -140,7 +140,7 @@ void Capsule_HeartRateMonitor::transitionaction_____top__onRegisterListener__Act
     msg.decode( rtdata );
     std::cout << getName() << ": Listener Registered" << std::endl;
 
-    timerID=timer().informEvery(UMLRTTimespec(6,0));  // Send a timeout signal every 6 seconds.
+    timerID=timer().informEvery(UMLRTTimespec(3,0));  // Send a timeout signal every 3 seconds. HeartRateSamplingPeriod in xtuml model.
     if(!timerID.isValid()) { std::cout << "Error setting timer" << std::endl; } else {{ std::cout << "timer set" << std::endl; }};
     msg.destroy( (void *)buff0 );
 }
@@ -202,6 +202,17 @@ Capsule_HeartRateMonitor::State Capsule_HeartRateMonitor::state_____top__monitor
 {
     switch( msg.destPort->role()->id )
     {
+    case port_timer:
+        switch( msg.getSignalId() )
+        {
+        case UMLRTTimerProtocol::signal_timeout:
+            msg.decodeInit( NULL );
+            return junction_____top__Junction1( msg );
+        default:
+            this->unexpectedMessage();
+            break;
+        }
+        return currentState;
     case port_HeartRatePort:
         switch( msg.getSignalId() )
         {
@@ -209,17 +220,6 @@ Capsule_HeartRateMonitor::State Capsule_HeartRateMonitor::state_____top__monitor
             msg.decodeInit( NULL );
             actionchain_____top__onUnregisterListener__ActionChain5( msg );
             return top__idle;
-        default:
-            this->unexpectedMessage();
-            break;
-        }
-        return currentState;
-    case port_timer:
-        switch( msg.getSignalId() )
-        {
-        case UMLRTTimerProtocol::signal_timeout:
-            msg.decodeInit( NULL );
-            return junction_____top__Junction1( msg );
         default:
             this->unexpectedMessage();
             break;

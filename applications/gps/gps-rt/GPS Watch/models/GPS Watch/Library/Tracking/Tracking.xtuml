@@ -864,6 +864,7 @@ INSERT INTO SPR_RS
 select any session from instances of WorkoutSession;
 if (not empty session)
   session.addHeartRateSample(heartRate: param.heartRate);
+  bridge LOG::LogInteger(message:" received beats ", i:param.heartRate);
 end if;',
 	1);
 INSERT INTO C_EP_PROXY

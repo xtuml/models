@@ -405,13 +405,54 @@ Tracking_WorkoutSession_MDA_currentPace( Tracking_WorkoutSession * self )
 i_t
 Tracking_WorkoutSession_MDA_currentHeartRate( Tracking_WorkoutSession * self )
 {
-  i_t sum;Tracking_WorkoutTimer * workoutTimer=0;
+  Tracking_HeartRateSample * sample=0;i_t sum;i_t numberOfSamples;Tracking_WorkoutTimer * workoutTimer=0;Escher_ObjectSet_s samples_space={0}; Escher_ObjectSet_s * samples = &samples_space;
   /* SELECT one workoutTimer RELATED BY self->WorkoutTimer[R8.is timed by] */
   XTUML_OAL_STMT_TRACE( 1, "SELECT one workoutTimer RELATED BY self->WorkoutTimer[R8.is timed by]" );
   workoutTimer = ( 0 != self ) ? self->WorkoutTimer_R8_is_timed_by : 0;
+  /* SELECT many samples RELATED BY self->HeartRateSample[R6.tracks heart rate over time as] WHERE ( ( SELECTED.time >= ( workoutTimer.time - ( HeartRateSamplingPeriod * HeartRateAveragingWindow ) ) ) ) */
+  XTUML_OAL_STMT_TRACE( 1, "SELECT many samples RELATED BY self->HeartRateSample[R6.tracks heart rate over time as] WHERE ( ( SELECTED.time >= ( workoutTimer.time - ( HeartRateSamplingPeriod * HeartRateAveragingWindow ) ) ) )" );
+  Escher_ClearSet( samples );
+  {Tracking_HeartRateSample * selected;
+  Escher_Iterator_s iHeartRateSample_R6_tracks_heart_rate_over_time_as;
+  Escher_IteratorReset( &iHeartRateSample_R6_tracks_heart_rate_over_time_as, &self->HeartRateSample_R6_tracks_heart_rate_over_time_as );
+  while ( 0 != ( selected = (Tracking_HeartRateSample *) Escher_IteratorNext( &iHeartRateSample_R6_tracks_heart_rate_over_time_as ) ) ) {
+    if ( ( selected->time >= ( workoutTimer->time - ( 3 * 5 ) ) ) ) {
+      if ( ! Escher_SetContains( (Escher_ObjectSet_s *) samples, selected ) ) {
+        Escher_SetInsertElement( (Escher_ObjectSet_s *) samples, selected );
+  }}}}
+  /* ASSIGN numberOfSamples = 0 */
+  XTUML_OAL_STMT_TRACE( 1, "ASSIGN numberOfSamples = 0" );
+  numberOfSamples = 0;
   /* ASSIGN sum = 0 */
   XTUML_OAL_STMT_TRACE( 1, "ASSIGN sum = 0" );
   sum = 0;
+  /* FOR EACH sample IN samples */
+  XTUML_OAL_STMT_TRACE( 1, "FOR EACH sample IN samples" );
+  { Escher_Iterator_s itersample;
+  Tracking_HeartRateSample * iisample;
+  Escher_IteratorReset( &itersample, samples );
+  while ( (iisample = (Tracking_HeartRateSample *)Escher_IteratorNext( &itersample )) != 0 ) {
+    sample = iisample; {
+    /* ASSIGN numberOfSamples = ( numberOfSamples + 1 ) */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN numberOfSamples = ( numberOfSamples + 1 )" );
+    numberOfSamples = ( numberOfSamples + 1 );
+    /* ASSIGN sum = ( sum + sample.heartRate ) */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN sum = ( sum + sample.heartRate )" );
+    sum = ( sum + sample->heartRate );
+  }}}
+  /* IF ( ( numberOfSamples > 0 ) ) */
+  XTUML_OAL_STMT_TRACE( 1, "IF ( ( numberOfSamples > 0 ) )" );
+  if ( ( numberOfSamples > 0 ) ) {
+    /* ASSIGN self.currentHeartRate = ( sum / numberOfSamples ) */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN self.currentHeartRate = ( sum / numberOfSamples )" );
+    self->currentHeartRate = ( sum / numberOfSamples );
+  }
+  else {
+    /* ASSIGN self.currentHeartRate = 0 */
+    XTUML_OAL_STMT_TRACE( 2, "ASSIGN self.currentHeartRate = 0" );
+    self->currentHeartRate = 0;
+  }
+  Escher_ClearSet( samples ); 
 
   return self->currentHeartRate;
 }

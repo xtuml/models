@@ -19,14 +19,12 @@ public:
     {
         borderport_HeartRatePort
     };
-protected:
-    HeartRateMonitorProtocol_baserole HeartRatePort() const;
-public:
     enum InternalPortId
     {
         internalport_timer
     };
 protected:
+    HeartRateMonitorProtocol_baserole HeartRatePort() const;
     UMLRTTimerProtocol_baserole timer() const;
 public:
     enum PartId

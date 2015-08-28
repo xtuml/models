@@ -13,6 +13,7 @@
 #include "UI_classes.h"
 #include "UI_GuiBridge_bridge.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -160,7 +161,7 @@ pthread_t   threadId;
   struct sockaddr_in address;      /* socket address stuff */
   char cIP[50];
   
-  while (TRUE) /* continue till a connection has been made */
+  while (true) /* continue till a connection has been made */
   {
 #if defined(_WIN32) || defined(WIN32)
     wVersionRequested = MAKEWORD( 1, 1 );

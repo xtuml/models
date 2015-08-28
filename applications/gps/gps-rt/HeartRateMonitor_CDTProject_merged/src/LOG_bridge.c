@@ -81,9 +81,10 @@ LOG_LogReal( c_t p_message[ESCHER_SYS_MAX_STRING_LEN], const r_t p_r )
  * Bridge:  LogInteger
  */
 void
-LOG_LogInteger( const i_t p_message )
+LOG_LogInteger( const i_t p_i, c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 {
   /* Replace/Insert your implementation code here... */
+   printf("%u%s\n", p_i, p_message);
 }
 
 

@@ -29,7 +29,7 @@ CC_INCLUDES:=$(foreach i, $(CC_INCLUDES), $(CC_INC)$i)
 LD_LIBS:=$(foreach i, $(LD_LIBS), $(LD_LIB)$i)
 LD_PATHS:=$(foreach i, $(LD_PATHS), $(LD_LIBPATH)$i)
 
-SRCS = TopMain.cc TopControllers.cc HeartRateMonitor.cc Top.cc HeartRateMonitorProtocol.cc GPSWatch.cc 
+SRCS = TopMain.cc TopControllers.cc Top.cc HeartRateMonitor.cc GPSWatch.cc HeartRateMonitorProtocol.cc 
 OBJS = $(subst $(CC_EXT),$(OBJ_EXT),$(SRCS))
 
 MAIN = TopMain$(EXE_EXT)

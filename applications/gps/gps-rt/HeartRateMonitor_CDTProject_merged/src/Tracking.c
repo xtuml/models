@@ -260,6 +260,9 @@ Tracking_HR_heartRateChanged( const i_t p_heartRate )
     /* session.addHeartRateSample( heartRate:PARAM.heartRate ) */
     XTUML_OAL_STMT_TRACE( 2, "session.addHeartRateSample( heartRate:PARAM.heartRate )" );
     Tracking_WorkoutSession_op_addHeartRateSample( session,  p_heartRate );
+    /* LOG::LogInteger( i:PARAM.heartRate, message: received beats  ) */
+    XTUML_OAL_STMT_TRACE( 2, "LOG::LogInteger( i:PARAM.heartRate, message: received beats  )" );
+    LOG_LogInteger( p_heartRate, " received beats " );
   }
 }
 
