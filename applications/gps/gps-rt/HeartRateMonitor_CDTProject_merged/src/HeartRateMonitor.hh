@@ -42,6 +42,7 @@ public:
 protected:
     UMLRTTimerId timerID;
 public:
+    int currentHeartRate;
     virtual void inject( const UMLRTInMessage & message );
     virtual void initialize( const UMLRTInMessage & message );
     const char * getCurrentStateString() const;

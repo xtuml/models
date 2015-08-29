@@ -141,6 +141,7 @@ void Capsule_HeartRateMonitor::transitionaction_____top__onRegisterListener__Act
     msg.decode( rtdata );
     std::cout << getName() << ": Listener Registered" << std::endl;
 
+    currentHeartRate=50;
     timerID=timer().informEvery(UMLRTTimespec(3,0));  // Send a timeout signal every 3 seconds. HeartRateSamplingPeriod in xtuml model.
     if(!timerID.isValid()) { std::cout << "Error setting timer" << std::endl; } else {{ std::cout << "timer set" << std::endl; }};
     msg.destroy( (void *)buff0 );
@@ -166,8 +167,8 @@ void Capsule_HeartRateMonitor::transitionaction_____top__updateHeartbeat__Action
     msg.decode( rtdata );
     std::cout << getName() << " updating heartbeat" << std::endl;
 
-    HeartRatePort().updateHeartRate(6).send();
-    Tracking_HR_heartRateChanged(6);
+    HeartRatePort().updateHeartRate(currentHeartRate).send();
+    currentHeartRate = currentHeartRate + 1;
     msg.destroy( (void *)buff0 );
 }
 
