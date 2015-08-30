@@ -168,6 +168,7 @@ void Capsule_HeartRateMonitor::transitionaction_____top__updateHeartbeat__Action
     std::cout << getName() << " updating heartbeat" << std::endl;
 
     HeartRatePort().updateHeartRate(currentHeartRate).send();
+    Tracking_HR_heartRateChanged(currentHeartRate);
     currentHeartRate = currentHeartRate + 1;
     msg.destroy( (void *)buff0 );
 }
