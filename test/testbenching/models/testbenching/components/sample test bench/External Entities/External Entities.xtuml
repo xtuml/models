@@ -1,4 +1,4 @@
--- BP 7.1 content: Package syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO EP_PKG
 	VALUES ("dd1a160d-ad4a-4257-ad20-8e189d88a56d",
@@ -24,13 +24,15 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'');
+	'',
+	'testbenching::components::sample test bench::External Entities');
 INSERT INTO GD_GE
 	VALUES ("b29f3c5a-b540-4266-a7c7-0e6504c70ee0",
 	"fbf8356a-09a5-4a8a-aef7-b30d2d786bd6",
 	"b6143c92-c937-4078-be28-e991baad5397",
 	12,
-	0);
+	0,
+	'testbenching::components::sample test bench::External Entities::Time');
 INSERT INTO GD_SHP
 	VALUES ("b29f3c5a-b540-4266-a7c7-0e6504c70ee0");
 INSERT INTO GD_NCS
@@ -53,7 +55,8 @@ INSERT INTO GD_GE
 	"fbf8356a-09a5-4a8a-aef7-b30d2d786bd6",
 	"1d25d090-de46-4fdd-8917-bd4d56788b14",
 	12,
-	0);
+	0,
+	'testbenching::components::sample test bench::External Entities::Architecture');
 INSERT INTO GD_SHP
 	VALUES ("050158b7-b5f9-4204-9977-fecbbe46516e");
 INSERT INTO GD_NCS
@@ -76,7 +79,8 @@ INSERT INTO GD_GE
 	"fbf8356a-09a5-4a8a-aef7-b30d2d786bd6",
 	"afa00069-1f39-4e17-b0c8-c25a53b61edc",
 	12,
-	0);
+	0,
+	'testbenching::components::sample test bench::External Entities::Logging');
 INSERT INTO GD_SHP
 	VALUES ("a25ff91c-1f23-4e48-88af-94b59482ff24");
 INSERT INTO GD_NCS
@@ -101,18 +105,15 @@ INSERT INTO DIM_DIA
 	3969.000000,
 	2950.000000,
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO PE_PE
-	VALUES ("b6143c92-c937-4078-be28-e991baad5397",
-	1,
-	"dd1a160d-ad4a-4257-ad20-8e189d88a56d",
-	"00000000-0000-0000-0000-000000000000",
-	5);
 INSERT INTO S_EE
 	VALUES ("b6143c92-c937-4078-be28-e991baad5397",
 	'Time',
 	'The Time external entity provides date, timestamp, and timer related operations.',
 	'TIM',
-	"00000000-0000-0000-0000-000000000000");
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	'Time',
+	1);
 INSERT INTO S_BRG
 	VALUES ("80c18872-24bf-41fc-b460-c21f8eeecf65",
 	"b6143c92-c937-4078-be28-e991baad5397",
@@ -476,7 +477,7 @@ INSERT INTO S_BPARM
 	"00000000-0000-0000-0000-000000000000",
 	'');
 INSERT INTO PE_PE
-	VALUES ("1d25d090-de46-4fdd-8917-bd4d56788b14",
+	VALUES ("b6143c92-c937-4078-be28-e991baad5397",
 	1,
 	"dd1a160d-ad4a-4257-ad20-8e189d88a56d",
 	"00000000-0000-0000-0000-000000000000",
@@ -486,7 +487,10 @@ INSERT INTO S_EE
 	'Architecture',
 	'',
 	'ARCH',
-	"00000000-0000-0000-0000-000000000000");
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	'Architecture',
+	0);
 INSERT INTO S_BRG
 	VALUES ("475bfa24-b2fd-43e1-a183-a049015d27b4",
 	"1d25d090-de46-4fdd-8917-bd4d56788b14",
@@ -498,7 +502,7 @@ INSERT INTO S_BRG
 	1,
 	'');
 INSERT INTO PE_PE
-	VALUES ("afa00069-1f39-4e17-b0c8-c25a53b61edc",
+	VALUES ("1d25d090-de46-4fdd-8917-bd4d56788b14",
 	1,
 	"dd1a160d-ad4a-4257-ad20-8e189d88a56d",
 	"00000000-0000-0000-0000-000000000000",
@@ -508,7 +512,10 @@ INSERT INTO S_EE
 	'Logging',
 	'',
 	'LOG',
-	"00000000-0000-0000-0000-000000000000");
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	'Logging',
+	1);
 INSERT INTO S_BRG
 	VALUES ("9149130a-6004-4f57-96be-0dedf8f0feae",
 	"afa00069-1f39-4e17-b0c8-c25a53b61edc",
@@ -669,12 +676,28 @@ INSERT INTO S_BPARM
 	'',
 	"00000000-0000-0000-0000-000000000000",
 	'');
-INSERT INTO PE_PE_PROXY
+INSERT INTO PE_PE
+	VALUES ("afa00069-1f39-4e17-b0c8-c25a53b61edc",
+	1,
+	"dd1a160d-ad4a-4257-ad20-8e189d88a56d",
+	"00000000-0000-0000-0000-000000000000",
+	5);
+INSERT INTO PE_PE
 	VALUES ("dd1a160d-ad4a-4257-ad20-8e189d88a56d",
 	1,
 	"00000000-0000-0000-0000-000000000000",
 	"d13f649f-f241-48b9-af7a-831f14fb7c1a",
-	7,
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("d13f649f-f241-48b9-af7a-831f14fb7c1a",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'sample test bench',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
 	'../sample test bench.xtuml');
 INSERT INTO S_SYS_PROXY
 	VALUES ("d8d8e64a-9be2-44d8-9846-63e8493caa3c",
