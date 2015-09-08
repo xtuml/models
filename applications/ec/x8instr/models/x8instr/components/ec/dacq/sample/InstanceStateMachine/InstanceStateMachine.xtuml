@@ -161,31 +161,31 @@ INSERT INTO SM_ACT
 	VALUES ("e83fd0ae-a863-4f9e-bcef-b26f9276b799",
 	"8f53cb30-fd73-4347-b8e6-d540e1459cd1",
 	1,
-	'select any measurement from instances of MEASUREMENT;
-if ( not_empty measurement )
+	'select any reading from instances of READING;
+if ( not_empty reading )
   self.data = param.data;
   self.length = param.length;
-  self.record_number = measurement.record_count;
+  self.record_number = reading.record_count;
 
-  select one newest_sample related by measurement->SAMPLE[R21];
+  select one newest_sample related by reading->SAMPLE[R21];
 
   if ( empty newest_sample )
     // this is the first sample
-    relate measurement to self across R21.''has newest'';
-    relate measurement to self across R22.''has oldest'';
+    relate reading to self across R21.''has newest'';
+    relate reading to self across R22.''has oldest'';
   else 
-    unrelate measurement from newest_sample across R21.''has newest'';
-    relate measurement to self across R21.''has newest'';
+    unrelate reading from newest_sample across R21.''has newest'';
+    relate reading to self across R21.''has newest'';
     relate self to newest_sample across R23.''precedes'';
   end if;
   
   // Now, see if the SD is ready.  If so, get self written to SD.
-  if ( measurement.SD_ready )
+  if ( reading.SD_ready )
     generate SAMPLE2:storage_ready() to self;
   end if;
   
 else
-  LOG::LogFailure( message:"sample arrived but no measurement existed" );
+  LOG::LogFailure( message:"sample arrived but no reading existed" );
 end if;
 ',
 	'');
@@ -202,20 +202,20 @@ INSERT INTO SM_ACT
 	1,
 	'// Write ourself out to SD by sending a write.
 // Mark SD busy until SD responds back with SD_ready.
-select one measurement related by self->MEASUREMENT[R22];
+select one reading related by self->READING[R22];
 
 // Unlink as oldest.
-unrelate measurement from self across R22.''has oldest'';
+unrelate reading from self across R22.''has oldest'';
 select one previous_sample related by self->SAMPLE[R23.''follows''];
 if ( not_empty previous_sample )
   unrelate previous_sample from self across R23.''precedes'';
-  relate measurement to previous_sample across R22.''has oldest'';
+  relate reading to previous_sample across R22.''has oldest'';
 else
   // I am the last sample, unlink from newest.
-  unrelate measurement from self across R21.''has newest'';
+  unrelate reading from self across R21.''has newest'';
 end if;
 
-measurement.SD_ready = false;
+reading.SD_ready = false;
 //send SD::write(
 //  Ax:self.Ax, Ay:self.Ay, Az:self.Az,
 //  Ox:self.Ox, Oy:self.Oy, Oz:self.Oz,

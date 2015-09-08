@@ -62,7 +62,7 @@ INSERT INTO SM_EVT
 	'go',
 	0,
 	'',
-	'MEASUREMENT1',
+	'READING1',
 	'');
 INSERT INTO SM_LEVT
 	VALUES ("419ac6d1-cf86-41f5-8423-e84c3d27c9da",
@@ -80,7 +80,7 @@ INSERT INTO SM_EVT
 	'tick',
 	0,
 	'',
-	'MEASUREMENT2',
+	'READING2',
 	'');
 INSERT INTO SM_LEVT
 	VALUES ("f8774989-aca7-4282-a9af-9b6388633d48",
@@ -98,7 +98,7 @@ INSERT INTO SM_EVT
 	'sample_ready',
 	0,
 	'',
-	'MEASUREMENT3',
+	'READING3',
 	'');
 INSERT INTO SM_LEVT
 	VALUES ("e67c4717-b3bd-4294-b941-bdaa62b3e82b",
@@ -116,7 +116,7 @@ INSERT INTO SM_EVT
 	'acquisition_fulfilled',
 	0,
 	'',
-	'MEASUREMENT4',
+	'READING4',
 	'');
 INSERT INTO SM_STATE
 	VALUES ("fba47d14-0fa9-4e54-9266-9cc630e36919",
@@ -353,7 +353,12 @@ INSERT INTO SM_ACT
 	VALUES ("b828d3fa-66f1-4443-8f19-93fbb1e26bcf",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'create event instance tick of MEASUREMENT2:tick() to self;
+	'// Inform the hardware of where to stow the collected data.
+HW::dacq_setup( data:0, length:0 );
+
+// Set up a recurring timer that fires for each dacq conversion needed.
+create event instance tick of READING2:tick() to self;
+self.conversion_timer = TIM::timer_start_recurring( microseconds:0, event_inst:tick );
 
 ',
 	'');
@@ -367,7 +372,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("f5b92a7e-20cf-4180-b3f6-b4ecf8e187b4",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO SM_MOAH
@@ -380,7 +385,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("a8d7b427-2d6f-4bdf-83cf-615db728a791",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO SM_MOAH
@@ -393,7 +398,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("519683ba-8eaa-462f-a487-f2e49fb0fa11",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO SM_TAH
@@ -406,7 +411,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("3564aa73-8456-487b-933a-e040f9e74569",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO SM_TAH
@@ -419,7 +424,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("fd496bb0-14be-4e25-871d-10cd5de983f2",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO SM_TAH
@@ -432,7 +437,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("60f817ee-cb3a-42f0-8a35-23eebaad8290",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO SM_TAH
@@ -445,7 +450,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("43f63bde-c8eb-4872-9ef4-d74828a8ae3b",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO GD_MD
@@ -466,14 +471,14 @@ INSERT INTO GD_MD
 	0,
 	0,
 	'4.1.17',
-	'x8instr::components::ec::dacq::buffer::Instance State Machine');
+	'x8instr::components::ec::dacq::reading::Instance State Machine');
 INSERT INTO GD_GE
 	VALUES ("93c9c8c9-851e-4fe3-b49d-bd785cb960ed",
 	"25195e87-9207-4252-a70d-150d5aca6068",
 	"fba47d14-0fa9-4e54-9266-9cc630e36919",
 	41,
 	0,
-	'x8instr::components::ec::dacq::buffer::Instance State Machine::starting');
+	'x8instr::components::ec::dacq::reading::Instance State Machine::starting');
 INSERT INTO GD_SHP
 	VALUES ("93c9c8c9-851e-4fe3-b49d-bd785cb960ed");
 INSERT INTO GD_NCS
@@ -502,7 +507,7 @@ INSERT INTO GD_GE
 	"56b2f02d-df33-45ed-b396-bb3eecc9caa5",
 	41,
 	0,
-	'x8instr::components::ec::dacq::buffer::Instance State Machine::converting');
+	'x8instr::components::ec::dacq::reading::Instance State Machine::converting');
 INSERT INTO GD_SHP
 	VALUES ("de694cff-8225-4d8c-b983-4b7138df51ac");
 INSERT INTO GD_NCS
@@ -541,7 +546,7 @@ INSERT INTO GD_GE
 	"97bfa24a-7584-410b-a8da-77152c8e885c",
 	41,
 	0,
-	'x8instr::components::ec::dacq::buffer::Instance State Machine::receiving sample');
+	'x8instr::components::ec::dacq::reading::Instance State Machine::receiving sample');
 INSERT INTO GD_SHP
 	VALUES ("2f1f6780-55fe-4e19-acbf-446a2e60682d");
 INSERT INTO GD_NCS
@@ -580,7 +585,7 @@ INSERT INTO GD_GE
 	"f1029747-9e45-46df-b2cc-3786708503b1",
 	41,
 	0,
-	'x8instr::components::ec::dacq::buffer::Instance State Machine::done');
+	'x8instr::components::ec::dacq::reading::Instance State Machine::done');
 INSERT INTO GD_SHP
 	VALUES ("67ad633a-bf2d-4d43-af29-74649d40e23a");
 INSERT INTO GD_NCS
@@ -609,7 +614,7 @@ INSERT INTO GD_GE
 	"c1aee0f7-5ae6-4501-8701-07281861dc03",
 	42,
 	0,
-	'x8instr::components::ec::dacq::buffer::Instance State Machine::starting::MEASUREMENT1: go');
+	'x8instr::components::ec::dacq::reading::Instance State Machine::starting::READING1: go');
 INSERT INTO GD_CON
 	VALUES ("c1043152-15da-458b-93e0-deaa2cfb94c8",
 	"00000000-0000-0000-0000-000000000000");
@@ -709,7 +714,7 @@ INSERT INTO GD_GE
 	"c1d9b64a-4bc8-4afe-a575-7e4055635a3e",
 	42,
 	0,
-	'x8instr::components::ec::dacq::buffer::Instance State Machine::converting::MEASUREMENT3: sample_ready');
+	'x8instr::components::ec::dacq::reading::Instance State Machine::converting::READING3: sample_ready');
 INSERT INTO GD_CON
 	VALUES ("f114d7fb-c7ca-4fc9-aa8b-c7d6dcd95e7d",
 	"00000000-0000-0000-0000-000000000000");
@@ -809,7 +814,7 @@ INSERT INTO GD_GE
 	"00ad0f1e-1723-45d5-b1b7-2c269737742e",
 	42,
 	0,
-	'x8instr::components::ec::dacq::buffer::Instance State Machine::receiving sample::MEASUREMENT2: tick');
+	'x8instr::components::ec::dacq::reading::Instance State Machine::receiving sample::READING2: tick');
 INSERT INTO GD_CON
 	VALUES ("90532c2f-31ac-4463-a4e0-9667a75eb8a4",
 	"00000000-0000-0000-0000-000000000000");
@@ -935,7 +940,7 @@ INSERT INTO GD_GE
 	"71a64cd4-4557-4736-8b07-d6d2b79c644a",
 	42,
 	0,
-	'x8instr::components::ec::dacq::buffer::Instance State Machine::receiving sample::MEASUREMENT4: acquisition_fulfilled');
+	'x8instr::components::ec::dacq::reading::Instance State Machine::receiving sample::READING4: acquisition_fulfilled');
 INSERT INTO GD_CON
 	VALUES ("f1591d63-eb72-4f68-9977-979e9eb39616",
 	"00000000-0000-0000-0000-000000000000");
@@ -1038,9 +1043,9 @@ INSERT INTO DIM_DIA
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_OBJ_PROXY
 	VALUES ("8ad0dd13-6581-4222-a0b7-04cdb41ae032",
-	'buffer',
+	'reading',
 	21,
-	'MEASUREMENT',
+	'READING',
 	'',
 	"00000000-0000-0000-0000-000000000000",
-	'../buffer.xtuml');
+	'../reading.xtuml');

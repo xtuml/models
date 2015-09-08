@@ -2,9 +2,9 @@
 
 INSERT INTO O_OBJ
 	VALUES ("8ad0dd13-6581-4222-a0b7-04cdb41ae032",
-	'buffer',
+	'reading',
 	21,
-	'BUFFER',
+	'READING',
 	'',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_TFR
@@ -14,11 +14,11 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
-	'create object instance measurement of MEASUREMENT;
-measurement.filename = "file01.txt";  // CDS Use better strategy here.
-measurement.start_time = 0;
-measurement.SD_ready = false;
-measurement.record_count = 0;',
+	'create object instance reading of READING;
+reading.filename = "file01.txt";  // CDS Use better strategy here.
+reading.start_time = 0;
+reading.SD_ready = false;
+reading.record_count = 0;',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");
@@ -29,16 +29,16 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
-	'select any measurement from instances of MEASUREMENT;
-if ( not_empty measurement )
-  measurement.record_count = measurement.record_count + 1;
+	'select any reading from instances of READING;
+if ( not_empty reading )
+  reading.record_count = reading.record_count + 1;
   // create the new sample
   create object instance sample of SAMPLE;
   d[1]=0;d[0]=1;
   generate SAMPLE1:arrived( data:d, length:1 ) to sample;
   LOG::LogInfo( message:"sample received" );
 else
-  LOG::LogFailure( message:"sample arrived but no measurement exists" );
+  LOG::LogFailure( message:"sample arrived but no reading exists" );
 end if;',
 	1,
 	'',
@@ -47,30 +47,18 @@ INSERT INTO O_TPARM
 	VALUES ("6dec0b43-5100-46f5-88f6-656bb3862808",
 	"6b160328-553c-405d-84db-a5e7f1a7a7a8",
 	'data',
-	"ba5eda7a-def5-0000-0000-000000000002",
+	"66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
 	1,
-	'[256]',
+	'',
 	"00000000-0000-0000-0000-000000000000",
 	'');
-INSERT INTO S_DIM
-	VALUES (256,
-	0,
+INSERT INTO S_DT_PROXY
+	VALUES ("66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
 	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"6dec0b43-5100-46f5-88f6-656bb3862808",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"bf8ab5d4-f5a6-440c-b817-9ef654d874ba",
-	"00000000-0000-0000-0000-000000000000");
+	'dataptr',
+	'',
+	'',
+	'../../../../../../../x8shared/models/x8shared/x8types/x8types.xtuml');
 INSERT INTO O_TPARM
 	VALUES ("020e3e6c-dd39-417d-a377-aabb3367168e",
 	"6b160328-553c-405d-84db-a5e7f1a7a7a8",

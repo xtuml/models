@@ -32,7 +32,7 @@ INSERT INTO GD_GE
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
 	21,
 	0,
-	'x8instr::components::ec::dacq::buffer');
+	'x8instr::components::ec::dacq::reading');
 INSERT INTO GD_SHP
 	VALUES ("a791e1f3-823d-4765-b8b6-e8980ce2f669");
 INSERT INTO GD_NCS
@@ -933,12 +933,12 @@ INSERT INTO R_OIR
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_OBJ_PROXY
 	VALUES ("8ad0dd13-6581-4222-a0b7-04cdb41ae032",
-	'buffer',
+	'reading',
 	21,
-	'MEASUREMENT',
+	'READING',
 	'',
 	"00000000-0000-0000-0000-000000000000",
-	'./buffer/buffer.xtuml');
+	'./reading/reading.xtuml');
 INSERT INTO R_PART
 	VALUES ("b28182ed-31ef-4127-a900-d5f3fbbe08c0",
 	"5299c828-db93-4cb1-9d42-e27458424415",
@@ -1218,13 +1218,13 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'sample_ready',
 	'',
-	'// Find the currently running measurement.
-select any measurement from instances of MEASUREMENT;
-if ( not_empty measurement )
-  // Make a note in measurement that the SD is ready to receive data.
-  measurement.SD_ready = true;
+	'// Find the currently active reading.
+select any reading from instances of READING;
+if ( not_empty reading )
+  // Make a note in reading that the SD is ready to receive data.
+  reading.SD_ready = true;
   // Find the oldest sample and tell it to get itself written.
-  select one sample related by measurement->SAMPLE[R22.''has oldest''];
+  select one sample related by reading->SAMPLE[R22.''has oldest''];
   if ( not_empty sample )
     generate SAMPLE2:storage_ready() to sample;
   end if;
