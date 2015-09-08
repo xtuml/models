@@ -353,8 +353,13 @@ INSERT INTO SM_ACT
 	VALUES ("b828d3fa-66f1-4443-8f19-93fbb1e26bcf",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'// Inform the hardware of where to stow the collected data.
-HW::dacq_setup( data:0, length:0 );
+	'select one buffer related by self->BUFFER[R28.''stows in''];
+if ( not_empty buffer )
+  // Inform the hardware of where to stow the collected data.
+  HW::dacq_setup( data:buffer.beginning, length:buffer.capacity );
+else
+  LOG::LogFailure( message:"no buffer found when one should be there" );
+end if;
 
 // Set up a recurring timer that fires for each dacq conversion needed.
 create event instance tick of READING2:tick() to self;
@@ -373,7 +378,7 @@ INSERT INTO SM_ACT
 	VALUES ("f5b92a7e-20cf-4180-b3f6-b4ecf8e187b4",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'',
+	'HW::ADC_convert();',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("a8d7b427-2d6f-4bdf-83cf-615db728a791",

@@ -80,10 +80,12 @@ INSERT INTO O_TFR
 	"3f2abfce-3c83-4930-a1a3-99387d1218b1",
 	0,
 	'create object instance buffer of BUFFER;
-buffer.in = 0;
-buffer.out = 0;
+buffer.beginning = param.beginning;
+buffer.ending = param.ending;
+buffer.capacity = buffer.ending - buffer.beginning + 1; // zero base
+buffer.in = buffer.beginning;
+buffer.out = buffer.beginning;
 buffer.amount = 0;
-buffer.capacity = param.capacity;
 buffer.available = true;
 buffer.overrun = false;
 return buffer;',
@@ -91,13 +93,22 @@ return buffer;',
 	'',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_TPARM
-	VALUES ("132a17b7-5d6c-436e-a77f-955412be2b35",
+	VALUES ("0771b708-731d-408b-ba38-3c099caf1bf6",
 	"397543f2-d035-4969-9fce-4e7fcdb2fe2b",
-	'capacity',
+	'beginning',
 	"ba5eda7a-def5-0000-0000-000000000002",
 	0,
 	'',
 	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("93dc2fd3-ca35-4e61-be38-f2dfb6e75d5d",
+	"397543f2-d035-4969-9fce-4e7fcdb2fe2b",
+	'ending',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"0771b708-731d-408b-ba38-3c099caf1bf6",
 	'');
 INSERT INTO S_DT_PROXY
 	VALUES ("3f2abfce-3c83-4930-a1a3-99387d1218b1",
@@ -223,6 +234,42 @@ INSERT INTO O_ATTR
 	'available',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("76fd3010-22ef-4732-b147-aff1ba6a85a5",
+	"608a3e14-0609-4099-816a-0af279bb668f");
+INSERT INTO O_BATTR
+	VALUES ("76fd3010-22ef-4732-b147-aff1ba6a85a5",
+	"608a3e14-0609-4099-816a-0af279bb668f");
+INSERT INTO O_ATTR
+	VALUES ("76fd3010-22ef-4732-b147-aff1ba6a85a5",
+	"608a3e14-0609-4099-816a-0af279bb668f",
+	"24581c21-4d74-4076-9fdd-b12d69cceffd",
+	'beginning',
+	'',
+	'',
+	'beginning',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("c19dba8c-6b85-4e93-90cd-0ed2c1bc3286",
+	"608a3e14-0609-4099-816a-0af279bb668f");
+INSERT INTO O_BATTR
+	VALUES ("c19dba8c-6b85-4e93-90cd-0ed2c1bc3286",
+	"608a3e14-0609-4099-816a-0af279bb668f");
+INSERT INTO O_ATTR
+	VALUES ("c19dba8c-6b85-4e93-90cd-0ed2c1bc3286",
+	"608a3e14-0609-4099-816a-0af279bb668f",
+	"76fd3010-22ef-4732-b147-aff1ba6a85a5",
+	'ending',
+	'',
+	'',
+	'ending',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
 	'');
 INSERT INTO O_ID

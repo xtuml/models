@@ -14,29 +14,17 @@ INSERT INTO SM_EVTDI
 	"8f53cb30-fd73-4347-b8e6-d540e1459cd1",
 	'data',
 	'',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'[256]',
+	"66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
+	'',
 	"6be8eca2-88bc-4f8f-a59a-553dfd5e8749",
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO S_DIM
-	VALUES (256,
-	0,
+INSERT INTO S_DT_PROXY
+	VALUES ("66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
 	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"8f53cb30-fd73-4347-b8e6-d540e1459cd1",
-	"50f7b175-6602-4fd5-a39a-9be90d6be77b",
-	"a9020fa7-155d-4f37-a966-bcdca095808c",
-	"00000000-0000-0000-0000-000000000000");
+	'dataptr',
+	'',
+	'',
+	'../../../../../../../../x8shared/models/x8shared/x8types/x8types.xtuml');
 INSERT INTO SM_EVTDI
 	VALUES ("d7dc438c-0eff-4e8e-b4f9-d99b5fca2769",
 	"8f53cb30-fd73-4347-b8e6-d540e1459cd1",
@@ -165,7 +153,6 @@ INSERT INTO SM_ACT
 if ( not_empty reading )
   self.data = param.data;
   self.length = param.length;
-  self.record_number = reading.record_count;
 
   select one newest_sample related by reading->SAMPLE[R21];
 
@@ -177,11 +164,6 @@ if ( not_empty reading )
     unrelate reading from newest_sample across R21.''has newest'';
     relate reading to self across R21.''has newest'';
     relate self to newest_sample across R23.''precedes'';
-  end if;
-  
-  // Now, see if the SD is ready.  If so, get self written to SD.
-  if ( reading.SD_ready )
-    generate SAMPLE2:storage_ready() to self;
   end if;
   
 else
@@ -215,7 +197,6 @@ else
   unrelate reading from self across R21.''has newest'';
 end if;
 
-reading.SD_ready = false;
 //send SD::write(
 //  Ax:self.Ax, Ay:self.Ay, Az:self.Az,
 //  Ox:self.Ox, Oy:self.Oy, Oz:self.Oz,

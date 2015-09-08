@@ -1667,8 +1667,6 @@ INSERT INTO S_SYNC
 	'// Find the currently active reading.
 select any reading from instances of READING;
 if ( not_empty reading )
-  // Make a note in reading that the SD is ready to receive data.
-  reading.SD_ready = true;
   // Find the oldest sample and tell it to get itself written.
   select one sample related by reading->SAMPLE[R22.''has oldest''];
   if ( not_empty sample )

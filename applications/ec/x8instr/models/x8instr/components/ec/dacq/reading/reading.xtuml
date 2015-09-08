@@ -61,10 +61,9 @@ INSERT INTO O_TFR
 	0,
 	'select any reading from instances of READING;
 if ( not_empty reading )
-  reading.record_count = reading.record_count + 1;
   // create the new sample
   create object instance sample of SAMPLE;
-  d[1]=0;d[0]=1;
+  d = 123;
   generate SAMPLE1:arrived( data:d, length:1 ) to sample;
   LOG::LogInfo( message:"sample received" );
 else
