@@ -149,27 +149,7 @@ INSERT INTO SM_ACT
 	VALUES ("e83fd0ae-a863-4f9e-bcef-b26f9276b799",
 	"8f53cb30-fd73-4347-b8e6-d540e1459cd1",
 	1,
-	'select any reading from instances of READING;
-if ( not_empty reading )
-  self.data = param.data;
-  self.length = param.length;
-
-  select one newest_sample related by reading->SAMPLE[R21];
-
-  if ( empty newest_sample )
-    // this is the first sample
-    relate reading to self across R21.''has newest'';
-    relate reading to self across R22.''has oldest'';
-  else 
-    unrelate reading from newest_sample across R21.''has newest'';
-    relate reading to self across R21.''has newest'';
-    relate self to newest_sample across R23.''precedes'';
-  end if;
-  
-else
-  LOG::LogFailure( message:"sample arrived but no reading existed" );
-end if;
-',
+	'',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("ac9f3525-a5f4-49f9-b41e-bd926efdbdb5",

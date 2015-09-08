@@ -29,16 +29,19 @@ experiment.name = param.name;
 // Add the timeline and link the default simple waveform and data acquisition.
 timeline = TIMELINE::init();
 relate experiment to timeline across R13;
-timelineeventwave = TIMELINEEVENT::init( offset:0 );
+
+timelineeventwave = TIMELINEEVENT::init( offset:0, duration:0 );
 wave = WAVE::init();
 relate wave to timelineeventwave across R10;
 timeline.add( timelineevent:timelineeventwave );
 
-timelineeventdacq = TIMELINEEVENT::init( offset:0 );
+timelineeventdacq = TIMELINEEVENT::init( offset:0, duration:2000 );
 dacq = DACQ::init();
 relate dacq to timelineeventdacq across R10;
 timeline.add( timelineevent:timelineeventdacq );
-',
+
+// Set timeline to expire at the end of the longest timeline event.
+timeline.duration = 2000;',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");

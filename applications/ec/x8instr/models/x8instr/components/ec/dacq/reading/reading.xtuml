@@ -17,6 +17,7 @@ INSERT INTO O_TFR
 	'create object instance reading of READING;
 reading.length_expected = param.length_expected;
 reading.samples_expected = param.samples_expected;
+reading.period = param.period;
 select any buffer from instances of BUFFER where ( selected.available );
 if ( not_empty buffer )
   relate reading to buffer across R28;
@@ -45,6 +46,15 @@ INSERT INTO O_TPARM
 	'',
 	"77548eaa-22ed-4d56-96ec-b8611579e23d",
 	'');
+INSERT INTO O_TPARM
+	VALUES ("7ce1159e-9af0-412b-b5d2-fb7aa324f8e7",
+	"ccbe3854-f870-451c-9668-be2deebd6070",
+	'period',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"018db6a9-81cb-4395-91d8-8bbbdb02028b",
+	'');
 INSERT INTO S_DT_PROXY
 	VALUES ("db0f147d-a35d-4d50-bd56-06640ca6ab14",
 	"00000000-0000-0000-0000-000000000000",
@@ -61,10 +71,7 @@ INSERT INTO O_TFR
 	0,
 	'select any reading from instances of READING;
 if ( not_empty reading )
-  // create the new sample
-  create object instance sample of SAMPLE;
-  d = 123;
-  generate SAMPLE1:arrived( data:d, length:1 ) to sample;
+  generate READING3:sample( data:param.data, length:param.length ) to reading;
   LOG::LogInfo( message:"sample received" );
 else
   LOG::LogFailure( message:"sample arrived but no reading exists" );
@@ -77,7 +84,7 @@ INSERT INTO O_TPARM
 	"6b160328-553c-405d-84db-a5e7f1a7a7a8",
 	'data',
 	"66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
-	1,
+	0,
 	'',
 	"00000000-0000-0000-0000-000000000000",
 	'');
@@ -171,7 +178,7 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("558f89aa-5f87-4d6f-884a-bed7a47d1de9",
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
-	"a58eedf7-ee01-4609-92bb-69a8c55f246e",
+	"cbdaefe9-894d-44b0-9cf2-c8e58ddc6af7",
 	'current_state',
 	'',
 	'',
@@ -232,6 +239,24 @@ INSERT INTO O_ATTR
 	'conversion_timer',
 	0,
 	"ba5eda7a-def5-0000-0000-00000000000f",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("cbdaefe9-894d-44b0-9cf2-c8e58ddc6af7",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_BATTR
+	VALUES ("cbdaefe9-894d-44b0-9cf2-c8e58ddc6af7",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_ATTR
+	VALUES ("cbdaefe9-894d-44b0-9cf2-c8e58ddc6af7",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	"a58eedf7-ee01-4609-92bb-69a8c55f246e",
+	'period',
+	'',
+	'',
+	'period',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
 	'');
 INSERT INTO O_ID

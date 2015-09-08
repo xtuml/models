@@ -14,29 +14,17 @@ INSERT INTO SM_EVTDI
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	'data',
 	'',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'[256]',
+	"66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
+	'',
 	"f8774989-aca7-4282-a9af-9b6388633d48",
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO S_DIM
-	VALUES (256,
-	0,
+INSERT INTO S_DT_PROXY
+	VALUES ("66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
 	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
-	"0d0031c7-15c1-4118-a413-d532bed1d723",
-	"0260659f-7289-4f30-a80f-788a5d244083",
-	"00000000-0000-0000-0000-000000000000");
+	'dataptr',
+	'',
+	'',
+	'../../../../../../../../x8shared/models/x8shared/x8types/x8types.xtuml');
 INSERT INTO SM_EVTDI
 	VALUES ("6214a6bb-6e71-4106-ae6d-918ad2a40229",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
@@ -95,7 +83,7 @@ INSERT INTO SM_EVT
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	"00000000-0000-0000-0000-000000000000",
 	3,
-	'sample_ready',
+	'sample',
 	0,
 	'',
 	'READING3',
@@ -265,7 +253,7 @@ INSERT INTO SM_SEME
 	"f458b89a-6207-4680-a2cc-848d723ac43e",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO SM_CH
+INSERT INTO SM_EIGN
 	VALUES ("f1029747-9e45-46df-b2cc-3786708503b1",
 	"419ac6d1-cf86-41f5-8423-e84c3d27c9da",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
@@ -353,19 +341,7 @@ INSERT INTO SM_ACT
 	VALUES ("b828d3fa-66f1-4443-8f19-93fbb1e26bcf",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'select one buffer related by self->BUFFER[R28.''stows in''];
-if ( not_empty buffer )
-  // Inform the hardware of where to stow the collected data.
-  HW::dacq_setup( data:buffer.beginning, length:buffer.capacity );
-else
-  LOG::LogFailure( message:"no buffer found when one should be there" );
-end if;
-
-// Set up a recurring timer that fires for each dacq conversion needed.
-create event instance tick of READING2:tick() to self;
-self.conversion_timer = TIM::timer_start_recurring( microseconds:0, event_inst:tick );
-
-',
+	'',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("f5b92a7e-20cf-4180-b3f6-b4ecf8e187b4",
@@ -391,7 +367,27 @@ INSERT INTO SM_ACT
 	VALUES ("a8d7b427-2d6f-4bdf-83cf-615db728a791",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'',
+	'// create the new sample
+sample = SAMPLE::init( data:param.data, length:param.length );
+
+select one front_sample related by self->SAMPLE[R21];
+
+if ( empty front_sample )
+  // this is the first sample
+  relate self to sample across R21.''has newest'';
+  relate self to sample across R22.''has oldest'';
+else 
+  unrelate self from front_sample across R21.''has newest'';
+  relate self to sample across R21.''has newest'';
+  relate sample to front_sample across R23.''precedes'';
+end if;
+
+// Interrogate the amount of data received.  Detect when we have it all.
+self.length_acquired = self.length_acquired + param.length;
+if ( self.length_acquired >= self.length_expected )
+  generate READING4:acquisition_fulfilled() to self;
+end if;
+self.samples_acquired = self.samples_acquired + 1;',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("519683ba-8eaa-462f-a487-f2e49fb0fa11",
@@ -404,7 +400,11 @@ INSERT INTO SM_ACT
 	VALUES ("519683ba-8eaa-462f-a487-f2e49fb0fa11",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'',
+	'if ( not TIM::timer_cancel( timer_inst_ref:self.conversion_timer ) )
+  LOG::LogFailure( message:"timer not running when attempt to cancel" );
+end if;
+select one dacq related by self->DACQ[R29];
+dacq.done();',
 	'');
 INSERT INTO SM_TAH
 	VALUES ("3564aa73-8456-487b-933a-e040f9e74569",
@@ -417,7 +417,17 @@ INSERT INTO SM_ACT
 	VALUES ("3564aa73-8456-487b-933a-e040f9e74569",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'',
+	'select one buffer related by self->BUFFER[R28.''stows in''];
+if ( not_empty buffer )
+  // Inform the hardware of where to stow the collected data.
+  HW::dacq_setup( data:buffer.beginning, length:buffer.capacity );
+else
+  LOG::LogFailure( message:"no buffer found when one should be there" );
+end if;
+
+// Set up a recurring timer that fires for each dacq conversion needed.
+create event instance tick of READING2:tick() to self;
+self.conversion_timer = TIM::timer_start_recurring( microseconds:self.period, event_inst:tick );',
 	'');
 INSERT INTO SM_TAH
 	VALUES ("fd496bb0-14be-4e25-871d-10cd5de983f2",
@@ -505,6 +515,16 @@ INSERT INTO DIM_CON
 	VALUES ("3050be7a-463a-4e51-9b76-a9b7dc76ad65",
 	4224.000000,
 	3089.000000,
+	"93c9c8c9-851e-4fe3-b49d-bd785cb960ed");
+INSERT INTO DIM_CON
+	VALUES ("90e729ce-3487-4b26-aa64-7544f594ed61",
+	4176.000000,
+	3056.000000,
+	"93c9c8c9-851e-4fe3-b49d-bd785cb960ed");
+INSERT INTO DIM_CON
+	VALUES ("4d2681bb-f5d7-4179-a0c5-774d0d5c3102",
+	4224.000000,
+	3056.000000,
 	"93c9c8c9-851e-4fe3-b49d-bd785cb960ed");
 INSERT INTO GD_GE
 	VALUES ("de694cff-8225-4d8c-b983-4b7138df51ac",
@@ -719,7 +739,7 @@ INSERT INTO GD_GE
 	"c1d9b64a-4bc8-4afe-a575-7e4055635a3e",
 	42,
 	0,
-	'x8instr::components::ec::dacq::reading::Instance State Machine::converting::READING3: sample_ready');
+	'x8instr::components::ec::dacq::reading::Instance State Machine::converting::READING3: sample');
 INSERT INTO GD_CON
 	VALUES ("f114d7fb-c7ca-4fc9-aa8b-c7d6dcd95e7d",
 	"00000000-0000-0000-0000-000000000000");

@@ -16,7 +16,8 @@ INSERT INTO O_TFR
 	0,
 	'create object instance dacq of DACQ;
 buffer = BUFFER::init( beginning:7000, ending:7999 );
-reading = READING::init( length_expected:500, samples_expected:5 );
+// CDS - hard code data and period
+reading = READING::init( length_expected:400, samples_expected:5, period:10000 );
 relate dacq to reading across R29.''takes'';
 return dacq;',
 	1,
@@ -51,10 +52,27 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'',
-	3,
+	'select one reading related by self->READING[R29];
+if ( not_empty reading )
+  generate READING1:go() to reading;
+else
+  LOG::LogFailure( message:"no reading when dacq starting" );
+end if;',
+	1,
 	'',
 	"225412eb-215b-43de-81d9-1a5d17de36ef");
+INSERT INTO O_TFR
+	VALUES ("23290c4c-e468-4e24-a68e-e54fac111c98",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	'done',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one timelineevent related by self->TIMELINEEVENT[R10];
+timelineevent.done();',
+	1,
+	'',
+	"68237f7b-6fb8-4d20-beb3-d19b0c55b871");
 INSERT INTO O_NBATTR
 	VALUES ("c3769976-411a-482a-85ae-47e258469f00",
 	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
