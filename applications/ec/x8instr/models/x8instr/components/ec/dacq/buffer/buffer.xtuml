@@ -14,8 +14,28 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'',
-	3,
+	'// Manage the buffer status.
+length = param.length;
+
+// Update amount in buffer and detect overrun.
+self.amount = self.amount + length;
+if ( self.amount > self.capacity )
+  self.overrun = true;
+  LOG::LogInfo( message:"buffer overrun" );
+else
+
+  // Advance the in pointer.
+  newin = self.in + length;
+  if ( newin > self.ending )
+    // Wrap around the end.
+    delta = self.ending - self.in;
+    self.in = self.beginning + length - delta;
+  else
+    self.in = newin;
+  end if;
+end if;
+',
+	1,
 	'',
 	"abde66ca-5369-42bb-b56b-3b6174a110e7");
 INSERT INTO O_TPARM
@@ -48,10 +68,36 @@ INSERT INTO O_TFR
 	"608a3e14-0609-4099-816a-0af279bb668f",
 	'withdraw',
 	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
+	"ba5eda7a-def5-0000-0000-000000000002",
 	1,
-	'',
-	3,
+	'/*
+Treat a withdrawal like a request for withdrawal.  Data is provided
+only when it exists.
+Manage the buffer status at extraction.
+*/
+length = param.length;
+
+// Detect underrun.  Reduce withdrawal accordingly.
+if ( self.amount < length )
+  length = self.amount;
+end if;
+
+// Advance the out pointer.
+if ( length > 0 )
+  newout = self.out + length;
+  if ( newout > self.ending )
+    // Wrap around the end.
+    delta = self.ending - self.out;
+    self.out = self.beginning + length - delta;
+  else
+    self.out = newout;
+  end if;
+end if;
+
+self.amount = self.amount - length;
+
+return length;',
+	1,
 	'',
 	"898d968e-0a0e-4f65-8e76-60ffdcebf59f");
 INSERT INTO O_TPARM

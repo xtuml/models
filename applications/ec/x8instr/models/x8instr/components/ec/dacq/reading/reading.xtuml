@@ -21,6 +21,7 @@ reading.period = param.period;
 select any buffer from instances of BUFFER where ( selected.available );
 if ( not_empty buffer )
   relate reading to buffer across R28;
+  buffer.available = false;
 else
   LOG::LogFailure( message:"no buffers available" );
 end if;

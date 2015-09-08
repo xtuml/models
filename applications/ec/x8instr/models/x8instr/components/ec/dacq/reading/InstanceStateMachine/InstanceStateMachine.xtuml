@@ -367,11 +367,9 @@ INSERT INTO SM_ACT
 	VALUES ("a8d7b427-2d6f-4bdf-83cf-615db728a791",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'// create the new sample
+	'/* CDS - This seems overkill.
 sample = SAMPLE::init( data:param.data, length:param.length );
-
 select one front_sample related by self->SAMPLE[R21];
-
 if ( empty front_sample )
   // this is the first sample
   relate self to sample across R21.''has newest'';
@@ -381,6 +379,11 @@ else
   relate self to sample across R21.''has newest'';
   relate sample to front_sample across R23.''precedes'';
 end if;
+*/
+
+// Stow data into the circular buffer.
+select one buffer related by self->BUFFER[R28.''stows in''];
+buffer.deposit( data:param.data, length:param.length );
 
 // Interrogate the amount of data received.  Detect when we have it all.
 self.length_acquired = self.length_acquired + param.length;
