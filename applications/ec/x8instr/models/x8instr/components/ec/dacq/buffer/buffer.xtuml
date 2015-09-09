@@ -170,7 +170,11 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'delete object instance self;',
+	'select one reading related by self->READING[R28];
+if ( not_empty reading )
+  unrelate self from reading across R28;
+end if;
+delete object instance self;',
 	1,
 	'',
 	"397543f2-d035-4969-9fce-4e7fcdb2fe2b");
