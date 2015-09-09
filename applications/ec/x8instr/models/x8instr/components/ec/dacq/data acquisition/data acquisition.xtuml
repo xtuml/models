@@ -15,9 +15,12 @@ INSERT INTO O_TFR
 	"6f6d7864-624d-44d1-a38b-a72d60e6c31e",
 	0,
 	'create object instance dacq of DACQ;
+dacq.period = 10000;
+dacq.duration = 9999; // CDS ??
+dacq.packet_size = 100;
 buffer = BUFFER::init( beginning:7000, ending:7999 );
 // CDS - hard code data and period
-reading = READING::init( length_expected:400, samples_expected:5, period:10000 );
+reading = READING::init( length_expected:400, samples_expected:5, period:dacq.period );
 relate dacq to reading across R29.''takes'';
 return dacq;',
 	1,

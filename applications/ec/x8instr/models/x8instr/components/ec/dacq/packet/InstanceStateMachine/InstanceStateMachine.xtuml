@@ -123,8 +123,15 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("71f5c667-5c25-4626-8fab-5c0cc34a6f9d",
 	"1bd757bd-b260-41d2-8c25-ec8e0af73d64",
-	3,
-	'',
+	1,
+	'send host::data( data:self.data, length:self.length );
+
+
+
+
+
+// CDS - simulation for now...
+generate PACKET2:sent() to self;',
 	'');
 INSERT INTO SM_TAH
 	VALUES ("43bab918-95ba-4ab0-8688-6c970123193d",
@@ -136,7 +143,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("43bab918-95ba-4ab0-8688-6c970123193d",
 	"1bd757bd-b260-41d2-8c25-ec8e0af73d64",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO SM_MOAH
@@ -150,7 +157,9 @@ INSERT INTO SM_ACT
 	VALUES ("7a112264-79bf-4cf7-9996-c37fdb17b62e",
 	"1bd757bd-b260-41d2-8c25-ec8e0af73d64",
 	1,
-	'self.cleanup();',
+	'select one dataupload related by self->DATAUPLOAD[R25];
+generate DATAUPLOAD2:sent() to dataupload;
+self.cleanup();',
 	'');
 INSERT INTO SM_TAH
 	VALUES ("d150ae70-e731-41d7-b068-de63c3ea1991",
@@ -162,7 +171,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("d150ae70-e731-41d7-b068-de63c3ea1991",
 	"1bd757bd-b260-41d2-8c25-ec8e0af73d64",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO GD_MD

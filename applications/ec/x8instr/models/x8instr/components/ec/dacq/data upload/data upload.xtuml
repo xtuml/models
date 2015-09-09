@@ -49,6 +49,8 @@ INSERT INTO O_TFR
 	'buffer = param.buffer;
 create object instance dataupload of DATAUPLOAD;
 relate dataupload to buffer across R24.''drains'';
+select one dacq related by buffer->READING[R28]->DACQ[R29];
+dataupload.packet_size = dacq.packet_size;
 return dataupload;',
 	1,
 	'',
@@ -100,6 +102,24 @@ INSERT INTO O_ATTR
 	'current_state',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("91a9516b-b97e-45a0-9bb7-f18058f483e6",
+	"589ffd62-af53-473a-84bf-e6d1567fe967");
+INSERT INTO O_BATTR
+	VALUES ("91a9516b-b97e-45a0-9bb7-f18058f483e6",
+	"589ffd62-af53-473a-84bf-e6d1567fe967");
+INSERT INTO O_ATTR
+	VALUES ("91a9516b-b97e-45a0-9bb7-f18058f483e6",
+	"589ffd62-af53-473a-84bf-e6d1567fe967",
+	"d64fb409-170d-4cec-ae7a-9dbbf6b928b4",
+	'packet_size',
+	'',
+	'',
+	'packet_size',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
 	'');
 INSERT INTO O_ID
