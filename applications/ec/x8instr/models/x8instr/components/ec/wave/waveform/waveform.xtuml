@@ -15,7 +15,12 @@ INSERT INTO O_TFR
 	"45ac1edb-87df-459d-8c77-913b855c087e",
 	0,
 	'create object instance wave of WAVE;
-return wave;',
+wave.add_segment();
+wave.add_segment();
+wave.add_segment();
+wave.segment_count = 3;
+return wave;
+',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");
@@ -49,9 +54,37 @@ INSERT INTO O_TFR
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
-	3,
+	1,
 	'',
 	"aab148aa-2f58-4b2a-a516-8c5d867ad7e2");
+INSERT INTO O_TFR
+	VALUES ("1da9b247-2eff-4d0f-8041-e179157e9885",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	'add_segment',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'segment = SEGMENT::init();
+// Append segment to end of list.
+select one first_segment related by self->SEGMENT[R40.''has first''];
+if ( empty first_segment )
+  // first segment in list
+  relate self to segment across R40.''has first'';
+else
+  // CDS - this is initial draft
+  preceding_segment = first_segment;
+  next_segment = first_segment;
+  // Find end of list.
+  while ( not_empty next_segment )
+    preceding_segment = next_segment;
+    select one next_segment related by next_segment->SEGMENT[R41.''precedes''];
+  end while;
+  // Link to end of list.
+  relate segment to preceding_segment across R41.''follows'';
+end if;',
+	1,
+	'',
+	"0ca89f9e-dfd1-461c-a194-b79205482ddf");
 INSERT INTO O_NBATTR
 	VALUES ("bc7f48c2-1093-4edc-8f2b-ee202a8e70f3",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
