@@ -85,6 +85,43 @@ end if;',
 	1,
 	'',
 	"0ca89f9e-dfd1-461c-a194-b79205482ddf");
+INSERT INTO O_TFR
+	VALUES ("153210b4-31ec-4f39-904e-a7d1aa7dab58",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	'next_segment',
+	'',
+	"96143939-5991-45e3-8f49-e323199cfed2",
+	1,
+	'/*
+Get the next segment.  If the current segment is not related,
+then we are just starting, so get the first one.
+When the current segment exists, traverse to the next one.
+*/
+select one current_segment related by self->SEGMENT[R42.''has current''];
+if ( empty current_segment )
+  // just starting
+  select one first_segment related by self->SEGMENT[R40.''has first''];
+  if ( not_empty first_segment )
+    relate self to first_segment across R42.''has current'';
+    current_segment = first_segment;
+  else
+    LOG::LogFailure( message:"looking for next when there is no current segment" );
+  end if;
+else
+  // have current, get next
+  select one current_segment related by current_segment->SEGMENT[R41.''precedes''];
+end if;
+return current_segment;',
+	1,
+	'',
+	"1da9b247-2eff-4d0f-8041-e179157e9885");
+INSERT INTO S_DT_PROXY
+	VALUES ("96143939-5991-45e3-8f49-e323199cfed2",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<segment>',
+	'',
+	'',
+	'../wave.xtuml');
 INSERT INTO O_NBATTR
 	VALUES ("bc7f48c2-1093-4edc-8f2b-ee202a8e70f3",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
