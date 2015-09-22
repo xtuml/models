@@ -1,0 +1,135 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'timeline event',
+	13,
+	'TIMELINEEVENT',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("5277ef1d-ff7d-4920-977b-bebd91de0fe4",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'fire',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("c5293b7b-9b85-423f-a4b4-a03e39d5e87e",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'init',
+	'',
+	"773f48ca-eab2-4c19-a20a-09e12caf496e",
+	0,
+	'create object instance timelineevent of TIMELINEEVENT;
+timelineevent.offset = param.offset;
+return timelineevent;',
+	1,
+	'',
+	"5277ef1d-ff7d-4920-977b-bebd91de0fe4");
+INSERT INTO O_TPARM
+	VALUES ("ec078976-48e9-454f-b608-ac4f352848d3",
+	"c5293b7b-9b85-423f-a4b4-a03e39d5e87e",
+	'offset',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("773f48ca-eab2-4c19-a20a-09e12caf496e",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<timeline event>',
+	'',
+	'',
+	'../experiment.xtuml');
+INSERT INTO O_TFR
+	VALUES ("b46181ff-9124-4992-ab86-a31a028930b2",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Unlink from above.
+select one timeline related by self->TIMELINE[R11];
+if ( not_empty timeline )
+  unrelate self from timeline across R11;
+end if;
+select one timeline related by self->TIMELINE[R14];
+if ( not_empty timeline )
+  unrelate self from timeline across R14;
+end if;
+
+// Unlink and clean up the related subordinate instances.
+select one program related by self->PROGRAM[R10];
+if ( not_empty program )
+  unrelate self from program across R10;
+  program.erase();
+else
+  select one dacq related by self->DACQ[R10];
+if ( not_empty dacq )
+  unrelate self from dacq across R10;
+  dacq.cleanup();
+else
+  select one wave related by self->WAVE[R10];
+if ( not_empty wave )
+  unrelate self from wave across R10;
+  wave.cleanup();
+end if;
+end if;
+end if;
+
+// Clean up my sibling time line event(s).
+select one siblingtimelineevent related by self->TIMELINEEVENT[R12.''follows''];
+unrelate siblingtimelineevent from self across R12.''follows'';
+siblingtimelineevent.cleanup(); // recursive call
+
+delete object instance self;',
+	1,
+	'',
+	"c5293b7b-9b85-423f-a4b4-a03e39d5e87e");
+INSERT INTO O_NBATTR
+	VALUES ("f3ae8358-cbc8-4684-8481-3f81d2c873a5",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_BATTR
+	VALUES ("f3ae8358-cbc8-4684-8481-3f81d2c873a5",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_ATTR
+	VALUES ("f3ae8358-cbc8-4684-8481-3f81d2c873a5",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	"00000000-0000-0000-0000-000000000000",
+	'offset',
+	'',
+	'',
+	'offset',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_ID
+	VALUES (1,
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_ID
+	VALUES (2,
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO PE_PE
+	VALUES ("641c0663-c7a2-40bf-a386-dcca59439e0e",
+	1,
+	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'experiment',
+	'',
+	10,
+	'../experiment.xtuml');
