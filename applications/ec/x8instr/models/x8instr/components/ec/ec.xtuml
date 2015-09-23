@@ -520,23 +520,47 @@ INSERT INTO SPR_RS
 	VALUES ("7c3a4d4e-e909-4ffb-96a8-d65c03f8a509",
 	'sample',
 	'',
-	'select any measurement from instances of MEASUREMENT;
-if ( not_empty measurement )
-  measurement.record_count = measurement.record_count + 1;
-  // create the new sample
-  create object instance sample of SAMPLE;
-  d[1]=0;d[0]=1;
-  generate SAMPLE1:arrived( data:d, length:1 ) to sample;
-  LOG::LogInfo( message:"sample received" );
-else
-  LOG::LogFailure( message:"sample arrived but no measurement exists" );
-end if;',
+	'READING::sample_received( data:param.data, length:param.length );',
 	1);
 INSERT INTO C_EP_PROXY
 	VALUES ("62c4cfc7-a31b-4731-bf29-fc81434050d0",
 	"6353ba35-2c74-4233-8671-eace622b1fc1",
 	-1,
 	'sample',
+	'',
+	'../../../../../x8shared/models/x8shared/interfaces/HWIF/HWIF.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("97fc4065-9a79-4af4-b3f9-decd0608f7c4",
+	"f7c0394a-7720-4bde-81df-3ea083b13805",
+	"c0376033-4ddd-4aca-95cb-9b7505f620f5");
+INSERT INTO SPR_RS
+	VALUES ("97fc4065-9a79-4af4-b3f9-decd0608f7c4",
+	'ADC_convert',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("f7c0394a-7720-4bde-81df-3ea083b13805",
+	"6353ba35-2c74-4233-8671-eace622b1fc1",
+	-1,
+	'ADC_convert',
+	'',
+	'../../../../../x8shared/models/x8shared/interfaces/HWIF/HWIF.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("52c45799-6cc9-4252-88e6-b3a6b325335d",
+	"6c8ce1ac-b82c-4b73-a734-b076ced9e4ae",
+	"c0376033-4ddd-4aca-95cb-9b7505f620f5");
+INSERT INTO SPR_RS
+	VALUES ("52c45799-6cc9-4252-88e6-b3a6b325335d",
+	'dacq_setup',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("6c8ce1ac-b82c-4b73-a734-b076ced9e4ae",
+	"6353ba35-2c74-4233-8671-eace622b1fc1",
+	-1,
+	'dacq_setup',
 	'',
 	'../../../../../x8shared/models/x8shared/interfaces/HWIF/HWIF.xtuml');
 INSERT INTO C_I_PROXY
@@ -773,7 +797,7 @@ INSERT INTO SPR_PS
 	'experiment_done',
 	'',
 	'',
-	3);
+	1);
 INSERT INTO C_EP_PROXY
 	VALUES ("df3c21cc-37f3-4454-b476-aa3fba392842",
 	"9a1265f1-2e3c-4c01-8470-af88f41ddb48",
@@ -887,6 +911,23 @@ INSERT INTO C_EP_PROXY
 	"93fcd110-0fea-49dd-a0c3-44f81ca77ccb",
 	-1,
 	'init',
+	'',
+	'../../../../../x8shared/models/x8shared/interfaces/instrumentation/instrumentation.xtuml');
+INSERT INTO SPR_PEP
+	VALUES ("40134f92-2f91-4f27-96d2-0ede681dcc6a",
+	"84102d5b-7ebc-4fcc-befd-91ff72821545",
+	"12f72934-d6bb-46d2-b6b3-76e4421614e8");
+INSERT INTO SPR_PS
+	VALUES ("40134f92-2f91-4f27-96d2-0ede681dcc6a",
+	'hw_sample',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("84102d5b-7ebc-4fcc-befd-91ff72821545",
+	"93fcd110-0fea-49dd-a0c3-44f81ca77ccb",
+	-1,
+	'hw_sample',
 	'',
 	'../../../../../x8shared/models/x8shared/interfaces/instrumentation/instrumentation.xtuml');
 INSERT INTO C_I_PROXY
