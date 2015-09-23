@@ -15,10 +15,13 @@ INSERT INTO O_TFR
 	"45ac1edb-87df-459d-8c77-913b855c087e",
 	0,
 	'create object instance wave of WAVE;
-wave.add_segment();
-wave.add_segment();
-wave.add_segment();
-wave.segment_count = 3;
+wave.segment_count = 0;
+seg = SEGMENT::init( number:1 );
+wave.add_segment( segment:seg );
+seg = SEGMENT::init( number:2 );
+wave.add_segment( segment:seg );
+seg = SEGMENT::init( number:3 );
+wave.add_segment( segment:seg );
 return wave;
 ',
 	1,
@@ -49,11 +52,13 @@ delete object instance self;',
 INSERT INTO O_TFR
 	VALUES ("0ca89f9e-dfd1-461c-a194-b79205482ddf",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
-	'run',
+	'play',
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'',
+	'/*
+Play out the waveform segment by segment.
+*/',
 	1,
 	'',
 	"aab148aa-2f58-4b2a-a516-8c5d867ad7e2");
@@ -64,16 +69,14 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'segment = SEGMENT::init();
+	'segment = param.segment;
 // Append segment to end of list.
-select one first_segment related by self->SEGMENT[R40.''has first''];
-if ( empty first_segment )
+select one preceding_segment related by self->SEGMENT[R40.''has first''];
+if ( empty preceding_segment )
   // first segment in list
   relate self to segment across R40.''has first'';
 else
-  // CDS - this is initial draft
-  preceding_segment = first_segment;
-  next_segment = first_segment;
+  next_segment = preceding_segment;
   // Find end of list.
   while ( not_empty next_segment )
     preceding_segment = next_segment;
@@ -81,10 +84,27 @@ else
   end while;
   // Link to end of list.
   relate segment to preceding_segment across R41.''follows'';
-end if;',
+end if;
+self.segment_count = self.segment_count + 1;',
 	1,
 	'',
 	"0ca89f9e-dfd1-461c-a194-b79205482ddf");
+INSERT INTO O_TPARM
+	VALUES ("e790c781-5fa5-4750-8b0d-1b4daad55f33",
+	"1da9b247-2eff-4d0f-8041-e179157e9885",
+	'segment',
+	"96143939-5991-45e3-8f49-e323199cfed2",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("96143939-5991-45e3-8f49-e323199cfed2",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<segment>',
+	'',
+	'',
+	'../wave.xtuml');
 INSERT INTO O_TFR
 	VALUES ("153210b4-31ec-4f39-904e-a7d1aa7dab58",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
@@ -96,6 +116,7 @@ INSERT INTO O_TFR
 Get the next segment.  If the current segment is not related,
 then we are just starting, so get the first one.
 When the current segment exists, traverse to the next one.
+When done, return a null segment.
 */
 select one current_segment related by self->SEGMENT[R42.''has current''];
 if ( empty current_segment )
@@ -115,13 +136,6 @@ return current_segment;',
 	1,
 	'',
 	"1da9b247-2eff-4d0f-8041-e179157e9885");
-INSERT INTO S_DT_PROXY
-	VALUES ("96143939-5991-45e3-8f49-e323199cfed2",
-	"00000000-0000-0000-0000-000000000000",
-	'inst_ref<segment>',
-	'',
-	'',
-	'../wave.xtuml');
 INSERT INTO O_NBATTR
 	VALUES ("bc7f48c2-1093-4edc-8f2b-ee202a8e70f3",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
@@ -138,6 +152,24 @@ INSERT INTO O_ATTR
 	'segment_count',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("5c9add5e-ea0a-48b3-8cad-2d36c616b00f",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
+INSERT INTO O_BATTR
+	VALUES ("5c9add5e-ea0a-48b3-8cad-2d36c616b00f",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
+INSERT INTO O_ATTR
+	VALUES ("5c9add5e-ea0a-48b3-8cad-2d36c616b00f",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	"bc7f48c2-1093-4edc-8f2b-ee202a8e70f3",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
 	'',
 	'');
 INSERT INTO O_ID

@@ -213,7 +213,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("da47b456-7fda-4137-a34c-5f4232735945",
 	"e16e8133-15a7-43a7-b72f-eb400f2d2814",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO SM_MOAH
@@ -228,7 +228,8 @@ INSERT INTO SM_ACT
 	"e16e8133-15a7-43a7-b72f-eb400f2d2814",
 	1,
 	'// Play the potential and bump the index.
-HW::DAC_play( E:self.E[ self.index ] );
+select one buffer related by self->BUFFER[R43];
+HW::DAC_play( E:buffer.data[ self.index ] );
 self.index = self.index + 1;
 ',
 	'');
@@ -259,7 +260,8 @@ INSERT INTO SM_ACT
 	VALUES ("7aa6add6-5620-4a59-a82b-91a5fc6d61e0",
 	"e16e8133-15a7-43a7-b72f-eb400f2d2814",
 	1,
-	'create event instance tick of SEGMENT2:tick() to self;
+	'self.index = 0;
+create event instance tick of SEGMENT2:tick() to self;
 self.clock = TIM::timer_start_recurring( microseconds:self.period, event_inst:tick );',
 	'');
 INSERT INTO SM_TAH
@@ -272,7 +274,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("bb795c56-b97d-4e41-b05c-1a88f86bb955",
 	"e16e8133-15a7-43a7-b72f-eb400f2d2814",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO SM_TAH
@@ -285,7 +287,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("31e4eb9a-0114-44dd-b38c-5692d607a3bc",
 	"e16e8133-15a7-43a7-b72f-eb400f2d2814",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO SM_TAH
@@ -298,7 +300,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("24a1c132-2806-4553-8470-63bacd758d7d",
 	"e16e8133-15a7-43a7-b72f-eb400f2d2814",
-	3,
+	1,
 	'',
 	'');
 INSERT INTO GD_MD
