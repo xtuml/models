@@ -15,6 +15,13 @@ INSERT INTO O_TFR
 	"6f6d7864-624d-44d1-a38b-a72d60e6c31e",
 	0,
 	'create object instance dacq of DACQ;
+dacq.period = 10000;
+dacq.duration = 9999; // CDS ??
+dacq.packet_size = 100;
+buffer = BUFFER::init( beginning:7000, ending:7999 );
+// CDS - hard code data and period
+reading = READING::init( length_expected:400, samples_expected:5, period:dacq.period );
+relate dacq to reading across R29.''takes'';
 return dacq;',
 	1,
 	'',
@@ -41,6 +48,34 @@ delete object instance self;',
 	1,
 	'',
 	"332bacb7-dd34-443c-8fa1-0b67ce099456");
+INSERT INTO O_TFR
+	VALUES ("68237f7b-6fb8-4d20-beb3-d19b0c55b871",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one reading related by self->READING[R29];
+if ( not_empty reading )
+  generate READING1:go() to reading;
+else
+  LOG::LogFailure( message:"no reading when dacq starting" );
+end if;',
+	1,
+	'',
+	"225412eb-215b-43de-81d9-1a5d17de36ef");
+INSERT INTO O_TFR
+	VALUES ("23290c4c-e468-4e24-a68e-e54fac111c98",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	'done',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one timelineevent related by self->TIMELINEEVENT[R10];
+timelineevent.done();',
+	1,
+	'',
+	"68237f7b-6fb8-4d20-beb3-d19b0c55b871");
 INSERT INTO O_NBATTR
 	VALUES ("c3769976-411a-482a-85ae-47e258469f00",
 	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
