@@ -376,7 +376,7 @@ INSERT INTO DIM_ND
 	"a60ee4f4-c72a-426c-b350-6ebd8d35a014");
 INSERT INTO DIM_GE
 	VALUES (4391.000000,
-	3166.000000,
+	3169.000000,
 	"a60ee4f4-c72a-426c-b350-6ebd8d35a014",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -538,6 +538,12 @@ INSERT INTO S_ENUM
 	'',
 	"bfb79a91-baaa-4fce-b3cf-8525e9921397",
 	"29b0f359-88cd-483f-a476-f1afbceaea2e");
+INSERT INTO S_ENUM
+	VALUES ("0d666c2a-8e06-4687-a47e-4bb4dc773be8",
+	'middle',
+	'',
+	"bfb79a91-baaa-4fce-b3cf-8525e9921397",
+	"fd7d9529-cdd4-45cf-86e5-86cb60acac02");
 INSERT INTO PE_PE
 	VALUES ("bfb79a91-baaa-4fce-b3cf-8525e9921397",
 	1,
@@ -717,7 +723,7 @@ INSERT INTO S_EE
 	"00000000-0000-0000-0000-000000000000",
 	'',
 	'actuator',
-	1);
+	0);
 INSERT INTO S_BRG
 	VALUES ("8b7d380c-9a21-4400-ae40-b2d9d12580d2",
 	"87180f83-ab27-4a4b-8921-7d1972e63fa7",
@@ -789,7 +795,7 @@ probe.state = probeposition::up;
 create object instance spinner of spinner;
 spinner.position = 0;
 spinner.capacity = 10;
-ready = true;
+spinner.ready = true;
 
 relate probe to spinner across R3.''checks safety'';',
 	"ba5eda7a-def5-0000-0000-000000000000",
@@ -804,7 +810,7 @@ INSERT INTO PE_PE
 INSERT INTO S_SYNC
 	VALUES ("9de6f4f7-0368-47f2-8afe-784156e84b87",
 	"00000000-0000-0000-0000-000000000000",
-	'batchrun',
+	'runbatch',
 	'',
 	'select any spinner from instances of spinner;
 select any probe from instances of probe;
@@ -817,7 +823,8 @@ batch.current_sample = 0;
 
 relate spinner to batch across R1.''spins'';
 relate probe to batch across R2.''samples'';
-',
+
+generate batch4:start() to batch;',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'');
