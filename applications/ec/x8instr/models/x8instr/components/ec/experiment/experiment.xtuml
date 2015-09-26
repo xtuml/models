@@ -1549,7 +1549,10 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'init',
 	'',
-	'EXPERIMENT::init( name:"default" );',
+	'select any experiment from instances of EXPERIMENT where ( selected.name == "default" );
+if ( empty experiment )
+  EXPERIMENT::init( name:"default" );
+end if;',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'');
