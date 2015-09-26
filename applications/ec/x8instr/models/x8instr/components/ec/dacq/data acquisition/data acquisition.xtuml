@@ -15,17 +15,26 @@ INSERT INTO O_TFR
 	"6f6d7864-624d-44d1-a38b-a72d60e6c31e",
 	0,
 	'create object instance dacq of DACQ;
-dacq.period = 100000;
+dacq.period = param.period;
 dacq.duration = 9999; // CDS ??
 dacq.packet_size = 100;
-buffer = BUFFER::init( beginning:7000, ending:7999 );
+buffer = BUFFER::init( beginning:7000, ending:7016 );
 // CDS - hard code data and period
-reading = READING::init( length_expected:400, samples_expected:5, period:dacq.period );
+reading = READING::init( length_expected:16, samples_expected:4, period:dacq.period );
 relate dacq to reading across R29.''takes'';
 return dacq;',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("c55f9da7-1f34-42f7-bd07-2860048c2896",
+	"332bacb7-dd34-443c-8fa1-0b67ce099456",
+	'period',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
 INSERT INTO S_DT_PROXY
 	VALUES ("6f6d7864-624d-44d1-a38b-a72d60e6c31e",
 	"00000000-0000-0000-0000-000000000000",
