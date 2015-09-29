@@ -21,7 +21,7 @@ length = param.length;
 self.amount = self.amount + length;
 if ( self.amount > self.capacity )
   self.overrun = true;
-  LOG::LogInfo( message:"buffer overrun" );
+  TRACE::log( id:1010, flavor:"info", message:"buffer overrun" );
 else
 
   // Advance the in pointer.
@@ -34,9 +34,7 @@ else
     self.in = newin;
   end if;
 end if;
-
-// Data wants to be uploaded, so trigger an upload.
-DATAUPLOAD::trigger( buffer:self );',
+',
 	1,
 	'',
 	"abde66ca-5369-42bb-b56b-3b6174a110e7");

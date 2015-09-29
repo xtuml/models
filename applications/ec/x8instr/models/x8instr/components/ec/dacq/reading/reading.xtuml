@@ -70,12 +70,13 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
-	'select any reading from instances of READING;
+	'// CDS - somehow reading likely needs to be uniquely identified
+select any reading from instances of READING;
 if ( not_empty reading )
   generate READING3:sample( data:param.data, length:param.length ) to reading;
-  LOG::LogInfo( message:"sample received" );
+  TRACE::log( id:1013, flavor:"info", message:"sample received" );
 else
-  LOG::LogFailure( message:"sample arrived but no reading exists" );
+  TRACE::log( id:1014, flavor:"error", message:"sample arrived but no reading exists" );
 end if;',
 	1,
 	'',

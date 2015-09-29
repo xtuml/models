@@ -131,12 +131,12 @@ HW::DAC_play( E:buffer.data[ self.index ] );
 self.index = self.index + 1;
 if( self.index == self.length )
   self.index = 0;
-  if ( self.current_repetition == self.repetitions )
+  if ( self.current_cycle == self.cycles )
     if ( not TIM::timer_cancel( timer_inst_ref:self.clock ) )
       LOG::LogFailure( message:"timer gone in segment when trying to cancel" );
     end if;
   else
-    self.current_repetition = self.current_repetition + 1;
+    self.current_cycle = self.current_cycle + 1;
   end if;
 end if;',
 	'');
@@ -165,7 +165,7 @@ INSERT INTO SM_ACT
 	"e16e8133-15a7-43a7-b72f-eb400f2d2814",
 	1,
 	'self.index = 0;
-self.current_repetition = 1;
+self.current_cycle = 1;
 create event instance tick of SEGMENT2:tick() to self;
 self.clock = TIM::timer_start_recurring( microseconds:self.period, event_inst:tick );',
 	'');

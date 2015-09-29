@@ -47,9 +47,10 @@ INSERT INTO O_TFR
 	"0b79e7e5-8d96-4c96-bddf-629d07984e67",
 	0,
 	'buffer = param.buffer;
+select any dataupload from instances of DATAUPLOAD where ( false );  // declare variable
+select one dacq related by buffer->READING[R28]->DACQ[R29];
 create object instance dataupload of DATAUPLOAD;
 relate dataupload to buffer across R24.''drains'';
-select one dacq related by buffer->READING[R28]->DACQ[R29];
 dataupload.packet_size = dacq.packet_size;
 return dataupload;',
 	1,

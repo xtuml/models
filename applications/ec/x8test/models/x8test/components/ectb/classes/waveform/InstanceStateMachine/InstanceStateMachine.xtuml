@@ -366,6 +366,37 @@ INSERT INTO SM_ACT
 	1,
 	'// Do setup.  When complete, send the done message to the test sequencer.
 
+w[ 21 ] = 0; // init length of array
+
+w[ 0 ] = 3;
+
+w[ 1 ] = 1; // segment number
+w[ 2 ] = 0; // no DC_offset
+w[ 3 ] = 200000; // period
+w[ 4 ] = 1; // cycles
+w[ 5 ] = 0; // no branch_offset
+w[ 6 ] = 1; // length is 1
+w[ 7 ] = 1; // 1 data value of 1
+
+w[ 8 ] = 2; // segment number
+w[ 9 ] = 0; // no DC_offset
+w[ 10 ] = 800000; // period
+w[ 11 ] = 1; // cycles
+w[ 12 ] = 0; // no branch_offset
+w[ 13 ] = 1; // length is 1
+w[ 14 ] = 2; // 1 data value
+
+w[ 15 ] = 3; // segment number
+w[ 16 ] = 0; // no DC_offset
+w[ 17 ] = 400000; // period
+w[ 18 ] = 1; // cycles
+w[ 19 ] = 0; // no branch_offset
+w[ 20 ] = 1; // length is 1
+w[ 21 ] = 3; // 1 data value
+
+// Send the waveform file to the EC.
+send eibus::wave( data:w );
+
 send SEQ::done( variation_number:self.number );',
 	'');
 INSERT INTO SM_MOAH

@@ -140,11 +140,11 @@ INSERT INTO O_TFR
 	0,
 	'wave = WAVE::init();
 //
-seg = SEGMENT::init( number:1, DC_offset:0, period:200000, repetitions:1, branch_offset:0, length:1 );
+seg = SEGMENT::init( number:1, DC_offset:0, period:200000, cycles:1, branch_offset:0, length:1 );
 wave.add_segment( segment:seg );
-seg = SEGMENT::init( number:2, DC_offset:0, period:800000, repetitions:1, branch_offset:0, length:1 );
+seg = SEGMENT::init( number:2, DC_offset:0, period:800000, cycles:1, branch_offset:0, length:1 );
 wave.add_segment( segment:seg );
-seg = SEGMENT::init( number:3, DC_offset:0, period:400000, repetitions:1, branch_offset:0, length:1 );
+seg = SEGMENT::init( number:3, DC_offset:0, period:400000, cycles:1, branch_offset:0, length:1 );
 wave.add_segment( segment:seg );
 //
 return wave;
@@ -152,6 +152,57 @@ return wave;
 	1,
 	'',
 	"153210b4-31ec-4f39-904e-a7d1aa7dab58");
+INSERT INTO O_TFR
+	VALUES ("b1a6b153-e4a5-418a-8c39-5ee73d8c92a2",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	'parse',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// waveform file is ordered the same as the segment class.
+w = param.data;
+i = 0;
+count = w[ i ];
+wave = WAVE::init();
+while ( count > 0 )
+  seg = SEGMENT::init( number:w[i+1], DC_offset:w[i+2], period:w[i+3], cycles:w[i+4], branch_offset:w[i+5], length:w[i+6] );
+  wave.add_segment( segment:seg );
+  select one buffer related by seg->BUFFER[R43];
+  buffer.deposit( data:w[i+7], length:w[i+6] );
+  i = i + w[i+6] + 6;
+  count = count - 1;
+end while;',
+	1,
+	'',
+	"6ffdb004-006b-4db0-b435-1c6c51a53623");
+INSERT INTO O_TPARM
+	VALUES ("f515e7f6-3a46-4af3-a3f7-efa65b465b6a",
+	"b1a6b153-e4a5-418a-8c39-5ee73d8c92a2",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'[256]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (256,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"f515e7f6-3a46-4af3-a3f7-efa65b465b6a",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"5ca0cbe1-62df-4956-a7cc-266ab60cf22f",
+	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_NBATTR
 	VALUES ("bc7f48c2-1093-4edc-8f2b-ee202a8e70f3",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");

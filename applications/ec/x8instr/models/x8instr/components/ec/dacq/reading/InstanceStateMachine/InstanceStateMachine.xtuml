@@ -384,6 +384,8 @@ end if;
 // Stow data into the circular buffer.
 select one buffer related by self->BUFFER[R28.''stows in''];
 buffer.deposit( data:param.data, length:param.length );
+// Data wants to be uploaded, so trigger an upload.
+DATAUPLOAD::trigger( buffer:buffer );
 
 // Interrogate the amount of data received.  Detect when we have it all.
 self.length_acquired = self.length_acquired + param.length;
