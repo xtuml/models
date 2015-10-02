@@ -127,6 +127,80 @@ INSERT INTO O_TFR
 	1,
 	'',
 	"b46181ff-9124-4992-ab86-a31a028930b2");
+INSERT INTO O_TFR
+	VALUES ("839c0064-fda7-449b-b49e-90fbbb916e28",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'add_segment',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'segment = param.segment;
+// Append segment to end of list.
+select one preceding_segment related by self->SEGMENT[R15.''has first''];
+if ( empty preceding_segment )
+  // first segment in list
+  relate self to segment across R15.''has first'';
+else
+  next_segment = preceding_segment;
+  // Find end of list.
+  while ( not_empty next_segment )
+    preceding_segment = next_segment;
+    select one next_segment related by next_segment->SEGMENT[R17.''precedes''];
+  end while;
+  // Link to end of list.
+  relate segment to preceding_segment across R17.''succeeds'';
+end if;
+self.segment_count = self.segment_count + 1;',
+	1,
+	'',
+	"22836d59-096b-4f34-8a28-09cc640bbf23");
+INSERT INTO O_TPARM
+	VALUES ("d49819d6-5e8e-4b9e-b1ac-93b3560ca923",
+	"839c0064-fda7-449b-b49e-90fbbb916e28",
+	'segment',
+	"ddfc22ca-41d9-4c88-b2e8-bf95ecd32b26",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("ddfc22ca-41d9-4c88-b2e8-bf95ecd32b26",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<segment>',
+	'',
+	'',
+	'../experiment.xtuml');
+INSERT INTO O_TFR
+	VALUES ("85f69829-a16f-48be-92cc-77ab56126269",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'next_segment',
+	'',
+	"ddfc22ca-41d9-4c88-b2e8-bf95ecd32b26",
+	1,
+	'/*
+Get the next segment.  If the current segment is not related,
+then we are just starting, so get the first one.
+When the current segment exists, traverse to the next one.
+When done, return a null segment.
+*/
+select one current_segment related by self->SEGMENT[R16.''has current''];
+if ( empty current_segment )
+  // just starting
+  select one first_segment related by self->SEGMENT[R15.''has first''];
+  if ( not_empty first_segment )
+    relate self to first_segment across R16.''has current'';
+    current_segment = first_segment;
+  else
+    TRACE::log( id:1060, flavor:"failure", message:"looking for next when there is no current segment" );
+  end if;
+else
+  // have current, get next
+  select one current_segment related by current_segment->SEGMENT[R17.''precedes''];
+end if;
+return current_segment;',
+	1,
+	'',
+	"839c0064-fda7-449b-b49e-90fbbb916e28");
 INSERT INTO O_NBATTR
 	VALUES ("f3ae8358-cbc8-4684-8481-3f81d2c873a5",
 	"641c0663-c7a2-40bf-a386-dcca59439e0e");
@@ -159,6 +233,24 @@ INSERT INTO O_ATTR
 	'',
 	'',
 	'duration',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("fe7f27a0-b14c-4b47-b378-1ae562712f6d",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_BATTR
+	VALUES ("fe7f27a0-b14c-4b47-b378-1ae562712f6d",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_ATTR
+	VALUES ("fe7f27a0-b14c-4b47-b378-1ae562712f6d",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	"2ec4ee76-c6f1-4595-b5e0-d1149a6b50e4",
+	'segment_count',
+	'',
+	'',
+	'segment_count',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
