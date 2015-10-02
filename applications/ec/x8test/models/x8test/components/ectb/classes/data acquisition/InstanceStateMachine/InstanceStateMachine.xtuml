@@ -366,6 +366,21 @@ INSERT INTO SM_ACT
 	1,
 	'// Do setup.  When complete, send the done message to the test sequencer.
 
+d[ 21 ] = 0; // init length of array
+
+d[ 0 ] = 3;
+
+d[ 1 ] = 1; // reading number
+d[ 2 ] = 0; // start time
+d[ 3 ] = 200000; // period
+d[ 4 ] = 1; // cycles
+d[ 5 ] = 0; // no branch_offset
+d[ 6 ] = 1; // length is 1
+d[ 7 ] = 1; // 1 data value of 1
+
+// Send the data acquisition file to the EC.
+send eibus::dacq( data:d );
+
 send SEQ::done( variation_number:self.number );',
 	'');
 INSERT INTO SM_MOAH

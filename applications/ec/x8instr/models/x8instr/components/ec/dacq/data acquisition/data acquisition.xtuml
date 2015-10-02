@@ -17,10 +17,11 @@ INSERT INTO O_TFR
 	'create object instance dacq of DACQ;
 dacq.period = param.period;
 dacq.duration = 9999; // CDS ??
-dacq.packet_size = 100;
+dacq.packet_size = 100; // CDS ??
+dacq.reading_count = 0;
 buffer = BUFFER::init( beginning:7000, ending:7016 );
 // CDS - hard code data and period
-reading = READING::init( length_expected:16, samples_expected:4, period:dacq.period );
+reading = READING::init( number:1, length:16, samples:4, period:dacq.period );
 relate dacq to reading across R29.''takes'';
 return dacq;',
 	1,
@@ -134,6 +135,49 @@ INSERT INTO S_DIM
 	"00000000-0000-0000-0000-000000000000",
 	"944e3a5d-67ee-4dc5-a514-6734b2ccc321",
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("7c6a48c2-4bac-4e9f-9c3b-53cf80394723",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	'add_reading',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'reading = param.reading;
+// Append reading to end of list.
+select one preceding_reading related by self->SEGMENT[R40.''has first''];
+if ( empty preceding_reading )
+  // first reading in list
+  relate self to reading across R40.''has first'';
+else
+  next_reading = preceding_reading;
+  // Find end of list.
+  while ( not_empty next_reading )
+    preceding_reading = next_reading;
+    select one next_reading related by next_reading->SEGMENT[R41.''precedes''];
+  end while;
+  // Link to end of list.
+  relate reading to preceding_reading across R41.''follows'';
+end if;
+self.reading_count = self.reading_count + 1;',
+	1,
+	'',
+	"e91259f0-496d-441d-a06f-0b02c7eb91bc");
+INSERT INTO O_TPARM
+	VALUES ("462dab6e-9e92-45dc-ba21-0dc89362e355",
+	"7c6a48c2-4bac-4e9f-9c3b-53cf80394723",
+	'reading',
+	"db0f147d-a35d-4d50-bd56-06640ca6ab14",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("db0f147d-a35d-4d50-bd56-06640ca6ab14",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<reading>',
+	'',
+	'',
+	'../dacq.xtuml');
 INSERT INTO O_NBATTR
 	VALUES ("c3769976-411a-482a-85ae-47e258469f00",
 	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
@@ -204,6 +248,24 @@ INSERT INTO O_ATTR
 	'name',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1a0298c1-6cfa-4026-9005-f4bb80dc1ac6",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
+INSERT INTO O_BATTR
+	VALUES ("1a0298c1-6cfa-4026-9005-f4bb80dc1ac6",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
+INSERT INTO O_ATTR
+	VALUES ("1a0298c1-6cfa-4026-9005-f4bb80dc1ac6",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	"5a3100ce-c5e9-4fa8-a870-0536de97b0f3",
+	'reading_count',
+	'',
+	'',
+	'reading_count',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
 	'');
 INSERT INTO O_ID
