@@ -367,21 +367,7 @@ INSERT INTO SM_ACT
 	VALUES ("a8d7b427-2d6f-4bdf-83cf-615db728a791",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'/* CDS - This seems overkill.
-sample = SAMPLE::init( data:param.data, length:param.length );
-select one front_sample related by self->SAMPLE[R21];
-if ( empty front_sample )
-  // this is the first sample
-  relate self to sample across R21.''has newest'';
-  relate self to sample across R22.''has oldest'';
-else 
-  unrelate self from front_sample across R21.''has newest'';
-  relate self to sample across R21.''has newest'';
-  relate sample to front_sample across R23.''precedes'';
-end if;
-*/
-
-// Stow data into the circular buffer.
+	'// Stow data into the circular buffer.
 select one buffer related by self->BUFFER[R28.''stows in''];
 buffer.deposit( data:param.data, length:param.length );
 // Data wants to be uploaded, so trigger an upload.
@@ -389,7 +375,7 @@ DATAUPLOAD::trigger( buffer:buffer );
 
 // Interrogate the amount of data received.  Detect when we have it all.
 self.length_acquired = self.length_acquired + param.length;
-if ( self.length_acquired >= self.length_expected )
+if ( self.length_acquired >= self.length )
   generate READING4:acquisition_fulfilled() to self;
 end if;
 self.samples_acquired = self.samples_acquired + 1;',
@@ -427,7 +413,7 @@ if ( not_empty buffer )
   // Inform the hardware of where to stow the collected data.
   HW::dacq_setup( data:buffer.beginning, length:buffer.capacity );
 else
-  LOG::LogFailure( message:"no buffer found when one should be there" );
+  TRACE::log( id:1055, flavor:"failure", message:"no buffer found when one should be there" );
 end if;
 
 // Set up a recurring timer that fires for each dacq conversion needed.

@@ -15,8 +15,8 @@ INSERT INTO O_TFR
 	"db0f147d-a35d-4d50-bd56-06640ca6ab14",
 	0,
 	'create object instance reading of READING;
-reading.length_expected = param.length_expected;
-reading.samples_expected = param.samples_expected;
+reading.length = param.length_expected;
+reading.samples = param.samples_expected;
 reading.period = param.period;
 select any buffer from instances of BUFFER where ( selected.available );
 if ( not_empty buffer )
@@ -126,7 +126,7 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("009bf2fb-a092-4992-8426-f9b0f760cbfd",
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
-	"c161c539-0556-47f6-bb3e-e9d0f46b52f0",
+	"a58eedf7-ee01-4609-92bb-69a8c55f246e",
 	'length_acquired',
 	'',
 	'',
@@ -144,7 +144,7 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("17e0d0ed-0360-4c19-b6fb-c41001b65c65",
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
-	"00000000-0000-0000-0000-000000000000",
+	"39e79450-5231-4200-a604-a7aa483f5334",
 	'start_time',
 	'',
 	'',
@@ -162,11 +162,11 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("c161c539-0556-47f6-bb3e-e9d0f46b52f0",
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
-	"17e0d0ed-0360-4c19-b6fb-c41001b65c65",
-	'length_expected',
+	"c66c07ea-4e81-48cc-bdf5-fc419c41e3d5",
+	'length',
 	'',
 	'',
-	'length_expected',
+	'length',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
@@ -180,7 +180,7 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("558f89aa-5f87-4d6f-884a-bed7a47d1de9",
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
-	"cbdaefe9-894d-44b0-9cf2-c8e58ddc6af7",
+	"afa1e17b-66bc-4785-b88a-8c59a33acd23",
 	'current_state',
 	'',
 	'',
@@ -198,7 +198,7 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("a58eedf7-ee01-4609-92bb-69a8c55f246e",
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
-	"c66c07ea-4e81-48cc-bdf5-fc419c41e3d5",
+	"c161c539-0556-47f6-bb3e-e9d0f46b52f0",
 	'samples_acquired',
 	'',
 	'',
@@ -215,26 +215,26 @@ INSERT INTO O_BATTR
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
 INSERT INTO O_ATTR
 	VALUES ("c66c07ea-4e81-48cc-bdf5-fc419c41e3d5",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	"cbdaefe9-894d-44b0-9cf2-c8e58ddc6af7",
+	'samples',
+	'',
+	'',
+	'samples',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("afa1e17b-66bc-4785-b88a-8c59a33acd23",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_BATTR
+	VALUES ("afa1e17b-66bc-4785-b88a-8c59a33acd23",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_ATTR
+	VALUES ("afa1e17b-66bc-4785-b88a-8c59a33acd23",
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
 	"009bf2fb-a092-4992-8426-f9b0f760cbfd",
-	'samples_expected',
-	'',
-	'',
-	'samples_expected',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("afa1e17b-66bc-4785-b88a-8c59a33acd23",
-	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
-INSERT INTO O_BATTR
-	VALUES ("afa1e17b-66bc-4785-b88a-8c59a33acd23",
-	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
-INSERT INTO O_ATTR
-	VALUES ("afa1e17b-66bc-4785-b88a-8c59a33acd23",
-	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
-	"558f89aa-5f87-4d6f-884a-bed7a47d1de9",
 	'conversion_timer',
 	'',
 	'',
@@ -252,7 +252,7 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("cbdaefe9-894d-44b0-9cf2-c8e58ddc6af7",
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
-	"a58eedf7-ee01-4609-92bb-69a8c55f246e",
+	"17e0d0ed-0360-4c19-b6fb-c41001b65c65",
 	'period',
 	'',
 	'',
@@ -261,9 +261,32 @@ INSERT INTO O_ATTR
 	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
 	'');
+INSERT INTO O_NBATTR
+	VALUES ("39e79450-5231-4200-a604-a7aa483f5334",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_BATTR
+	VALUES ("39e79450-5231-4200-a604-a7aa483f5334",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_ATTR
+	VALUES ("39e79450-5231-4200-a604-a7aa483f5334",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	"00000000-0000-0000-0000-000000000000",
+	'number',
+	'',
+	'',
+	'number',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
 INSERT INTO O_ID
 	VALUES (0,
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_OIDA
+	VALUES ("39e79450-5231-4200-a604-a7aa483f5334",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	0,
+	'number');
 INSERT INTO O_ID
 	VALUES (1,
 	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
