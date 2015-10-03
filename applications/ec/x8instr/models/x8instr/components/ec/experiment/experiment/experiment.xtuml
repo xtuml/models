@@ -26,16 +26,11 @@ at a pretty slow rate.
 create object instance experiment of EXPERIMENT;
 experiment.name = param.name;
 
-// Add the timeline and link the default simple waveform and data acquisition.
+// Add the empty timeline and link to default experiment.
 timeline = TIMELINE::init();
 relate experiment to timeline across R13;
 
-timelineeventwave = TIMELINEEVENT::init( offset:0, duration:0 );
-wave = WAVE::init();  // defaulting to empty wave
-relate wave to timelineeventwave across R10;
-timeline.add( timelineevent:timelineeventwave );
-
-timelineeventdacq = TIMELINEEVENT::init( offset:0, duration:2000 );
+timelineeventdacq = TIMELINEEVENT::init( name:"", offset:0, duration:2000 );
 dacq = DACQ::init( period:100000 );
 relate dacq to timelineeventdacq across R10;
 timeline.add( timelineevent:timelineeventdacq );

@@ -159,23 +159,30 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
-	'// waveform file is ordered the same as the segment class.
-w = param.data;
-// CDS - need to deal with string conversion
-name = "11111111"; // w[ 0 ];
+	'w = param.data;
+name = ::itoa( i:w[0] );
 // CDS - how do we link to experiment and timelineevent?
 select any wave from instances of WAVE where ( selected.name == name );
+select one timelineevent related by wave->TIMELINEEVENT[R10];
 if ( empty wave )
+  timelineevent = TIMELINEEVENT::init( name:name, offset:0, duration:0 );
   wave = WAVE::init();
-  wave.name = name;
+  relate wave to timelineevent across R10;
+  select any experiment from instances of EXPERIMENT where ( selected.name == "default" );
+  select one timeline related by experiment->TIMELINE[R13.''runs on''];
+  if ( not_empty timeline )
+    timeline.add( timelineevent:timelineevent );
+  else 
+    TRACE::log( id:1037, flavor:"failure", message:"failed to find default timeline in wave" );
+  end if;
 end if;
 count = w[ 1 ];
 i = 2;
 while ( count > 0 )
-  seg = SEGMENT::init( number:w[i], DC_offset:w[i+1], period:w[i+2], cycles:w[i+3], branch_offset:w[i+4], length:w[i+5] );
+  segment = SEGMENT::init( number:w[i], period:w[i+1], cycles:w[i+2], branch_offset:w[i+3], length:w[i+4] );
   //writing = WRITING::init();
-  wave.add_segment( segment:seg );
-  select one buffer related by seg->BUFFER[R43];
+  timelineevent.add_segment( segment:segment );
+  select one buffer related by segment->BUFFER[R19];
   buffer.deposit( data:w[i+7], length:w[i+6] );
   i = i + w[i+6] + 6;
   count = count - 1;
@@ -220,7 +227,7 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("bc7f48c2-1093-4edc-8f2b-ee202a8e70f3",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
-	"60a3deca-83d5-41f5-849e-5ded14685fc8",
+	"c03f72d3-0fee-472e-8690-0b0a1e44ace5",
 	'segment_count',
 	'',
 	'',
@@ -265,14 +272,47 @@ INSERT INTO O_ATTR
 	"ba5eda7a-def5-0000-0000-00000000000f",
 	'',
 	'');
-INSERT INTO O_NBATTR
-	VALUES ("60a3deca-83d5-41f5-849e-5ded14685fc8",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
-INSERT INTO O_BATTR
-	VALUES ("60a3deca-83d5-41f5-849e-5ded14685fc8",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
+INSERT INTO O_REF
+	VALUES ("b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	0,
+	"f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"5c10e785-cb13-4e96-a052-e5cdc230a4fb",
+	"b93e3bbc-f312-43a5-84cd-0dd8023b15fa",
+	"f51d67c5-d1fa-48fa-9fe8-46976334cd5b",
+	"c03f72d3-0fee-472e-8690-0b0a1e44ace5",
+	"fa50aa4e-98b2-4b2e-b8ba-684723c05627",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'timeline event',
+	'name',
+	'R10');
+INSERT INTO R_RGO_PROXY
+	VALUES ("b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	"5c10e785-cb13-4e96-a052-e5cdc230a4fb",
+	"b93e3bbc-f312-43a5-84cd-0dd8023b15fa",
+	'../../experiment/experiment.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	0,
+	"5c10e785-cb13-4e96-a052-e5cdc230a4fb",
+	"f51d67c5-d1fa-48fa-9fe8-46976334cd5b",
+	'../../experiment/experiment.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("c03f72d3-0fee-472e-8690-0b0a1e44ace5",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	"f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	1,
+	'name');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'../../experiment/timeline event/timeline event.xtuml');
 INSERT INTO O_ATTR
-	VALUES ("60a3deca-83d5-41f5-849e-5ded14685fc8",
+	VALUES ("c03f72d3-0fee-472e-8690-0b0a1e44ace5",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
 	"00000000-0000-0000-0000-000000000000",
 	'name',
@@ -280,14 +320,14 @@ INSERT INTO O_ATTR
 	'',
 	'name',
 	0,
-	"ba5eda7a-def5-0000-0000-000000000004",
+	"ba5eda7a-def5-0000-0000-000000000007",
 	'',
 	'');
 INSERT INTO O_ID
 	VALUES (0,
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
 INSERT INTO O_OIDA
-	VALUES ("60a3deca-83d5-41f5-849e-5ded14685fc8",
+	VALUES ("c03f72d3-0fee-472e-8690-0b0a1e44ace5",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
 	0,
 	'name');
