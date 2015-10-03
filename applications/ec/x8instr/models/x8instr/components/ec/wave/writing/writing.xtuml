@@ -16,11 +16,6 @@ INSERT INTO O_TFR
 	0,
 	'create object instance writing of WRITING;
 writing.DC_offset = param.DC_offset;
-
-//buffer = BUFFER::init( beginning:5000, ending:5000 + param.length );
-//buffer.data[0] = writing.number;  // CDS - default a value into the buffer for this writing.
-//relate segment to buffer across R43;
-
 return writing;',
 	1,
 	'',
@@ -59,86 +54,15 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'self.index = 0;
-self.current_cycle = 1;
-create event instance tick of SEGMENT2:tick() to self;
-self.clock = TIM::timer_start_recurring( microseconds:self.period, event_inst:tick );',
+	'select one segment related by self->SEGMENT[R18];
+segment.index = 0;
+segment.current_cycle = 1;
+create event instance tick of WRITING2:tick() to self;
+segment.clock = TIM::timer_start_recurring( microseconds:segment.period, event_inst:tick );',
 	1,
 	'',
 	"be1d0a87-7ef0-4611-b34b-3892ee1f6fd5");
 INSERT INTO O_NBATTR
-	VALUES ("e7dddba5-7f1b-4e15-8da1-a67a8a981757",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_BATTR
-	VALUES ("e7dddba5-7f1b-4e15-8da1-a67a8a981757",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_ATTR
-	VALUES ("e7dddba5-7f1b-4e15-8da1-a67a8a981757",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
-	"79c82c4c-f79b-4d0c-aeb6-9665a9281089",
-	'length',
-	'',
-	'',
-	'length',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("e27e05f0-db53-47f5-936a-002f4da6c216",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_BATTR
-	VALUES ("e27e05f0-db53-47f5-936a-002f4da6c216",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_ATTR
-	VALUES ("e27e05f0-db53-47f5-936a-002f4da6c216",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
-	"e7dddba5-7f1b-4e15-8da1-a67a8a981757",
-	'index',
-	'',
-	'',
-	'index',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("1cfe2d55-0f2f-4d53-92a5-6056b130be30",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_BATTR
-	VALUES ("1cfe2d55-0f2f-4d53-92a5-6056b130be30",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_ATTR
-	VALUES ("1cfe2d55-0f2f-4d53-92a5-6056b130be30",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
-	"3bdc50af-f1e8-4b89-b670-0f7f9b325c26",
-	'cycles',
-	'',
-	'',
-	'cycles',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("ccbe3475-7c9c-499d-93d4-0bb785f6af7d",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_BATTR
-	VALUES ("ccbe3475-7c9c-499d-93d4-0bb785f6af7d",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_ATTR
-	VALUES ("ccbe3475-7c9c-499d-93d4-0bb785f6af7d",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
-	"e27e05f0-db53-47f5-936a-002f4da6c216",
-	'current_cycle',
-	'',
-	'',
-	'current_cycle',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	'');
-INSERT INTO O_NBATTR
 	VALUES ("99dfe68c-744c-423e-9f00-1e0697ecab95",
 	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
 INSERT INTO O_BATTR
@@ -147,49 +71,13 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("99dfe68c-744c-423e-9f00-1e0697ecab95",
 	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
-	"fe6b1f55-2021-495c-a6dc-2c89c61c11f1",
+	"bab55d6b-1523-4b75-a79b-fe1b833eb177",
 	'current_state',
 	'',
 	'',
 	'current_state',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000006",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("fe6b1f55-2021-495c-a6dc-2c89c61c11f1",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_BATTR
-	VALUES ("fe6b1f55-2021-495c-a6dc-2c89c61c11f1",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_ATTR
-	VALUES ("fe6b1f55-2021-495c-a6dc-2c89c61c11f1",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
-	"ccbe3475-7c9c-499d-93d4-0bb785f6af7d",
-	'clock',
-	'',
-	'',
-	'clock',
-	0,
-	"ba5eda7a-def5-0000-0000-00000000000f",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("3bdc50af-f1e8-4b89-b670-0f7f9b325c26",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_BATTR
-	VALUES ("3bdc50af-f1e8-4b89-b670-0f7f9b325c26",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_ATTR
-	VALUES ("3bdc50af-f1e8-4b89-b670-0f7f9b325c26",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
-	"bab55d6b-1523-4b75-a79b-fe1b833eb177",
-	'period',
-	'',
-	'',
-	'period',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
 	'');
 INSERT INTO O_NBATTR
@@ -206,24 +94,6 @@ INSERT INTO O_ATTR
 	'',
 	'',
 	'number',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("79c82c4c-f79b-4d0c-aeb6-9665a9281089",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_BATTR
-	VALUES ("79c82c4c-f79b-4d0c-aeb6-9665a9281089",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
-INSERT INTO O_ATTR
-	VALUES ("79c82c4c-f79b-4d0c-aeb6-9665a9281089",
-	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
-	"1cfe2d55-0f2f-4d53-92a5-6056b130be30",
-	'branch_offset',
-	'',
-	'',
-	'branch_offset',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000002",
 	'',

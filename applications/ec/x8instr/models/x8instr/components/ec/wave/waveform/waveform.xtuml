@@ -58,80 +58,6 @@ generate WAVE1:play() to self;',
 	'',
 	"aab148aa-2f58-4b2a-a516-8c5d867ad7e2");
 INSERT INTO O_TFR
-	VALUES ("1da9b247-2eff-4d0f-8041-e179157e9885",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
-	'add_segment',
-	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'segment = param.segment;
-// Append segment to end of list.
-select one preceding_segment related by self->SEGMENT[R40.''has first''];
-if ( empty preceding_segment )
-  // first segment in list
-  relate self to segment across R40.''has first'';
-else
-  next_segment = preceding_segment;
-  // Find end of list.
-  while ( not_empty next_segment )
-    preceding_segment = next_segment;
-    select one next_segment related by next_segment->SEGMENT[R41.''precedes''];
-  end while;
-  // Link to end of list.
-  relate segment to preceding_segment across R41.''follows'';
-end if;
-self.segment_count = self.segment_count + 1;',
-	1,
-	'',
-	"0ca89f9e-dfd1-461c-a194-b79205482ddf");
-INSERT INTO O_TPARM
-	VALUES ("e790c781-5fa5-4750-8b0d-1b4daad55f33",
-	"1da9b247-2eff-4d0f-8041-e179157e9885",
-	'segment',
-	"96143939-5991-45e3-8f49-e323199cfed2",
-	0,
-	'',
-	"00000000-0000-0000-0000-000000000000",
-	'');
-INSERT INTO S_DT_PROXY
-	VALUES ("96143939-5991-45e3-8f49-e323199cfed2",
-	"00000000-0000-0000-0000-000000000000",
-	'inst_ref<writing>',
-	'',
-	'',
-	'../wave.xtuml');
-INSERT INTO O_TFR
-	VALUES ("153210b4-31ec-4f39-904e-a7d1aa7dab58",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
-	'next_segment',
-	'',
-	"96143939-5991-45e3-8f49-e323199cfed2",
-	1,
-	'/*
-Get the next segment.  If the current segment is not related,
-then we are just starting, so get the first one.
-When the current segment exists, traverse to the next one.
-When done, return a null segment.
-*/
-select one current_segment related by self->SEGMENT[R42.''has current''];
-if ( empty current_segment )
-  // just starting
-  select one first_segment related by self->SEGMENT[R40.''has first''];
-  if ( not_empty first_segment )
-    relate self to first_segment across R42.''has current'';
-    current_segment = first_segment;
-  else
-    LOG::LogFailure( message:"looking for next when there is no current segment" );
-  end if;
-else
-  // have current, get next
-  select one current_segment related by current_segment->SEGMENT[R41.''precedes''];
-end if;
-return current_segment;',
-	1,
-	'',
-	"1da9b247-2eff-4d0f-8041-e179157e9885");
-INSERT INTO O_TFR
 	VALUES ("6ffdb004-006b-4db0-b435-1c6c51a53623",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
 	'PAD',
@@ -151,7 +77,7 @@ return wave;
 ',
 	1,
 	'',
-	"153210b4-31ec-4f39-904e-a7d1aa7dab58");
+	"0ca89f9e-dfd1-461c-a194-b79205482ddf");
 INSERT INTO O_TFR
 	VALUES ("b1a6b153-e4a5-418a-8c39-5ee73d8c92a2",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
@@ -160,12 +86,16 @@ INSERT INTO O_TFR
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
 	'w = param.data;
-name = ::itoa( i:w[0] );
-// CDS - how do we link to experiment and timelineevent?
-select any wave from instances of WAVE where ( selected.name == name );
+i = 0;
+wavename = ::itoa( i:w[i] ); i = i + 1;
+experimentname = ::itoa( i:w[1] ); i = i + 1;
+timeline_offset = w[2]; i = i + 1;
+timeline_duration = w[3]; i = i + 1;
+// See if a wave with the same name exists, if so, reuse it.
+select any wave from instances of WAVE where ( selected.name == wavename );
 select one timelineevent related by wave->TIMELINEEVENT[R10];
 if ( empty wave )
-  timelineevent = TIMELINEEVENT::init( name:name, offset:0, duration:0 );
+  timelineevent = TIMELINEEVENT::init( name:wavename, offset:timeline_offset, duration:timeline_duration );
   wave = WAVE::init();
   relate wave to timelineevent across R10;
   select any experiment from instances of EXPERIMENT where ( selected.name == "default" );
@@ -173,18 +103,20 @@ if ( empty wave )
   if ( not_empty timeline )
     timeline.add( timelineevent:timelineevent );
   else 
-    TRACE::log( id:1037, flavor:"failure", message:"failed to find default timeline in wave" );
+    TRACE::log( id:1037, flavor:"failure", message:"failed to find default timeline for wave" );
   end if;
 end if;
-count = w[ 1 ];
-i = 2;
+count = w[ i ]; i = i + 1;
 while ( count > 0 )
+  // CDS - Maybe check to see if segments already exist before creating new ones.
   segment = SEGMENT::init( number:w[i], period:w[i+1], cycles:w[i+2], branch_offset:w[i+3], length:w[i+4] );
-  //writing = WRITING::init();
+  writing = WRITING::init( DC_offset:w[i+5] );
+  relate writing to segment across R18;
+  relate writing to wave across R40.''writes segment of'';
   timelineevent.add_segment( segment:segment );
   select one buffer related by segment->BUFFER[R19];
   buffer.deposit( data:w[i+7], length:w[i+6] );
-  i = i + w[i+6] + 6;
+  i = i + w[i+4] + 6;
   count = count - 1;
 end while;',
 	1,
@@ -234,24 +166,6 @@ INSERT INTO O_ATTR
 	'segment_count',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("5c9add5e-ea0a-48b3-8cad-2d36c616b00f",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
-INSERT INTO O_BATTR
-	VALUES ("5c9add5e-ea0a-48b3-8cad-2d36c616b00f",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
-INSERT INTO O_ATTR
-	VALUES ("5c9add5e-ea0a-48b3-8cad-2d36c616b00f",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
-	"325bc52b-5cb8-46f9-a077-d9de0cdec6d4",
-	'current_state',
-	'',
-	'',
-	'current_state',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000006",
 	'',
 	'');
 INSERT INTO O_NBATTR

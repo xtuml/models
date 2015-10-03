@@ -24,8 +24,10 @@ segment.index = 0;
 segment.current_cycle = 0;
 
 // CDS - I think buffer will give me enough space.
-buffer = BUFFER::init( beginning:0, ending:0 + param.length );
-relate segment to buffer across R19;
+if ( segment.length > 0 )
+  buffer = BUFFER::init( beginning:0, ending:0 + param.length );
+  relate segment to buffer across R19;
+end if;
 
 return segment;',
 	1,
@@ -103,8 +105,11 @@ INSERT INTO O_TFR
 	1,
 	'self.index = 0;
 self.current_cycle = 1;
+// CDS - select the subtype and deliver the message through an instance operation
+/*
 create event instance tick of SEGMENT2:tick() to self;
-self.clock = TIM::timer_start_recurring( microseconds:self.period, event_inst:tick );',
+self.clock = TIM::timer_start_recurring( microseconds:self.period, event_inst:tick );
+*/',
 	1,
 	'',
 	"d38b465e-fc9c-407b-9006-3d2fb24a7932");

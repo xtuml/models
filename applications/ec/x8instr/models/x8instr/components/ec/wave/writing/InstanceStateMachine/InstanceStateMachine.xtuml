@@ -25,7 +25,7 @@ INSERT INTO SM_EVT
 	'play',
 	0,
 	'',
-	'SEGMENT1',
+	'WRITING1',
 	'');
 INSERT INTO SM_LEVT
 	VALUES ("c832e962-2185-4088-8771-81c22a671ce1",
@@ -43,7 +43,7 @@ INSERT INTO SM_EVT
 	'tick',
 	0,
 	'',
-	'SEGMENT2',
+	'WRITING2',
 	'');
 INSERT INTO SM_LEVT
 	VALUES ("c9623f61-7c13-4966-a065-b9818302bd03",
@@ -61,7 +61,7 @@ INSERT INTO SM_EVT
 	'done',
 	0,
 	'',
-	'SEGMENT3',
+	'WRITING3',
 	'');
 INSERT INTO SM_STATE
 	VALUES ("118ee215-22da-437d-a081-6ed81e71290a",
@@ -171,17 +171,19 @@ INSERT INTO SM_ACT
 	1,
 	'// Play the potential and bump the index and possibly the repetition.
 // CDS - note this action language supports only repeating not branching
-select one buffer related by self->BUFFER[R43];
-HW::DAC_play( E:buffer.data[ self.index ] );
-self.index = self.index + 1;
-if( self.index == self.length )
-  self.index = 0;
-  if ( self.current_cycle == self.cycles )
-    if ( not TIM::timer_cancel( timer_inst_ref:self.clock ) )
+select one segment related by self->SEGMENT[R18];
+select one buffer related by segment->BUFFER[R19];
+// CDS - Should Estatic (DC_offset) be passed here?
+HW::DAC_play( E:buffer.data[ segment.index ] );
+segment.index = segment.index + 1;
+if( segment.index == segment.length )
+  segment.index = 0;
+  if ( segment.current_cycle == segment.cycles )
+    if ( not TIM::timer_cancel( timer_inst_ref:segment.clock ) )
       TRACE::log( id:1056, flavor:"failure", message:"timer gone in segment when trying to cancel" );
     end if;
   else
-    self.current_cycle = self.current_cycle + 1;
+    segment.current_cycle = segment.current_cycle + 1;
   end if;
 end if;',
 	'');
@@ -333,7 +335,7 @@ INSERT INTO GD_GE
 	"4063316d-d51e-4039-ba33-a63b4ffa0d46",
 	42,
 	0,
-	'x8instr::components::ec::wave::writing::Instance State Machine::playing a potential::SEGMENT2: tick');
+	'x8instr::components::ec::wave::writing::Instance State Machine::playing a potential::WRITING2: tick');
 INSERT INTO GD_CON
 	VALUES ("0961abf3-ce03-4ca5-a87a-22a755e481aa",
 	"00000000-0000-0000-0000-000000000000");
@@ -472,7 +474,7 @@ INSERT INTO GD_GE
 	"b45cdf1f-0740-48fb-9877-d693c076dd94",
 	42,
 	0,
-	'x8instr::components::ec::wave::writing::Instance State Machine::playing a potential::SEGMENT1: play');
+	'x8instr::components::ec::wave::writing::Instance State Machine::playing a potential::WRITING1: play');
 INSERT INTO GD_CON
 	VALUES ("08125d5a-53ee-4768-9729-d421962db4ca",
 	"00000000-0000-0000-0000-000000000000");
@@ -653,7 +655,7 @@ INSERT INTO GD_GE
 	"98849883-b2a2-43d5-a90c-4d8a2c752446",
 	42,
 	0,
-	'x8instr::components::ec::wave::writing::Instance State Machine::starting::SEGMENT1: play');
+	'x8instr::components::ec::wave::writing::Instance State Machine::starting::WRITING1: play');
 INSERT INTO GD_CON
 	VALUES ("f07d4b1d-d207-44b4-adc0-5dd8cac9e6e3",
 	"00000000-0000-0000-0000-000000000000");
@@ -758,7 +760,7 @@ INSERT INTO O_OBJ_PROXY
 	VALUES ("85f26ee6-d6ce-4942-885c-9ae50424ca27",
 	'writing',
 	41,
-	'SEGMENT',
+	'WRITING',
 	'',
 	"00000000-0000-0000-0000-000000000000",
 	'../writing.xtuml');
