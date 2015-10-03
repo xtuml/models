@@ -31,7 +31,7 @@ timeline = TIMELINE::init();
 relate experiment to timeline across R13;
 
 timelineeventwave = TIMELINEEVENT::init( offset:0, duration:0 );
-wave = WAVE::PAD();  // defaulting to PAD waveform, CDS - use waveform file
+wave = WAVE::init();  // defaulting to empty wave
 relate wave to timelineeventwave across R10;
 timeline.add( timelineevent:timelineeventwave );
 
@@ -41,6 +41,7 @@ relate dacq to timelineeventdacq across R10;
 timeline.add( timelineevent:timelineeventdacq );
 
 // Set timeline to expire at the end of the longest timeline event.
+// CDS - Maybe add_segment needs to accumulate the duration and propagate up.
 timeline.duration = 2000;',
 	1,
 	'',
@@ -107,6 +108,11 @@ INSERT INTO O_ATTR
 INSERT INTO O_ID
 	VALUES (0,
 	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");
+INSERT INTO O_OIDA
+	VALUES ("198170c7-9689-467d-9c4e-1e4561434a56",
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337",
+	0,
+	'name');
 INSERT INTO O_ID
 	VALUES (1,
 	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");

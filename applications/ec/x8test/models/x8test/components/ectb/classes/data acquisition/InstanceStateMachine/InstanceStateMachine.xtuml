@@ -366,17 +366,18 @@ INSERT INTO SM_ACT
 	1,
 	'// Do setup.  When complete, send the done message to the test sequencer.
 
-d[ 21 ] = 0; // init length of array
+d[ 8 ] = 0; // init length of array
 
-d[ 0 ] = 3;
+d[ 0 ] = 2222; // 4 bytes of name
+d[ 1 ] = 1; // number of segments
 
-d[ 1 ] = 1; // reading number
-d[ 2 ] = 0; // start time
-d[ 3 ] = 200000; // period
-d[ 4 ] = 1; // cycles
-d[ 5 ] = 0; // no branch_offset
-d[ 6 ] = 1; // length is 1
-d[ 7 ] = 1; // 1 data value of 1
+d[ 2 ] = 1; // reading number
+d[ 3 ] = 0; // start time
+d[ 4 ] = 200000; // period
+d[ 5 ] = 1; // cycles
+d[ 6 ] = 0; // no branch_offset
+d[ 7 ] = 1; // length is 1
+d[ 8 ] = 1; // 1 data value of 1
 
 // Send the data acquisition file to the EC.
 send eibus::dacq( data:d );

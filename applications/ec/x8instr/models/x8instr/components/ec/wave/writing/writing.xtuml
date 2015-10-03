@@ -14,58 +14,17 @@ INSERT INTO O_TFR
 	'',
 	"96143939-5991-45e3-8f49-e323199cfed2",
 	0,
-	'create object instance segment of SEGMENT;
-segment.number = param.number;
-segment.length = param.length;
-segment.cycles = param.cycles;
-segment.current_cycle = 0;
-segment.period = param.period;
-segment.index = 0;
+	'create object instance writing of WRITING;
+writing.DC_offset = param.DC_offset;
 
-buffer = BUFFER::init( beginning:5000, ending:5000 + param.length );
-buffer.data[0] = segment.number;  // CDS - default a value into the buffer for this segment.
-relate segment to buffer across R43;
+//buffer = BUFFER::init( beginning:5000, ending:5000 + param.length );
+//buffer.data[0] = writing.number;  // CDS - default a value into the buffer for this writing.
+//relate segment to buffer across R43;
 
-return segment;',
+return writing;',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO O_TPARM
-	VALUES ("819acab4-fafc-4358-a1d7-828cf070188a",
-	"284034e4-b89f-46a4-a31e-ef7f6894e611",
-	'number',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"00000000-0000-0000-0000-000000000000",
-	'');
-INSERT INTO O_TPARM
-	VALUES ("2ea97cbb-aeb0-4c0d-83e6-f3e72f530bb9",
-	"284034e4-b89f-46a4-a31e-ef7f6894e611",
-	'length',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"c097193e-11fc-41e3-b07c-0c36e257f5ec",
-	'');
-INSERT INTO O_TPARM
-	VALUES ("265d95f3-6b89-4b0b-bc14-76f9cd15d29f",
-	"284034e4-b89f-46a4-a31e-ef7f6894e611",
-	'cycles',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"4d4055b6-ceb1-487e-9953-24a2c19fca19",
-	'');
-INSERT INTO O_TPARM
-	VALUES ("4d4055b6-ceb1-487e-9953-24a2c19fca19",
-	"284034e4-b89f-46a4-a31e-ef7f6894e611",
-	'period',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"af855bc9-9048-4be3-9367-d5ee25f6b4e5",
-	'');
 INSERT INTO O_TPARM
 	VALUES ("af855bc9-9048-4be3-9367-d5ee25f6b4e5",
 	"284034e4-b89f-46a4-a31e-ef7f6894e611",
@@ -73,16 +32,7 @@ INSERT INTO O_TPARM
 	"ba5eda7a-def5-0000-0000-000000000002",
 	0,
 	'',
-	"819acab4-fafc-4358-a1d7-828cf070188a",
-	'');
-INSERT INTO O_TPARM
-	VALUES ("c097193e-11fc-41e3-b07c-0c36e257f5ec",
-	"284034e4-b89f-46a4-a31e-ef7f6894e611",
-	'branch_offset',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"265d95f3-6b89-4b0b-bc14-76f9cd15d29f",
+	"00000000-0000-0000-0000-000000000000",
 	'');
 INSERT INTO S_DT_PROXY
 	VALUES ("96143939-5991-45e3-8f49-e323199cfed2",

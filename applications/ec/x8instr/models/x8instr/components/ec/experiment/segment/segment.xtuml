@@ -12,19 +12,20 @@ INSERT INTO O_TFR
 	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
 	'init',
 	'',
-	"96143939-5991-45e3-8f49-e323199cfed2",
+	"ddfc22ca-41d9-4c88-b2e8-bf95ecd32b26",
 	0,
 	'create object instance segment of SEGMENT;
 segment.number = param.number;
-segment.length = param.length;
-segment.cycles = param.cycles;
-segment.current_cycle = 0;
 segment.period = param.period;
+segment.cycles = param.cycles;
+segment.branch_offset = param.branch_offset;
+segment.length = param.length;
 segment.index = 0;
+segment.current_cycle = 0;
 
-buffer = BUFFER::init( beginning:5000, ending:5000 + param.length );
-buffer.data[0] = segment.number;  // CDS - default a value into the buffer for this segment.
-relate segment to buffer across R43;
+// CDS - I think buffer will give me enough space.
+buffer = BUFFER::init( beginning:0, ending:0 + param.length );
+relate segment to buffer across R19;
 
 return segment;',
 	1,
@@ -64,15 +65,6 @@ INSERT INTO O_TPARM
 	"ba5eda7a-def5-0000-0000-000000000002",
 	0,
 	'',
-	"ee18e4fd-c468-4940-b65d-e49b27f42c11",
-	'');
-INSERT INTO O_TPARM
-	VALUES ("ee18e4fd-c468-4940-b65d-e49b27f42c11",
-	"25309da8-b423-4d33-b4f6-a99e11f67342",
-	'DC_offset',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
 	"bdeb3c88-7816-49f9-a888-e123613c0325",
 	'');
 INSERT INTO O_TPARM
@@ -85,12 +77,12 @@ INSERT INTO O_TPARM
 	"a1536676-adcf-43d4-a5f1-b3a333e85965",
 	'');
 INSERT INTO S_DT_PROXY
-	VALUES ("96143939-5991-45e3-8f49-e323199cfed2",
+	VALUES ("ddfc22ca-41d9-4c88-b2e8-bf95ecd32b26",
 	"00000000-0000-0000-0000-000000000000",
 	'inst_ref<segment>',
 	'',
 	'',
-	'../../wave/wave.xtuml');
+	'../experiment.xtuml');
 INSERT INTO O_TFR
 	VALUES ("d38b465e-fc9c-407b-9006-3d2fb24a7932",
 	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
@@ -215,7 +207,7 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("abead7fb-95e4-4bbb-b046-4345cc191214",
 	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
-	"70534d9b-e7fa-42ac-b9da-81971fbbb5dc",
+	"80881a48-3d48-4463-b8df-9e79ef2e2579",
 	'period',
 	'',
 	'',
@@ -256,24 +248,6 @@ INSERT INTO O_ATTR
 	'',
 	'',
 	'branch_offset',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("70534d9b-e7fa-42ac-b9da-81971fbbb5dc",
-	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
-INSERT INTO O_BATTR
-	VALUES ("70534d9b-e7fa-42ac-b9da-81971fbbb5dc",
-	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
-INSERT INTO O_ATTR
-	VALUES ("70534d9b-e7fa-42ac-b9da-81971fbbb5dc",
-	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
-	"80881a48-3d48-4463-b8df-9e79ef2e2579",
-	'DC_offset',
-	'',
-	'',
-	'DC_offset',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000002",
 	'',

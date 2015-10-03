@@ -96,7 +96,7 @@ INSERT INTO O_TPARM
 INSERT INTO S_DT_PROXY
 	VALUES ("96143939-5991-45e3-8f49-e323199cfed2",
 	"00000000-0000-0000-0000-000000000000",
-	'inst_ref<segment>',
+	'inst_ref<writing>',
 	'',
 	'',
 	'../wave.xtuml');
@@ -161,11 +161,19 @@ INSERT INTO O_TFR
 	0,
 	'// waveform file is ordered the same as the segment class.
 w = param.data;
-i = 0;
-count = w[ i ];
-wave = WAVE::init();
+// CDS - need to deal with string conversion
+name = "11111111"; // w[ 0 ];
+// CDS - how do we link to experiment and timelineevent?
+select any wave from instances of WAVE where ( selected.name == name );
+if ( empty wave )
+  wave = WAVE::init();
+  wave.name = name;
+end if;
+count = w[ 1 ];
+i = 2;
 while ( count > 0 )
-  seg = SEGMENT::init( number:w[i+1], DC_offset:w[i+2], period:w[i+3], cycles:w[i+4], branch_offset:w[i+5], length:w[i+6] );
+  seg = SEGMENT::init( number:w[i], DC_offset:w[i+1], period:w[i+2], cycles:w[i+3], branch_offset:w[i+4], length:w[i+5] );
+  //writing = WRITING::init();
   wave.add_segment( segment:seg );
   select one buffer related by seg->BUFFER[R43];
   buffer.deposit( data:w[i+7], length:w[i+6] );
@@ -212,7 +220,7 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("bc7f48c2-1093-4edc-8f2b-ee202a8e70f3",
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
-	"00000000-0000-0000-0000-000000000000",
+	"60a3deca-83d5-41f5-849e-5ded14685fc8",
 	'segment_count',
 	'',
 	'',
@@ -257,9 +265,32 @@ INSERT INTO O_ATTR
 	"ba5eda7a-def5-0000-0000-00000000000f",
 	'',
 	'');
+INSERT INTO O_NBATTR
+	VALUES ("60a3deca-83d5-41f5-849e-5ded14685fc8",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
+INSERT INTO O_BATTR
+	VALUES ("60a3deca-83d5-41f5-849e-5ded14685fc8",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
+INSERT INTO O_ATTR
+	VALUES ("60a3deca-83d5-41f5-849e-5ded14685fc8",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	"00000000-0000-0000-0000-000000000000",
+	'name',
+	'',
+	'',
+	'name',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
 INSERT INTO O_ID
 	VALUES (0,
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
+INSERT INTO O_OIDA
+	VALUES ("60a3deca-83d5-41f5-849e-5ded14685fc8",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	0,
+	'name');
 INSERT INTO O_ID
 	VALUES (1,
 	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
