@@ -15,27 +15,10 @@ INSERT INTO O_TFR
 	"6f6d7864-624d-44d1-a38b-a72d60e6c31e",
 	0,
 	'create object instance dacq of DACQ;
-dacq.period = param.period;
-dacq.duration = 9999; // CDS ??
-dacq.packet_size = 100; // CDS ??
-dacq.reading_count = 0;
-buffer = BUFFER::init( beginning:7000, ending:7016 );
-// CDS - hard code data and period
-reading = READING::init( number:1, length:16, samples:4, period:dacq.period );
-relate dacq to reading across R29.''takes'';
 return dacq;',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO O_TPARM
-	VALUES ("c55f9da7-1f34-42f7-bd07-2860048c2896",
-	"332bacb7-dd34-443c-8fa1-0b67ce099456",
-	'period',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"00000000-0000-0000-0000-000000000000",
-	'');
 INSERT INTO S_DT_PROXY
 	VALUES ("6f6d7864-624d-44d1-a38b-a72d60e6c31e",
 	"00000000-0000-0000-0000-000000000000",
@@ -93,17 +76,42 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
-	'// data acquisition file is ordered
+	'// Almost identical to wave.  Refactor?
 d = param.data;
 i = 0;
-count = d[ i ];
-wave = WAVE::init();
+name = ::itoa( i:d[i] ); i = i + 1;
+experimentname = ::itoa( i:d[i] ); i = i + 1;
+timeline_offset = d[i]; i = i + 1;
+event_duration = d[i]; i = i + 1;
+// See if a dacq with the same name exists, if so, reuse it.
+select any dacq from instances of DACQ where ( selected.name == name );
+select one timelineevent related by dacq->TIMELINEEVENT[R10];
+if ( empty dacq )
+  timelineevent = TIMELINEEVENT::init( name:name, offset:timeline_offset, duration:event_duration );
+  dacq = DACQ::init();
+  relate dacq to timelineevent across R10;
+  select any experiment from instances of EXPERIMENT where ( selected.name == experimentname );
+  select one timeline related by experiment->TIMELINE[R13.''runs on''];
+  if ( not_empty timeline )
+    timeline.add( timelineevent:timelineevent );
+  else 
+    TRACE::log( id:1038, flavor:"failure", message:"failed to find default timeline for dacq" );
+  end if;
+end if;
+count = d[ i ]; i = i + 1;
 while ( count > 0 )
-  //reading = READING::init( number:w[i+1], DC_offset:w[i+2], period:w[i+3], cycles:w[i+4], branch_offset:w[i+5], length:w[i+6] );
-  //dacq.add_reading( reading:reading );
-  i = i + d[i+5] + 5;
+  // CDS - Maybe check to see if segments already exist before creating new ones.
+  segment = SEGMENT::init( number:d[i], period:d[i+1], cycles:d[i+2], branch_offset:d[i+3], length:d[i+4] );
+  reading = READING::init();
+  relate reading to segment across R18;
+  relate reading to dacq across R29.''acquires segment of'';
+  timelineevent.add_segment( segment:segment );
+  select one buffer related by segment->BUFFER[R19];
+  buffer.deposit( data:d[i+6], length:d[i+4] );
+  i = i + d[i+4] + 6;
   count = count - 1;
-end while;',
+end while;
+',
 	1,
 	'',
 	"23290c4c-e468-4e24-a68e-e54fac111c98");
@@ -135,95 +143,16 @@ INSERT INTO S_DIM
 	"00000000-0000-0000-0000-000000000000",
 	"944e3a5d-67ee-4dc5-a514-6734b2ccc321",
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO O_TFR
-	VALUES ("7c6a48c2-4bac-4e9f-9c3b-53cf80394723",
-	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
-	'add_reading',
-	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'reading = param.reading;
-// Append reading to end of list.
-select one preceding_reading related by self->SEGMENT[R40.''has first''];
-if ( empty preceding_reading )
-  // first reading in list
-  relate self to reading across R40.''has first'';
-else
-  next_reading = preceding_reading;
-  // Find end of list.
-  while ( not_empty next_reading )
-    preceding_reading = next_reading;
-    select one next_reading related by next_reading->SEGMENT[R41.''precedes''];
-  end while;
-  // Link to end of list.
-  relate reading to preceding_reading across R41.''follows'';
-end if;
-self.reading_count = self.reading_count + 1;',
-	1,
-	'',
-	"e91259f0-496d-441d-a06f-0b02c7eb91bc");
-INSERT INTO O_TPARM
-	VALUES ("462dab6e-9e92-45dc-ba21-0dc89362e355",
-	"7c6a48c2-4bac-4e9f-9c3b-53cf80394723",
-	'reading',
-	"db0f147d-a35d-4d50-bd56-06640ca6ab14",
-	0,
-	'',
-	"00000000-0000-0000-0000-000000000000",
-	'');
-INSERT INTO S_DT_PROXY
-	VALUES ("db0f147d-a35d-4d50-bd56-06640ca6ab14",
-	"00000000-0000-0000-0000-000000000000",
-	'inst_ref<reading>',
-	'',
-	'',
-	'../dacq.xtuml');
 INSERT INTO O_NBATTR
-	VALUES ("c3769976-411a-482a-85ae-47e258469f00",
+	VALUES ("5a3100ce-c5e9-4fa8-a870-0536de97b0f3",
 	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
 INSERT INTO O_BATTR
-	VALUES ("c3769976-411a-482a-85ae-47e258469f00",
+	VALUES ("5a3100ce-c5e9-4fa8-a870-0536de97b0f3",
 	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
 INSERT INTO O_ATTR
-	VALUES ("c3769976-411a-482a-85ae-47e258469f00",
+	VALUES ("5a3100ce-c5e9-4fa8-a870-0536de97b0f3",
 	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
 	"934aa5b6-c36d-42c1-8f0b-aefee7eb6977",
-	'period',
-	'',
-	'',
-	'period',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("73462b1a-5626-46c1-b5bc-c2434029dd56",
-	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
-INSERT INTO O_BATTR
-	VALUES ("73462b1a-5626-46c1-b5bc-c2434029dd56",
-	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
-INSERT INTO O_ATTR
-	VALUES ("73462b1a-5626-46c1-b5bc-c2434029dd56",
-	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
-	"c3769976-411a-482a-85ae-47e258469f00",
-	'duration',
-	'',
-	'',
-	'duration',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("5a3100ce-c5e9-4fa8-a870-0536de97b0f3",
-	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
-INSERT INTO O_BATTR
-	VALUES ("5a3100ce-c5e9-4fa8-a870-0536de97b0f3",
-	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
-INSERT INTO O_ATTR
-	VALUES ("5a3100ce-c5e9-4fa8-a870-0536de97b0f3",
-	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
-	"73462b1a-5626-46c1-b5bc-c2434029dd56",
 	'packet_size',
 	'',
 	'',

@@ -22,7 +22,7 @@ select one timelineevent related by self->TIMELINEEVENT[R11.''has first''];
 if ( not_empty timelineevent )
   generate TIMELINE1:start() to self;
 else
-  LOG::LogFailure( message:"tried to start empty timeline" );
+  TRACE::log( id:1028, flavor:"failure", message:"tried to start empty timeline" );
 end if;
 
 // Set the expiration timer.
@@ -31,7 +31,7 @@ self.end_timer = TIM::timer_start( microseconds:self.duration * 1000, event_inst
 ',
 	1,
 	'',
-	"00000000-0000-0000-0000-000000000000");
+	"20581f5b-490d-4a8b-a1e9-ac8a33170e5a");
 INSERT INTO O_TFR
 	VALUES ("b4e7900d-e787-4c7a-a341-a9c1ced872de",
 	"f25b666c-2fcc-4735-949f-13378350a7fd",
@@ -44,7 +44,7 @@ timeline.duration = 0;
 return timeline;',
 	1,
 	'',
-	"1149452f-5ee3-423d-9671-8aa535b06f98");
+	"00000000-0000-0000-0000-000000000000");
 INSERT INTO S_DT_PROXY
 	VALUES ("0daa40bc-a18b-4d74-af89-882da4e91f11",
 	"00000000-0000-0000-0000-000000000000",
@@ -73,6 +73,7 @@ end if;
 if ( empty firstevent )
   // We are first to be added to an empty list.
   relate self to timelineevent across R11.''has first'';
+  self.duration = timelineevent.duration;
 else
   // Start at first and get next.  Compare offsets.
   if ( timelineevent.offset <= firstevent.offset )
@@ -95,12 +96,15 @@ else
     relate prev to timelineevent across R12.''precedes'';
     if ( not_empty nextevent )
       relate nextevent to timelineevent across R12.''follows'';
+    else
+      // The last event in the timeline governs the duration of the timeline.
+      self.duration = timelineevent.duration + timelineevent.offset;
     end if;
   end if;
 end if;',
 	1,
 	'',
-	"b4e7900d-e787-4c7a-a341-a9c1ced872de");
+	"1149452f-5ee3-423d-9671-8aa535b06f98");
 INSERT INTO O_TPARM
 	VALUES ("058f15ea-1a3e-435d-a3f5-715b047ac906",
 	"d8ef6e8f-a34f-4bd5-9a72-8c7606994fde",
@@ -175,7 +179,7 @@ timelineevent.cleanup();
 delete object instance self;',
 	1,
 	'',
-	"2df77480-aab2-4036-b581-3718994b5f60");
+	"b4e7900d-e787-4c7a-a341-a9c1ced872de");
 INSERT INTO O_NBATTR
 	VALUES ("4223661a-9f3d-48e5-8716-40f3c27fe91b",
 	"f25b666c-2fcc-4735-949f-13378350a7fd");

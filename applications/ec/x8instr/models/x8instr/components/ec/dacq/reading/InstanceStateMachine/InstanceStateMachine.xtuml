@@ -368,7 +368,7 @@ INSERT INTO SM_ACT
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
 	'// Stow data into the circular buffer.
-select one buffer related by self->BUFFER[R28.''stows in''];
+select one buffer related by self->SEGMENT[R18]->BUFFER[R19];
 buffer.deposit( data:param.data, length:param.length );
 // Data wants to be uploaded, so trigger an upload.
 DATAUPLOAD::trigger( buffer:buffer );
@@ -408,7 +408,8 @@ INSERT INTO SM_ACT
 	VALUES ("3564aa73-8456-487b-933a-e040f9e74569",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'select one buffer related by self->BUFFER[R28.''stows in''];
+	'/*
+select one buffer related by self->BUFFER[R28.''stows in''];
 if ( not_empty buffer )
   // Inform the hardware of where to stow the collected data.
   HW::dacq_setup( data:buffer.beginning, length:buffer.capacity );
@@ -418,7 +419,8 @@ end if;
 
 // Set up a recurring timer that fires for each dacq conversion needed.
 create event instance tick of READING2:tick() to self;
-self.conversion_timer = TIM::timer_start_recurring( microseconds:self.period, event_inst:tick );',
+self.conversion_timer = TIM::timer_start_recurring( microseconds:self.period, event_inst:tick );
+*/',
 	'');
 INSERT INTO SM_TAH
 	VALUES ("fd496bb0-14be-4e25-871d-10cd5de983f2",

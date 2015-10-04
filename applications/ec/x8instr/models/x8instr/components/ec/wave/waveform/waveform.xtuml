@@ -15,7 +15,6 @@ INSERT INTO O_TFR
 	"45ac1edb-87df-459d-8c77-913b855c087e",
 	0,
 	'create object instance wave of WAVE;
-wave.segment_count = 0;
 return wave;
 ',
 	1,
@@ -53,7 +52,8 @@ INSERT INTO O_TFR
 	'/*
 Play out the waveform segment by segment.
 */
-generate WAVE1:play() to self;',
+select one timelineevent related by self->TIMELINEEVENT[R10];
+generate TIMELINEEVENT1:play() to timelineevent;',
 	1,
 	'',
 	"aab148aa-2f58-4b2a-a516-8c5d867ad7e2");
@@ -65,14 +65,14 @@ INSERT INTO O_TFR
 	"45ac1edb-87df-459d-8c77-913b855c087e",
 	0,
 	'wave = WAVE::init();
-//
+/*
 seg = SEGMENT::init( number:1, DC_offset:0, period:200000, cycles:1, branch_offset:0, length:1 );
 wave.add_segment( segment:seg );
 seg = SEGMENT::init( number:2, DC_offset:0, period:800000, cycles:1, branch_offset:0, length:1 );
 wave.add_segment( segment:seg );
 seg = SEGMENT::init( number:3, DC_offset:0, period:400000, cycles:1, branch_offset:0, length:1 );
 wave.add_segment( segment:seg );
-//
+*/
 return wave;
 ',
 	1,
@@ -85,20 +85,27 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
-	'w = param.data;
+	'// Almost identical to dacq.  Refactor?
+d = param.data;
 i = 0;
-wavename = ::itoa( i:w[i] ); i = i + 1;
-experimentname = ::itoa( i:w[1] ); i = i + 1;
-timeline_offset = w[2]; i = i + 1;
-timeline_duration = w[3]; i = i + 1;
+name = ::itoa( i:d[i] ); i = i + 1;
+experimentname = ::itoa( i:d[i] ); i = i + 1;
+timeline_offset = d[i]; i = i + 1;
+// Consider calculating this.
+event_duration = d[i]; i = i + 1;
 // See if a wave with the same name exists, if so, reuse it.
-select any wave from instances of WAVE where ( selected.name == wavename );
+/*
+ CDS - no, not this.  Instead, look for an event on the timeline at
+ the same offset and of the same type.
+ Only one waveform can exist at the same point on the timeline at the same time.
+*/
+select any wave from instances of WAVE where ( selected.name == name );
 select one timelineevent related by wave->TIMELINEEVENT[R10];
 if ( empty wave )
-  timelineevent = TIMELINEEVENT::init( name:wavename, offset:timeline_offset, duration:timeline_duration );
+  timelineevent = TIMELINEEVENT::init( name:name, offset:timeline_offset, duration:event_duration );
   wave = WAVE::init();
   relate wave to timelineevent across R10;
-  select any experiment from instances of EXPERIMENT where ( selected.name == "default" );
+  select any experiment from instances of EXPERIMENT where ( selected.name == experimentname );
   select one timeline related by experiment->TIMELINE[R13.''runs on''];
   if ( not_empty timeline )
     timeline.add( timelineevent:timelineevent );
@@ -106,19 +113,21 @@ if ( empty wave )
     TRACE::log( id:1037, flavor:"failure", message:"failed to find default timeline for wave" );
   end if;
 end if;
-count = w[ i ]; i = i + 1;
+count = d[ i ]; i = i + 1;
 while ( count > 0 )
   // CDS - Maybe check to see if segments already exist before creating new ones.
-  segment = SEGMENT::init( number:w[i], period:w[i+1], cycles:w[i+2], branch_offset:w[i+3], length:w[i+4] );
-  writing = WRITING::init( DC_offset:w[i+5] );
+  segment = SEGMENT::init( number:d[i], period:d[i+1], cycles:d[i+2], branch_offset:d[i+3], length:d[i+4] );
+  writing = WRITING::init( DC_offset:d[i+5] );
   relate writing to segment across R18;
   relate writing to wave across R40.''writes segment of'';
   timelineevent.add_segment( segment:segment );
   select one buffer related by segment->BUFFER[R19];
-  buffer.deposit( data:w[i+7], length:w[i+6] );
-  i = i + w[i+4] + 6;
+  buffer.deposit( data:d[i+6], length:d[i+4] );
+  i = i + d[i+4] + 6;
   count = count - 1;
-end while;',
+end while;
+// Add event to timeline after all segments are accumulated.
+// This allows full duration to be calculated.',
 	1,
 	'',
 	"6ffdb004-006b-4db0-b435-1c6c51a53623");
@@ -150,42 +159,6 @@ INSERT INTO S_DIM
 	"00000000-0000-0000-0000-000000000000",
 	"5ca0cbe1-62df-4956-a7cc-266ab60cf22f",
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO O_NBATTR
-	VALUES ("bc7f48c2-1093-4edc-8f2b-ee202a8e70f3",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
-INSERT INTO O_BATTR
-	VALUES ("bc7f48c2-1093-4edc-8f2b-ee202a8e70f3",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
-INSERT INTO O_ATTR
-	VALUES ("bc7f48c2-1093-4edc-8f2b-ee202a8e70f3",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
-	"c03f72d3-0fee-472e-8690-0b0a1e44ace5",
-	'segment_count',
-	'',
-	'',
-	'segment_count',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("325bc52b-5cb8-46f9-a077-d9de0cdec6d4",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
-INSERT INTO O_BATTR
-	VALUES ("325bc52b-5cb8-46f9-a077-d9de0cdec6d4",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
-INSERT INTO O_ATTR
-	VALUES ("325bc52b-5cb8-46f9-a077-d9de0cdec6d4",
-	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
-	"bc7f48c2-1093-4edc-8f2b-ee202a8e70f3",
-	'segment_timer',
-	'',
-	'',
-	'segment_timer',
-	0,
-	"ba5eda7a-def5-0000-0000-00000000000f",
-	'',
-	'');
 INSERT INTO O_REF
 	VALUES ("b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
 	"641c0663-c7a2-40bf-a386-dcca59439e0e",

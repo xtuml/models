@@ -15,7 +15,10 @@ INSERT INTO O_TFR
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
 	'create object instance program of PROGRAM;
-program.name = param.name;
+programname = param.name;
+// Create the supertype timeline event even if not connecting to a timeline.
+timelineevent = TIMELINEEVENT::init( name:programname, offset:0, duration:0 );
+relate program to timelineevent across R10;
 program.length = param.length;
 program.PC =  program.length;
 while ( program.PC > 0 )
