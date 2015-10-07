@@ -85,7 +85,15 @@ OR adding a waveform when no experiment yet exists.
 d = param.data;
 i = 0;
 name = STRING::itoa( i:d[i] ); i = i + 1;
+// CDS - HACK for now to have a default name
+if ( d[i-1] == 0 )
+  name = "default";
+end if;
 experimentname = STRING::itoa( i:d[i] ); i = i + 1;
+// CDS - HACK for now to have a default name
+if ( d[i-1] == 0 )
+  experimentname = "default";
+end if;
 base = d[i]; i = i + 1; exponent = d[i]; i = i + 1;
 timeline_offset = TIME::microseconds( base:base, exponent:exponent );
 base = d[i]; i = i + 1; exponent = d[i]; i = i + 1;
