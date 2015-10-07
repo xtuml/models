@@ -12,17 +12,16 @@ INSERT INTO O_TFR
 	"e27e2331-72d3-4f2e-99d7-a84cf05b0337",
 	'init',
 	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
+	"1b75847b-ccf4-41f4-b023-faa4cee8b9c3",
 	0,
-	'/*
-This is the default generic experiment.
-*/
-create object instance experiment of EXPERIMENT;
+	'create object instance experiment of EXPERIMENT;
 experiment.name = param.name;
 
-// Add the empty timeline and link to default experiment.
+// Add the empty timeline and link to the new experiment.
 timeline = TIMELINE::init();
 relate experiment to timeline across R13;
+
+return experiment;
 ',
 	1,
 	'',
@@ -36,6 +35,13 @@ INSERT INTO O_TPARM
 	'',
 	"00000000-0000-0000-0000-000000000000",
 	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("1b75847b-ccf4-41f4-b023-faa4cee8b9c3",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<experiment>',
+	'',
+	'',
+	'../experiment.xtuml');
 INSERT INTO O_TFR
 	VALUES ("997c2642-06fb-47bc-8fa6-d875f3b87caf",
 	"e27e2331-72d3-4f2e-99d7-a84cf05b0337",

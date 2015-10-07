@@ -48,7 +48,7 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'select one reading related by self->READING[R29];
+	'select one reading related by self->TIMELINEEVENT[R10]->SEGMENT[R15.''has first'']->READING[R18];
 if ( not_empty reading )
   generate READING1:go() to reading;
 else
@@ -76,31 +76,47 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
-	'// Almost identical to wave.  Refactor?
+	'/*
+This routine supports adding a waveform to an existing experiment and timeline
+where the waveform already exists,
+OR adding a waveform to an existing experiment when the waveform does not exist,
+OR adding a waveform when no experiment yet exists.
+*/
 d = param.data;
 i = 0;
-name = ::itoa( i:d[i] ); i = i + 1;
-experimentname = ::itoa( i:d[i] ); i = i + 1;
+name = STRING::itoa( i:d[i] ); i = i + 1;
+experimentname = STRING::itoa( i:d[i] ); i = i + 1;
 timeline_offset = d[i]; i = i + 1;
 event_duration = d[i]; i = i + 1;
-// See if a dacq with the same name exists, if so, reuse it.
-select any dacq from instances of DACQ where ( selected.name == name );
-select one timelineevent related by dacq->TIMELINEEVENT[R10];
+
+select any dacq from instances of DACQ where ( false ); // declare
+select any timelineevent from instances of TIMELINEEVENT where ( false ); // declare
+// Look for given experiment.  Use it or create it.
+// See if timeline event at this offset already exists.  If so, use it.
+select any experiment from instances of EXPERIMENT where ( selected.name == experimentname );
+if ( empty experiment )
+  // Create experiment and timeline.
+  experiment = EXPERIMENT::init( name:experimentname );
+else
+  // experiment already exists, so check for matching dacq.
+  select any timelineevent from instances of TIMELINEEVENT where ( ( selected.name == name ) and ( selected.offset == timeline_offset ) );
+  if ( not_empty timelineevent )
+    // Clear off existing segments.
+    timelineevent.clear_segments();
+    // Get the related waveform.
+    select one dacq related by timelineevent->DACQ[R10];
+  end if;
+end if;
+// Now we either found an existing dacq or we still need to create it.
 if ( empty dacq )
   timelineevent = TIMELINEEVENT::init( name:name, offset:timeline_offset, duration:event_duration );
   dacq = DACQ::init();
   relate dacq to timelineevent across R10;
-  select any experiment from instances of EXPERIMENT where ( selected.name == experimentname );
   select one timeline related by experiment->TIMELINE[R13.''runs on''];
-  if ( not_empty timeline )
-    timeline.add( timelineevent:timelineevent );
-  else 
-    TRACE::log( id:1038, flavor:"failure", message:"failed to find default timeline for dacq" );
-  end if;
+  timeline.add( timelineevent:timelineevent );
 end if;
 count = d[ i ]; i = i + 1;
 while ( count > 0 )
-  // CDS - Maybe check to see if segments already exist before creating new ones.
   segment = SEGMENT::init( number:d[i], period:d[i+1], cycles:d[i+2], branch_offset:d[i+3], length:d[i+4] );
   reading = READING::init();
   relate reading to segment across R18;

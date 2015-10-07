@@ -366,40 +366,39 @@ INSERT INTO SM_ACT
 	1,
 	'// Do setup.  When complete, send the done message to the test sequencer.
 
-w[ 25 ] = 0; // init length of array
+d[ 25 ] = 0;      i = 0;           // init length of array
 
-w[ 0 ] = 1; // wave name
-w[ 1 ] = 0; // experiment name
-w[ 2 ] = 0; // timeline offset
-w[ 3 ] = 1400000; // timeline duration
-w[ 4 ] = 3; // number of segments
+d[ 0 ] = 1;       i = i + 1;       // wave name
+d[ 1 ] = 0;       i = i + 1;       // experiment name
+d[ 2 ] = 0;       i = i + 1;       // timeline offset
+d[ 3 ] = 1400000; i = i + 1;       // timeline duration
+d[ 4 ] = 3;       i = i + 1;       // number of segments
 
-w[ 5 ] = 1; // segment number
-w[ 6 ] = 200000; // period
-w[ 7 ] = 1; // cycles
-w[ 8 ] = 0; // no branch_offset
-w[ 9 ] = 1; // length is 1
-w[ 10 ] = 0; // no DC_offset
-w[ 11 ] = 1; // 1 data value of 1
+d[ 5 ] = 1;       i = i + 1;       // segment number
+d[ 6 ] = 200000;  i = i + 1;       // period
+d[ 7 ] = 1;       i = i + 1;       // cycles
+d[ 8 ] = 0;       i = i + 1;       // no branch_offset
+d[ 9 ] = 1;       i = i + 1;       // length is 1
+d[ 10 ] = 0;      i = i + 1;       // no DC_offset
+d[ 11 ] = 1;      i = i + 1;       // 1 data value of 1
 
-w[ 12 ] = 2; // segment number
-w[ 13 ] = 800000; // period
-w[ 14 ] = 1; // cycles
-w[ 15 ] = 0; // no branch_offset
-w[ 16 ] = 1; // length is 1
-w[ 17 ] = 0; // no DC_offset
-w[ 18 ] = 2; // 1 data value
-
-w[ 19 ] = 3; // segment number
-w[ 20 ] = 400000; // period
-w[ 21 ] = 1; // cycles
-w[ 22 ] = 0; // no branch_offset
-w[ 23 ] = 1; // length is 1
-w[ 24 ] = 0; // no DC_offset
-w[ 25 ] = 3; // 1 data value
+d[ 12 ] = 2;      i = i + 1;       // segment number
+d[ 13 ] = 800000; i = i + 1;       // period
+d[ 14 ] = 1;      i = i + 1;       // cycles
+d[ 15 ] = 0;      i = i + 1;       // no branch_offset
+d[ 16 ] = 1;      i = i + 1;       // length is 1
+d[ 17 ] = 0;      i = i + 1;       // no DC_offset
+d[ 18 ] = 2;      i = i + 1;       // 1 data value
+d[ 19 ] = 3;      i = i + 1;       // segment number
+d[ 20 ] = 400000; i = i + 1;       // period
+d[ 21 ] = 1;      i = i + 1;       // cycles
+d[ 22 ] = 0;      i = i + 1;       // no branch_offset
+d[ 23 ] = 1;      i = i + 1;       // length is 1
+d[ 24 ] = 0;      i = i + 1;       // no DC_offset
+d[ 25 ] = 3;      i = i + 1;       // 1 data value
 
 // Send the waveform file to the EC.
-send eibus::wave( data:w );
+send eibus::wave( data:d );
 
 send SEQ::done( variation_number:self.number );',
 	'');

@@ -1155,7 +1155,7 @@ INSERT INTO GD_NCS
 	VALUES ("427da7dc-1d94-4a8b-8d7d-818c3440de14");
 INSERT INTO DIM_ND
 	VALUES (128.000000,
-	64.000000,
+	49.000000,
 	"427da7dc-1d94-4a8b-8d7d-818c3440de14");
 INSERT INTO DIM_GE
 	VALUES (4064.000000,
@@ -2158,6 +2158,30 @@ INSERT INTO DIM_ED
 	VALUES ("98126f1f-1c46-489b-bcdd-6d060c5c392b",
 	"5685a31c-a45d-45bb-88e8-178b2b9f2be7",
 	"5833945d-8586-40df-a891-0e8792f657fa");
+INSERT INTO GD_GE
+	VALUES ("4c20267b-a3a7-4fde-80e9-c1ec7f0d9fd0",
+	"8bcf9807-5b09-4c72-8b85-41c868db876e",
+	"6794b3dd-dbe5-4b32-ad4e-b9942a538f0f",
+	12,
+	0,
+	'x8instr::components::ec::experiment::string');
+INSERT INTO GD_SHP
+	VALUES ("4c20267b-a3a7-4fde-80e9-c1ec7f0d9fd0");
+INSERT INTO GD_NCS
+	VALUES ("4c20267b-a3a7-4fde-80e9-c1ec7f0d9fd0");
+INSERT INTO DIM_ND
+	VALUES (128.000000,
+	49.000000,
+	"4c20267b-a3a7-4fde-80e9-c1ec7f0d9fd0");
+INSERT INTO DIM_GE
+	VALUES (4064.000000,
+	3344.000000,
+	"4c20267b-a3a7-4fde-80e9-c1ec7f0d9fd0",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("4c20267b-a3a7-4fde-80e9-c1ec7f0d9fd0",
+	0,
+	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_DIA
 	VALUES ("8bcf9807-5b09-4c72-8b85-41c868db876e",
 	'',
@@ -2321,6 +2345,46 @@ INSERT INTO S_IRDT
 	"aa1ae013-7738-446a-b125-66f508af4b78");
 INSERT INTO PE_PE
 	VALUES ("2114f204-edb2-4eef-a07d-97716618c78e",
+	1,
+	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	3);
+INSERT INTO S_DT
+	VALUES ("1b75847b-ccf4-41f4-b023-faa4cee8b9c3",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<experiment>',
+	'',
+	'');
+INSERT INTO S_IRDT
+	VALUES ("1b75847b-ccf4-41f4-b023-faa4cee8b9c3",
+	0,
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");
+INSERT INTO O_OBJ_PROXY
+	VALUES ("e27e2331-72d3-4f2e-99d7-a84cf05b0337",
+	'experiment',
+	11,
+	'EXPERIMENT',
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'./experiment/experiment.xtuml');
+INSERT INTO PE_PE
+	VALUES ("1b75847b-ccf4-41f4-b023-faa4cee8b9c3",
+	1,
+	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	3);
+INSERT INTO S_DT
+	VALUES ("34564422-8ae2-420d-8b9c-8b432f5ed36f",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref_set<experiment>',
+	'',
+	'');
+INSERT INTO S_IRDT
+	VALUES ("34564422-8ae2-420d-8b9c-8b432f5ed36f",
+	1,
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");
+INSERT INTO PE_PE
+	VALUES ("34564422-8ae2-420d-8b9c-8b432f5ed36f",
 	1,
 	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
 	"00000000-0000-0000-0000-000000000000",
@@ -2549,14 +2613,6 @@ INSERT INTO R_OIR
 	"5d71bbc5-245d-4ec5-9123-fccd66088a3e",
 	"769896aa-6123-46e4-8fdc-de3623a2e52a",
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO O_OBJ_PROXY
-	VALUES ("e27e2331-72d3-4f2e-99d7-a84cf05b0337",
-	'experiment',
-	11,
-	'EXPERIMENT',
-	'',
-	"00000000-0000-0000-0000-000000000000",
-	'./experiment/experiment.xtuml');
 INSERT INTO R_PART
 	VALUES ("f25b666c-2fcc-4735-949f-13378350a7fd",
 	"5d71bbc5-245d-4ec5-9123-fccd66088a3e",
@@ -2949,29 +3005,22 @@ INSERT INTO PE_PE
 	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
 	"00000000-0000-0000-0000-000000000000",
 	19);
-INSERT INTO S_SYNC
-	VALUES ("c6d7bf0b-3b50-4abe-9159-5e007289f17c",
-	"00000000-0000-0000-0000-000000000000",
-	'init',
+INSERT INTO S_EE
+	VALUES ("6794b3dd-dbe5-4b32-ad4e-b9942a538f0f",
+	'string',
 	'',
-	'select any experiment from instances of EXPERIMENT where ( selected.name == "default" );
-if ( empty experiment )
-  EXPERIMENT::init( name:"default" );
-end if;',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'');
-INSERT INTO PE_PE
-	VALUES ("c6d7bf0b-3b50-4abe-9159-5e007289f17c",
-	1,
-	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	'STRING',
 	"00000000-0000-0000-0000-000000000000",
+	'',
+	'string',
 	1);
-INSERT INTO S_SYNC
-	VALUES ("fbf681e8-2f49-4935-83dc-b930133ed692",
-	"00000000-0000-0000-0000-000000000000",
+INSERT INTO S_BRG
+	VALUES ("8c8352cc-5783-41ad-b851-1fd2d9292a93",
+	"6794b3dd-dbe5-4b32-ad4e-b9942a538f0f",
 	'itoa',
 	'',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
 	's = "";
 if ( 0 == param.i )
   s = "default";
@@ -2997,20 +3046,57 @@ else
   TRACE::log( id:1042, flavor:"warning", message:"itoa unable to convert input" );
 end if;
 return s;',
-	"ba5eda7a-def5-0000-0000-000000000004",
 	1,
 	'');
-INSERT INTO S_SPARM
-	VALUES ("b9f4cc7e-a8cb-4625-b55c-8dd03117e570",
-	"fbf681e8-2f49-4935-83dc-b930133ed692",
+INSERT INTO S_BPARM
+	VALUES ("9cad311f-2b6f-45d0-a592-1d55964ef67a",
+	"8c8352cc-5783-41ad-b851-1fd2d9292a93",
 	'i',
 	"ba5eda7a-def5-0000-0000-000000000002",
 	0,
 	'',
 	"00000000-0000-0000-0000-000000000000",
 	'');
+INSERT INTO S_BRG
+	VALUES ("508858a0-4ee4-4e46-a26f-f14982e5553c",
+	"6794b3dd-dbe5-4b32-ad4e-b9942a538f0f",
+	'atoi',
+	'',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000000",
+	'',
+	1,
+	'');
+INSERT INTO S_BPARM
+	VALUES ("c725a937-26d7-42d8-9a97-353808132071",
+	"508858a0-4ee4-4e46-a26f-f14982e5553c",
+	's',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
 INSERT INTO PE_PE
-	VALUES ("fbf681e8-2f49-4935-83dc-b930133ed692",
+	VALUES ("6794b3dd-dbe5-4b32-ad4e-b9942a538f0f",
+	1,
+	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	5);
+INSERT INTO S_SYNC
+	VALUES ("c6d7bf0b-3b50-4abe-9159-5e007289f17c",
+	"00000000-0000-0000-0000-000000000000",
+	'init',
+	'',
+	'select any experiment from instances of EXPERIMENT where ( selected.name == "default" );
+if ( empty experiment )
+  experiment = EXPERIMENT::init( name:"default" );
+  WAVE::PAD();
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("c6d7bf0b-3b50-4abe-9159-5e007289f17c",
 	1,
 	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
 	"00000000-0000-0000-0000-000000000000",

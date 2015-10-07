@@ -19,16 +19,14 @@ Select the first timeline event to be fired.
 Create a timer for the timebase and start it.
 */
 select one timelineevent related by self->TIMELINEEVENT[R11.''has first''];
-if ( not_empty timelineevent )
-  generate TIMELINE1:start() to self;
+if ( empty timelineevent )
+  TRACE::log( id:1028, flavor:"warning", message:"tried to start empty timeline" );
 else
-  TRACE::log( id:1028, flavor:"failure", message:"tried to start empty timeline" );
-end if;
-
-// Set the expiration timer.
-create event instance done of TIMELINE3:done() to self;
-self.end_timer = TIM::timer_start( microseconds:self.duration * 1000, event_inst:done );
-',
+  generate TIMELINE1:start() to self;
+  // Set the expiration timer.
+  create event instance done of TIMELINE3:done() to self;
+  self.end_timer = TIM::timer_start( microseconds:self.duration * 1000, event_inst:done );
+end if;',
 	1,
 	'',
 	"20581f5b-490d-4a8b-a1e9-ac8a33170e5a");

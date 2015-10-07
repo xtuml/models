@@ -374,11 +374,13 @@ buffer.deposit( data:param.data, length:param.length );
 DATAUPLOAD::trigger( buffer:buffer );
 
 // Interrogate the amount of data received.  Detect when we have it all.
+/*
 self.length_acquired = self.length_acquired + param.length;
 if ( self.length_acquired >= self.length )
   generate READING4:acquisition_fulfilled() to self;
 end if;
-self.samples_acquired = self.samples_acquired + 1;',
+self.samples_acquired = self.samples_acquired + 1;
+*/',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("519683ba-8eaa-462f-a487-f2e49fb0fa11",
@@ -391,7 +393,8 @@ INSERT INTO SM_ACT
 	VALUES ("519683ba-8eaa-462f-a487-f2e49fb0fa11",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'if ( not TIM::timer_cancel( timer_inst_ref:self.conversion_timer ) )
+	'select one segment related by self->SEGMENT[R18];
+if ( not TIM::timer_cancel( timer_inst_ref:segment.clock ) )
   LOG::LogFailure( message:"timer not running when attempt to cancel" );
 end if;
 select one dacq related by self->DACQ[R29];

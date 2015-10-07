@@ -92,7 +92,21 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'delete object instance self;',
+	'select one next_segment related by self->SEGMENT[R17.''precedes''];
+if ( not_empty next_segment )
+  // recursively drill down to the end deleting as back out
+  next_segment.cleanup();
+  unrelate self from next_segment across R17.''precedes'';
+end if;
+select one timelineevent related by self->TIMELINEEVENT[R15];
+if ( not_empty timelineevent )
+  unrelate self from timelineevent across R15;
+end if;
+select one timelineevent related by self->TIMELINEEVENT[R16];
+if ( not_empty timelineevent )
+  unrelate self from timelineevent across R16;
+end if;
+delete object instance self;',
 	1,
 	'',
 	"25309da8-b423-4d33-b4f6-a99e11f67342");
