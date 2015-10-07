@@ -366,21 +366,23 @@ INSERT INTO SM_ACT
 	1,
 	'// Do setup.  When complete, send the done message to the test sequencer.
 
-d[ 8 ] = 0; // init length of array
+d[ 10 ] = 0;      i = 0;           // init length of array
 
-d[ 0 ] = 2; // dacq name
-d[ 1 ] = 0; // experiment name
-d[ 2 ] = 0; // timeline offset
-d[ 3 ] = 1400000; // timeline duration
-d[ 4 ] = 1; // number of segments
+d[ i ] = 1;       i = i + 1;       // dacq name
+d[ i ] = 0;       i = i + 1;       // experiment name
+d[ i ] = 0;       i = i + 1;       // timeline offset base seconds
+d[ i ] = 0;       i = i + 1;       // timeline offset exponent
+d[ i ] = 1400;    i = i + 1;       // timeline duration base seconds
+d[ i ] = -3;      i = i + 1;       // timeline duration exponent
+d[ i ] = 1;       i = i + 1;       // number of segments
 
-d[ 2 ] = 1; // segment number
-d[ 3 ] = 0; // start time
-d[ 4 ] = 200000; // period
-d[ 5 ] = 1; // cycles
-d[ 6 ] = 0; // no branch_offset
-d[ 7 ] = 1; // length is 1
-d[ 8 ] = 1; // 1 data value of 1
+d[ i ] = 1;       i = i + 1;       // segment number
+d[ i ] = 200;     i = i + 1;       // period base
+d[ i ] = -3;      i = i + 1;       // exponent
+d[ i ] = 1;       i = i + 1;       // cycles
+d[ i ] = 0;       i = i + 1;       // no branch_offset
+d[ i ] = 1;       i = i + 1;       // length is 1
+d[ i ] = 1;       i = i + 1;       // 1 data value of 1
 
 // Send the data acquisition file to the EC.
 send eibus::dacq( data:d );
