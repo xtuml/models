@@ -19,8 +19,6 @@ public:
     class OutSignals
     {
     public:
-        UMLRTOutSignal registerListener( const UMLRTCommsPort * sourcePort ) const;
-        UMLRTOutSignal unregisterListener( const UMLRTCommsPort * sourcePort ) const;
         UMLRTOutSignal updateHeartRate( const UMLRTCommsPort * sourcePort, int heartRate ) const;
     };
     class InSignals
@@ -28,7 +26,6 @@ public:
     public:
         UMLRTOutSignal registerListener( const UMLRTCommsPort * sourcePort ) const;
         UMLRTOutSignal unregisterListener( const UMLRTCommsPort * sourcePort ) const;
-        UMLRTOutSignal updateHeartRate( const UMLRTCommsPort * sourcePort, int heartRate ) const;
     };
     typedef OutSignals Base;
     typedef InSignals Conjugate;
@@ -37,8 +34,6 @@ class HeartRateMonitorProtocol_baserole : protected UMLRTProtocol, private Heart
 {
 public:
     HeartRateMonitorProtocol_baserole( const UMLRTCommsPort * srcPort );
-    UMLRTOutSignal registerListener() const;
-    UMLRTOutSignal unregisterListener() const;
     UMLRTOutSignal updateHeartRate( int heartRate ) const;
 };
 class HeartRateMonitorProtocol_conjrole : protected UMLRTProtocol, private HeartRateMonitorProtocol::Conjugate
@@ -47,7 +42,6 @@ public:
     HeartRateMonitorProtocol_conjrole( const UMLRTCommsPort * srcPort );
     UMLRTOutSignal registerListener() const;
     UMLRTOutSignal unregisterListener() const;
-    UMLRTOutSignal updateHeartRate( int heartRate ) const;
 };
 
 #endif

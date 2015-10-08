@@ -29,25 +29,8 @@ public:
     };
     virtual void bindPort( bool isBorder, int portId, int index );
     virtual void unbindPort( bool isBorder, int portId, int index );
-    virtual void inject( const UMLRTInMessage & message );
-    virtual void initialize( const UMLRTInMessage & message );
-    const char * getCurrentStateString() const;
-private:
-    enum State
-    {
-        top__Updating,
-        top__Initializing,
-        SPECIAL_INTERNAL_STATE_UNVISITED
-    };
-    const char * stateNames[2];
-    State currentState;
-    void entryaction_____top__initialize__ActionChain2__onEntry( const UMLRTInMessage & msg );
-    void entryaction_____top__update__ActionChain4__onEntry( const UMLRTInMessage & msg );
-    void transitionaction_____top__initialize__ActionChain2__onInit( const UMLRTInMessage & msg );
-    void actionchain_____top__initialize__ActionChain2( const UMLRTInMessage & msg );
-    void actionchain_____top__update__ActionChain4( const UMLRTInMessage & msg );
-    State state_____top__Updating( const UMLRTInMessage & msg );
-    State state_____top__Initializing( const UMLRTInMessage & msg );
+    virtual void initialize( const UMLRTInMessage & msg );
+    virtual void inject( const UMLRTInMessage & msg );
 };
 extern const UMLRTCapsuleClass GPSWatch;
 

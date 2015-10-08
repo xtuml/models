@@ -41,21 +41,16 @@ public:
 private:
     enum State
     {
-        top__idle,
         top__monitoring,
+        top__idle,
         SPECIAL_INTERNAL_STATE_UNVISITED
     };
     const char * stateNames[2];
     State currentState;
-    void entryaction_____top__onRegisterListener__ActionChain5__onEntry( const UMLRTInMessage & msg );
-    void transitionaction_____top__Transition3__ActionChain4__onInit( const UMLRTInMessage & msg );
-    void transitionaction_____top__onRegisterListener__ActionChain5__TransitionAction11( const UMLRTInMessage & msg );
-    void transitionaction_____top__onUnregisterListener__ActionChain6__TransitionAction12( const UMLRTInMessage & msg );
-    void actionchain_____top__Transition3__ActionChain4( const UMLRTInMessage & msg );
-    void actionchain_____top__onRegisterListener__ActionChain5( const UMLRTInMessage & msg );
-    void actionchain_____top__onUnregisterListener__ActionChain6( const UMLRTInMessage & msg );
-    State state_____top__idle( const UMLRTInMessage & msg );
+    void entryaction_____top__onRegisterListener__ActionChain6__onEntry( const UMLRTInMessage & msg );
+    void actionchain_____top__onRegisterListener__ActionChain6( const UMLRTInMessage & msg );
     State state_____top__monitoring( const UMLRTInMessage & msg );
+    State state_____top__idle( const UMLRTInMessage & msg );
 };
 extern const UMLRTCapsuleClass HeartRateMonitor;
 
