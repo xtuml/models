@@ -39,6 +39,8 @@ void Capsule_Top::unbindPort( bool isBorder, int portId, int index )
 {
 }
 
+
+
 void Capsule_Top::initialize( const UMLRTInMessage & msg )
 {
 }

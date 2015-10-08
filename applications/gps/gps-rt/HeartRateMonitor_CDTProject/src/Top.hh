@@ -2,6 +2,8 @@
 #ifndef TOP_HH
 #define TOP_HH
 
+#include "GPSWatch.hh"
+#include "HeartRateMonitor.hh"
 #include "umlrtcapsule.hh"
 #include "umlrtcapsuleclass.hh"
 #include "umlrtinmessage.hh"
@@ -24,6 +26,8 @@ protected:
 public:
     virtual void bindPort( bool isBorder, int portId, int index );
     virtual void unbindPort( bool isBorder, int portId, int index );
+    GPSWatch gpswatch;
+    HeartRateMonitor heartratemonitor;
     virtual void initialize( const UMLRTInMessage & msg );
     virtual void inject( const UMLRTInMessage & msg );
 };
