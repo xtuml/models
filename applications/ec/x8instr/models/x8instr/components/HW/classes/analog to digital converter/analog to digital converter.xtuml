@@ -19,6 +19,7 @@ Simulate the hardware.
 Divide the acquisition into 4 pieces.
 Send them back as requested.
 */
+TRACE::log( id:1071, flavor:"info", message:"ADC_convert" );
 select any adc from instances of ADC;
 chunk = adc.buffer_capacity / 4;
 send SW::sample( data:adc.buffer_current, length:chunk );

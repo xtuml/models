@@ -29,7 +29,7 @@ elif ( opneedleup == ascmd.opcode )
 elif ( opneedledown == ascmd.opcode )
   length = NEEDLEDOWN::load( ascmd:ascmd, program:program );
 else
-  LOG::LogFailure( message:"warning:  opcode not recognized" );
+  TRACE::log( id:1001, flavor:"warning", message:"opcode not recognized" );
 end if;
 return length;',
 	1,
@@ -89,7 +89,7 @@ elif ( opneedledown == self.opcode )
   select one sub related by self->NEEDLEDOWN[R31];
   rv = sub.run();
 else
-  LOG::LogFailure( message:"warning:  attempt to run invalid opcode" );
+  TRACE::log( id:1002, flavor:"warning", message:"attempt to run invalid opcode" );
 end if;
 return rv;',
 	1,

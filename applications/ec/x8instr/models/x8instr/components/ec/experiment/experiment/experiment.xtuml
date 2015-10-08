@@ -12,36 +12,17 @@ INSERT INTO O_TFR
 	"e27e2331-72d3-4f2e-99d7-a84cf05b0337",
 	'init',
 	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
+	"1b75847b-ccf4-41f4-b023-faa4cee8b9c3",
 	0,
-	'/*
-This is the default generic experiment.
-It will have a timeline with default:
-  - waveform to apply
-  - acquisition to collect data
-It will not have a default program.
-What it does have will apply a pretty safe waveform and collect data
-at a pretty slow rate.
-*/
-create object instance experiment of EXPERIMENT;
+	'create object instance experiment of EXPERIMENT;
 experiment.name = param.name;
 
-// Add the timeline and link the default simple waveform and data acquisition.
+// Add the empty timeline and link to the new experiment.
 timeline = TIMELINE::init();
 relate experiment to timeline across R13;
 
-timelineeventwave = TIMELINEEVENT::init( offset:0, duration:0 );
-wave = WAVE::init();
-relate wave to timelineeventwave across R10;
-timeline.add( timelineevent:timelineeventwave );
-
-timelineeventdacq = TIMELINEEVENT::init( offset:0, duration:2000 );
-dacq = DACQ::init();
-relate dacq to timelineeventdacq across R10;
-timeline.add( timelineevent:timelineeventdacq );
-
-// Set timeline to expire at the end of the longest timeline event.
-timeline.duration = 2000;',
+return experiment;
+',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");
@@ -54,6 +35,13 @@ INSERT INTO O_TPARM
 	'',
 	"00000000-0000-0000-0000-000000000000",
 	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("1b75847b-ccf4-41f4-b023-faa4cee8b9c3",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<experiment>',
+	'',
+	'',
+	'../experiment.xtuml');
 INSERT INTO O_TFR
 	VALUES ("997c2642-06fb-47bc-8fa6-d875f3b87caf",
 	"e27e2331-72d3-4f2e-99d7-a84cf05b0337",
@@ -107,6 +95,11 @@ INSERT INTO O_ATTR
 INSERT INTO O_ID
 	VALUES (0,
 	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");
+INSERT INTO O_OIDA
+	VALUES ("198170c7-9689-467d-9c4e-1e4561434a56",
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337",
+	0,
+	'name');
 INSERT INTO O_ID
 	VALUES (1,
 	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");

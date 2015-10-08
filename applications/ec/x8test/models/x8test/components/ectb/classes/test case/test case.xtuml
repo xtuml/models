@@ -46,12 +46,24 @@ elif ( 4 == testnumber )
   create object instance start of TB_START;
   relate start to testcase across R1;
 
+elif ( 5 == testnumber )
+  create object instance testcase of TB_TESTCASE;
+  testcase.init( number:testnumber, label:"data acquisition" );
+  create object instance dacq of TB_DACQ;
+  relate dacq to testcase across R1;
+
+elif ( 6 == testnumber )
+  create object instance testcase of TB_TESTCASE;
+  testcase.init( number:testnumber, label:"waveform" );
+  create object instance wave of TB_WAVE;
+  relate wave to testcase across R1;
+
 else
   // Returning only the number of tests.
 end if;
 
 // Return the total number of tests.
-return 4;',
+return 6;',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");

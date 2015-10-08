@@ -367,30 +367,20 @@ INSERT INTO SM_ACT
 	VALUES ("a8d7b427-2d6f-4bdf-83cf-615db728a791",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'/* CDS - This seems overkill.
-sample = SAMPLE::init( data:param.data, length:param.length );
-select one front_sample related by self->SAMPLE[R21];
-if ( empty front_sample )
-  // this is the first sample
-  relate self to sample across R21.''has newest'';
-  relate self to sample across R22.''has oldest'';
-else 
-  unrelate self from front_sample across R21.''has newest'';
-  relate self to sample across R21.''has newest'';
-  relate sample to front_sample across R23.''precedes'';
-end if;
-*/
-
-// Stow data into the circular buffer.
-select one buffer related by self->BUFFER[R28.''stows in''];
+	'// Stow data into the circular buffer.
+select one buffer related by self->SEGMENT[R18]->BUFFER[R19];
 buffer.deposit( data:param.data, length:param.length );
+// Data wants to be uploaded, so trigger an upload.
+DATAUPLOAD::trigger( buffer:buffer );
 
 // Interrogate the amount of data received.  Detect when we have it all.
+/*
 self.length_acquired = self.length_acquired + param.length;
-if ( self.length_acquired >= self.length_expected )
+if ( self.length_acquired >= self.length )
   generate READING4:acquisition_fulfilled() to self;
 end if;
-self.samples_acquired = self.samples_acquired + 1;',
+self.samples_acquired = self.samples_acquired + 1;
+*/',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("519683ba-8eaa-462f-a487-f2e49fb0fa11",
@@ -403,7 +393,8 @@ INSERT INTO SM_ACT
 	VALUES ("519683ba-8eaa-462f-a487-f2e49fb0fa11",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'if ( not TIM::timer_cancel( timer_inst_ref:self.conversion_timer ) )
+	'select one segment related by self->SEGMENT[R18];
+if ( not TIM::timer_cancel( timer_inst_ref:segment.clock ) )
   LOG::LogFailure( message:"timer not running when attempt to cancel" );
 end if;
 select one dacq related by self->DACQ[R29];
@@ -420,17 +411,19 @@ INSERT INTO SM_ACT
 	VALUES ("3564aa73-8456-487b-933a-e040f9e74569",
 	"d212a714-b76c-4f8d-8292-d5f0bf719f40",
 	1,
-	'select one buffer related by self->BUFFER[R28.''stows in''];
+	'/*
+select one buffer related by self->BUFFER[R28.''stows in''];
 if ( not_empty buffer )
   // Inform the hardware of where to stow the collected data.
   HW::dacq_setup( data:buffer.beginning, length:buffer.capacity );
 else
-  LOG::LogFailure( message:"no buffer found when one should be there" );
+  TRACE::log( id:1055, flavor:"failure", message:"no buffer found when one should be there" );
 end if;
 
 // Set up a recurring timer that fires for each dacq conversion needed.
 create event instance tick of READING2:tick() to self;
-self.conversion_timer = TIM::timer_start_recurring( microseconds:self.period, event_inst:tick );',
+self.conversion_timer = TIM::timer_start_recurring( microseconds:self.period, event_inst:tick );
+*/',
 	'');
 INSERT INTO SM_TAH
 	VALUES ("fd496bb0-14be-4e25-871d-10cd5de983f2",
