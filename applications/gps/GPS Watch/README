@@ -10,7 +10,7 @@ The project consists of three executable entities:
    
 RUNNING THE PROJECT
 --------------------
-An execution configuration exists in order to launch the GUI.  To create and
+An execution configuration exists in order to launch the GUI. To create 
 run the Watch GUI:
 
 * Open the C/C++ Projects perspective (Window > Open Perspective > Other... > C/C++) 
@@ -24,8 +24,8 @@ to connect interchangeably, meaning there is no need to restart the GUI between
 various sessions. When a new connection is detected the GUI will simply drop any 
 existing connection and only service the recently detected connection.
 
-You can now run either the already generated Windows executable, or run the 
-model in xtUML eXecute.
+You can now run either the already generated Windows executable, Linux executable, 
+or run the model in xtUML eXecute.
 
 To run the EXE:
 * Expand the Binaries item under the project
@@ -45,28 +45,33 @@ To run the model in xtUML eXecute:
 * Now the GUI may be used to drive execution.
 
 You will also notice a "GPS Watch with Initializer" launch configuration here.  This
-launch does not use the interactive GUI.  Instead, it starts and automated test case
-that does its own stimulus and response.
+launch does not use the interactive GUI.  Instead, it starts and automated test 
+case that does its own stimulus and response.
 
 BUILDING THE PROJECT
 ---------------------
-The project is pre-built so building the project is not necessary. But, there 
-might be warnings/errors in the project resulting from an unresolved build path.
+The project is pre-built for Windows, so building the project on Windows is not 
+necessary. To run on Linux you must rebuild.
+
+If you want to rebuild the project for Linux or after modifying the model or a marking file:
+
+* Switch to the C/C++ perspective
+* Right-click on the project and choose 'Build Configurations > Set Active > ...
+   and set the build configuration you want.
+* Right-click on the project and choose 'Build Project' in the context menu
+
+There might be warnings/errors in the project resulting from an unresolved build path.
 The Java code that is used to extend xtUML eXecute depends on a BridgePoint jar file 
-called core.jar. This path should have been set correctly by the installer, but
-if it is wrong you must follow these steps to resolve the path to core.jar:
+called core.jar. If the path to core.jar is wrong you must follow these steps to 
+resolve it:
 
 * Open the Java perspective: Window > Open Perspective > Java
 * Right-click the project and select Build Path > Configure Build Path...
 * In the wizard click the Libraries tab
 * Select core.jar and click Edit...
 * Locate core.jar:
-    <BridgePoint installation folder>\eclipse_extensions\BridgePoint\eclipse\plugins\com.mentor.nucleus.bp.core_<version>\core.jar
+    <BridgePoint installation folder>\eclipse_extensions\BridgePoint\eclipse\plugins\org.xtuml.bp.core_<version>\core.jar
 * OK all pop-ups
 
-If you want to rebuild the project after modifying the model or a marking file:
-
-* Switch to the C/C++ perspective
-* Right-click on the project and choose 'Build Project' in the context menu
 
 Have fun!
