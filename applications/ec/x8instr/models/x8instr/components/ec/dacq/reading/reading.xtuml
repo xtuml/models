@@ -1,0 +1,182 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	'reading',
+	21,
+	'READING',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("ccbe3854-f870-451c-9668-be2deebd6070",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	'init',
+	'',
+	"db0f147d-a35d-4d50-bd56-06640ca6ab14",
+	0,
+	'create object instance reading of READING;
+return reading;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("db0f147d-a35d-4d50-bd56-06640ca6ab14",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<reading>',
+	'',
+	'',
+	'../dacq.xtuml');
+INSERT INTO O_TFR
+	VALUES ("6b160328-553c-405d-84db-a5e7f1a7a7a8",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	'sample_received',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// CDS - somehow reading likely needs to be uniquely identified
+select any reading from instances of READING;
+if ( not_empty reading )
+  generate READING3:sample( data:param.data, length:param.length ) to reading;
+  TRACE::log( id:1013, flavor:"info", message:"sample received" );
+else
+  TRACE::log( id:1014, flavor:"error", message:"sample arrived but no reading exists" );
+end if;',
+	1,
+	'',
+	"d7b373ca-4bef-4e94-aa3a-3a58856f52a2");
+INSERT INTO O_TPARM
+	VALUES ("6dec0b43-5100-46f5-88f6-656bb3862808",
+	"6b160328-553c-405d-84db-a5e7f1a7a7a8",
+	'data',
+	"66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
+	"00000000-0000-0000-0000-000000000000",
+	'dataptr',
+	'',
+	'',
+	'../../../../../../../x8shared/models/x8shared/x8types/x8types.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("020e3e6c-dd39-417d-a377-aabb3367168e",
+	"6b160328-553c-405d-84db-a5e7f1a7a7a8",
+	'length',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"6dec0b43-5100-46f5-88f6-656bb3862808",
+	'');
+INSERT INTO O_TFR
+	VALUES ("d7b373ca-4bef-4e94-aa3a-3a58856f52a2",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'delete object instance self;',
+	1,
+	'',
+	"ccbe3854-f870-451c-9668-be2deebd6070");
+INSERT INTO O_NBATTR
+	VALUES ("17e0d0ed-0360-4c19-b6fb-c41001b65c65",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_BATTR
+	VALUES ("17e0d0ed-0360-4c19-b6fb-c41001b65c65",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_ATTR
+	VALUES ("17e0d0ed-0360-4c19-b6fb-c41001b65c65",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	"39e79450-5231-4200-a604-a7aa483f5334",
+	'start_time',
+	'',
+	'',
+	'start_time',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("558f89aa-5f87-4d6f-884a-bed7a47d1de9",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_BATTR
+	VALUES ("558f89aa-5f87-4d6f-884a-bed7a47d1de9",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_ATTR
+	VALUES ("558f89aa-5f87-4d6f-884a-bed7a47d1de9",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	"c66c07ea-4e81-48cc-bdf5-fc419c41e3d5",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("c66c07ea-4e81-48cc-bdf5-fc419c41e3d5",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_BATTR
+	VALUES ("c66c07ea-4e81-48cc-bdf5-fc419c41e3d5",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_ATTR
+	VALUES ("c66c07ea-4e81-48cc-bdf5-fc419c41e3d5",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	"17e0d0ed-0360-4c19-b6fb-c41001b65c65",
+	'samples',
+	'',
+	'',
+	'samples',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("39e79450-5231-4200-a604-a7aa483f5334",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_BATTR
+	VALUES ("39e79450-5231-4200-a604-a7aa483f5334",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_ATTR
+	VALUES ("39e79450-5231-4200-a604-a7aa483f5334",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	"00000000-0000-0000-0000-000000000000",
+	'number',
+	'',
+	'',
+	'number',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_OIDA
+	VALUES ("39e79450-5231-4200-a604-a7aa483f5334",
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	0,
+	'number');
+INSERT INTO O_ID
+	VALUES (1,
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO O_ID
+	VALUES (2,
+	"8ad0dd13-6581-4222-a0b7-04cdb41ae032");
+INSERT INTO PE_PE
+	VALUES ("8ad0dd13-6581-4222-a0b7-04cdb41ae032",
+	1,
+	"000b3762-5fb2-4ede-9ae7-28b6ae9c7aa1",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("000b3762-5fb2-4ede-9ae7-28b6ae9c7aa1",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'dacq',
+	'',
+	20,
+	'../dacq.xtuml');

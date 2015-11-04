@@ -1,0 +1,229 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("04f0fbd9-59ba-4e32-8afd-40b70b5a127d",
+	'test case',
+	100,
+	'TB_TESTCASE',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("2b12319f-570a-4a9e-8c91-0a976ab92d33",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d",
+	'setup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'// This is where to add tests.
+// 1) Add a class an relate as a subtype to this class.
+// 2) create, relate and initialize it here.
+
+testnumber = param.variation_number;
+
+if ( 1 == testnumber )
+  // Create the simple variation test.
+  create object instance testcase of TB_TESTCASE;
+  testcase.init( number:testnumber, label:"get version" );
+  create object instance simple of TB_GETVERSION;
+  relate simple to testcase across R1;
+
+elif ( 2 == testnumber )
+  // Create the second most complex scenario test.
+  create object instance testcase of TB_TESTCASE;
+  testcase.init( number:testnumber, label:"next most complex scenario" );
+  create object instance complex of TB_COMPLEX;
+  relate complex to testcase across R1;
+
+elif ( 3 == testnumber )
+  // Add more test class initializations here...
+
+elif ( 4 == testnumber )
+  // Add more test class initializations here...
+
+else
+  // Returning only the number of tests.
+end if;
+
+// Return the total number of tests.
+return 2;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("834fee0d-13b3-4000-b036-0cab93b554c3",
+	"2b12319f-570a-4a9e-8c91-0a976ab92d33",
+	'variation_number',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("8627c517-a61a-4cf0-87c6-444e6421bf72",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d",
+	'init',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'self.number = param.number;
+self.label = param.label;
+self.started = false;
+self.finished = false;
+self.passed = false;',
+	1,
+	'',
+	"2b12319f-570a-4a9e-8c91-0a976ab92d33");
+INSERT INTO O_TPARM
+	VALUES ("2fc2da58-cba1-4896-9064-641e09fefe17",
+	"8627c517-a61a-4cf0-87c6-444e6421bf72",
+	'number',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("4f6ee69c-bfff-41fc-8e97-72faa162196c",
+	"8627c517-a61a-4cf0-87c6-444e6421bf72",
+	'label',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"2fc2da58-cba1-4896-9064-641e09fefe17",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("3365c52d-ac1d-4af2-b431-efcb99102854",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_BATTR
+	VALUES ("3365c52d-ac1d-4af2-b431-efcb99102854",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_ATTR
+	VALUES ("3365c52d-ac1d-4af2-b431-efcb99102854",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d",
+	"256cd1d1-89f2-434e-beeb-2510b9317ee3",
+	'label',
+	'',
+	'',
+	'label',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("256cd1d1-89f2-434e-beeb-2510b9317ee3",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_BATTR
+	VALUES ("256cd1d1-89f2-434e-beeb-2510b9317ee3",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_ATTR
+	VALUES ("256cd1d1-89f2-434e-beeb-2510b9317ee3",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d",
+	"ef6c4bbb-a0f8-488f-9d58-80a02be36d81",
+	'number',
+	'',
+	'',
+	'number',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("f96f9585-a241-4577-b42c-34fa8a5b5516",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_BATTR
+	VALUES ("f96f9585-a241-4577-b42c-34fa8a5b5516",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_ATTR
+	VALUES ("f96f9585-a241-4577-b42c-34fa8a5b5516",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d",
+	"3365c52d-ac1d-4af2-b431-efcb99102854",
+	'started',
+	'',
+	'',
+	'started',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("c3b49b5f-eeaa-4b3b-9881-55f3ddab17e2",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_BATTR
+	VALUES ("c3b49b5f-eeaa-4b3b-9881-55f3ddab17e2",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_ATTR
+	VALUES ("c3b49b5f-eeaa-4b3b-9881-55f3ddab17e2",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d",
+	"f96f9585-a241-4577-b42c-34fa8a5b5516",
+	'finished',
+	'',
+	'',
+	'finished',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("869b9a85-08a0-4245-a3a6-b83b715ca887",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_BATTR
+	VALUES ("869b9a85-08a0-4245-a3a6-b83b715ca887",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_ATTR
+	VALUES ("869b9a85-08a0-4245-a3a6-b83b715ca887",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d",
+	"c3b49b5f-eeaa-4b3b-9881-55f3ddab17e2",
+	'passed',
+	'',
+	'',
+	'passed',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("ef6c4bbb-a0f8-488f-9d58-80a02be36d81",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_BATTR
+	VALUES ("ef6c4bbb-a0f8-488f-9d58-80a02be36d81",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_ATTR
+	VALUES ("ef6c4bbb-a0f8-488f-9d58-80a02be36d81",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d",
+	"00000000-0000-0000-0000-000000000000",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_OIDA
+	VALUES ("256cd1d1-89f2-434e-beeb-2510b9317ee3",
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d",
+	0,
+	'number');
+INSERT INTO O_ID
+	VALUES (1,
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO O_ID
+	VALUES (2,
+	"04f0fbd9-59ba-4e32-8afd-40b70b5a127d");
+INSERT INTO PE_PE
+	VALUES ("04f0fbd9-59ba-4e32-8afd-40b70b5a127d",
+	1,
+	"b3e51358-a5dc-4e36-adac-e93e9529022e",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("b3e51358-a5dc-4e36-adac-e93e9529022e",
+	"00000000-0000-0000-0000-000000000000",
+	"1cd11447-ff04-4409-87f9-a593ed6d6cf6",
+	'classes',
+	'',
+	0,
+	'../classes.xtuml');

@@ -1,0 +1,162 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("926c9a0b-21d3-4a36-b093-cfe987397941",
+	'packet',
+	24,
+	'PACKET',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("5c7c80c4-35b8-4d75-b3bb-0330444d1a5c",
+	"926c9a0b-21d3-4a36-b093-cfe987397941",
+	'init',
+	'',
+	"f09fffeb-2b8d-43aa-a852-230d41ab0016",
+	0,
+	'dataupload = param.dataupload;
+create object instance packet of PACKET;
+relate dataupload to packet across R25.''sends'';
+packet.length = dataupload.packet_size;
+return packet;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("22dd8d0f-feeb-4427-8da6-c5c372ac2196",
+	"5c7c80c4-35b8-4d75-b3bb-0330444d1a5c",
+	'dataupload',
+	"0b79e7e5-8d96-4c96-bddf-629d07984e67",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("0b79e7e5-8d96-4c96-bddf-629d07984e67",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<data upload>',
+	'',
+	'',
+	'../dacq.xtuml');
+INSERT INTO S_DT_PROXY
+	VALUES ("f09fffeb-2b8d-43aa-a852-230d41ab0016",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<packet>',
+	'',
+	'',
+	'../dacq.xtuml');
+INSERT INTO O_TFR
+	VALUES ("8592432b-8f38-46f9-840e-1e6b58070c8a",
+	"926c9a0b-21d3-4a36-b093-cfe987397941",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one dataupload related by self->DATAUPLOAD[R25];
+unrelate self from dataupload across R25;
+delete object instance self;',
+	1,
+	'',
+	"5c7c80c4-35b8-4d75-b3bb-0330444d1a5c");
+INSERT INTO O_NBATTR
+	VALUES ("89faad05-004a-4128-9d55-fd6a50a1a78c",
+	"926c9a0b-21d3-4a36-b093-cfe987397941");
+INSERT INTO O_BATTR
+	VALUES ("89faad05-004a-4128-9d55-fd6a50a1a78c",
+	"926c9a0b-21d3-4a36-b093-cfe987397941");
+INSERT INTO O_ATTR
+	VALUES ("89faad05-004a-4128-9d55-fd6a50a1a78c",
+	"926c9a0b-21d3-4a36-b093-cfe987397941",
+	"7f893b74-18b5-4a31-a641-08a45b014981",
+	'length',
+	'',
+	'',
+	'length',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("c82e5e12-faf7-4059-a4e8-f222c3c706bc",
+	"926c9a0b-21d3-4a36-b093-cfe987397941");
+INSERT INTO O_BATTR
+	VALUES ("c82e5e12-faf7-4059-a4e8-f222c3c706bc",
+	"926c9a0b-21d3-4a36-b093-cfe987397941");
+INSERT INTO O_ATTR
+	VALUES ("c82e5e12-faf7-4059-a4e8-f222c3c706bc",
+	"926c9a0b-21d3-4a36-b093-cfe987397941",
+	"89faad05-004a-4128-9d55-fd6a50a1a78c",
+	'checksum',
+	'',
+	'',
+	'checksum',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e05caa7f-7498-4058-873d-a5603e9620ef",
+	"926c9a0b-21d3-4a36-b093-cfe987397941");
+INSERT INTO O_BATTR
+	VALUES ("e05caa7f-7498-4058-873d-a5603e9620ef",
+	"926c9a0b-21d3-4a36-b093-cfe987397941");
+INSERT INTO O_ATTR
+	VALUES ("e05caa7f-7498-4058-873d-a5603e9620ef",
+	"926c9a0b-21d3-4a36-b093-cfe987397941",
+	"c82e5e12-faf7-4059-a4e8-f222c3c706bc",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("7f893b74-18b5-4a31-a641-08a45b014981",
+	"926c9a0b-21d3-4a36-b093-cfe987397941");
+INSERT INTO O_BATTR
+	VALUES ("7f893b74-18b5-4a31-a641-08a45b014981",
+	"926c9a0b-21d3-4a36-b093-cfe987397941");
+INSERT INTO O_ATTR
+	VALUES ("7f893b74-18b5-4a31-a641-08a45b014981",
+	"926c9a0b-21d3-4a36-b093-cfe987397941",
+	"00000000-0000-0000-0000-000000000000",
+	'data',
+	'',
+	'',
+	'data',
+	0,
+	"66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
+	"00000000-0000-0000-0000-000000000000",
+	'dataptr',
+	'',
+	'',
+	'../../../../../../../x8shared/models/x8shared/x8types/x8types.xtuml');
+INSERT INTO O_ID
+	VALUES (0,
+	"926c9a0b-21d3-4a36-b093-cfe987397941");
+INSERT INTO O_ID
+	VALUES (1,
+	"926c9a0b-21d3-4a36-b093-cfe987397941");
+INSERT INTO O_ID
+	VALUES (2,
+	"926c9a0b-21d3-4a36-b093-cfe987397941");
+INSERT INTO PE_PE
+	VALUES ("926c9a0b-21d3-4a36-b093-cfe987397941",
+	1,
+	"000b3762-5fb2-4ede-9ae7-28b6ae9c7aa1",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("000b3762-5fb2-4ede-9ae7-28b6ae9c7aa1",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'dacq',
+	'',
+	20,
+	'../dacq.xtuml');

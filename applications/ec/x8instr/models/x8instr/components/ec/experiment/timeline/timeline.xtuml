@@ -1,0 +1,275 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("f25b666c-2fcc-4735-949f-13378350a7fd",
+	'timeline',
+	12,
+	'TIMELINE',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("1149452f-5ee3-423d-9671-8aa535b06f98",
+	"f25b666c-2fcc-4735-949f-13378350a7fd",
+	'start',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'/*
+Select the first timeline event to be fired.
+Create a timer for the timebase and start it.
+*/
+select one timelineevent related by self->TIMELINEEVENT[R11.''has first''];
+if ( empty timelineevent )
+  TRACE::log( id:1028, flavor:"warning", message:"tried to start empty timeline" );
+else
+  generate TIMELINE1:start() to self;
+  // Set the expiration timer.
+  create event instance done of TIMELINE3:done() to self;
+  self.end_timer = TIM::timer_start( microseconds:self.duration, event_inst:done );
+end if;',
+	1,
+	'',
+	"20581f5b-490d-4a8b-a1e9-ac8a33170e5a");
+INSERT INTO O_TFR
+	VALUES ("b4e7900d-e787-4c7a-a341-a9c1ced872de",
+	"f25b666c-2fcc-4735-949f-13378350a7fd",
+	'init',
+	'',
+	"0daa40bc-a18b-4d74-af89-882da4e91f11",
+	0,
+	'create object instance timeline of TIMELINE;
+timeline.duration = 0;
+return timeline;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("0daa40bc-a18b-4d74-af89-882da4e91f11",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<timeline>',
+	'',
+	'',
+	'../experiment.xtuml');
+INSERT INTO O_TFR
+	VALUES ("d8ef6e8f-a34f-4bd5-9a72-8c7606994fde",
+	"f25b666c-2fcc-4735-949f-13378350a7fd",
+	'add',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'/*
+Add the given event to the timeline.
+Start at the beginning of the list and insert into the linked list.
+*/
+timelineevent = param.timelineevent;
+// Select the currently running event as the first in the list.
+// If we are not running, select the first event in the list.
+select one firstevent related by self->TIMELINEEVENT[R14.''is running''];
+if ( empty firstevent )
+  select one firstevent related by self->TIMELINEEVENT[R11.''has first''];
+end if;
+if ( empty firstevent )
+  // We are first to be added to an empty list.
+  relate self to timelineevent across R11.''has first'';
+  self.duration = timelineevent.duration;
+else
+  // Start at first and get next.  Compare offsets.
+  if ( timelineevent.offset <= firstevent.offset )
+    // before head
+    unrelate self from firstevent across R11.''has first'';
+    relate self to timelineevent across R11.''has first'';
+    relate timelineevent to firstevent across R12.''precedes'';
+  else
+    // find bigger
+    prev = firstevent;
+    select one nextevent related by prev->TIMELINEEVENT[R12.''precedes''];
+    while ( not_empty nextevent )
+      if ( timelineevent.offset <= nextevent.offset )
+        break;
+      end if;
+      prev = nextevent;
+      select one nextevent related by prev->TIMELINEEVENT[R12.''precedes''];
+    end while;
+    // link in
+    relate prev to timelineevent across R12.''precedes'';
+    if ( not_empty nextevent )
+      relate nextevent to timelineevent across R12.''follows'';
+    else
+      // The last event in the timeline governs the duration of the timeline.
+      self.duration = timelineevent.duration + timelineevent.offset;
+    end if;
+  end if;
+end if;',
+	1,
+	'',
+	"1149452f-5ee3-423d-9671-8aa535b06f98");
+INSERT INTO O_TPARM
+	VALUES ("058f15ea-1a3e-435d-a3f5-715b047ac906",
+	"d8ef6e8f-a34f-4bd5-9a72-8c7606994fde",
+	'timelineevent',
+	"773f48ca-eab2-4c19-a20a-09e12caf496e",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("773f48ca-eab2-4c19-a20a-09e12caf496e",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<timeline event>',
+	'',
+	'',
+	'../experiment.xtuml');
+INSERT INTO O_TFR
+	VALUES ("2df77480-aab2-4036-b581-3718994b5f60",
+	"f25b666c-2fcc-4735-949f-13378350a7fd",
+	'advance',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one timelineevent related by self->TIMELINEEVENT[R14.''is running''];
+if ( empty timelineevent )
+  // first time line event
+  select one timelineevent related by self->TIMELINEEVENT[R11.''has first''];
+else
+  // middle time line event
+  unrelate self from timelineevent across R14.''is running'';
+  select one timelineevent related by timelineevent->TIMELINEEVENT[R12.''precedes''];
+end if;
+
+// Run this event.
+relate self to timelineevent across R14.''is running'';
+timelineevent.fire();
+
+// Reload the timer if needed.
+select one nexttimelineevent related by timelineevent->TIMELINEEVENT[R12.''precedes''];
+if ( not_empty nexttimelineevent )
+  create event instance pop of TIMELINE2:pop() to self;
+  delta = nexttimelineevent.offset - timelineevent.offset;
+  self.timebase = TIM::timer_start( event_inst:pop, microseconds:delta * 1000 );
+end if;',
+	1,
+	'',
+	"d8ef6e8f-a34f-4bd5-9a72-8c7606994fde");
+INSERT INTO O_TFR
+	VALUES ("20581f5b-490d-4a8b-a1e9-ac8a33170e5a",
+	"f25b666c-2fcc-4735-949f-13378350a7fd",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Unlink from above.
+select one experiment related by self->EXPERIMENT[R13];
+if ( not_empty experiment )
+  unrelate self from experiment across R13;
+end if;
+
+// Unlink the running time line event.
+select one runningtimelineevent related by self->TIMELINEEVENT[R14.''is running''];
+if ( not_empty runningtimelineevent )
+  unrelate self from runningtimelineevent across R14;
+end if;
+
+// Clean up the related time line events.
+select one timelineevent related by self->TIMELINEEVENT[R11.''has first''];
+unrelate self from timelineevent across R11.''has first'';
+timelineevent.cleanup();
+
+delete object instance self;',
+	1,
+	'',
+	"b4e7900d-e787-4c7a-a341-a9c1ced872de");
+INSERT INTO O_NBATTR
+	VALUES ("4223661a-9f3d-48e5-8716-40f3c27fe91b",
+	"f25b666c-2fcc-4735-949f-13378350a7fd");
+INSERT INTO O_BATTR
+	VALUES ("4223661a-9f3d-48e5-8716-40f3c27fe91b",
+	"f25b666c-2fcc-4735-949f-13378350a7fd");
+INSERT INTO O_ATTR
+	VALUES ("4223661a-9f3d-48e5-8716-40f3c27fe91b",
+	"f25b666c-2fcc-4735-949f-13378350a7fd",
+	"00000000-0000-0000-0000-000000000000",
+	'timebase',
+	'',
+	'',
+	'timebase',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000f",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("4270ec45-bef4-472a-a068-5df3ee67d2f1",
+	"f25b666c-2fcc-4735-949f-13378350a7fd");
+INSERT INTO O_BATTR
+	VALUES ("4270ec45-bef4-472a-a068-5df3ee67d2f1",
+	"f25b666c-2fcc-4735-949f-13378350a7fd");
+INSERT INTO O_ATTR
+	VALUES ("4270ec45-bef4-472a-a068-5df3ee67d2f1",
+	"f25b666c-2fcc-4735-949f-13378350a7fd",
+	"31e59e34-db1e-4b70-a6e5-74f3c7561e24",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("31e59e34-db1e-4b70-a6e5-74f3c7561e24",
+	"f25b666c-2fcc-4735-949f-13378350a7fd");
+INSERT INTO O_BATTR
+	VALUES ("31e59e34-db1e-4b70-a6e5-74f3c7561e24",
+	"f25b666c-2fcc-4735-949f-13378350a7fd");
+INSERT INTO O_ATTR
+	VALUES ("31e59e34-db1e-4b70-a6e5-74f3c7561e24",
+	"f25b666c-2fcc-4735-949f-13378350a7fd",
+	"3de15cbe-ee0f-4a8c-a643-c14a87c63231",
+	'duration',
+	'',
+	'',
+	'duration',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("3de15cbe-ee0f-4a8c-a643-c14a87c63231",
+	"f25b666c-2fcc-4735-949f-13378350a7fd");
+INSERT INTO O_BATTR
+	VALUES ("3de15cbe-ee0f-4a8c-a643-c14a87c63231",
+	"f25b666c-2fcc-4735-949f-13378350a7fd");
+INSERT INTO O_ATTR
+	VALUES ("3de15cbe-ee0f-4a8c-a643-c14a87c63231",
+	"f25b666c-2fcc-4735-949f-13378350a7fd",
+	"4223661a-9f3d-48e5-8716-40f3c27fe91b",
+	'end_timer',
+	'',
+	'',
+	'end_timer',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000f",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"f25b666c-2fcc-4735-949f-13378350a7fd");
+INSERT INTO O_ID
+	VALUES (1,
+	"f25b666c-2fcc-4735-949f-13378350a7fd");
+INSERT INTO O_ID
+	VALUES (2,
+	"f25b666c-2fcc-4735-949f-13378350a7fd");
+INSERT INTO PE_PE
+	VALUES ("f25b666c-2fcc-4735-949f-13378350a7fd",
+	1,
+	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'experiment',
+	'',
+	10,
+	'../experiment.xtuml');

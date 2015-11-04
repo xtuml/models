@@ -1,0 +1,246 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("834416b2-b818-4f41-a6a3-e62f3a391701",
+	'forloop',
+	4,
+	'FORLOOP',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("18ac0378-2ae4-48a2-a259-c67c41f0c9a1",
+	"834416b2-b818-4f41-a6a3-e62f3a391701",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'instruction = param.instruction;
+program = param.program;
+create object instance forloop of FORLOOP;
+relate forloop to instruction across R2;
+low = program.store[ program.PC + 1 ];
+high = program.store[ program.PC + 2 ];
+forloop.count = ( high * 256 ) + low;
+low = program.store[ program.PC + 3 ];
+high = program.store[ program.PC + 4 ];
+forloop.branch_offset = ( high * 256 ) + low;
+forloop.counter = 0;
+return 5;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("b7df70a6-251e-4fdc-9aa2-bb0827958c0d",
+	"18ac0378-2ae4-48a2-a259-c67c41f0c9a1",
+	'instruction',
+	"8e1a23ce-49ad-4e78-8b0e-fa0a2947f09c",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8e1a23ce-49ad-4e78-8b0e-fa0a2947f09c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<instruction>',
+	'',
+	'',
+	'../program.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("73d6c58d-7a38-4fab-811f-34f00c33aeef",
+	"18ac0378-2ae4-48a2-a259-c67c41f0c9a1",
+	'program',
+	"7ffff356-33a0-4540-9fd8-2c5d08586a4c",
+	0,
+	'',
+	"b7df70a6-251e-4fdc-9aa2-bb0827958c0d",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("7ffff356-33a0-4540-9fd8-2c5d08586a4c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../program.xtuml');
+INSERT INTO O_TFR
+	VALUES ("eabee4d2-ff80-4726-85c0-42e998245033",
+	"834416b2-b818-4f41-a6a3-e62f3a391701",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'LOG::LogInteger( message:self.counter );
+loop_done = false;
+if ( self.counter < self.count )
+  self.counter = self.counter + 1;
+else
+  self.counter = 0;
+  loop_done = true;
+end if;
+return loop_done;
+',
+	1,
+	'',
+	"18ac0378-2ae4-48a2-a259-c67c41f0c9a1");
+INSERT INTO O_TFR
+	VALUES ("fdc4bf1d-5a09-4a92-ae2c-53a62058cea2",
+	"834416b2-b818-4f41-a6a3-e62f3a391701",
+	'resolve_branches',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Find the end_of_loop instruction at the end of the loop body (offset - 1).
+// Find the continuing_on instruction just past the loop body (offset).
+// Link end_of_loop to instruction.
+// Link forloop to the continuing_on instruction.
+select one instruction related by self->INSTRUCTION[R2];
+end_of_loop = instruction;
+i = self.branch_offset;
+while ( i > 0 )
+  select one end_of_loop related by end_of_loop->INSTRUCTION[R4.follows];
+  i = i - 1;
+end while;
+select one continuing_on related by end_of_loop->INSTRUCTION[R4.follows];
+select one instruction related by self->INSTRUCTION[R2];
+
+relate end_of_loop to instruction across R5.''branches to'';
+if ( not_empty continuing_on )
+  relate self to continuing_on across R6.''proceeds to'';
+end if;
+
+',
+	1,
+	'',
+	"eabee4d2-ff80-4726-85c0-42e998245033");
+INSERT INTO O_REF
+	VALUES ("834416b2-b818-4f41-a6a3-e62f3a391701",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	0,
+	"33872038-c20c-4c5e-9be6-90759c144a5a",
+	"e909a8cf-93f0-4717-9195-06a02c37a374",
+	"2196fe0e-bcaa-4378-9344-37210f54b1f2",
+	"d32ce726-c290-4e23-a4ae-72412359cca2",
+	"617a9f69-f842-4baf-9665-04bb8b75859a",
+	"ce8473cb-8c23-4b3f-8f05-13d95c0ddb36",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'instruction',
+	'location',
+	'R2');
+INSERT INTO R_RGO_PROXY
+	VALUES ("834416b2-b818-4f41-a6a3-e62f3a391701",
+	"e909a8cf-93f0-4717-9195-06a02c37a374",
+	"2196fe0e-bcaa-4378-9344-37210f54b1f2",
+	'../program.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("33872038-c20c-4c5e-9be6-90759c144a5a",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	0,
+	"e909a8cf-93f0-4717-9195-06a02c37a374",
+	"d32ce726-c290-4e23-a4ae-72412359cca2",
+	'../program.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("617a9f69-f842-4baf-9665-04bb8b75859a",
+	"834416b2-b818-4f41-a6a3-e62f3a391701",
+	"33872038-c20c-4c5e-9be6-90759c144a5a",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	1,
+	'location');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("33872038-c20c-4c5e-9be6-90759c144a5a",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	'../instruction/instruction.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("617a9f69-f842-4baf-9665-04bb8b75859a",
+	"834416b2-b818-4f41-a6a3-e62f3a391701",
+	"00000000-0000-0000-0000-000000000000",
+	'location',
+	'',
+	'',
+	'location',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("10aad87d-85ef-4682-aafa-95f67880bc2e",
+	"834416b2-b818-4f41-a6a3-e62f3a391701");
+INSERT INTO O_BATTR
+	VALUES ("10aad87d-85ef-4682-aafa-95f67880bc2e",
+	"834416b2-b818-4f41-a6a3-e62f3a391701");
+INSERT INTO O_ATTR
+	VALUES ("10aad87d-85ef-4682-aafa-95f67880bc2e",
+	"834416b2-b818-4f41-a6a3-e62f3a391701",
+	"6f728dc1-8d79-433e-87d4-f389634d0f34",
+	'counter',
+	'dynamic counter for iterating through the count',
+	'',
+	'counter',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("eca62a4f-1832-46d3-82d3-46b76b9e6ea8",
+	"834416b2-b818-4f41-a6a3-e62f3a391701");
+INSERT INTO O_BATTR
+	VALUES ("eca62a4f-1832-46d3-82d3-46b76b9e6ea8",
+	"834416b2-b818-4f41-a6a3-e62f3a391701");
+INSERT INTO O_ATTR
+	VALUES ("eca62a4f-1832-46d3-82d3-46b76b9e6ea8",
+	"834416b2-b818-4f41-a6a3-e62f3a391701",
+	"10aad87d-85ef-4682-aafa-95f67880bc2e",
+	'branch_offset',
+	'',
+	'',
+	'branch_offset',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("6f728dc1-8d79-433e-87d4-f389634d0f34",
+	"834416b2-b818-4f41-a6a3-e62f3a391701");
+INSERT INTO O_BATTR
+	VALUES ("6f728dc1-8d79-433e-87d4-f389634d0f34",
+	"834416b2-b818-4f41-a6a3-e62f3a391701");
+INSERT INTO O_ATTR
+	VALUES ("6f728dc1-8d79-433e-87d4-f389634d0f34",
+	"834416b2-b818-4f41-a6a3-e62f3a391701",
+	"617a9f69-f842-4baf-9665-04bb8b75859a",
+	'count',
+	'number of loop iterations requested in the opcode',
+	'',
+	'count',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"834416b2-b818-4f41-a6a3-e62f3a391701");
+INSERT INTO O_OIDA
+	VALUES ("617a9f69-f842-4baf-9665-04bb8b75859a",
+	"834416b2-b818-4f41-a6a3-e62f3a391701",
+	0,
+	'location');
+INSERT INTO O_ID
+	VALUES (1,
+	"834416b2-b818-4f41-a6a3-e62f3a391701");
+INSERT INTO O_ID
+	VALUES (2,
+	"834416b2-b818-4f41-a6a3-e62f3a391701");
+INSERT INTO PE_PE
+	VALUES ("834416b2-b818-4f41-a6a3-e62f3a391701",
+	1,
+	"e8e3d8c7-d251-42fa-bdd2-32b3eea72d96",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("e8e3d8c7-d251-42fa-bdd2-32b3eea72d96",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'program',
+	'',
+	0,
+	'../program.xtuml');

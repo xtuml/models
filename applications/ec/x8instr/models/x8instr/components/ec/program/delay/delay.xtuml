@@ -1,0 +1,198 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("90cb6075-082b-40fc-bef3-4109cb2a6577",
+	'delay',
+	5,
+	'DELAY',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("b0643a78-bcce-4dd9-9ebd-7a159489145a",
+	"90cb6075-082b-40fc-bef3-4109cb2a6577",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'instruction = param.instruction;
+program = param.program;
+create object instance delay of DELAY;
+relate delay to instruction across R2;
+low = program.store[ program.PC + 1 ];
+high = program.store[ program.PC + 2 ];
+delay.milliseconds = ( high * 256 ) + low;
+low = program.store[ program.PC + 3 ];
+high = program.store[ program.PC + 4 ];
+delay.seconds = ( high * 256 ) + low;
+return 5;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("3734e6ec-6bce-4d53-8a14-67f0993c98b4",
+	"b0643a78-bcce-4dd9-9ebd-7a159489145a",
+	'instruction',
+	"8e1a23ce-49ad-4e78-8b0e-fa0a2947f09c",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8e1a23ce-49ad-4e78-8b0e-fa0a2947f09c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<instruction>',
+	'',
+	'',
+	'../program.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("310a5245-dcae-4432-be5e-07c1c271edfe",
+	"b0643a78-bcce-4dd9-9ebd-7a159489145a",
+	'program',
+	"7ffff356-33a0-4540-9fd8-2c5d08586a4c",
+	0,
+	'',
+	"3734e6ec-6bce-4d53-8a14-67f0993c98b4",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("7ffff356-33a0-4540-9fd8-2c5d08586a4c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../program.xtuml');
+INSERT INTO O_TFR
+	VALUES ("3e48e0b3-3508-4bfb-8c17-0c1f27352f69",
+	"90cb6075-082b-40fc-bef3-4109cb2a6577",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'TRACE::log( id:1015, flavor:"info", message:"delay" );
+t = TIM::timer_start( microseconds:  self.milliseconds * 1000, event_inst:param.completion_event );',
+	1,
+	'',
+	"b0643a78-bcce-4dd9-9ebd-7a159489145a");
+INSERT INTO O_TPARM
+	VALUES ("0a3ea20a-8022-4bee-b9a4-5c3fad074021",
+	"3e48e0b3-3508-4bfb-8c17-0c1f27352f69",
+	'completion_event',
+	"ba5eda7a-def5-0000-0000-00000000000a",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_REF
+	VALUES ("90cb6075-082b-40fc-bef3-4109cb2a6577",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	0,
+	"33872038-c20c-4c5e-9be6-90759c144a5a",
+	"e909a8cf-93f0-4717-9195-06a02c37a374",
+	"112142ca-60c2-46b9-84d0-2147b5ce7292",
+	"d32ce726-c290-4e23-a4ae-72412359cca2",
+	"2f422f92-a868-4739-a1dd-63fd022390f4",
+	"e2465a53-d4ad-4b13-b5cc-3739a6a2940d",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'instruction',
+	'location',
+	'R2');
+INSERT INTO R_RGO_PROXY
+	VALUES ("90cb6075-082b-40fc-bef3-4109cb2a6577",
+	"e909a8cf-93f0-4717-9195-06a02c37a374",
+	"112142ca-60c2-46b9-84d0-2147b5ce7292",
+	'../program.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("33872038-c20c-4c5e-9be6-90759c144a5a",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	0,
+	"e909a8cf-93f0-4717-9195-06a02c37a374",
+	"d32ce726-c290-4e23-a4ae-72412359cca2",
+	'../program.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("2f422f92-a868-4739-a1dd-63fd022390f4",
+	"90cb6075-082b-40fc-bef3-4109cb2a6577",
+	"33872038-c20c-4c5e-9be6-90759c144a5a",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	1,
+	'location');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("33872038-c20c-4c5e-9be6-90759c144a5a",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	'../instruction/instruction.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("2f422f92-a868-4739-a1dd-63fd022390f4",
+	"90cb6075-082b-40fc-bef3-4109cb2a6577",
+	"00000000-0000-0000-0000-000000000000",
+	'location',
+	'',
+	'',
+	'location',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("71bef149-e1a4-4591-80f2-3c1d2af5bb8c",
+	"90cb6075-082b-40fc-bef3-4109cb2a6577");
+INSERT INTO O_BATTR
+	VALUES ("71bef149-e1a4-4591-80f2-3c1d2af5bb8c",
+	"90cb6075-082b-40fc-bef3-4109cb2a6577");
+INSERT INTO O_ATTR
+	VALUES ("71bef149-e1a4-4591-80f2-3c1d2af5bb8c",
+	"90cb6075-082b-40fc-bef3-4109cb2a6577",
+	"2f422f92-a868-4739-a1dd-63fd022390f4",
+	'milliseconds',
+	'',
+	'',
+	'milliseconds',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("fcc62142-910a-4fac-947b-902ac80ecefb",
+	"90cb6075-082b-40fc-bef3-4109cb2a6577");
+INSERT INTO O_BATTR
+	VALUES ("fcc62142-910a-4fac-947b-902ac80ecefb",
+	"90cb6075-082b-40fc-bef3-4109cb2a6577");
+INSERT INTO O_ATTR
+	VALUES ("fcc62142-910a-4fac-947b-902ac80ecefb",
+	"90cb6075-082b-40fc-bef3-4109cb2a6577",
+	"71bef149-e1a4-4591-80f2-3c1d2af5bb8c",
+	'seconds',
+	'',
+	'',
+	'seconds',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"90cb6075-082b-40fc-bef3-4109cb2a6577");
+INSERT INTO O_OIDA
+	VALUES ("2f422f92-a868-4739-a1dd-63fd022390f4",
+	"90cb6075-082b-40fc-bef3-4109cb2a6577",
+	0,
+	'location');
+INSERT INTO O_ID
+	VALUES (1,
+	"90cb6075-082b-40fc-bef3-4109cb2a6577");
+INSERT INTO O_ID
+	VALUES (2,
+	"90cb6075-082b-40fc-bef3-4109cb2a6577");
+INSERT INTO PE_PE
+	VALUES ("90cb6075-082b-40fc-bef3-4109cb2a6577",
+	1,
+	"e8e3d8c7-d251-42fa-bdd2-32b3eea72d96",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("e8e3d8c7-d251-42fa-bdd2-32b3eea72d96",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'program',
+	'',
+	0,
+	'../program.xtuml');

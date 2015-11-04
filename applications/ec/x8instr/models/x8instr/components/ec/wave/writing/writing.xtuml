@@ -1,0 +1,146 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("85f26ee6-d6ce-4942-885c-9ae50424ca27",
+	'writing',
+	41,
+	'WRITING',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("284034e4-b89f-46a4-a31e-ef7f6894e611",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
+	'init',
+	'',
+	"96143939-5991-45e3-8f49-e323199cfed2",
+	0,
+	'create object instance writing of WRITING;
+writing.DC_offset = param.DC_offset;
+return writing;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("af855bc9-9048-4be3-9367-d5ee25f6b4e5",
+	"284034e4-b89f-46a4-a31e-ef7f6894e611",
+	'DC_offset',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("96143939-5991-45e3-8f49-e323199cfed2",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<writing>',
+	'',
+	'',
+	'../wave.xtuml');
+INSERT INTO O_TFR
+	VALUES ("be1d0a87-7ef0-4611-b34b-3892ee1f6fd5",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'delete object instance self;',
+	1,
+	'',
+	"284034e4-b89f-46a4-a31e-ef7f6894e611");
+INSERT INTO O_TFR
+	VALUES ("8007e538-fed9-4153-9397-f4259d2e8b79",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
+	'play',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one segment related by self->SEGMENT[R18];
+segment.index = 0;
+segment.current_cycle = 1;
+create event instance tick of WRITING2:tick() to self;
+segment.clock = TIM::timer_start_recurring( microseconds:segment.period, event_inst:tick );',
+	1,
+	'',
+	"be1d0a87-7ef0-4611-b34b-3892ee1f6fd5");
+INSERT INTO O_NBATTR
+	VALUES ("99dfe68c-744c-423e-9f00-1e0697ecab95",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
+INSERT INTO O_BATTR
+	VALUES ("99dfe68c-744c-423e-9f00-1e0697ecab95",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
+INSERT INTO O_ATTR
+	VALUES ("99dfe68c-744c-423e-9f00-1e0697ecab95",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
+	"bab55d6b-1523-4b75-a79b-fe1b833eb177",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("b55570c6-53c0-461c-b8c0-eaee42141e13",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
+INSERT INTO O_BATTR
+	VALUES ("b55570c6-53c0-461c-b8c0-eaee42141e13",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
+INSERT INTO O_ATTR
+	VALUES ("b55570c6-53c0-461c-b8c0-eaee42141e13",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
+	"00000000-0000-0000-0000-000000000000",
+	'number',
+	'',
+	'',
+	'number',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("bab55d6b-1523-4b75-a79b-fe1b833eb177",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
+INSERT INTO O_BATTR
+	VALUES ("bab55d6b-1523-4b75-a79b-fe1b833eb177",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
+INSERT INTO O_ATTR
+	VALUES ("bab55d6b-1523-4b75-a79b-fe1b833eb177",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
+	"b55570c6-53c0-461c-b8c0-eaee42141e13",
+	'DC_offset',
+	'',
+	'',
+	'DC_offset',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
+INSERT INTO O_OIDA
+	VALUES ("b55570c6-53c0-461c-b8c0-eaee42141e13",
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27",
+	0,
+	'number');
+INSERT INTO O_ID
+	VALUES (1,
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
+INSERT INTO O_ID
+	VALUES (2,
+	"85f26ee6-d6ce-4942-885c-9ae50424ca27");
+INSERT INTO PE_PE
+	VALUES ("85f26ee6-d6ce-4942-885c-9ae50424ca27",
+	1,
+	"756e2fa8-d9b5-49f0-9bf0-80f37f535bb5",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("756e2fa8-d9b5-49f0-9bf0-80f37f535bb5",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'wave',
+	'',
+	40,
+	'../wave.xtuml');

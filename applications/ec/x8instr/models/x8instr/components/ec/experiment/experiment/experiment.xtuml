@@ -1,0 +1,122 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("e27e2331-72d3-4f2e-99d7-a84cf05b0337",
+	'experiment',
+	11,
+	'EXPERIMENT',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("99427a2d-b638-450e-93db-26c03b68af42",
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337",
+	'init',
+	'',
+	"1b75847b-ccf4-41f4-b023-faa4cee8b9c3",
+	0,
+	'create object instance experiment of EXPERIMENT;
+experiment.name = param.name;
+
+// Add the empty timeline and link to the new experiment.
+timeline = TIMELINE::init();
+relate experiment to timeline across R13;
+
+return experiment;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("044d9ef6-d8ad-4454-88b6-a8bbe2f06ef6",
+	"99427a2d-b638-450e-93db-26c03b68af42",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("1b75847b-ccf4-41f4-b023-faa4cee8b9c3",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<experiment>',
+	'',
+	'',
+	'../experiment.xtuml');
+INSERT INTO O_TFR
+	VALUES ("997c2642-06fb-47bc-8fa6-d875f3b87caf",
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one timeline related by self->TIMELINE[R13];
+timeline.cleanup();
+
+delete object instance self;',
+	1,
+	'',
+	"99427a2d-b638-450e-93db-26c03b68af42");
+INSERT INTO O_NBATTR
+	VALUES ("198170c7-9689-467d-9c4e-1e4561434a56",
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");
+INSERT INTO O_BATTR
+	VALUES ("198170c7-9689-467d-9c4e-1e4561434a56",
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");
+INSERT INTO O_ATTR
+	VALUES ("198170c7-9689-467d-9c4e-1e4561434a56",
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337",
+	"00000000-0000-0000-0000-000000000000",
+	'name',
+	'',
+	'',
+	'name',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("37a42208-8772-405e-9b7c-49cdbc69ad03",
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");
+INSERT INTO O_BATTR
+	VALUES ("37a42208-8772-405e-9b7c-49cdbc69ad03",
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");
+INSERT INTO O_ATTR
+	VALUES ("37a42208-8772-405e-9b7c-49cdbc69ad03",
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337",
+	"198170c7-9689-467d-9c4e-1e4561434a56",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");
+INSERT INTO O_OIDA
+	VALUES ("198170c7-9689-467d-9c4e-1e4561434a56",
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337",
+	0,
+	'name');
+INSERT INTO O_ID
+	VALUES (1,
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");
+INSERT INTO O_ID
+	VALUES (2,
+	"e27e2331-72d3-4f2e-99d7-a84cf05b0337");
+INSERT INTO PE_PE
+	VALUES ("e27e2331-72d3-4f2e-99d7-a84cf05b0337",
+	1,
+	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'experiment',
+	'',
+	10,
+	'../experiment.xtuml');
