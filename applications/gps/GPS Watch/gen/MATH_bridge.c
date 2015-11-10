@@ -9,13 +9,8 @@
  * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
-#include "GPSWatch_sys_types.h"
-#include "LOG_bridge.h"
-#include "MATH_bridge.h"
-#include "TIM_bridge.h"
-#include "MATH_bridge.h"
-#include "GPSWatch_sys_types.h"
 #include <math.h>
+#include "MATH_bridge.h"
 
 /*
  * Bridge:  sqrt
