@@ -86,7 +86,7 @@ INSERT INTO GD_GE
 	"99384781-5223-4064-90b8-5c818dd98732",
 	93,
 	0,
-	'GPS Watch::Tracking::Tracking::LOC::TrackingRequired_Location');
+	'GPS Watch::Tracking::Tracking::Location::TrackingLocation');
 INSERT INTO GD_CON
 	VALUES ("a1555373-1e83-4a58-9e3c-81fc11a4f8dc",
 	"00000000-0000-0000-0000-000000000000");
@@ -186,7 +186,7 @@ INSERT INTO GD_GE
 	"96c8720d-9630-45bf-957f-6f4b64aae714",
 	93,
 	0,
-	'GPS Watch::Tracking::Tracking::UI::TrackingRequired_UI');
+	'GPS Watch::Tracking::Tracking::UI::TrackingUI');
 INSERT INTO GD_CON
 	VALUES ("6332050d-9962-47f5-9da0-55bbcca5ac89",
 	"00000000-0000-0000-0000-000000000000");
@@ -286,7 +286,7 @@ INSERT INTO GD_GE
 	"facb3218-e4ef-4501-bd4a-a9f319931244",
 	93,
 	0,
-	'GPS Watch::Tracking::Tracking::GENERIC::TrackingRequired');
+	'GPS Watch::Tracking::Tracking::HeartRateMonitor::TrackingHeartRateMonitor');
 INSERT INTO GD_CON
 	VALUES ("cc0ab8b9-b503-488d-aa86-2a2e2b2f7567",
 	"00000000-0000-0000-0000-000000000000");
@@ -434,7 +434,7 @@ INSERT INTO GD_GE
 	"6fba6db4-d781-4f4d-af6c-4cf584b68360",
 	94,
 	0,
-	'GPS Watch::Tracking::Tracking::TRACKout::TrackingProvided');
+	'GPS Watch::Tracking::Tracking::Tracking::Tracking');
 INSERT INTO GD_CON
 	VALUES ("861dbcda-06af-4ac1-b0b0-1f7bb607e84e",
 	"00000000-0000-0000-0000-000000000000");
@@ -538,7 +538,7 @@ INSERT INTO DIM_DIA
 INSERT INTO C_PO
 	VALUES ("b2cadd36-7878-446f-8086-3508907d9a0c",
 	"dc1f9e78-8541-47a9-bfe9-2f5129a44ed0",
-	'LOC',
+	'Location',
 	0,
 	0);
 INSERT INTO C_IR
@@ -548,43 +548,20 @@ INSERT INTO C_IR
 	"b2cadd36-7878-446f-8086-3508907d9a0c");
 INSERT INTO C_R
 	VALUES ("99384781-5223-4064-90b8-5c818dd98732",
-	'TrackingRequired_Location',
+	'TrackingLocation',
 	'',
 	'Unnamed Interface',
-	'Tracking::LOC::TrackingRequired_Location');
+	'Tracking::Location::TrackingLocation');
 INSERT INTO SPR_REP
-	VALUES ("40c288d3-baa6-4d72-994f-f8702e504552",
-	"e9b5b4ec-71fa-4b89-a0b4-b9c5de21aafa",
-	"99384781-5223-4064-90b8-5c818dd98732");
-INSERT INTO SPR_RS
-	VALUES ("40c288d3-baa6-4d72-994f-f8702e504552",
-	'getLocation',
-	'',
-	'',
-	1);
-INSERT INTO C_EP_PROXY
-	VALUES ("e9b5b4ec-71fa-4b89-a0b4-b9c5de21aafa",
-	"42b5fc7d-2c15-41d5-bb71-5d34b536369b",
-	-1,
-	'getLocation',
-	'',
-	'../Interfaces/TrackingRequired_Location/TrackingRequired_Location.xtuml');
-INSERT INTO SPR_REP
-	VALUES ("c7bb68d8-1d56-4b55-bc3c-6805fe72690a",
+	VALUES ("b37dffbc-d0a6-4f55-a702-ef71b726b174",
 	"73fd274d-1bd7-4902-bb17-35d01f45ec95",
 	"99384781-5223-4064-90b8-5c818dd98732");
 INSERT INTO SPR_RO
-	VALUES ("c7bb68d8-1d56-4b55-bc3c-6805fe72690a",
+	VALUES ("b37dffbc-d0a6-4f55-a702-ef71b726b174",
 	'getDistance',
 	'Returns distance, in kilometers, between the "from" and "to" coordinates passed as parameters.
 The coordinates must be passed as decimal degrees.',
-	'// Return the straight-line distance, expressed in meters, between the 
-// two points passed as parameters, expressed in decimal degrees.
-
-deltaLat = param.toLat - param.fromLat;
-deltaLong = param.toLong - param.fromLong;
-sumSquares = (deltaLat * deltaLat) + (deltaLong * deltaLong);
-return ( (MATH::sqrt( x: sumSquares ) * kmPerDegree * 1000 ) );',
+	'return 1;',
 	1);
 INSERT INTO C_EP_PROXY
 	VALUES ("73fd274d-1bd7-4902-bb17-35d01f45ec95",
@@ -593,13 +570,64 @@ INSERT INTO C_EP_PROXY
 	'getDistance',
 	'Returns distance, in kilometers, between the "from" and "to" coordinates passed as parameters.
 The coordinates must be passed as decimal degrees.',
-	'../Interfaces/TrackingRequired_Location/TrackingRequired_Location.xtuml');
+	'../Interfaces/TrackingLocation/TrackingLocation.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("db3592bf-2b78-43b3-a7bf-a14bd7032ad8",
+	"0390fab8-9176-4793-9cd7-2b6336abe3da",
+	"99384781-5223-4064-90b8-5c818dd98732");
+INSERT INTO SPR_RO
+	VALUES ("db3592bf-2b78-43b3-a7bf-a14bd7032ad8",
+	'getLocation',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("0390fab8-9176-4793-9cd7-2b6336abe3da",
+	"42b5fc7d-2c15-41d5-bb71-5d34b536369b",
+	-1,
+	'getLocation',
+	'',
+	'../Interfaces/TrackingLocation/TrackingLocation.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("b5f22457-4bb8-4ad6-80e1-93c82dff2107",
+	"166f448a-1123-430e-a960-928225cc9524",
+	"99384781-5223-4064-90b8-5c818dd98732");
+INSERT INTO SPR_RO
+	VALUES ("b5f22457-4bb8-4ad6-80e1-93c82dff2107",
+	'registerListener',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("166f448a-1123-430e-a960-928225cc9524",
+	"42b5fc7d-2c15-41d5-bb71-5d34b536369b",
+	-1,
+	'registerListener',
+	'',
+	'../Interfaces/TrackingLocation/TrackingLocation.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("2c5be330-e140-45f2-81fd-d5a227abc2bb",
+	"59a065ee-964d-4372-8fa5-186358360821",
+	"99384781-5223-4064-90b8-5c818dd98732");
+INSERT INTO SPR_RO
+	VALUES ("2c5be330-e140-45f2-81fd-d5a227abc2bb",
+	'unregisterListener',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("59a065ee-964d-4372-8fa5-186358360821",
+	"42b5fc7d-2c15-41d5-bb71-5d34b536369b",
+	-1,
+	'unregisterListener',
+	'',
+	'../Interfaces/TrackingLocation/TrackingLocation.xtuml');
 INSERT INTO C_I_PROXY
 	VALUES ("42b5fc7d-2c15-41d5-bb71-5d34b536369b",
 	"00000000-0000-0000-0000-000000000000",
-	'TrackingRequired_Location',
+	'TrackingLocation',
 	'',
-	'../Interfaces/TrackingRequired_Location/TrackingRequired_Location.xtuml');
+	'../Interfaces/TrackingLocation/TrackingLocation.xtuml');
 INSERT INTO C_PO
 	VALUES ("b7661769-7ce8-492a-abf5-5476c3474362",
 	"dc1f9e78-8541-47a9-bfe9-2f5129a44ed0",
@@ -613,33 +641,16 @@ INSERT INTO C_IR
 	"b7661769-7ce8-492a-abf5-5476c3474362");
 INSERT INTO C_R
 	VALUES ("96c8720d-9630-45bf-957f-6f4b64aae714",
-	'TrackingRequired_UI',
+	'TrackingUI',
 	'',
 	'Unnamed Interface',
-	'Tracking::UI::TrackingRequired_UI');
+	'Tracking::UI::TrackingUI');
 INSERT INTO SPR_REP
-	VALUES ("7c6a2313-2d9a-4703-afdd-ada8cc673c65",
-	"4c91c536-bcd9-49e3-993e-121920e7a8b2",
-	"96c8720d-9630-45bf-957f-6f4b64aae714");
-INSERT INTO SPR_RS
-	VALUES ("7c6a2313-2d9a-4703-afdd-ada8cc673c65",
-	'newGoalSpec',
-	'',
-	'',
-	1);
-INSERT INTO C_EP_PROXY
-	VALUES ("4c91c536-bcd9-49e3-993e-121920e7a8b2",
-	"3bd26f59-356c-4341-852d-fad0e305bc6b",
-	-1,
-	'newGoalSpec',
-	'',
-	'../Interfaces/TrackingRequired_UI/TrackingRequired_UI.xtuml');
-INSERT INTO SPR_REP
-	VALUES ("d5a3a8a2-2427-41e2-bf7b-76b9791a8006",
+	VALUES ("3cf9813c-c369-4142-8a05-b8dd043ebab4",
 	"bb278b2e-df3b-4dee-9422-d8b3e3b3553e",
 	"96c8720d-9630-45bf-957f-6f4b64aae714");
 INSERT INTO SPR_RO
-	VALUES ("d5a3a8a2-2427-41e2-bf7b-76b9791a8006",
+	VALUES ("3cf9813c-c369-4142-8a05-b8dd043ebab4",
 	'setData',
 	'',
 	'',
@@ -650,13 +661,13 @@ INSERT INTO C_EP_PROXY
 	-1,
 	'setData',
 	'',
-	'../Interfaces/TrackingRequired_UI/TrackingRequired_UI.xtuml');
+	'../Interfaces/TrackingUI/TrackingUI.xtuml');
 INSERT INTO SPR_REP
-	VALUES ("ed10af01-adb8-4eba-bab5-2e9087cb9945",
+	VALUES ("02ee2441-f39c-48e3-9823-bb07a6004fa6",
 	"3d14f8f4-4127-48b8-bfb1-2dc4eb5c4412",
 	"96c8720d-9630-45bf-957f-6f4b64aae714");
 INSERT INTO SPR_RO
-	VALUES ("ed10af01-adb8-4eba-bab5-2e9087cb9945",
+	VALUES ("02ee2441-f39c-48e3-9823-bb07a6004fa6",
 	'setIndicator',
 	'',
 	'',
@@ -667,13 +678,13 @@ INSERT INTO C_EP_PROXY
 	-1,
 	'setIndicator',
 	'',
-	'../Interfaces/TrackingRequired_UI/TrackingRequired_UI.xtuml');
+	'../Interfaces/TrackingUI/TrackingUI.xtuml');
 INSERT INTO SPR_REP
-	VALUES ("d595758f-887e-4c5d-88da-37703ca524ea",
+	VALUES ("b4e209f2-952b-458a-b7c8-bb88eed2321d",
 	"3c4d5043-f6c7-4975-a189-d8b4e3eb179f",
 	"96c8720d-9630-45bf-957f-6f4b64aae714");
 INSERT INTO SPR_RO
-	VALUES ("d595758f-887e-4c5d-88da-37703ca524ea",
+	VALUES ("b4e209f2-952b-458a-b7c8-bb88eed2321d",
 	'setTime',
 	'',
 	'',
@@ -684,17 +695,34 @@ INSERT INTO C_EP_PROXY
 	-1,
 	'setTime',
 	'',
-	'../Interfaces/TrackingRequired_UI/TrackingRequired_UI.xtuml');
+	'../Interfaces/TrackingUI/TrackingUI.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("1431b3a1-014d-4861-9605-81f860b32e1b",
+	"0e2c83a2-ee33-4aa8-af96-ac6f7f0a2c25",
+	"96c8720d-9630-45bf-957f-6f4b64aae714");
+INSERT INTO SPR_RO
+	VALUES ("1431b3a1-014d-4861-9605-81f860b32e1b",
+	'newGoalSpec',
+	'',
+	'',
+	1);
+INSERT INTO C_EP_PROXY
+	VALUES ("0e2c83a2-ee33-4aa8-af96-ac6f7f0a2c25",
+	"3bd26f59-356c-4341-852d-fad0e305bc6b",
+	-1,
+	'newGoalSpec',
+	'',
+	'../Interfaces/TrackingUI/TrackingUI.xtuml');
 INSERT INTO C_I_PROXY
 	VALUES ("3bd26f59-356c-4341-852d-fad0e305bc6b",
 	"00000000-0000-0000-0000-000000000000",
-	'TrackingRequired_UI',
+	'TrackingUI',
 	'',
-	'../Interfaces/TrackingRequired_UI/TrackingRequired_UI.xtuml');
+	'../Interfaces/TrackingUI/TrackingUI.xtuml');
 INSERT INTO C_PO
 	VALUES ("542bf91e-23cc-41d3-856f-5497af10ec1b",
 	"dc1f9e78-8541-47a9-bfe9-2f5129a44ed0",
-	'GENERIC',
+	'HeartRateMonitor',
 	0,
 	0);
 INSERT INTO C_IR
@@ -704,54 +732,54 @@ INSERT INTO C_IR
 	"542bf91e-23cc-41d3-856f-5497af10ec1b");
 INSERT INTO C_R
 	VALUES ("facb3218-e4ef-4501-bd4a-a9f319931244",
-	'TrackingRequired',
+	'TrackingHeartRateMonitor',
 	'',
 	'Unnamed Interface',
-	'Tracking::GENERIC::TrackingRequired');
+	'Tracking::HeartRateMonitor::TrackingHeartRateMonitor');
 INSERT INTO SPR_REP
-	VALUES ("ac095a4b-16f5-4997-9dc5-85025b3019a4",
-	"0238cee7-0cc5-4b94-8ca7-87515d67f8a9",
+	VALUES ("bfd9f74e-233f-4f91-afd4-d0c9b5d33e93",
+	"104a1b93-a334-437d-a4f1-f132655e4ad4",
 	"facb3218-e4ef-4501-bd4a-a9f319931244");
-INSERT INTO SPR_RS
-	VALUES ("ac095a4b-16f5-4997-9dc5-85025b3019a4",
+INSERT INTO SPR_RO
+	VALUES ("bfd9f74e-233f-4f91-afd4-d0c9b5d33e93",
 	'registerListener',
 	'',
 	'',
 	1);
 INSERT INTO C_EP_PROXY
-	VALUES ("0238cee7-0cc5-4b94-8ca7-87515d67f8a9",
+	VALUES ("104a1b93-a334-437d-a4f1-f132655e4ad4",
 	"f78b1978-678d-4bf3-b965-cc083f1a67fa",
 	-1,
 	'registerListener',
 	'',
-	'../Interfaces/TrackingRequired/TrackingRequired.xtuml');
+	'../Interfaces/TrackingHeartRateMonitor/TrackingHeartRateMonitor.xtuml');
 INSERT INTO SPR_REP
-	VALUES ("39e51fc4-ebac-47f3-a018-4d30c10b3114",
-	"259a11d0-aeca-49f3-a34d-d49eb0b0c07e",
+	VALUES ("730b7c03-5b85-4115-b81f-7379079ad0f3",
+	"4dc0647a-475a-4cee-b320-89d474884a85",
 	"facb3218-e4ef-4501-bd4a-a9f319931244");
-INSERT INTO SPR_RS
-	VALUES ("39e51fc4-ebac-47f3-a018-4d30c10b3114",
+INSERT INTO SPR_RO
+	VALUES ("730b7c03-5b85-4115-b81f-7379079ad0f3",
 	'unregisterListener',
 	'',
 	'',
 	1);
 INSERT INTO C_EP_PROXY
-	VALUES ("259a11d0-aeca-49f3-a34d-d49eb0b0c07e",
+	VALUES ("4dc0647a-475a-4cee-b320-89d474884a85",
 	"f78b1978-678d-4bf3-b965-cc083f1a67fa",
 	-1,
 	'unregisterListener',
 	'',
-	'../Interfaces/TrackingRequired/TrackingRequired.xtuml');
+	'../Interfaces/TrackingHeartRateMonitor/TrackingHeartRateMonitor.xtuml');
 INSERT INTO C_I_PROXY
 	VALUES ("f78b1978-678d-4bf3-b965-cc083f1a67fa",
 	"00000000-0000-0000-0000-000000000000",
-	'TrackingRequired',
+	'TrackingHeartRateMonitor',
 	'',
-	'../Interfaces/TrackingRequired/TrackingRequired.xtuml');
+	'../Interfaces/TrackingHeartRateMonitor/TrackingHeartRateMonitor.xtuml');
 INSERT INTO C_PO
 	VALUES ("4fbed411-cc96-4f1f-b83c-ef9418e10b63",
 	"dc1f9e78-8541-47a9-bfe9-2f5129a44ed0",
-	'TRACKout',
+	'Tracking',
 	0,
 	0);
 INSERT INTO C_IR
@@ -761,50 +789,67 @@ INSERT INTO C_IR
 	"4fbed411-cc96-4f1f-b83c-ef9418e10b63");
 INSERT INTO C_P
 	VALUES ("6fba6db4-d781-4f4d-af6c-4cf584b68360",
-	'TrackingProvided',
+	'Tracking',
 	'Unnamed Interface',
 	'',
-	'Tracking::TRACKout::TrackingProvided');
+	'Tracking::Tracking::Tracking');
 INSERT INTO SPR_PEP
-	VALUES ("529e0c69-4732-4e4d-9812-ef75109e8426",
-	"1ab927e8-0e2a-4d62-8fd4-3bffdd407e25",
+	VALUES ("5eee39ca-d408-4a98-9f72-36465234bcc8",
+	"7f6cf1b0-8f9a-407b-9e23-8b37418f3a0c",
 	"6fba6db4-d781-4f4d-af6c-4cf584b68360");
-INSERT INTO SPR_PS
-	VALUES ("529e0c69-4732-4e4d-9812-ef75109e8426",
+INSERT INTO SPR_PO
+	VALUES ("5eee39ca-d408-4a98-9f72-36465234bcc8",
 	'heartRateChanged',
 	'',
-	'',
+	'// Find the singleton instance of the workout session
+// and forward this signal, as an event, to it.
+// If there is no active workout session, then this 
+// sample is simply ignored and not recorded.
+
+select any session from instances of WorkoutSession;
+if (not empty session)
+  session.addHeartRateSample(heartRate: param.heartRate);
+end if;',
 	1);
 INSERT INTO C_EP_PROXY
-	VALUES ("1ab927e8-0e2a-4d62-8fd4-3bffdd407e25",
+	VALUES ("7f6cf1b0-8f9a-407b-9e23-8b37418f3a0c",
 	"3a3c18c3-a68f-4965-9880-4f4f0a1c1194",
 	-1,
 	'heartRateChanged',
 	'',
-	'../Interfaces/TrackingProvided/TrackingProvided.xtuml');
+	'../Interfaces/Tracking/Tracking.xtuml');
 INSERT INTO SPR_PEP
-	VALUES ("238c50f1-e6c0-4a9a-967e-cc72cf42b20d",
-	"e59b3131-1f08-4334-ac3e-f562a986a48c",
+	VALUES ("95dfb902-bb3f-499d-9990-808ac2f909a9",
+	"9b4a8425-59ff-448f-a9d3-311d0388e6b7",
 	"6fba6db4-d781-4f4d-af6c-4cf584b68360");
-INSERT INTO SPR_PS
-	VALUES ("238c50f1-e6c0-4a9a-967e-cc72cf42b20d",
+INSERT INTO SPR_PO
+	VALUES ("95dfb902-bb3f-499d-9990-808ac2f909a9",
 	'lapResetPressed',
 	'',
-	'',
+	'// Find the singleton instance of the workout timer 
+// and forward this signal, as an event, to it.
+
+select any workoutTimer from instances of WorkoutTimer;
+if (not empty workoutTimer)
+  generate WorkoutTimer2:lapResetPressed() to workoutTimer;
+else
+  LOG::LogFailure( message:"Tracking:UI:lapResetPressed - No WorkoutTimer, so nothing to do." );
+end if;
+',
 	1);
 INSERT INTO C_EP_PROXY
-	VALUES ("e59b3131-1f08-4334-ac3e-f562a986a48c",
+	VALUES ("9b4a8425-59ff-448f-a9d3-311d0388e6b7",
 	"3a3c18c3-a68f-4965-9880-4f4f0a1c1194",
 	-1,
 	'lapResetPressed',
 	'',
-	'../Interfaces/TrackingProvided/TrackingProvided.xtuml');
+	'../Interfaces/Tracking/Tracking.xtuml');
 INSERT INTO SPR_PEP
-	VALUES ("adc0b42b-e680-4460-9d9f-bf316c5dcb3d",
-	"9d39447b-9803-411a-b029-25f402238e11",
+	VALUES ("f43ad91e-bbf8-4ae3-9142-41bfb63af922",
+	"b5088f59-26da-4dd7-b4e4-aebcbf640fba",
 	"6fba6db4-d781-4f4d-af6c-4cf584b68360");
-INSERT INTO SPR_PS
-	VALUES ("adc0b42b-e680-4460-9d9f-bf316c5dcb3d",
+INSERT INTO SPR_PO
+	VALUES ("f43ad91e-bbf8-4ae3-9142-41bfb63af922",
 	'modePressed',
 	'',
 	'// Notify the display to change modes.
@@ -818,18 +863,18 @@ if ( not empty session )
 end if;',
 	1);
 INSERT INTO C_EP_PROXY
-	VALUES ("9d39447b-9803-411a-b029-25f402238e11",
+	VALUES ("b5088f59-26da-4dd7-b4e4-aebcbf640fba",
 	"3a3c18c3-a68f-4965-9880-4f4f0a1c1194",
 	-1,
 	'modePressed',
 	'',
-	'../Interfaces/TrackingProvided/TrackingProvided.xtuml');
+	'../Interfaces/Tracking/Tracking.xtuml');
 INSERT INTO SPR_PEP
-	VALUES ("b8fb81de-620b-4d21-9dec-5261e5c2c5d4",
-	"054a0630-918d-474a-99b0-39af2dfb78e0",
+	VALUES ("bba62f2d-efbd-4813-8aed-4992f7c58647",
+	"20451d56-700b-4ede-b155-5b993d7e27a6",
 	"6fba6db4-d781-4f4d-af6c-4cf584b68360");
-INSERT INTO SPR_PS
-	VALUES ("b8fb81de-620b-4d21-9dec-5261e5c2c5d4",
+INSERT INTO SPR_PO
+	VALUES ("bba62f2d-efbd-4813-8aed-4992f7c58647",
 	'setTargetPressed',
 	'',
 	'// If a goal is currently executing, advance to the next one,
@@ -837,18 +882,18 @@ INSERT INTO SPR_PS
 Goal::nextGoal();',
 	1);
 INSERT INTO C_EP_PROXY
-	VALUES ("054a0630-918d-474a-99b0-39af2dfb78e0",
+	VALUES ("20451d56-700b-4ede-b155-5b993d7e27a6",
 	"3a3c18c3-a68f-4965-9880-4f4f0a1c1194",
 	-1,
 	'setTargetPressed',
 	'',
-	'../Interfaces/TrackingProvided/TrackingProvided.xtuml');
+	'../Interfaces/Tracking/Tracking.xtuml');
 INSERT INTO SPR_PEP
-	VALUES ("65d4f557-a6f7-4036-aeb8-01520347c201",
-	"c9a38f19-01fc-4abf-bbcd-b6298100be93",
+	VALUES ("ba849870-28f8-4ec1-9c4a-dd0d2b7e2546",
+	"7a527085-ec3b-428f-9ba2-0cf5cbc50ba4",
 	"6fba6db4-d781-4f4d-af6c-4cf584b68360");
-INSERT INTO SPR_PS
-	VALUES ("65d4f557-a6f7-4036-aeb8-01520347c201",
+INSERT INTO SPR_PO
+	VALUES ("ba849870-28f8-4ec1-9c4a-dd0d2b7e2546",
 	'startStopPressed',
 	'',
 	'// If necessary, create a workout session and everything required to 
@@ -861,18 +906,18 @@ select any workoutTimer from instances of WorkoutTimer;
 generate WorkoutTimer1:startStopPressed() to workoutTimer;',
 	1);
 INSERT INTO C_EP_PROXY
-	VALUES ("c9a38f19-01fc-4abf-bbcd-b6298100be93",
+	VALUES ("7a527085-ec3b-428f-9ba2-0cf5cbc50ba4",
 	"3a3c18c3-a68f-4965-9880-4f4f0a1c1194",
 	-1,
 	'startStopPressed',
 	'',
-	'../Interfaces/TrackingProvided/TrackingProvided.xtuml');
+	'../Interfaces/Tracking/Tracking.xtuml');
 INSERT INTO SPR_PEP
-	VALUES ("6e7bcb1f-281e-42b5-b87e-17ad99059047",
-	"51def536-32ad-48f0-bfd8-82812e25a57e",
+	VALUES ("2a73bcd8-ff98-4b04-905d-70b2df7e2fa7",
+	"69ed63c2-1cf8-4700-b6c8-b7ffb7ccc3e8",
 	"6fba6db4-d781-4f4d-af6c-4cf584b68360");
-INSERT INTO SPR_PS
-	VALUES ("6e7bcb1f-281e-42b5-b87e-17ad99059047",
+INSERT INTO SPR_PO
+	VALUES ("2a73bcd8-ff98-4b04-905d-70b2df7e2fa7",
 	'newGoalSpec',
 	'',
 	'// Create a new goal specification and relate it to the
@@ -890,18 +935,18 @@ if ( not empty session )
 end if;',
 	1);
 INSERT INTO C_EP_PROXY
-	VALUES ("51def536-32ad-48f0-bfd8-82812e25a57e",
+	VALUES ("69ed63c2-1cf8-4700-b6c8-b7ffb7ccc3e8",
 	"3a3c18c3-a68f-4965-9880-4f4f0a1c1194",
 	-1,
 	'newGoalSpec',
 	'',
-	'../Interfaces/TrackingProvided/TrackingProvided.xtuml');
+	'../Interfaces/Tracking/Tracking.xtuml');
 INSERT INTO C_I_PROXY
 	VALUES ("3a3c18c3-a68f-4965-9880-4f4f0a1c1194",
 	"00000000-0000-0000-0000-000000000000",
-	'TrackingProvided',
+	'Tracking',
 	'',
-	'../Interfaces/TrackingProvided/TrackingProvided.xtuml');
+	'../Interfaces/Tracking/Tracking.xtuml');
 INSERT INTO PE_PE
 	VALUES ("dc1f9e78-8541-47a9-bfe9-2f5129a44ed0",
 	1,
