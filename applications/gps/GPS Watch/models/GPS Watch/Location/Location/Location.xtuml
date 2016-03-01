@@ -236,8 +236,14 @@ INSERT INTO SPR_PO
 	VALUES ("dfbbeef4-7de5-4605-baa9-5f031c686b15",
 	'getDistance',
 	'',
-	'',
-	3);
+	'// Return the straight-line distance, expressed in meters, between the
+// two points passed as parameters, expressed in decimal degrees.
+
+deltaLat = param.toLat - param.fromLat;
+deltaLong = param.toLong - param.fromLong;
+sumSquares = (deltaLat * deltaLat) + (deltaLong * deltaLong);
+return ( (MATH::sqrt( x: sumSquares ) * kmPerDegree * 1000 ) );',
+	1);
 INSERT INTO C_EP_PROXY
 	VALUES ("f3e865c1-8202-4d5c-9f6b-413cdf939090",
 	"e1cd6aaf-96c8-4814-a8e1-f8aa5af876ac",
