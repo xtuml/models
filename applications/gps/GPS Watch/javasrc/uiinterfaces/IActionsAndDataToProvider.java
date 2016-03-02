@@ -8,7 +8,7 @@ package uiinterfaces;
 
 import uidatatypes.Unit;
 
-import org.xtuml.bp.core.ComponentInstance_c;
+import com.mentor.nucleus.bp.core.ComponentInstance_c;
 
 
 public interface IActionsAndDataToProvider {
