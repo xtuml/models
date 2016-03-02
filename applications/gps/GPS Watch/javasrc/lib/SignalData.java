@@ -15,7 +15,6 @@ public class SignalData implements Serializable, Runnable {
 	// client to server signals
 	public static final int SIGNAL_NO_SET_DATA = 0;
 	public static final int SIGNAL_NO_SET_TIME = 1;
-	public static final int SIGNAL_NO_SET_INDICATOR = 2;
 	
 	//server to client signals
 	public static final int SIGNAL_NO_START_STOP_PRESSED = 0;
