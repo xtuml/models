@@ -12,7 +12,7 @@ and whether the goal has completed.',
 INSERT INTO O_TFR
 	VALUES ("b104ebc0-aeee-4076-a86c-f2eeea09bf72",
 	"472a759d-5701-4af4-9f68-7813a11ee4e7",
-	'create',
+	'goalcreate',
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
@@ -66,10 +66,10 @@ select one goalSpec related by self->GoalSpec[R9.''specified by''];
 if ( goalSpec.spanType == GoalSpan::Time )
   select one workoutTimer related by 
     self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
-  self.start = workoutTimer.time;
+  self.goalstart = workoutTimer.time;
 elif ( goalSpec.spanType == GoalSpan::Distance )
   select one session related by self->WorkoutSession[R11.''is currently executing within''];
-  self.start = session.accumulatedDistance;
+  self.goalstart = session.accumulatedDistance;
 else
   LOG::LogFailure( message: "Goal.calculateStart: Unknown Goal Span Type." );
 end if;',
@@ -150,11 +150,11 @@ select one goalSpec related by self->GoalSpec[R9.''specified by''];
 elapsedSpan = 0.0;  // Explicit declaration
 if ( goalSpec.spanType == GoalSpan::Distance )
   select one session related by self->WorkoutSession[R11.''is currently executing within''];
-  elapsedSpan = session.accumulatedDistance - self.start;
+  elapsedSpan = session.accumulatedDistance - self.goalstart;
 elif ( goalSpec.spanType == GoalSpan::Time )
   select one workoutTimer related by 
     self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
-  elapsedSpan = workoutTimer.time - self.start;
+  elapsedSpan = workoutTimer.time - self.goalstart;
 else
   LOG::LogFailure( message: "Goal.evaluateCompletion: Unknown Goal Span Type." );
 end if;
@@ -192,7 +192,7 @@ if ( not empty session )
   if ( not empty goal )
     generate Goal1:Completed to goal;
   else
-    Goal::create( sequenceNumber: GoalSpecOrigin );
+    Goal::goalcreate( sequenceNumber: GoalSpecOrigin );
   end if;
 end if;',
 	1,
@@ -232,7 +232,7 @@ INSERT INTO O_ATTR
 	VALUES ("5542b20c-c95b-4c73-9a69-58fa78e884f3",
 	"472a759d-5701-4af4-9f68-7813a11ee4e7",
 	"0a8d6e52-5d8c-469d-b45f-25a2d01394cb",
-	'start',
+	'goalstart',
 	'Captures the starting point of the span for this particular goal so 
 that the end of the goal execution period can be determined.  In other
 words, using the value of this attribute together with the span specified
@@ -246,7 +246,7 @@ For time-based goals, it is expressed as the elapsed time in seconds
 for the associated workout session at the time this goal execution
 commenced.',
 	'',
-	'start',
+	'goalstart',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000003",
 	'',
