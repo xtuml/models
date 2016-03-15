@@ -12,7 +12,7 @@ and whether the goal has completed.',
 INSERT INTO O_TFR
 	VALUES ("b104ebc0-aeee-4076-a86c-f2eeea09bf72",
 	"472a759d-5701-4af4-9f68-7813a11ee4e7",
-	'create',
+	'goalcreate',
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
@@ -66,10 +66,10 @@ select one goalSpec related by self->GoalSpec[R9.''specified by''];
 if ( goalSpec.spanType == GoalSpan::Time )
   select one workoutTimer related by 
     self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
-  self.start = workoutTimer.time;
+  self.goalstart = workoutTimer.time;
 elif ( goalSpec.spanType == GoalSpan::Distance )
   select one session related by self->WorkoutSession[R11.''is currently executing within''];
-  self.start = session.accumulatedDistance;
+  self.goalstart = session.accumulatedDistance;
 else
   LOG::LogFailure( message: "Goal.calculateStart: Unknown Goal Span Type." );
 end if;',
@@ -81,7 +81,7 @@ INSERT INTO O_TFR
 	"472a759d-5701-4af4-9f68-7813a11ee4e7",
 	'evaluateAchievement',
 	'',
-	"581bce01-aba7-4236-a02f-a3833c4b660c",
+	"4ecd6e30-3951-4db3-9100-8996bdf342c5",
 	1,
 	'// Based on the type of goal, determine whether this one is 
 //   currently being achieved and return a value indicating
@@ -125,12 +125,12 @@ return( goalDisposition );',
 	'',
 	"feeb244f-368a-41c4-a410-aaabac80d5c2");
 INSERT INTO S_DT_PROXY
-	VALUES ("581bce01-aba7-4236-a02f-a3833c4b660c",
+	VALUES ("4ecd6e30-3951-4db3-9100-8996bdf342c5",
 	"00000000-0000-0000-0000-000000000000",
 	'GoalDisposition',
 	'Disposition of a currently executing goal.',
 	'',
-	'../../../shared/shared.xtuml');
+	'../../../Tracking.xtuml');
 INSERT INTO O_TFR
 	VALUES ("0d01f42a-bc05-4492-a99e-89c886b75c07",
 	"472a759d-5701-4af4-9f68-7813a11ee4e7",
@@ -150,11 +150,11 @@ select one goalSpec related by self->GoalSpec[R9.''specified by''];
 elapsedSpan = 0.0;  // Explicit declaration
 if ( goalSpec.spanType == GoalSpan::Distance )
   select one session related by self->WorkoutSession[R11.''is currently executing within''];
-  elapsedSpan = session.accumulatedDistance - self.start;
+  elapsedSpan = session.accumulatedDistance - self.goalstart;
 elif ( goalSpec.spanType == GoalSpan::Time )
   select one workoutTimer related by 
     self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
-  elapsedSpan = workoutTimer.time - self.start;
+  elapsedSpan = workoutTimer.time - self.goalstart;
 else
   LOG::LogFailure( message: "Goal.evaluateCompletion: Unknown Goal Span Type." );
 end if;
@@ -192,7 +192,7 @@ if ( not empty session )
   if ( not empty goal )
     generate Goal1:Completed to goal;
   else
-    Goal::create( sequenceNumber: GoalSpecOrigin );
+    Goal::goalcreate( sequenceNumber: GoalSpecOrigin );
   end if;
 end if;',
 	1,
@@ -219,7 +219,7 @@ increase speed, causing a lower (faster) pace number.',
 	'',
 	'disposition',
 	0,
-	"581bce01-aba7-4236-a02f-a3833c4b660c",
+	"4ecd6e30-3951-4db3-9100-8996bdf342c5",
 	'',
 	'');
 INSERT INTO O_NBATTR
@@ -232,7 +232,7 @@ INSERT INTO O_ATTR
 	VALUES ("5542b20c-c95b-4c73-9a69-58fa78e884f3",
 	"472a759d-5701-4af4-9f68-7813a11ee4e7",
 	"0a8d6e52-5d8c-469d-b45f-25a2d01394cb",
-	'start',
+	'goalstart',
 	'Captures the starting point of the span for this particular goal so 
 that the end of the goal execution period can be determined.  In other
 words, using the value of this attribute together with the span specified
@@ -246,7 +246,7 @@ For time-based goals, it is expressed as the elapsed time in seconds
 for the associated workout session at the time this goal execution
 commenced.',
 	'',
-	'start',
+	'goalstart',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000003",
 	'',
