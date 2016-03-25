@@ -1,0 +1,54 @@
+project GPSWatch is
+domain Location is
+end domain;
+domain UI is
+  terminator Tracking is
+    public service setTargetPressed (
+    );
+    public service startStopPressed (
+    );
+    public service lapResetPressed (
+    );
+    public service modePressed (
+    );
+    public service newGoalSpec (
+        spanType : in GoalSpan,        criteriaType : in GoalCriteria,        span : in real,        maximum : in real,        minimum : in real,        sequenceNumber : in integer    );
+    public service lightPressed (
+    );
+  end terminator;
+end domain;
+domain Tracking is
+  terminator Location is
+    public function getDistance (
+        toLong : in real,        toLat : in real,        fromLong : in real,        fromLat : in real    ) return real;
+    public service getLocation (
+        longitude : in real,        latitude : in real    );
+    public service registerListener (
+    );
+    public service unregisterListener (
+    );
+  end terminator;
+  terminator UI is
+    public service setData (
+        unit : in Unit,        value : in real    );
+    public service setIndicator (
+        indicator : in Indicator    );
+    public service setTime (
+        time : in integer    );
+    public service newGoalSpec (
+        spanType : in GoalSpan,        criteriaType : in GoalCriteria,        span : in real,        maximum : in real,        minimum : in real,        sequenceNumber : in integer    );
+  end terminator;
+  terminator HeartRateMonitor is
+    public service registerListener (
+    );
+    public service unregisterListener (
+    );
+  end terminator;
+end domain;
+domain HeartRateMonitor is
+  terminator Unspecified is
+    public service heartRateChanged (
+        heartRate : in integer    );
+  end terminator;
+end domain;
+end project;
