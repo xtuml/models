@@ -21,20 +21,17 @@ domain UI is
   public service startTest ();
 
   terminator Tracking is
-
     private service setTargetPressed ();
     private service startStopPressed ();
     private service lapResetPressed ();
+    private service lightPressed ();
     private service modePressed ();
-    private service tessst ();
     private service newGoalSpec ( spanType : in GoalSpan,
                                  criteriaType : in GoalCriteria,
                                  span : in real,
                                  maximum : in real,
                                  minimum : in real,
                                  sequenceNumber : in integer );
-    private service lightPressed ();
-
   end terminator;
 
   object TestCase is
