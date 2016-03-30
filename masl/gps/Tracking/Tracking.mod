@@ -41,6 +41,7 @@ domain Tracking is
     private service registerListener ();
     private service unregisterListener ();
   end terminator;
+  pragma key_letter ("LOC");
 
   terminator UI is
     private service setData ( unit : in Unit,
@@ -49,11 +50,13 @@ domain Tracking is
     private service setTime ( time : in integer );
     private service startTest ();
   end terminator;
+  pragma key_letter ("UI");
   
   terminator HeartRateMonitor is
     private service registerListener ();
     private service unregisterListener ();
   end terminator;
+  pragma key_letter ("HR");
 
   relationship R1 is TrackPoint conditionally is_start_of one TrackLog,
                      TrackLog conditionally has_first one TrackPoint;
@@ -102,6 +105,7 @@ domain Tracking is
     endTime : integer;
     public instance service close ();
   end object;
+  pragma key_letter ("A");
 
   object Display is
     public function goalDispositionIndicator () return Indicator;
@@ -132,15 +136,18 @@ domain Tracking is
         refresh => displayLapCount );
     end transition;
   end object;
+  pragma key_letter ("D");
 
   object HeartRateSample is
     heartRate : integer;
     time : integer;
   end object;
+  pragma key_letter ("HRS");
 
   object LapMarker is
     lapTime : integer;
   end object;
+  pragma key_letter ("LM");
   
   object TrackLog is
     public instance service addTrackPoint ();
@@ -149,12 +156,14 @@ domain Tracking is
     public instance service clearLapMarkers ();
     public instance service updateDisplay ();
   end object;
+  pragma key_letter ("TL");
 
   object TrackPoint is
     time : integer;
     longitude : real;
     latitude : real;
   end object;
+  pragma key_letter ("TP");
 
   object WorkoutSession is
     startDate : preferred date;
@@ -169,6 +178,7 @@ domain Tracking is
     public service sessioncreate ();
     public instance service reset ();
   end object;
+  pragma key_letter ("WS");
 
   object WorkoutTimer is
     time : integer;
@@ -199,6 +209,7 @@ domain Tracking is
         tick => Ignore );
     end transition;
   end object;
+  pragma key_letter ("WT");
 
   object Goal is
     disposition : GoalDisposition;
@@ -234,6 +245,7 @@ domain Tracking is
         Pause => cannot_happen );
     end transition;
   end object;
+  pragma key_letter ("G");
 
   object GoalSpec is
     minimum : real;
@@ -243,5 +255,6 @@ domain Tracking is
     spanType : GoalSpan;
     sequenceNumber : preferred integer;
   end object;
+  pragma key_letter ("GS");
 
 end domain;

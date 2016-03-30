@@ -33,6 +33,7 @@ domain UI is
                                  minimum : in real,
                                  sequenceNumber : in integer );
   end terminator;
+  pragma key_letter ("T");
 
   object TestCase is
     iterations : integer;
@@ -54,6 +55,7 @@ domain UI is
         tcfinish => cannot_happen ); 
     end transition;
   end object;
+  pragma key_letter ("TC");
 
   object UI is
     public service connect ();
@@ -72,5 +74,6 @@ domain UI is
         modePressed => running ); 
     end transition;
   end object;
+  pragma key_letter ("UI");
 
 end domain;

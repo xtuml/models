@@ -36,5 +36,6 @@ domain Location is
         unregisterListener => idle );
     end transition;
   end object;
+  pragma key_letter ("GPS");
 
 end domain;

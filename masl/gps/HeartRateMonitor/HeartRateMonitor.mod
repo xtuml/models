@@ -8,6 +8,7 @@ domain HeartRateMonitor is
   terminator Unspecified is
     private service heartRateChanged ( heartRate : in integer );
   end terminator;
+  pragma key_letter ("U");
 
   object HeartRateMonitor is
     recentHeartRate : integer;
@@ -30,5 +31,6 @@ domain HeartRateMonitor is
         unregisterListener => idle );
     end transition;
   end object;
+  pragma key_letter ("HR");
 
 end domain;

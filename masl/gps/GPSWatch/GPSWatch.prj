@@ -5,6 +5,7 @@ project GPSWatch is
     terminator Unspecified is
       private service heartRateChanged ( heartRate : in integer );
     end terminator;
+    pragma key_letter ("U");
 
   end domain;
 
@@ -23,6 +24,7 @@ project GPSWatch is
       private service registerListener ();
       private service unregisterListener ();
     end terminator;
+    pragma key_letter ("LOC");
 
     terminator UI is
       private service setData ( unit : in Unit,
@@ -31,11 +33,13 @@ project GPSWatch is
       private service setTime ( time : in integer );
       private service startTest ();
     end terminator;
+    pragma key_letter ("UI");
     
     terminator HeartRateMonitor is
       private service registerListener ();
       private service unregisterListener ();
     end terminator;
+    pragma key_letter ("HR");
 
   end domain;
 
@@ -54,6 +58,7 @@ project GPSWatch is
                                    minimum : in real,
                                    sequenceNumber : in integer );
     end terminator;
+    pragma key_letter ("T");
 
   end domain;
 
