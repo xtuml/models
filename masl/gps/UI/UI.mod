@@ -26,8 +26,8 @@ domain UI is
     private service lapResetPressed ();
     private service lightPressed ();
     private service modePressed ();
-    private service newGoalSpec ( spanType : in GoalSpan,
-                                 criteriaType : in GoalCriteria,
+    private service newGoalSpec ( spanType : in Tracking::GoalSpan,
+                                 criteriaType : in Tracking::GoalCriteria,
                                  span : in real,
                                  maximum : in real,
                                  minimum : in real,
