@@ -44,9 +44,9 @@ domain Tracking is
   pragma key_letter ("LOC");
 
   terminator UI is
-    private service setData ( unit : in Unit,
+    private service setData ( unit : in UI::Unit,
                               value : in real );
-    private service setIndicator ( indicator : in Indicator );
+    private service setIndicator ( indicator : in UI::Indicator );
     private service setTime ( time : in integer );
     private service startTest ();
   end terminator;
@@ -108,7 +108,7 @@ domain Tracking is
   pragma key_letter ("A");
 
   object Display is
-    public function goalDispositionIndicator () return Indicator;
+    public function goalDispositionIndicator () return UI::Indicator;
 
     state displayDistance();
     state displaySpeed();
@@ -166,7 +166,7 @@ domain Tracking is
   pragma key_letter ("TP");
 
   object WorkoutSession is
-    startDate : preferred date;
+    startDate : preferred string;
     startTime : preferred timestamp;
     currentSpeed : real;
     currentPace : real;
