@@ -65,7 +65,7 @@ domain PSC is
                                     Paid,
                                     Evaded);
 
-  type Timer_ID is Integer;
+  type Timer_ID is integer;
 
   terminator ATTENDANT is
     private service Request_Pump_Enable ();

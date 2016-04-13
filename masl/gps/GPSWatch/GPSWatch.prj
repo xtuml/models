@@ -27,9 +27,9 @@ project GPSWatch is
     pragma key_letter ("LOC");
 
     terminator UI is
-      private service setData ( unit : in Unit,
+      private service setData ( unit : in UI::Unit,
                                 value : in real );
-      private service setIndicator ( indicator : in Indicator );
+      private service setIndicator ( indicator : in UI::Indicator );
       private service setTime ( time : in integer );
       private service startTest ();
     end terminator;
@@ -51,8 +51,8 @@ project GPSWatch is
       private service lapResetPressed ();
       private service lightPressed ();
       private service modePressed ();
-      private service newGoalSpec ( spanType : in GoalSpan,
-                                   criteriaType : in GoalCriteria,
+      private service newGoalSpec ( spanType : in Tracking::GoalSpan,
+                                   criteriaType : in Tracking::GoalCriteria,
                                    span : in real,
                                    maximum : in real,
                                    minimum : in real,
