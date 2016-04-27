@@ -29,10 +29,10 @@ domain Location is
       idle (
         tick => Ignore,
         registerListener => locating,
-        unregisterListener => cannot_happen );
+        unregisterListener => Cannot_Happen );
       locating (
         tick => locating,
-        registerListener => cannot_happen,
+        registerListener => Cannot_Happen,
         unregisterListener => idle );
     end transition;
   end object;
