@@ -46,7 +46,7 @@ domain UI is
     event tcfinish();
     transition is
       Non_Existent (
-        tcdelay => Cannot_Happen
+        tcdelay => Cannot_Happen,
         tcstart => Cannot_Happen,
         tcfinish => Cannot_Happen ); 
       pressStartStop (
