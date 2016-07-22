@@ -10,7 +10,7 @@ domain Logic is
                                my_crib: in boolean );   
   
   
-  terminator Game is
+  terminator GameControl is
     private service play ( card: in Game::CardType );     
   end terminator;
   
