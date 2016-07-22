@@ -13,6 +13,7 @@ domain Logic is
   terminator GameControl is
     private service play ( card: in Game::CardType );     
   end terminator;
+  pragma key_letter("GC");
   
   
   
@@ -27,6 +28,7 @@ domain Logic is
     public instance deferred ( R1 ) service calculatePlay ();     
     
   end object;
+  pragma key_letter("S");
   
   object CribDiscardScenario is
     
@@ -37,6 +39,7 @@ domain Logic is
     public instance service calculatePlay ();     
     
   end object;
+  pragma key_letter("DS");
   
   object PeggingScenario is
     
@@ -47,6 +50,7 @@ domain Logic is
     public instance service calculatePlay ();     
     
   end object;
+  pragma key_letter("PS");
   
   
 end domain;
