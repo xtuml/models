@@ -28,7 +28,7 @@ rectangle) in the _Game_ project.
 under the component to store them.
 2. Create a new package under the _Game_ component. Right click, then 'New >
 Package'  
-3. Enter _Types_ for the name and press _Ok_  
+3. Enter _types_ for the name and press _Ok_  
 4. Now create a new type by right clicking on the newly created package, then
 _New > types > User DataType_.  
 5. Enter _ColorType_ for the name and press _Ok_  
@@ -71,7 +71,7 @@ __Creating _createPegs_ domain service__
 represent the reference. We make all type references public. Navigate to the
 _Shared_ package adjacent to the _Game_ component  
 7. Right click on the _Shared_ package, then _New > types > User DataType_  
-8. Enter _sequence of ColorType_ for the name and press _Ok_  
+8. Enter "sequence of ColorType" for the name and press _Ok_  
 9. Select the new type and in the _Properties_ view _Basic > CoreType_, select
 _MASLtype_ with the type chooser as we did before  
 10. Navigate back to the newly created function, right click the _colors_
