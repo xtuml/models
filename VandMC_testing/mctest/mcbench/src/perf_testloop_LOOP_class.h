@@ -4,7 +4,7 @@
  * Class:       loop  (LOOP)
  * Component:   perf_testloop
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef PERF_TESTLOOP_LOOP_CLASS_H
@@ -26,11 +26,10 @@ struct perf_testloop_LOOP {
   i_t repetitions;  /* - repetitions */
   i_t measured_run_time;  /* - measured_run_time */
   i_t time_delta;  /* - time_delta */
-
+  Escher_TimeStamp_t t0;  /* - t0 */
 };
 void perf_testloop_LOOP_op_begin_time_measurement( perf_testloop_LOOP * );
 i_t perf_testloop_LOOP_op_end_time_measurement( perf_testloop_LOOP * );
-
 
 
 #define perf_testloop_LOOP_MAX_EXTENT_SIZE 10
@@ -44,7 +43,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } perf_testloop_LOOPevent1;
 extern const Escher_xtUMLEventConstant_t perf_testloop_LOOPevent1c;
-
 /*
  * instance event:  LOOP2:'stop'
  */
@@ -53,7 +51,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } perf_testloop_LOOPevent2;
 extern const Escher_xtUMLEventConstant_t perf_testloop_LOOPevent2c;
-
 /*
  * instance event:  LOOP5:'begin'
  */
@@ -63,16 +60,14 @@ typedef struct {
   i_t p_testnum; /* testnum */
 } perf_testloop_LOOPevent5;
 extern const Escher_xtUMLEventConstant_t perf_testloop_LOOPevent5c;
-
 /*
  * union of events targeted towards 'LOOP' state machine
  */
 typedef union {
-  perf_testloop_LOOPevent1 loop11;  
-  perf_testloop_LOOPevent2 loop22;  
-  perf_testloop_LOOPevent5 loop53;  
+  perf_testloop_LOOPevent1 loop1_1;  
+  perf_testloop_LOOPevent2 loop2_2;  
+  perf_testloop_LOOPevent5 loop5_3;  
 } perf_testloop_LOOP_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -93,5 +88,3 @@ extern void perf_testloop_LOOP_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* PERF_TESTLOOP_LOOP_CLASS_H */
-
-

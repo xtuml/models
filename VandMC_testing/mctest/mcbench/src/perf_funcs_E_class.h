@@ -4,7 +4,7 @@
  * Class:       e  (E)
  * Component:   perf_funcs
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef PERF_FUNCS_E_CLASS_H
@@ -22,7 +22,6 @@ struct perf_funcs_E {
 
   /* application analysis class attributes */
   i_t eID;  /* * eID */
-
   /* relationship storage */
   perf_funcs_G * G_R3;
 };
@@ -37,5 +36,3 @@ extern Escher_Extent_t pG_perf_funcs_E_extent;
 #endif
 
 #endif  /* PERF_FUNCS_E_CLASS_H */
-
-

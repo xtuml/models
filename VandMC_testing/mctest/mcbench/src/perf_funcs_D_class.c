@@ -4,12 +4,13 @@
  * Class:       d  (D)
  * Component:   perf_funcs
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "mcbench_sys_types.h"
+#include "ARCH_bridge.h"
+#include "DELTA_bridge.h"
 #include "TIM_bridge.h"
-#include "perf_funcs_ARCH_bridge.h"
 #include "perf_funcs_CBENCHMARK_bridge.h"
 #include "perf_funcs_classes.h"
 
@@ -43,7 +44,6 @@ perf_funcs_D_R2_Unlink( perf_funcs_C * part, perf_funcs_D * form )
   form->C_R2 = 0;
   Escher_SetRemoveElement( &part->D_R2, (Escher_ObjectSet_s *) form );
 }
-
 /*
  * Statically allocate space for the instance population for this class.
  * Allocate space for the class instance and its attribute values.
@@ -57,5 +57,4 @@ Escher_Extent_t pG_perf_funcs_D_extent = {
   (Escher_iHandle_t) &perf_funcs_D_instances,
   sizeof( perf_funcs_D ), 0, perf_funcs_D_MAX_EXTENT_SIZE
   };
-
 

@@ -2,19 +2,28 @@
  * File:  sys_xtuml.c
  *
  * Description:
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "mcbench_sys_types.h"
 #include "perf_funcs_classes.h"
 #include "perf_testloop_classes.h"
 
-
 /*
  * Allocate the storage for the pool of container nodes.
  */
 static Escher_ObjectSet_s node1_FreeList;
 static Escher_SetElement_s node1s[ SYS_MAX_CONTAINERS ];
+
+/*
+ * Supply a unique integer ID.
+ */
+Escher_UniqueID_t
+Escher_ID_factory( void )
+{
+  static Escher_UniqueID_t Escher_ID_factory = 1;
+  return Escher_ID_factory++;
+}
 
 /*
  * Initialize the node1 instances by linking them into a collection.
@@ -25,10 +34,10 @@ static Escher_SetElement_s node1s[ SYS_MAX_CONTAINERS ];
 void
 Escher_SetFactoryInit( const i_t n1_size )
 {
-  u2_t i;
+  Escher_size_t i;
   node1_FreeList.head = &node1s[ 0 ];
   /* Build the collection (linked list) of node1 instances.  */
-  for ( i = 0; i < ( n1_size - 1 ); i++ ) {
+  for ( i = 0; ( i + 1 ) < n1_size; i++ ) {
     node1s[ i ].next = &node1s[ i + 1 ];
     node1s[ i ].object = 0;
   }
@@ -71,6 +80,20 @@ Escher_ClearSet( Escher_ObjectSet_s * set )
 }
 
 /*
+ * Concatenate set2 onto the end of set1.
+ */
+Escher_ObjectSet_s *
+Escher_SetAdd( Escher_ObjectSet_s * set1,  Escher_ObjectSet_s * set2 )
+{
+  if ( ( set1->head != 0 ) && ( set2->head != 0 ) ) {  /* empty set  */
+    Escher_SetElement_s * slot;
+    for ( slot = set1->head; slot->next != 0; slot = slot->next ); /* Find end of set1.  */
+    slot->next = set2->head;
+  }
+  return set1;
+}
+
+/*
  * Insert a single element into the set in no particular order.
  * The element is a data item.  A container node will be allocated
  * to link in the element.
@@ -84,13 +107,12 @@ Escher_SetInsertElement(
   Escher_SetElement_s * slot;
   if ( 0 == node1_FreeList.head ) {
     UserNodeListEmptyCallout(); /* Bad news!  No more nodes.         */
-  } else {
-    slot = node1_FreeList.head; /* Extract node from free list head. */
-    node1_FreeList.head = node1_FreeList.head->next;
-    slot->object = substance;
-    slot->next = set->head;     /* Insert substance at list front.   */
-    set->head = slot;
   }
+  slot = node1_FreeList.head; /* Extract node from free list head. */
+  node1_FreeList.head = node1_FreeList.head->next;
+  slot->object = substance;
+  slot->next = set->head;     /* Insert substance at list front.   */
+  set->head = slot;
 }
 
 /*
@@ -101,11 +123,11 @@ Escher_SetInsertElement(
 Escher_SetElement_s *
 Escher_SetInsertBlock( Escher_SetElement_s * container,
                        const u1_t * instance,
-                       const u2_t length,
-                       u2_t count )
+                       const Escher_size_t length,
+                       Escher_size_t count )
 {
   Escher_SetElement_s * head = ( count > 0 ) ? container : 0;
-  u2_t n = count;
+  Escher_size_t n = count;
   while ( count > 0 ) {
     container->prev = ( count < n ) ? container - 1 : 0;
     count--;
@@ -160,11 +182,11 @@ Escher_SetRemoveNode(
 )
 {
   Escher_SetElement_s * t = set->head; /* Start with first node.           */
+  Escher_SetElement_s * t_old = t;
   /* Find node containing data and unlink from list.                 */
   if ( t->object == d ) {        /* Element found at head.           */
     set->head = t->next;         /* Unlink it from the list.         */
   } else {
-    Escher_SetElement_s * t_old;
     do {                         /* Search for data element.         */
       t_old = t;
       t = t->next;
@@ -213,6 +235,7 @@ Escher_SetContains(
     if ( node->object == element ) { return node; }  /* found  */
     node = node->next;
   }
+  if ( 0 == element ) return ( const void * ) 1; /* every set contains null */
   return 0;                                      /* absent */
 }
 
@@ -220,10 +243,10 @@ Escher_SetContains(
  * Count the elements in the set.  Return that count.
  * This routine counts nodes.
  */
-u2_t 
+Escher_size_t
 Escher_SetCardinality( const Escher_ObjectSet_s * const set )
 {
-  u2_t result = 0;
+  Escher_size_t result = 0;
   const Escher_SetElement_s * node = set->head;
   while ( node != 0 ) {
     result++;
@@ -290,7 +313,7 @@ Escher_IteratorNext( Escher_Iterator_s * const iter )
  * Set memory bytes to value at destination.
  */
 void
-Escher_memset( void * const dst, const u1_t val, u2_t len )
+Escher_memset( void * const dst, const u1_t val, Escher_size_t len )
 {
   u1_t * d = (u1_t *) dst;
   while ( len > 0 ) {
@@ -303,7 +326,7 @@ Escher_memset( void * const dst, const u1_t val, u2_t len )
  * Move memory bytes from source to destination.
  */
 void
-Escher_memmove( void * const dst, const void * const src, u2_t len )
+Escher_memmove( void * const dst, const void * const src, Escher_size_t len )
 {
   u1_t * s = (u1_t *) src;
   u1_t * d = (u1_t *) dst;
@@ -320,12 +343,14 @@ c_t *
 Escher_strcpy( c_t * dst, const c_t * src )
 {
   c_t * s = dst;
-  s2_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
-  while ( ( i > 0 ) && ( *src != '\0' ) ) {
-    --i;
-    *dst++ = *src++;
+  if ( ( 0 != src ) && ( 0 != dst ) ) {
+    Escher_size_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
+    while ( ( i > 0 ) && ( *src != '\0' ) ) {
+      --i;
+      *dst++ = *src++;
+    }
+    *dst = '\0';  /* Ensure delimiter.  */
   }
-  *dst = '\0';  /* Ensure delimiter.  */
   return s;
 }
 
@@ -335,9 +360,11 @@ Escher_strcpy( c_t * dst, const c_t * src )
 c_t *
 Escher_stradd( const c_t * left, const c_t * right )
 {
-  s2_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
+  Escher_size_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
   c_t * s = Escher_strget();
   c_t * dst = s;
+  if ( 0 == left ) left = "";
+  if ( 0 == right ) right = "";
   while ( ( i > 0 ) && ( *left != '\0' ) ) {
     --i;
     *dst++ = *left++;
@@ -362,7 +389,7 @@ Escher_strcmp( const c_t *p1, const c_t *p2 )
   const c_t *s1 = p1;
   const c_t *s2 = p2;
   c_t c1, c2;
-  s2_t i = ESCHER_SYS_MAX_STRING_LEN;
+  i_t i = ESCHER_SYS_MAX_STRING_LEN;
   do {
     c1 = *s1++;
     c2 = *s2++;
@@ -378,10 +405,13 @@ Escher_strcmp( const c_t *p1, const c_t *p2 )
 c_t *
 Escher_strget( void )
 {
+  c_t * r;
   static u1_t i = 0;
-  static c_t s[ 4 ][ ESCHER_SYS_MAX_STRING_LEN ];
-  i = ( i + 1 ) % 4;
-  return ( &s[ i ][ 0 ] );
+  static c_t s[ 16 ][ ESCHER_SYS_MAX_STRING_LEN ];
+  i = ( i + 1 ) % 16;
+  r = &s[ i ][ 0 ];
+  *r = 0;
+  return ( r );
 }
 
 
@@ -412,7 +442,9 @@ Escher_CreateInstance(
 
   dci->inactive.head = dci->inactive.head->next;
   instance = (Escher_iHandle_t) node->object;
-  instance->current_state = dci->initial_state;
+  if ( 0 != dci->initial_state ) {
+    instance->current_state = dci->initial_state;
+  }
   Escher_SetInsertInstance( &dci->active, node );
   return instance;
 }
@@ -429,15 +461,19 @@ Escher_DeleteInstance(
 {
   Escher_SetElement_s * node;
   Escher_Extent_t * dci = *(domain_class_info[ domain_num ] + class_num);
-  node = &dci->container[ 0 ] +
-    (((char *) instance - (char *) dci->pool ) / dci->size );
-  Escher_SetRemoveDlistNode( &dci->active, node );
-  node->next = dci->inactive.head;
-  dci->inactive.head = node;
-  /* Initialize storage to zero.  */
-  Escher_memset( instance, 0, dci->size );
+  if ( 0 != instance ) {
+    node = &dci->container[ 0 ] +
+      (((char *) instance - (char *) dci->pool ) / dci->size );
+    Escher_SetRemoveDlistNode( &dci->active, node );
+    node->next = dci->inactive.head;
+    dci->inactive.head = node;
+    /* Initialize storage to zero.  */
+    Escher_memset( instance, 0, dci->size );
+    if ( ( 0 != dci->size ) && ( 0 != dci->initial_state ) ) {
+      instance->current_state = -1; /* 0xff max for error detection */
+    }
+  }
 }
-
 
 /*
  * Initialize object factory services.
@@ -452,7 +488,7 @@ Escher_ClassFactoryInit(
   Escher_Extent_t * dci = *(domain_class_info[ domain_num ] + class_num);
   if ( 0 != dci ) {
   dci->active.head = 0;
-  dci->inactive.head = Escher_SetInsertBlock( 
+  dci->inactive.head = Escher_SetInsertBlock(
     dci->container,
     (const u1_t *) dci->pool,
     dci->size,
@@ -515,7 +551,7 @@ InitializeOoaEventPool( void )
 Escher_xtUMLEvent_t * Escher_AllocatextUMLEvent( void )
 {
   Escher_xtUMLEvent_t * event = 0;
-  if ( free_event_list == 0 ) {
+  if ( 0 == free_event_list ) {
     UserEventFreeListEmptyCallout();   /* Bad news!  No more events.  */
   } else {
     event = free_event_list;       /* Grab front of the free list.  */
@@ -676,7 +712,7 @@ static void ooa_loop( void )
   static const EventTaker_t * DomainClassDispatcherTable[ 2 ] =
     {
       perf_funcs_EventDispatcher,
-      perf_testloop_EventDispatcher,
+      perf_testloop_EventDispatcher
     };
   Escher_xtUMLEvent_t * event;
   /* Start consuming events and dispatching background processes.  */

@@ -4,12 +4,13 @@
  * Class:       e  (E)
  * Component:   perf_funcs
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "mcbench_sys_types.h"
+#include "ARCH_bridge.h"
+#include "DELTA_bridge.h"
 #include "TIM_bridge.h"
-#include "perf_funcs_ARCH_bridge.h"
 #include "perf_funcs_CBENCHMARK_bridge.h"
 #include "perf_funcs_classes.h"
 
@@ -27,5 +28,4 @@ Escher_Extent_t pG_perf_funcs_E_extent = {
   (Escher_iHandle_t) &perf_funcs_E_instances,
   sizeof( perf_funcs_E ), 0, perf_funcs_E_MAX_EXTENT_SIZE
   };
-
 
