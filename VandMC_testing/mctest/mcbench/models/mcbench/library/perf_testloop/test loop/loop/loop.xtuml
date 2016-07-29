@@ -14,12 +14,9 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'a = TIM::current_clock();
-self.time_delta = 0;
-
-/* #inline
-  self->m_time_delta = TIM_current_clock();
-*/',
+	'self.time_delta = 0;
+self.t0 = TIM::current_clock();
+',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000");
@@ -30,11 +27,7 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000002",
 	1,
-	'a = TIM::current_clock();
-self.time_delta = self.time_delta - 0;
-/* #inline
-  self->m_time_delta = TIM_current_clock() - self->m_time_delta;
-*/
+	'self.time_delta = DELTA::timestamp( t0:self.t0, t1:TIM::current_clock() );
 return self.time_delta;
 ',
 	1,
@@ -146,6 +139,24 @@ INSERT INTO O_ATTR
 	'time_delta',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e4a85830-7aee-4638-9d88-607c0cd65329",
+	"bb9a04f8-6e22-4902-9bd0-ab50fbe605db");
+INSERT INTO O_BATTR
+	VALUES ("e4a85830-7aee-4638-9d88-607c0cd65329",
+	"bb9a04f8-6e22-4902-9bd0-ab50fbe605db");
+INSERT INTO O_ATTR
+	VALUES ("e4a85830-7aee-4638-9d88-607c0cd65329",
+	"bb9a04f8-6e22-4902-9bd0-ab50fbe605db",
+	"55a64649-3c13-487f-b594-767b1374fdd7",
+	't0',
+	'',
+	'',
+	't0',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000010",
 	'',
 	'');
 INSERT INTO O_ID

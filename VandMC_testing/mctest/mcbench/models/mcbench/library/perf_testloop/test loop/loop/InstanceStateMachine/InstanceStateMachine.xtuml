@@ -285,7 +285,7 @@ INSERT INTO SM_ACT
 	'self.repetitions = 0;
 self.measured_run_time = 0;
 self.duration = 0;
-self.client_test_number = rcvd_evt.testnum;
+self.client_test_number = param.testnum;
 
 b = APP::perftest(
   testnum:self.client_test_number,
@@ -295,7 +295,9 @@ b = APP::perftest(
   
 generate LOOP1:go() to self;
 create event instance stop of LOOP2:stop() to self;
-t = TIM::timer_start( microseconds:rcvd_evt.duration * 1000000, event_inst:stop );',
+t = TIM::timer_start( microseconds:param.duration * 1000000, event_inst:stop );
+
+b = b; // Keep C compiler happy.',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("19bf9de2-6290-4aa8-9d1d-cfff7d5fb4a8",
@@ -320,7 +322,9 @@ self.measured_run_time = self.measured_run_time
   + self.end_time_measurement();
   
 self.repetitions = self.repetitions + 1;
-generate LOOP1:go() to self;',
+generate LOOP1:go() to self;
+
+b = b; // Keep C compiler happy.',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("7a88c4de-29c2-459c-8c3b-4f030b9b9373",
@@ -368,6 +372,8 @@ b = APP::perftest(
 b = APP::perftest(
   testnum:self.client_test_number,
   phase:6, count:0, duration:0 );
+
+b = b; // Keep C compiler happy.
 ',
 	'');
 INSERT INTO SM_TAH
@@ -465,7 +471,7 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'3.2.0',
+	'4.1.17',
 	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine');
 INSERT INTO GD_GE
 	VALUES ("2ce5c60f-5679-4fea-b6de-a724a6c69782",

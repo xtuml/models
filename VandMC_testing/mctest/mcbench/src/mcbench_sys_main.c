@@ -2,12 +2,12 @@
  * File:  mcbench_sys_main.c
  *
  * Description:  main, system initialization (and idle loop)
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "mcbench_sys_types.h"
-#include "perf_funcs_classes.h"
 #include "perf_testloop_classes.h"
+#include "perf_funcs_classes.h"
 
 /*
  * Run application level initialization by initializing the
@@ -48,8 +48,8 @@ main( int argc, char ** argv )
   InitializeOoaEventPool();
   ApplicationLevelInitialization();
   UserPreOoaInitializationCallout();
-  perf_funcs_execute_initialization();
   perf_testloop_execute_initialization();
+  perf_funcs_execute_initialization();
   UserPostOoaInitializationCallout();
   Escher_xtUML_run(); /* This is the primary event dispatch loop.  */
   UserPreShutdownCallout();

@@ -4,12 +4,13 @@
  * Class:       benchmark  (BENCHMARK)
  * Component:   perf_funcs
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "mcbench_sys_types.h"
+#include "ARCH_bridge.h"
+#include "DELTA_bridge.h"
 #include "TIM_bridge.h"
-#include "perf_funcs_ARCH_bridge.h"
 #include "perf_funcs_CBENCHMARK_bridge.h"
 #include "perf_funcs_classes.h"
 
@@ -17,21 +18,21 @@
  * class operation:  create_instance
  */
 bool
-perf_funcs_BENCHMARK_op_create_instance( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_create_instance( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 1000 */
   iterations = 1000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
   }
   else if ( ( 2 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* CREATE OBJECT INSTANCE a OF A */
@@ -57,12 +58,12 @@ perf_funcs_BENCHMARK_op_create_instance( i_t p_count, i_t p_duration, i_t p_phas
     }
   }
   else if ( ( 3 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -80,12 +81,12 @@ perf_funcs_BENCHMARK_op_create_instance( i_t p_count, i_t p_duration, i_t p_phas
     }
   }
   else if ( ( 4 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -103,36 +104,36 @@ perf_funcs_BENCHMARK_op_create_instance( i_t p_count, i_t p_duration, i_t p_phas
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( ( 10 * iterations ) * PARAM.count ) */
     i = ( ( 10 * iterations ) * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'create instance' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:create instance ) */
     perf_funcs_report( i, p_duration, "create instance" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  delete_instance
  */
 bool
-perf_funcs_BENCHMARK_op_delete_instance( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_delete_instance( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN i = ( i - 1 ) */
@@ -140,12 +141,12 @@ perf_funcs_BENCHMARK_op_delete_instance( i_t p_count, i_t p_duration, i_t p_phas
     }
   }
   else if ( ( 2 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -163,12 +164,12 @@ perf_funcs_BENCHMARK_op_delete_instance( i_t p_count, i_t p_duration, i_t p_phas
     }
   }
   else if ( ( 3 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN i = ( i - 1 ) */
@@ -176,12 +177,12 @@ perf_funcs_BENCHMARK_op_delete_instance( i_t p_count, i_t p_duration, i_t p_phas
     }
   }
   else if ( ( 4 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -199,36 +200,36 @@ perf_funcs_BENCHMARK_op_delete_instance( i_t p_count, i_t p_duration, i_t p_phas
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'select then delete instance' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:select then delete instance ) */
     perf_funcs_report( i, p_duration, "select then delete instance" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  generate_event
  */
 bool
-perf_funcs_BENCHMARK_op_generate_event( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_generate_event( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 300 */
   iterations = 300;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    perf_funcs_A * a; 
+    perf_funcs_A * a;
     /* CREATE OBJECT INSTANCE a OF A */
     a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
   }
   else if ( ( 2 == p_phase ) ) {
-    perf_funcs_A * a=0; 
+    perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* a.generate_ignored_event_to_self( count:iterations ) */
@@ -237,7 +238,7 @@ perf_funcs_BENCHMARK_op_generate_event( i_t p_count, i_t p_duration, i_t p_phase
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    perf_funcs_A * a=0; 
+    perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* DELETE OBJECT INSTANCE a */
@@ -247,28 +248,28 @@ perf_funcs_BENCHMARK_op_generate_event( i_t p_count, i_t p_duration, i_t p_phase
     Escher_DeleteInstance( (Escher_iHandle_t) a, perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'generate event' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:generate event ) */
     perf_funcs_report( i, p_duration, "generate event" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  generate_and_dispatch_event
  */
 bool
-perf_funcs_BENCHMARK_op_generate_and_dispatch_event( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_generate_and_dispatch_event( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    perf_funcs_A * a; perf_funcs_B * b; 
+    perf_funcs_B * b;perf_funcs_A * a;
     /* CREATE OBJECT INSTANCE a OF A */
     a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
     /* ASSIGN a.odometer = 0 */
@@ -279,7 +280,7 @@ perf_funcs_BENCHMARK_op_generate_and_dispatch_event( i_t p_count, i_t p_duration
     perf_funcs_A_R1_Link( b, a );
   }
   else if ( ( 2 == p_phase ) ) {
-    perf_funcs_A * a=0; 
+    perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* GENERATE A1:e() TO a */
@@ -289,10 +290,11 @@ perf_funcs_BENCHMARK_op_generate_and_dispatch_event( i_t p_count, i_t p_duration
   }
   else if ( ( 3 == p_phase ) ) {
     /* RETURN FALSE */
-    return FALSE;
+    {bool xtumlOALrv = FALSE;
+    return xtumlOALrv;}
   }
   else if ( ( 4 == p_phase ) ) {
-    perf_funcs_A * a=0; 
+    perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* GENERATE A3:stop() TO a */
@@ -301,12 +303,12 @@ perf_funcs_BENCHMARK_op_generate_and_dispatch_event( i_t p_count, i_t p_duration
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    perf_funcs_A * a=0; i_t odometer_reading; 
+    i_t odometer_reading;perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* ASSIGN odometer_reading = ( a.odometer * PARAM.count ) */
     odometer_reading = ( a->odometer * p_count );
-    /* ::report( count:odometer_reading, duration:999, message:'generate and dispatch event' ) */
+    /* ::report( count:odometer_reading, duration:999, message:generate and dispatch event ) */
     perf_funcs_report( odometer_reading, 999, "generate and dispatch event" );
     /* DELETE OBJECT INSTANCE a */
     if ( 0 == a ) {
@@ -317,22 +319,22 @@ perf_funcs_BENCHMARK_op_generate_and_dispatch_event( i_t p_count, i_t p_duration
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  select_one_related
  */
 bool
-perf_funcs_BENCHMARK_op_select_one_related( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_select_one_related( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 100 */
   iterations = 100;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    perf_funcs_A * a; perf_funcs_B * b; 
+    perf_funcs_B * b;perf_funcs_A * a;
     /* CREATE OBJECT INSTANCE a OF A */
     a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
     /* CREATE OBJECT INSTANCE b OF B */
@@ -341,17 +343,16 @@ perf_funcs_BENCHMARK_op_select_one_related( i_t p_count, i_t p_duration, i_t p_p
     perf_funcs_A_R1_Link( b, a );
   }
   else if ( ( 2 == p_phase ) ) {
-    perf_funcs_A * a=0; i_t i; 
+    i_t i;perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( i > 0 ) ) */
     while ( ( i > 0 ) ) {
-      perf_funcs_B * b = 0; /* b (B) */
- 
+      perf_funcs_B * b=0;
       /* SELECT one b RELATED BY a->B[R1] */
-      b = a->B_R1;
+      b = ( 0 != a ) ? a->B_R1 : 0;
       /* ASSIGN i = ( i - 1 ) */
       i = ( i - 1 );
     }
@@ -359,7 +360,7 @@ perf_funcs_BENCHMARK_op_select_one_related( i_t p_count, i_t p_duration, i_t p_p
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    perf_funcs_A * a=0; perf_funcs_B * b=0; 
+    perf_funcs_B * b=0;perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* SELECT any b FROM INSTANCES OF B */
@@ -381,41 +382,41 @@ perf_funcs_BENCHMARK_op_select_one_related( i_t p_count, i_t p_duration, i_t p_p
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'select one related' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:select one related ) */
     perf_funcs_report( i, p_duration, "select one related" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  select_any_from
  */
 bool
-perf_funcs_BENCHMARK_op_select_any_from( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_select_any_from( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    perf_funcs_A * a; 
+    perf_funcs_A * a;
     /* CREATE OBJECT INSTANCE a OF A */
     a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
   }
   else if ( ( 2 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( i > 0 ) ) */
     while ( ( i > 0 ) ) {
-      perf_funcs_A * a0=0; perf_funcs_A * a1=0; perf_funcs_A * a2=0; perf_funcs_A * a3=0; perf_funcs_A * a4=0; perf_funcs_A * a5=0; perf_funcs_A * a6=0; perf_funcs_A * a7=0; perf_funcs_A * a8=0; perf_funcs_A * a9=0; 
+      perf_funcs_A * a9=0;perf_funcs_A * a8=0;perf_funcs_A * a7=0;perf_funcs_A * a6=0;perf_funcs_A * a5=0;perf_funcs_A * a4=0;perf_funcs_A * a3=0;perf_funcs_A * a2=0;perf_funcs_A * a1=0;perf_funcs_A * a0=0;
       /* SELECT any a0 FROM INSTANCES OF A */
       a0 = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* SELECT any a1 FROM INSTANCES OF A */
@@ -443,7 +444,7 @@ perf_funcs_BENCHMARK_op_select_any_from( i_t p_count, i_t p_duration, i_t p_phas
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    perf_funcs_A * a=0; 
+    perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* DELETE OBJECT INSTANCE a */
@@ -453,38 +454,38 @@ perf_funcs_BENCHMARK_op_select_any_from( i_t p_count, i_t p_duration, i_t p_phas
     Escher_DeleteInstance( (Escher_iHandle_t) a, perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( ( 10 * iterations ) * PARAM.count ) */
     i = ( ( 10 * iterations ) * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'select any from instances of' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:select any from instances of ) */
     perf_funcs_report( i, p_duration, "select any from instances of" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  relate_one
  */
 bool
-perf_funcs_BENCHMARK_op_relate_one( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_relate_one( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    perf_funcs_A * a; perf_funcs_B * b; 
+    perf_funcs_B * b;perf_funcs_A * a;
     /* CREATE OBJECT INSTANCE a OF A */
     a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
     /* CREATE OBJECT INSTANCE b OF B */
     b = (perf_funcs_B *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_B_CLASS_NUMBER );
   }
   else if ( ( 2 == p_phase ) ) {
-    perf_funcs_A * a=0; perf_funcs_B * b=0; i_t i; 
+    i_t i;perf_funcs_B * b=0;perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* SELECT any b FROM INSTANCES OF B */
@@ -520,7 +521,7 @@ perf_funcs_BENCHMARK_op_relate_one( i_t p_count, i_t p_duration, i_t p_phase, i_
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    perf_funcs_A * a=0; perf_funcs_B * b=0; 
+    perf_funcs_B * b=0;perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* SELECT any b FROM INSTANCES OF B */
@@ -539,44 +540,42 @@ perf_funcs_BENCHMARK_op_relate_one( i_t p_count, i_t p_duration, i_t p_phase, i_
     Escher_DeleteInstance( (Escher_iHandle_t) b, perf_funcs_DOMAIN_ID, perf_funcs_B_CLASS_NUMBER );
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( ( 10 * iterations ) * PARAM.count ) */
     i = ( ( 10 * iterations ) * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'relate one' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:relate one ) */
     perf_funcs_report( i, p_duration, "relate one" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  relate_one_to_many
  */
 bool
-perf_funcs_BENCHMARK_op_relate_one_to_many( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_relate_one_to_many( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    perf_funcs_C * c; perf_funcs_D * d; perf_funcs_C * c1 = 0; /* c1 (C) */
- perf_funcs_D * d1 = 0; /* d1 (D) */
- 
+    perf_funcs_D * d;perf_funcs_C * c;perf_funcs_D * d1=0;perf_funcs_C * c1=0;
     /* CREATE OBJECT INSTANCE c OF C */
     c = (perf_funcs_C *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_C_CLASS_NUMBER );
     /* CREATE OBJECT INSTANCE d OF D */
     d = (perf_funcs_D *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_D_CLASS_NUMBER );
     /* SELECT one c1 RELATED BY d->C[R2] */
-    c1 = d->C_R2;
+    c1 = ( 0 != d ) ? d->C_R2 : 0;
     /* SELECT any d1 RELATED BY c->D[R2] */
-    d1 = (perf_funcs_D *) Escher_SetGetAny( &c->D_R2 );
+    d1 = ( 0 != c ) ? (perf_funcs_D *) Escher_SetGetAny( &c->D_R2 ) : 0;
   }
   else if ( ( 2 == p_phase ) ) {
-    perf_funcs_C * c=0; perf_funcs_D * d=0; i_t i; 
+    i_t i;perf_funcs_D * d=0;perf_funcs_C * c=0;
     /* SELECT any c FROM INSTANCES OF C */
     c = (perf_funcs_C *) Escher_SetGetAny( &pG_perf_funcs_C_extent.active );
     /* SELECT any d FROM INSTANCES OF D */
@@ -632,7 +631,7 @@ perf_funcs_BENCHMARK_op_relate_one_to_many( i_t p_count, i_t p_duration, i_t p_p
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    perf_funcs_C * c=0; perf_funcs_D * d=0; 
+    perf_funcs_D * d=0;perf_funcs_C * c=0;
     /* SELECT any c FROM INSTANCES OF C */
     c = (perf_funcs_C *) Escher_SetGetAny( &pG_perf_funcs_C_extent.active );
     /* SELECT any d FROM INSTANCES OF D */
@@ -651,31 +650,31 @@ perf_funcs_BENCHMARK_op_relate_one_to_many( i_t p_count, i_t p_duration, i_t p_p
     Escher_DeleteInstance( (Escher_iHandle_t) d, perf_funcs_DOMAIN_ID, perf_funcs_D_CLASS_NUMBER );
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( ( 10 * iterations ) * PARAM.count ) */
     i = ( ( 10 * iterations ) * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'relate/unrelate one to many' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:relate/unrelate one to many ) */
     perf_funcs_report( i, p_duration, "relate/unrelate one to many" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  relate_one_using
  */
 bool
-perf_funcs_BENCHMARK_op_relate_one_using( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_relate_one_using( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    perf_funcs_E * e; perf_funcs_F * f; perf_funcs_G * g; 
+    perf_funcs_G * g;perf_funcs_F * f;perf_funcs_E * e;
     /* CREATE OBJECT INSTANCE e OF E */
     e = (perf_funcs_E *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_E_CLASS_NUMBER );
     /* CREATE OBJECT INSTANCE f OF F */
@@ -684,7 +683,7 @@ perf_funcs_BENCHMARK_op_relate_one_using( i_t p_count, i_t p_duration, i_t p_pha
     g = (perf_funcs_G *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_G_CLASS_NUMBER );
   }
   else if ( ( 2 == p_phase ) ) {
-    perf_funcs_E * e=0; perf_funcs_F * f=0; perf_funcs_G * g=0; i_t i; 
+    i_t i;perf_funcs_G * g=0;perf_funcs_F * f=0;perf_funcs_E * e=0;
     /* SELECT any e FROM INSTANCES OF E */
     e = (perf_funcs_E *) Escher_SetGetAny( &pG_perf_funcs_E_extent.active );
     /* SELECT any f FROM INSTANCES OF F */
@@ -702,9 +701,7 @@ perf_funcs_BENCHMARK_op_relate_one_using( i_t p_count, i_t p_duration, i_t p_pha
     }
   }
   else if ( ( 3 == p_phase ) ) {
-    perf_funcs_E * e=0; perf_funcs_F * f = 0; /* f (F) */
- perf_funcs_G * g = 0; /* g (G) */
- 
+    perf_funcs_E * e=0;perf_funcs_G * g=0;perf_funcs_F * f=0;
     /* SELECT any e FROM INSTANCES OF E */
     e = (perf_funcs_E *) Escher_SetGetAny( &pG_perf_funcs_E_extent.active );
     /* SELECT one f RELATED BY e->F[R3] */
@@ -715,12 +712,12 @@ perf_funcs_BENCHMARK_op_relate_one_using( i_t p_count, i_t p_duration, i_t p_pha
     f = G_R3->F_R3;
 }}}
     /* SELECT one g RELATED BY e->G[R3] */
-    g = e->G_R3;
+    g = ( 0 != e ) ? e->G_R3 : 0;
     /* UNRELATE e FROM f ACROSS R3 USING g */
     perf_funcs_G_R3_Unlink( e, f, g );
   }
   else if ( ( 4 == p_phase ) ) {
-    perf_funcs_E * e=0; bool more; 
+    bool more;perf_funcs_E * e=0;
     /* SELECT any e FROM INSTANCES OF E */
     e = (perf_funcs_E *) Escher_SetGetAny( &pG_perf_funcs_E_extent.active );
     /* DELETE OBJECT INSTANCE e */
@@ -732,7 +729,7 @@ perf_funcs_BENCHMARK_op_relate_one_using( i_t p_count, i_t p_duration, i_t p_pha
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_F * f=0; 
+      perf_funcs_F * f=0;
       /* SELECT any f FROM INSTANCES OF F */
       f = (perf_funcs_F *) Escher_SetGetAny( &pG_perf_funcs_F_extent.active );
       /* IF ( not_empty f ) */
@@ -752,7 +749,7 @@ perf_funcs_BENCHMARK_op_relate_one_using( i_t p_count, i_t p_duration, i_t p_pha
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_G * g=0; 
+      perf_funcs_G * g=0;
       /* SELECT any g FROM INSTANCES OF G */
       g = (perf_funcs_G *) Escher_SetGetAny( &pG_perf_funcs_G_extent.active );
       /* IF ( not_empty g ) */
@@ -770,36 +767,36 @@ perf_funcs_BENCHMARK_op_relate_one_using( i_t p_count, i_t p_duration, i_t p_pha
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'relate one to many using' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:relate one to many using ) */
     perf_funcs_report( i, p_duration, "relate one to many using" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  cardinality_10000
  */
 bool
-perf_funcs_BENCHMARK_op_cardinality_10000( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_cardinality_10000( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN i = ( i - 1 ) */
@@ -807,14 +804,14 @@ perf_funcs_BENCHMARK_op_cardinality_10000( i_t p_count, i_t p_duration, i_t p_ph
     }
   }
   else if ( ( 2 == p_phase ) ) {
-    Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space; /* as (A) */ i_t i; 
+    i_t i;Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space;
     /* SELECT many as FROM INSTANCES OF A */
     Escher_CopySet( as, &pG_perf_funcs_A_extent.active );
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      i_t j; 
+      i_t j;
       /* ASSIGN j = cardinality as */
       j = Escher_SetCardinality( as );
       /* ASSIGN i = ( i - 1 ) */
@@ -825,12 +822,12 @@ perf_funcs_BENCHMARK_op_cardinality_10000( i_t p_count, i_t p_duration, i_t p_ph
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -848,36 +845,36 @@ perf_funcs_BENCHMARK_op_cardinality_10000( i_t p_count, i_t p_duration, i_t p_ph
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'cardinality 10000' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:cardinality 10000 ) */
     perf_funcs_report( i, p_duration, "cardinality 10000" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  cardinality_1000
  */
 bool
-perf_funcs_BENCHMARK_op_cardinality_1000( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_cardinality_1000( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 1000 */
   iterations = 1000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN i = ( i - 1 ) */
@@ -885,14 +882,14 @@ perf_funcs_BENCHMARK_op_cardinality_1000( i_t p_count, i_t p_duration, i_t p_pha
     }
   }
   else if ( ( 2 == p_phase ) ) {
-    Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space; /* as (A) */ i_t i; 
+    i_t i;Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space;
     /* SELECT many as FROM INSTANCES OF A */
     Escher_CopySet( as, &pG_perf_funcs_A_extent.active );
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      i_t j; 
+      i_t j;
       /* ASSIGN j = cardinality as */
       j = Escher_SetCardinality( as );
       /* ASSIGN i = ( i - 1 ) */
@@ -903,12 +900,12 @@ perf_funcs_BENCHMARK_op_cardinality_1000( i_t p_count, i_t p_duration, i_t p_pha
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -926,36 +923,36 @@ perf_funcs_BENCHMARK_op_cardinality_1000( i_t p_count, i_t p_duration, i_t p_pha
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'cardinality 1000' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:cardinality 1000 ) */
     perf_funcs_report( i, p_duration, "cardinality 1000" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  cardinality_100
  */
 bool
-perf_funcs_BENCHMARK_op_cardinality_100( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_cardinality_100( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 100 */
   iterations = 100;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN i = ( i - 1 ) */
@@ -963,14 +960,14 @@ perf_funcs_BENCHMARK_op_cardinality_100( i_t p_count, i_t p_duration, i_t p_phas
     }
   }
   else if ( ( 2 == p_phase ) ) {
-    Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space; /* as (A) */ i_t i; 
+    i_t i;Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space;
     /* SELECT many as FROM INSTANCES OF A */
     Escher_CopySet( as, &pG_perf_funcs_A_extent.active );
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      i_t j; 
+      i_t j;
       /* ASSIGN j = cardinality as */
       j = Escher_SetCardinality( as );
       /* ASSIGN i = ( i - 1 ) */
@@ -981,12 +978,12 @@ perf_funcs_BENCHMARK_op_cardinality_100( i_t p_count, i_t p_duration, i_t p_phas
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -1004,36 +1001,36 @@ perf_funcs_BENCHMARK_op_cardinality_100( i_t p_count, i_t p_duration, i_t p_phas
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'cardinality 100' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:cardinality 100 ) */
     perf_funcs_report( i, p_duration, "cardinality 100" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  cardinality_10
  */
 bool
-perf_funcs_BENCHMARK_op_cardinality_10( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_cardinality_10( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10 */
   iterations = 10;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN i = ( i - 1 ) */
@@ -1041,14 +1038,14 @@ perf_funcs_BENCHMARK_op_cardinality_10( i_t p_count, i_t p_duration, i_t p_phase
     }
   }
   else if ( ( 2 == p_phase ) ) {
-    Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space; /* as (A) */ i_t i; 
+    i_t i;Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space;
     /* SELECT many as FROM INSTANCES OF A */
     Escher_CopySet( as, &pG_perf_funcs_A_extent.active );
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      i_t j; 
+      i_t j;
       /* ASSIGN j = cardinality as */
       j = Escher_SetCardinality( as );
       /* ASSIGN i = ( i - 1 ) */
@@ -1059,12 +1056,12 @@ perf_funcs_BENCHMARK_op_cardinality_10( i_t p_count, i_t p_duration, i_t p_phase
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -1082,36 +1079,36 @@ perf_funcs_BENCHMARK_op_cardinality_10( i_t p_count, i_t p_duration, i_t p_phase
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'cardinality 10' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:cardinality 10 ) */
     perf_funcs_report( i, p_duration, "cardinality 10" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  select_any_where_10000
  */
 bool
-perf_funcs_BENCHMARK_op_select_any_where_10000( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_select_any_where_10000( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = 10000 */
     i = 10000;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN a.ID = i */
@@ -1121,12 +1118,12 @@ perf_funcs_BENCHMARK_op_select_any_where_10000( i_t p_count, i_t p_duration, i_t
     }
   }
   else if ( ( 2 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = 10000 */
     i = 10000;
     /* WHILE ( ( i > 0 ) ) */
     while ( ( i > 0 ) ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A WHERE ( SELECTED.ID == i ) */
       a = 0;
       { perf_funcs_A * selected;
@@ -1146,12 +1143,12 @@ perf_funcs_BENCHMARK_op_select_any_where_10000( i_t p_count, i_t p_duration, i_t
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -1169,36 +1166,36 @@ perf_funcs_BENCHMARK_op_select_any_where_10000( i_t p_count, i_t p_duration, i_t
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'select any where 10000' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:select any where 10000 ) */
     perf_funcs_report( i, p_duration, "select any where 10000" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  select_any_where_1000
  */
 bool
-perf_funcs_BENCHMARK_op_select_any_where_1000( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_select_any_where_1000( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 5000 */
   iterations = 5000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = 100 */
     i = 100;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN a.ID = i */
@@ -1208,17 +1205,17 @@ perf_funcs_BENCHMARK_op_select_any_where_1000( i_t p_count, i_t p_duration, i_t 
     }
   }
   else if ( ( 2 == p_phase ) ) {
-    i_t j; 
+    i_t j;
     /* ASSIGN j = 5 */
     j = 5;
     /* WHILE ( ( 0 < j ) ) */
     while ( ( 0 < j ) ) {
-      i_t i; 
+      i_t i;
       /* ASSIGN i = 1000 */
       i = 1000;
       /* WHILE ( ( i > 0 ) ) */
       while ( ( i > 0 ) ) {
-        perf_funcs_A * a=0; 
+        perf_funcs_A * a=0;
         /* SELECT any a FROM INSTANCES OF A WHERE ( SELECTED.ID == i ) */
         a = 0;
         { perf_funcs_A * selected;
@@ -1241,12 +1238,12 @@ perf_funcs_BENCHMARK_op_select_any_where_1000( i_t p_count, i_t p_duration, i_t 
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -1264,36 +1261,36 @@ perf_funcs_BENCHMARK_op_select_any_where_1000( i_t p_count, i_t p_duration, i_t 
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'select any where 1000' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:select any where 1000 ) */
     perf_funcs_report( i, p_duration, "select any where 1000" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  select_any_where_100
  */
 bool
-perf_funcs_BENCHMARK_op_select_any_where_100( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_select_any_where_100( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 5000 */
   iterations = 5000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = 100 */
     i = 100;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN a.ID = i */
@@ -1303,17 +1300,17 @@ perf_funcs_BENCHMARK_op_select_any_where_100( i_t p_count, i_t p_duration, i_t p
     }
   }
   else if ( ( 2 == p_phase ) ) {
-    i_t j; 
+    i_t j;
     /* ASSIGN j = 50 */
     j = 50;
     /* WHILE ( ( 0 < j ) ) */
     while ( ( 0 < j ) ) {
-      i_t i; 
+      i_t i;
       /* ASSIGN i = 100 */
       i = 100;
       /* WHILE ( ( i > 0 ) ) */
       while ( ( i > 0 ) ) {
-        perf_funcs_A * a=0; 
+        perf_funcs_A * a=0;
         /* SELECT any a FROM INSTANCES OF A WHERE ( SELECTED.ID == i ) */
         a = 0;
         { perf_funcs_A * selected;
@@ -1336,12 +1333,12 @@ perf_funcs_BENCHMARK_op_select_any_where_100( i_t p_count, i_t p_duration, i_t p
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -1359,36 +1356,36 @@ perf_funcs_BENCHMARK_op_select_any_where_100( i_t p_count, i_t p_duration, i_t p
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'select any where 100' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:select any where 100 ) */
     perf_funcs_report( i, p_duration, "select any where 100" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  select_any_where_10
  */
 bool
-perf_funcs_BENCHMARK_op_select_any_where_10( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_select_any_where_10( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 5000 */
   iterations = 5000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = 10 */
     i = 10;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN a.ID = i */
@@ -1398,17 +1395,17 @@ perf_funcs_BENCHMARK_op_select_any_where_10( i_t p_count, i_t p_duration, i_t p_
     }
   }
   else if ( ( 2 == p_phase ) ) {
-    i_t j; 
+    i_t j;
     /* ASSIGN j = 500 */
     j = 500;
     /* WHILE ( ( 0 < j ) ) */
     while ( ( 0 < j ) ) {
-      i_t i; 
+      i_t i;
       /* ASSIGN i = 10 */
       i = 10;
       /* WHILE ( ( i > 0 ) ) */
       while ( ( i > 0 ) ) {
-        perf_funcs_A * a=0; 
+        perf_funcs_A * a=0;
         /* SELECT any a FROM INSTANCES OF A WHERE ( SELECTED.ID == i ) */
         a = 0;
         { perf_funcs_A * selected;
@@ -1431,12 +1428,12 @@ perf_funcs_BENCHMARK_op_select_any_where_10( i_t p_count, i_t p_duration, i_t p_
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -1454,43 +1451,43 @@ perf_funcs_BENCHMARK_op_select_any_where_10( i_t p_count, i_t p_duration, i_t p_
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'select any where 10' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:select any where 10 ) */
     perf_funcs_report( i, p_duration, "select any where 10" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  read_attribute
  */
 bool
-perf_funcs_BENCHMARK_op_read_attribute( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_read_attribute( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    perf_funcs_A * a; 
+    perf_funcs_A * a;
     /* CREATE OBJECT INSTANCE a OF A */
     a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
   }
   else if ( ( 2 == p_phase ) ) {
-    perf_funcs_A * a=0; i_t i; 
+    i_t i;perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( i > 0 ) ) */
     while ( ( i > 0 ) ) {
-      i_t j; 
+      i_t j;
       /* ASSIGN j = a.odometer */
       j = a->odometer;
       /* ASSIGN j = a.odometer */
@@ -1518,7 +1515,7 @@ perf_funcs_BENCHMARK_op_read_attribute( i_t p_count, i_t p_duration, i_t p_phase
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    perf_funcs_A * a=0; 
+    perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* DELETE OBJECT INSTANCE a */
@@ -1528,36 +1525,36 @@ perf_funcs_BENCHMARK_op_read_attribute( i_t p_count, i_t p_duration, i_t p_phase
     Escher_DeleteInstance( (Escher_iHandle_t) a, perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( ( 10 * iterations ) * PARAM.count ) */
     i = ( ( 10 * iterations ) * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'read attribute' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:read attribute ) */
     perf_funcs_report( i, p_duration, "read attribute" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  write_attribute
  */
 bool
-perf_funcs_BENCHMARK_op_write_attribute( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_write_attribute( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    perf_funcs_A * a; 
+    perf_funcs_A * a;
     /* CREATE OBJECT INSTANCE a OF A */
     a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
   }
   else if ( ( 2 == p_phase ) ) {
-    perf_funcs_A * a=0; i_t i; 
+    i_t i;perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* ASSIGN i = iterations */
@@ -1591,7 +1588,7 @@ perf_funcs_BENCHMARK_op_write_attribute( i_t p_count, i_t p_duration, i_t p_phas
   else if ( ( 3 == p_phase ) ) {
   }
   else if ( ( 4 == p_phase ) ) {
-    perf_funcs_A * a=0; 
+    perf_funcs_A * a=0;
     /* SELECT any a FROM INSTANCES OF A */
     a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
     /* DELETE OBJECT INSTANCE a */
@@ -1601,33 +1598,33 @@ perf_funcs_BENCHMARK_op_write_attribute( i_t p_count, i_t p_duration, i_t p_phas
     Escher_DeleteInstance( (Escher_iHandle_t) a, perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( ( 10 * iterations ) * PARAM.count ) */
     i = ( ( 10 * iterations ) * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'write attribute' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:write attribute ) */
     perf_funcs_report( i, p_duration, "write attribute" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  bridge_void_void
  */
 bool
-perf_funcs_BENCHMARK_op_bridge_void_void( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_bridge_void_void( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
   }
   else if ( ( 2 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( i > 0 ) ) */
@@ -1661,33 +1658,33 @@ perf_funcs_BENCHMARK_op_bridge_void_void( i_t p_count, i_t p_duration, i_t p_pha
   else if ( ( 4 == p_phase ) ) {
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( ( 10 * iterations ) * PARAM.count ) */
     i = ( ( 10 * iterations ) * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'bridge void void' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:bridge void void ) */
     perf_funcs_report( i, p_duration, "bridge void void" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  bridge_void_integer
  */
 bool
-perf_funcs_BENCHMARK_op_bridge_void_integer( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_bridge_void_integer( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
   }
   else if ( ( 2 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( i > 0 ) ) */
@@ -1721,26 +1718,26 @@ perf_funcs_BENCHMARK_op_bridge_void_integer( i_t p_count, i_t p_duration, i_t p_
   else if ( ( 4 == p_phase ) ) {
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( ( 10 * iterations ) * PARAM.count ) */
     i = ( ( 10 * iterations ) * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'bridge void integer' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:bridge void integer ) */
     perf_funcs_report( i, p_duration, "bridge void integer" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  bridge_integer_integer
  */
 bool
-perf_funcs_BENCHMARK_op_bridge_integer_integer( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_bridge_integer_integer( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; i_t j; 
+  i_t j;i_t iterations;
   /* ASSIGN iterations = 10000 */
   iterations = 10000;
   /* ASSIGN j = 0 */
@@ -1749,7 +1746,7 @@ perf_funcs_BENCHMARK_op_bridge_integer_integer( i_t p_count, i_t p_duration, i_t
   if ( ( 1 == p_phase ) ) {
   }
   else if ( ( 2 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( i > 0 ) ) */
@@ -1783,36 +1780,36 @@ perf_funcs_BENCHMARK_op_bridge_integer_integer( i_t p_count, i_t p_duration, i_t
   else if ( ( 4 == p_phase ) ) {
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( ( 10 * iterations ) * PARAM.count ) */
     i = ( ( 10 * iterations ) * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'bridge integer integer' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:bridge integer integer ) */
     perf_funcs_report( i, p_duration, "bridge integer integer" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
 
 /*
  * class operation:  delete_many
  */
 bool
-perf_funcs_BENCHMARK_op_delete_many( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_funcs_BENCHMARK_op_delete_many( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
-  i_t iterations; 
+  i_t iterations;
   /* ASSIGN iterations = 5000 */
   iterations = 5000;
   /* IF ( ( 1 == PARAM.phase ) ) */
   if ( ( 1 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN i = ( i - 1 ) */
@@ -1820,15 +1817,15 @@ perf_funcs_BENCHMARK_op_delete_many( i_t p_count, i_t p_duration, i_t p_phase, i
     }
   }
   else if ( ( 2 == p_phase ) ) {
-    Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space; /* as (A) */ perf_funcs_A * a=0; 
+    perf_funcs_A * a=0;Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space;
     /* SELECT many as FROM INSTANCES OF A */
     Escher_CopySet( as, &pG_perf_funcs_A_extent.active );
     /* FOR EACH a IN as */
-    { Escher_Iterator_s iterperf_funcs_Aa;
-    perf_funcs_A * perf_funcs_Aiterperf_funcs_Aa;
-    Escher_IteratorReset( &iterperf_funcs_Aa, as );
-    while ( (perf_funcs_Aiterperf_funcs_Aa = (perf_funcs_A *)Escher_IteratorNext( &iterperf_funcs_Aa )) != 0 ) {
-      a = perf_funcs_Aiterperf_funcs_Aa; {
+    { Escher_Iterator_s itera;
+    perf_funcs_A * iia;
+    Escher_IteratorReset( &itera, as );
+    while ( (iia = (perf_funcs_A *)Escher_IteratorNext( &itera )) != 0 ) {
+      a = iia; {
       /* DELETE OBJECT INSTANCE a */
       if ( 0 == a ) {
         XTUML_EMPTY_HANDLE_TRACE( "A", "Escher_DeleteInstance" );
@@ -1838,12 +1835,12 @@ perf_funcs_BENCHMARK_op_delete_many( i_t p_count, i_t p_duration, i_t p_phase, i
     Escher_ClearSet( as );
   }
   else if ( ( 3 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = iterations */
     i = iterations;
     /* WHILE ( ( 0 < i ) ) */
     while ( ( 0 < i ) ) {
-      perf_funcs_A * a; 
+      perf_funcs_A * a;
       /* CREATE OBJECT INSTANCE a OF A */
       a = (perf_funcs_A *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER );
       /* ASSIGN i = ( i - 1 ) */
@@ -1851,12 +1848,12 @@ perf_funcs_BENCHMARK_op_delete_many( i_t p_count, i_t p_duration, i_t p_phase, i
     }
   }
   else if ( ( 4 == p_phase ) ) {
-    bool more; 
+    bool more;
     /* ASSIGN more = TRUE */
     more = TRUE;
     /* WHILE ( more ) */
     while ( more ) {
-      perf_funcs_A * a=0; 
+      perf_funcs_A * a=0;
       /* SELECT any a FROM INSTANCES OF A */
       a = (perf_funcs_A *) Escher_SetGetAny( &pG_perf_funcs_A_extent.active );
       /* IF ( empty a ) */
@@ -1874,19 +1871,18 @@ perf_funcs_BENCHMARK_op_delete_many( i_t p_count, i_t p_duration, i_t p_phase, i
     }
   }
   else if ( ( 5 == p_phase ) ) {
-    i_t i; 
+    i_t i;
     /* ASSIGN i = ( iterations * PARAM.count ) */
     i = ( iterations * p_count );
-    /* ::report( count:i, duration:PARAM.duration, message:'select many delete 5000 instances' ) */
+    /* ::report( count:i, duration:PARAM.duration, message:select many delete 5000 instances ) */
     perf_funcs_report( i, p_duration, "select many delete 5000 instances" );
   }
   else {
   }
   /* RETURN TRUE */
-  return TRUE;
-
+  {bool xtumlOALrv = TRUE;
+  return xtumlOALrv;}
 }
-
 
 
 /*----------------------------------------------------------------------------
@@ -1935,7 +1931,7 @@ static void perf_funcs_BENCHMARK_act2( perf_funcs_BENCHMARK *, const Escher_xtUM
 static void
 perf_funcs_BENCHMARK_act2( perf_funcs_BENCHMARK * self, const Escher_xtUMLEvent_t * const event )
 {
-  Escher_xtUMLEvent_t * go;  /* go */ Escher_Timer_t * t; 
+  Escher_Timer_t * t;Escher_xtUMLEvent_t * go;
   /* CREATE EVENT INSTANCE go(  ) TO self */
   go = Escher_NewxtUMLEvent( (void *) self, &perf_funcs_BENCHMARKevent1c );
   /* ASSIGN t = TIM::timer_start(event_inst:go, microseconds:1000) */
@@ -1945,11 +1941,9 @@ perf_funcs_BENCHMARK_act2( perf_funcs_BENCHMARK * self, const Escher_xtUMLEvent_
 const Escher_xtUMLEventConstant_t perf_funcs_BENCHMARKevent1c = {
   perf_funcs_DOMAIN_ID, perf_funcs_BENCHMARK_CLASS_NUMBER, PERF_FUNCS_BENCHMARKEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t perf_funcs_BENCHMARKevent2c = {
   perf_funcs_DOMAIN_ID, perf_funcs_BENCHMARK_CLASS_NUMBER, PERF_FUNCS_BENCHMARKEVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -1987,7 +1981,6 @@ perf_funcs_BENCHMARK_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 2 ) {
@@ -2008,5 +2001,4 @@ perf_funcs_BENCHMARK_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

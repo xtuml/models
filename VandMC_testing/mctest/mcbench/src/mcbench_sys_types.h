@@ -1,15 +1,13 @@
 /*----------------------------------------------------------------------------
  * File:  mcbench_sys_types.h
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *
  *
  * System Name:  
  * System ID:    1
  * Model Compiler Product Information:
  * Product:  
- * Version:  
- * S/N:      
  * System default/colored values:
  * MaxStringLen:  32
  * MaxObjExtent:  0
@@ -17,20 +15,20 @@
  * MaxSelectExtent:  0
  * MaxSelfEvents:  0
  * MaxNonSelfEvents:  64000
- * MaxTimers:  0
+ * MaxTimers:  5
  * MaxInterleavedBridges:  0
- * MaxInterleavedBridgeDataSize:  0
+ * MaxInterleavedBridgeDataSize:  8
  * CollectionsFlavor:  20
- * ForcePriorityEvents:  FALSE
+ * ForcePriorityEvents:  False
  * PEIClassCount:  0
  * PersistentClassCount:  0
  * PersistInstanceCacheDepth:  128
  * PersistLinkCacheDepth:  128
  *
- * Component Name:  perf_funcs
- * MaxObjExtent:  40080
- * MaxRelExtent:  10
- * MaxSelectExtent:  40000
+ * Component Name:  perf_testloop
+ * MaxObjExtent:  10
+ * MaxRelExtent:  0
+ * MaxSelectExtent:  10
  * MaxSelfEvents:  2
  * MaxNonSelfEvents:  2
  * MaxPriorityEvents:  0
@@ -41,10 +39,10 @@
  * InterleavedDataSize:  8
  * CollectionsFlavor:  20
  *
- * Component Name:  perf_testloop
- * MaxObjExtent:  10
- * MaxRelExtent:  0
- * MaxSelectExtent:  10
+ * Component Name:  perf_funcs
+ * MaxObjExtent:  40080
+ * MaxRelExtent:  10
+ * MaxSelectExtent:  40000
  * MaxSelfEvents:  2
  * MaxNonSelfEvents:  2
  * MaxPriorityEvents:  0
@@ -91,7 +89,6 @@ typedef unsigned char bool;
 #define FALSE ( (bool) 0 )
 #define TRUE  ( (bool) (!FALSE) )
 
-
 #define ESCHER_SYS_MAX_STRING_LEN 32
 #define ESCHER_PERSIST_INST_CACHE_DEPTH 128
 #define ESCHER_PERSIST_LINK_CACHE_DEPTH 128
@@ -105,7 +102,6 @@ typedef unsigned char bool;
 #define ESCHER_SYS_MAX_XTUML_TIMERS 5
 #define ESCHER_SYS_MAX_INTERLEAVED_BRIDGES 0
 #define ESCHER_SYS_MAX_INTERLEAVED_BRIDGE_DATA 8
-
 
 /*
  * Core types with byte widths defined for MISRA-C compliance.
@@ -125,13 +121,14 @@ typedef unsigned long   u4_t;
 typedef          double r_t;
 typedef          float  r4_t;
 typedef          double r8_t;
+typedef /*size_t*/ u4_t Escher_size_t;
 
 /*
  * These are some of the fundamental types used universally.
  */
 typedef u1_t Escher_DomainNumber_t;
 typedef u2_t Escher_ClassNumber_t;
-typedef u2_t Escher_ClassSize_t;
+typedef Escher_size_t Escher_ClassSize_t;
 typedef u2_t Escher_InstanceIndex_t;
 typedef u1_t Escher_StateNumber_t;
 typedef u1_t Escher_EventNumber_t;
@@ -148,7 +145,8 @@ typedef struct {
   Escher_StateNumber_t current_state;
 } Escher_InstanceBase_t;
 typedef Escher_InstanceBase_t * Escher_iHandle_t;
-typedef Escher_iHandle_t Escher_UniqueID_t;
+typedef i_t Escher_UniqueID_t;
+typedef void (*Escher_idf)( Escher_iHandle_t ); 
 
 /* Return code type for dispatch of a polymorphic event (see sys_events.h).  */
 typedef u1_t Escher_PolyEventRC_t;
@@ -323,10 +321,11 @@ void Escher_thread_shutdown( void );
 #define SYSTEM_DOMAIN_COUNT 2
 /* xtUML domain identification numbers */
 #define perf_funcs_DOMAIN_ID 0
+#define perf_funcs_DOMAIN_ID_text "perf_funcs"
 #include "perf_funcs_classes.h"
 #define perf_testloop_DOMAIN_ID 1
+#define perf_testloop_DOMAIN_ID_text "perf_testloop"
 #include "perf_testloop_classes.h"
-
 /*----------------------------------------------------------------------------
  *
  * Run time instrumentation and tracing declarations are defined here.
@@ -390,24 +389,19 @@ void Escher_thread_shutdown( void );
 #endif
 
 /*
- * Transformer invocation start tracing:
+ * Component message start tracing:
  */
-/* To suppress transformer start tracing, uncomment the following macro */
-/* #define XTUML_TRANSFORMER_START_TRACE( obj_kl, tfr_name ) */
+/* To suppress component message start tracing, uncomment the following macro */
+/* #define COMP_MSG_START_TRACE( arg_format, component_number, port_number, message_number, args... ) */
 
-#ifndef XTUML_TRANSFORMER_START_TRACE
-#define XTUML_TRANSFORMER_START_TRACE( obj_kl, tfr_name ) do {   XTUML_SOURCE_PROLOGUE;   printf( "Invocation started: '%s' Transformer '%s'\n", obj_kl, tfr_name );   XTUML_TRACE_FLUSH( 0 ); } while (0)
+#ifndef COMP_MSG_START_TRACE
+#define COMP_MSG_START_TRACE( arg_format, component_number, port_number, message_number, args... ) do {   XTUML_SOURCE_PROLOGUE;   printf( "component %d port %d message %d " arg_format "\n", component_number, port_number, message_number, ## args );   XTUML_TRACE_FLUSH( 0 ); } while (0)
 #endif
 
 /*
- * Transformer invocation complete tracing:
+ * Component message end tracing:
  */
-/* To suppress transformer end tracing, uncomment the following macro */
-/* #define XTUML_TRANSFORMER_END_TRACE( obj_kl, tfr_name ) */
 
-#ifndef XTUML_TRANSFORMER_END_TRACE
-#define XTUML_TRANSFORMER_END_TRACE( obj_kl, tfr_name ) do {   XTUML_SOURCE_PROLOGUE;   printf( "Invocation complete: '%s' Transformer '%s'\n", obj_kl, tfr_name );   XTUML_TRACE_FLUSH( 0 ); } while (0)
-#endif
 
 /*
  * Object Action Language (OAL) statement level tracing:
