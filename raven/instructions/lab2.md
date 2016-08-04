@@ -13,7 +13,7 @@ MASL project model.
 1. Open a terminal window and navigate to the `~/xtuml` directory.  
 2. Run the `bridgepoint.sh` script to launch BridgePoint (or run the BridgePoint
 launcher directly with `BridgePoint/eclipse/Launcher.sh`.  
-3. Enter `/home/student/xtuml/workspaces/ws-lab2` in the workspace chooser and
+3. Enter `/home/student/xtuml/workspaces/ws-domains` in the workspace chooser and
 press `Ok`.  
 
 #### Converting the project model

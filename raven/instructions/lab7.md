@@ -10,6 +10,14 @@ This exercise will take the student through the steps to export a MASL project.
 In this example, we will export the _Cribbage_ project, open up the MASL and see
 some of our changes.
 
+#### Preparing the workspace
+
+1. Open a terminal window and navigate to the `~/xtuml` directory.  
+2. Run the `bridgepoint.sh` script to launch BridgePoint (or run the BridgePoint
+launcher directly with `BridgePoint/eclipse/Launcher.sh`.  
+3. Enter `/home/student/xtuml/workspaces/ws-all` in the workspace chooser and
+press `Ok`.  
+
 #### Exporting the project
 
 1. Navigate to the _Cribbage_ package in the _Cribbage_ project  

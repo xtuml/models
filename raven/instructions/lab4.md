@@ -9,6 +9,14 @@ models with BridgePoint and how to avoid/manage them.
 
 ## Instructions
 
+#### Preparing the workspace
+
+1. Open a terminal window and navigate to the `~/xtuml` directory.  
+2. Run the `bridgepoint.sh` script to launch BridgePoint (or run the BridgePoint
+launcher directly with `BridgePoint/eclipse/Launcher.sh`.  
+3. Enter `/home/student/xtuml/workspaces/ws-all` in the workspace chooser and
+press `Ok`.  
+
 #### Marking elements with pragmas
 
 Model elements can be marked with pragmas through text in the description. In
@@ -19,11 +27,12 @@ this example, we will add the pragma _number_ to the _Game_ domain
 3. Enter the text "pragma number(1);" and save  
 
 Some markable elements share a single xtUML element. For example, to mark an
-identifier, an analyst must mark its containing class with special tags. To mark
-the second or third identifier, wrap your pragma list in
+identifier, an analyst must mark its containing class with special tags. To
+mark the second or third identifier, wrap your pragma list in
 "<identifier2></identifier2>" or "<identifier3></identifier3>" tags. An
-exhaustive list of mappings and pragma locations can be found in the "Pragma
-Mapping" document.
+exhaustive list of mappings and pragma locations can be found in this document
+section 5.1.2: [Pragma
+mapping](https://github.com/xtuml/mc/blob/master/doc/notes/8574_production_pragmas_int.md)  
 
 #### Editing MASL activities
 

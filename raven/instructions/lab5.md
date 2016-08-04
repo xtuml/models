@@ -9,6 +9,14 @@ associations, state modeling and terminators.
 
 ## Instructions
 
+#### Preparing the workspace
+
+1. Open a terminal window and navigate to the `~/xtuml` directory.  
+2. Run the `bridgepoint.sh` script to launch BridgePoint (or run the BridgePoint
+launcher directly with `BridgePoint/eclipse/Launcher.sh`.  
+3. Enter `/home/student/xtuml/workspaces/ws-all` in the workspace chooser and
+press `Ok`.  
+
 #### Modeling classes and associations
 
 In this example, we will add a new class _Crib_ to the _Game_ domain. We will
