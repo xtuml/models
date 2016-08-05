@@ -61,11 +61,11 @@ domain PSC is
   object EVADED_TRANSACTION;
   object TEST;
 
-  type Transaction_Subtype is enum (Pending,
-                                    Paid,
-                                    Evaded);
+  public type Transaction_Subtype is enum (Pending,
+                                           Paid,
+                                           Evaded);
 
-  type Timer_ID is integer;
+  public type Timer_ID is integer;
 
   terminator ATTENDANT is
     private service Request_Pump_Enable ();
