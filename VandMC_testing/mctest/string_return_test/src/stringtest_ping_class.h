@@ -43,7 +43,7 @@ extern const Escher_xtUMLEventConstant_t stringtest_pingevent1c;
  * union of events targeted towards 'ping' state machine
  */
 typedef union {
-  stringtest_pingevent1 ping11;  
+  stringtest_pingevent1 ping1_1;  
 } stringtest_ping_Events_u;
 
 /*

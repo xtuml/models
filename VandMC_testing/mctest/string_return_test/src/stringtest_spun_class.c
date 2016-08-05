@@ -40,7 +40,7 @@ static void
 stringtest_spun_act1( stringtest_spun * self, const Escher_xtUMLEvent_t * const event )
 {
   stringtest_spunevent1 * rcvd_evt = (stringtest_spunevent1 *) event;
-  stringtest_spin * spin;i_t count;c_t t[ESCHER_SYS_MAX_STRING_LEN];c_t s[ESCHER_SYS_MAX_STRING_LEN];
+  c_t s[ESCHER_SYS_MAX_STRING_LEN];c_t t[ESCHER_SYS_MAX_STRING_LEN];i_t count;stringtest_spin * spin;
   /* ASSIGN s = C        10         20 .        30         40 .        50         60 .        70         80 .        90         00 .        10         20 .        30         40 .        50         60 .        70         80 .        90         00 */
   Escher_strcpy( s, "C        10         20 .        30         40 .        50         60 .        70         80 .        90         00 .        10         20 .        30         40 .        50         60 .        70         80 .        90         00" );
   /* ASSIGN t = D        10         20 .        30         40 .        50         60 .        70         80 .        90         00 .        10         20 .        30         40 .        50         60 .        70         80 .        90         00 */
@@ -53,7 +53,7 @@ stringtest_spun_act1( stringtest_spun * self, const Escher_xtUMLEvent_t * const 
     /* ASSIGN count = ( count - 1 ) */
     count = ( count - 1 );
     /* ASSIGN u = buffer::twist(s1:1, s2:t, s3:0, s4:s) */
-    Escher_strcpy2( u, stringtest_buffer_op_twist("1", t, "0", s) );
+    Escher_strcpy( u, stringtest_buffer_op_twist("1", t, "0", s).s );
   }
   /* ASSIGN spin = PARAM.spin */
   spin = rcvd_evt->p_spin;

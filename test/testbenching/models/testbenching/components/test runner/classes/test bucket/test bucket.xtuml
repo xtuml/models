@@ -1,4 +1,4 @@
--- BP 7.1 content: ModelClass syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO O_OBJ
 	VALUES ("ede00d97-3870-44e1-b06a-6d049514aff9",
@@ -18,7 +18,8 @@ INSERT INTO O_TFR
 self.test_suite_name = "";
 self.test_suite_version = "";
 self.variation_count = 0;
-self.guard_timer_duration = 3000000; // 5 seconds
+// CDS - this should be an input parameter from the application test bench
+self.guard_timer_duration = 3000000; // 3 seconds
 
 // Delete away old test cases.
 select one first_test_case related by self->SEQ_TESTCASE[R2];
@@ -136,7 +137,7 @@ INSERT INTO O_REF
 	'',
 	'test case',
 	'test_case_number',
-	'R3');
+	'R3.''is current''');
 INSERT INTO R_RGO_PROXY
 	VALUES ("ede00d97-3870-44e1-b06a-6d049514aff9",
 	"651c8b1e-7418-4627-9542-ea74d6a484a2",
@@ -217,10 +218,17 @@ INSERT INTO O_ID
 INSERT INTO O_ID
 	VALUES (2,
 	"ede00d97-3870-44e1-b06a-6d049514aff9");
-INSERT INTO PE_PE_PROXY
+INSERT INTO PE_PE
 	VALUES ("ede00d97-3870-44e1-b06a-6d049514aff9",
 	1,
 	"2897b2b3-6919-4bf0-9f4a-1ad2e921fae7",
 	"00000000-0000-0000-0000-000000000000",
-	4,
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("2897b2b3-6919-4bf0-9f4a-1ad2e921fae7",
+	"00000000-0000-0000-0000-000000000000",
+	"d8d8e64a-9be2-44d8-9846-63e8493caa3c",
+	'classes',
+	'',
+	0,
 	'../classes.xtuml');

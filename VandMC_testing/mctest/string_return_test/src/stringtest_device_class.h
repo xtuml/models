@@ -26,8 +26,10 @@ struct stringtest_device {
   /* relationship storage */
   /* Note:  No storage needed for device->buffer[R2] */
 };
-c_t * stringtest_device_op_rstr( stringtest_device * );
+xtuml_string stringtest_device_op_rstr( stringtest_device * );
 
+void stringtest_device_R2_Link( stringtest_buffer *, stringtest_device * );
+/* Note:  buffer<-R2->device unrelate accessor not needed */
 
 
 #define stringtest_device_MAX_EXTENT_SIZE 10
@@ -57,8 +59,8 @@ extern const Escher_xtUMLEventConstant_t stringtest_deviceevent2c;
  * union of events targeted towards 'device' state machine
  */
 typedef union {
-  stringtest_deviceevent1 device11;  
-  stringtest_deviceevent2 device22;  
+  stringtest_deviceevent1 device1_1;  
+  stringtest_deviceevent2 device2_2;  
 } stringtest_device_Events_u;
 
 /*

@@ -130,6 +130,7 @@ Escher_SetContains(
     if ( node->object == element ) { return node; }  /* found  */
     node = node->next;
   }
+  if ( 0 == element ) return ( const void * ) 1; /* every set contains null */
   return 0;                                      /* absent */
 }
 
@@ -234,40 +235,10 @@ Escher_memmove( void * const dst, const void * const src, Escher_size_t len )
  * Copy characters and be paranoid about null delimiter.
  */
 c_t *
-Escher_strcpy2( c_t * dst, const c_t * src )
-{
-  c_t * s = dst;
-  double pi1 = 3.14, pi2 = 2.78, pi3 = 3.10, pi4 = 7.7;
-  static double pi;
-  s2_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
-  if ( ( 0 != src ) && ( 0 != dst ) ) {
-    while ( ( i > 0 ) && ( *src != '\0' ) ) {
-      int i;
-      for ( i = 0; i < 99; i++ ) {
-        pi = pi1 * pi2;
-        pi = pi + pi3 * pi4;
-        if ( pi > 777.7753 )
-          pi = pi - 1;
-        else
-          pi = pi + 1;
-      }
-      --i;
-      *dst++ = *src++;
-    }
-    *dst = '\0';  /* Ensure delimiter.  */
-  }
-  return s;
-}
-
-
-/*
- * Copy characters and be paranoid about null delimiter.
- */
-c_t *
 Escher_strcpy( c_t * dst, const c_t * src )
 {
   c_t * s = dst;
-  s2_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
+  Escher_size_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
   if ( ( 0 != src ) && ( 0 != dst ) ) {
     while ( ( i > 0 ) && ( *src != '\0' ) ) {
       --i;
@@ -284,7 +255,7 @@ Escher_strcpy( c_t * dst, const c_t * src )
 c_t *
 Escher_stradd( const c_t * left, const c_t * right )
 {
-  s2_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
+  Escher_size_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
   c_t * s = Escher_strget();
   c_t * dst = s;
   if ( 0 == left ) left = "";
@@ -384,13 +355,18 @@ Escher_DeleteInstance(
 {
   Escher_SetElement_s * node;
   Escher_Extent_t * dci = *(domain_class_info[ domain_num ] + class_num);
-  Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
-  node = Escher_SetRemoveNode( &dci->active, instance );
-  node->next = dci->inactive.head;
-  dci->inactive.head = node;
-  /* Initialize storage to zero.  */
-  Escher_memset( instance, 0, dci->size );
-  Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
+  if ( 0 != instance ) {
+    Escher_mutex_lock( SEMAPHORE_FLAVOR_INSTANCE );
+    node = Escher_SetRemoveNode( &dci->active, instance );
+    node->next = dci->inactive.head;
+    dci->inactive.head = node;
+    /* Initialize storage to zero.  */
+    Escher_memset( instance, 0, dci->size );
+    if ( ( 0 != dci->size ) && ( 0 != dci->initial_state ) ) {
+      instance->current_state = -1; /* 0xff max for error detection */
+    }
+    Escher_mutex_unlock( SEMAPHORE_FLAVOR_INSTANCE );
+  }
 }
 
 /*

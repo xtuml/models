@@ -1,0 +1,145 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("5c0045dc-66a9-40ea-89c4-e3ab248d5026",
+	'analog to digital converter',
+	201,
+	'ADC',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("a6ab353d-574a-4393-9eea-b1cd4c257972",
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026",
+	'convert',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'/*
+Simulate the hardware.
+Divide the acquisition into 4 pieces.
+Send them back as requested.
+*/
+TRACE::log( id:1071, flavor:"info", message:"ADC_convert" );
+select any adc from instances of ADC;
+chunk = adc.buffer_capacity / 4;
+send SW::sample( data:adc.buffer_current, length:chunk );
+adc.buffer_current = adc.buffer_current + chunk;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("ece13928-46c8-4077-8ec4-d2905a3e6ef1",
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026",
+	'init',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'create object instance adc of ADC;
+adc.buffer_beginning = param.data;
+adc.buffer_current = adc.buffer_beginning;
+adc.buffer_capacity = param.length;',
+	1,
+	'',
+	"a6ab353d-574a-4393-9eea-b1cd4c257972");
+INSERT INTO O_TPARM
+	VALUES ("f40f6a3b-e2be-4f70-aecf-c05097b2ddfb",
+	"ece13928-46c8-4077-8ec4-d2905a3e6ef1",
+	'data',
+	"66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
+	"00000000-0000-0000-0000-000000000000",
+	'dataptr',
+	'',
+	'',
+	'../../../../../../../x8shared/models/x8shared/x8types/x8types.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("ce93b88d-24ec-433a-ba84-af8d796af60e",
+	"ece13928-46c8-4077-8ec4-d2905a3e6ef1",
+	'length',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"f40f6a3b-e2be-4f70-aecf-c05097b2ddfb",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("904b00af-4106-4027-9842-57518d88286c",
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026");
+INSERT INTO O_BATTR
+	VALUES ("904b00af-4106-4027-9842-57518d88286c",
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026");
+INSERT INTO O_ATTR
+	VALUES ("904b00af-4106-4027-9842-57518d88286c",
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026",
+	"d1b0b506-2db3-4720-8a7c-1c100c3dcdc1",
+	'buffer_beginning',
+	'',
+	'',
+	'buffer_beginning',
+	0,
+	"66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("d1b0b506-2db3-4720-8a7c-1c100c3dcdc1",
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026");
+INSERT INTO O_BATTR
+	VALUES ("d1b0b506-2db3-4720-8a7c-1c100c3dcdc1",
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026");
+INSERT INTO O_ATTR
+	VALUES ("d1b0b506-2db3-4720-8a7c-1c100c3dcdc1",
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026",
+	"00000000-0000-0000-0000-000000000000",
+	'buffer_capacity',
+	'',
+	'',
+	'buffer_capacity',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("51295f7c-70ee-45fe-9353-38f74bec09b6",
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026");
+INSERT INTO O_BATTR
+	VALUES ("51295f7c-70ee-45fe-9353-38f74bec09b6",
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026");
+INSERT INTO O_ATTR
+	VALUES ("51295f7c-70ee-45fe-9353-38f74bec09b6",
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026",
+	"904b00af-4106-4027-9842-57518d88286c",
+	'buffer_current',
+	'',
+	'',
+	'buffer_current',
+	0,
+	"66aeca84-6b6e-4222-ba10-12ebd4eaa7f7",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026");
+INSERT INTO O_ID
+	VALUES (1,
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026");
+INSERT INTO O_ID
+	VALUES (2,
+	"5c0045dc-66a9-40ea-89c4-e3ab248d5026");
+INSERT INTO PE_PE
+	VALUES ("5c0045dc-66a9-40ea-89c4-e3ab248d5026",
+	1,
+	"d4ac6fbe-6e68-48a5-b6e8-fd68564ba3fe",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("d4ac6fbe-6e68-48a5-b6e8-fd68564ba3fe",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'classes',
+	'',
+	200,
+	'../classes.xtuml');

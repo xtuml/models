@@ -6,7 +6,7 @@
  *
  * External Entity:  C Benchmark (CBENCHMARK)
  * 
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef PERF_FUNCS_CBENCHMARK_BRIDGE_H
@@ -16,12 +16,11 @@ extern	"C"	{
 #endif
 
 #include "mcbench_sys_types.h"
-
 void perf_funcs_CBENCHMARK_function_void_void( void );
-void perf_funcs_CBENCHMARK_function_void_integer( i_t );
-i_t perf_funcs_CBENCHMARK_function_integer_integer( i_t );
-i_t perf_funcs_CBENCHMARK_read_struct_member( i_t );
-i_t perf_funcs_CBENCHMARK_write_struct_member( i_t );
+void perf_funcs_CBENCHMARK_function_void_integer( const i_t );
+i_t perf_funcs_CBENCHMARK_function_integer_integer( const i_t );
+i_t perf_funcs_CBENCHMARK_read_struct_member( const i_t );
+i_t perf_funcs_CBENCHMARK_write_struct_member( const i_t );
 
 #ifdef	__cplusplus
 }

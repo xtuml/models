@@ -1,0 +1,247 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("7c578315-7b6b-4436-b5a1-45adbb6595ff",
+	'test case',
+	100,
+	'TB_TESTCASE',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("49350c8c-78be-41c5-b1d7-2140cedcd44a",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff",
+	'setup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'// This is where to add tests.
+// 1) Add a class an relate as a subtype to this class.
+// 2) create, relate and initialize it here.
+
+testnumber = param.variation_number;
+
+if ( 1 == testnumber )
+  // Create the simple variation test.
+  create object instance testcase of TB_TESTCASE;
+  testcase.init( number:testnumber, label:"simple test" );
+  create object instance simple of TB_SIMPLE;
+  relate simple to testcase across R1;
+
+elif ( 2 == testnumber )
+  // Create the second most complex scenario test.
+  create object instance testcase of TB_TESTCASE;
+  testcase.init( number:testnumber, label:"next most complex scenario" );
+  create object instance complex of TB_COMPLEX;
+  relate complex to testcase across R1;
+
+elif ( 3 == testnumber )
+  create object instance testcase of TB_TESTCASE;
+  testcase.init( number:testnumber, label:"program test" );
+  create object instance program of TB_PROGRAM;
+  relate program to testcase across R1;
+
+elif ( 4 == testnumber )
+  create object instance testcase of TB_TESTCASE;
+  testcase.init( number:testnumber, label:"start experiment" );
+  create object instance start of TB_START;
+  relate start to testcase across R1;
+
+elif ( 5 == testnumber )
+  create object instance testcase of TB_TESTCASE;
+  testcase.init( number:testnumber, label:"data acquisition" );
+  create object instance dacq of TB_DACQ;
+  relate dacq to testcase across R1;
+
+elif ( 6 == testnumber )
+  create object instance testcase of TB_TESTCASE;
+  testcase.init( number:testnumber, label:"waveform" );
+  create object instance wave of TB_WAVE;
+  relate wave to testcase across R1;
+
+else
+  // Returning only the number of tests.
+end if;
+
+// Return the total number of tests.
+return 6;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("b7253fa5-0fc7-4530-bf64-7f17360013b6",
+	"49350c8c-78be-41c5-b1d7-2140cedcd44a",
+	'variation_number',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("66196da5-ed1c-4fb1-aeaf-6a216090fe01",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff",
+	'init',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'self.number = param.number;
+self.label = param.label;
+self.started = false;
+self.finished = false;
+self.passed = false;',
+	1,
+	'',
+	"49350c8c-78be-41c5-b1d7-2140cedcd44a");
+INSERT INTO O_TPARM
+	VALUES ("6af4b7ff-446b-4cda-af93-3e988ab4ac77",
+	"66196da5-ed1c-4fb1-aeaf-6a216090fe01",
+	'number',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("1756ce79-3d13-45a2-9770-bc7fbd83da24",
+	"66196da5-ed1c-4fb1-aeaf-6a216090fe01",
+	'label',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"6af4b7ff-446b-4cda-af93-3e988ab4ac77",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("fcbe7f09-ea08-422e-8bd8-438d4c0ca1e5",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_BATTR
+	VALUES ("fcbe7f09-ea08-422e-8bd8-438d4c0ca1e5",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_ATTR
+	VALUES ("fcbe7f09-ea08-422e-8bd8-438d4c0ca1e5",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff",
+	"1c5ce571-949d-496d-a877-d834f49aca3d",
+	'label',
+	'',
+	'',
+	'label',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1c5ce571-949d-496d-a877-d834f49aca3d",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_BATTR
+	VALUES ("1c5ce571-949d-496d-a877-d834f49aca3d",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_ATTR
+	VALUES ("1c5ce571-949d-496d-a877-d834f49aca3d",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff",
+	"f7008e39-6a21-4e68-802b-89fabd8c99a0",
+	'number',
+	'',
+	'',
+	'number',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("3e6bd33d-175f-4a18-918d-e0c65dbad7e5",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_BATTR
+	VALUES ("3e6bd33d-175f-4a18-918d-e0c65dbad7e5",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_ATTR
+	VALUES ("3e6bd33d-175f-4a18-918d-e0c65dbad7e5",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff",
+	"fcbe7f09-ea08-422e-8bd8-438d4c0ca1e5",
+	'started',
+	'',
+	'',
+	'started',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("64c8225a-c0fd-4bfd-8568-9f9cfce5eb62",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_BATTR
+	VALUES ("64c8225a-c0fd-4bfd-8568-9f9cfce5eb62",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_ATTR
+	VALUES ("64c8225a-c0fd-4bfd-8568-9f9cfce5eb62",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff",
+	"3e6bd33d-175f-4a18-918d-e0c65dbad7e5",
+	'finished',
+	'',
+	'',
+	'finished',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("95bf7340-cc82-4187-9ce6-4e41a272ca49",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_BATTR
+	VALUES ("95bf7340-cc82-4187-9ce6-4e41a272ca49",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_ATTR
+	VALUES ("95bf7340-cc82-4187-9ce6-4e41a272ca49",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff",
+	"64c8225a-c0fd-4bfd-8568-9f9cfce5eb62",
+	'passed',
+	'',
+	'',
+	'passed',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("f7008e39-6a21-4e68-802b-89fabd8c99a0",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_BATTR
+	VALUES ("f7008e39-6a21-4e68-802b-89fabd8c99a0",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_ATTR
+	VALUES ("f7008e39-6a21-4e68-802b-89fabd8c99a0",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff",
+	"00000000-0000-0000-0000-000000000000",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_OIDA
+	VALUES ("1c5ce571-949d-496d-a877-d834f49aca3d",
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff",
+	0,
+	'number');
+INSERT INTO O_ID
+	VALUES (1,
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO O_ID
+	VALUES (2,
+	"7c578315-7b6b-4436-b5a1-45adbb6595ff");
+INSERT INTO PE_PE
+	VALUES ("7c578315-7b6b-4436-b5a1-45adbb6595ff",
+	1,
+	"e7cb00bb-c6d6-4a7e-bb19-dc97bee6c7e5",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("e7cb00bb-c6d6-4a7e-bb19-dc97bee6c7e5",
+	"00000000-0000-0000-0000-000000000000",
+	"1cd11447-ff04-4409-87f9-a593ed6d6cf6",
+	'classes',
+	'',
+	0,
+	'../classes.xtuml');

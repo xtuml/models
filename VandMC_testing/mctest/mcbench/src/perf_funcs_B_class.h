@@ -4,7 +4,7 @@
  * Class:       b  (B)
  * Component:   perf_funcs
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef PERF_FUNCS_B_CLASS_H
@@ -22,7 +22,6 @@ struct perf_funcs_B {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
   i_t bID;  /* * bID */
-
   /* relationship storage */
   perf_funcs_A * A_R1;
 };
@@ -40,14 +39,12 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } perf_funcs_Bevent1;
 extern const Escher_xtUMLEventConstant_t perf_funcs_Bevent1c;
-
 /*
  * union of events targeted towards 'B' state machine
  */
 typedef union {
-  perf_funcs_Bevent1 b11;  
+  perf_funcs_Bevent1 b1_1;  
 } perf_funcs_B_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -63,5 +60,3 @@ extern void perf_funcs_B_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* PERF_FUNCS_B_CLASS_H */
-
-

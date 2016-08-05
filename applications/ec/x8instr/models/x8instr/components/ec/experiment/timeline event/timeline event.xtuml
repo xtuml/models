@@ -1,0 +1,363 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'timeline event',
+	13,
+	'TIMELINEEVENT',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("5277ef1d-ff7d-4920-977b-bebd91de0fe4",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'fire',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one program related by self->PROGRAM[R10];
+if ( not_empty program )
+  program.run();
+else
+select one wave related by self->WAVE[R10];
+if ( not_empty wave )
+  wave.play();
+else
+select one dacq related by self->DACQ[R10];
+if ( not_empty dacq )
+  dacq.run();
+end if;
+end if;
+end if;
+',
+	1,
+	'',
+	"b46181ff-9124-4992-ab86-a31a028930b2");
+INSERT INTO O_TFR
+	VALUES ("c5293b7b-9b85-423f-a4b4-a03e39d5e87e",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'init',
+	'',
+	"773f48ca-eab2-4c19-a20a-09e12caf496e",
+	0,
+	'create object instance timelineevent of TIMELINEEVENT;
+timelineevent.name = param.name;
+timelineevent.offset = param.offset;
+timelineevent.duration = param.duration;
+return timelineevent;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("ec078976-48e9-454f-b608-ac4f352848d3",
+	"c5293b7b-9b85-423f-a4b4-a03e39d5e87e",
+	'offset',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"47a965b1-8231-41f1-81c4-3a3838a296bc",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("a0a39194-59c6-47cc-8ea4-c5f2c4126cb9",
+	"c5293b7b-9b85-423f-a4b4-a03e39d5e87e",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"ec078976-48e9-454f-b608-ac4f352848d3",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("47a965b1-8231-41f1-81c4-3a3838a296bc",
+	"c5293b7b-9b85-423f-a4b4-a03e39d5e87e",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("773f48ca-eab2-4c19-a20a-09e12caf496e",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<timeline event>',
+	'',
+	'',
+	'../experiment.xtuml');
+INSERT INTO O_TFR
+	VALUES ("b46181ff-9124-4992-ab86-a31a028930b2",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Unlink from above.
+select one timeline related by self->TIMELINE[R11];
+if ( not_empty timeline )
+  unrelate self from timeline across R11;
+end if;
+select one timeline related by self->TIMELINE[R14];
+if ( not_empty timeline )
+  unrelate self from timeline across R14;
+end if;
+
+// Unlink and clean up the related subordinate instances.
+select one program related by self->PROGRAM[R10];
+if ( not_empty program )
+  unrelate self from program across R10;
+  program.erase();
+else
+  select one dacq related by self->DACQ[R10];
+if ( not_empty dacq )
+  unrelate self from dacq across R10;
+  dacq.cleanup();
+else
+  select one wave related by self->WAVE[R10];
+if ( not_empty wave )
+  unrelate self from wave across R10;
+  wave.cleanup();
+end if;
+end if;
+end if;
+
+// Clean up my sibling time line event(s).
+select one siblingtimelineevent related by self->TIMELINEEVENT[R12.''follows''];
+unrelate siblingtimelineevent from self across R12.''follows'';
+siblingtimelineevent.cleanup(); // recursive call
+
+delete object instance self;',
+	1,
+	'',
+	"c5293b7b-9b85-423f-a4b4-a03e39d5e87e");
+INSERT INTO O_TFR
+	VALUES ("22836d59-096b-4f34-8a28-09cc640bbf23",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'done',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"5277ef1d-ff7d-4920-977b-bebd91de0fe4");
+INSERT INTO O_TFR
+	VALUES ("839c0064-fda7-449b-b49e-90fbbb916e28",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'add_segment',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'segment = param.segment;
+// Append segment to end of list.
+select one preceding_segment related by self->SEGMENT[R15.''has first''];
+if ( empty preceding_segment )
+  // first segment in list
+  relate self to segment across R15.''has first'';
+else
+  next_segment = preceding_segment;
+  // Find end of list.
+  while ( not_empty next_segment )
+    preceding_segment = next_segment;
+    select one next_segment related by next_segment->SEGMENT[R17.''precedes''];
+  end while;
+  // Link to end of list.
+  relate segment to preceding_segment across R17.''succeeds'';
+end if;
+self.segment_count = self.segment_count + 1;',
+	1,
+	'',
+	"22836d59-096b-4f34-8a28-09cc640bbf23");
+INSERT INTO O_TPARM
+	VALUES ("d49819d6-5e8e-4b9e-b1ac-93b3560ca923",
+	"839c0064-fda7-449b-b49e-90fbbb916e28",
+	'segment',
+	"ddfc22ca-41d9-4c88-b2e8-bf95ecd32b26",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("ddfc22ca-41d9-4c88-b2e8-bf95ecd32b26",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<segment>',
+	'',
+	'',
+	'../experiment.xtuml');
+INSERT INTO O_TFR
+	VALUES ("85f69829-a16f-48be-92cc-77ab56126269",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'next_segment',
+	'',
+	"ddfc22ca-41d9-4c88-b2e8-bf95ecd32b26",
+	1,
+	'/*
+Get the next segment.  If the current segment is not related,
+then we are just starting, so get the first one.
+When the current segment exists, traverse to the next one.
+When done, return a null segment.
+*/
+select one current_segment related by self->SEGMENT[R16.''has current''];
+if ( empty current_segment )
+  // just starting
+  select one first_segment related by self->SEGMENT[R15.''has first''];
+  if ( not_empty first_segment )
+    relate self to first_segment across R16.''has current'';
+    current_segment = first_segment;
+  else
+    TRACE::log( id:1060, flavor:"failure", message:"looking for next when there is no current segment" );
+  end if;
+else
+  // have current, get next
+  select one current_segment related by current_segment->SEGMENT[R17.''precedes''];
+end if;
+return current_segment;',
+	1,
+	'',
+	"839c0064-fda7-449b-b49e-90fbbb916e28");
+INSERT INTO O_TFR
+	VALUES ("8ed2d0ea-ca39-4085-af26-3ff1707b7250",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'clear_segments',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one segment related by self->SEGMENT[R15.''has first''];
+if ( not_empty segment )
+  segment.cleanup();
+end if;',
+	1,
+	'',
+	"85f69829-a16f-48be-92cc-77ab56126269");
+INSERT INTO O_NBATTR
+	VALUES ("f3ae8358-cbc8-4684-8481-3f81d2c873a5",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_BATTR
+	VALUES ("f3ae8358-cbc8-4684-8481-3f81d2c873a5",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_ATTR
+	VALUES ("f3ae8358-cbc8-4684-8481-3f81d2c873a5",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	"f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	'offset',
+	'',
+	'',
+	'offset',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("2ec4ee76-c6f1-4595-b5e0-d1149a6b50e4",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_BATTR
+	VALUES ("2ec4ee76-c6f1-4595-b5e0-d1149a6b50e4",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_ATTR
+	VALUES ("2ec4ee76-c6f1-4595-b5e0-d1149a6b50e4",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	"f3ae8358-cbc8-4684-8481-3f81d2c873a5",
+	'duration',
+	'',
+	'',
+	'duration',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("fe7f27a0-b14c-4b47-b378-1ae562712f6d",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_BATTR
+	VALUES ("fe7f27a0-b14c-4b47-b378-1ae562712f6d",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_ATTR
+	VALUES ("fe7f27a0-b14c-4b47-b378-1ae562712f6d",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	"2ec4ee76-c6f1-4595-b5e0-d1149a6b50e4",
+	'segment_count',
+	'',
+	'',
+	'segment_count',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_BATTR
+	VALUES ("f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_ATTR
+	VALUES ("f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	"00000000-0000-0000-0000-000000000000",
+	'name',
+	'',
+	'',
+	'name',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("a906d06e-4174-495c-9fc1-c3d532af4d15",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_BATTR
+	VALUES ("a906d06e-4174-495c-9fc1-c3d532af4d15",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_ATTR
+	VALUES ("a906d06e-4174-495c-9fc1-c3d532af4d15",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	"97f55514-232d-4a54-9306-c691b6968302",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("97f55514-232d-4a54-9306-c691b6968302",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_BATTR
+	VALUES ("97f55514-232d-4a54-9306-c691b6968302",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_ATTR
+	VALUES ("97f55514-232d-4a54-9306-c691b6968302",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	"fe7f27a0-b14c-4b47-b378-1ae562712f6d",
+	'segment_timer',
+	'',
+	'',
+	'segment_timer',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000f",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_OIDA
+	VALUES ("f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	0,
+	'name');
+INSERT INTO O_ID
+	VALUES (1,
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO O_ID
+	VALUES (2,
+	"641c0663-c7a2-40bf-a386-dcca59439e0e");
+INSERT INTO PE_PE
+	VALUES ("641c0663-c7a2-40bf-a386-dcca59439e0e",
+	1,
+	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'experiment',
+	'',
+	10,
+	'../experiment.xtuml');

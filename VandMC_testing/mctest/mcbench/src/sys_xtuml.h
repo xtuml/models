@@ -3,7 +3,7 @@
  *
  * Description:
  * Here we have the system-level instance create and delete declaration.
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef SYS_XTUML_H
@@ -53,17 +53,21 @@ typedef struct {
   Escher_InstanceIndex_t population;
 } Escher_Extent_t;
 
+Escher_UniqueID_t Escher_ID_factory( void );
 void Escher_SetFactoryInit( const i_t );
 void Escher_CopySet( Escher_ObjectSet_s *,
                 Escher_ObjectSet_s * const );
 void Escher_ClearSet( Escher_ObjectSet_s * );
+Escher_ObjectSet_s *
+Escher_SetAdd( Escher_ObjectSet_s * set1,
+                                 Escher_ObjectSet_s * set2 );
 void Escher_SetInsertElement( Escher_ObjectSet_s *,
                          void * const );
 Escher_SetElement_s *
 Escher_SetInsertBlock( Escher_SetElement_s *,
                        const u1_t *,
-                       const u2_t,
-                       u2_t );
+                       const Escher_size_t,
+                       Escher_size_t );
 /*
  * Calculate address of containoid from address of instance.
  * Here we do some far out pointer arithmetic to determine in
@@ -94,7 +98,7 @@ void Escher_SetRemoveElement( Escher_ObjectSet_s *,
                          const void * const );
 const void * Escher_SetContains( const Escher_ObjectSet_s * const,
                     const void * const );
-u2_t Escher_SetCardinality( const Escher_ObjectSet_s * const );
+Escher_size_t Escher_SetCardinality( const Escher_ObjectSet_s * const );
 bool Escher_SetEquality( Escher_ObjectSet_s * const,
                     Escher_ObjectSet_s * const );
 #define Escher_InitSet( S ) (S)->head = 0
@@ -115,15 +119,15 @@ void * Escher_IteratorNext( Escher_Iterator_s * const );
 
 /* We could easily replace this function declaration with a macro
    that invoked the compiler (C library) supplied strlen.  */
-u2_t Escher_strlen( const c_t * );
+Escher_size_t Escher_strlen( const c_t * );
 
 /* We could easily replace this function declaration with a macro
    that invoked the compiler (C library) supplied memset.  */
-void Escher_memset( void * const, const u1_t, u2_t );
+void Escher_memset( void * const, const u1_t, Escher_size_t );
 
 /* We could easily replace this function declaration with a macro
    that invoked the compiler (C library) supplied memmove.  */
-void Escher_memmove( void * const, const void * const, u2_t );
+void Escher_memmove( void * const, const void * const, Escher_size_t );
 c_t * Escher_strcpy( c_t *, const c_t * );
 c_t * Escher_stradd( const c_t *, const c_t * );
 /* We could easily replace this function declaration with a macro

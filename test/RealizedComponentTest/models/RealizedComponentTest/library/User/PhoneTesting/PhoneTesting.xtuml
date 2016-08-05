@@ -1,0 +1,145 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("b4716237-5891-404d-b4ec-91c48fcd2fe4",
+	"00000000-0000-0000-0000-000000000000",
+	"008a49f5-75ae-4839-bb44-49ed418963ac",
+	'PhoneTesting',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("fa8ab280-8b59-4131-8d72-0724bb6ede85",
+	112,
+	"b4716237-5891-404d-b4ec-91c48fcd2fe4",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'4.1.17',
+	'RealizedComponentTest::library::User::PhoneTesting');
+INSERT INTO DIM_DIA
+	VALUES ("fa8ab280-8b59-4131-8d72-0724bb6ede85",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("00eeca96-e907-490b-b4bb-8f846671def4",
+	"00000000-0000-0000-0000-000000000000",
+	'Calls',
+	'',
+	'send Port2::MakeCall(number:717544);
+send Port2::EndCall();
+send Port2::MakeCall(number:7177076);
+send Port2::EndCall();
+send Port2::EndCall();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("00eeca96-e907-490b-b4bb-8f846671def4",
+	1,
+	"b4716237-5891-404d-b4ec-91c48fcd2fe4",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("cb785430-415d-4c4a-9621-1a5c524d648e",
+	"00000000-0000-0000-0000-000000000000",
+	'SMS',
+	'',
+	'sms = "This is a SMS text";
+Send Port2::SendSms(text: sms);
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("cb785430-415d-4c4a-9621-1a5c524d648e",
+	1,
+	"b4716237-5891-404d-b4ec-91c48fcd2fe4",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("a762edeb-7645-4909-8f24-8cee4a0a48a4",
+	"00000000-0000-0000-0000-000000000000",
+	'HandShake',
+	'',
+	'Send Port5::Ping();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("a762edeb-7645-4909-8f24-8cee4a0a48a4",
+	1,
+	"b4716237-5891-404d-b4ec-91c48fcd2fe4",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("c06be68c-c37e-441c-a2e4-10aa9f5b4e7e",
+	"00000000-0000-0000-0000-000000000000",
+	'Sync',
+	'',
+	'Send Port2::StartSync();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("c06be68c-c37e-441c-a2e4-10aa9f5b4e7e",
+	1,
+	"b4716237-5891-404d-b4ec-91c48fcd2fe4",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("820ca69c-0881-4c1b-b4b3-0f16686ee4e2",
+	"00000000-0000-0000-0000-000000000000",
+	'AddContact',
+	'',
+	'add_status = false;
+Send Port2::AddNewContact(status:add_status);
+if ( add_status)
+ LOG::LogSuccess(message:"done");
+else
+ LOG::LogFailure(message:"failed");
+
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("820ca69c-0881-4c1b-b4b3-0f16686ee4e2",
+	1,
+	"b4716237-5891-404d-b4ec-91c48fcd2fe4",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("b4716237-5891-404d-b4ec-91c48fcd2fe4",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"e185d53c-43a7-48e4-97e4-0b62db280814",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("e185d53c-43a7-48e4-97e4-0b62db280814",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'User',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../User.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("008a49f5-75ae-4839-bb44-49ed418963ac",
+	'RealizedComponentTest',
+	1,
+	'../../../RealizedComponentTest.xtuml');

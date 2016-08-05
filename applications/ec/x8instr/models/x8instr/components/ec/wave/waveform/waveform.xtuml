@@ -1,0 +1,293 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	'waveform',
+	40,
+	'WAVE',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("b345f5a1-b95c-40a0-859e-f690634be4ae",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	'init',
+	'',
+	"45ac1edb-87df-459d-8c77-913b855c087e",
+	0,
+	'create object instance wave of WAVE;
+return wave;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("45ac1edb-87df-459d-8c77-913b855c087e",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<waveform>',
+	'',
+	'',
+	'../wave.xtuml');
+INSERT INTO O_TFR
+	VALUES ("aab148aa-2f58-4b2a-a516-8c5d867ad7e2",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one timelineevent related by self->TIMELINEEVENT[R10];
+if ( not_empty timelineevent )
+  unrelate self from timelineevent across R10;
+end if;
+delete object instance self;',
+	1,
+	'',
+	"b345f5a1-b95c-40a0-859e-f690634be4ae");
+INSERT INTO O_TFR
+	VALUES ("0ca89f9e-dfd1-461c-a194-b79205482ddf",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	'play',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'/*
+Play out the waveform segment by segment.
+*/
+select one timelineevent related by self->TIMELINEEVENT[R10];
+generate TIMELINEEVENT1:play() to timelineevent;',
+	1,
+	'',
+	"aab148aa-2f58-4b2a-a516-8c5d867ad7e2");
+INSERT INTO O_TFR
+	VALUES ("6ffdb004-006b-4db0-b435-1c6c51a53623",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	'PAD',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// PAD (triple-pulse) waveform.
+
+d[ 30 ] = 0;      i = 0;           // init length of array
+
+d[ i ] = 1;       i = i + 1;       // wave name
+d[ i ] = 0;       i = i + 1;       // experiment name
+d[ i ] = 0;       i = i + 1;       // timeline offset base seconds
+d[ i ] = 0;       i = i + 1;       // timeline offset exponent
+d[ i ] = 1400;    i = i + 1;       // timeline duration base seconds
+d[ i ] = -3;      i = i + 1;       // timeline duration exponent
+d[ i ] = 3;       i = i + 1;       // number of segments
+
+d[ i ] = 1;       i = i + 1;       // segment number
+d[ i ] = 200;     i = i + 1;       // period base
+d[ i ] = -3;      i = i + 1;       // exponent
+d[ i ] = 1;       i = i + 1;       // cycles
+d[ i ] = 0;       i = i + 1;       // no branch_offset
+d[ i ] = 1;       i = i + 1;       // length is 1
+d[ i ] = 0;       i = i + 1;       // no DC_offset
+d[ i ] = 1;       i = i + 1;       // 1 data value of 1
+
+d[ i ] = 2;       i = i + 1;       // segment number
+d[ i ] = 800;     i = i + 1;       // period base
+d[ i ] = -3;      i = i + 1;       // exponent
+d[ i ] = 1;       i = i + 1;       // cycles
+d[ i ] = 0;       i = i + 1;       // no branch_offset
+d[ i ] = 1;       i = i + 1;       // length is 1
+d[ i ] = 0;       i = i + 1;       // no DC_offset
+d[ i ] = 2;       i = i + 1;       // 1 data value
+
+d[ i ] = 3;       i = i + 1;       // segment number
+d[ i ] = 400;     i = i + 1;       // period base
+d[ i ] = -3;      i = i + 1;       // exponent
+d[ i ] = 1;       i = i + 1;       // cycles
+d[ i ] = 0;       i = i + 1;       // no branch_offset
+d[ i ] = 1;       i = i + 1;       // length is 1
+d[ i ] = 0;       i = i + 1;       // no DC_offset
+d[ i ] = 3;       i = i + 1;       // 1 data value
+
+WAVE::parse( data:d );',
+	1,
+	'',
+	"0ca89f9e-dfd1-461c-a194-b79205482ddf");
+INSERT INTO O_TFR
+	VALUES ("b1a6b153-e4a5-418a-8c39-5ee73d8c92a2",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	'parse',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'/*
+This routine supports adding a waveform to an existing experiment and timeline
+where the waveform already exists,
+OR adding a waveform to an existing experiment when the waveform does not exist,
+OR adding a waveform when no experiment yet exists.
+*/
+d = param.data;
+i = 0;
+name = STRING::itoa( i:d[i] ); i = i + 1;
+// CDS - HACK for now to have a default name
+if ( d[i-1] == 0 )
+  name = "default";
+end if;
+experimentname = STRING::itoa( i:d[i] ); i = i + 1;
+// CDS - HACK for now to have a default name
+if ( d[i-1] == 0 )
+  experimentname = "default";
+end if;
+base = d[i]; i = i + 1; exponent = d[i]; i = i + 1;
+timeline_offset = TIME::microseconds( base:base, exponent:exponent );
+base = d[i]; i = i + 1; exponent = d[i]; i = i + 1;
+event_duration = TIME::microseconds( base:base, exponent:exponent );
+
+select any wave from instances of WAVE where ( false ); // declare
+select any timelineevent from instances of TIMELINEEVENT where ( false ); // declare
+// Look for given experiment.  Use it or create it.
+// See if timeline event at this offset already exists.  If so, use it.
+select any experiment from instances of EXPERIMENT where ( selected.name == experimentname );
+if ( empty experiment )
+  // Create experiment and timeline.
+  experiment = EXPERIMENT::init( name:experimentname );
+else
+  // experiment already exists, so check for matching wave.
+  select any timelineevent from instances of TIMELINEEVENT where ( ( selected.name == name ) and ( selected.offset == timeline_offset ) );
+  if ( not_empty timelineevent )
+    // Clear off existing segments.
+    timelineevent.clear_segments();
+    // Get the related waveform.
+    select one wave related by timelineevent->WAVE[R10];
+  end if;
+end if;
+// Now we either found an existing wave or we still need to create it.
+if ( empty wave )
+  timelineevent = TIMELINEEVENT::init( name:name, offset:timeline_offset, duration:event_duration );
+  wave = WAVE::init();
+  relate wave to timelineevent across R10;
+  select one timeline related by experiment->TIMELINE[R13.''runs on''];
+  timeline.add( timelineevent:timelineevent );
+end if;
+count = d[ i ]; i = i + 1;
+while ( count > 0 )
+  number = d[i]; i = i + 1;
+  base = d[i]; i = i + 1; exponent = d[i]; i = i + 1;
+  period = TIME::microseconds( base:base, exponent:exponent );
+  cycles = d[i]; i = i + 1;
+  branch_offset = d[i]; i = i + 1;
+  length = d[i]; i = i + 1;
+  segment = SEGMENT::init( number:number, period:period, cycles:cycles, branch_offset:branch_offset, length:length );
+  writing = WRITING::init( DC_offset:d[i] ); i = i + 1;
+  relate writing to segment across R18;
+  relate writing to wave across R40.''writes segment of'';
+  timelineevent.add_segment( segment:segment );
+  select one buffer related by segment->BUFFER[R19];
+  buffer.deposit( data:d[i], length:length );
+  i = i + length;
+  count = count - 1;
+end while;',
+	1,
+	'',
+	"6ffdb004-006b-4db0-b435-1c6c51a53623");
+INSERT INTO O_TPARM
+	VALUES ("f515e7f6-3a46-4af3-a3f7-efa65b465b6a",
+	"b1a6b153-e4a5-418a-8c39-5ee73d8c92a2",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'[256]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (256,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"f515e7f6-3a46-4af3-a3f7-efa65b465b6a",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"5ca0cbe1-62df-4956-a7cc-266ab60cf22f",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_REF
+	VALUES ("b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	0,
+	"f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"5c10e785-cb13-4e96-a052-e5cdc230a4fb",
+	"b93e3bbc-f312-43a5-84cd-0dd8023b15fa",
+	"f51d67c5-d1fa-48fa-9fe8-46976334cd5b",
+	"c03f72d3-0fee-472e-8690-0b0a1e44ace5",
+	"fa50aa4e-98b2-4b2e-b8ba-684723c05627",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'timeline event',
+	'name',
+	'R10');
+INSERT INTO R_RGO_PROXY
+	VALUES ("b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	"5c10e785-cb13-4e96-a052-e5cdc230a4fb",
+	"b93e3bbc-f312-43a5-84cd-0dd8023b15fa",
+	'../../experiment/experiment.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	0,
+	"5c10e785-cb13-4e96-a052-e5cdc230a4fb",
+	"f51d67c5-d1fa-48fa-9fe8-46976334cd5b",
+	'../../experiment/experiment.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("c03f72d3-0fee-472e-8690-0b0a1e44ace5",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	"f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	1,
+	'name');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'../../experiment/timeline event/timeline event.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("c03f72d3-0fee-472e-8690-0b0a1e44ace5",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	"00000000-0000-0000-0000-000000000000",
+	'name',
+	'',
+	'',
+	'name',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
+INSERT INTO O_OIDA
+	VALUES ("c03f72d3-0fee-472e-8690-0b0a1e44ace5",
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	0,
+	'name');
+INSERT INTO O_ID
+	VALUES (1,
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
+INSERT INTO O_ID
+	VALUES (2,
+	"b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd");
+INSERT INTO PE_PE
+	VALUES ("b6ea1a8e-6c18-4c30-a106-1d0b1bde92dd",
+	1,
+	"756e2fa8-d9b5-49f0-9bf0-80f37f535bb5",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("756e2fa8-d9b5-49f0-9bf0-80f37f535bb5",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'wave',
+	'',
+	40,
+	'../wave.xtuml');

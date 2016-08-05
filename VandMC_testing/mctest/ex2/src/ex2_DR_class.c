@@ -4,16 +4,16 @@
  * Class:       Driver  (DR)
  * Component:   ex2
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "ex2_sys_types.h"
-#include "ex2_BR_bridge.h"
 #include "ARCH_bridge.h"
+#include "LOG_bridge.h"
 #include "NVS_bridge.h"
 #include "PERSIST_bridge.h"
-#include "LOG_bridge.h"
 #include "TIM_bridge.h"
+#include "ex2_BR_bridge.h"
 #include "ex2_classes.h"
 
 
@@ -53,7 +53,7 @@ static void ex2_DR_act5( ex2_DR *, const Escher_xtUMLEvent_t * const );
 static void
 ex2_DR_act5( ex2_DR * self, const Escher_xtUMLEvent_t * const event )
 {
-  ex2_TCE * tce=0; 
+  ex2_TCE * tce=0;
   /* SELECT any tce FROM INSTANCES OF TCE */
   tce = (ex2_TCE *) Escher_SetGetAny( &pG_ex2_TCE_extent.active );
   /* IF ( not_empty tce ) */
@@ -64,7 +64,7 @@ ex2_DR_act5( ex2_DR * self, const Escher_xtUMLEvent_t * const event )
     }
     Escher_DeleteInstance( (Escher_iHandle_t) tce, ex2_DOMAIN_ID, ex2_TCE_CLASS_NUMBER );
   }
-  /* LOG::LogInfo( message:'Test Complete' ) */
+  /* LOG::LogInfo( message:Test Complete ) */
   LOG_LogInfo( "Test Complete" );
   /* ::xit(  ) */
   ex2_xit();
@@ -77,10 +77,10 @@ static void ex2_DR_act4( ex2_DR *, const Escher_xtUMLEvent_t * const );
 static void
 ex2_DR_act4( ex2_DR * self, const Escher_xtUMLEvent_t * const event )
 {
-  ex2_TCE * tce=0; 
+  ex2_TCE * tce=0;
   /* SELECT any tce FROM INSTANCES OF TCE */
   tce = (ex2_TCE *) Escher_SetGetAny( &pG_ex2_TCE_extent.active );
-  /* GENERATE TCE3:event with supp data(age:'31', name:'Bob') TO tce */
+  /* GENERATE TCE3:event with supp data(age:31, name:Bob) TO tce */
   { ex2_TCEevent3 * e = (ex2_TCEevent3 *) Escher_NewxtUMLEvent( tce, &ex2_TCEevent3c );
     Escher_strcpy( e->p_age, "31" );    Escher_strcpy( e->p_name, "Bob" );
     Escher_SendEvent( (Escher_xtUMLEvent_t *) e );
@@ -98,7 +98,7 @@ static void ex2_DR_act3( ex2_DR *, const Escher_xtUMLEvent_t * const );
 static void
 ex2_DR_act3( ex2_DR * self, const Escher_xtUMLEvent_t * const event )
 {
-  ex2_TCE * tce=0; 
+  ex2_TCE * tce=0;
   /* SELECT any tce FROM INSTANCES OF TCE */
   tce = (ex2_TCE *) Escher_SetGetAny( &pG_ex2_TCE_extent.active );
   /* GENERATE TCE2:next test() TO tce */
@@ -118,7 +118,7 @@ static void ex2_DR_act1( ex2_DR *, const Escher_xtUMLEvent_t * const );
 static void
 ex2_DR_act1( ex2_DR * self, const Escher_xtUMLEvent_t * const event )
 {
-  ex2_TCE * tce; 
+  ex2_TCE * tce;
   /* CREATE OBJECT INSTANCE tce OF TCE */
   tce = (ex2_TCE *) Escher_CreateInstance( ex2_DOMAIN_ID, ex2_TCE_CLASS_NUMBER );
   tce->tce_id = (Escher_UniqueID_t) tce;

@@ -3,7 +3,7 @@ package test;
 import interfaces.ITestFromProvider;
 import interfaces.ITestToProvider;
 
-import com.mentor.nucleus.bp.core.ComponentInstance_c;
+import org.xtuml.bp.core.ComponentInstance_c;
 
 public class Realized  implements ITestToProvider {
 

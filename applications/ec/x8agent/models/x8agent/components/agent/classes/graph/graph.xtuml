@@ -1,0 +1,84 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("be68f2e7-4c4a-451d-ab06-03a996f79f85",
+	'graph',
+	1,
+	'GRAPH',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("fc96e473-f643-4d30-b1e9-dffe231ec5ce",
+	"be68f2e7-4c4a-451d-ab06-03a996f79f85",
+	'add_segment',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Create and initialize the new segment.
+create object instance segment of SEGMENT;
+segment.starting_value = 0.0;
+segment.ending_value = 0.0;
+segment.rate = 0.0;
+segment.starting_value = 0.0;
+
+select one first_segment related by self->SEGMENT[R2];
+select one last_segment related by self->SEGMENT[R3];
+
+if (empty first_segment)
+  // This is the first segment in the waveform.
+  relate self to segment across R2.''has first'';
+  relate self to segment across R3.''has last'';
+else 
+  unrelate self from last_segment across R3.''has last'';
+  relate self to segment across R3.''has last'';
+  relate last_segment to segment across R4.''succeeds'';
+end if;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("8e7daa07-3344-4f88-b4fe-f731e5200935",
+	"be68f2e7-4c4a-451d-ab06-03a996f79f85",
+	'delete_segment',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	3,
+	'',
+	"fc96e473-f643-4d30-b1e9-dffe231ec5ce");
+INSERT INTO O_TFR
+	VALUES ("09d76fb5-4e59-4f43-8730-892ee10444b8",
+	"be68f2e7-4c4a-451d-ab06-03a996f79f85",
+	'move_segment',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	3,
+	'',
+	"8e7daa07-3344-4f88-b4fe-f731e5200935");
+INSERT INTO O_ID
+	VALUES (0,
+	"be68f2e7-4c4a-451d-ab06-03a996f79f85");
+INSERT INTO O_ID
+	VALUES (1,
+	"be68f2e7-4c4a-451d-ab06-03a996f79f85");
+INSERT INTO O_ID
+	VALUES (2,
+	"be68f2e7-4c4a-451d-ab06-03a996f79f85");
+INSERT INTO PE_PE
+	VALUES ("be68f2e7-4c4a-451d-ab06-03a996f79f85",
+	1,
+	"5ef6060a-d334-46a8-832d-9ee5d5223056",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("5ef6060a-d334-46a8-832d-9ee5d5223056",
+	"00000000-0000-0000-0000-000000000000",
+	"10e70d03-419e-4b62-8d29-9bab166dab95",
+	'classes',
+	'',
+	0,
+	'../classes.xtuml');

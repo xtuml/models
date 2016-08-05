@@ -4,7 +4,7 @@
  * Class:       Test Compound Expressions  (TCE)
  * Component:   ex2
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef EX2_TCE_CLASS_H
@@ -103,12 +103,12 @@ extern const Escher_xtUMLEventConstant_t ex2_TCEevent6c;
  * union of events targeted towards 'TCE' state machine
  */
 typedef union {
-  ex2_TCEevent1 tce11;  
-  ex2_TCEevent2 tce22;  
-  ex2_TCEevent3 tce33;  
-  ex2_TCEevent4 tce44;  
-  ex2_TCEevent5 tce55;  
-  ex2_TCEevent6 tce66;  
+  ex2_TCEevent1 tce1_1;  
+  ex2_TCEevent2 tce2_2;  
+  ex2_TCEevent3 tce3_3;  
+  ex2_TCEevent4 tce4_4;  
+  ex2_TCEevent5 tce5_5;  
+  ex2_TCEevent6 tce6_6;  
 } ex2_TCE_Events_u;
 
 /*

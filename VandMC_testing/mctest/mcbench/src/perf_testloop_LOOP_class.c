@@ -4,10 +4,12 @@
  * Class:       loop  (LOOP)
  * Component:   perf_testloop
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "mcbench_sys_types.h"
+#include "ARCH_bridge.h"
+#include "DELTA_bridge.h"
 #include "TIM_bridge.h"
 #include "perf_testloop_classes.h"
 
@@ -17,12 +19,10 @@
 void
 perf_testloop_LOOP_op_begin_time_measurement( perf_testloop_LOOP * self)
 {
-  Escher_TimeStamp_t a; 
-  /* ASSIGN a = TIM::current_clock() */
-  a = TIM_current_clock();
   /* ASSIGN self.time_delta = 0 */
   self->time_delta = 0;
-
+  /* ASSIGN self.t0 = TIM::current_clock() */
+  self->t0 = TIM_current_clock();
 }
 
 /*
@@ -31,16 +31,12 @@ perf_testloop_LOOP_op_begin_time_measurement( perf_testloop_LOOP * self)
 i_t
 perf_testloop_LOOP_op_end_time_measurement( perf_testloop_LOOP * self)
 {
-  Escher_TimeStamp_t a; 
-  /* ASSIGN a = TIM::current_clock() */
-  a = TIM_current_clock();
-  /* ASSIGN self.time_delta = ( self.time_delta - 0 ) */
-  self->time_delta = ( self->time_delta - 0 );
+  /* ASSIGN self.time_delta = DELTA::timestamp(t0:self.t0, TIM::current_clock()) */
+  self->time_delta = DELTA_timestamp( self->t0, TIM_current_clock() );
   /* RETURN self.time_delta */
-  return self->time_delta;
-
+  {i_t xtumlOALrv = self->time_delta;
+  return xtumlOALrv;}
 }
-
 
 
 /*----------------------------------------------------------------------------
@@ -77,7 +73,7 @@ static void
 perf_testloop_LOOP_act1( perf_testloop_LOOP * self, const Escher_xtUMLEvent_t * const event )
 {
   perf_testloop_LOOPevent5 * rcvd_evt = (perf_testloop_LOOPevent5 *) event;
-  bool b; Escher_xtUMLEvent_t * stop;  /* stop */ Escher_Timer_t * t; 
+  Escher_Timer_t * t;bool b;Escher_xtUMLEvent_t * stop;
   /* ASSIGN self.repetitions = 0 */
   self->repetitions = 0;
   /* ASSIGN self.measured_run_time = 0 */
@@ -96,6 +92,8 @@ perf_testloop_LOOP_act1( perf_testloop_LOOP * self, const Escher_xtUMLEvent_t * 
   stop = Escher_NewxtUMLEvent( (void *) self, &perf_testloop_LOOPevent2c );
   /* ASSIGN t = TIM::timer_start(event_inst:stop, microseconds:( PARAM.duration * 1000000 )) */
   t = TIM_timer_start( (Escher_xtUMLEvent_t *)stop, ( rcvd_evt->p_duration * 1000000 ) );
+  /* ASSIGN b = b */
+  b = b;
 }
 
 /*
@@ -105,7 +103,7 @@ static void perf_testloop_LOOP_act2( perf_testloop_LOOP *, const Escher_xtUMLEve
 static void
 perf_testloop_LOOP_act2( perf_testloop_LOOP * self, const Escher_xtUMLEvent_t * const event )
 {
-  bool b; 
+  bool b;
   /* self.begin_time_measurement() */
   perf_testloop_LOOP_op_begin_time_measurement( self );
   /* ASSIGN b = APP::perftest(count:0, duration:0, phase:2, testnum:self.client_test_number) */
@@ -118,6 +116,8 @@ perf_testloop_LOOP_act2( perf_testloop_LOOP * self, const Escher_xtUMLEvent_t * 
   { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( self, &perf_testloop_LOOPevent1c );
     Escher_SendSelfEvent( e );
   }
+  /* ASSIGN b = b */
+  b = b;
 }
 
 /*
@@ -129,7 +129,7 @@ perf_testloop_LOOP_act3( perf_testloop_LOOP * self, const Escher_xtUMLEvent_t * 
 {
   /* IF ( APP::perftest(count:0, duration:0, phase:3, testnum:self.client_test_number) ) */
   if ( perf_testloop_APP_perftest( 0, 0, 3, self->client_test_number ) ) {
-    perf_testloop_LOOP * loop; 
+    perf_testloop_LOOP * loop;
     /* ASSIGN loop = self */
     loop = self;
     /* GENERATE LOOP1:go() TO loop */
@@ -146,27 +146,26 @@ static void perf_testloop_LOOP_act4( perf_testloop_LOOP *, const Escher_xtUMLEve
 static void
 perf_testloop_LOOP_act4( perf_testloop_LOOP * self, const Escher_xtUMLEvent_t * const event )
 {
-  bool b; 
+  bool b;
   /* ASSIGN b = APP::perftest(count:0, duration:0, phase:4, testnum:self.client_test_number) */
   b = perf_testloop_APP_perftest( 0, 0, 4, self->client_test_number );
   /* ASSIGN b = APP::perftest(count:self.repetitions, duration:self.measured_run_time, phase:5, testnum:self.client_test_number) */
   b = perf_testloop_APP_perftest( self->repetitions, self->measured_run_time, 5, self->client_test_number );
   /* ASSIGN b = APP::perftest(count:0, duration:0, phase:6, testnum:self.client_test_number) */
   b = perf_testloop_APP_perftest( 0, 0, 6, self->client_test_number );
+  /* ASSIGN b = b */
+  b = b;
 }
 
 const Escher_xtUMLEventConstant_t perf_testloop_LOOPevent1c = {
   perf_testloop_DOMAIN_ID, perf_testloop_LOOP_CLASS_NUMBER, PERF_TESTLOOP_LOOPEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t perf_testloop_LOOPevent2c = {
   perf_testloop_DOMAIN_ID, perf_testloop_LOOP_CLASS_NUMBER, PERF_TESTLOOP_LOOPEVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t perf_testloop_LOOPevent5c = {
   perf_testloop_DOMAIN_ID, perf_testloop_LOOP_CLASS_NUMBER, PERF_TESTLOOP_LOOPEVENT5NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -210,7 +209,6 @@ perf_testloop_LOOP_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 4 ) {
@@ -233,5 +231,4 @@ perf_testloop_LOOP_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

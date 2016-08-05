@@ -1,15 +1,13 @@
 /*----------------------------------------------------------------------------
  * File:  ex2_sys_types.h
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *
  *
  * System Name:  
  * System ID:    1
  * Model Compiler Product Information:
  * Product:  
- * Version:  
- * S/N:      
  * System default/colored values:
  * MaxStringLen:  256
  * MaxObjExtent:  0
@@ -19,7 +17,7 @@
  * MaxNonSelfEvents:  0
  * MaxTimers:  0
  * MaxInterleavedBridges:  0
- * MaxInterleavedBridgeDataSize:  0
+ * MaxInterleavedBridgeDataSize:  8
  * CollectionsFlavor:  0
  * ForcePriorityEvents:  FALSE
  * PEIClassCount:  0
@@ -77,7 +75,6 @@ typedef unsigned char bool;
 #define FALSE ( (bool) 0 )
 #define TRUE  ( (bool) (!FALSE) )
 
-
 #define ESCHER_SYS_MAX_STRING_LEN 256
 #define ESCHER_PERSIST_INST_CACHE_DEPTH 128
 #define ESCHER_PERSIST_LINK_CACHE_DEPTH 128
@@ -110,13 +107,14 @@ typedef unsigned long   u4_t;
 typedef          double r_t;
 typedef          float  r4_t;
 typedef          double r8_t;
+typedef /*size_t*/ u4_t Escher_size_t;
 
 /*
  * These are some of the fundamental types used universally.
  */
 typedef u1_t Escher_DomainNumber_t;
 typedef u2_t Escher_ClassNumber_t;
-typedef u2_t Escher_ClassSize_t;
+typedef Escher_size_t Escher_ClassSize_t;
 typedef u2_t Escher_InstanceIndex_t;
 typedef u1_t Escher_StateNumber_t;
 typedef u1_t Escher_EventNumber_t;
@@ -134,6 +132,7 @@ typedef struct {
 } Escher_InstanceBase_t;
 typedef Escher_InstanceBase_t * Escher_iHandle_t;
 typedef Escher_iHandle_t Escher_UniqueID_t;
+typedef void (*Escher_idf)( Escher_iHandle_t ); 
 
 /* Return code type for dispatch of a polymorphic event (see sys_events.h).  */
 typedef u1_t Escher_PolyEventRC_t;
@@ -308,6 +307,7 @@ void Escher_thread_shutdown( void );
 #define SYSTEM_DOMAIN_COUNT 1
 /* xtUML domain identification numbers */
 #define ex2_DOMAIN_ID 0
+#define ex2_DOMAIN_ID_text "ex2"
 #include "ex2_classes.h"
 
 /*----------------------------------------------------------------------------
@@ -373,24 +373,19 @@ void Escher_thread_shutdown( void );
 #endif
 
 /*
- * Transformer invocation start tracing:
+ * Component message start tracing:
  */
-/* To suppress transformer start tracing, uncomment the following macro */
-/* #define XTUML_TRANSFORMER_START_TRACE( obj_kl, tfr_name ) */
+/* To suppress component message start tracing, uncomment the following macro */
+/* #define COMP_MSG_START_TRACE( arg_format, component_number, port_number, message_number, args... ) */
 
-#ifndef XTUML_TRANSFORMER_START_TRACE
-#define XTUML_TRANSFORMER_START_TRACE( obj_kl, tfr_name ) do {   XTUML_SOURCE_PROLOGUE;   printf( "Invocation started: '%s' Transformer '%s'\n", obj_kl, tfr_name );   XTUML_TRACE_FLUSH( 0 ); } while (0)
+#ifndef COMP_MSG_START_TRACE
+#define COMP_MSG_START_TRACE( arg_format, component_number, port_number, message_number, args... ) do {   XTUML_SOURCE_PROLOGUE;   printf( "component %d port %d message %d " arg_format "\n", component_number, port_number, message_number, ## args );   XTUML_TRACE_FLUSH( 0 ); } while (0)
 #endif
 
 /*
- * Transformer invocation complete tracing:
+ * Component message end tracing:
  */
-/* To suppress transformer end tracing, uncomment the following macro */
-/* #define XTUML_TRANSFORMER_END_TRACE( obj_kl, tfr_name ) */
 
-#ifndef XTUML_TRANSFORMER_END_TRACE
-#define XTUML_TRANSFORMER_END_TRACE( obj_kl, tfr_name ) do {   XTUML_SOURCE_PROLOGUE;   printf( "Invocation complete: '%s' Transformer '%s'\n", obj_kl, tfr_name );   XTUML_TRACE_FLUSH( 0 ); } while (0)
-#endif
 
 /*
  * Object Action Language (OAL) statement level tracing:

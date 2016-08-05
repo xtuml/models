@@ -1,0 +1,111 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("6d938093-6b63-4038-86c9-d981b7259dd1",
+	'carousel home',
+	31,
+	'CARHOME',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("acfbc568-d5e9-4396-8a12-35720f8b6cf9",
+	"6d938093-6b63-4038-86c9-d981b7259dd1",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'TRACE::log( id:1002, flavor:"info", message:"loading carousel home" );
+ascmd = param.ascmd;
+create object instance carhome of CARHOME;
+relate carhome to ascmd across R31;
+return 1;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("44ee45d9-1740-404d-a86c-3e2eac873189",
+	"acfbc568-d5e9-4396-8a12-35720f8b6cf9",
+	'ascmd',
+	"0dfa9cf0-faad-45c7-815e-c69d1f6ca5d2",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("0dfa9cf0-faad-45c7-815e-c69d1f6ca5d2",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<autosampler command>',
+	'',
+	'',
+	'../autosampler.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("d0a22448-deaa-4fa0-896b-42423b6dfac0",
+	"acfbc568-d5e9-4396-8a12-35720f8b6cf9",
+	'program',
+	"7ffff356-33a0-4540-9fd8-2c5d08586a4c",
+	0,
+	'',
+	"44ee45d9-1740-404d-a86c-3e2eac873189",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("7ffff356-33a0-4540-9fd8-2c5d08586a4c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../../program/program.xtuml');
+INSERT INTO O_TFR
+	VALUES ("873e6860-3ade-4b91-bc08-d9243f972de6",
+	"6d938093-6b63-4038-86c9-d981b7259dd1",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'TRACE::log( id:1003, flavor:"info", message:"carousel home" );
+select one ascmd related by self->ASCMD[R31];
+generate ascmd.completion_event;
+return false;',
+	1,
+	'',
+	"acfbc568-d5e9-4396-8a12-35720f8b6cf9");
+INSERT INTO O_NBATTR
+	VALUES ("089fa5df-db36-42c9-a3b1-8294c96c9d3c",
+	"6d938093-6b63-4038-86c9-d981b7259dd1");
+INSERT INTO O_BATTR
+	VALUES ("089fa5df-db36-42c9-a3b1-8294c96c9d3c",
+	"6d938093-6b63-4038-86c9-d981b7259dd1");
+INSERT INTO O_ATTR
+	VALUES ("089fa5df-db36-42c9-a3b1-8294c96c9d3c",
+	"6d938093-6b63-4038-86c9-d981b7259dd1",
+	"00000000-0000-0000-0000-000000000000",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"6d938093-6b63-4038-86c9-d981b7259dd1");
+INSERT INTO O_ID
+	VALUES (1,
+	"6d938093-6b63-4038-86c9-d981b7259dd1");
+INSERT INTO O_ID
+	VALUES (2,
+	"6d938093-6b63-4038-86c9-d981b7259dd1");
+INSERT INTO PE_PE
+	VALUES ("6d938093-6b63-4038-86c9-d981b7259dd1",
+	1,
+	"a883bde7-72fb-4da6-a4a4-3cea65b6e63f",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a883bde7-72fb-4da6-a4a4-3cea65b6e63f",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'autosampler',
+	'',
+	30,
+	'../autosampler.xtuml');

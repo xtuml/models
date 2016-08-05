@@ -34,7 +34,7 @@ stringtest_INSTR_start()
 void
 stringtest_init()
 {
-  stringtest_spun * spun2;stringtest_spin * spin1;stringtest_pong * p2;stringtest_ping * p1;stringtest_buffer * b;stringtest_device * d;stringtest_host * h;
+  stringtest_host * h;stringtest_device * d;stringtest_buffer * b;stringtest_ping * p1;stringtest_pong * p2;stringtest_spin * spin1;stringtest_spun * spun2;
   /* LOG::LogInfo( message:starting init ) */
   LOG_LogInfo( "starting init" );
   /* CREATE OBJECT INSTANCE h OF host */
@@ -50,9 +50,9 @@ stringtest_init()
   /* ASSIGN b.cache = ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ */
   Escher_strcpy( b->cache, "ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
   /* RELATE h TO b ACROSS R1 */
-  stringtest_buffer_R1_Link( h, b );
+  stringtest_host_R1_Link( b, h );
   /* RELATE d TO b ACROSS R2 */
-  stringtest_buffer_R2_Link( d, b );
+  stringtest_device_R2_Link( b, d );
   /* GENERATE host1:get(s:d.lower, d:d) TO h */
   { stringtest_hostevent1 * e = (stringtest_hostevent1 *) Escher_NewxtUMLEvent( h, &stringtest_hostevent1c );
     Escher_strcpy( e->p_s, d->lower );    e->p_d = d;

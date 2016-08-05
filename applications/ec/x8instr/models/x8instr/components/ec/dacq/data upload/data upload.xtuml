@@ -1,0 +1,148 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("589ffd62-af53-473a-84bf-e6d1567fe967",
+	'data upload',
+	26,
+	'DATAUPLOAD',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("eef070f7-4925-486b-8c2f-e066a3b0a762",
+	"589ffd62-af53-473a-84bf-e6d1567fe967",
+	'trigger',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'buffer = param.buffer;
+select one dataupload related by buffer->DATAUPLOAD[R24];
+if ( empty dataupload )
+  dataupload = DATAUPLOAD::init( buffer:buffer );
+end if;
+generate DATAUPLOAD1:go( buffer:buffer ) to dataupload;',
+	1,
+	'',
+	"65f49eb4-5473-43f1-bc27-1ddaf471d429");
+INSERT INTO O_TPARM
+	VALUES ("bcd1b692-debc-4cf2-8966-b287e4e516ed",
+	"eef070f7-4925-486b-8c2f-e066a3b0a762",
+	'buffer',
+	"97d11d5b-0019-41e5-8d97-0ee1fd19be7e",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("97d11d5b-0019-41e5-8d97-0ee1fd19be7e",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<buffer>',
+	'',
+	'',
+	'../../experiment/experiment.xtuml');
+INSERT INTO O_TFR
+	VALUES ("783d7afa-b19c-49e9-8a37-8501f255cb48",
+	"589ffd62-af53-473a-84bf-e6d1567fe967",
+	'init',
+	'',
+	"0b79e7e5-8d96-4c96-bddf-629d07984e67",
+	0,
+	'buffer = param.buffer;
+select any dataupload from instances of DATAUPLOAD where ( false );  // declare variable
+select one dacq related by buffer->SEGMENT[R19]->READING[R18]->DACQ[R29];
+create object instance dataupload of DATAUPLOAD;
+relate dataupload to buffer across R24.''drains'';
+dataupload.packet_size = dacq.packet_size;
+return dataupload;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("e98bc5a6-f23b-4d81-b24e-44566136dc1b",
+	"783d7afa-b19c-49e9-8a37-8501f255cb48",
+	'buffer',
+	"97d11d5b-0019-41e5-8d97-0ee1fd19be7e",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("0b79e7e5-8d96-4c96-bddf-629d07984e67",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<data upload>',
+	'',
+	'',
+	'../dacq.xtuml');
+INSERT INTO O_TFR
+	VALUES ("65f49eb4-5473-43f1-bc27-1ddaf471d429",
+	"589ffd62-af53-473a-84bf-e6d1567fe967",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one buffer related by self->BUFFER[R24];
+if ( not_empty buffer )
+  //unrelate self from buffer across R24;
+end if;
+delete object instance self;',
+	1,
+	'',
+	"783d7afa-b19c-49e9-8a37-8501f255cb48");
+INSERT INTO O_NBATTR
+	VALUES ("d64fb409-170d-4cec-ae7a-9dbbf6b928b4",
+	"589ffd62-af53-473a-84bf-e6d1567fe967");
+INSERT INTO O_BATTR
+	VALUES ("d64fb409-170d-4cec-ae7a-9dbbf6b928b4",
+	"589ffd62-af53-473a-84bf-e6d1567fe967");
+INSERT INTO O_ATTR
+	VALUES ("d64fb409-170d-4cec-ae7a-9dbbf6b928b4",
+	"589ffd62-af53-473a-84bf-e6d1567fe967",
+	"00000000-0000-0000-0000-000000000000",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("91a9516b-b97e-45a0-9bb7-f18058f483e6",
+	"589ffd62-af53-473a-84bf-e6d1567fe967");
+INSERT INTO O_BATTR
+	VALUES ("91a9516b-b97e-45a0-9bb7-f18058f483e6",
+	"589ffd62-af53-473a-84bf-e6d1567fe967");
+INSERT INTO O_ATTR
+	VALUES ("91a9516b-b97e-45a0-9bb7-f18058f483e6",
+	"589ffd62-af53-473a-84bf-e6d1567fe967",
+	"d64fb409-170d-4cec-ae7a-9dbbf6b928b4",
+	'packet_size',
+	'',
+	'',
+	'packet_size',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"589ffd62-af53-473a-84bf-e6d1567fe967");
+INSERT INTO O_ID
+	VALUES (1,
+	"589ffd62-af53-473a-84bf-e6d1567fe967");
+INSERT INTO O_ID
+	VALUES (2,
+	"589ffd62-af53-473a-84bf-e6d1567fe967");
+INSERT INTO PE_PE
+	VALUES ("589ffd62-af53-473a-84bf-e6d1567fe967",
+	1,
+	"000b3762-5fb2-4ede-9ae7-28b6ae9c7aa1",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("000b3762-5fb2-4ede-9ae7-28b6ae9c7aa1",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'dacq',
+	'',
+	20,
+	'../dacq.xtuml');
