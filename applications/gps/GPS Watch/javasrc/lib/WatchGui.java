@@ -20,15 +20,44 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
-import uidatatypes.Unit;
-
 public class WatchGui extends JFrame {
 
 	public static final long serialVersionUID = 0;
 	
 	public static final int LARGE_Y = 355;
 	public static final int SMALL_Y = 295;
+	public static final int INDICATOR_Y = SMALL_Y + ((LARGE_Y - SMALL_Y) / 2);
 	
+	public static final String[] UNIT_LABELS = new String[] {
+		  "km", 
+		  "meters",
+		  "min/km",
+		  "km/h",
+		  "miles",
+		  "yds",
+		  "ft",
+		  "min/mile",
+		  "mph",
+		  "bpm",
+		  "laps"
+	};
+	public static final int UNIT_KM           = 0;
+	public static final int UNIT_METERS       = 1;
+	public static final int UNIT_MIN_PER_KM   = 2;
+	public static final int UNIT_KM_PER_HOUR  = 3;
+	public static final int UNIT_MILES        = 4;
+	public static final int UNIT_YDS          = 5;
+	public static final int UNIT_FT           = 6;
+	public static final int UNIT_MIN_PER_MILE = 7;
+	public static final int UNIT_MPH          = 8;
+	public static final int UNIT_BPM          = 9;
+	public static final int UNIT_LAPS         = 10;
+	
+	public static final int INDICATOR_BLANK   = 0;
+	public static final int INDICATOR_DOWN    = 1;
+	public static final int INDICATOR_FLAT    = 2;
+	public static final int INDICATOR_UP      = 3;
+
 	private WatchGui.ApplicationConnection server;
 	private JPanel holdAll = new JPanel();
 
@@ -46,6 +75,10 @@ public class WatchGui extends JFrame {
 	protected ImageIcon startStopPressed;
 	protected ImageIcon smallSeparator;
 	protected ImageIcon largeDots;
+	protected ImageIcon upArrow;
+	protected ImageIcon downArrow;
+	protected ImageIcon flat;
+	protected ImageIcon blank;
 	protected ImageIcon smallDigit[] = new ImageIcon[10];
 	protected ImageIcon largeDigit[] = new ImageIcon[10];
 	
@@ -58,6 +91,7 @@ public class WatchGui extends JFrame {
 	private JLabel smallSeparatorLabel = new JLabel();
 	private JLabel largeDotsLabel = new JLabel();
 	private JLabel unitsLabel     = new JLabel();
+	private JLabel indicatorLabel = new JLabel();
 	
 	private JLabel[] smallDigitLabel = new JLabel[4];
 	private JLabel[] largeDigitLabel = new JLabel[4];
@@ -84,8 +118,12 @@ public class WatchGui extends JFrame {
 		lapResetPressed  = createStandaloneImageIcon("lib/img/lap_reset_pressed.png");
 		startStopHover   = createStandaloneImageIcon("lib/img/start_stop_hover.png");
 		startStopPressed = createStandaloneImageIcon("lib/img/start_stop_pressed.png");
-		smallSeparator        = createStandaloneImageIcon("lib/img/dots_small.png");
+		smallSeparator   = createStandaloneImageIcon("lib/img/dots_small.png");
 		largeDots        = createStandaloneImageIcon("lib/img/dots_large.png");
+		upArrow          = createStandaloneImageIcon("lib/img/up.png");
+		downArrow        = createStandaloneImageIcon("lib/img/down.png");
+		blank            = createStandaloneImageIcon("lib/img/blank.png");
+		flat             = createStandaloneImageIcon("lib/img/flat.png");
 		for (int i = 0; i < largeDigit.length; i++) {
 			largeDigit[i] = createStandaloneImageIcon("lib/img/" + i + "_large.png");
 			smallDigit[i] = createStandaloneImageIcon("lib/img/" + i + "_small.png");
@@ -148,6 +186,9 @@ public class WatchGui extends JFrame {
 		largeDotsLabel.setBounds(242, LARGE_Y + 28, 13, 35);
 		largeDotsLabel.setIcon(largeDots);
 		
+		indicatorLabel.setBounds(120, INDICATOR_Y, 26, 51);
+		indicatorLabel.setIcon(blank);
+		
 		unitsLabel.setText("");
 		unitsLabel.setBounds(275, SMALL_Y + 28, 100, 25);
 		unitsLabel.setForeground(Color.DARK_GRAY);
@@ -163,6 +204,7 @@ public class WatchGui extends JFrame {
 		pane.add(smallSeparatorLabel, JLayeredPane.POPUP_LAYER);
 		pane.add(largeDotsLabel, JLayeredPane.POPUP_LAYER);
 		pane.add(unitsLabel,     JLayeredPane.POPUP_LAYER);
+		pane.add(indicatorLabel, JLayeredPane.POPUP_LAYER);
 		
 		for (int i = 0; i < largeDigitLabel.length; i++) {
 			smallDigitLabel[i] = new JLabel();
@@ -238,35 +280,53 @@ public class WatchGui extends JFrame {
 		setSmallDigit(2, sec / 10);
 		setSmallDigit(3, sec % 10);
 	}
-	public void setData(float value, Unit unit) {
+	public void setData(float value, int unit) {
 		switch (unit) {
 		
-		case km:
-		case miles:
-		case kmPerHour:
-		case mph:
+		case UNIT_KM:
+		case UNIT_MILES:		
+		case UNIT_KM_PER_HOUR:
+		case UNIT_MPH:
 			setFloatingPointValue(value);
 			showSeparator(true);
 			break;
-
-		case meters:
-		case yards:
-		case feet:
-		case bpm:
-		case laps:
+	
+		case UNIT_METERS:
+		case UNIT_YDS:
+		case UNIT_FT:
+		case UNIT_BPM:
+		case UNIT_LAPS:
 			setDiscreteValue(value);
 			showSeparator(false);
 			break;
-
-		case minPerKm:
-		case minPerMile:
+	
+		case UNIT_MIN_PER_KM:
+		case UNIT_MIN_PER_MILE:
 			setTimex(value);
 			showSeparator(true);
 			break;
 		default:
 			break;
 		}
-		setUnit(unit.toString());
+		setUnit(UNIT_LABELS[unit]);
+	}
+	public void setIndicator(int value){
+		switch (value) {
+			
+		case INDICATOR_DOWN:
+			indicatorLabel.setIcon(downArrow);
+			break;
+		case INDICATOR_FLAT:
+			indicatorLabel.setIcon(flat);
+			break;
+		case INDICATOR_UP:
+			indicatorLabel.setIcon(upArrow);
+			break;
+		case INDICATOR_BLANK:
+			indicatorLabel.setIcon(blank);
+		default:
+			break;
+		}
 	}
 	
 	/**
@@ -405,6 +465,15 @@ public class WatchGui extends JFrame {
 								}
 							};
 							break;
+						case SignalData.SIGNAL_NO_SET_INDICATOR:
+							data = new SetIndicator() {
+								public static final long serialVersionUID = 0;
+								@Override
+								public void run() {
+									setIndicator(value);
+								}
+							};
+							break;
 						default:
 							break;
 						}
@@ -425,7 +494,7 @@ public class WatchGui extends JFrame {
 				try {
 					connection.close();
 					setTime(0);
-					setData(0f, Unit.km);
+					setData(0f, 0);
 				} catch (IOException ioException){
 					ioException.printStackTrace();
 				}
