@@ -3,8 +3,8 @@ domain UI is
   object TestCase;
   object UI;
 
-  public type Unit is enum ( Blank, Down, Flat, Up );
-  public type Indicator is enum ( km, meters, minPerKm, kmPerHour, miles, yards, feet, minPerMile, mph, bpm, laps );
+  public type Indicator is enum ( Blank, Down, Flat, Up );
+  public type Unit is enum ( km, meters, minPerKm, kmPerHour, miles, yards, feet, minPerMile, mph, bpm, laps );
 
   private service createGoals_1 ();
   private service init ();
@@ -45,6 +45,10 @@ domain UI is
     event tcstart( iterations : in integer );
     event tcfinish();
     transition is
+      Non_Existent (
+        tcdelay => Cannot_Happen,
+        tcstart => Cannot_Happen,
+        tcfinish => Cannot_Happen ); 
       pressStartStop (
         tcdelay => pressStartStop,
         tcstart => cannot_happen,

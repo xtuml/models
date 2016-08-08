@@ -119,6 +119,9 @@ domain Tracking is
     event refresh();
 
     transition is
+      Non_Existent (
+        modeChange => Cannot_Happen,
+        refresh => Cannot_Happen );
       displayDistance (
         modeChange => displaySpeed,
         refresh => displayDistance );
@@ -195,6 +198,10 @@ domain Tracking is
     event tick();
 
     transition is
+      Non_Existent (
+        startStopPressed => Cannot_Happen,
+        lapResetPressed => Cannot_Happen,
+        tick => Cannot_Happen );
       stopped (
         startStopPressed => running,
         lapResetPressed => Ignore,
@@ -221,7 +228,7 @@ domain Tracking is
     public instance service calculateStart ();
     public instance function evaluateAchievement () return GoalDisposition;
     public instance service evaluateCompletion ();
-    public  service nextGoal ();
+    public service nextGoal ();
 
     state Executing();
     state Completed();
@@ -231,6 +238,10 @@ domain Tracking is
     event Pause();
 
     transition is
+      Non_Existent (
+        Completed => Cannot_Happen,
+        Evaluate => Cannot_Happen,
+        Pause => Cannot_Happen );
       Executing (
         Completed => Completed,
         Evaluate => Executing,

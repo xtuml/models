@@ -270,9 +270,9 @@ domain SAC is
     event heartbeat_timeout_expired ();
 
     transition is
-      Non_Existant (            user_logged_on            => Ignore,
-                                session_timeout_reached   => Ignore,
-                                heartbeat_timeout_expired => Ignore);
+      Non_Existant (            user_logged_on            => Cannot_Happen,
+                                session_timeout_reached   => Cannot_Happen,
+                                heartbeat_timeout_expired => Cannot_Happen);
       Created (                 user_logged_on            => Session_Established,
                                 session_timeout_reached   => Ignore,
                                 heartbeat_timeout_expired => Ignore);
