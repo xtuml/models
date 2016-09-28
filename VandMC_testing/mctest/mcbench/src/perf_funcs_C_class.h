@@ -4,7 +4,7 @@
  * Class:       c  (C)
  * Component:   perf_funcs
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef PERF_FUNCS_C_CLASS_H
@@ -22,13 +22,11 @@ struct perf_funcs_C {
 
   /* application analysis class attributes */
   i_t cID;  /* * cID */
-
   /* relationship storage */
   Escher_ObjectSet_s D_R2;
 };
 
 #define perf_funcs_D_R2_From_C( C ) ( &((C)->D_R2) )
-
 
 #define perf_funcs_C_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_perf_funcs_C_extent;
@@ -38,5 +36,3 @@ extern Escher_Extent_t pG_perf_funcs_C_extent;
 #endif
 
 #endif  /* PERF_FUNCS_C_CLASS_H */
-
-

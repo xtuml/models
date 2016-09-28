@@ -4,7 +4,7 @@
  * Class:       a  (A)
  * Component:   perf_funcs
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef PERF_FUNCS_A_CLASS_H
@@ -24,15 +24,12 @@ struct perf_funcs_A {
   i_t ID;  /* * ID */
   i_t odometer;  /* - odometer */
   i_t bID;  /* - bID (R1) */
-
   /* relationship storage */
   perf_funcs_B * B_R1;
 };
-void perf_funcs_A_op_generate_ignored_event_to_self( perf_funcs_A *, i_t );
-
+void perf_funcs_A_op_generate_ignored_event_to_self( perf_funcs_A *, const i_t );
 void perf_funcs_A_R1_Link( perf_funcs_B *, perf_funcs_A * );
 void perf_funcs_A_R1_Unlink( perf_funcs_B *, perf_funcs_A * );
-
 
 #define perf_funcs_A_MAX_EXTENT_SIZE 40000
 extern Escher_Extent_t pG_perf_funcs_A_extent;
@@ -45,7 +42,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } perf_funcs_Aevent1;
 extern const Escher_xtUMLEventConstant_t perf_funcs_Aevent1c;
-
 /*
  * instance event:  A2:'e2'
  */
@@ -54,7 +50,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } perf_funcs_Aevent2;
 extern const Escher_xtUMLEventConstant_t perf_funcs_Aevent2c;
-
 /*
  * instance event:  A3:'stop'
  */
@@ -63,16 +58,14 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } perf_funcs_Aevent3;
 extern const Escher_xtUMLEventConstant_t perf_funcs_Aevent3c;
-
 /*
  * union of events targeted towards 'A' state machine
  */
 typedef union {
-  perf_funcs_Aevent1 a11;  
-  perf_funcs_Aevent2 a22;  
-  perf_funcs_Aevent3 a33;  
+  perf_funcs_Aevent1 a1_1;  
+  perf_funcs_Aevent2 a2_2;  
+  perf_funcs_Aevent3 a3_3;  
 } perf_funcs_A_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -91,5 +84,3 @@ extern void perf_funcs_A_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* PERF_FUNCS_A_CLASS_H */
-
-

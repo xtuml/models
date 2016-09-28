@@ -4,12 +4,13 @@
  * Class:       a  (A)
  * Component:   perf_funcs
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "mcbench_sys_types.h"
+#include "ARCH_bridge.h"
+#include "DELTA_bridge.h"
 #include "TIM_bridge.h"
-#include "perf_funcs_ARCH_bridge.h"
 #include "perf_funcs_CBENCHMARK_bridge.h"
 #include "perf_funcs_classes.h"
 
@@ -17,9 +18,9 @@
  * instance operation:  generate_ignored_event_to_self
  */
 void
-perf_funcs_A_op_generate_ignored_event_to_self( perf_funcs_A * self, i_t p_count)
+perf_funcs_A_op_generate_ignored_event_to_self( perf_funcs_A * self, const i_t p_count )
 {
-  i_t i; 
+  i_t i;
   /* ASSIGN i = PARAM.count */
   i = p_count;
   /* WHILE ( ( 0 < i ) ) */
@@ -31,9 +32,7 @@ perf_funcs_A_op_generate_ignored_event_to_self( perf_funcs_A * self, i_t p_count
     /* ASSIGN i = ( i - 1 ) */
     i = ( i - 1 );
   }
-
 }
-
 
 /*
  * RELATE B TO A ACROSS R1
@@ -64,7 +63,6 @@ perf_funcs_A_R1_Unlink( perf_funcs_B * part, perf_funcs_A * form )
   form->B_R1 = 0;
   part->A_R1 = 0;
 }
-
 
 /*----------------------------------------------------------------------------
  * Operation action methods implementation for the following class:
@@ -99,10 +97,9 @@ static void perf_funcs_A_act1( perf_funcs_A *, const Escher_xtUMLEvent_t * const
 static void
 perf_funcs_A_act1( perf_funcs_A * self, const Escher_xtUMLEvent_t * const event )
 {
-  perf_funcs_B * b = 0; /* b (B) */
- 
+  perf_funcs_B * b=0;
   /* SELECT one b RELATED BY self->B[R1] */
-  b = self->B_R1;
+  b = ( 0 != self ) ? self->B_R1 : 0;
   /* GENERATE B1:e1() TO b */
   { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( b, &perf_funcs_Bevent1c );
     Escher_SendEvent( e );
@@ -123,15 +120,12 @@ perf_funcs_A_act2( perf_funcs_A * self, const Escher_xtUMLEvent_t * const event 
 const Escher_xtUMLEventConstant_t perf_funcs_Aevent1c = {
   perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER, PERF_FUNCS_AEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t perf_funcs_Aevent2c = {
   perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER, PERF_FUNCS_AEVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t perf_funcs_Aevent3c = {
   perf_funcs_DOMAIN_ID, perf_funcs_A_CLASS_NUMBER, PERF_FUNCS_AEVENT3NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -169,7 +163,6 @@ perf_funcs_A_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 2 ) {
@@ -192,5 +185,4 @@ perf_funcs_A_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

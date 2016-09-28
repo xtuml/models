@@ -24,10 +24,10 @@ domain HeartRateMonitor is
       idle (
         timeout => Ignore,
         registerListener => monitoring,
-        unregisterListener => cannot_happen );
+        unregisterListener => Cannot_Happen );
       monitoring (
         timeout => monitoring,
-        registerListener => cannot_happen,
+        registerListener => Cannot_Happen,
         unregisterListener => idle );
     end transition;
   end object;

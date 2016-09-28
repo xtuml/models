@@ -4,10 +4,13 @@
  * UML Component Port Messages
  * Component/Module Name:  perf_testloop
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "mcbench_sys_types.h"
+#include "perf_testloop.h"
+#include "DELTA_bridge.h"
+#include "ARCH_bridge.h"
 #include "TIM_bridge.h"
 #include "perf_funcs.h"
 #include "perf_testloop_classes.h"
@@ -15,25 +18,14 @@
 /*
  * Interface:  benchif
  * Required Port:  APP
- * From Provider Message:  runtest
- */
-void
-perf_testloop_APP_runtest( i_t p_duration, i_t p_testnum)
-{
-  /* ::runtest( duration:PARAM.duration, testnum:PARAM.testnum ) */
-  perf_testloop_runtest( p_duration, p_testnum );
-}
-
-/*
- * Interface:  benchif
- * Required Port:  APP
  * From Provider Message:  bridge_integer_integer
  */
 i_t
-perf_testloop_APP_bridge_integer_integer( i_t p_i)
+perf_testloop_APP_bridge_integer_integer( const i_t p_i )
 {
   /* RETURN PARAM.i */
-  return p_i;
+  {i_t xtumlOALrv = p_i;
+  return xtumlOALrv;}
 }
 
 /*
@@ -42,9 +34,9 @@ perf_testloop_APP_bridge_integer_integer( i_t p_i)
  * From Provider Message:  bridge_void_integer
  */
 void
-perf_testloop_APP_bridge_void_integer( i_t p_i)
+perf_testloop_APP_bridge_void_integer( const i_t p_i )
 {
-  i_t i; 
+  i_t i;
   /* ASSIGN i = PARAM.i */
   i = p_i;
 }
@@ -65,23 +57,62 @@ perf_testloop_APP_bridge_void_void()
  * To Provider Message:  perftest
  */
 bool
-perf_testloop_APP_perftest( i_t p_count, i_t p_duration, i_t p_phase, i_t p_testnum)
+perf_testloop_APP_perftest( const i_t p_count, const i_t p_duration, const i_t p_phase, const i_t p_testnum )
 {
 return   perf_funcs_TESTLOOP_perftest(  p_count, p_duration, p_phase, p_testnum );
 }
 
 /*
+ * Interface:  benchif
+ * Required Port:  APP
+ * From Provider Message:  runtest
+ */
+void
+perf_testloop_APP_runtest( const i_t p_duration, const i_t p_testnum )
+{
+  /* ::runtest( duration:PARAM.duration, testnum:PARAM.testnum ) */
+  perf_testloop_runtest( p_duration, p_testnum );
+}
+/*
  * UML Domain Functions (Synchronous Services)
  */
 
+/*
+ * Domain Function:  bridge_integer_integer
+ */
+i_t
+perf_testloop_bridge_integer_integer( const i_t p_i )
+{
+  /* RETURN PARAM.i */
+  {i_t xtumlOALrv = p_i;
+  return xtumlOALrv;}
+}
+
+/*
+ * Domain Function:  bridge_void_integer
+ */
+void
+perf_testloop_bridge_void_integer( const i_t p_i )
+{
+
+}
+
+/*
+ * Domain Function:  bridge_void_void
+ */
+void
+perf_testloop_bridge_void_void()
+{
+
+}
 
 /*
  * Domain Function:  runtest
  */
 void
-perf_testloop_runtest( i_t p_duration, i_t p_testnum)
+perf_testloop_runtest( const i_t p_duration, const i_t p_testnum )
 {
-  perf_testloop_LOOP * loop=0; 
+  perf_testloop_LOOP * loop=0;
   /* SELECT any loop FROM INSTANCES OF LOOP */
   loop = (perf_testloop_LOOP *) Escher_SetGetAny( &pG_perf_testloop_LOOP_extent.active );
   /* IF ( empty loop ) */
@@ -94,47 +125,11 @@ perf_testloop_runtest( i_t p_duration, i_t p_testnum)
     e->p_duration = p_duration;    e->p_testnum = p_testnum;
     Escher_SendEvent( (Escher_xtUMLEvent_t *) e );
   }
-
 }
-
-
-/*
- * Domain Function:  bridge_void_void
- */
-void
-perf_testloop_bridge_void_void()
-{
-
-}
-
-
-/*
- * Domain Function:  bridge_void_integer
- */
-void
-perf_testloop_bridge_void_integer( i_t p_i)
-{
-
-}
-
-
-/*
- * Domain Function:  bridge_integer_integer
- */
-i_t
-perf_testloop_bridge_integer_integer( i_t p_i)
-{
-  /* RETURN PARAM.i */
-  return p_i;
-
-}
-
-#if perf_testloop_MAX_CLASS_NUMBERS > 0
 /* xtUML class info (collections, sizes, etc.) */
 Escher_Extent_t * const perf_testloop_class_info[ perf_testloop_MAX_CLASS_NUMBERS ] = {
-  perf_testloop_CLASS_INFO_INIT
+  &pG_perf_testloop_LOOP_extent
 };
-#endif
 
 /*
  * Array of pointers to the class event dispatcher method.

@@ -4,12 +4,13 @@
  * Class:       b  (B)
  * Component:   perf_funcs
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "mcbench_sys_types.h"
+#include "ARCH_bridge.h"
+#include "DELTA_bridge.h"
 #include "TIM_bridge.h"
-#include "perf_funcs_ARCH_bridge.h"
 #include "perf_funcs_CBENCHMARK_bridge.h"
 #include "perf_funcs_classes.h"
 
@@ -41,10 +42,9 @@ static void perf_funcs_B_act1( perf_funcs_B *, const Escher_xtUMLEvent_t * const
 static void
 perf_funcs_B_act1( perf_funcs_B * self, const Escher_xtUMLEvent_t * const event )
 {
-  perf_funcs_A * a = 0; /* a (A) */
- 
+  perf_funcs_A * a=0;
   /* SELECT one a RELATED BY self->A[R1] */
-  a = self->A_R1;
+  a = ( 0 != self ) ? self->A_R1 : 0;
   /* GENERATE A1:e() TO a */
   { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( a, &perf_funcs_Aevent1c );
     Escher_SendEvent( e );
@@ -54,7 +54,6 @@ perf_funcs_B_act1( perf_funcs_B * self, const Escher_xtUMLEvent_t * const event 
 const Escher_xtUMLEventConstant_t perf_funcs_Bevent1c = {
   perf_funcs_DOMAIN_ID, perf_funcs_B_CLASS_NUMBER, PERF_FUNCS_BEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -89,7 +88,6 @@ perf_funcs_B_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 1 ) {
@@ -107,5 +105,4 @@ perf_funcs_B_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 
