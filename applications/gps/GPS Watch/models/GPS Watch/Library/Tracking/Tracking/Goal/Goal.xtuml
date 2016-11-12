@@ -1,0 +1,330 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("c1022670-c44d-401e-bb23-dfcef6084fba",
+	'Goal',
+	9,
+	'Goal',
+	'Each instance represents a particular goal as it is executing.
+This class knows how to evaluate whether the goal is being achieved 
+and whether the goal has completed.',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("8ac30761-d43a-49d9-b7e4-c3ec442ea9f3",
+	"c1022670-c44d-401e-bb23-dfcef6084fba",
+	'create',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// Create and activate an instance of a goal specified by
+//   the goal specification, if it exists, identified by 
+//   the incoming parameter.
+
+// Find the goal specification for this goal, then
+//   create and relate this goal to the specification
+//   and to the singleton workout session.
+select any goalSpec from instances of GoalSpec 
+  where ( selected.sequenceNumber == param.sequenceNumber );
+if ( not empty goalSpec )
+  create object instance goal of Goal;
+  relate goal to goalSpec across R9.''specified by'';
+  select any session from instances of WorkoutSession;  // WorkoutSession is a singleton
+  relate goal to session across R11.''is currently executing within'';
+
+  // Initialize this goal.
+  goal.calculateStart();
+  goal.disposition = GoalDisposition::Increase;
+
+  // Start a timer that periodically causes evaluation of goal achievement.
+  create event instance evaluateEvent of Goal2:Evaluate to goal;
+  goal.evaluationTimer = TIM::timer_start_recurring( event_inst: evaluateEvent, microseconds: evaluationPeriod );
+end if;
+
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("36f92128-c2c3-44e3-bd67-bffb5fdc3e6d",
+	"8ac30761-d43a-49d9-b7e4-c3ec442ea9f3",
+	'sequenceNumber',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'Sequence number of the goal specification for which an instance of a goal should be created.');
+INSERT INTO O_TFR
+	VALUES ("b3215204-3d02-48ba-9794-25ddbc40009c",
+	"c1022670-c44d-401e-bb23-dfcef6084fba",
+	'calculateStart',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Based on the span type for this goal, calculate and
+//   store the value of the start attribute.
+select one goalSpec related by self->GoalSpec[R9.''specified by''];
+if ( goalSpec.spanType == GoalSpan::Time )
+  select one workoutTimer related by 
+    self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
+  self.start = workoutTimer.time;
+elif ( goalSpec.spanType == GoalSpan::Distance )
+  select one session related by self->WorkoutSession[R11.''is currently executing within''];
+  self.start = session.accumulatedDistance;
+else
+  LOG::LogFailure( message: "Goal.calculateStart: Unknown Goal Span Type." );
+end if;',
+	1,
+	'',
+	"8ac30761-d43a-49d9-b7e4-c3ec442ea9f3");
+INSERT INTO O_TFR
+	VALUES ("2b884ff8-637a-468b-a2fa-f96b8ef98b0a",
+	"c1022670-c44d-401e-bb23-dfcef6084fba",
+	'evaluateAchievement',
+	'',
+	"ca91d910-53ec-403c-9551-bfc1a9aa9b73",
+	1,
+	'// Based on the type of goal, determine whether this one is 
+//   currently being achieved and return a value indicating
+//   the disposition of the this goal.    
+
+// Find the related goal specification and workout session for this goal.
+select one goalSpec related by self->GoalSpec[R9.''specified by''];
+select one session related by self->WorkoutSession[R11.''is currently executing within''];
+
+// Based on the goal criteria type, get the appropriate current value
+//   for comparison against the criteria (minimum and maximum).
+currentValue = 0.0;  // Explicit declaration
+if ( goalSpec.criteriaType == GoalCriteria::HeartRate )
+  currentValue = session.currentHeartRate;
+elif ( goalSpec.criteriaType == GoalCriteria::Pace )
+  currentValue = session.currentPace;
+else
+  LOG::LogFailure( message: "Goal.evaluateAchievement: Unknown Goal Criteria Type." );
+end if;
+ 
+// Compare the current value against the criteria to calculate the return value.
+goalDisposition = GoalDisposition::Achieving; 
+if ( currentValue < goalSpec.minimum )
+  goalDisposition = GoalDisposition::Increase;
+elif ( currentValue > goalSpec.maximum )
+  goalDisposition = GoalDisposition::Decrease;
+end if;
+
+// Invert the disposition value to produce a logical, semantic disposition for
+//   goal types, such as pace, that require it.
+if ( goalSpec.criteriaType == GoalCriteria::Pace )
+  if ( goalDisposition == GoalDisposition::Increase )
+    goalDisposition = GoalDisposition::Decrease;
+  elif ( goalDisposition == GoalDisposition::Decrease )
+    goalDisposition = GoalDisposition::Increase;
+  end if;
+end if;
+ 
+return( goalDisposition );',
+	1,
+	'',
+	"b3215204-3d02-48ba-9794-25ddbc40009c");
+INSERT INTO S_DT_PROXY
+	VALUES ("ca91d910-53ec-403c-9551-bfc1a9aa9b73",
+	"00000000-0000-0000-0000-000000000000",
+	'GoalDisposition',
+	'Disposition of a currently executing goal.',
+	'',
+	'../../../../TrackingDataTypes/TrackingDataTypes.xtuml');
+INSERT INTO O_TFR
+	VALUES ("7090ad22-2865-4836-a89f-a46b868d3ac0",
+	"c1022670-c44d-401e-bb23-dfcef6084fba",
+	'evaluateCompletion',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Based on the span type for this goal, determine 
+//  whether it has been completed, update achievement
+//  records as necessary, and advance to the next goal
+//  if appropriate.
+
+select one goalSpec related by self->GoalSpec[R9.''specified by''];
+
+// Based on the span type for the goal, get the elapsed span 
+//   for comparison against the specified span for the goal.
+elapsedSpan = 0.0;  // Explicit declaration
+if ( goalSpec.spanType == GoalSpan::Distance )
+  select one session related by self->WorkoutSession[R11.''is currently executing within''];
+  elapsedSpan = session.accumulatedDistance - self.start;
+elif ( goalSpec.spanType == GoalSpan::Time )
+  select one workoutTimer related by 
+    self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
+  elapsedSpan = workoutTimer.time - self.start;
+else
+  LOG::LogFailure( message: "Goal.evaluateCompletion: Unknown Goal Span Type." );
+end if;
+
+// Compare the current value against the specified span to determine 
+//   whether the execution of this workout goal is complete.
+if ( elapsedSpan >= goalSpec.span )
+  select one openAchievement related by self->Achievement[R14.''has open''];
+  if ( not empty openAchievement )
+    openAchievement.close();
+  end if;
+  generate Goal1:Completed to self;
+end if;
+',
+	1,
+	'',
+	"2b884ff8-637a-468b-a2fa-f96b8ef98b0a");
+INSERT INTO O_TFR
+	VALUES ("902f97d2-b056-4461-89c5-6454f9f253d7",
+	"c1022670-c44d-401e-bb23-dfcef6084fba",
+	'nextGoal',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// Advance to the next goal or start the first one if one
+//   is currently not exectuing.
+
+//  If there is a goal currently executing, notify it that its execution
+//    has completed.
+//  Otherwise, create and start a goal for the first goal specification
+//    if one exists.
+select any session from instances of WorkoutSession;  // WorkoutSession is a singleton.
+if ( not empty session )
+  select one goal related by session->Goal[R11.''is currently executing''];
+  if ( not empty goal )
+    generate Goal1:Completed to goal;
+  else
+    Goal::create( sequenceNumber: GoalSpecOrigin );
+  end if;
+end if;',
+	1,
+	'',
+	"7090ad22-2865-4836-a89f-a46b868d3ac0");
+INSERT INTO O_NBATTR
+	VALUES ("fa9000ac-0495-47fe-bbaf-66bc8f9a4f0a",
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_BATTR
+	VALUES ("fa9000ac-0495-47fe-bbaf-66bc8f9a4f0a",
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_ATTR
+	VALUES ("fa9000ac-0495-47fe-bbaf-66bc8f9a4f0a",
+	"c1022670-c44d-401e-bb23-dfcef6084fba",
+	"7d60ba72-b691-4687-9636-20d33798168c",
+	'disposition',
+	'The disposition of this goal.  See data type descriptions for details.
+This attribute represents the logical or semantic disposition of the goal.
+For example, a disposition indicating the need to increase the value in question
+for a heart-rate goal means that activity should be increased to drive up the 
+heart rate.  Since pace is the inverse of speed, a disposition indicating 
+the need to increase the value in question (pace) means that the user must
+increase speed, causing a lower (faster) pace number.',
+	'',
+	'disposition',
+	0,
+	"ca91d910-53ec-403c-9551-bfc1a9aa9b73",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("7d60ba72-b691-4687-9636-20d33798168c",
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_BATTR
+	VALUES ("7d60ba72-b691-4687-9636-20d33798168c",
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_ATTR
+	VALUES ("7d60ba72-b691-4687-9636-20d33798168c",
+	"c1022670-c44d-401e-bb23-dfcef6084fba",
+	"645a58ca-7e54-4f1b-bb56-64249dab5aaa",
+	'start',
+	'Captures the starting point of the span for this particular goal so 
+that the end of the goal execution period can be determined.  In other
+words, using the value of this attribute together with the span specified
+by the associated goal specification, the goal knows when it is finished.
+
+For distance-based goals, it is expressed as the accumulated distance
+in meters for the associated workout session at the time this goal
+execution commenced.
+
+For time-based goals, it is expressed as the elapsed time in seconds
+for the associated workout session at the time this goal execution
+commenced.',
+	'',
+	'start',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("645a58ca-7e54-4f1b-bb56-64249dab5aaa",
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_BATTR
+	VALUES ("645a58ca-7e54-4f1b-bb56-64249dab5aaa",
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_ATTR
+	VALUES ("645a58ca-7e54-4f1b-bb56-64249dab5aaa",
+	"c1022670-c44d-401e-bb23-dfcef6084fba",
+	"00000000-0000-0000-0000-000000000000",
+	'ID',
+	'An arbitrary identifier.',
+	'',
+	'ID',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("c307e400-f06b-4450-8e3c-94dadad961ff",
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_BATTR
+	VALUES ("c307e400-f06b-4450-8e3c-94dadad961ff",
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_ATTR
+	VALUES ("c307e400-f06b-4450-8e3c-94dadad961ff",
+	"c1022670-c44d-401e-bb23-dfcef6084fba",
+	"0078004b-9cab-4a56-beac-5014d746ad80",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("0078004b-9cab-4a56-beac-5014d746ad80",
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_BATTR
+	VALUES ("0078004b-9cab-4a56-beac-5014d746ad80",
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_ATTR
+	VALUES ("0078004b-9cab-4a56-beac-5014d746ad80",
+	"c1022670-c44d-401e-bb23-dfcef6084fba",
+	"fa9000ac-0495-47fe-bbaf-66bc8f9a4f0a",
+	'evaluationTimer',
+	'Handle for the timer used for periodic evaluation of goal achievement.',
+	'',
+	'evaluationTimer',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000f",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_ID
+	VALUES (1,
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO O_ID
+	VALUES (2,
+	"c1022670-c44d-401e-bb23-dfcef6084fba");
+INSERT INTO PE_PE
+	VALUES ("c1022670-c44d-401e-bb23-dfcef6084fba",
+	1,
+	"a09220a4-d685-4338-83fd-0d42f7c7e308",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a09220a4-d685-4338-83fd-0d42f7c7e308",
+	"00000000-0000-0000-0000-000000000000",
+	"36a41cf7-d411-488d-99fc-74866d4fea39",
+	'Tracking',
+	'',
+	0,
+	'../Tracking.xtuml');

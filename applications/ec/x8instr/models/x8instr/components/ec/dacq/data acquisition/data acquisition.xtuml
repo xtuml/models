@@ -1,0 +1,291 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	'data acquisition',
+	23,
+	'DACQ',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("332bacb7-dd34-443c-8fa1-0b67ce099456",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	'init',
+	'',
+	"6f6d7864-624d-44d1-a38b-a72d60e6c31e",
+	0,
+	'create object instance dacq of DACQ;
+return dacq;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("6f6d7864-624d-44d1-a38b-a72d60e6c31e",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<data acquisition>',
+	'',
+	'',
+	'../dacq.xtuml');
+INSERT INTO O_TFR
+	VALUES ("225412eb-215b-43de-81d9-1a5d17de36ef",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one timelineevent related by self->TIMELINEEVENT[R10];
+if ( not_empty timelineevent )
+  unrelate self from timelineevent across R10;
+end if;
+delete object instance self;',
+	1,
+	'',
+	"332bacb7-dd34-443c-8fa1-0b67ce099456");
+INSERT INTO O_TFR
+	VALUES ("68237f7b-6fb8-4d20-beb3-d19b0c55b871",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one reading related by self->TIMELINEEVENT[R10]->SEGMENT[R15.''has first'']->READING[R18];
+if ( not_empty reading )
+  generate READING1:go() to reading;
+else
+  LOG::LogFailure( message:"no reading when dacq starting" );
+end if;',
+	1,
+	'',
+	"225412eb-215b-43de-81d9-1a5d17de36ef");
+INSERT INTO O_TFR
+	VALUES ("23290c4c-e468-4e24-a68e-e54fac111c98",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	'done',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one timelineevent related by self->TIMELINEEVENT[R10];
+timelineevent.done();',
+	1,
+	'',
+	"68237f7b-6fb8-4d20-beb3-d19b0c55b871");
+INSERT INTO O_TFR
+	VALUES ("e91259f0-496d-441d-a06f-0b02c7eb91bc",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	'parse',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'/*
+This routine supports adding a waveform to an existing experiment and timeline
+where the waveform already exists,
+OR adding a waveform to an existing experiment when the waveform does not exist,
+OR adding a waveform when no experiment yet exists.
+*/
+d = param.data;
+i = 0;
+name = STRING::itoa( i:d[i] ); i = i + 1;
+// CDS - HACK for now to have a default name
+if ( d[i-1] == 0 )
+  name = "default";
+end if;
+experimentname = STRING::itoa( i:d[i] ); i = i + 1;
+// CDS - HACK for now to have a default name
+if ( d[i-1] == 0 )
+  experimentname = "default";
+end if;
+base = d[i]; i = i + 1; exponent = d[i]; i = i + 1;
+timeline_offset = TIME::microseconds( base:base, exponent:exponent );
+base = d[i]; i = i + 1; exponent = d[i]; i = i + 1;
+event_duration = TIME::microseconds( base:base, exponent:exponent );
+
+select any dacq from instances of DACQ where ( false ); // declare
+select any timelineevent from instances of TIMELINEEVENT where ( false ); // declare
+// Look for given experiment.  Use it or create it.
+// See if timeline event at this offset already exists.  If so, use it.
+select any experiment from instances of EXPERIMENT where ( selected.name == experimentname );
+if ( empty experiment )
+  // Create experiment and timeline.
+  experiment = EXPERIMENT::init( name:experimentname );
+else
+  // experiment already exists, so check for matching dacq.
+  select any timelineevent from instances of TIMELINEEVENT where ( ( selected.name == name ) and ( selected.offset == timeline_offset ) );
+  if ( not_empty timelineevent )
+    // Clear off existing segments.
+    timelineevent.clear_segments();
+    // Get the related waveform.
+    select one dacq related by timelineevent->DACQ[R10];
+  end if;
+end if;
+// Now we either found an existing dacq or we still need to create it.
+if ( empty dacq )
+  timelineevent = TIMELINEEVENT::init( name:name, offset:timeline_offset, duration:event_duration );
+  dacq = DACQ::init();
+  relate dacq to timelineevent across R10;
+  select one timeline related by experiment->TIMELINE[R13.''runs on''];
+  timeline.add( timelineevent:timelineevent );
+end if;
+count = d[ i ]; i = i + 1;
+while ( count > 0 )
+  number = d[i]; i = i + 1;
+  base = d[i]; i = i + 1; exponent = d[i]; i = i + 1;
+  period = TIME::microseconds( base:base, exponent:exponent );
+  cycles = d[i]; i = i + 1;
+  branch_offset = d[i]; i = i + 1;
+  length = d[i]; i = i + 1;
+  segment = SEGMENT::init( number:number, period:period, cycles:cycles, branch_offset:branch_offset, length:length );
+  reading = READING::init();
+  relate reading to segment across R18;
+  relate reading to dacq across R29.''acquires segment of'';
+  timelineevent.add_segment( segment:segment );
+  select one buffer related by segment->BUFFER[R19];
+  buffer.deposit( data:d[i], length:length );
+  i = i + length;
+  count = count - 1;
+end while; ',
+	1,
+	'',
+	"23290c4c-e468-4e24-a68e-e54fac111c98");
+INSERT INTO O_TPARM
+	VALUES ("97169f32-0816-465e-a799-f944838acf8f",
+	"e91259f0-496d-441d-a06f-0b02c7eb91bc",
+	'data',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'[256]',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DIM
+	VALUES (256,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"97169f32-0816-465e-a799-f944838acf8f",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"944e3a5d-67ee-4dc5-a514-6734b2ccc321",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("5a3100ce-c5e9-4fa8-a870-0536de97b0f3",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
+INSERT INTO O_BATTR
+	VALUES ("5a3100ce-c5e9-4fa8-a870-0536de97b0f3",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
+INSERT INTO O_ATTR
+	VALUES ("5a3100ce-c5e9-4fa8-a870-0536de97b0f3",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	"934aa5b6-c36d-42c1-8f0b-aefee7eb6977",
+	'packet_size',
+	'',
+	'',
+	'packet_size',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1a0298c1-6cfa-4026-9005-f4bb80dc1ac6",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
+INSERT INTO O_BATTR
+	VALUES ("1a0298c1-6cfa-4026-9005-f4bb80dc1ac6",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
+INSERT INTO O_ATTR
+	VALUES ("1a0298c1-6cfa-4026-9005-f4bb80dc1ac6",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	"5a3100ce-c5e9-4fa8-a870-0536de97b0f3",
+	'reading_count',
+	'',
+	'',
+	'reading_count',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	0,
+	"f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"5c10e785-cb13-4e96-a052-e5cdc230a4fb",
+	"fc0b41fd-0b2b-4f28-8e23-d6fffdbd4e7b",
+	"f51d67c5-d1fa-48fa-9fe8-46976334cd5b",
+	"934aa5b6-c36d-42c1-8f0b-aefee7eb6977",
+	"1b3c34f9-335a-4860-b802-d3870eb06c3b",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'timeline event',
+	'name',
+	'R10');
+INSERT INTO R_RGO_PROXY
+	VALUES ("1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	"5c10e785-cb13-4e96-a052-e5cdc230a4fb",
+	"fc0b41fd-0b2b-4f28-8e23-d6fffdbd4e7b",
+	'../../experiment/experiment.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	0,
+	"5c10e785-cb13-4e96-a052-e5cdc230a4fb",
+	"f51d67c5-d1fa-48fa-9fe8-46976334cd5b",
+	'../../experiment/experiment.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("934aa5b6-c36d-42c1-8f0b-aefee7eb6977",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	"f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	1,
+	'name');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("f18d7c78-fadc-4096-b9bd-acdd613fa72b",
+	"641c0663-c7a2-40bf-a386-dcca59439e0e",
+	'../../experiment/timeline event/timeline event.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("934aa5b6-c36d-42c1-8f0b-aefee7eb6977",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	"00000000-0000-0000-0000-000000000000",
+	'name',
+	'',
+	'',
+	'name',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
+INSERT INTO O_OIDA
+	VALUES ("934aa5b6-c36d-42c1-8f0b-aefee7eb6977",
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	0,
+	'name');
+INSERT INTO O_ID
+	VALUES (1,
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
+INSERT INTO O_ID
+	VALUES (2,
+	"1a5bbdbf-243c-4cb4-9f5d-604501d4a83e");
+INSERT INTO PE_PE
+	VALUES ("1a5bbdbf-243c-4cb4-9f5d-604501d4a83e",
+	1,
+	"000b3762-5fb2-4ede-9ae7-28b6ae9c7aa1",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("000b3762-5fb2-4ede-9ae7-28b6ae9c7aa1",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'dacq',
+	'',
+	20,
+	'../dacq.xtuml');

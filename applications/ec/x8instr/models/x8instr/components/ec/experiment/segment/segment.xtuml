@@ -1,0 +1,301 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	'segment',
+	15,
+	'SEGMENT',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("25309da8-b423-4d33-b4f6-a99e11f67342",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	'init',
+	'',
+	"ddfc22ca-41d9-4c88-b2e8-bf95ecd32b26",
+	0,
+	'create object instance segment of SEGMENT;
+segment.number = param.number;
+segment.period = param.period;
+segment.cycles = param.cycles;
+segment.branch_offset = param.branch_offset;
+segment.length = param.length;
+segment.index = 0;
+segment.current_cycle = 0;
+
+// CDS - I think buffer will give me enough space.
+if ( segment.length > 0 )
+  buffer = BUFFER::init( beginning:0, ending:0 + param.length );
+  relate segment to buffer across R19;
+end if;
+
+return segment;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("bdeb3c88-7816-49f9-a888-e123613c0325",
+	"25309da8-b423-4d33-b4f6-a99e11f67342",
+	'number',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("bb09313e-603b-428f-a9c0-8b93c5573dc7",
+	"25309da8-b423-4d33-b4f6-a99e11f67342",
+	'length',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"e16d727d-8c41-4185-a377-0ef57c30bafd",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("a1536676-adcf-43d4-a5f1-b3a333e85965",
+	"25309da8-b423-4d33-b4f6-a99e11f67342",
+	'cycles',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"4088c3fc-fa6d-49e6-8011-46e3be229eb8",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("4088c3fc-fa6d-49e6-8011-46e3be229eb8",
+	"25309da8-b423-4d33-b4f6-a99e11f67342",
+	'period',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"bdeb3c88-7816-49f9-a888-e123613c0325",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("e16d727d-8c41-4185-a377-0ef57c30bafd",
+	"25309da8-b423-4d33-b4f6-a99e11f67342",
+	'branch_offset',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"a1536676-adcf-43d4-a5f1-b3a333e85965",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("ddfc22ca-41d9-4c88-b2e8-bf95ecd32b26",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<segment>',
+	'',
+	'',
+	'../experiment.xtuml');
+INSERT INTO O_TFR
+	VALUES ("d38b465e-fc9c-407b-9006-3d2fb24a7932",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select one next_segment related by self->SEGMENT[R17.''precedes''];
+if ( not_empty next_segment )
+  // recursively drill down to the end deleting as back out
+  next_segment.cleanup();
+  unrelate self from next_segment across R17.''precedes'';
+end if;
+select one timelineevent related by self->TIMELINEEVENT[R15];
+if ( not_empty timelineevent )
+  unrelate self from timelineevent across R15;
+end if;
+select one timelineevent related by self->TIMELINEEVENT[R16];
+if ( not_empty timelineevent )
+  unrelate self from timelineevent across R16;
+end if;
+delete object instance self;',
+	1,
+	'',
+	"25309da8-b423-4d33-b4f6-a99e11f67342");
+INSERT INTO O_TFR
+	VALUES ("b4537dad-7be7-449d-a65f-83cb2615ce59",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	'play',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'self.index = 0;
+self.current_cycle = 1;
+// CDS - select the subtype and deliver the message through an instance operation
+/*
+create event instance tick of SEGMENT2:tick() to self;
+self.clock = TIM::timer_start_recurring( microseconds:self.period, event_inst:tick );
+*/',
+	1,
+	'',
+	"d38b465e-fc9c-407b-9006-3d2fb24a7932");
+INSERT INTO O_NBATTR
+	VALUES ("504cb939-d3f6-41f6-92cb-6c332ed9d900",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_BATTR
+	VALUES ("504cb939-d3f6-41f6-92cb-6c332ed9d900",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_ATTR
+	VALUES ("504cb939-d3f6-41f6-92cb-6c332ed9d900",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	"22bcb73a-4d2d-4f18-a861-9842b0138593",
+	'length',
+	'',
+	'',
+	'length',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e59189f1-8362-40c5-935c-c256c3f4ff54",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_BATTR
+	VALUES ("e59189f1-8362-40c5-935c-c256c3f4ff54",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_ATTR
+	VALUES ("e59189f1-8362-40c5-935c-c256c3f4ff54",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	"504cb939-d3f6-41f6-92cb-6c332ed9d900",
+	'index',
+	'',
+	'',
+	'index',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("84f32218-879f-404d-b174-f072596834a0",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_BATTR
+	VALUES ("84f32218-879f-404d-b174-f072596834a0",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_ATTR
+	VALUES ("84f32218-879f-404d-b174-f072596834a0",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	"abead7fb-95e4-4bbb-b046-4345cc191214",
+	'cycles',
+	'',
+	'',
+	'cycles',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("524b9f5a-2c2b-4174-853d-59e5b1531a99",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_BATTR
+	VALUES ("524b9f5a-2c2b-4174-853d-59e5b1531a99",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_ATTR
+	VALUES ("524b9f5a-2c2b-4174-853d-59e5b1531a99",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	"e59189f1-8362-40c5-935c-c256c3f4ff54",
+	'current_cycle',
+	'',
+	'',
+	'current_cycle',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("ed891f61-3205-4335-86cf-8b4092208a8a",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_BATTR
+	VALUES ("ed891f61-3205-4335-86cf-8b4092208a8a",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_ATTR
+	VALUES ("ed891f61-3205-4335-86cf-8b4092208a8a",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	"524b9f5a-2c2b-4174-853d-59e5b1531a99",
+	'clock',
+	'',
+	'',
+	'clock',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000f",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("abead7fb-95e4-4bbb-b046-4345cc191214",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_BATTR
+	VALUES ("abead7fb-95e4-4bbb-b046-4345cc191214",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_ATTR
+	VALUES ("abead7fb-95e4-4bbb-b046-4345cc191214",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	"80881a48-3d48-4463-b8df-9e79ef2e2579",
+	'period',
+	'',
+	'',
+	'period',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("80881a48-3d48-4463-b8df-9e79ef2e2579",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_BATTR
+	VALUES ("80881a48-3d48-4463-b8df-9e79ef2e2579",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_ATTR
+	VALUES ("80881a48-3d48-4463-b8df-9e79ef2e2579",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	"00000000-0000-0000-0000-000000000000",
+	'number',
+	'',
+	'',
+	'number',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("22bcb73a-4d2d-4f18-a861-9842b0138593",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_BATTR
+	VALUES ("22bcb73a-4d2d-4f18-a861-9842b0138593",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_ATTR
+	VALUES ("22bcb73a-4d2d-4f18-a861-9842b0138593",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	"84f32218-879f-404d-b174-f072596834a0",
+	'branch_offset',
+	'',
+	'',
+	'branch_offset',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_OIDA
+	VALUES ("80881a48-3d48-4463-b8df-9e79ef2e2579",
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	0,
+	'number');
+INSERT INTO O_ID
+	VALUES (1,
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO O_ID
+	VALUES (2,
+	"a87cbb22-0398-4c29-8685-23d3db5ac14f");
+INSERT INTO PE_PE
+	VALUES ("a87cbb22-0398-4c29-8685-23d3db5ac14f",
+	1,
+	"7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("7d937772-f087-4b5f-9d28-37b78ceb9fe9",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'experiment',
+	'',
+	10,
+	'../experiment.xtuml');

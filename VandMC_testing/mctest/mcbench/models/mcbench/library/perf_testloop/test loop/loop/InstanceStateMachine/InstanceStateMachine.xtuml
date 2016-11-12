@@ -1,4 +1,4 @@
--- BP 7.1 content: InstanceStateMachine syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: InstanceStateMachine syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO SM_ISM
 	VALUES ("03147481-7647-411e-9e59-5f8e6cdec489",
@@ -285,7 +285,7 @@ INSERT INTO SM_ACT
 	'self.repetitions = 0;
 self.measured_run_time = 0;
 self.duration = 0;
-self.client_test_number = rcvd_evt.testnum;
+self.client_test_number = param.testnum;
 
 b = APP::perftest(
   testnum:self.client_test_number,
@@ -295,7 +295,9 @@ b = APP::perftest(
   
 generate LOOP1:go() to self;
 create event instance stop of LOOP2:stop() to self;
-t = TIM::timer_start( microseconds:rcvd_evt.duration * 1000000, event_inst:stop );',
+t = TIM::timer_start( microseconds:param.duration * 1000000, event_inst:stop );
+
+b = b; // Keep C compiler happy.',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("19bf9de2-6290-4aa8-9d1d-cfff7d5fb4a8",
@@ -320,7 +322,9 @@ self.measured_run_time = self.measured_run_time
   + self.end_time_measurement();
   
 self.repetitions = self.repetitions + 1;
-generate LOOP1:go() to self;',
+generate LOOP1:go() to self;
+
+b = b; // Keep C compiler happy.',
 	'');
 INSERT INTO SM_MOAH
 	VALUES ("7a88c4de-29c2-459c-8c3b-4f030b9b9373",
@@ -368,6 +372,8 @@ b = APP::perftest(
 b = APP::perftest(
   testnum:self.client_test_number,
   phase:6, count:0, duration:0 );
+
+b = b; // Keep C compiler happy.
 ',
 	'');
 INSERT INTO SM_TAH
@@ -465,15 +471,15 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'3.2.0',
-	'mcbench::library::perf_testloop::test loop::loop::loop');
+	'4.1.17',
+	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine');
 INSERT INTO GD_GE
 	VALUES ("2ce5c60f-5679-4fea-b6de-a724a6c69782",
 	"2132562f-64da-4a52-9a6d-853fca5e05fd",
 	"95c22aa4-8a6b-423a-b36c-62b8436888c9",
 	41,
 	0,
-	'mcbench::library::perf_testloop::test loop::loop::loop::starting');
+	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine::starting');
 INSERT INTO GD_SHP
 	VALUES ("2ce5c60f-5679-4fea-b6de-a724a6c69782");
 INSERT INTO GD_NCS
@@ -542,7 +548,7 @@ INSERT INTO GD_GE
 	"c0abf315-ea68-49f1-8730-5653b587b390",
 	41,
 	0,
-	'mcbench::library::perf_testloop::test loop::loop::loop::running');
+	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine::running');
 INSERT INTO GD_SHP
 	VALUES ("7bce44c4-4397-4720-bdce-c269ad1b93df");
 INSERT INTO GD_NCS
@@ -581,7 +587,7 @@ INSERT INTO GD_GE
 	"e819fa10-b5ce-49a8-b6b2-5f85e3086543",
 	41,
 	0,
-	'mcbench::library::perf_testloop::test loop::loop::loop::unrunning');
+	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine::unrunning');
 INSERT INTO GD_SHP
 	VALUES ("beba1c6d-a18b-4791-840d-2b6d49b3c3fe");
 INSERT INTO GD_NCS
@@ -620,7 +626,7 @@ INSERT INTO GD_GE
 	"a07c96bb-a2c8-46ee-b490-bd3a36931be2",
 	41,
 	0,
-	'mcbench::library::perf_testloop::test loop::loop::loop::done');
+	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine::done');
 INSERT INTO GD_SHP
 	VALUES ("ad06851e-8c51-4422-a4e9-771180a70290");
 INSERT INTO GD_NCS
@@ -659,7 +665,7 @@ INSERT INTO GD_GE
 	"be218f70-fa88-4afb-8f3f-d36bad629608",
 	42,
 	0,
-	'mcbench::library::perf_testloop::test loop::loop::loop::LOOP1: go in starting to running');
+	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine::starting::LOOP1: go');
 INSERT INTO GD_CON
 	VALUES ("bb481103-7764-456c-908d-8077ac660225",
 	"00000000-0000-0000-0000-000000000000");
@@ -759,7 +765,7 @@ INSERT INTO GD_GE
 	"faaf8588-3c19-42cb-be45-6cb4d639aeb2",
 	42,
 	0,
-	'loop::loop::LOOP1: go in running to unrunning');
+	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine::running::LOOP1: go');
 INSERT INTO GD_CON
 	VALUES ("84dbde53-a7f0-4a90-82a2-26b35506bb5c",
 	"00000000-0000-0000-0000-000000000000");
@@ -859,7 +865,7 @@ INSERT INTO GD_GE
 	"be93f47c-0886-4403-a101-4947481bd4da",
 	42,
 	0,
-	'loop::loop::LOOP1: go in unrunning to running');
+	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine::unrunning::LOOP1: go');
 INSERT INTO GD_CON
 	VALUES ("9f5e448e-4cae-4257-bf02-6876d1442985",
 	"00000000-0000-0000-0000-000000000000");
@@ -985,7 +991,7 @@ INSERT INTO GD_GE
 	"a54f5a98-2be3-48d1-8e33-cf2bf21696de",
 	42,
 	0,
-	'loop::loop::LOOP2: stop in unrunning to done');
+	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine::unrunning::LOOP2: stop');
 INSERT INTO GD_CON
 	VALUES ("db65b2f9-ed85-4d9b-b713-b1aede809e22",
 	"00000000-0000-0000-0000-000000000000");
@@ -1085,7 +1091,7 @@ INSERT INTO GD_GE
 	"313ed045-4c47-4caf-a929-5d20ec6addd0",
 	42,
 	0,
-	'mcbench::library::perf_testloop::test loop::loop::loop::LOOP5: begin in done to starting');
+	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine::done::LOOP5: begin');
 INSERT INTO GD_CON
 	VALUES ("65b3921f-7e41-41c7-87bb-e20f3cfb03c2",
 	"00000000-0000-0000-0000-000000000000");
@@ -1211,7 +1217,7 @@ INSERT INTO GD_GE
 	"0cd0d7a5-f625-4ba2-bc99-1b715dd73479",
 	42,
 	0,
-	'mcbench::library::perf_testloop::test loop::loop::loop::LOOP5: begin in starting to starting');
+	'mcbench::library::perf_testloop::test loop::loop::Instance State Machine::starting::LOOP5: begin');
 INSERT INTO GD_CON
 	VALUES ("dd222049-4545-4d41-b9b8-bf5e7122c777",
 	"00000000-0000-0000-0000-000000000000");

@@ -4,7 +4,7 @@
  * Class:       benchmark  (BENCHMARK)
  * Component:   perf_funcs
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef PERF_FUNCS_BENCHMARK_CLASS_H
@@ -23,32 +23,30 @@ struct perf_funcs_BENCHMARK {
   /* application analysis class attributes */
   i_t test_number;  /* - test_number */
   i_t duration;  /* - duration */
-
 };
-bool perf_funcs_BENCHMARK_op_create_instance(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_delete_instance(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_generate_event(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_generate_and_dispatch_event(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_select_one_related(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_select_any_from(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_relate_one(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_relate_one_to_many(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_relate_one_using(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_cardinality_10000(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_cardinality_1000(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_cardinality_100(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_cardinality_10(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_select_any_where_10000(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_select_any_where_1000(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_select_any_where_100(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_select_any_where_10(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_read_attribute(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_write_attribute(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_bridge_void_void(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_bridge_void_integer(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_bridge_integer_integer(  i_t, i_t, i_t, i_t );
-bool perf_funcs_BENCHMARK_op_delete_many(  i_t, i_t, i_t, i_t );
-
+bool perf_funcs_BENCHMARK_op_create_instance(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_delete_instance(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_generate_event(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_generate_and_dispatch_event(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_select_one_related(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_select_any_from(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_relate_one(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_relate_one_to_many(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_relate_one_using(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_cardinality_10000(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_cardinality_1000(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_cardinality_100(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_cardinality_10(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_select_any_where_10000(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_select_any_where_1000(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_select_any_where_100(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_select_any_where_10(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_read_attribute(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_write_attribute(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_bridge_void_void(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_bridge_void_integer(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_bridge_integer_integer(  const i_t, const i_t, const i_t, const i_t );
+bool perf_funcs_BENCHMARK_op_delete_many(  const i_t, const i_t, const i_t, const i_t );
 
 
 #define perf_funcs_BENCHMARK_MAX_EXTENT_SIZE 10
@@ -62,7 +60,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } perf_funcs_BENCHMARKevent1;
 extern const Escher_xtUMLEventConstant_t perf_funcs_BENCHMARKevent1c;
-
 /*
  * instance event:  BENCHMARK2:'stop'
  */
@@ -71,15 +68,13 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } perf_funcs_BENCHMARKevent2;
 extern const Escher_xtUMLEventConstant_t perf_funcs_BENCHMARKevent2c;
-
 /*
  * union of events targeted towards 'BENCHMARK' state machine
  */
 typedef union {
-  perf_funcs_BENCHMARKevent1 benchmark11;  
-  perf_funcs_BENCHMARKevent2 benchmark22;  
+  perf_funcs_BENCHMARKevent1 benchmark1_1;  
+  perf_funcs_BENCHMARKevent2 benchmark2_2;  
 } perf_funcs_BENCHMARK_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -97,5 +92,3 @@ extern void perf_funcs_BENCHMARK_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* PERF_FUNCS_BENCHMARK_CLASS_H */
-
-

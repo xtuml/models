@@ -1,0 +1,111 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("f4f19ba1-4b83-4a4f-8f8b-d1c986d1e87a",
+	"00000000-0000-0000-0000-000000000000",
+	"47aa4d12-f423-4914-b454-412c48122aed",
+	'FunctionsPackage',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("72823f5d-d758-4943-b222-104b68cb17c2",
+	112,
+	"f4f19ba1-4b83-4a4f-8f8b-d1c986d1e87a",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'7525_test_model::7525Package::components_package::FunctionsPackage');
+INSERT INTO DIM_DIA
+	VALUES ("72823f5d-d758-4943-b222-104b68cb17c2",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("120afc36-06c7-4b88-8ee1-42acf6a94e36",
+	"00000000-0000-0000-0000-000000000000",
+	'Failure',
+	'',
+	'select any H from instances of Head;
+
+select many Ns related by H->Node[R1];
+
+for each N in Ns
+  unrelate N from H across R1;
+end for;
+
+for each N in Ns
+  relate N to H across R1;
+end for;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("120afc36-06c7-4b88-8ee1-42acf6a94e36",
+	1,
+	"f4f19ba1-4b83-4a4f-8f8b-d1c986d1e87a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("335f86a2-0c6a-4b1f-bcb8-c34f0eb8579c",
+	"00000000-0000-0000-0000-000000000000",
+	'Setup',
+	'',
+	'create object instance H of Head;
+
+create object instance N1 of Node;
+
+relate H to N1 across R1;
+
+create object instance N2 of Node;
+
+relate H to N2 across R1;
+
+relate N1 to N2 across R2.''follows'';
+
+relate N2 to N1 across R2.''follows'';
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("335f86a2-0c6a-4b1f-bcb8-c34f0eb8579c",
+	1,
+	"f4f19ba1-4b83-4a4f-8f8b-d1c986d1e87a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("f4f19ba1-4b83-4a4f-8f8b-d1c986d1e87a",
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"19f0bb1a-faef-44aa-a4e1-d3ab609522e8",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("19f0bb1a-faef-44aa-a4e1-d3ab609522e8",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'components_package',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../components_package.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("47aa4d12-f423-4914-b454-412c48122aed",
+	'7525_test_model',
+	1,
+	'../../../7525_test_model.xtuml');

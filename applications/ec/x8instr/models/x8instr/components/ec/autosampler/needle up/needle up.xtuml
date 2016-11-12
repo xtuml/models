@@ -1,0 +1,111 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("9f7fa68c-37a5-4b6c-8300-6bed2a4954aa",
+	'needle up',
+	33,
+	'NEEDLEUP',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("8a9b51c0-ec93-451b-8285-228eee8e2326",
+	"9f7fa68c-37a5-4b6c-8300-6bed2a4954aa",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'TRACE::log( id:1008, flavor:"info", message:"loading needled up" );
+ascmd = param.ascmd;
+create object instance needleup of NEEDLEUP;
+relate needleup to ascmd across R31;
+return 1;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("61710225-c21c-4b9d-a010-aa67b9eac4b9",
+	"8a9b51c0-ec93-451b-8285-228eee8e2326",
+	'ascmd',
+	"0dfa9cf0-faad-45c7-815e-c69d1f6ca5d2",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("0dfa9cf0-faad-45c7-815e-c69d1f6ca5d2",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<autosampler command>',
+	'',
+	'',
+	'../autosampler.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("f531e0c7-54ab-45fe-bf32-78e9a0735349",
+	"8a9b51c0-ec93-451b-8285-228eee8e2326",
+	'program',
+	"7ffff356-33a0-4540-9fd8-2c5d08586a4c",
+	0,
+	'',
+	"61710225-c21c-4b9d-a010-aa67b9eac4b9",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("7ffff356-33a0-4540-9fd8-2c5d08586a4c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../../program/program.xtuml');
+INSERT INTO O_TFR
+	VALUES ("143f4676-d455-4fd9-b2ad-c3065dd4d232",
+	"9f7fa68c-37a5-4b6c-8300-6bed2a4954aa",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'TRACE::log( id:1009, flavor:"info", message:"needle up" );
+select one ascmd related by self->ASCMD[R31];
+generate ascmd.completion_event;
+return false;',
+	1,
+	'',
+	"8a9b51c0-ec93-451b-8285-228eee8e2326");
+INSERT INTO O_NBATTR
+	VALUES ("2efd548d-1bce-4914-9a57-07aaff914e7e",
+	"9f7fa68c-37a5-4b6c-8300-6bed2a4954aa");
+INSERT INTO O_BATTR
+	VALUES ("2efd548d-1bce-4914-9a57-07aaff914e7e",
+	"9f7fa68c-37a5-4b6c-8300-6bed2a4954aa");
+INSERT INTO O_ATTR
+	VALUES ("2efd548d-1bce-4914-9a57-07aaff914e7e",
+	"9f7fa68c-37a5-4b6c-8300-6bed2a4954aa",
+	"00000000-0000-0000-0000-000000000000",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"9f7fa68c-37a5-4b6c-8300-6bed2a4954aa");
+INSERT INTO O_ID
+	VALUES (1,
+	"9f7fa68c-37a5-4b6c-8300-6bed2a4954aa");
+INSERT INTO O_ID
+	VALUES (2,
+	"9f7fa68c-37a5-4b6c-8300-6bed2a4954aa");
+INSERT INTO PE_PE
+	VALUES ("9f7fa68c-37a5-4b6c-8300-6bed2a4954aa",
+	1,
+	"a883bde7-72fb-4da6-a4a4-3cea65b6e63f",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a883bde7-72fb-4da6-a4a4-3cea65b6e63f",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'autosampler',
+	'',
+	30,
+	'../autosampler.xtuml');

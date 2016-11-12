@@ -1,4 +1,4 @@
--- BP 7.1 content: Package syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO EP_PKG
 	VALUES ("2675528c-c8ec-4c4d-a967-aa956427f711",
@@ -90,7 +90,7 @@ INSERT INTO GD_GE
 	"47969cef-74b8-473c-a7ca-b428a2e2190a",
 	106,
 	0,
-	'testbenching::test system::testbenching::components::test runner::test sequencing');
+	'testbenching::test system::testbenching::components::test runner::TB::test sequencing');
 INSERT INTO GD_CON
 	VALUES ("a12f85f2-353c-40ce-a5b4-8fe46aa0efc0",
 	"00000000-0000-0000-0000-000000000000");
@@ -190,7 +190,7 @@ INSERT INTO GD_GE
 	"94052202-a381-436e-94b6-464c63ac9fda",
 	105,
 	0,
-	'testbenching::test system::testbenching::components::sample test bench::test sequencing');
+	'testbenching::test system::testbenching::components::sample test bench::SEQ::test sequencing');
 INSERT INTO GD_CON
 	VALUES ("1047d623-4321-4aa1-83ce-2d3472638767",
 	"00000000-0000-0000-0000-000000000000");
@@ -299,12 +299,6 @@ INSERT INTO DIM_DIA
 	4000.000000,
 	3000.000000,
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO PE_PE
-	VALUES ("ab8b2e57-aa4d-48f8-a800-ae9bff03104c",
-	1,
-	"2675528c-c8ec-4c4d-a967-aa956427f711",
-	"00000000-0000-0000-0000-000000000000",
-	21);
 INSERT INTO CL_IC
 	VALUES ("ab8b2e57-aa4d-48f8-a800-ae9bff03104c",
 	"a944cd98-7bf4-4dcc-adab-cca5ecc39ce0",
@@ -314,10 +308,15 @@ INSERT INTO CL_IC
 	'',
 	'testbenching::components::test runner',
 	'');
+INSERT INTO CL_POR
+	VALUES ("ab8b2e57-aa4d-48f8-a800-ae9bff03104c",
+	"c8dd3a32-a944-488c-a1cc-74b8d4da9dd2",
+	'TB',
+	"50e6a461-fb2a-493d-bffd-b1be36b6c04b");
 INSERT INTO CL_IIR
 	VALUES ("47969cef-74b8-473c-a7ca-b428a2e2190a",
 	"466ef900-ac44-4455-a66d-5f2f0b6a39b8",
-	"ab8b2e57-aa4d-48f8-a800-ae9bff03104c",
+	"50e6a461-fb2a-493d-bffd-b1be36b6c04b",
 	"00000000-0000-0000-0000-000000000000",
 	'test sequencing',
 	'');
@@ -332,6 +331,19 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"c8dd3a32-a944-488c-a1cc-74b8d4da9dd2",
 	'../components/test runner/test runner.xtuml');
+INSERT INTO C_PO_PROXY
+	VALUES ("c8dd3a32-a944-488c-a1cc-74b8d4da9dd2",
+	"a944cd98-7bf4-4dcc-adab-cca5ecc39ce0",
+	'TB',
+	0,
+	0,
+	'../components/test runner/test runner.xtuml');
+INSERT INTO PE_PE
+	VALUES ("ab8b2e57-aa4d-48f8-a800-ae9bff03104c",
+	1,
+	"2675528c-c8ec-4c4d-a967-aa956427f711",
+	"00000000-0000-0000-0000-000000000000",
+	21);
 INSERT INTO C_C_PROXY
 	VALUES ("a944cd98-7bf4-4dcc-adab-cca5ecc39ce0",
 	"00000000-0000-0000-0000-000000000000",
@@ -343,12 +355,6 @@ INSERT INTO C_C_PROXY
 	0,
 	'',
 	'../components/test runner/test runner.xtuml');
-INSERT INTO PE_PE
-	VALUES ("95e50240-2e40-42fb-af25-fa493765f70b",
-	1,
-	"2675528c-c8ec-4c4d-a967-aa956427f711",
-	"00000000-0000-0000-0000-000000000000",
-	21);
 INSERT INTO CL_IC
 	VALUES ("95e50240-2e40-42fb-af25-fa493765f70b",
 	"d13f649f-f241-48b9-af7a-831f14fb7c1a",
@@ -358,10 +364,15 @@ INSERT INTO CL_IC
 	'',
 	'testbenching::components::sample test bench',
 	'');
+INSERT INTO CL_POR
+	VALUES ("95e50240-2e40-42fb-af25-fa493765f70b",
+	"b48d63c6-3f5c-4db3-bef5-66df6974d79a",
+	'SEQ',
+	"ce004130-735e-4513-a2eb-65201ee4efbf");
 INSERT INTO CL_IIR
 	VALUES ("94052202-a381-436e-94b6-464c63ac9fda",
 	"380d2ff9-e6b8-4722-b7d9-9b0741f2b20b",
-	"95e50240-2e40-42fb-af25-fa493765f70b",
+	"ce004130-735e-4513-a2eb-65201ee4efbf",
 	"00000000-0000-0000-0000-000000000000",
 	'test sequencing',
 	'');
@@ -378,6 +389,19 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"b48d63c6-3f5c-4db3-bef5-66df6974d79a",
 	'../components/sample test bench/sample test bench.xtuml');
+INSERT INTO C_PO_PROXY
+	VALUES ("b48d63c6-3f5c-4db3-bef5-66df6974d79a",
+	"d13f649f-f241-48b9-af7a-831f14fb7c1a",
+	'SEQ',
+	0,
+	0,
+	'../components/sample test bench/sample test bench.xtuml');
+INSERT INTO PE_PE
+	VALUES ("95e50240-2e40-42fb-af25-fa493765f70b",
+	1,
+	"2675528c-c8ec-4c4d-a967-aa956427f711",
+	"00000000-0000-0000-0000-000000000000",
+	21);
 INSERT INTO C_C_PROXY
 	VALUES ("d13f649f-f241-48b9-af7a-831f14fb7c1a",
 	"00000000-0000-0000-0000-000000000000",
@@ -389,18 +413,18 @@ INSERT INTO C_C_PROXY
 	0,
 	'',
 	'../components/sample test bench/sample test bench.xtuml');
-INSERT INTO PE_PE
-	VALUES ("abe0e27b-432b-4462-96c4-27ae8d6d3675",
-	1,
-	"2675528c-c8ec-4c4d-a967-aa956427f711",
-	"00000000-0000-0000-0000-000000000000",
-	22);
 INSERT INTO C_SF
 	VALUES ("abe0e27b-432b-4462-96c4-27ae8d6d3675",
 	"466ef900-ac44-4455-a66d-5f2f0b6a39b8",
 	"380d2ff9-e6b8-4722-b7d9-9b0741f2b20b",
 	'',
 	'sample test bench::SEQ::test sequencing -o)- test runner::TB::test sequencing');
+INSERT INTO PE_PE
+	VALUES ("abe0e27b-432b-4462-96c4-27ae8d6d3675",
+	1,
+	"2675528c-c8ec-4c4d-a967-aa956427f711",
+	"00000000-0000-0000-0000-000000000000",
+	22);
 INSERT INTO C_R_PROXY
 	VALUES ("466ef900-ac44-4455-a66d-5f2f0b6a39b8",
 	'test sequencing',
@@ -415,6 +439,12 @@ INSERT INTO C_P_PROXY
 	'',
 	'sample test bench::SEQ::test sequencing',
 	'../components/sample test bench/sample test bench.xtuml');
+INSERT INTO PE_PE
+	VALUES ("2675528c-c8ec-4c4d-a967-aa956427f711",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	7);
 INSERT INTO S_SYS_PROXY
 	VALUES ("d8d8e64a-9be2-44d8-9846-63e8493caa3c",
 	'testbenching',

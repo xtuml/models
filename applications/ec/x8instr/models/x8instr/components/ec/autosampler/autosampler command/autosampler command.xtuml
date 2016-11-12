@@ -1,0 +1,221 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("d6fa67bd-b1be-4ac3-a848-90893a53fa55",
+	'autosampler command',
+	30,
+	'ASCMD',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("a4309ebc-c8b0-490a-879d-5c7b581cfa24",
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55",
+	'load',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'instruction = param.instruction;
+program = param.program;
+create object instance ascmd of ASCMD;
+relate ascmd to instruction across R2;
+ascmd.opcode = instruction.opcode;
+length = 1;
+if ( opcarhome == ascmd.opcode )
+  length = CARHOME::load( ascmd:ascmd, program:program );
+elif ( opcarnext == ascmd.opcode )
+  length = CARNEXT::load( ascmd:ascmd, program:program );
+elif ( opneedleup == ascmd.opcode )
+  length = NEEDLEUP::load( ascmd:ascmd, program:program );
+elif ( opneedledown == ascmd.opcode )
+  length = NEEDLEDOWN::load( ascmd:ascmd, program:program );
+else
+  TRACE::log( id:1001, flavor:"warning", message:"opcode not recognized" );
+end if;
+return length;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("562beb50-23fa-4ecd-b7b3-8298af840e57",
+	"a4309ebc-c8b0-490a-879d-5c7b581cfa24",
+	'instruction',
+	"8e1a23ce-49ad-4e78-8b0e-fa0a2947f09c",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("8e1a23ce-49ad-4e78-8b0e-fa0a2947f09c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<instruction>',
+	'',
+	'',
+	'../../program/program.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("bbcc4bf8-fd90-483e-9cdb-aa5a127c2528",
+	"a4309ebc-c8b0-490a-879d-5c7b581cfa24",
+	'program',
+	"7ffff356-33a0-4540-9fd8-2c5d08586a4c",
+	0,
+	'',
+	"562beb50-23fa-4ecd-b7b3-8298af840e57",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("7ffff356-33a0-4540-9fd8-2c5d08586a4c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<program>',
+	'',
+	'',
+	'../../program/program.xtuml');
+INSERT INTO O_TFR
+	VALUES ("3230da0e-28d7-4a71-9ade-5dd47f62556b",
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55",
+	'run',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'rv = false;
+self.completion_event = param.completion_event;
+if ( opcarhome == self.opcode )
+  select one sub related by self->CARHOME[R31];
+  rv = sub.run();
+elif ( opcarnext == self.opcode )
+  select one sub related by self->CARNEXT[R31];
+  rv = sub.run();
+elif ( opneedleup == self.opcode )
+  select one sub related by self->NEEDLEUP[R31];
+  rv = sub.run();
+elif ( opneedledown == self.opcode )
+  select one sub related by self->NEEDLEDOWN[R31];
+  rv = sub.run();
+else
+  TRACE::log( id:1002, flavor:"warning", message:"attempt to run invalid opcode" );
+end if;
+return rv;',
+	1,
+	'',
+	"a4309ebc-c8b0-490a-879d-5c7b581cfa24");
+INSERT INTO O_TPARM
+	VALUES ("7579ecd9-83db-48de-b15e-9a1a1dd60bb8",
+	"3230da0e-28d7-4a71-9ade-5dd47f62556b",
+	'completion_event',
+	"ba5eda7a-def5-0000-0000-00000000000a",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("f80de103-229a-4eb7-b7ea-a3b366117388",
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55");
+INSERT INTO O_BATTR
+	VALUES ("f80de103-229a-4eb7-b7ea-a3b366117388",
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55");
+INSERT INTO O_ATTR
+	VALUES ("f80de103-229a-4eb7-b7ea-a3b366117388",
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55",
+	"00000000-0000-0000-0000-000000000000",
+	'opcode',
+	'',
+	'',
+	'opcode',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("d6fa67bd-b1be-4ac3-a848-90893a53fa55",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	0,
+	"33872038-c20c-4c5e-9be6-90759c144a5a",
+	"e909a8cf-93f0-4717-9195-06a02c37a374",
+	"457f0241-8b81-4356-abc2-053c8060a315",
+	"d32ce726-c290-4e23-a4ae-72412359cca2",
+	"27284775-adef-44c8-adc0-37900b98784e",
+	"efb2c224-b6e2-4035-a95a-42aa20710760",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'instruction',
+	'location',
+	'R2');
+INSERT INTO R_RGO_PROXY
+	VALUES ("d6fa67bd-b1be-4ac3-a848-90893a53fa55",
+	"e909a8cf-93f0-4717-9195-06a02c37a374",
+	"457f0241-8b81-4356-abc2-053c8060a315",
+	'../../program/program.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("33872038-c20c-4c5e-9be6-90759c144a5a",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	0,
+	"e909a8cf-93f0-4717-9195-06a02c37a374",
+	"d32ce726-c290-4e23-a4ae-72412359cca2",
+	'../../program/program.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("27284775-adef-44c8-adc0-37900b98784e",
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55",
+	"33872038-c20c-4c5e-9be6-90759c144a5a",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	1,
+	'location');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("33872038-c20c-4c5e-9be6-90759c144a5a",
+	"4533e8f9-5d2e-4c25-b362-b42bdffb8f55",
+	'../../program/instruction/instruction.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("27284775-adef-44c8-adc0-37900b98784e",
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55",
+	"f80de103-229a-4eb7-b7ea-a3b366117388",
+	'location',
+	'',
+	'',
+	'location',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("b69359e6-161c-4a19-a397-507bcd27493c",
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55");
+INSERT INTO O_BATTR
+	VALUES ("b69359e6-161c-4a19-a397-507bcd27493c",
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55");
+INSERT INTO O_ATTR
+	VALUES ("b69359e6-161c-4a19-a397-507bcd27493c",
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55",
+	"27284775-adef-44c8-adc0-37900b98784e",
+	'completion_event',
+	'',
+	'',
+	'completion_event',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000a",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55");
+INSERT INTO O_OIDA
+	VALUES ("27284775-adef-44c8-adc0-37900b98784e",
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55",
+	0,
+	'location');
+INSERT INTO O_ID
+	VALUES (1,
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55");
+INSERT INTO O_ID
+	VALUES (2,
+	"d6fa67bd-b1be-4ac3-a848-90893a53fa55");
+INSERT INTO PE_PE
+	VALUES ("d6fa67bd-b1be-4ac3-a848-90893a53fa55",
+	1,
+	"a883bde7-72fb-4da6-a4a4-3cea65b6e63f",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a883bde7-72fb-4da6-a4a4-3cea65b6e63f",
+	"00000000-0000-0000-0000-000000000000",
+	"dbf92ecc-a444-472c-a2b6-e80ac235d85c",
+	'autosampler',
+	'',
+	30,
+	'../autosampler.xtuml');
