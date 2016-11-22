@@ -1,6 +1,6 @@
 package lib;
 
-import com.mentor.nucleus.bp.core.CorePlugin;
+import org.xtuml.bp.core.CorePlugin;
 
 public class BUG {
 
