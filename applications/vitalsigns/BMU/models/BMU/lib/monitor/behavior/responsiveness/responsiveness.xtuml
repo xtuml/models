@@ -1,0 +1,100 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("1e1fc5cc-8753-4d9a-9dc4-e6bee38ba251",
+	'responsiveness',
+	6,
+	'responsiveness',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("0757cdda-70bc-40c1-a53d-e1751098ae65",
+	"1e1fc5cc-8753-4d9a-9dc4-e6bee38ba251",
+	'init',
+	'',
+	"5b6d4426-99e6-42df-a317-d0580064aa1f",
+	0,
+	'create object instance responsiveness of responsiveness;
+create object instance vitalsign of vitalsign;
+vitalsign.name = "ARM";
+vitalsign.value = 0;
+vitalsign.yellow_threshold = 20;
+vitalsign.red_threshold = 10;
+relate responsiveness to vitalsign across R2;
+return vitalsign;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("5b6d4426-99e6-42df-a317-d0580064aa1f",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vital sign>',
+	'',
+	'',
+	'../behavior.xtuml');
+INSERT INTO O_TFR
+	VALUES ("5545e4c3-b273-4a14-82a5-c37cb9867b18",
+	"1e1fc5cc-8753-4d9a-9dc4-e6bee38ba251",
+	'update',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'select any responsiveness from instances of responsiveness;
+select one vitalsign related by responsiveness->vitalsign[R2];
+if ( not_empty vitalsign )
+  vitalsign.update( value:param.response_time );
+end if;',
+	1,
+	'',
+	"0757cdda-70bc-40c1-a53d-e1751098ae65");
+INSERT INTO O_TPARM
+	VALUES ("4ce460ac-6896-434c-969e-8ff5084dade7",
+	"5545e4c3-b273-4a14-82a5-c37cb9867b18",
+	'response_time',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("6f4454f9-c320-4b0d-8a44-6294e50bdda3",
+	"1e1fc5cc-8753-4d9a-9dc4-e6bee38ba251");
+INSERT INTO O_BATTR
+	VALUES ("6f4454f9-c320-4b0d-8a44-6294e50bdda3",
+	"1e1fc5cc-8753-4d9a-9dc4-e6bee38ba251");
+INSERT INTO O_ATTR
+	VALUES ("6f4454f9-c320-4b0d-8a44-6294e50bdda3",
+	"1e1fc5cc-8753-4d9a-9dc4-e6bee38ba251",
+	"00000000-0000-0000-0000-000000000000",
+	'response_time',
+	'',
+	'',
+	'response_time',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"1e1fc5cc-8753-4d9a-9dc4-e6bee38ba251");
+INSERT INTO O_ID
+	VALUES (1,
+	"1e1fc5cc-8753-4d9a-9dc4-e6bee38ba251");
+INSERT INTO O_ID
+	VALUES (2,
+	"1e1fc5cc-8753-4d9a-9dc4-e6bee38ba251");
+INSERT INTO PE_PE
+	VALUES ("1e1fc5cc-8753-4d9a-9dc4-e6bee38ba251",
+	1,
+	"8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	"03f0dd69-d2b4-416a-89b3-4c8a47ad1b90",
+	'behavior',
+	'',
+	0,
+	'../behavior.xtuml');

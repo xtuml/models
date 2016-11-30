@@ -1,0 +1,102 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("f30f5f6b-ef91-4e0b-8b0f-ce57cf37e0f8",
+	'O2saturation',
+	4,
+	'O2saturation',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("2ab44f76-a4d2-41ef-b490-2c8661ffef84",
+	"f30f5f6b-ef91-4e0b-8b0f-ce57cf37e0f8",
+	'init',
+	'',
+	"5b6d4426-99e6-42df-a317-d0580064aa1f",
+	0,
+	'create object instance O2saturation of O2saturation;
+create object instance vitalsign of vitalsign;
+vitalsign.name = "O2saturation";
+vitalsign.value = 0;
+vitalsign.yellow_threshold = 93;
+vitalsign.red_threshold = 85;
+vitalsign.yellow_stops_infusion = true;
+vitalsign.red_stops_infusion = true;
+relate O2saturation to vitalsign across R2;
+return vitalsign;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("5b6d4426-99e6-42df-a317-d0580064aa1f",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vital sign>',
+	'',
+	'',
+	'../behavior.xtuml');
+INSERT INTO O_TFR
+	VALUES ("6331c860-b1ef-448c-99ee-822f42eb1e9c",
+	"f30f5f6b-ef91-4e0b-8b0f-ce57cf37e0f8",
+	'update',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// This selection assumes only one pulse oximeter in our system.
+select any O2saturation from instances of O2saturation;
+select one vitalsign related by O2saturation->vitalsign[R2];
+if ( not_empty vitalsign )
+  vitalsign.update( value:param.O2saturation );
+end if;',
+	1,
+	'',
+	"2ab44f76-a4d2-41ef-b490-2c8661ffef84");
+INSERT INTO O_TPARM
+	VALUES ("75522e15-5b0a-4a63-948f-88e52f2a4b55",
+	"6331c860-b1ef-448c-99ee-822f42eb1e9c",
+	'O2saturation',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("6afa7859-fe41-44f0-a1b2-c4b017ffc447",
+	"f30f5f6b-ef91-4e0b-8b0f-ce57cf37e0f8");
+INSERT INTO O_BATTR
+	VALUES ("6afa7859-fe41-44f0-a1b2-c4b017ffc447",
+	"f30f5f6b-ef91-4e0b-8b0f-ce57cf37e0f8");
+INSERT INTO O_ATTR
+	VALUES ("6afa7859-fe41-44f0-a1b2-c4b017ffc447",
+	"f30f5f6b-ef91-4e0b-8b0f-ce57cf37e0f8",
+	"00000000-0000-0000-0000-000000000000",
+	'i',
+	'',
+	'',
+	'i',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"f30f5f6b-ef91-4e0b-8b0f-ce57cf37e0f8");
+INSERT INTO O_ID
+	VALUES (1,
+	"f30f5f6b-ef91-4e0b-8b0f-ce57cf37e0f8");
+INSERT INTO O_ID
+	VALUES (2,
+	"f30f5f6b-ef91-4e0b-8b0f-ce57cf37e0f8");
+INSERT INTO PE_PE
+	VALUES ("f30f5f6b-ef91-4e0b-8b0f-ce57cf37e0f8",
+	1,
+	"8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	"03f0dd69-d2b4-416a-89b3-4c8a47ad1b90",
+	'behavior',
+	'',
+	0,
+	'../behavior.xtuml');

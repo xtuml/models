@@ -1,0 +1,82 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("ad7902d1-b322-4ea5-9b02-40a14f7f25e1",
+	'diastolic BP',
+	16,
+	'diastolicBP',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("943f7d74-9132-4911-92c1-fafe383f316a",
+	"ad7902d1-b322-4ea5-9b02-40a14f7f25e1",
+	'init',
+	'',
+	"5b6d4426-99e6-42df-a317-d0580064aa1f",
+	0,
+	'create object instance diastolicBP of diastolicBP;
+create object instance vitalsign of vitalsign;
+vitalsign.name = "diastolic";
+vitalsign.value = 0;
+vitalsign.yellow_threshold = 90;
+vitalsign.red_threshold = 80;
+relate diastolicBP to vitalsign across R2;
+return vitalsign;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("5b6d4426-99e6-42df-a317-d0580064aa1f",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vital sign>',
+	'',
+	'',
+	'../behavior.xtuml');
+INSERT INTO O_TFR
+	VALUES ("afdeee2a-6801-4966-9f5b-01dcaa6d58a1",
+	"ad7902d1-b322-4ea5-9b02-40a14f7f25e1",
+	'update',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'select any diastolicBP from instances of diastolicBP;
+select one vitalsign related by diastolicBP->vitalsign[R2];
+if ( not_empty vitalsign )
+  vitalsign.update( value:param.diastolic );
+end if;',
+	1,
+	'',
+	"943f7d74-9132-4911-92c1-fafe383f316a");
+INSERT INTO O_TPARM
+	VALUES ("4805010d-dd1d-4a2f-a750-cb7f8116295b",
+	"afdeee2a-6801-4966-9f5b-01dcaa6d58a1",
+	'diastolic',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"ad7902d1-b322-4ea5-9b02-40a14f7f25e1");
+INSERT INTO O_ID
+	VALUES (1,
+	"ad7902d1-b322-4ea5-9b02-40a14f7f25e1");
+INSERT INTO O_ID
+	VALUES (2,
+	"ad7902d1-b322-4ea5-9b02-40a14f7f25e1");
+INSERT INTO PE_PE
+	VALUES ("ad7902d1-b322-4ea5-9b02-40a14f7f25e1",
+	1,
+	"8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	"03f0dd69-d2b4-416a-89b3-4c8a47ad1b90",
+	'behavior',
+	'',
+	0,
+	'../behavior.xtuml');

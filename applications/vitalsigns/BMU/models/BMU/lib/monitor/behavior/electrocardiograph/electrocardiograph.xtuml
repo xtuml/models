@@ -1,0 +1,120 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("fc798ee0-5f1b-4d0c-8360-da5e893dda46",
+	'electrocardiograph',
+	7,
+	'electrocardiograph',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("54754733-68b0-4c91-be93-eecdba4f53f1",
+	"fc798ee0-5f1b-4d0c-8360-da5e893dda46",
+	'init',
+	'',
+	"5b6d4426-99e6-42df-a317-d0580064aa1f",
+	0,
+	'create object instance electrocardiograph of electrocardiograph;
+create object instance vitalsign of vitalsign;
+vitalsign.name = "ecg";
+vitalsign.value = 0;
+vitalsign.yellow_threshold = 20;
+vitalsign.red_threshold = 10;
+vitalsign.yellow_stops_infusion = false;
+vitalsign.red_stops_infusion = false;
+relate electrocardiograph to vitalsign across R2;
+return vitalsign;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("5b6d4426-99e6-42df-a317-d0580064aa1f",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vital sign>',
+	'',
+	'',
+	'../behavior.xtuml');
+INSERT INTO O_TFR
+	VALUES ("64c99a6a-07e0-43a0-ba45-a531c7ec97a8",
+	"fc798ee0-5f1b-4d0c-8360-da5e893dda46",
+	'update',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'select any electrocardiograph from instances of electrocardiograph;
+select one vitalsign related by electrocardiograph->vitalsign[R2];
+if ( not_empty vitalsign )
+  vitalsign.update( value:param.heartrate );
+end if;',
+	1,
+	'',
+	"54754733-68b0-4c91-be93-eecdba4f53f1");
+INSERT INTO O_TPARM
+	VALUES ("3cc3ebe3-f04e-4a81-b418-5ac3498fba7f",
+	"64c99a6a-07e0-43a0-ba45-a531c7ec97a8",
+	'heartrate',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("4bac5795-d374-4530-85d2-d97e5822d12e",
+	"fc798ee0-5f1b-4d0c-8360-da5e893dda46");
+INSERT INTO O_BATTR
+	VALUES ("4bac5795-d374-4530-85d2-d97e5822d12e",
+	"fc798ee0-5f1b-4d0c-8360-da5e893dda46");
+INSERT INTO O_ATTR
+	VALUES ("4bac5795-d374-4530-85d2-d97e5822d12e",
+	"fc798ee0-5f1b-4d0c-8360-da5e893dda46",
+	"00000000-0000-0000-0000-000000000000",
+	'gain',
+	'',
+	'',
+	'gain',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("9395b37c-861f-4a46-8bfc-deaf92e371bc",
+	"fc798ee0-5f1b-4d0c-8360-da5e893dda46");
+INSERT INTO O_BATTR
+	VALUES ("9395b37c-861f-4a46-8bfc-deaf92e371bc",
+	"fc798ee0-5f1b-4d0c-8360-da5e893dda46");
+INSERT INTO O_ATTR
+	VALUES ("9395b37c-861f-4a46-8bfc-deaf92e371bc",
+	"fc798ee0-5f1b-4d0c-8360-da5e893dda46",
+	"4bac5795-d374-4530-85d2-d97e5822d12e",
+	'waveform',
+	'',
+	'',
+	'waveform',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"fc798ee0-5f1b-4d0c-8360-da5e893dda46");
+INSERT INTO O_ID
+	VALUES (1,
+	"fc798ee0-5f1b-4d0c-8360-da5e893dda46");
+INSERT INTO O_ID
+	VALUES (2,
+	"fc798ee0-5f1b-4d0c-8360-da5e893dda46");
+INSERT INTO PE_PE
+	VALUES ("fc798ee0-5f1b-4d0c-8360-da5e893dda46",
+	1,
+	"8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	"03f0dd69-d2b4-416a-89b3-4c8a47ad1b90",
+	'behavior',
+	'',
+	0,
+	'../behavior.xtuml');
