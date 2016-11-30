@@ -1,0 +1,82 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("e60596c2-c0f7-4fdc-ac3a-625f14c27459",
+	'etCO2',
+	15,
+	'etCO2',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("42727268-efc6-49a1-bc92-e01bc2a2e4b3",
+	"e60596c2-c0f7-4fdc-ac3a-625f14c27459",
+	'update',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'select any etCO2 from instances of etCO2;
+select one vitalsign related by etCO2->vitalsign[R2];
+if ( not_empty vitalsign )
+  vitalsign.update( value:param.etCO2 );
+end if;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("9d076a66-e105-4d1b-aaa6-25e4b54446b1",
+	"42727268-efc6-49a1-bc92-e01bc2a2e4b3",
+	'etCO2',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("e6435fc6-f14e-43ba-ab9a-7722b1d3d061",
+	"e60596c2-c0f7-4fdc-ac3a-625f14c27459",
+	'init',
+	'',
+	"5b6d4426-99e6-42df-a317-d0580064aa1f",
+	0,
+	'create object instance etCO2 of etCO2;
+create object instance vitalsign of vitalsign;
+vitalsign.name = "etCO2";
+vitalsign.value = 0;
+vitalsign.yellow_threshold = 10;
+vitalsign.red_threshold = 5;
+relate etCO2 to vitalsign across R2;
+return vitalsign;
+',
+	1,
+	'',
+	"42727268-efc6-49a1-bc92-e01bc2a2e4b3");
+INSERT INTO S_DT_PROXY
+	VALUES ("5b6d4426-99e6-42df-a317-d0580064aa1f",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vital sign>',
+	'',
+	'',
+	'../behavior.xtuml');
+INSERT INTO O_ID
+	VALUES (0,
+	"e60596c2-c0f7-4fdc-ac3a-625f14c27459");
+INSERT INTO O_ID
+	VALUES (1,
+	"e60596c2-c0f7-4fdc-ac3a-625f14c27459");
+INSERT INTO O_ID
+	VALUES (2,
+	"e60596c2-c0f7-4fdc-ac3a-625f14c27459");
+INSERT INTO PE_PE
+	VALUES ("e60596c2-c0f7-4fdc-ac3a-625f14c27459",
+	1,
+	"8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	"03f0dd69-d2b4-416a-89b3-4c8a47ad1b90",
+	'behavior',
+	'',
+	0,
+	'../behavior.xtuml');
