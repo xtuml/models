@@ -1,4 +1,4 @@
--- BP 7.1 content: Package syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO EP_PKG
 	VALUES ("7271c439-8dc1-4845-900e-8568ae45619b",
@@ -24,13 +24,15 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'3.4.9');
+	'3.4.9',
+	'polycalc::system');
 INSERT INTO GD_GE
 	VALUES ("b1b502d1-8b66-4b0d-90a9-b4d6d974c6a1",
 	"461cd19b-3e9c-4c1e-a71d-9340bccb942e",
 	"07d515d6-22be-4462-bf0b-ec9f664e77e1",
 	100,
-	0);
+	0,
+	'polycalc::system::polycalc::library::polycalc');
 INSERT INTO GD_SHP
 	VALUES ("b1b502d1-8b66-4b0d-90a9-b4d6d974c6a1");
 INSERT INTO GD_NCS
@@ -58,7 +60,8 @@ INSERT INTO GD_GE
 	"461cd19b-3e9c-4c1e-a71d-9340bccb942e",
 	"294e6800-1900-4667-a105-a2271099ab90",
 	105,
-	0);
+	0,
+	'polycalc::system::polycalc::library::polycalc::testing::instrumentation');
 INSERT INTO GD_CON
 	VALUES ("07b609ab-6aef-41fb-b7ab-a77aceb1f397",
 	"00000000-0000-0000-0000-000000000000");
@@ -159,12 +162,6 @@ INSERT INTO DIM_DIA
 	4000.000000,
 	3000.000000,
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO PE_PE
-	VALUES ("07d515d6-22be-4462-bf0b-ec9f664e77e1",
-	1,
-	"7271c439-8dc1-4845-900e-8568ae45619b",
-	"00000000-0000-0000-0000-000000000000",
-	21);
 INSERT INTO CL_IC
 	VALUES ("07d515d6-22be-4462-bf0b-ec9f664e77e1",
 	"96bc158e-0df4-4032-92da-1e6bea093856",
@@ -174,10 +171,15 @@ INSERT INTO CL_IC
 	'',
 	'polycalc::library::polycalc',
 	'');
+INSERT INTO CL_POR
+	VALUES ("07d515d6-22be-4462-bf0b-ec9f664e77e1",
+	"8f64225a-d72f-414b-bd85-b925ddd5bb7e",
+	'testing',
+	"a30539ab-ab5b-440a-bba1-6912de26d6e9");
 INSERT INTO CL_IIR
 	VALUES ("294e6800-1900-4667-a105-a2271099ab90",
 	"99cb7a1a-757c-42ad-8c8b-6c1b505bde6c",
-	"07d515d6-22be-4462-bf0b-ec9f664e77e1",
+	"a30539ab-ab5b-440a-bba1-6912de26d6e9",
 	"00000000-0000-0000-0000-000000000000",
 	'instrumentation',
 	'');
@@ -191,6 +193,19 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"8f64225a-d72f-414b-bd85-b925ddd5bb7e",
 	'../library/polycalc/polycalc.xtuml');
+INSERT INTO C_PO_PROXY
+	VALUES ("8f64225a-d72f-414b-bd85-b925ddd5bb7e",
+	"96bc158e-0df4-4032-92da-1e6bea093856",
+	'testing',
+	0,
+	0,
+	'../library/polycalc/polycalc.xtuml');
+INSERT INTO PE_PE
+	VALUES ("07d515d6-22be-4462-bf0b-ec9f664e77e1",
+	1,
+	"7271c439-8dc1-4845-900e-8568ae45619b",
+	"00000000-0000-0000-0000-000000000000",
+	21);
 INSERT INTO C_C_PROXY
 	VALUES ("96bc158e-0df4-4032-92da-1e6bea093856",
 	"00000000-0000-0000-0000-000000000000",
@@ -199,7 +214,15 @@ INSERT INTO C_C_PROXY
 	'',
 	0,
 	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
 	'../library/polycalc/polycalc.xtuml');
+INSERT INTO PE_PE
+	VALUES ("7271c439-8dc1-4845-900e-8568ae45619b",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	7);
 INSERT INTO S_SYS_PROXY
 	VALUES ("98a374c4-ca4c-4a59-ba9b-009bf9433939",
 	'polycalc',
