@@ -1,10 +1,3 @@
-//
-// Filename: S_Session_Established.al
-//
-// Description: 
-//
-// UK Crown Copyright (c) 2010,2014. All rights reserved.
-//
 state SAC::Session.Session_Established () is
 the_session_spec : instance of Session_Specification;
 the_user : instance of User;

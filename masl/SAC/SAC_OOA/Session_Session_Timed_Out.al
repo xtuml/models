@@ -1,10 +1,3 @@
-//
-// Filename: S_Session_Timed_Out.al
-//
-// Description: 
-//
-// UK Crown Copyright (c) 2010,2014. All rights reserved.
-//
 state SAC::Session.Session_Timed_Out () is
 the_user : instance of User;
 
