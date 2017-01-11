@@ -1,4 +1,4 @@
--- BP 7.1 content: Component syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: Component syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO C_C
 	VALUES ("96bc158e-0df4-4032-92da-1e6bea093856",
@@ -7,7 +7,9 @@ INSERT INTO C_C
 	'polycalc',
 	'',
 	0,
-	"00000000-0000-0000-0000-000000000000");
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'');
 INSERT INTO GD_MD
 	VALUES ("432c2ee3-890b-4d93-9639-c2d0f032d2e7",
 	111,
@@ -25,13 +27,15 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'3.5.3');
+	'3.5.3',
+	'polycalc::library::polycalc');
 INSERT INTO GD_GE
 	VALUES ("ffc7c986-43c2-457f-a1c9-a3675bab55be",
 	"432c2ee3-890b-4d93-9639-c2d0f032d2e7",
 	"96bc158e-0df4-4032-92da-1e6bea093856",
 	103,
-	0);
+	0,
+	'polycalc::library::polycalc');
 INSERT INTO GD_SHP
 	VALUES ("ffc7c986-43c2-457f-a1c9-a3675bab55be");
 INSERT INTO GD_CTR
@@ -59,7 +63,8 @@ INSERT INTO GD_GE
 	"432c2ee3-890b-4d93-9639-c2d0f032d2e7",
 	"27b026b9-dd5c-4f67-a267-00aa2230b833",
 	108,
-	0);
+	0,
+	'polycalc::library::polycalc::asmd');
 INSERT INTO GD_SHP
 	VALUES ("5006d88c-f2e8-431a-b5d5-3977d1c5c2bf");
 INSERT INTO GD_NCS
@@ -82,7 +87,8 @@ INSERT INTO GD_GE
 	"432c2ee3-890b-4d93-9639-c2d0f032d2e7",
 	"9848b9d8-32f5-4451-9fe4-c5b25a7a23b1",
 	108,
-	0);
+	0,
+	'polycalc::library::polycalc::deep');
 INSERT INTO GD_SHP
 	VALUES ("cc44ce74-f2c8-4806-8e84-e5f9c7478e47");
 INSERT INTO GD_NCS
@@ -105,7 +111,8 @@ INSERT INTO GD_GE
 	"432c2ee3-890b-4d93-9639-c2d0f032d2e7",
 	"0711a48a-3dd0-477f-a75b-d40d8b6384d0",
 	108,
-	0);
+	0,
+	'polycalc::library::polycalc::multiple');
 INSERT INTO GD_SHP
 	VALUES ("13b4dde9-b1c1-430e-8ced-d5bded81e1f1");
 INSERT INTO GD_NCS
@@ -128,7 +135,8 @@ INSERT INTO GD_GE
 	"432c2ee3-890b-4d93-9639-c2d0f032d2e7",
 	"a9bf88b0-aa0a-45eb-86ac-cff4fa451b03",
 	108,
-	0);
+	0,
+	'polycalc::library::polycalc::fun');
 INSERT INTO GD_SHP
 	VALUES ("09420c4a-a98e-423e-86da-aea886bb0877");
 INSERT INTO GD_NCS
@@ -151,7 +159,8 @@ INSERT INTO GD_GE
 	"432c2ee3-890b-4d93-9639-c2d0f032d2e7",
 	"99cb7a1a-757c-42ad-8c8b-6c1b505bde6c",
 	94,
-	0);
+	0,
+	'polycalc::library::polycalc::testing::instrumentation');
 INSERT INTO GD_CON
 	VALUES ("7a388d57-2e1f-4e87-b50a-7d0b3fb0cb22",
 	"00000000-0000-0000-0000-000000000000");
@@ -267,7 +276,8 @@ INSERT INTO C_P
 	VALUES ("99cb7a1a-757c-42ad-8c8b-6c1b505bde6c",
 	'instrumentation',
 	'Unnamed Interface',
-	'');
+	'',
+	'polycalc::testing::instrumentation');
 INSERT INTO SPR_PEP
 	VALUES ("3efea2e9-7e73-44e6-8ddf-aadf567b69b2",
 	"3d31ee12-71fb-40f8-976c-a1f9399f426d",
@@ -284,6 +294,7 @@ INSERT INTO C_EP_PROXY
 	"755d36f2-a10d-4dc3-a873-4fe698311475",
 	-1,
 	'start_test',
+	'',
 	'../instrumentation/instrumentation.xtuml');
 INSERT INTO C_I_PROXY
 	VALUES ("755d36f2-a10d-4dc3-a873-4fe698311475",
@@ -291,34 +302,17 @@ INSERT INTO C_I_PROXY
 	'instrumentation',
 	'',
 	'../instrumentation/instrumentation.xtuml');
-INSERT INTO PE_PE_PROXY
+INSERT INTO PE_PE
 	VALUES ("96bc158e-0df4-4032-92da-1e6bea093856",
 	1,
 	"5339ac80-359c-4599-8b3b-42e9f6498f52",
 	"00000000-0000-0000-0000-000000000000",
-	2,
+	2);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("5339ac80-359c-4599-8b3b-42e9f6498f52",
+	"98a374c4-ca4c-4a59-ba9b-009bf9433939",
+	"98a374c4-ca4c-4a59-ba9b-009bf9433939",
+	'library',
+	'',
+	0,
 	'../library.xtuml');
-INSERT INTO PE_PE
-	VALUES ("27b026b9-dd5c-4f67-a267-00aa2230b833",
-	1,
-	"00000000-0000-0000-0000-000000000000",
-	"96bc158e-0df4-4032-92da-1e6bea093856",
-	7);
-INSERT INTO PE_PE
-	VALUES ("9848b9d8-32f5-4451-9fe4-c5b25a7a23b1",
-	1,
-	"00000000-0000-0000-0000-000000000000",
-	"96bc158e-0df4-4032-92da-1e6bea093856",
-	7);
-INSERT INTO PE_PE
-	VALUES ("0711a48a-3dd0-477f-a75b-d40d8b6384d0",
-	1,
-	"00000000-0000-0000-0000-000000000000",
-	"96bc158e-0df4-4032-92da-1e6bea093856",
-	7);
-INSERT INTO PE_PE
-	VALUES ("a9bf88b0-aa0a-45eb-86ac-cff4fa451b03",
-	1,
-	"00000000-0000-0000-0000-000000000000",
-	"96bc158e-0df4-4032-92da-1e6bea093856",
-	7);

@@ -1,0 +1,154 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("87e2b4bb-6736-4b27-98cf-511cfe5893e5",
+	'respiration',
+	8,
+	'respiration',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("8aff89a6-27ea-4d94-aa6b-ba455f067384",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5",
+	'update',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'select any respiration from instances of respiration;
+select one vitalsign related by respiration->vitalsign[R2];
+if ( not_empty vitalsign )
+  vitalsign.update( value:param.period );
+end if;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("b3cd5fbe-9b40-40a3-a83b-0a83ae14d94e",
+	"8aff89a6-27ea-4d94-aa6b-ba455f067384",
+	'period',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("ce510fd3-b686-49a4-8b69-6a0f3e37f458",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5",
+	'init',
+	'',
+	"5b6d4426-99e6-42df-a317-d0580064aa1f",
+	0,
+	'create object instance respiration of respiration;
+create object instance vitalsign of vitalsign;
+vitalsign.name = "respiration";
+vitalsign.value = 0;
+vitalsign.yellow_threshold = 30;
+vitalsign.red_threshold = 60;
+relate respiration to vitalsign across R2;
+return vitalsign;
+',
+	1,
+	'',
+	"8aff89a6-27ea-4d94-aa6b-ba455f067384");
+INSERT INTO S_DT_PROXY
+	VALUES ("5b6d4426-99e6-42df-a317-d0580064aa1f",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vital sign>',
+	'',
+	'',
+	'../behavior.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("acda28ea-0aaa-4850-84ef-2de40df30ff6",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5");
+INSERT INTO O_BATTR
+	VALUES ("acda28ea-0aaa-4850-84ef-2de40df30ff6",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5");
+INSERT INTO O_ATTR
+	VALUES ("acda28ea-0aaa-4850-84ef-2de40df30ff6",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5",
+	"00000000-0000-0000-0000-000000000000",
+	'rate',
+	'',
+	'',
+	'rate',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("90123f2b-3cab-456d-b87a-f5b79c4ae83d",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5");
+INSERT INTO O_BATTR
+	VALUES ("90123f2b-3cab-456d-b87a-f5b79c4ae83d",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5");
+INSERT INTO O_ATTR
+	VALUES ("90123f2b-3cab-456d-b87a-f5b79c4ae83d",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5",
+	"acda28ea-0aaa-4850-84ef-2de40df30ff6",
+	'apnia',
+	'',
+	'',
+	'apnia',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("2fb3cd6b-7c2d-4ad3-ade7-f8b19594a4f0",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5");
+INSERT INTO O_BATTR
+	VALUES ("2fb3cd6b-7c2d-4ad3-ade7-f8b19594a4f0",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5");
+INSERT INTO O_ATTR
+	VALUES ("2fb3cd6b-7c2d-4ad3-ade7-f8b19594a4f0",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5",
+	"90123f2b-3cab-456d-b87a-f5b79c4ae83d",
+	'inhale',
+	'',
+	'',
+	'inhale',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("231f0201-f769-4a29-83f3-e387ee677922",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5");
+INSERT INTO O_BATTR
+	VALUES ("231f0201-f769-4a29-83f3-e387ee677922",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5");
+INSERT INTO O_ATTR
+	VALUES ("231f0201-f769-4a29-83f3-e387ee677922",
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5",
+	"2fb3cd6b-7c2d-4ad3-ade7-f8b19594a4f0",
+	'exhale',
+	'',
+	'',
+	'exhale',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5");
+INSERT INTO O_ID
+	VALUES (1,
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5");
+INSERT INTO O_ID
+	VALUES (2,
+	"87e2b4bb-6736-4b27-98cf-511cfe5893e5");
+INSERT INTO PE_PE
+	VALUES ("87e2b4bb-6736-4b27-98cf-511cfe5893e5",
+	1,
+	"8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	"03f0dd69-d2b4-416a-89b3-4c8a47ad1b90",
+	'behavior',
+	'',
+	0,
+	'../behavior.xtuml');

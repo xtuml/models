@@ -1,0 +1,204 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("0e0e5443-0f15-430b-8c55-37a7da052575",
+	'vital sign',
+	2,
+	'vitalsign',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("f9a96ecf-8033-4767-ac59-0f780100984a",
+	"0e0e5443-0f15-430b-8c55-37a7da052575",
+	'update',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'self.value = param.value;
+select one redalarm related by self->alarm[R7] where ( selected.color == color::red );
+select one yellowalarm related by self->alarm[R7] where ( selected.color == color::yellow );
+if ( self.value < self.yellow_threshold )
+  if ( empty redalarm )
+    if ( not_empty yellowalarm )
+      unrelate yellowalarm from self across R7;
+      delete object instance yellowalarm;
+    end if;
+    create object instance redalarm of alarm;
+    redalarm.color = color::red;
+    relate redalarm to self across R7;
+  end if;
+elif ( self.value < self.yellow_threshold )
+  if ( empty yellowalarm )
+    create object instance yellowalarm of alarm;
+    yellowalarm.color = color::yellow;
+    relate yellowalarm to self across R7;
+  end if;
+else
+  // All O.K.
+end if;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("e5255374-7d52-4c56-935d-93be10a6861c",
+	"f9a96ecf-8033-4767-ac59-0f780100984a",
+	'value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1c8f7b98-5d58-47e2-a6e6-9d32cdfaf1ba",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_BATTR
+	VALUES ("1c8f7b98-5d58-47e2-a6e6-9d32cdfaf1ba",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_ATTR
+	VALUES ("1c8f7b98-5d58-47e2-a6e6-9d32cdfaf1ba",
+	"0e0e5443-0f15-430b-8c55-37a7da052575",
+	"00000000-0000-0000-0000-000000000000",
+	'name',
+	'',
+	'',
+	'name',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("8df91cbc-d9a1-4565-944d-91522c2bfb0a",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_BATTR
+	VALUES ("8df91cbc-d9a1-4565-944d-91522c2bfb0a",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_ATTR
+	VALUES ("8df91cbc-d9a1-4565-944d-91522c2bfb0a",
+	"0e0e5443-0f15-430b-8c55-37a7da052575",
+	"1c8f7b98-5d58-47e2-a6e6-9d32cdfaf1ba",
+	'value',
+	'',
+	'',
+	'value',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("aa9a9ca1-03f5-43a6-a5b1-7227475dd2df",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_BATTR
+	VALUES ("aa9a9ca1-03f5-43a6-a5b1-7227475dd2df",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_ATTR
+	VALUES ("aa9a9ca1-03f5-43a6-a5b1-7227475dd2df",
+	"0e0e5443-0f15-430b-8c55-37a7da052575",
+	"18a03134-0c02-4f07-b294-275d2cedd6c3",
+	'yellow_threshold',
+	'',
+	'',
+	'yellow_threshold',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e2098874-1d33-4471-866e-25990c7ab335",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_BATTR
+	VALUES ("e2098874-1d33-4471-866e-25990c7ab335",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_ATTR
+	VALUES ("e2098874-1d33-4471-866e-25990c7ab335",
+	"0e0e5443-0f15-430b-8c55-37a7da052575",
+	"aa9a9ca1-03f5-43a6-a5b1-7227475dd2df",
+	'red_threshold',
+	'',
+	'',
+	'red_threshold',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("11c7c3fa-d7b8-43df-8c86-859876470148",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_BATTR
+	VALUES ("11c7c3fa-d7b8-43df-8c86-859876470148",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_ATTR
+	VALUES ("11c7c3fa-d7b8-43df-8c86-859876470148",
+	"0e0e5443-0f15-430b-8c55-37a7da052575",
+	"e2098874-1d33-4471-866e-25990c7ab335",
+	'yellow_stops_infusion',
+	'',
+	'',
+	'yellow_stops_infusion',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("91694f7a-6ec1-45da-b5ba-8c822ed5ebd8",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_BATTR
+	VALUES ("91694f7a-6ec1-45da-b5ba-8c822ed5ebd8",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_ATTR
+	VALUES ("91694f7a-6ec1-45da-b5ba-8c822ed5ebd8",
+	"0e0e5443-0f15-430b-8c55-37a7da052575",
+	"11c7c3fa-d7b8-43df-8c86-859876470148",
+	'red_stops_infusion',
+	'',
+	'',
+	'red_stops_infusion',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("18a03134-0c02-4f07-b294-275d2cedd6c3",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_BATTR
+	VALUES ("18a03134-0c02-4f07-b294-275d2cedd6c3",
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_ATTR
+	VALUES ("18a03134-0c02-4f07-b294-275d2cedd6c3",
+	"0e0e5443-0f15-430b-8c55-37a7da052575",
+	"8df91cbc-d9a1-4565-944d-91522c2bfb0a",
+	'old_value',
+	'',
+	'',
+	'old_value',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_OIDA
+	VALUES ("1c8f7b98-5d58-47e2-a6e6-9d32cdfaf1ba",
+	"0e0e5443-0f15-430b-8c55-37a7da052575",
+	0,
+	'name');
+INSERT INTO O_ID
+	VALUES (1,
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO O_ID
+	VALUES (2,
+	"0e0e5443-0f15-430b-8c55-37a7da052575");
+INSERT INTO PE_PE
+	VALUES ("0e0e5443-0f15-430b-8c55-37a7da052575",
+	1,
+	"8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	"03f0dd69-d2b4-416a-89b3-4c8a47ad1b90",
+	'behavior',
+	'',
+	0,
+	'../behavior.xtuml');
