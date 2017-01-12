@@ -1,10 +1,3 @@
-//
-// Filename: S_Session_Heartbeat_Failed.al
-//
-// Description: 
-//
-// UK Crown Copyright (c) 2010. All rights reserved.
-//
 state SAC::Session.Session_Heartbeat_Failed () is
 the_session_spec : instance of Session_Specification;
 
