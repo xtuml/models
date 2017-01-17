@@ -1,19 +1,8 @@
-//
-// Filename: user_logon.svc
-//
-// Description: Allows a user to log into the system. The groups that the
-//              user belongs to are specifed and the domain checks that they
-//              are valid. If they are valid a session is created and the
-//              user is provided with a session id.  If there are invalid
-//              the user is informed of the failure to logon.
-//
-// UK Crown Copyright (c) 2010-2012,2014. All rights reserved.
-//
-public service SAC::user_logon (user_id              : in  integer,
-                                login_name           : in  string,
-                                user_name            : in  string,
-                                workstation_hostname : in  string,
-                                groups               : in  sequence of string) is
+public service SAC::user_logon ( user_id: in integer,
+                                 login_name: in string,
+                                 user_name: in string,
+                                 workstation_hostname: in string,
+                                 groups: in sequence of string ) is
 login_allowed : boolean := false;
 the_user : instance of User;
 the_workstation : instance of Workstation;
