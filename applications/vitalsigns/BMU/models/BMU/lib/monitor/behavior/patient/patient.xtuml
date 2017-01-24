@@ -1,0 +1,271 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("e5489a96-9fdc-4b66-a5c2-cc50c018004f",
+	'patient',
+	1,
+	'patient',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("f7aadd7c-6735-4027-b2f3-98f3ca653ef9",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f",
+	'init',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'select any patient from instances of patient where ( selected.identifier == param.identifier );
+if ( empty patient )
+  create object instance patient of patient;
+end if;
+patient.identifier = param.identifier;
+patient.name = param.name;
+patient.age = param.age;
+patient.gender = param.gender;
+patient.weight = param.weight;
+
+// Create the O2 saturation vital sign (sub/super) and link here.
+O2saturation = O2saturation::init();
+relate patient to O2saturation across R1;
+
+// Create the pulse vital sign (sub/super) and link here.
+pulse = pulse::init();
+relate patient to pulse across R1;
+
+// Create the blood pressure vital sign (sub/super) and links here.
+systolic = systolicBP::init();
+relate patient to systolic across R1;
+diastolic = diastolicBP::init();
+relate patient to diastolic across R1;
+
+// Create the electrocardiograph and link here.
+ecg = electrocardiograph::init();
+relate patient to ecg across R1;
+
+// Create the respiration vital signs and link here.
+breath = respiration::init();
+relate patient to breath across R1;
+co2 = etCO2::init();
+relate patient to co2 across R1;
+
+// Create and link the responsiveness measurement.
+arm = responsiveness::init();
+relate patient to arm across R1;
+
+// Activate the patient.
+generate patient8:setup() to patient;
+
+create event instance e of vitalsign_A1:tick() to vitalsign class;
+t = TIM::timer_start_recurring( microseconds:700000, event_inst:e );',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TPARM
+	VALUES ("2de946f4-f5a4-4717-91ea-903720cd12cc",
+	"f7aadd7c-6735-4027-b2f3-98f3ca653ef9",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"ebfb2c64-346d-414d-b9b9-b8434cfc9bd3",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("fcf24d41-4134-4623-a15e-ebb34bcc2146",
+	"f7aadd7c-6735-4027-b2f3-98f3ca653ef9",
+	'age',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"2de946f4-f5a4-4717-91ea-903720cd12cc",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("ebfb2c64-346d-414d-b9b9-b8434cfc9bd3",
+	"f7aadd7c-6735-4027-b2f3-98f3ca653ef9",
+	'identifier',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("a3e76177-fcf3-420f-9c02-7fb43ab9bca6",
+	"f7aadd7c-6735-4027-b2f3-98f3ca653ef9",
+	'gender',
+	"d93f790b-e47f-4436-a4fe-d02d03a3f838",
+	0,
+	'',
+	"fcf24d41-4134-4623-a15e-ebb34bcc2146",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d93f790b-e47f-4436-a4fe-d02d03a3f838",
+	"00000000-0000-0000-0000-000000000000",
+	'gender',
+	'',
+	'',
+	'../../../../../../../capsshare/models/capsshare/caps data types/caps data types.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("067346c3-37f9-4a78-9aab-ac72d7e86078",
+	"f7aadd7c-6735-4027-b2f3-98f3ca653ef9",
+	'weight',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"a3e76177-fcf3-420f-9c02-7fb43ab9bca6",
+	'');
+INSERT INTO O_TFR
+	VALUES ("20327295-fc5e-4f12-8d06-2edc65cc8b26",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f",
+	'cleanup',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'send pulsox::off();
+
+select many patients from instances of patient;
+for each patient in patients
+  select many vitalsigns related by patient->vitalsign[R1];
+  for each vitalsign in vitalsigns
+    unrelate patient from vitalsign across R1;
+    delete object instance vitalsign;
+  end for;
+  delete object instance patient;
+end for;',
+	1,
+	'',
+	"f7aadd7c-6735-4027-b2f3-98f3ca653ef9");
+INSERT INTO O_NBATTR
+	VALUES ("519e0471-947e-49f5-b6bf-43bb15927721",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_BATTR
+	VALUES ("519e0471-947e-49f5-b6bf-43bb15927721",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_ATTR
+	VALUES ("519e0471-947e-49f5-b6bf-43bb15927721",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f",
+	"e4e41ace-0c86-4805-ae42-b594bbbe84fc",
+	'name',
+	'',
+	'',
+	'name',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("0e8da97e-9bb3-4086-a335-29844e3dacea",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_BATTR
+	VALUES ("0e8da97e-9bb3-4086-a335-29844e3dacea",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_ATTR
+	VALUES ("0e8da97e-9bb3-4086-a335-29844e3dacea",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f",
+	"e0fc71c5-9879-4a49-8b7d-2d9aad40e2b2",
+	'age',
+	'',
+	'',
+	'age',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("8e6563b8-3e70-4c7a-84cd-9fc8b80ae740",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_BATTR
+	VALUES ("8e6563b8-3e70-4c7a-84cd-9fc8b80ae740",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_ATTR
+	VALUES ("8e6563b8-3e70-4c7a-84cd-9fc8b80ae740",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f",
+	"0e8da97e-9bb3-4086-a335-29844e3dacea",
+	'weight',
+	'',
+	'',
+	'weight',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("7acd695a-37f1-4ea9-9d87-972ecc3da0cc",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_BATTR
+	VALUES ("7acd695a-37f1-4ea9-9d87-972ecc3da0cc",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_ATTR
+	VALUES ("7acd695a-37f1-4ea9-9d87-972ecc3da0cc",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f",
+	"519e0471-947e-49f5-b6bf-43bb15927721",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e0fc71c5-9879-4a49-8b7d-2d9aad40e2b2",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_BATTR
+	VALUES ("e0fc71c5-9879-4a49-8b7d-2d9aad40e2b2",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_ATTR
+	VALUES ("e0fc71c5-9879-4a49-8b7d-2d9aad40e2b2",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f",
+	"00000000-0000-0000-0000-000000000000",
+	'identifier',
+	'',
+	'',
+	'identifier',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e4e41ace-0c86-4805-ae42-b594bbbe84fc",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_BATTR
+	VALUES ("e4e41ace-0c86-4805-ae42-b594bbbe84fc",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_ATTR
+	VALUES ("e4e41ace-0c86-4805-ae42-b594bbbe84fc",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f",
+	"8e6563b8-3e70-4c7a-84cd-9fc8b80ae740",
+	'gender',
+	'',
+	'',
+	'gender',
+	0,
+	"d93f790b-e47f-4436-a4fe-d02d03a3f838",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_OIDA
+	VALUES ("e0fc71c5-9879-4a49-8b7d-2d9aad40e2b2",
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f",
+	0,
+	'identifier');
+INSERT INTO O_ID
+	VALUES (1,
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO O_ID
+	VALUES (2,
+	"e5489a96-9fdc-4b66-a5c2-cc50c018004f");
+INSERT INTO PE_PE
+	VALUES ("e5489a96-9fdc-4b66-a5c2-cc50c018004f",
+	1,
+	"8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	"03f0dd69-d2b4-416a-89b3-4c8a47ad1b90",
+	'behavior',
+	'',
+	0,
+	'../behavior.xtuml');

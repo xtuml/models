@@ -1,0 +1,82 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("119b1fce-54f2-490e-b2c6-1598fa8c0393",
+	'pulse',
+	3,
+	'pulse',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("8ee94831-c530-47cc-8a5d-f9a63d190c72",
+	"119b1fce-54f2-490e-b2c6-1598fa8c0393",
+	'init',
+	'',
+	"5b6d4426-99e6-42df-a317-d0580064aa1f",
+	0,
+	'create object instance pulse of pulse;
+create object instance vitalsign of vitalsign;
+vitalsign.name = "pulse";
+vitalsign.value = 0;
+vitalsign.yellow_threshold = 20;
+vitalsign.red_threshold = 10;
+relate pulse to vitalsign across R2;
+return vitalsign;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DT_PROXY
+	VALUES ("5b6d4426-99e6-42df-a317-d0580064aa1f",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<vital sign>',
+	'',
+	'',
+	'../behavior.xtuml');
+INSERT INTO O_TFR
+	VALUES ("f514d966-347d-4103-bcf8-ecbac7106c64",
+	"119b1fce-54f2-490e-b2c6-1598fa8c0393",
+	'update',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'select any pulse from instances of pulse;
+select one vitalsign related by pulse->vitalsign[R2];
+if ( not_empty vitalsign )
+  vitalsign.update( value:param.pulse );
+end if;',
+	1,
+	'',
+	"8ee94831-c530-47cc-8a5d-f9a63d190c72");
+INSERT INTO O_TPARM
+	VALUES ("2477d57e-901a-48db-80e7-4e21e899063f",
+	"f514d966-347d-4103-bcf8-ecbac7106c64",
+	'pulse',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"119b1fce-54f2-490e-b2c6-1598fa8c0393");
+INSERT INTO O_ID
+	VALUES (1,
+	"119b1fce-54f2-490e-b2c6-1598fa8c0393");
+INSERT INTO O_ID
+	VALUES (2,
+	"119b1fce-54f2-490e-b2c6-1598fa8c0393");
+INSERT INTO PE_PE
+	VALUES ("119b1fce-54f2-490e-b2c6-1598fa8c0393",
+	1,
+	"8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("8b20a567-d209-4d10-af34-5f1907a95dd4",
+	"00000000-0000-0000-0000-000000000000",
+	"03f0dd69-d2b4-416a-89b3-4c8a47ad1b90",
+	'behavior',
+	'',
+	0,
+	'../behavior.xtuml');

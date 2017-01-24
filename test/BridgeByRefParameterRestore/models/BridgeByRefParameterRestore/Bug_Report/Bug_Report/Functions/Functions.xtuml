@@ -1,0 +1,98 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("4ecfb0c2-ff73-4fc8-b7f4-d3e9bb619f1e",
+	"00000000-0000-0000-0000-000000000000",
+	"f9df829c-6b4d-4f5e-8837-2e2214ed85d2",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("990ed4b5-7d3f-4268-8525-61baa4798395",
+	112,
+	"4ecfb0c2-ff73-4fc8-b7f4-d3e9bb619f1e",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'BridgeByRefParameterRestore::Bug_Report::Bug_Report::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("990ed4b5-7d3f-4268-8525-61baa4798395",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("5f366a75-c6d6-4be3-b198-364fc576912a",
+	"00000000-0000-0000-0000-000000000000",
+	'Trigger_Bug',
+	'',
+	'trigger_bug = true;
+
+BUG::Assert_Equals(Value: false, Name: "false");
+BUG::Assert_Equals(Value: false, Name: "False");
+BUG::Assert_Equals(Value: false, Name: "FALSE");
+BUG::Assert_Equals(Value: false, Name: "FaLsE");
+
+BUG::Assert_Equals(Value: true, Name: "true");
+BUG::Assert_Equals(Value: true, Name: "True");
+BUG::Assert_Equals(Value: true, Name: "TRUE");
+BUG::Assert_Equals(Value: true, Name: "TrUe");
+
+b = true;
+
+if trigger_bug
+	BUG::Set(Inst_Ref: b, Value: "FALSE");
+else
+	b = false;
+end if;
+
+BUG::Invert(Inst_Ref: b);
+
+BUG::Assert_Equals(Value: b, Name: "true");
+BUG::Assert_Equals(Value: b, Name: "True");
+BUG::Assert_Equals(Value: b, Name: "TRUE");
+BUG::Assert_Equals(Value: b, Name: "TrUe");
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'');
+INSERT INTO PE_PE
+	VALUES ("5f366a75-c6d6-4be3-b198-364fc576912a",
+	1,
+	"4ecfb0c2-ff73-4fc8-b7f4-d3e9bb619f1e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("4ecfb0c2-ff73-4fc8-b7f4-d3e9bb619f1e",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"ed4c1865-2294-43a0-ad2a-798c984fa796",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("ed4c1865-2294-43a0-ad2a-798c984fa796",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Bug_Report',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../Bug_Report.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("f9df829c-6b4d-4f5e-8837-2e2214ed85d2",
+	'BridgeByRefParameterRestore',
+	1,
+	'../../../BridgeByRefParameterRestore.xtuml');
