@@ -1,15 +1,6 @@
-//
-// Filename: user_logoff.svc
-//
-// Description: Allows the user to inform the domainthat they have logged
-//              off. The domain shall delet the session and if teh user is
-//              involved in no other session then it shall delete the user.
-//
-// UK Crown Copyright (c) 2010,2014. All rights reserved.
-//
-public service SAC::user_logoff (session_id : in  integer,
-                                 user_id    : in  integer,
-                                 login_name : in  string) is
+public service SAC::user_logoff ( session_id: in integer,
+                                  user_id: in integer,
+                                  login_name: in string ) is
 the_session : instance of Session;
 the_workstation : instance of Workstation;
 
@@ -29,5 +20,4 @@ begin
       console << "SAC::user_logoff - Invalid logoff received, session_id = " << session_id'image  << 
                  ", uid = " << user_id'image << ", sid = " << login_name << endl << flush;
    end if;
-   
 end service;
