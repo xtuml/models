@@ -24,8 +24,6 @@ domain Logic is
     
     scenario_id: preferred unique integer;     
     
-    public instance deferred ( R1 ) service calculatePlay ();     
-    
   end object;
   
   object CribDiscardScenario is

@@ -1,0 +1,17 @@
+private service Logic::GameControl~>play ( card : in Game::CardType ) is
+begin
+  Game::play( card );
+end service;
+
+private service Game::PlayerLogic~>nextPeggingPlay ( cards : in sequence of Game::CardType,
+                                                            pile_cards : in sequence of Game::CardType ) is
+begin
+  Logic::nextPeggingPlay( cards, pile_cards );
+end service;
+
+private service Game::PlayerLogic~>nextDiscard ( cards : in sequence of Game::CardType,
+                                                        my_crib : in boolean ) is
+begin
+  Logic::nextDiscard( cards, my_crib );
+end service;
+

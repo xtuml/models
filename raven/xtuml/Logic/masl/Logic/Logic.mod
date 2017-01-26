@@ -1,8 +1,8 @@
 domain Logic is
   
-  object Scenario;
   object CribDiscardScenario;
   object PeggingScenario;
+  object Scenario;
   
   public service nextPeggingPlay ( cards: in sequence of Game::CardType,
                                    pile_cards: in sequence of Game::CardType );   
@@ -19,14 +19,6 @@ domain Logic is
   relationship R1 is Scenario is_a ( PeggingScenario, CribDiscardScenario );   
   
   
-  
-  object Scenario is
-    
-    scenario_id: preferred unique integer;     
-    
-    public instance deferred ( R1 ) service calculatePlay ();     
-    
-  end object;
   
   object CribDiscardScenario is
     
@@ -45,6 +37,12 @@ domain Logic is
     scenario_id: preferred referential ( R1.scenario_id ) integer;     
     
     public instance service calculatePlay ();     
+    
+  end object;
+  
+  object Scenario is
+    
+    scenario_id: preferred unique integer;     
     
   end object;
   
