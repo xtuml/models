@@ -34,7 +34,6 @@ domain Game is
     private service nextDiscard (
         cards : in sequence of CardType,        my_crib : in boolean    );
   end terminator;
-pragma key_letter ( "PL" ); 
   relationship R2 is Game unconditionally has one Deck,
     Deck unconditionally contains_cards_for one Game;
   relationship R3 is Game unconditionally has many Player,
@@ -75,7 +74,6 @@ pragma key_letter ( "PL" );
     board_id : preferred unique integer;
     game_number :   referential ( R1.keeps_score_for.Game.game_number ) integer;
   end object;
-pragma key_letter ( "B" ); 
   object Card is
     value : preferred  integer;
     suit : preferred  SuitType;
@@ -84,19 +82,16 @@ pragma key_letter ( "B" );
     deck_id :   referential ( R7.located_in.Deck.deck_id ) integer;
     crib_id :   referential ( R18.located_in.Crib.crib_id ) integer;
   end object;
-pragma key_letter ( "C" ); 
   object CardInPlay is
     play_id : preferred  referential ( R10.makes.Play.play_id ) integer;
     player_number : preferred  referential ( R10.made_by.Player.player_number ) integer;
     value :   referential ( R11.represents.Card.value ) integer;
     suit :   referential ( R11.represents.Card.suit ) SuitType;
   end object;
-pragma key_letter ( "CIP" ); 
   object Deck is
     deck_id : preferred unique integer;
     game_number :   referential ( R2.contains_cards_for.Game.game_number ) integer;
   end object;
-pragma key_letter ( "D" ); 
   object Game is
     game_number : preferred unique integer;
      state PickingFirstCrib();
@@ -198,15 +193,12 @@ pragma key_letter ( "D" );
         ContinueDiscarding => Cannot_Happen      ); 
     end transition;
   end object;
-pragma key_letter ( "G" ); 
   object Hand is
     hand_id : preferred unique integer;
   end object;
-pragma key_letter ( "H" ); 
   object NormalPlay is
     play_id : preferred  referential ( R12.play_id ) integer;
   end object;
-pragma key_letter ( "NP" ); 
   object Peg is
     peg_id : preferred unique integer;
     board_id :   referential ( R5.moves_on.Board.board_id ) integer;
@@ -227,38 +219,31 @@ pragma key_letter ( "NP" );
         MoveDone => Stationary      ); 
     end transition;
   end object;
-pragma key_letter ( "PG" ); 
   object Pile is
     pile_id : preferred unique integer;
     game_number :   referential ( R4.contains_cards_for.Game.game_number ) integer;
   end object;
-pragma key_letter ( "PI" ); 
   object Play is
     play_id : preferred unique integer;
   end object;
-pragma key_letter ( "P" ); 
   object Player is
     player_number : preferred unique integer;
     name :   string;
     game_number :   referential ( R3.plays.Game.game_number ) integer;
   end object;
-pragma key_letter ( "PR" ); 
   object Score is
     peg_id :   referential ( R16.moves.Peg.peg_id ) integer;
     player_number : preferred  referential ( R6.ranks.Player.player_number ) integer;
   end object;
-pragma key_letter ( "S" ); 
   object ScoringPlay is
     pile_id :   referential ( R14.occurs_in.Pile.pile_id ) integer;
     hand_id :   referential ( R13.occurs_in.Hand.hand_id ) integer;
     player_number :   referential ( R15.changes.Score.player_number ) integer;
     play_id : preferred  referential ( R12.play_id ) integer;
   end object;
-pragma key_letter ( "SP" ); 
   object Crib is
     crib_id : preferred unique integer;
     game_number :   referential ( R17.contains_cards_for.Game.game_number ) integer;
   end object;
-pragma key_letter ( "CB" ); 
 end domain;
 pragma number (  ); 

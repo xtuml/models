@@ -29,7 +29,6 @@ domain Game is
     private service nextDiscard ( cards: in sequence of CardType,
                                   my_crib: in boolean );     
   end terminator;
-  pragma key_letter("PL");
   
   
   
@@ -89,7 +88,6 @@ domain Game is
     game_number: referential ( R1.keeps_score_for.Game.game_number ) integer;     
     
   end object;
-  pragma key_letter("B");
   
   object Card is
     
@@ -100,7 +98,6 @@ domain Game is
     hand_id: referential ( R9.located_in.Hand.hand_id ) integer;     
     
   end object;
-  pragma key_letter("C");
   
   object CardInPlay is
     
@@ -110,7 +107,6 @@ domain Game is
     player_number: preferred referential ( R10.made_by.Player.player_number ) integer;     
     
   end object;
-  pragma key_letter("CIP");
   
   object Deck is
     
@@ -118,7 +114,6 @@ domain Game is
     game_number: referential ( R2.contains_cards_for.Game.game_number ) integer;     
     
   end object;
-  pragma key_letter("D");
   
   object Game is
     
@@ -218,21 +213,18 @@ domain Game is
     end transition;
     
   end object;
-  pragma key_letter("G");
   
   object Hand is
     
     hand_id: preferred unique integer;     
     
   end object;
-  pragma key_letter("H");
   
   object NormalPlay is
     
     play_id: preferred referential ( R12.play_id ) integer;     
     
   end object;
-  pragma key_letter("NP");
   
   object Peg is
     
@@ -240,7 +232,6 @@ domain Game is
     board_id: referential ( R5.moves_on.Board.board_id ) integer;     
     
   end object;
-  pragma key_letter("PG");
   
   object Pile is
     
@@ -248,14 +239,12 @@ domain Game is
     game_number: referential ( R4.contains_cards_for.Game.game_number ) integer;     
     
   end object;
-  pragma key_letter("PI");
   
   object Play is
     
     play_id: preferred unique integer;     
     
   end object;
-  pragma key_letter("P");
   
   object Player is
     
@@ -264,7 +253,6 @@ domain Game is
     game_number: referential ( R3.plays.Game.game_number ) integer;     
     
   end object;
-  pragma key_letter("PR");
   
   object Score is
     
@@ -272,7 +260,6 @@ domain Game is
     peg_id: referential ( R16.moves.Peg.peg_id ) integer;     
     
   end object;
-  pragma key_letter("S");
   
   object ScoringPlay is
     
@@ -282,7 +269,6 @@ domain Game is
     player_number: referential ( R15.changes.Score.player_number ) integer;     
     
   end object;
-  pragma key_letter("SP");
   
   
 end domain;
