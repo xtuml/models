@@ -23,7 +23,6 @@ tool from the command line.
 1. Open a new terminal window and navigate to the `~/xtuml` directory.  
 2. The model we will be converting is located in the
 `~/git/models/raven/masl/Game` directory. Feel free to browse the source.  
-
 3. To run the conversion tool, we must provide an input directory, an output
 directory and specify that we are converting a domain with the flag `-d`. The
 conversion tool is located in `tools/mc/bin` under the BridgePoint
