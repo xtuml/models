@@ -1,6 +1,8 @@
 Modeling with BridgePoint  
 =========================
 
+[prev: MASL editing nuances](exercise4.md) | [index](README.md) | [next: Export a MASL domain](exercise6.md)
+
 ## Purpose
 
 This exercise will guide the student through some of the more difficult parts of

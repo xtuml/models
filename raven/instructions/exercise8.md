@@ -1,6 +1,8 @@
 Using the MASL diff tool and formatter
 ======================================
 
+[prev: Export a MASL project](exercise7.md) | [index](README.md)
+
 ## Purpose
 
 This exercise will teach the student how to use the MASL diff tool to compare

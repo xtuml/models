@@ -1,6 +1,8 @@
 Managing dependencies while editing MASL projects
 =================================================
 
+[prev: Convert and import a MASL project](exercise2.md) | [index](README.md) | [next: MASL editing nuances](exercise4.md)
+
 ## Purpose
 
 This exercise will teach the student how to properly edit multi-project MASL

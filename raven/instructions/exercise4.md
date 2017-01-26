@@ -1,6 +1,8 @@
 MASL editing nuances
 ====================
 
+[prev: Managing dependencies](exercise3.md) | [index](README.md) | [next: Modeling with BridgePoint](exercise5.md)
+
 ## Purpose
 
 This exercise will walk the student through several special situations in MASL

@@ -1,6 +1,8 @@
 Export a MASL project
 =====================
 
+[prev: Export a MASL domain](exercise6.md) | [index](README.md) | [next: MASL diff tool and formatter](exercise8.md)
+
 ## Purpose
 
 This exercise will take the student through the steps to export a MASL project.

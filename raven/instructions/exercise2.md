@@ -1,6 +1,8 @@
 Converting and importing a MASL project
 =======================================
 
+[prev: Convert and import a MASL domain](exercise1.md) | [index](README.md) | [next: Managing dependencies](exercise3.md)
+
 ## Purpose
 
 This exercise will guide the student through the process to convert and import
