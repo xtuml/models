@@ -143,6 +143,37 @@ package, right click the _GamePlayerLogic_ interface, then _New > Operation_
 3. Note once again the warning symbols on the _Game_ and _Cribbage_ projects.
 Right click the _Game_ project, then _Synchronize references_  
 
+#### Introducing a domain to an existing MASL project
+
+In this example, we will create a new domain _Tournament_ and link it to the
+project.
+
+1. Navigate to the welcome screen, _Help > Welcome_  
+2. Click _Quick Start_, then _MASL Template_. Firefox will launch and display
+the help contents  
+3. Rename the project, containing packages, and component from "MASLTemplate" to
+"Tournament"  
+4. Rename the "MASLTemplate" port to tournament. Rename the interface if you
+wish  
+5. Browse the model. Example patterns have been provided for several element
+types.  
+
+We have now created a domain model and are free to populate it with any
+implementation we want. Next we must integrate this component with the
+_Cribbage_ project  
+
+1. Navigate to the _Cribbage_ package under the _Cribbage_ project.  
+2. Create a new component reference in this package (right click, then _New >
+Components > Component Reference_  
+3. Right click on the new component reference, then _Assign Component..._  
+4. Select the new _Tournament_ component and press _Ok_  
+5. Double click the _Cribbage_ package to open the package editor  
+6. As we did before, draw a new interface from the _Cribbage_ component to the
+canvas, however this time, select _Required Interface_ from the palette  
+7. Rename the port to _Tournament_ as we did before  
+8. Connect the matching interfaces on the _Tournament_ component reference and
+the _Cribbage_ component by dragging the ball to the cup  
+
 ## Recap
 
 * Types  
