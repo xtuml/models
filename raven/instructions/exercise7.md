@@ -1,7 +1,7 @@
 Using the MASL diff tool and formatter
 ======================================
 
-prev: [Export a MASL project](exercise7.md) | [index](README.md)
+prev: [Export a MASL project](exercise6-2.md) | [index](README.md)
 
 ## Purpose
 
