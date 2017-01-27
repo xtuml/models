@@ -17,7 +17,8 @@ with the _Game_ domain that we exported after making changes.
 
 1. Open a new terminal window and navigate to the `~/xtuml` directory.  
 2. Run the diff tool with the following command:  
-    `BridgePoint/tools/masl/masldiff models/raven/masl/Game/ models/raven/xtuml/Game/masl/Game/`  
+    `l586/tools/mc/bin/masldiff ~/git/models/raven/masl/Game/
+    ~/git/models/raven/xtuml/Game/masl/Game/`  
 3. You will see some output from the `diff` utility  
 4. Run the command `ls` in the terminal. You will notice two new directories
 `left.masldiff` and `right.masldiff`. This is where the diff tool outputs
@@ -32,26 +33,30 @@ demonstration, we will use `vimdiff`. Run the command:
 The MASL code formatter is run automatically by the MASL exporter and the MASL
 diff tool. You can run the formatter standalone as well.
 
-1. Open `~/xtuml/models/raven/masl/unformatted/Game.mod` in a text editor. You
+1. Open `~/git/models/raven/masl/unformatted/Game.mod` in a text editor. You
 will notice that this file is not formatted well. We will format this file with
 the MASL code formatter  
 2. from the `~/xtuml` directory, run the command:  
 
     ```
-    java -cp BridgePoint/tools/masl/lib/MASLParser.jar:BridgePoint/tools/masl/lib/antlr-3.5.2-complete.jar MaslFormatter -r < models/raven/masl/unformatted/Game.mod > Game.mod
+    java -cp l586/tools/mc/bin/MASLParser.jar:l586/tools/mc/bin/antlr-3.5.2-complete.jar MaslFormatter -r < ~/git/models/raven/masl/unformatted/Game.mod > Game.mod
     ```
 
 3. This `java` invocation has 3 parts:  
-    * We must specify the classpath with `-cp` and point to the `jar` files in masl tools library  
+    * We must specify the classpath with `-cp` and point to the `jar` files in
+      masl tools library  
     * We must specify the main class `MaslFormatter`  
     * We must give the application arguments
 4. `-r` is a flag to reorder the model elements and group all
 the similar model elements together  
 5. `-s` (not used in this example) is a flag to sort the model elements  
 6. `-t` (not used in this example) specifies the tab width. Default is 2  
-7. `-i` specifies the input directory  
-8. `-o` specifies the output directory  
-9. Note that the `-i` and `-o` options are only used when formatting whole
+7. `-c` (not used in this example) is a flag to output header comments  
+8. `-i` specifies the input directory  
+9. `-o` specifies the output directory  
+10. `-h` displays usage information  
+11. Note that the `-i` and `-o` options are only used when formatting whole
 directories  
 
 Open up `Game.mod` and view the formatted result.
+
