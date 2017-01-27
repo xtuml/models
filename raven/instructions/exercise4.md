@@ -1,7 +1,7 @@
 MASL editing nuances
 ====================
 
-[prev: Managing dependencies](exercise3.md) | [index](README.md) | [next: Modeling with BridgePoint](exercise5.md)
+prev: [Managing dependencies](exercise3.md) | [index](README.md) | next: [Modeling with BridgePoint](exercise5.md)
 
 ## Purpose
 

@@ -1,7 +1,7 @@
 Export a MASL domain
 ====================
 
-[prev: Modeling with BridgePoint](exercise5.md) | [index](README.md) | [next: Export a MASL project](exercise7.md)
+prev: [Modeling with BridgePoint](exercise5.md) | [index](README.md) | next: [Export a MASL project](exercise6-2.md)
 
 ## Purpose
 

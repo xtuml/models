@@ -1,7 +1,7 @@
 Managing dependencies while editing MASL projects
 =================================================
 
-[prev: Convert and import a MASL project](exercise2.md) | [index](README.md) | [next: MASL editing nuances](exercise4.md)
+prev: [Convert and import a MASL project](exercise2.md) | [index](README.md) | next: [MASL editing nuances](exercise4.md)
 
 ## Purpose
 

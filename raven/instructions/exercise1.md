@@ -1,7 +1,7 @@
 Converting and importing a MASL domain
 ======================================
 
-[prev: GPS Watch example](gps.md) | [index](README.md) | [next: Convert and import a MASL project](exercise2.md)
+prev: [GPS Watch example](gps.md) | [index](README.md) | next: [Convert and import a MASL project](exercise2.md)
 
 ## Purpose
 

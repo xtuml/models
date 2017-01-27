@@ -1,7 +1,7 @@
 GPS Watch Demo
 ==============
 
-[index](README.md) | [next: Convert and import a MASL domain](exercise1.md)
+[index](README.md) | next: [Convert and import a MASL domain](exercise1.md)
 
 ## Purpose
 

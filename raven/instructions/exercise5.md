@@ -1,7 +1,7 @@
 Modeling with BridgePoint  
 =========================
 
-[prev: MASL editing nuances](exercise4.md) | [index](README.md) | [next: Export a MASL domain](exercise6.md)
+prev: [MASL editing nuances](exercise4.md) | [index](README.md) | next: [Export a MASL domain](exercise6-1.md)
 
 ## Purpose
 

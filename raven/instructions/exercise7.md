@@ -1,39 +1,57 @@
-Export a MASL project
-=====================
+Using the MASL diff tool and formatter
+======================================
 
-[prev: Export a MASL domain](exercise6.md) | [index](README.md) | [next: MASL diff tool and formatter](exercise8.md)
+prev: [Export a MASL project](exercise7.md) | [index](README.md)
 
 ## Purpose
 
-This exercise will take the student through the steps to export a MASL project.
+This exercise will teach the student how to use the MASL diff tool to compare
+MASL models and to use the MASL formatter to format MASL.
 
 ## Instructions
 
-In this example, we will export the _Cribbage_ project, open up the MASL and see
-some of our changes.
+#### Using the diff tool
 
-#### Preparing the workspace
+In this example, we will diff the _Game_ domain that we originally converted
+with the _Game_ domain that we exported after making changes.
 
-1. Open a terminal window and navigate to the `~/xtuml` directory.  
-2. Run the `bridgepoint.sh` script to launch BridgePoint (or run the BridgePoint
-launcher directly with `BridgePoint/eclipse/Launcher.sh`.  
-3. Enter `/home/student/xtuml/workspaces/ws-all` in the workspace chooser and
-press `Ok`.  
+1. Open a new terminal window and navigate to the `~/xtuml` directory.  
+2. Run the diff tool with the following command:  
+    `BridgePoint/tools/masl/masldiff models/raven/masl/Game/ models/raven/xtuml/Game/masl/Game/`  
+3. You will see some output from the `diff` utility  
+4. Run the command `ls` in the terminal. You will notice two new directories
+`left.masldiff` and `right.masldiff`. This is where the diff tool outputs
+formatted MASL  
+5. We can now use a compare tool of our choice to compare the MASL. For this
+demonstration, we will use `vimdiff`. Run the command:  
+    `vimdiff left.masldiff/Game.mod right.masldiff/Game.mod`  
+6. Observe the differences from the changes we made to the model  
 
-#### Exporting the project
+#### Using the MASL code formatter
 
-1. Navigate to the _Cribbage_ package in the _Cribbage_ project  
-2. Right click the package, then _Export MASL project_  
-3. When the exporter is finished running, a logfile for the export will appear.
-This represents the standard error output of the exporter. It can generally be
-ignored.  
+The MASL code formatter is run automatically by the MASL exporter and the MASL
+diff tool. You can run the formatter standalone as well.
 
-Now that we have exported the project, we can see some of our model changes
-reflected in the MASL.
+1. Open `~/xtuml/models/raven/masl/unformatted/Game.mod` in a text editor. You
+will notice that this file is not formatted well. We will format this file with
+the MASL code formatter  
+2. from the `~/xtuml` directory, run the command:  
 
-1. Open the _Navigator_ view (_Window > Show View > Other..._, then search for
-"Navigator")  
-2. Navigate to _Cribbage > masl > Cribbage_  
-3. Open The `Cribbage.prj` file by right clicking, then _Open With > Text Editor_  
-4. Note the changes we have made in the MASL project. We will see more when we
-look at the MASL diff tool  
+    ```
+    java -cp BridgePoint/tools/masl/lib/MASLParser.jar:BridgePoint/tools/masl/lib/antlr-3.5.2-complete.jar MaslFormatter -r < models/raven/masl/unformatted/Game.mod > Game.mod
+    ```
+
+3. This `java` invocation has 3 parts:  
+    * We must specify the classpath with `-cp` and point to the `jar` files in masl tools library  
+    * We must specify the main class `MaslFormatter`  
+    * We must give the application arguments
+4. `-r` is a flag to reorder the model elements and group all
+the similar model elements together  
+5. `-s` (not used in this example) is a flag to sort the model elements  
+6. `-t` (not used in this example) specifies the tab width. Default is 2  
+7. `-i` specifies the input directory  
+8. `-o` specifies the output directory  
+9. Note that the `-i` and `-o` options are only used when formatting whole
+directories  
+
+Open up `Game.mod` and view the formatted result.
