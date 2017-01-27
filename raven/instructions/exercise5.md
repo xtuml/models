@@ -5,19 +5,18 @@ Modeling with BridgePoint
 
 ## Purpose
 
-This exercise will guide the student through some of the more difficult parts of
-modeling using BridgePoint. The student will learn the subtleties of objects and
-associations, state modeling and terminators.
+This exercise will guide the student through some of the more difficult parts
+of modeling using BridgePoint. The student will learn the subtleties of objects
+and associations, state modeling and terminators.
 
 ## Instructions
 
 #### Preparing the workspace
 
-1. Open a terminal window and navigate to the `~/xtuml` directory.  
-2. Run the `bridgepoint.sh` script to launch BridgePoint (or run the BridgePoint
-launcher directly with `BridgePoint/eclipse/Launcher.sh`.  
-3. Enter `/home/student/xtuml/workspaces/ws-all` in the workspace chooser and
-press `Ok`.  
+1. Open a terminal window and navigate to the home directory.  
+2. Run the `bridgepoint.sh` script to launch BridgePoint  
+3. Enter `/home/developer/git/models/raven/workspaces/ws-3` in the workspace
+chooser and press `Ok`.  
 
 #### Modeling classes and associations
 
@@ -36,28 +35,27 @@ name "Crib"
 the type of the new attribute to "MASLunique"  
 6. Right click on the new attribute, then _Add to Identifier..._, select _1_ and
 press _Finish_  
-7. Add key letters to this class by double clicking to bring up the description
-editor and entering "pragma key_letter("CB");" and saving  
-8. Now in the _Classes_ category of the palette, select the _Association_ tool  
-9. Draw an association between _Crib_ and _Game_ and between _Crib_ and _Card_  
-10. Use the mouse and the bend points to reposition the lines to your liking  
-11. Select the relationship between _Crib_ and _Game_. We will now change the
+7. Now in the _Classes_ category of the palette, select the _Association_ tool  
+8. Draw an association between _Crib_ and _Game_ and between _Crib_ and _Card_  
+9. Use the mouse and the bend points to reposition the lines to your liking  
+10. Select the relationship between _Crib_ and _Game_. We will now change the
 properties of this relationship using the _Properties_ view  
-12. Expand the _Class As Simple Participant > Crib_ section. In this case, we
+11. Expand the _Class As Simple Participant > Crib_ section. In this case, we
 want an unconditional 1-to-1 relationship, so we just must update the text
 phrases  
-13. Enter "has" for the _Text Phrase_  
-14. Expand the _Class As Simple Participant > Game_ section. Enter
+12. Enter "has" for the _Text Phrase_  
+13. Expand the _Class As Simple Participant > Game_ section. Enter
 "contains_cards_for" for the _Text Phrase_. It is important that the phrase
 contains no spaces  
-15. Now, to formalize the relationship, right click on the relationship on the
+_Discussion point: Spaces in export and round trip equality_  
+14. Now, to formalize the relationship, right click on the relationship on the
 canvas and click _Formalize..._  
-16. In this case, we want the _Crib_ class to be the formalizer. Choose the
+15. In this case, we want the _Crib_ class to be the formalizer. Choose the
 _Game_ class as the participant, and click _Next_  
-17. Choose identifier _1_ as the identifier to formalize with and click
+16. Choose identifier _1_ as the identifier to formalize with and click
 _Finish_.  Note the referential attribute that appears in the _Crib_ class with
 the relationship number  
-18. Follow the same process to update and formalize the relationship between
+17. Follow the same process to update and formalize the relationship between
 _Crib_ and _Card_, except in this situation we want conditional one on the
 _Crib_ side and conditional many on the _Card_ side. Card must be the formalizer
 because it is the _many_ side of the relationship  
@@ -92,10 +90,10 @@ Event..._. Select "PlayerScored" and press _Finish_
 view can also be used to edit state machines as a table  
 
 _**Important note:** In xtUML, states do not have signatures as events do.
-However, xtUML adheres to the "same data" rule, meaning all events transitioning
-to a given state must share the same signature. Therefore, a MASL activity on an
-xtUML state must be defined with the same signature as the events that transition
-to that state._
+However, xtUML adheres to the "same data" rule, meaning all events
+transitioning to a given state must share the same signature. Therefore, a MASL
+activity on an xtUML state must be defined with the same signature as the
+events that transition to that state._
 
 #### Adding a terminator
 
@@ -108,15 +106,15 @@ called "MathFunctions" to provide these services.
 
 1. Navigate to the _Shared_ package under the _Logic_ domain  
 2. Right click, then _New > Components > Interface_. Enter "LogicMathFunctions"
-for the name, and press _Ok_. The name **_must_** follow the convention "_\<domain
-name>\<terminator name>_"  
-3. Double click on the highest _Logic_ package (right under the project) to open
-the package editor  
+for the name, and press _Ok_.  
+    _Note: It is convention to name the interfaces for a terminator \<domain
+    name>\<terminator name>, but it is not strictly required_  
+3. Double click on the outermost _Logic_ package (right under the project) to
+open the package editor  
 4. Use the _Required Interface_ tool in the _Components_ category and draw an
 interface on the _Logic_ component  
-5. In the model explorer, rename the new port to "MathFunctions". Again, the
-naming convention is important. For the port, follow the convention
-"_\<terminator name>_"  
+5. In the model explorer, rename the new port to "MathFunctions". The name of
+the port becomes the name of the terminator in MASL.
 6. Expand the port, right click on the interface and formalize to the newly
 created _LogicMathFunctions_ interface  
 7. Note that the _Cribbage_ project has the warning symbol on it. This is
@@ -124,17 +122,19 @@ because a component reference in that project refers to the _Logic_ component.
 We must synchronize to update the component reference in the _Cribbage_ project.
 Right click the _Logic_ project, then _Synchronize references_  
 
-At this point, the terminator has been created, however in order to be able to
-add terminator activities in the project, we must add the provided interface to
-the project component.
+At this point, the terminator has been created in the domain. Now we must
+create the project terminator definition by adding a provided interface to the
+project component.
 
-1. Navigate to the _Cribbage_ package in the _Cribbage_ component. Double click
+1. Navigate to the _Cribbage_ package in the _Cribbage_ project. Double click
 to open the package editor  
 2. Select the _Provided Interface_ tool from the _Components_ category and draw
 a provided interface on the _Cribbage_ component  
-3. In the model explorer, rename then new port "LogicMathFunctions". The naming
-here also follows the convention "_\<domain name>\<terminator name>_"  
+3. In the model explorer, rename then new port "LogicMathFunctions".  
+    _Note: Here also, the convention is to name the project port for a
+    terminator \<domain name>\<terminator name>_  
 4. Formalize the interface to the "LogicMathFunctions" interface in the _Logic_
 component  
 5. Drag the ball to the cup to connect the terminator in the project to the
 terminator in the domain  
+
