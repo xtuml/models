@@ -48,6 +48,8 @@ open and edit the _play_ function.
 2. Double click the _play_ function  
 3. Add your statements and save  
 
+_Discussion point: Xtext editor_
+
 While modeling, it is desirable for new activities to be in the MASL dialect.
 To make sure that the MASL is the dialect used, we must set the preference for
 our default dialect.

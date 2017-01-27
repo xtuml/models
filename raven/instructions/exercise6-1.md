@@ -14,11 +14,10 @@ of our changes.
 
 #### Preparing the workspace
 
-1. Open a terminal window and navigate to the `~/xtuml` directory.  
-2. Run the `bridgepoint.sh` script to launch BridgePoint (or run the BridgePoint
-launcher directly with `BridgePoint/eclipse/Launcher.sh`.  
-3. Enter `/home/student/xtuml/workspaces/ws-all` in the workspace chooser and
-press `Ok`.  
+1. Open a terminal window and navigate to the home directory.  
+2. Run the `bridgepoint.sh` script to launch BridgePoint  
+3. Enter `/home/developer/git/models/raven/workspaces/ws-3` in the workspace
+chooser and press `Ok`.  
 
 #### Exporting the domain
 
@@ -34,6 +33,6 @@ reflected in the MASL.
 1. Open the _Navigator_ view (_Window > Show View > Other..._, then search for
 "Navigator")  
 2. Navigate to _Game > masl > Game_  
-3. Open The `Game.mod` file by right clicking, then _Open With > Text Editor_  
+3. Open The `Game.mod` file by double clicking  
 4. Note the changes we have made in the MASL model. We will see more when we
 look at the MASL diff tool  
