@@ -9,5 +9,5 @@ Verifier and compiled application
 * [Exercise 4](exercise4.md) -- MASL editing nuances  
 * [Exercise 5](exercise5.md) -- Modeling with BridgePoint  
 * [Exercise 6-1](exercise6-1.md) -- Export a MASL domain  
-* [Exercise 7-2](exercise6-2.md) -- Export a MASL project  
+* [Exercise 6-2](exercise6-2.md) -- Export a MASL project  
 * [Exercise 8](exercise7.md) -- Using the MASL diff tool and formatter  
