@@ -1,0 +1,16 @@
+project Cribbage is
+domain Game is
+  terminator PlayerLogic is
+    private service nextPeggingPlay (
+        cards : in sequence of CardType,        pile_cards : in sequence of CardType    );
+    private service nextDiscard (
+        cards : in sequence of CardType,        my_crib : in boolean    );
+  end terminator;
+end domain;
+domain Logic is
+  terminator GameControl is
+    private service play (
+        card : in Game::CardType    );
+  end terminator;
+end domain;
+end project;
