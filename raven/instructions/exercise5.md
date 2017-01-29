@@ -97,9 +97,6 @@ events that transition to that state._
 
 #### Adding a terminator
 
-The MASL idiom makes adding terminators to a domain a somewhat tricky process.
-Naming conventions here are important for export and must be strictly followed.
-
 In this example, we will assume that the _Logic_ domain depends on a _Math_
 domain for complex statistical calculations. We will create a new terminator
 called "MathFunctions" to provide these services.
@@ -133,8 +130,6 @@ a provided interface on the _Cribbage_ component
 3. In the model explorer, rename then new port "LogicMathFunctions".  
     _Note: Here also, the convention is to name the project port for a
     terminator \<domain name>\<terminator name>_  
-4. Formalize the interface to the "LogicMathFunctions" interface in the _Logic_
-component  
-5. Drag the ball to the cup to connect the terminator in the project to the
+4. Drag the ball to the cup to connect the terminator in the project to the
 terminator in the domain  
 

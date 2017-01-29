@@ -50,8 +50,8 @@ definition editor
     enumerations  
   * When entering MASL type definitions, be sure to omit the semicolon. It is
     emitted by the MASL exporter  
-8. Select the newly created type. In the _Properties_ view, expand the _Basic_
-section.
+
+_Discussion point: MASL refresher_
 
 __Creating class attribute__
 
@@ -78,7 +78,6 @@ _Discussion point: visibility of type reference types_
 9. Navigate back to the newly created function, right click the _colors_
 parameter, then _Set Type..._  
 10. Select the newly created _sequence of ColorType_ and press _Ok_  
-_Discussion point: MASL refresher_
 
 #### Referencing types and exceptions across domain boundaries
 
@@ -125,23 +124,25 @@ references'
 5. Navigate to the _functions_ package within the _Game_ component  
 6. Right click on the package, then _New > Function_  
 7. Enter _startGame_ for the name and press _Ok_  
-_Discussion point: The order of these operations is important_
-_Discussion point: visibility of domain services_
+
+_Discussion point: The order of these operations is important_  
+
+_Discussion point: visibility of domain services_  
 
 #### Creating terminator services and syncing across projects
 
 Like public domain services, terminator services are represented in xtUML as
 interface operations.
 
-In this example, we will create a new terminator service in the _Game_ domain
-called _mustGo_ with no arguments. In the case where the player cannot make a
-legal play, he must say "Go".
+In this example, we will create a new terminator service in the _Logic_ domain
+called _go_ with no arguments. In the case where the player cannot make a legal
+play, he must say "Go".
 
-1. Navigate to the _Shared_ Package within the _Game_ project. Within this
-package, right click the _GamePlayerLogic_ interface, then _New > Operation_  
-2. Enter _mustGo_ for the name and press _Ok_  
-3. Note once again the warning symbols on the _Game_ and _Cribbage_ projects.
-Right click the _Game_ project, then _Synchronize references_  
+1. Navigate to the _Shared_ Package within the _Logic_ project. Within this
+package, right click the _LogicGameControl_ interface, then _New > Operation_  
+2. Enter _go_ for the name and press _Ok_  
+3. Note once again the warning symbols on the _Logic_ and _Cribbage_ projects.
+Right click the _Logic_ project, then _Synchronize references_  
 
 #### Introducing a domain to an existing MASL project
 
@@ -162,16 +163,16 @@ We have now created a domain model and are free to populate it with any
 implementation we want. Next we must integrate this component with the
 _Cribbage_ project  
 
-1. Navigate to the _Cribbage_ package under the _Cribbage_ project.  
-2. Create a new component reference in this package (right click, then _New >
-Components > Component Reference_  
+1. Navigate to the _Cribbage_ package under the _Cribbage_ project and double
+click to open it in the package editor.  
+2. Create a new component reference in this package using the _Components >
+Component Reference_ tool in the palette  
 3. Right click on the new component reference, then _Assign Component..._  
 4. Select the new _Tournament_ component and press _Ok_  
-5. Double click the _Cribbage_ package to open the package editor  
-6. As we did before, draw a new interface from the _Cribbage_ component to the
+5. As we did before, draw a new interface from the _Cribbage_ component to the
 canvas, however this time, select _Required Interface_ from the palette  
-7. Rename the port to _Tournament_ as we did before  
-8. Connect the matching interfaces on the _Tournament_ component reference and
+6. Rename the port to _Tournament_ as we did before  
+7. Connect the matching interfaces on the _Tournament_ component reference and
 the _Cribbage_ component by dragging the ball to the cup  
 
 ## Recap
