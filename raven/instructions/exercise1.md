@@ -47,8 +47,21 @@ the xtUML data into the file structure of an xtUML Eclipse project.
 7. Select `Game.xtuml` and click "Ok"  
 8. Click "Finish"  
 
+#### Importing the marking data into the project
+
+Finally, we must import the marking (pragma) data into our project. We will
+discuss later how to manage project marks.
+
+1. Two files `application.mark` and `features.mark` must be copied into the
+project from the `converted_models` directory.  
+2. From a terminal enter the commands:
+    ```
+    mkdir -p ~/git/models/raven/workspaces/ws-1/Game/gen
+    cp ~/xtuml/converted_models/Game/*.mark ~/git/models/raven/workspaces/ws-1/Game/gen
+    ```
+
 #### Browse the model
 
 Now you can browse the model. Navigate to the _Game_ component. Open the _Game_
-package.  Note that graphics are created, but must be rearanged by the user.
+package.  Note that graphics are created, but must be rearranged by the user.
 
