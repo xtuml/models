@@ -88,6 +88,7 @@ domain Game is
     game_number: referential ( R1.keeps_score_for.Game.game_number ) integer;     
     
   end object;
+  pragma id( 1 );
   
   object Card is
     
@@ -98,6 +99,7 @@ domain Game is
     hand_id: referential ( R9.located_in.Hand.hand_id ) integer;     
     
   end object;
+  pragma id( 2 );
   
   object CardInPlay is
     
@@ -107,6 +109,7 @@ domain Game is
     player_number: preferred referential ( R10.made_by.Player.player_number ) integer;     
     
   end object;
+  pragma id( 3 );
   
   object Deck is
     
@@ -114,6 +117,7 @@ domain Game is
     game_number: referential ( R2.contains_cards_for.Game.game_number ) integer;     
     
   end object;
+  pragma id( 4 );
   
   object Game is
     
@@ -213,18 +217,21 @@ domain Game is
     end transition;
     
   end object;
+  pragma id( 5 );
   
   object Hand is
     
     hand_id: preferred unique integer;     
     
   end object;
+  pragma id( 6 );
   
   object NormalPlay is
     
     play_id: preferred referential ( R12.play_id ) integer;     
     
   end object;
+  pragma id( 7 );
   
   object Peg is
     
@@ -232,6 +239,7 @@ domain Game is
     board_id: referential ( R5.moves_on.Board.board_id ) integer;     
     
   end object;
+  pragma id( 8 );
   
   object Pile is
     
@@ -239,12 +247,14 @@ domain Game is
     game_number: referential ( R4.contains_cards_for.Game.game_number ) integer;     
     
   end object;
+  pragma id( 9 );
   
   object Play is
     
     play_id: preferred unique integer;     
     
   end object;
+  pragma id( 10 );
   
   object Player is
     
@@ -253,6 +263,7 @@ domain Game is
     game_number: referential ( R3.plays.Game.game_number ) integer;     
     
   end object;
+  pragma id( 11 );
   
   object Score is
     
@@ -260,6 +271,7 @@ domain Game is
     peg_id: referential ( R16.moves.Peg.peg_id ) integer;     
     
   end object;
+  pragma id( 12 );
   
   object ScoringPlay is
     
@@ -269,6 +281,7 @@ domain Game is
     player_number: referential ( R15.changes.Score.player_number ) integer;     
     
   end object;
+  pragma id( 13 );
   
   
 end domain;
