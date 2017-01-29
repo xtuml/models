@@ -55,10 +55,10 @@ discuss later how to manage project marks.
 1. Two files `application.mark` and `features.mark` must be copied into the
 project from the `converted_models` directory.  
 2. From a terminal enter the commands:
-    ```
-    mkdir -p ~/git/models/raven/workspaces/ws-1/Game/gen
-    cp ~/xtuml/converted_models/Game/*.mark ~/git/models/raven/workspaces/ws-1/Game/gen
-    ```
+```
+mkdir -p ~/git/models/raven/workspaces/ws-1/Game/gen
+cp ~/xtuml/converted_models/Game/*.mark ~/git/models/raven/workspaces/ws-1/Game/gen
+```
 
 #### Browse the model
 
