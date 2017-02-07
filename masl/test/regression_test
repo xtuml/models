@@ -1,0 +1,38 @@
+#!/bin/bash
+# 
+#  This utility is used to run regression tests on these models
+#
+#   regression_test [-o <output directory>]
+
+# USAGE
+print_usage () { 
+    echo "Usage:"
+    echo "        regression_test [-o <output directory>]";
+}
+
+# input variables
+BPINSTALL="/opt/xtuml/BridgePoint6"
+OUT_DIR=
+
+# parse arguments
+DIRECTIVE=
+for arg in $@; do
+    if [[ $arg == "-o" ]]; then                     # set the directive
+        DIRECTIVE=$arg
+    elif [[ $DIRECTIVE == "-o" && $OUT_DIR == "" ]]; then           # only can set the output directory once
+        OUT_DIR=$arg
+    else
+        print_usage
+        exit 1
+    fi
+done
+
+# if no out directory was given, give the current working directory
+if [[ $OUT_DIR == "" ]]; then OUT_DIR=.; fi
+
+# Run tests
+$BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-1 -o $OUT_DIR/1
+$BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-2 -o $OUT_DIR/2
+$BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-3 -o $OUT_DIR/3
+$BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-4 -o $OUT_DIR/4
+$BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-5 -o $OUT_DIR/5
