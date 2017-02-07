@@ -10,11 +10,11 @@ domain SAC is
   object User;
   object Workstation;
   
-  private type group_type is structure
+  public type group_type is structure
     group_name: string;     
     operation_names: sequence of string;     
   end structure;   
-  private type logged_on_type is enum ( logged_on, suspect );   
+  public type logged_on_type is enum ( logged_on, suspect );
   
   private service populate_domain_1 (); pragma scenario( 1 );   
   private service resend_infos_3 (); pragma scenario( 3 );   
