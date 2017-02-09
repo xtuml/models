@@ -1,5 +1,11 @@
 domain SAC is
   
+  public type group_type is structure
+    group_name: string;     
+    operation_names: sequence of string;     
+  end structure;   
+  public type logged_on_type is enum ( logged_on, suspect );   
+
   public service add_group ( group_name: in string ); pragma soa_remote( "" );   
   public service add_operation_to_group ( group_name: in string,
                                           operations: in sequence of string ); pragma soa_remote( "" );   
