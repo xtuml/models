@@ -19,5 +19,4 @@ begin
    the_session_spec := find_one Session_Specification();
    schedule this.session_heartbeat_timer generate Session.heartbeat_timeout_expired() to this 
                         delay the_session_spec.session_heartbeat_time;
-
 end state;

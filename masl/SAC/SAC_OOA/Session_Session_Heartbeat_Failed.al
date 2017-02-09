@@ -13,6 +13,4 @@ begin
       schedule this.session_heartbeat_timer generate Session.heartbeat_timeout_expired() to this 
                         delay the_session_spec.session_heartbeat_time;
    end if;
-   
-   
 end state;
