@@ -86,7 +86,6 @@ domain SAC is
                                    login_name: in string );     
     private service user_session_deleted ( session_id: in integer );     
   end terminator;
-  pragma key_letter ("OP");
   
   terminator System_Configuration is
     private service get_groups ( groups: out sequence of group_type );     
@@ -94,7 +93,6 @@ domain SAC is
                                                 heartbeat_failure_threshold: out integer );     
     private service reload_config_files ();     
   end terminator;
-  pragma key_letter ("SCON");
   
   
   
@@ -126,7 +124,6 @@ domain SAC is
     
   end object;
   pragma id( 3 );
-  pragma key_letter ("G");
   
   object Group_For_Session is
     
@@ -135,7 +132,6 @@ domain SAC is
     
   end object;
   pragma id( 6 );
-  pragma key_letter ("GFS");
   
   object Group_Operation is
     
@@ -144,7 +140,6 @@ domain SAC is
     
   end object;
   pragma id( 5 );
-  pragma key_letter ("GO");
   
   object Operation is
     
@@ -153,7 +148,6 @@ domain SAC is
     
   end object;
   pragma id( 4 );
-  pragma key_letter ("O");
   
   object Session is
     
@@ -200,7 +194,6 @@ domain SAC is
     
   end object;
   pragma id( 8 );
-  pragma key_letter ("S");
   
   object Session_Operation is
     
@@ -209,7 +202,6 @@ domain SAC is
     
   end object;
   pragma id( 10 );
-  pragma key_letter ("SO");
   
   object Session_Specification is
     
@@ -219,7 +211,6 @@ domain SAC is
     
   end object;
   pragma id( 9 );
-  pragma key_letter ("SS");
   
   object User is
     
@@ -230,7 +221,6 @@ domain SAC is
     
   end object;
   pragma id( 2 );
-  pragma key_letter ("U");
   
   object Workstation is
     
@@ -239,7 +229,6 @@ domain SAC is
     
   end object;
   pragma id( 7 );
-  pragma key_letter ("W");
   
   
 end domain;
