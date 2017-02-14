@@ -1,3 +1,4 @@
+//! System Access Control domain
 domain SAC is
   
   object Group;
@@ -16,6 +17,7 @@ domain SAC is
   end structure;   
   public type logged_on_type is enum ( logged_on, suspect );
   
+  //! Domain services
   private service populate_domain_1 (); pragma scenario( 1 );   
   private service resend_infos_3 (); pragma scenario( 3 );   
   private service soa_subscribe_2 (); pragma scenario( 2 );   
@@ -42,56 +44,56 @@ domain SAC is
   
   
   terminator Operator is
-    private service group_deleted ( group_name: in string );     
-    private service group_operation_removed ( group_name: in string,
+    public service group_deleted ( group_name: in string );     
+    public service group_operation_removed ( group_name: in string,
                                               operation_name: in string );     
-    private service login_valid ( session_id: in integer,
+    public service login_valid ( session_id: in integer,
                                   user_id: in integer,
                                   is_valid: in boolean,
                                   failure_reason: in string,
                                   workstation_hostname: in string,
                                   login_name: in string );     
-    private service raise_notification ( condition_description: in string,
+    public service raise_notification ( condition_description: in string,
                                          condition_name: in string );     
-    private service report_group ( group_name: in string );     
-    private service report_group_operation ( group_name: in string,
+    public service report_group ( group_name: in string );     
+    public service report_group_operation ( group_name: in string,
                                              operation_name: in string );     
-    private service report_user ( user_id: in integer,
+    public service report_user ( user_id: in integer,
                                   login_name: in string,
                                   user_name: in string,
                                   logged_on: in logged_on_type );     
-    private service report_user_group ( uid: in integer,
+    public service report_user_group ( uid: in integer,
                                         group_name: in string,
                                         login_name: in string,
                                         session_id: in integer );     
-    private service report_user_operation ( user_id: in integer,
+    public service report_user_operation ( user_id: in integer,
                                             operation_name: in string,
                                             login_name: in string,
                                             session_id: in integer );     
-    private service report_user_session ( session_id: in integer,
+    public service report_user_session ( session_id: in integer,
                                           user_id: in integer,
                                           login_time: in timestamp,
                                           session_timed_out: in boolean,
                                           workstation_hostname: in string,
                                           login_name: in string );     
-    private service user_group_removed ( uid: in integer,
+    public service user_group_removed ( uid: in integer,
                                          group_name: in string,
                                          login_name: in string,
                                          session_id: in integer );     
-    private service user_operation_removed ( user_id: in integer,
+    public service user_operation_removed ( user_id: in integer,
                                              operation_name: in string,
                                              login_name: in string,
                                              session_id: in integer );     
-    private service user_removed ( user_id: in integer,
+    public service user_removed ( user_id: in integer,
                                    login_name: in string );     
-    private service user_session_deleted ( session_id: in integer );     
+    public service user_session_deleted ( session_id: in integer );     
   end terminator;
   
   terminator System_Configuration is
-    private service get_groups ( groups: out sequence of group_type );     
-    private service get_session_specification ( heartbeat_time: out duration,
+    public service get_groups ( groups: out sequence of group_type );     
+    public service get_session_specification ( heartbeat_time: out duration,
                                                 heartbeat_failure_threshold: out integer );     
-    private service reload_config_files ();     
+    public service reload_config_files ();     
   end terminator;
   
   
@@ -116,14 +118,14 @@ domain SAC is
                      using Session_Operation;   
   
   
-  
+  //! Group is an object with two attributes 
   object Group is
     
+    //! Group has two class attributes
     group_id: preferred unique integer;     
     group_name: string;     
     
   end object;
-  pragma id( 3 );
   
   object Group_For_Session is
     
@@ -131,7 +133,6 @@ domain SAC is
     session_id: preferred referential ( R2.current_members_are.Session.session_id ) integer;     
     
   end object;
-  pragma id( 6 );
   
   object Group_Operation is
     
@@ -139,7 +140,6 @@ domain SAC is
     operation_id: preferred referential ( R1.can_perform.Operation.operation_id ) integer;     
     
   end object;
-  pragma id( 5 );
   
   object Operation is
     
@@ -147,7 +147,6 @@ domain SAC is
     operation_name: string;     
     
   end object;
-  pragma id( 4 );
   
   object Session is
     
@@ -193,7 +192,6 @@ domain SAC is
     end transition;
     
   end object;
-  pragma id( 8 );
   
   object Session_Operation is
     
@@ -201,7 +199,6 @@ domain SAC is
     session_id: preferred referential ( R5.has_been_allowed_for.Session.session_id ) integer;     
     
   end object;
-  pragma id( 10 );
   
   object Session_Specification is
     
@@ -210,7 +207,6 @@ domain SAC is
     session_heartbeat_time: duration;     
     
   end object;
-  pragma id( 9 );
   
   object User is
     
@@ -220,7 +216,6 @@ domain SAC is
     user_name: string;     
     
   end object;
-  pragma id( 2 );
   
   object Workstation is
     
@@ -228,8 +223,6 @@ domain SAC is
     workstation_id: preferred unique integer;     
     
   end object;
-  pragma id( 7 );
   
   
 end domain;
-pragma number( 59 );
