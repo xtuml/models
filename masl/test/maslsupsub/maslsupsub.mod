@@ -20,7 +20,7 @@ domain maslsupsub is
   
   object a_class is
     
-    name: integer;     
+    name: preferred integer;     
     
     public instance service get_name () return integer;     
     
@@ -28,11 +28,21 @@ domain maslsupsub is
   
   object b_class is
     
+    i: integer;     
+    bid: preferred integer;     
+    name: referential ( R1.is_used_by.a_class.name ) integer;     
+    
   end object;
+  pragma id ( 1 ); pragma big_pragname_for_testing ( "string goes here" );
   
   object garden is
     
+    //! this is the growing ratio
+    //! this is line two
+    //! a third line
     percentage: integer;     
+    //! the ID of the garden comes from the supertype (puzzle)
+    pid: preferred referential ( R2.pid ) integer;     
     
     state juicing_the_orange ();     
     state juicing_the_tomato ();     
@@ -63,6 +73,7 @@ domain maslsupsub is
   object general is
     
     accumulator: integer;     
+    pid: preferred referential ( R2.pid ) integer;     
     
     state adding ();     
     state subtracting ();     
@@ -102,6 +113,8 @@ domain maslsupsub is
   end object;
   
   object puzzle is
+    
+    pid: preferred integer;     
     
     event solve ();     
     event done ( value: in integer );     
