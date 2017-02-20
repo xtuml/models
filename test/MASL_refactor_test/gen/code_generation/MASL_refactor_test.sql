@@ -51,6 +51,23 @@ INSERT INTO C_IO
 	'',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO PE_PE
+	VALUES ("fc4008cb-8d1b-44ee-b911-cd21b01af2b9",
+	1,
+	"91a76e81-7c87-4c46-a70a-2193d0046636",
+	"00000000-0000-0000-0000-000000000000",
+	3);
+INSERT INTO S_DT
+	VALUES ("fc4008cb-8d1b-44ee-b911-cd21b01af2b9",
+	"00000000-0000-0000-0000-000000000000",
+	'MASLunique',
+	'',
+	'');
+INSERT INTO S_UDT
+	VALUES ("fc4008cb-8d1b-44ee-b911-cd21b01af2b9",
+	"8a7badbb-5a60-4610-8ade-68f24195a42b",
+	0,
+	'');
+INSERT INTO PE_PE
 	VALUES ("e899f858-d206-4d0d-9196-38bf4641f0d3",
 	1,
 	"91a76e81-7c87-4c46-a70a-2193d0046636",
@@ -84,23 +101,6 @@ INSERT INTO C_PP
 	0,
 	'',
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO PE_PE
-	VALUES ("fc4008cb-8d1b-44ee-b911-cd21b01af2b9",
-	1,
-	"91a76e81-7c87-4c46-a70a-2193d0046636",
-	"00000000-0000-0000-0000-000000000000",
-	3);
-INSERT INTO S_DT
-	VALUES ("fc4008cb-8d1b-44ee-b911-cd21b01af2b9",
-	"00000000-0000-0000-0000-000000000000",
-	'MASLunique',
-	'',
-	'');
-INSERT INTO S_UDT
-	VALUES ("fc4008cb-8d1b-44ee-b911-cd21b01af2b9",
-	"8a7badbb-5a60-4610-8ade-68f24195a42b",
-	0,
-	'');
 INSERT INTO PE_PE
 	VALUES ("fadbea7d-99bb-44ff-930d-eb7221a5f76b",
 	1,
@@ -176,79 +176,6 @@ begin
 end',
 	3,
 	1);
-INSERT INTO PE_PE
-	VALUES ("d3afa05c-2241-43b6-858a-f9e7d1175802",
-	1,
-	"00000000-0000-0000-0000-000000000000",
-	"fadbea7d-99bb-44ff-930d-eb7221a5f76b",
-	7);
-INSERT INTO EP_PKG
-	VALUES ("d3afa05c-2241-43b6-858a-f9e7d1175802",
-	"00000000-0000-0000-0000-000000000000",
-	"ab654f28-cc1e-47f1-b8d3-a44de1b2e25a",
-	'functions',
-	'',
-	0);
-INSERT INTO PE_PE
-	VALUES ("d7ff35a7-5418-45ee-a700-781f736670a6",
-	1,
-	"d3afa05c-2241-43b6-858a-f9e7d1175802",
-	"00000000-0000-0000-0000-000000000000",
-	1);
-INSERT INTO S_SYNC
-	VALUES ("d7ff35a7-5418-45ee-a700-781f736670a6",
-	"00000000-0000-0000-0000-000000000000",
-	'foo',
-	'',
-	'the_var : type1;
-the_int : integer;
-the_a : instance of A;
-the_b : instance of B;
-begin
-  the_int := the_var.member1;
-  foo();
-  bar( the_int );
-  the_a := create unique A();
-  the_b := create unique B( Current_State => state1 );
-  link the_a R1.bend the_b;
-  the_a.setName( "the_a" );
-  generate B.event1 ( 5 ) to the_b;
-end',
-	"82fe43a6-64c6-4709-8c8b-fef9364f33d3",
-	3,
-	'',
-	1);
-INSERT INTO PE_PE
-	VALUES ("f1f9f5df-accc-4f45-9456-accac05fd6fb",
-	1,
-	"d3afa05c-2241-43b6-858a-f9e7d1175802",
-	"00000000-0000-0000-0000-000000000000",
-	1);
-INSERT INTO S_SYNC
-	VALUES ("f1f9f5df-accc-4f45-9456-accac05fd6fb",
-	"00000000-0000-0000-0000-000000000000",
-	'bar',
-	'',
-	'the_int : integer;
-the_color : type2;
-begin
-  the_int = param1 * param1;
-  the_terminator~>term1( the_int );
-  the_color = RED;
-end',
-	"82fe43a6-64c6-4709-8c8b-fef9364f33d3",
-	3,
-	'',
-	1);
-INSERT INTO S_SPARM
-	VALUES ("46f82d17-a3a0-4f3b-babf-4fd0243d7e67",
-	"f1f9f5df-accc-4f45-9456-accac05fd6fb",
-	'param1',
-	"1db119de-0b3e-40e4-823c-e5c767544d4a",
-	0,
-	'',
-	"00000000-0000-0000-0000-000000000000",
-	'');
 INSERT INTO PE_PE
 	VALUES ("aac5bcd1-a94b-46d7-80a5-435169bb9dfa",
 	1,
@@ -400,7 +327,7 @@ INSERT INTO O_TFR
 	1,
 	'begin
   if ( name /= "" ) then
-    this.name = name;
+    this.name := name;
   end if;
 end',
 	3,
@@ -1089,6 +1016,86 @@ INSERT INTO S_UDT
 	"8a7badbb-5a60-4610-8ade-68f24195a42b",
 	0,
 	'enum ( RED, GREEN, BLUE )');
+INSERT INTO PE_PE
+	VALUES ("d3afa05c-2241-43b6-858a-f9e7d1175802",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"fadbea7d-99bb-44ff-930d-eb7221a5f76b",
+	7);
+INSERT INTO EP_PKG
+	VALUES ("d3afa05c-2241-43b6-858a-f9e7d1175802",
+	"00000000-0000-0000-0000-000000000000",
+	"ab654f28-cc1e-47f1-b8d3-a44de1b2e25a",
+	'functions',
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("d7ff35a7-5418-45ee-a700-781f736670a6",
+	1,
+	"d3afa05c-2241-43b6-858a-f9e7d1175802",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("d7ff35a7-5418-45ee-a700-781f736670a6",
+	"00000000-0000-0000-0000-000000000000",
+	'foo',
+	'',
+	'the_var : type1;
+the_int : integer;
+the_a : instance of A;
+the_b : instance of B;
+begin
+  the_int := the_var.member1;
+  foo();
+  bar( the_int );
+  the_a := create unique A();
+  the_b := create unique B( Current_State => state1 );
+  link the_a R1.bend the_b;
+  the_a.setName( "the_a" );
+  generate B.event1 ( 5 ) to the_b;
+end',
+	"82fe43a6-64c6-4709-8c8b-fef9364f33d3",
+	3,
+	'',
+	1);
+INSERT INTO PE_PE
+	VALUES ("f1f9f5df-accc-4f45-9456-accac05fd6fb",
+	1,
+	"d3afa05c-2241-43b6-858a-f9e7d1175802",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f1f9f5df-accc-4f45-9456-accac05fd6fb",
+	"00000000-0000-0000-0000-000000000000",
+	'bar',
+	'',
+	'the_int : integer;
+the_color : type2;
+the_c : instance of C;
+the_d : instance of D;
+the_e : instance of E;
+begin
+  the_int := param1 * param1;
+  the_terminator~>term1( the_int );
+  the_color := RED;
+  the_c := create unique C();
+  the_d := create unique D();
+  the_e := create unique E();
+  link the_c R2.dend the_d using the_e;
+end',
+	"82fe43a6-64c6-4709-8c8b-fef9364f33d3",
+	3,
+	'',
+	1);
+INSERT INTO S_SPARM
+	VALUES ("46f82d17-a3a0-4f3b-babf-4fd0243d7e67",
+	"f1f9f5df-accc-4f45-9456-accac05fd6fb",
+	'param1',
+	"1db119de-0b3e-40e4-823c-e5c767544d4a",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
 INSERT INTO EP_PKG
 	VALUES ("6d5f76fb-a2d5-4a6b-a00f-4dbed2b615cb",
 	"ab654f28-cc1e-47f1-b8d3-a44de1b2e25a",
