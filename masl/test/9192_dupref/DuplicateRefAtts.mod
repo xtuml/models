@@ -35,7 +35,7 @@ domain DuplicateRefAtts is
 
   object Element is
     item_id        : preferred referential ( R4.item_id ) string;
-    spec_id        : preferred referential ( R4.item_id, R3.is_contained_in.Node.spec_id ) string;
+    spec_id        : preferred referential ( R4.spec_id, R3.is_contained_in.Node.spec_id ) string;
     parent_item_id : referential (R3.is_contained_in.Node.item_id) string;
   end object;
 
