@@ -1,6 +1,9 @@
 domain refactor is
   object A;
   object B;
+  object C;
+  object D;
+  object E;
   private type type1 is structure
     member1 : integer;
     member2 : string;
@@ -13,11 +16,14 @@ domain refactor is
     private service bar (
         param1 : in integer    );
   terminator the_terminator is
-    private service term1 (
+    public service term1 (
         term_param1 : in integer    );
   end terminator;
   relationship R1 is A unconditionally bend one B,
     B unconditionally aend one A;
+  relationship R2 is D conditionally cend many C,
+    C conditionally dend many D
+    using E;
   object A is
     Aid : preferred unique integer;
     name :   string;
@@ -42,5 +48,15 @@ domain refactor is
         event1 => state2,
         event2 => state1      ); 
     end transition;
+  end object;
+  object C is
+    Cid : preferred unique integer;
+  end object;
+  object D is
+    Did : preferred unique integer;
+  end object;
+  object E is
+    Did : preferred  referential ( R2.dend.D.Did ) integer;
+    Cid : preferred  referential ( R2.cend.C.Cid ) integer;
   end object;
 end domain;
