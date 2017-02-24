@@ -16,7 +16,7 @@ domain PolymorphicSTT is
     state existing();
 
     transition is
-      Non_Existent ( 
+      Non_Existent (
         Sup.supEvent => Cannot_Happen,
         subEvent => Cannot_Happen );
       existing (
