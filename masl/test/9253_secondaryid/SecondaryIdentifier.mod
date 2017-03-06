@@ -7,10 +7,9 @@ domain SecondaryIdentifier is
     Parent conditionally has_child many Child;
 
   object Parent is
-    id : preferred integer;
+    id1 : preferred integer;
     id2 : integer;
-
-    identifier is ( id, id2 );
+    identifier is ( id1, id2 );
   end object;
 
   object Child is
