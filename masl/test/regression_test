@@ -30,38 +30,43 @@ done
 # if no out directory was given, give the current working directory
 if [[ $OUT_DIR == "" ]]; then OUT_DIR=.; fi
 
+XVFB=$(which xvfb-run)
+if [[ $XVFB == "" ]]; then
+  echo "Consider installing xvfb to run this suite headlessly.\n"
+fi
+
 # Run tests
-$BPINSTALL/tools/mc/bin/masl_round_trip -d ../SAC/SAC_OOA -o $OUT_DIR/00
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-1 -o $OUT_DIR/01
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-2 -o $OUT_DIR/02
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-3 -o $OUT_DIR/03
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-4 -o $OUT_DIR/04
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-5 -o $OUT_DIR/05
-$BPINSTALL/tools/mc/bin/masl_round_trip -d ipv6   -o $OUT_DIR/06
-$BPINSTALL/tools/mc/bin/masl_round_trip -d pei    -o $OUT_DIR/07
-$BPINSTALL/tools/mc/bin/masl_round_trip -d maslsupsub -o $OUT_DIR/08
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9149_id -o $OUT_DIR/09
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9151_fref -o $OUT_DIR/10
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9151_fref2 -o $OUT_DIR/11
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9201_enum -o $OUT_DIR/12
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9190_assref -o $OUT_DIR/13
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9192_dupref -o $OUT_DIR/14
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 8507_defer -o $OUT_DIR/15
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9206_refmiss -o $OUT_DIR/16
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9187_poly -o $OUT_DIR/17
-#$BPINSTALL/tools/mc/bin/masl_round_trip -d ../SAC/SAC_OOA -p ../SAC/SAC_PROC -o $OUT_DIR/18
-$BPINSTALL/tools/mc/bin/masl_round_trip -d c_services -o $OUT_DIR/19
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 8938_test -o $OUT_DIR/20
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 8957_test -o $OUT_DIR/21
-$BPINSTALL/tools/mc/bin/masl_round_trip -d poly -o $OUT_DIR/22
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9252_refass -o $OUT_DIR/23
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9253_secondaryid -o $OUT_DIR/24
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9254_1tomassoc -o $OUT_DIR/25
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9264_current_state -o $OUT_DIR/26
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9272_event_parms -o $OUT_DIR/27
-#$BPINSTALL/tools/mc/bin/masl_round_trip -d 9275_incomplete -o $OUT_DIR/28
-#$BPINSTALL/tools/mc/bin/masl_round_trip -d 9280_miss_rows -o $OUT_DIR/29
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9251_default -o $OUT_DIR/30
-$BPINSTALL/tools/mc/bin/masl_round_trip -d 9267_assigner -o $OUT_DIR/31
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d ../SAC/SAC_OOA -o $OUT_DIR/00
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-1 -o $OUT_DIR/01
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-2 -o $OUT_DIR/02
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-3 -o $OUT_DIR/03
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-4 -o $OUT_DIR/04
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9027-5 -o $OUT_DIR/05
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d ipv6   -o $OUT_DIR/06
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d pei    -o $OUT_DIR/07
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d maslsupsub -o $OUT_DIR/08
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9149_id -o $OUT_DIR/09
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9151_fref -o $OUT_DIR/10
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9151_fref2 -o $OUT_DIR/11
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9201_enum -o $OUT_DIR/12
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9190_assref -o $OUT_DIR/13
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9192_dupref -o $OUT_DIR/14
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 8507_defer -o $OUT_DIR/15
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9206_refmiss -o $OUT_DIR/16
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9187_poly -o $OUT_DIR/17
+#$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d ../SAC/SAC_OOA -p ../SAC/SAC_PROC -o $OUT_DIR/18
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d c_services -o $OUT_DIR/19
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 8938_test -o $OUT_DIR/20
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 8957_test -o $OUT_DIR/21
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d poly -o $OUT_DIR/22
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9252_refass -o $OUT_DIR/23
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9253_secondaryid -o $OUT_DIR/24
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9254_1tomassoc -o $OUT_DIR/25
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9264_current_state -o $OUT_DIR/26
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9272_event_parms -o $OUT_DIR/27
+#$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9275_incomplete -o $OUT_DIR/28
+#$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9280_miss_rows -o $OUT_DIR/29
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9251_default -o $OUT_DIR/30
+$XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d 9267_assigner -o $OUT_DIR/31
 
 find . -name "diff_*" -exec ls -l {} \;
