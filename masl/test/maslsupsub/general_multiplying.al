@@ -1,4 +1,4 @@
-state maslsupsub::general.multiplying () is
+state maslsupsub::general.multiplying ( value: in integer ) is
 begin
 //
 end state;
