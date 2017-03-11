@@ -17,8 +17,11 @@ domain poly is
     event supl1();
     state idle();
     transition is
-      Non_Existent ( supp1 => Cannot_Happen, supl1 => Cannot_Happen );
+      Non_Existent (
+        supp1 => Cannot_Happen,
+        supl1 => Cannot_Happen );
       idle (
+        supp1 => Ignore,
         supl1 => idle );
     end transition;
   end object;
@@ -29,12 +32,17 @@ domain poly is
     state s1();
     state s2();
     transition is
-      Non_Existent ( sup.supp1 => Cannot_Happen, subl1 => Cannot_Happen );
+      Non_Existent (
+        sup.supp1 => Cannot_Happen,
+        sup.supl1 => Cannot_Happen,
+        subl1 => Cannot_Happen );
       s1 (
         sup.supp1 => s2,
+        sup.supl1 => Ignore,
         subl1 => Ignore );
       s2 (
         sup.supp1 => Ignore,
+        sup.supl1 => Ignore,
         subl1 => s1 );
     end transition;
   end object;
@@ -46,12 +54,20 @@ domain poly is
     state s1();
     state s2();
     transition is
-      Non_Existent ( sup.supp1 => Cannot_Happen, sub2p1 => Cannot_Happen, subl1 => Cannot_Happen );
+      Non_Existent (
+        sup.supp1 => Cannot_Happen,
+        sup.supl1 => Cannot_Happen,
+        sub2p1 => Cannot_Happen,
+        subl1 => Cannot_Happen );
       s1 (
         sup.supp1 => s2,
+        sup.supl1 => Ignore,
+        sub2p1 => Ignore,
         subl1 => Ignore );
       s2 (
         sup.supp1 => Ignore,
+        sup.supl1 => Ignore,
+        sub2p1 => Ignore,
         subl1 => s1 );
     end transition;
   end object;
@@ -67,12 +83,23 @@ domain poly is
     state s1();
     state s2();
     transition is
-      Non_Existent ( sub2.sub2p1 => Cannot_Happen, sub2al1 => Cannot_Happen );
+      Non_Existent (
+        sup.supp1 => Cannot_Happen,
+        sup.supl1 => Cannot_Happen,
+        sub2.sub2p1 => Cannot_Happen,
+        sub2.subl1 => Cannot_Happen,
+        sub2al1 => Cannot_Happen );
       s1 (
+        sup.supp1 => Ignore,
+        sup.supl1 => Ignore,
         sub2.sub2p1 => s2,
+        sub2.subl1 => Ignore,
         sub2al1 => Ignore );
       s2 (
+        sup.supp1 => Ignore,
+        sup.supl1 => Ignore,
         sub2.sub2p1 => Ignore,
+        sub2.subl1 => Ignore,
         sub2al1 => s1 );
     end transition;
   end object;
@@ -82,12 +109,17 @@ domain poly is
     state s1();
     state s2();
     transition is
-      Non_Existent ( sup.supp1 => Cannot_Happen, sub3.sub3p1 => Cannot_Happen );
+      Non_Existent (
+        sup.supp1 => Cannot_Happen,
+        sup.supl1 => Cannot_Happen,
+        sub3.sub3p1 => Cannot_Happen );
       s1 (
         sup.supp1 => s2,
+        sup.supl1 => Ignore,
         sub3.sub3p1 => Ignore );
       s2 (
         sup.supp1 => Ignore,
+        sup.supl1 => Ignore,
         sub3.sub3p1 => s1 );
     end transition;
   end object;
@@ -98,13 +130,19 @@ domain poly is
     state s1();
     state s2();
     transition is
-      Non_Existent ( sup.supp1 => Cannot_Happen, sub3.sub3p1 => Cannot_Happen, sub3bl1 => Cannot_Happen );
+      Non_Existent (
+        sup.supp1 => Cannot_Happen,
+        sup.supl1 => Cannot_Happen,
+        sub3.sub3p1 => Cannot_Happen,
+        sub3bl1 => Cannot_Happen );
       s1 (
         sup.supp1 => s2,
+        sup.supl1 => Ignore,
         sub3.sub3p1 => Ignore,
         sub3bl1 => Ignore );
       s2 (
         sup.supp1 => Ignore,
+        sup.supl1 => Ignore,
         sub3.sub3p1 => s1,
         sub3bl1 => s1 );
     end transition;
