@@ -1,4 +1,4 @@
-state maslsupsub::garden.done () is
+state maslsupsub::garden.done ( value: in integer ) is
 begin
 //
 end state;
