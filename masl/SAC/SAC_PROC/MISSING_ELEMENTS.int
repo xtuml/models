@@ -15,6 +15,8 @@ domain INI is
 end domain;
 
 domain SAC is 
+ public type logged_on_type is enum ( logged_on, suspect )
+  ;
 	object _TEST_Operator_report_group; 
 	object _TEST_Operator_report_group is
 	end; 
@@ -74,24 +76,25 @@ domain Process is
 end domain;
 
 domain I_DC is
-	service info_User();
-	service info_User_Operation();
-	service info_User_Group();
-	service info_User_Session();
-	service info_Group();
-	service info_Group_Operation();
-	service info_delete_Group();
-	service info_delete_Group_Operation();
-	service info_delete_User();
-	service info_delete_User_Group();
-	service info_delete_User_Operation();
-	service info_delete_User_Session();
+	service info_User(user_id: in integer, login_name: in string, user_name: in string, logged_on: in string);
+	service info_User_Operation(operation_name: in string, login_name: in string, session_id: in integer);
+	service info_User_Group(group_name: in string, login_name: in string, session_id: in integer);
+	service info_User_Session(session_id: in integer, login_time: in timestamp, session_timed_out: in boolean, workstation_hostname: in string, login_name: in string);
+	service info_Group(group_name: in string);
+	service info_Group_Operation(group_name: in string, operation_name: in string);
+	service info_delete_Group(group_name: in string);
+	service info_delete_Group_Operation(group_name: in string, operation_name: in string);
+	service info_delete_User(login_name: in string);
+	service info_delete_User_Group(group_name: in string, login_name: in string, session_id: in integer);
+	service info_delete_User_Operation(operation_name: in string, login_name: in string, session_id: in integer);
+	service info_delete_User_Session(session_id: in integer);
 end domain;
 
 domain I_ODGUI is 
-	service login_valid();
+	service login_valid(user_id: in integer, session_id: in integer, is_valid: in boolean, failure_reason: in string, workstation_hostname: in string, login_name: in string);
 end domain;
 
 domain NTF is 
-	service Condition_Notification();
+	service Condition_Notification(condition_description: in string, condition_name: in string);
 end domain;
+
