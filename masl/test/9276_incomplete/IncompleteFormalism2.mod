@@ -5,7 +5,8 @@ domain IncompleteFormalism2 is
 
   relationship R1 is
     Actor unconditionally appears_in many Film,
-    Film unconditionally has_cast_member many Actor;
+    Film unconditionally has_cast_member many Actor
+    using Appearance;
 
   relationship R2 is
     Actor unconditionally has_debut one Appearance,
