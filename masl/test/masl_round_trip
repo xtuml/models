@@ -1,0 +1,210 @@
+#!/bin/bash
+# 
+#  This utility is used to run the full MASL round trip (convert, import,
+#  export, diff) on MASL domains.  The diff report that is produced helps
+#  users validate that the BridgePoint MASL flow works.
+#
+#  Please note that the BridgePoint CLI Import uses a graphical eclipse workbench which
+#  will capture focus as this script runs.  To run this script completely headlessly,
+#  install the xvfb package for your distribution and call this script using xvfb-run.
+#
+#   ./masl_round_trip -d <domain source directory(s) ...> -p <project soruce directory> [-o <output directory>]
+#   xvfb-run ./masl_round_trip -d <domain source directory(s) ...> -p <project soruce directory> [-o <output directory>]
+
+# USAGE
+print_usage () { 
+    echo "Usage:"
+    echo "        masl_round_trip -d <domain source directory(s) ...> -p <project soruce directory> [-o <output directory>]";
+    echo " ";
+    echo "  - Up to twenty domains may be specified. If a project is specified, only the project is diff'd.";
+    echo "  - Consider installing xvfb and calling this script with xvfb-run to execute headlessly. See info in this script's header.";
+    echo -e "\n";
+}
+
+# set up paths
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/"
+export PATH=$DIR:$PATH
+
+# input variables
+DOM_DIRS=()
+PROJ_DIR=
+OUT_DIR=
+
+# parse arguments
+DIRECTIVE=
+for arg in $@; do
+    if [[ $arg == "-d" || $arg == "-p" || $arg == "-o" ]]; then     # set the directive
+        DIRECTIVE=$arg
+    elif [[ $DIRECTIVE == "-d" ]]; then                             # add a domain dir
+        DOM_DIRS+=($arg)
+    elif [[ $DIRECTIVE == "-p" ]]; then                             # add a project dir
+        PROJ_DIR=$arg
+    elif [[ $DIRECTIVE == "-o" && $OUT_DIR == "" ]]; then           # only can set the output directory once
+        OUT_DIR=$arg
+    else
+        print_usage
+        exit 1
+    fi
+done
+
+# check if we have any domains to convert
+if [[ ${#DOM_DIRS[@]} == 0 ]]; then
+    print_usage
+    exit 1
+fi
+
+# if no out directory was given, give the current working directory
+if [[ $OUT_DIR == "" ]]; then OUT_DIR=.; fi
+
+# echo Args:
+#echo PROJ_DIR=$PROJ_DIR
+#echo DOM_DIRS=${DOM_DIRS[*]}
+#echo OUT_DIR=$OUT_DIR
+
+# make the output directory if there is one
+if [[ $OUT_DIR != "" ]]; then
+    if ! mkdir -p $OUT_DIR; then
+        echo "-masl_round_trip: ERROR could not create directory '$OUT_DIR'" 1>&2
+        exit 1
+    fi
+fi
+
+###########################
+# Convert
+###########################
+CONVERTDIR="/tmp/convertdir"
+# process domains
+for domain in ${DOM_DIRS[*]}; do
+    domname=$(basename $domain)
+    rm -rf $CONVERTDIR/$domname
+    masl2xtuml -d $domain -o $CONVERTDIR 
+done
+# process project
+if [[ $PROJ_DIR != "" ]]; then
+  projname=$(basename $PROJ_DIR)
+  rm -rf $CONVERTDIR/$projname
+  masl2xtuml -p $PROJ_DIR -o $CONVERTDIR 
+fi
+
+###########################
+# Import, Export, Diff
+###########################
+export WORKSPACE="/tmp/importwork"
+MASLOUTDIR="/tmp/maslout"
+
+# We have to create a workspace from a previously zipped one that contains a project 
+# because CLI Import can't create a project for a single file model itself.  The latter would
+# be much better.
+echo "Preparing workspace $WORKSPACE"
+if [[ -d $WORKSPACE ]]; then
+    rm -rf $WORKSPACE
+fi
+unzip -q -o $DIR/importworkspace.zip -d /tmp/
+
+domNum=0
+for domain in ${DOM_DIRS[*]}; do
+    echo -e "\n\n=========================================================="
+    echo "Processing domain $domain"
+    domname=$(basename $domain)
+
+    ((domNum+=1))
+    domProj=d$domNum
+
+    echo "Round trip is now importing"
+    CLI.sh Import -file $CONVERTDIR/$domname/$domname.xtuml -targetProject $domProj >/tmp/import_log_$domProj.txt 2>&1
+    if [[ ! -e $WORKSPACE/$domProj/models/$domProj/types/types.xtuml ]]; then
+      # First import didn't work. Import again. 
+      echo "Failed to import first time through.  Importing again."
+      CLI.sh Import -file $CONVERTDIR/$domname/$domname.xtuml -targetProject $domProj >>/tmp/import_log_$domProj.txt 2>&1
+    fi
+
+    if [[ -f $CONVERTDIR/$domname/features.mark ]]; then
+        cp $CONVERTDIR/$domname/features.mark $WORKSPACE/$domProj/gen/
+    fi
+    if [[ -f $CONVERTDIR/$domname/application.mark ]]; then
+        cp $CONVERTDIR/$domname/application.mark $WORKSPACE/$domProj/gen/
+    fi
+
+    # If there was a project specified, don't export and diff domains
+    if [[ $PROJ_DIR == "" ]]; then
+      # The component name (from the .mod file) may not be the same as the domain folder we 
+      # used during the processing.  So we calculate it from the .mod file name.
+      compfile=$(ls $domain/*.mod)
+      compname=$(basename -s .mod $compfile)
+      echo "Converting $compname from xtUML to MASL"
+      if [[ -d $MASLOUTDIR ]]; then
+         rm -rf $MASLOUTDIR
+      fi
+      xtuml2masl -i $WORKSPACE/$domProj/ -d $compname -o $MASLOUTDIR
+
+      # Now diff
+      echo "Diff'ing input and output MASL."
+      masldiff $domain $MASLOUTDIR/$compname > $MASLOUTDIR/$compname/diff_report.txt
+      if [[ -d $OUT_DIR/$compname ]]; then
+         rm -rf $OUT_DIR/$compname
+      fi
+      mv $MASLOUTDIR/$compname $OUT_DIR
+      mv left.masldiff $OUT_DIR/$compname
+      mv right.masldiff $OUT_DIR/$compname
+
+      if [[ -f $OUT_DIR/$compname/diff_report.txt ]]; then
+        if [[ -s $OUT_DIR/$compname/diff_report.txt ]]; then
+          echo -e "\nDiff report is in $OUT_DIR/$compname/diff_report.txt"
+        else
+          echo -e "\nThe MASL output is identical to the input."
+        fi
+      fi
+    fi
+done
+
+if [[ $PROJ_DIR != "" ]]; then
+    echo -e "\n\n=========================================================="
+    echo "Processing project $PROJ_DIR"
+    projname=$(basename $PROJ_DIR)
+
+    echo "Round trip is now importing"
+    CLI.sh Import -file $CONVERTDIR/$projname/$projname.xtuml -targetProject p1 >/tmp/import_log_p1.txt 2>&1
+    if [[ ! -e $WORKSPACE/p1/models/p1/types/types.xtuml ]]; then
+      # First import didn't work. Import again. 
+      echo "Failed to import first time through.  Importing again."
+      CLI.sh Import -file $CONVERTDIR/$projname/$projname.xtuml -targetProject p1 >>/tmp/import_log_p1.txt 2>&1
+    fi
+
+    if [[ -f $CONVERTDIR/$projname/features.mark ]]; then
+        cp $CONVERTDIR/$projname/features.mark $WORKSPACE/p1/gen/
+    fi
+    if [[ -f $CONVERTDIR/$projname/application.mark ]]; then
+        cp $CONVERTDIR/$projname/application.mark $WORKSPACE/p1/gen/
+    fi
+
+    # The component name (from the .prj file) may not be the same as the project folder we 
+    # used during the processing.  So we calculate it from the .prj file name.
+    compfile=$(ls $PROJ_DIR/*.prj)
+    compname=$(basename -s .prj $compfile)
+    echo "Converting $compname from xtUML to MASL"
+    if [[ -d $MASLOUTDIR ]]; then
+       rm -rf $MASLOUTDIR
+    fi
+    xtuml2masl -i $WORKSPACE/p1 -p $compname -o $MASLOUTDIR
+
+    # Now diff
+    echo "Diff'ing input and output MASL."
+    masldiff $PROJ_DIR $MASLOUTDIR/$compname > $MASLOUTDIR/$compname/diff_report.txt
+    if [[ -d $OUT_DIR/$compname ]]; then
+       rm -rf $OUT_DIR/$compname
+    fi
+    mv $MASLOUTDIR/$compname $OUT_DIR
+    mv left.masldiff $OUT_DIR/$compname
+    mv right.masldiff $OUT_DIR/$compname
+
+    if [[ -f $OUT_DIR/$compname/diff_report.txt ]]; then
+      if [[ -s $OUT_DIR/$compname/diff_report.txt ]]; then
+        echo -e "\nDiff report is in $OUT_DIR/$compname/diff_report.txt"
+      else
+        echo -e "\nThe MASL output is idential to the input." 
+      fi
+    fi
+fi
+
+echo -e "\n"
+
