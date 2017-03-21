@@ -1,0 +1,32 @@
+public service refactor::foo () is
+the_var : type1;
+the_int : integer;
+the_a : instance of A;
+the_b : instance of B;
+begin
+  the_int := the_var.member1;
+  foo();
+  bar( the_int );
+  the_a := create unique A();
+  the_b := create unique B( Current_State => state1 );
+  link the_a R1.bend the_b;
+  the_a.setName( "the_a" );
+  generate B.event1 ( 5 ) to the_b;
+end service;
+
+private service refactor::bar ( param1 : in integer ) is
+the_int : integer;
+the_color : type2;
+the_c : instance of C;
+the_d : instance of D;
+the_e : instance of E;
+begin
+  the_int := param1 * param1;
+  the_terminator~>term1( the_int );
+  the_color := RED;
+  the_c := create unique C();
+  the_d := create unique D();
+  the_e := create unique E();
+  link the_c R2.dend the_d using the_e;
+end service;
+

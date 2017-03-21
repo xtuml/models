@@ -26,6 +26,7 @@ domain pei is
   object marriage;
   object person;
   object report_line;
+  //! data type comment
   private type arbitrary_id is integer
   ;
     private service test (
@@ -79,9 +80,13 @@ domain pei is
   object B1 is
     bID : preferred  integer;
     i :   integer;
+     //! state one comment
      state first();
+     //! state two comment
+     //! line two
      state second();
      state third();
+     //! event comment
      event go();
      transition is
       Non_Existent (
