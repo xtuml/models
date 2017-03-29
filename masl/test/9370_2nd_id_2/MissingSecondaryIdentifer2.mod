@@ -28,15 +28,16 @@ domain MissingSecondaryIdentifer2 is
 
   object Process is
     process_id : preferred integer;
-    product_id : referential (R1.currently_processing.Product.product_id, R3.audited_by.Audit.product_id);
-    machine_id : referential (R1.being_processed_by.Machine.machine_id, R3.audited_by.Audit.machine_id);
+    product_id : referential (R1.currently_processing.Product.product_id, R3.audited_by.Audit.product_id) integer;
+    machine_id : referential (R1.being_processed_by.Machine.machine_id, R3.audited_by.Audit.machine_id) integer;
 
     identifier is (machine_id);
+    identifier is (machine_id,product_id);
   end object;
 
   object Audit is
-    product_id : referential (R2.has_processed.Product.product_id);
-    machine_id : referential (R2.was_processed_by.Machine.machine_id);
+    product_id : preferred referential (R2.has_processed.Product.product_id) integer;
+    machine_id : preferred referential (R2.was_processed_by.Machine.machine_id) integer;
   end object;  
 
 end domain;
