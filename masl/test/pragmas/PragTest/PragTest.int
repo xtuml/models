@@ -1,0 +1,21 @@
+domain PragTest is
+
+  public type fwd_decl_type; pragma prag02();
+  public type fwd_decl_type is structure
+    member1: fwd_decl_type;
+    member2: integer; pragma prag03();
+  end structure; pragma prag04();
+
+  public exception exp1; pragma prag05(two,args);
+
+  public service foo(); pragma prag06();
+  public function bar() return integer; pragma prag07();
+
+  terminator term1 is
+    public service foo(); pragma prag08();
+    public function bar() return integer; pragma prag09();
+  end terminator;
+  pragma prag10();
+
+end domain;
+pragma prag23();
