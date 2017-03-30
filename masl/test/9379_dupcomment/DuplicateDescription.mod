@@ -4,7 +4,7 @@ domain DuplicateDescription is
   object Film;
 
   relationship R1 is
-    Actor conditionally appears in many Film,
+    Actor conditionally appears_in many Film,
     Film conditionally has_cast_member many Actor;
 
   relationship R2 is
@@ -15,7 +15,7 @@ domain DuplicateDescription is
     name            : preferred string;
 
    //! We really should merge this with name or our debut appearance might be by someone else
-   debut_actor_name :  referential ( R2.has_debut.Appearance.actor_name) string
+   debut_actor_name :  referential ( R2.has_debut.Appearance.actor_name) string;
    debut_film_name : referential ( R2.has_debut.Appearance.film_name) string;
   end object; 
 
