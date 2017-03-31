@@ -28,5 +28,6 @@ domain LongSignature is
     x : in sequence of integer,
     y : in sequence of integer,
     x : in sequence of integer ); 
+  pragma hello("world");
 
 end domain;
