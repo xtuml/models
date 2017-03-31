@@ -13,6 +13,20 @@ domain LongSignature is
     j : in sequence of integer,
     k : in sequence of integer,
     l : in sequence of integer,
-    m : in sequence of integer ); 
+    l : in sequence of integer,
+    m : in sequence of integer,
+    n : in sequence of integer,
+    o : in sequence of integer,
+    p : in sequence of integer,
+    q : in sequence of integer,
+    r : in sequence of integer,
+    s : in sequence of integer,
+    t : in sequence of integer,
+    u : in sequence of integer,
+    v : in sequence of integer,
+    w : in sequence of integer,
+    x : in sequence of integer,
+    y : in sequence of integer,
+    x : in sequence of integer ); 
 
 end domain;
