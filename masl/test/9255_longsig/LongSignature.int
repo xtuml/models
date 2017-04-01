@@ -13,7 +13,6 @@ domain LongSignature is
     j : in sequence of integer,
     k : in sequence of integer,
     l : in sequence of integer,
-    l : in sequence of integer,
     m : in sequence of integer,
     n : in sequence of integer,
     o : in sequence of integer,
@@ -27,7 +26,7 @@ domain LongSignature is
     w : in sequence of integer,
     x : in sequence of integer,
     y : in sequence of integer,
-    x : in sequence of integer ); 
+    z : in sequence of integer ); 
   pragma hello("world");
 
 end domain;
