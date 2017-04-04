@@ -3,6 +3,8 @@ domain IncompleteFormalism2 is
   object Appearance;
   object Film;
 
+  private service init ();
+
   relationship R1 is
     Actor unconditionally appears_in many Film,
     Film unconditionally has_cast_member many Actor
