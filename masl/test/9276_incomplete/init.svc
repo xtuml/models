@@ -1,0 +1,12 @@
+private service IncompleteFormalism2::init () is
+a : instance of Actor;
+app : instance of Appearance;
+f : instance of Film;
+begin
+  // Create an Actor, Film and Appearance and relate them.
+  a := create Actor (name => "ruby");
+  f := create Film (name => "epic drama");
+  app := create Appearance (actor_name => a.name, film_name => f.name);
+  link a R1.appears_in.Film f using app;
+  link a R2.has_debut.Appearance app;
+end service;
