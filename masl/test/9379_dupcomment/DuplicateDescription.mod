@@ -5,7 +5,8 @@ domain DuplicateDescription is
 
   relationship R1 is
     Actor conditionally appears_in many Film,
-    Film conditionally has_cast_member many Actor;
+    Film conditionally has_cast_member many Actor
+    using Appearance;
 
   relationship R2 is
     Actor conditionally has_debut one Appearance,
