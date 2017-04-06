@@ -30,11 +30,6 @@ done
 # if no out directory was given, give the current working directory
 if [[ $OUT_DIR == "" ]]; then OUT_DIR=.; fi
 
-XVFB=$(which xvfb-run)
-if [[ $XVFB == "" ]]; then
-  echo "Consider installing xvfb to run this suite headlessly."
-fi
-
 # set up workspace
 export WORKSPACE="/tmp/importwork"
 if [[ -d $WORKSPACE ]]; then
@@ -65,10 +60,10 @@ while read TEST; do
                 CMD="$CMD${projects[$i]} "
                 i=$[$i +1]
             done
-            $XVFB $BPINSTALL/tools/mc/bin/masl_round_trip $CMD -o $OUT_DIR/$COUNTER
+            $BPINSTALL/tools/mc/bin/masl_round_trip $CMD -o $OUT_DIR/$COUNTER
         else
             # run round trip for a domain
-            $XVFB $BPINSTALL/tools/mc/bin/masl_round_trip -d $TEST -o $OUT_DIR/$COUNTER
+            $BPINSTALL/tools/mc/bin/masl_round_trip -d $TEST -o $OUT_DIR/$COUNTER
         fi
     fi
     COUNTER=$[$COUNTER +1]
