@@ -26,7 +26,7 @@ Model Translation is based on the Object Management Group (OMG) [1]
 standard for Model-Driven Architecture (MDA) [3].
 Mapping focuses on the
 move from the Requirements and Design phases to the Implementation phase.
-Requirements and Design phases are modified slighltly by making them more precise.
+Requirements and Design phases are modified slightly by making them more precise.
 Strictly speaking, Mapping is a technique used in
 Implementation that _translates_ requirements and design artifacts into
 target technology in a predictable, repeatable and step-by-step process.
@@ -122,14 +122,13 @@ model of the software architecture.
 With a model of Requirements and a model of Design, a model-to-model (M2M)
 transformation can be done that maps these model elements together
 into the Implementation.
-As a final step of the Design process a set of rules is defined.
+As a final step of the Design process, a set of rules is defined.
 One rule is defined for each type of element in the Requirements.
 Each rule explains how to pair an element in the Requirements with
 an element in the Design.
 This set of mapping rules is the core of the Model Translation.
-These rules can be applied manually.
-
-With models, much of this mapping and translation can be automated.
+These rules can be applied manually, but
+with models, much of this mapping and translation can be automated.
 
 ## Implementation  
 Implementation realizes the Requirements within the constraints of the
@@ -137,10 +136,13 @@ Design.
 
 In some systems, the process of Implementation is not clearly specified.
 In such cases the implementation team must satisfy the input Requirements
-and Design in an _ad hoc_ fashion.  A successful Implementation is proven
-by Testing.  But the Implementation team is not given a process whereby
+and Design in an _ad hoc_ fashion.
+A successful Implementation is proven by only Testing.
+But the Implementation team is not given a process whereby
 the Requirements and Design _translate_ into the Implementation.  Such
 a set of rules make Implementation easier, faster and more precise.
+The cost of Testing can be reduced by eliminating defects through
+systematic mapping from Requirements and Design into Implementation.
 
 Model Translation provides a more precise, repeatable and step-by-step
 approach to implementation.  The process of Implementation is accomplished
@@ -157,7 +159,8 @@ The example shows Requirements, Design and a Mapping to Implementation.
 ### GPS Tracker  
 
 #### GPS Tracker:  Requirements  
-Consider a GPS Tracker that acquires and accumulates track points
+Consider a GPS Tracker that acquires and accumulates location
+information (track points)
 on a periodic time basis to record the path of the person or ship
 carrying the GPS Tracker.  During the Requirements Specification
 phase the engineering team establishes that the GPS Tracker will
