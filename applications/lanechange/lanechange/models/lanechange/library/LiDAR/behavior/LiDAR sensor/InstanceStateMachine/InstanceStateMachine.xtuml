@@ -201,8 +201,10 @@ INSERT INTO SM_ACT
 	VALUES ("07e43375-1e73-46c1-a27f-34d8a0d7e22f",
 	"e1eaeafd-dbf4-40d3-b86d-097fe586ea5c",
 	1,
-	'create event instance e of sensor3:tick() to self;
-self.timer = TIM::timer_start_recurring( microseconds:tick, event_inst:e );',
+	'if ( not self.global_tick )
+  create event instance e of sensor3:tick() to self;
+  self.timer = TIM::timer_start_recurring( microseconds:tick, event_inst:e );
+end if;',
 	'',
 	0);
 INSERT INTO SM_TAH
@@ -216,7 +218,9 @@ INSERT INTO SM_ACT
 	VALUES ("df8a4c69-cac9-4855-b8de-d0fd6c5e8e22",
 	"e1eaeafd-dbf4-40d3-b86d-097fe586ea5c",
 	1,
-	' success = TIM::timer_cancel( timer_inst_ref:self.timer );',
+	'if ( not self.global_tick )
+  success = TIM::timer_cancel( timer_inst_ref:self.timer );
+end if;',
 	'',
 	0);
 INSERT INTO SM_TAH

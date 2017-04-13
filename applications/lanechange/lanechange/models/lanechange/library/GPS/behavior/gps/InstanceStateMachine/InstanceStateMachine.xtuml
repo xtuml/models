@@ -198,8 +198,10 @@ INSERT INTO SM_ACT
 	VALUES ("a16be4b3-dd2f-4b12-a432-db9a92b101b0",
 	"a820ffc2-a271-4476-9f9f-c9544f5e7564",
 	1,
-	'create event instance e of gps3:tick() to self;
-self.timer = TIM::timer_start_recurring( microseconds:tick, event_inst:e );',
+	'if ( not self.global_tick )
+  create event instance e of gps3:tick() to self;
+  self.timer = TIM::timer_start_recurring( microseconds:tick, event_inst:e );
+end if;',
 	'',
 	0);
 INSERT INTO SM_TAH
@@ -213,7 +215,9 @@ INSERT INTO SM_ACT
 	VALUES ("bc1a54b8-3fa6-4a2e-b419-7a51150164ea",
 	"a820ffc2-a271-4476-9f9f-c9544f5e7564",
 	1,
-	' success = TIM::timer_cancel( timer_inst_ref:self.timer );',
+	'if ( not self.global_tick )
+  success = TIM::timer_cancel( timer_inst_ref:self.timer );
+end if;',
 	'',
 	0);
 INSERT INTO SM_TAH

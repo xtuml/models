@@ -370,6 +370,79 @@ INSERT INTO C_EP_PROXY
 	'data',
 	'',
 	'../../interfaces/sensor control/sensor control.xtuml');
+INSERT INTO SPR_PEP
+	VALUES ("1d108611-d206-42b2-95c7-8b341c59bb1d",
+	"33089cff-8285-4b80-92ed-16cc659c14f2",
+	"c57cbd77-b872-435b-937f-0ddcb4e13049");
+INSERT INTO SPR_PO
+	VALUES ("1d108611-d206-42b2-95c7-8b341c59bb1d",
+	'data',
+	'',
+	'// read the test data
+DATA::read( file:param.file );
+
+// create a file reader
+select any file from instances of datafile where ( selected.name == param.file );
+if ( not_empty file )
+  select one first_point related by file->datapoint[R1];
+  create object instance reader of datafilereader;
+  relate reader to first_point across R5;
+  relate reader to file across R6;
+end if;',
+	1,
+	0);
+INSERT INTO C_EP_PROXY
+	VALUES ("33089cff-8285-4b80-92ed-16cc659c14f2",
+	"87cc8427-80d7-48d1-8fd0-4ce48ba638c8",
+	-1,
+	'data',
+	'',
+	'../../interfaces/sensor control/sensor control.xtuml');
+INSERT INTO SPR_PEP
+	VALUES ("313e7109-e270-4108-a25d-60183ef92101",
+	"91aa23b5-2e67-4d3c-aeba-8456f37bf516",
+	"c57cbd77-b872-435b-937f-0ddcb4e13049");
+INSERT INTO SPR_PS
+	VALUES ("313e7109-e270-4108-a25d-60183ef92101",
+	'init',
+	'',
+	'// start a LiDAR instance
+select any sensor from instances of sensor;
+if ( empty sensor )
+  create object instance sensor of sensor;
+  sensor.global_tick = param.global_tick;
+  generate sensor1:start_tracking() to sensor;
+end if;',
+	1,
+	0);
+INSERT INTO C_EP_PROXY
+	VALUES ("91aa23b5-2e67-4d3c-aeba-8456f37bf516",
+	"87cc8427-80d7-48d1-8fd0-4ce48ba638c8",
+	-1,
+	'init',
+	'',
+	'../../interfaces/sensor control/sensor control.xtuml');
+INSERT INTO SPR_PEP
+	VALUES ("30b7e010-1f90-45ad-b636-2df7ff82d206",
+	"8521e16d-8736-4b82-b838-7f7b9d7d0c1c",
+	"c57cbd77-b872-435b-937f-0ddcb4e13049");
+INSERT INTO SPR_PS
+	VALUES ("30b7e010-1f90-45ad-b636-2df7ff82d206",
+	'tick',
+	'',
+	'select any sensor from instances of sensor;
+if ( not_empty sensor and sensor.global_tick )
+  generate sensor3:tick() to sensor;
+end if;',
+	1,
+	0);
+INSERT INTO C_EP_PROXY
+	VALUES ("8521e16d-8736-4b82-b838-7f7b9d7d0c1c",
+	"87cc8427-80d7-48d1-8fd0-4ce48ba638c8",
+	-1,
+	'tick',
+	'',
+	'../../interfaces/sensor control/sensor control.xtuml');
 INSERT INTO C_I_PROXY
 	VALUES ("87cc8427-80d7-48d1-8fd0-4ce48ba638c8",
 	"00000000-0000-0000-0000-000000000000",
