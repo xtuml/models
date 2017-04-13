@@ -24,8 +24,8 @@ INSERT INTO GD_MD
 	1,
 	0,
 	0,
-	0,
-	0,
+	200,
+	150,
 	0,
 	'',
 	'lanechange::library::LiDAR');
@@ -41,7 +41,7 @@ INSERT INTO GD_SHP
 INSERT INTO GD_CTR
 	VALUES ("c9633fe0-e32f-427d-aa5e-c23e483da334");
 INSERT INTO DIM_ND
-	VALUES (800.000000,
+	VALUES (1252.000000,
 	800.000000,
 	"c9633fe0-e32f-427d-aa5e-c23e483da334");
 INSERT INTO DIM_GE
@@ -263,6 +263,54 @@ INSERT INTO DIM_ED
 	VALUES ("d66a4457-cf84-4b0d-98b2-0c6b899359e5",
 	"00000000-0000-0000-0000-000000000000",
 	"eadf759e-5812-40ee-8c3c-2e1a092e042b");
+INSERT INTO GD_GE
+	VALUES ("a513092d-a43a-4d1b-bdf7-103bd7b9be27",
+	"114e9ae6-5804-405a-ab22-239181efafe1",
+	"0e131b3d-f9b7-49ea-9c90-b5b803bee415",
+	108,
+	0,
+	'lanechange::library::LiDAR::behavior');
+INSERT INTO GD_SHP
+	VALUES ("a513092d-a43a-4d1b-bdf7-103bd7b9be27");
+INSERT INTO GD_NCS
+	VALUES ("a513092d-a43a-4d1b-bdf7-103bd7b9be27");
+INSERT INTO DIM_ND
+	VALUES (200.000000,
+	150.000000,
+	"a513092d-a43a-4d1b-bdf7-103bd7b9be27");
+INSERT INTO DIM_GE
+	VALUES (4920.000000,
+	3100.000000,
+	"a513092d-a43a-4d1b-bdf7-103bd7b9be27",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("a513092d-a43a-4d1b-bdf7-103bd7b9be27",
+	0,
+	"c9633fe0-e32f-427d-aa5e-c23e483da334");
+INSERT INTO GD_GE
+	VALUES ("5b3881c2-51a3-496b-b32a-ec9dfde7bafd",
+	"114e9ae6-5804-405a-ab22-239181efafe1",
+	"35ebeb68-d9e9-43b9-a4c0-8c870ad5e735",
+	108,
+	0,
+	'lanechange::library::LiDAR::testdata');
+INSERT INTO GD_SHP
+	VALUES ("5b3881c2-51a3-496b-b32a-ec9dfde7bafd");
+INSERT INTO GD_NCS
+	VALUES ("5b3881c2-51a3-496b-b32a-ec9dfde7bafd");
+INSERT INTO DIM_ND
+	VALUES (200.000000,
+	150.000000,
+	"5b3881c2-51a3-496b-b32a-ec9dfde7bafd");
+INSERT INTO DIM_GE
+	VALUES (5140.000000,
+	3100.000000,
+	"5b3881c2-51a3-496b-b32a-ec9dfde7bafd",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("5b3881c2-51a3-496b-b32a-ec9dfde7bafd",
+	0,
+	"c9633fe0-e32f-427d-aa5e-c23e483da334");
 INSERT INTO DIM_DIA
 	VALUES ("114e9ae6-5804-405a-ab22-239181efafe1",
 	'',
@@ -295,7 +343,24 @@ INSERT INTO SPR_PS
 	VALUES ("50064e45-353c-42a0-acd9-beb0c531686d",
 	'data',
 	'',
-	'',
+	'// read the test data
+DATA::read( file:param.file );
+
+// create a file reader
+select any file from instances of datafile where ( selected.name == param.file );
+if ( not_empty file )
+  select one first_point related by file->datapoint[R1];
+  create object instance reader of datafilereader;
+  relate reader to first_point across R5;
+  relate reader to file across R6;
+end if;
+
+// start an accelerometer instance
+select any sensor from instances of sensor;
+if ( empty sensor )
+  create object instance sensor of sensor;
+  generate sensor1:start_tracking() to sensor;
+end if;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
