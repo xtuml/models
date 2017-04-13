@@ -33,6 +33,59 @@ INSERT INTO DIM_DIA
 	0.000000,
 	0.000000,
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("c48e0bfc-1af6-423d-9dfc-708a1c4aa176",
+	"00000000-0000-0000-0000-000000000000",
+	'start',
+	'',
+	'// set up sensors
+acc_ctl::data( file:param.acc_file );
+gps_ctl::data( file:param.gps_file );
+lidar_ctl::data( file:param.lidar_file );
+
+// start heartbeat
+select any heartbeat from instances of heartbeat;
+if ( empty heartbeat )
+  create object instance heartbeat of heartbeat;
+end if;
+generate heartbeat1:start() to heartbeat;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("828addb7-108e-4db9-bc0d-179706dcedd1",
+	"c48e0bfc-1af6-423d-9dfc-708a1c4aa176",
+	'acc_file',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("e3aed130-e321-4c37-8efc-61b52daeeef9",
+	"c48e0bfc-1af6-423d-9dfc-708a1c4aa176",
+	'gps_file',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"828addb7-108e-4db9-bc0d-179706dcedd1",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("dfb2a177-0ff6-4a82-a490-38a643f04e3f",
+	"c48e0bfc-1af6-423d-9dfc-708a1c4aa176",
+	'lidar_file',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"e3aed130-e321-4c37-8efc-61b52daeeef9",
+	'');
+INSERT INTO PE_PE
+	VALUES ("c48e0bfc-1af6-423d-9dfc-708a1c4aa176",
+	1,
+	"cf49f97b-b516-49db-8ef7-055d7c93d3c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
 INSERT INTO PE_PE
 	VALUES ("cf49f97b-b516-49db-8ef7-055d7c93d3c6",
 	1,
