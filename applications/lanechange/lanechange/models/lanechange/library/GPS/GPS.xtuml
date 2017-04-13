@@ -27,7 +27,7 @@ INSERT INTO GD_MD
 	200,
 	150,
 	0,
-	'',
+	'4.1.17',
 	'lanechange::library::GPS');
 INSERT INTO GD_GE
 	VALUES ("d45691b1-0ce7-44ed-89d7-4121d9939fd1",
@@ -127,8 +127,8 @@ INSERT INTO DIM_ND
 	0.000000,
 	"06039797-f577-4f84-b64f-9ff56bab97f0");
 INSERT INTO DIM_GE
-	VALUES (0.000000,
-	0.000000,
+	VALUES (4880.000000,
+	3930.000000,
 	"06039797-f577-4f84-b64f-9ff56bab97f0",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -227,8 +227,8 @@ INSERT INTO DIM_ND
 	0.000000,
 	"1233c7e5-575c-4a6a-9fc1-0e1b54f6f649");
 INSERT INTO DIM_GE
-	VALUES (0.000000,
-	0.000000,
+	VALUES (4052.000000,
+	3448.000000,
 	"1233c7e5-575c-4a6a-9fc1-0e1b54f6f649",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -336,43 +336,6 @@ INSERT INTO C_P
 	'',
 	'GPS::ctl::sensor control');
 INSERT INTO SPR_PEP
-	VALUES ("dc9ec47a-fe18-4d60-b53a-449676418023",
-	"332cce41-7585-4bf7-9352-f860e783e531",
-	"72357a58-9ab7-4082-8f19-faed85d64508");
-INSERT INTO SPR_PS
-	VALUES ("dc9ec47a-fe18-4d60-b53a-449676418023",
-	'data',
-	'',
-	'// read the test data
-DATA::read( file:param.file );
-
-// create a file reader
-select any file from instances of datafile where ( selected.name == param.file );
-if ( not_empty file )
-  select one first_point related by file->datapoint[R1];
-  create object instance reader of datafilereader;
-  relate reader to first_point across R5;
-  relate reader to file across R6;
-end if;
-
-// start a gps instance
-select any gps from instances of gps;
-if ( empty gps )
-  create object instance gps of gps;
-  gps.location.latitude = 0;
-  gps.location.longitude = 0;
-  generate gps1:start_tracking() to gps;
-end if;',
-	1,
-	0);
-INSERT INTO C_EP_PROXY
-	VALUES ("332cce41-7585-4bf7-9352-f860e783e531",
-	"87cc8427-80d7-48d1-8fd0-4ce48ba638c8",
-	-1,
-	'data',
-	'',
-	'../../interfaces/sensor control/sensor control.xtuml');
-INSERT INTO SPR_PEP
 	VALUES ("6156e9ca-0595-4fca-9a53-90dc15c2e68a",
 	"33089cff-8285-4b80-92ed-16cc659c14f2",
 	"72357a58-9ab7-4082-8f19-faed85d64508");
@@ -415,7 +378,7 @@ if ( empty gps )
   gps.location.latitude = 0;
   gps.location.longitude = 0;
   gps.global_tick = param.global_tick;
-  generate gps1:start_tracking() to gps;
+  generate gps1:start() to gps;
 end if;',
 	1,
 	0);

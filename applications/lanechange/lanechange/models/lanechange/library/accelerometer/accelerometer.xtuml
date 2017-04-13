@@ -341,43 +341,6 @@ INSERT INTO C_P
 	'',
 	'accelerometer::ctl::sensor control');
 INSERT INTO SPR_PEP
-	VALUES ("d4b00830-ed83-4161-a17f-f8def9021741",
-	"332cce41-7585-4bf7-9352-f860e783e531",
-	"fa972d10-0ea7-4230-aacc-5a50efe04740");
-INSERT INTO SPR_PS
-	VALUES ("d4b00830-ed83-4161-a17f-f8def9021741",
-	'data',
-	'',
-	'// read the test data
-DATA::read( file:param.file );
-
-// create a file reader
-select any file from instances of datafile where ( selected.name == param.file );
-if ( not_empty file )
-  select one first_point related by file->datapoint[R1];
-  create object instance reader of datafilereader;
-  relate reader to first_point across R5;
-  relate reader to file across R6;
-end if;
-
-// start an accelerometer instance
-select any acc from instances of accelerometer;
-if ( empty acc )
-  create object instance acc of accelerometer;
-  acc.axis = axis::NULL;
-  acc.gs = 0;
-  generate accelerometer1:start_tracking() to acc;
-end if;',
-	1,
-	0);
-INSERT INTO C_EP_PROXY
-	VALUES ("332cce41-7585-4bf7-9352-f860e783e531",
-	"87cc8427-80d7-48d1-8fd0-4ce48ba638c8",
-	-1,
-	'data',
-	'',
-	'../../interfaces/sensor control/sensor control.xtuml');
-INSERT INTO SPR_PEP
 	VALUES ("7d16b6d4-19b1-46c4-af88-5d2fcdf5fe9d",
 	"33089cff-8285-4b80-92ed-16cc659c14f2",
 	"fa972d10-0ea7-4230-aacc-5a50efe04740");
@@ -420,7 +383,7 @@ if ( empty acc )
   acc.axis = axis::NULL;
   acc.gs = 0;
   acc.global_tick = param.global_tick;
-  generate accelerometer1:start_tracking() to acc;
+  generate accelerometer1:start() to acc;
 end if;',
 	1,
 	0);
