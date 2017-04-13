@@ -24,8 +24,8 @@ INSERT INTO GD_MD
 	1,
 	0,
 	0,
-	0,
-	0,
+	200,
+	150,
 	0,
 	'',
 	'lanechange::library::accelerometer');
@@ -41,7 +41,7 @@ INSERT INTO GD_SHP
 INSERT INTO GD_CTR
 	VALUES ("82d18517-662f-4e17-acc0-62505097a817");
 INSERT INTO DIM_ND
-	VALUES (800.000000,
+	VALUES (1252.000000,
 	800.000000,
 	"82d18517-662f-4e17-acc0-62505097a817");
 INSERT INTO DIM_GE
@@ -268,6 +268,30 @@ INSERT INTO DIM_ED
 	VALUES ("8b8bc263-6e3e-4314-be01-0ef71c195806",
 	"00000000-0000-0000-0000-000000000000",
 	"07e7232a-8d13-4403-8e56-0c5d5bcf066f");
+INSERT INTO GD_GE
+	VALUES ("4e9b27ff-1266-440a-bbe1-249da56669aa",
+	"b1589b2d-e3d9-4fc3-8673-e1a615c9ee74",
+	"e3779232-dfd1-48ee-8374-f7b91ce83f18",
+	108,
+	0,
+	'lanechange::library::accelerometer::behavior');
+INSERT INTO GD_SHP
+	VALUES ("4e9b27ff-1266-440a-bbe1-249da56669aa");
+INSERT INTO GD_NCS
+	VALUES ("4e9b27ff-1266-440a-bbe1-249da56669aa");
+INSERT INTO DIM_ND
+	VALUES (200.000000,
+	150.000000,
+	"4e9b27ff-1266-440a-bbe1-249da56669aa");
+INSERT INTO DIM_GE
+	VALUES (4920.000000,
+	3100.000000,
+	"4e9b27ff-1266-440a-bbe1-249da56669aa",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("4e9b27ff-1266-440a-bbe1-249da56669aa",
+	0,
+	"82d18517-662f-4e17-acc0-62505097a817");
 INSERT INTO DIM_DIA
 	VALUES ("b1589b2d-e3d9-4fc3-8673-e1a615c9ee74",
 	'',
@@ -300,8 +324,26 @@ INSERT INTO SPR_PS
 	VALUES ("d4b00830-ed83-4161-a17f-f8def9021741",
 	'data',
 	'',
-	'',
-	3,
+	'// read the test data
+DATA::read( file:param.file );
+
+// create a file reader
+select any file from instances of datafile where ( selected.name == param.file );
+if ( not_empty file )
+  select one first_point related by file->datapoint[R1];
+  create object instance reader of datafilereader;
+  relate reader to first_point across R5;
+  relate reader to file across R6;
+end if;
+
+// start an accelerometer instance
+select any acc from instances of accelerometer;
+if ( empty acc )
+  create object instance acc of accelerometer;
+  acc.acc_state = acc_state::NO_CHANGE;
+  generate accelerometer1:start_tracking() to acc;
+end if;',
+	1,
 	0);
 INSERT INTO C_EP_PROXY
 	VALUES ("332cce41-7585-4bf7-9352-f860e783e531",
@@ -342,7 +384,7 @@ INSERT INTO SPR_PS
 	'speeding_up',
 	'',
 	'',
-	3,
+	1,
 	0);
 INSERT INTO C_EP_PROXY
 	VALUES ("856af7c7-d1fa-494c-924d-03db1f3b35b7",
@@ -360,7 +402,7 @@ INSERT INTO SPR_PS
 	'slowing_down',
 	'',
 	'',
-	3,
+	1,
 	0);
 INSERT INTO C_EP_PROXY
 	VALUES ("25e59048-1419-4342-a65c-71b93d8b8d93",
@@ -378,7 +420,7 @@ INSERT INTO SPR_PS
 	'turning_left',
 	'',
 	'',
-	3,
+	1,
 	0);
 INSERT INTO C_EP_PROXY
 	VALUES ("b2c03bef-a76a-4429-a8de-eb28f751b80e",
@@ -396,7 +438,7 @@ INSERT INTO SPR_PS
 	'turning_right',
 	'',
 	'',
-	3,
+	1,
 	0);
 INSERT INTO C_EP_PROXY
 	VALUES ("4d30e6b4-eb9b-47ed-9fbb-d0bbc489f822",
