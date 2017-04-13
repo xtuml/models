@@ -186,15 +186,7 @@ INSERT INTO SM_ACT
 	'// send the hazards
 select many hazards related by self->hazard[R7];
 for each hazard in hazards
-  if ( direction::LEFT == hazard.direction )
-    send lidar::left( distance:hazard.distance );
-  elif ( direction::RIGHT == hazard.direction )
-    send lidar::right( distance:hazard.distance );
-  elif ( direction::FRONT == hazard.direction )
-    send lidar::front( distance:hazard.distance );
-  elif ( direction::BACK == hazard.direction )
-    send lidar::back( distance:hazard.distance );
-  end if;
+  send lidar::object( distance:hazard.distance, angle:hazard.angle );
 end for;',
 	'',
 	0);
@@ -250,11 +242,11 @@ select any reader from instances of datafilereader;
 select one point related by reader->datapoint[R5];
 select one hazard_value related by point->datavalue[R3];
 while ( not_empty hazard_value )
-  direction = STRING::atodirection( s:hazard_value.value );
+  angle = STRING::atodegrees( s:hazard_value.value );
   select one hazard_value related by hazard_value->datavalue[R4.''precedes''];
   distance = STRING::atometers( s:hazard_value.value );
   create object instance hazard of hazard;
-  hazard.direction = direction;
+  hazard.angle = angle;
   hazard.distance = distance;
   relate hazard to self across R7;
 end while;

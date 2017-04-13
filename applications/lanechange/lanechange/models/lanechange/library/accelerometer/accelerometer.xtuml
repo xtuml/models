@@ -364,7 +364,8 @@ end if;
 select any acc from instances of accelerometer;
 if ( empty acc )
   create object instance acc of accelerometer;
-  acc.acc_state = acc_state::NO_CHANGE;
+  acc.axis = axis::NULL;
+  acc.gs = 0;
   generate accelerometer1:start_tracking() to acc;
 end if;',
 	1,
@@ -405,7 +406,7 @@ INSERT INTO SPR_PEP
 	"48fc9e13-e8e7-446a-bf1b-37577ce5bf3c");
 INSERT INTO SPR_PS
 	VALUES ("b308b8a4-5bb0-4fe6-894c-d996af15ac19",
-	'speeding_up',
+	'acceleration',
 	'',
 	'',
 	1,
@@ -414,61 +415,7 @@ INSERT INTO C_EP_PROXY
 	VALUES ("856af7c7-d1fa-494c-924d-03db1f3b35b7",
 	"6268f5cd-b8c7-4a9f-9bb9-c3e5f20454f4",
 	-1,
-	'speeding_up',
-	'',
-	'../../interfaces/accelerometer/accelerometer.xtuml');
-INSERT INTO SPR_PEP
-	VALUES ("70448b97-6a81-40cc-8042-435d0ac95a50",
-	"25e59048-1419-4342-a65c-71b93d8b8d93",
-	"48fc9e13-e8e7-446a-bf1b-37577ce5bf3c");
-INSERT INTO SPR_PS
-	VALUES ("70448b97-6a81-40cc-8042-435d0ac95a50",
-	'slowing_down',
-	'',
-	'',
-	1,
-	0);
-INSERT INTO C_EP_PROXY
-	VALUES ("25e59048-1419-4342-a65c-71b93d8b8d93",
-	"6268f5cd-b8c7-4a9f-9bb9-c3e5f20454f4",
-	-1,
-	'slowing_down',
-	'',
-	'../../interfaces/accelerometer/accelerometer.xtuml');
-INSERT INTO SPR_PEP
-	VALUES ("ca7c97f2-abce-46ef-8e60-c0a87e9b4d88",
-	"b2c03bef-a76a-4429-a8de-eb28f751b80e",
-	"48fc9e13-e8e7-446a-bf1b-37577ce5bf3c");
-INSERT INTO SPR_PS
-	VALUES ("ca7c97f2-abce-46ef-8e60-c0a87e9b4d88",
-	'turning_left',
-	'',
-	'',
-	1,
-	0);
-INSERT INTO C_EP_PROXY
-	VALUES ("b2c03bef-a76a-4429-a8de-eb28f751b80e",
-	"6268f5cd-b8c7-4a9f-9bb9-c3e5f20454f4",
-	-1,
-	'turning_left',
-	'',
-	'../../interfaces/accelerometer/accelerometer.xtuml');
-INSERT INTO SPR_PEP
-	VALUES ("cf32ed0a-9ff6-48d0-972d-699c360f0294",
-	"4d30e6b4-eb9b-47ed-9fbb-d0bbc489f822",
-	"48fc9e13-e8e7-446a-bf1b-37577ce5bf3c");
-INSERT INTO SPR_PS
-	VALUES ("cf32ed0a-9ff6-48d0-972d-699c360f0294",
-	'turning_right',
-	'',
-	'',
-	1,
-	0);
-INSERT INTO C_EP_PROXY
-	VALUES ("4d30e6b4-eb9b-47ed-9fbb-d0bbc489f822",
-	"6268f5cd-b8c7-4a9f-9bb9-c3e5f20454f4",
-	-1,
-	'turning_right',
+	'acceleration',
 	'',
 	'../../interfaces/accelerometer/accelerometer.xtuml');
 INSERT INTO C_I_PROXY

@@ -184,17 +184,7 @@ INSERT INTO SM_ACT
 	"f91eca3b-6701-4092-b807-4b6bc25e9310",
 	1,
 	'// send the accelerometer reading
-if ( acc_state::SPEEDING_UP == self.acc_state )
-  send acc::speeding_up();
-elif ( acc_state::SLOWING_DOWN == self.acc_state )
-  send acc::slowing_down();
-elif ( acc_state::TURNING_LEFT == self.acc_state )
-  send acc::turning_left();
-elif ( acc_state::TURNING_RIGHT == self.acc_state )
-  send acc::turning_right();
-else
-  // do nothing for NO_CHANGE
-end if;',
+send acc::acceleration( axis:self.axis, gs:self.gs );',
 	'',
 	0);
 INSERT INTO SM_TAH
@@ -240,8 +230,12 @@ INSERT INTO SM_ACT
 	'// read the next data point in the file
 select any reader from instances of datafilereader;
 select one point related by reader->datapoint[R5];
-select one acc_value related by point->datavalue[R3];
-self.acc_state = STRING::atoacc_state( s:acc_value.value );
+select one axis_value related by point->datavalue[R3];
+select one g_value related by axis_value->datavalue[R4.''precedes''];
+if ( not_empty axis_value and not_empty g_value )
+  self.axis = STRING::atoaxis( s:axis_value.value );
+  self.gs = STRING::atogforce( s:axis_value.value );
+end if;
 
 // select the next data point
 select one next_point related by point->datapoint[R2.''precedes''];

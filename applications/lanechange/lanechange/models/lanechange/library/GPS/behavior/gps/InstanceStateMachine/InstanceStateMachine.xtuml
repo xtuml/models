@@ -233,8 +233,8 @@ select one point related by reader->datapoint[R5];
 select one lat_value related by point->datavalue[R3];
 select one long_value related by lat_value->datavalue[R4.''precedes''];
 if ( not_empty lat_value and not_empty long_value )
-  self.location.latitude = STRING::atof( s:lat_value.value );
-  self.location.longitude = STRING::atof( s:long_value.value );
+  self.location.latitude = STRING::atodegrees( s:lat_value.value );
+  self.location.longitude = STRING::atodegrees( s:long_value.value );
 end if;
 
 // select the next data point

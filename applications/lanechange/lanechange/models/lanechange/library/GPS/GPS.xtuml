@@ -359,6 +359,8 @@ end if;
 select any gps from instances of gps;
 if ( empty gps )
   create object instance gps of gps;
+  gps.location.latitude = 0;
+  gps.location.longitude = 0;
   generate gps1:start_tracking() to gps;
 end if;',
 	1,
