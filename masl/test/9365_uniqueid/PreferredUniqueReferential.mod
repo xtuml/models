@@ -1,9 +1,7 @@
-domain IncompleteFormalism2 is
+domain PreferredUniqueReferential is
   object Actor;
   object Appearance;
   object Film;
-
-  private service init ();
 
   relationship R1 is
     Actor unconditionally appears_in many Film,
@@ -15,17 +13,17 @@ domain IncompleteFormalism2 is
     Appearance conditionally was_debut_for one Actor;
 
   object Actor is
-    name            : preferred referential ( R2.has_debut.Appearance.actor_name) string;
-    debut_film_name : referential ( R2.has_debut.Appearance.film_name) string;
+    id            : preferred unique referential ( R2.has_debut.Appearance.actor_id) integer;
+    debut_film_id : referential ( R2.has_debut.Appearance.film_id) integer;
   end object; 
 
   object Appearance is
-    actor_name : preferred referential ( R1.has_cast_member.Actor.name) string;
-    film_name  : preferred referential ( R1.appears_in.Film.name) string;
+    actor_id : preferred referential ( R1.has_cast_member.Actor.id) integer;
+    film_id  : preferred referential ( R1.appears_in.Film.id) integer;
   end object; 
 
   object Film is
-    name : preferred string;
+    id : preferred integer;
   end object; 
 
 end domain;
