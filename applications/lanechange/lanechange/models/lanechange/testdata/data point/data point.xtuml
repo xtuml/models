@@ -19,9 +19,11 @@ point.number = param.number;
 
 if ( 1 == point.number )
   select any file from instances of datafile where ( selected.name == param.file_name );
-  if ( not_empty file )
-    relate point to file across R1;
+  if ( empty file )
+    datafile::create( name:param.file_name );
+    select any file from instances of datafile where ( selected.name == param.file_name );
   end if;
+  relate point to file across R1;
 end if;
 
 select any prev_point from instances of datapoint where ( selected.number == point.number - 1 and
@@ -109,27 +111,27 @@ INSERT INTO O_REF
 	0,
 	"80d51f85-11d8-44ef-92fc-1b40e540fa99",
 	"4802af97-d21c-440d-b284-13bba36ab223",
-	"f86234fa-5d65-43e9-8549-8a811de36705",
 	"845e0f13-a43b-4286-9bcf-6cd74a3a8911",
+	"f86234fa-5d65-43e9-8549-8a811de36705",
 	"80d51f85-11d8-44ef-92fc-1b40e540fa99",
-	"aea7fc7e-8e3f-4a22-ac08-d55be4f9604c",
+	"adbeaa21-a5c0-4d78-bcdd-ffd59e8823e7",
 	"2cc29911-70c1-4922-8682-070abb82e16b",
 	0,
 	'',
 	'data point',
 	'file_name',
-	'R2.''precedes''');
+	'R2.''follows''');
 INSERT INTO R_RGO_PROXY
 	VALUES ("46c02174-a381-4d31-b10f-8d5c52a1a457",
 	"4802af97-d21c-440d-b284-13bba36ab223",
-	"f86234fa-5d65-43e9-8549-8a811de36705",
+	"845e0f13-a43b-4286-9bcf-6cd74a3a8911",
 	'../testdata.xtuml');
 INSERT INTO O_RTIDA_PROXY
 	VALUES ("80d51f85-11d8-44ef-92fc-1b40e540fa99",
 	"46c02174-a381-4d31-b10f-8d5c52a1a457",
 	0,
 	"4802af97-d21c-440d-b284-13bba36ab223",
-	"845e0f13-a43b-4286-9bcf-6cd74a3a8911",
+	"f86234fa-5d65-43e9-8549-8a811de36705",
 	'../testdata.xtuml');
 INSERT INTO O_RATTR
 	VALUES ("80d51f85-11d8-44ef-92fc-1b40e540fa99",
@@ -160,40 +162,40 @@ INSERT INTO O_REF
 	0,
 	"96ad8409-3200-472c-a96e-778b4d087b1c",
 	"4802af97-d21c-440d-b284-13bba36ab223",
-	"f86234fa-5d65-43e9-8549-8a811de36705",
 	"845e0f13-a43b-4286-9bcf-6cd74a3a8911",
-	"54230b2f-7d32-45b4-acfa-52e896432d73",
-	"2a226baa-4c5e-4053-8694-7dbcfb6c977c",
+	"f86234fa-5d65-43e9-8549-8a811de36705",
+	"922a5008-4e7e-475f-bb6e-d6119c69e739",
+	"afb31cfe-c3ae-45c4-aae1-f21e3eaaa8c4",
 	"00000000-0000-0000-0000-000000000000",
 	0,
 	'',
 	'data point',
 	'number',
-	'R2.''precedes''');
+	'R2.''follows''');
 INSERT INTO O_RTIDA_PROXY
 	VALUES ("96ad8409-3200-472c-a96e-778b4d087b1c",
 	"46c02174-a381-4d31-b10f-8d5c52a1a457",
 	0,
 	"4802af97-d21c-440d-b284-13bba36ab223",
-	"845e0f13-a43b-4286-9bcf-6cd74a3a8911",
+	"f86234fa-5d65-43e9-8549-8a811de36705",
 	'../testdata.xtuml');
 INSERT INTO O_RATTR
-	VALUES ("54230b2f-7d32-45b4-acfa-52e896432d73",
+	VALUES ("922a5008-4e7e-475f-bb6e-d6119c69e739",
 	"46c02174-a381-4d31-b10f-8d5c52a1a457",
 	"96ad8409-3200-472c-a96e-778b4d087b1c",
 	"46c02174-a381-4d31-b10f-8d5c52a1a457",
 	1,
 	'number');
 INSERT INTO O_ATTR
-	VALUES ("54230b2f-7d32-45b4-acfa-52e896432d73",
+	VALUES ("922a5008-4e7e-475f-bb6e-d6119c69e739",
 	"46c02174-a381-4d31-b10f-8d5c52a1a457",
 	"96ad8409-3200-472c-a96e-778b4d087b1c",
-	'next_number',
+	'prev_number',
 	'',
-	'next_',
+	'prev_',
 	'number',
 	1,
-	"ba5eda7a-def5-0000-0000-000000000007",
+	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
 	'');
 INSERT INTO O_ID

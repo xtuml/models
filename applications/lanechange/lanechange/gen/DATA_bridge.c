@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#define DEBUG
+//#define DEBUG
 #ifdef DEBUG
 void debug_print( const char * format, ... ) {
   va_list args;
@@ -46,8 +46,8 @@ DATA_read( c_t p_file[ESCHER_SYS_MAX_STRING_LEN] )
   // copy filename
   memset( filename, 0, ESCHER_SYS_MAX_STRING_LEN );
   strncpy( filename, p_file, ESCHER_SYS_MAX_STRING_LEN );
-  pointnum = 0;
-  valnum = 0;
+  pointnum = 1;
+  valnum = 1;
 
   // open file
   FILE * f = fopen( p_file, "r" );
@@ -55,7 +55,7 @@ DATA_read( c_t p_file[ESCHER_SYS_MAX_STRING_LEN] )
   // read contents into buffer
   c_t file_string[MAX_FILE_LEN];
   memset( file_string, 0, MAX_FILE_LEN );
-  fread( file_string, 1, MAX_FILE_LEN, f );
+  if ( f ) fread( file_string, 1, MAX_FILE_LEN, f );
 
   // parse file
   DATA_internal_tokenizer_init( file_string );
@@ -63,15 +63,10 @@ DATA_read( c_t p_file[ESCHER_SYS_MAX_STRING_LEN] )
   DATA_internal_parser_1();
 }
 
-void DATA_internal_semantic_create_file() {
-  debug_print( "Executing semantic for 'file' rule\n" );
-  LiDAR_datafile_op_create( filename );
-}
-
 void DATA_internal_semantic_create_point() {
   debug_print( "Executing semantic for 'line' rule\n" );
-  LiDAR_datapoint_op_create( filename, pointnum++ );
-  valnum = 0;
+  pointnum++;
+  valnum = 1;
 }
 
 void DATA_internal_semantic_create_value() {
@@ -447,7 +442,7 @@ int (*DATA_internal_parse_states[17])() = {
 };
 
 void (*DATA_internal_parse_semantics[10])() = { 
-  &DATA_internal_semantic_create_file,
+  &DATA_internal_null_semantic,
   &DATA_internal_null_semantic,
   &DATA_internal_null_semantic,
   &DATA_internal_semantic_create_point,

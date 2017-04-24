@@ -67,12 +67,48 @@ UserPreOoaInitializationCalloutf( void )
  * When this callout function returns, the system dispatcher will allow the
  * xtUML application analysis state models to start consuming events.
  */
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 void
-UserPostOoaInitializationCalloutf( void )
+UserPostOoaInitializationCalloutf( int argc, char ** argv )
 {
   /* Insert implementation specific code here.  */
   SYS_USER_CO_PRINTF( "UserPostOoaInitializationCallout\n" )
-  testbench_start( "", "", "testfile.txt" );
+  c_t acc_file[ESCHER_SYS_MAX_STRING_LEN];
+  c_t gps_file[ESCHER_SYS_MAX_STRING_LEN];
+  c_t lidar_file[ESCHER_SYS_MAX_STRING_LEN];
+  memset( acc_file, 0, ESCHER_SYS_MAX_STRING_LEN );
+  memset( gps_file, 0, ESCHER_SYS_MAX_STRING_LEN );
+  memset( lidar_file, 0, ESCHER_SYS_MAX_STRING_LEN );
+  {
+    int c;
+    opterr = 0;
+    while ( ( c = getopt ( argc, argv, "a::g::l::" ) ) != -1 ) {
+      switch ( c ) {
+        case 'a':
+          if ( optarg )
+            strcpy( acc_file, optarg );
+          break;
+        case 'g':
+          if ( optarg )
+            strcpy( gps_file, optarg );
+          break;
+        case 'l':
+          if ( optarg )
+            strcpy( lidar_file, optarg );
+          break;
+        case '?':
+          fprintf( stderr, "Unknown option character '%c'.\n", optopt );
+          break;
+        default:
+          exit(1);
+      }
+    }
+  }
+  testbench_start( acc_file, gps_file, lidar_file );
 }
 
 /*

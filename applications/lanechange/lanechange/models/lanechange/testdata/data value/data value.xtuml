@@ -20,9 +20,11 @@ value.value = param.value;
 
 if ( 1 == value.number )
   select any point from instances of datapoint where ( selected.file_name == param.file_name and selected.number == param.point_number );
-  if ( not_empty point )
-    relate value to point across R3;
+  if ( empty point )
+    datapoint::create( file_name:param.file_name, number:param.point_number );
+    select any point from instances of datapoint where ( selected.file_name == param.file_name and selected.number == param.point_number );
   end if;
+  relate value to point across R3;
 end if;
 
 select any prev_value from instances of datavalue where ( selected.number == value.number - 1 and 
@@ -148,27 +150,27 @@ INSERT INTO O_REF
 	0,
 	"eb6dc3cc-6d3d-4828-81ed-bd49db4a4118",
 	"67485367-eda7-4bb8-ac54-8146df1bdadf",
-	"8026520c-ef8d-43cf-a0c6-c026d445d918",
 	"e6e0aec3-862c-405e-9d8a-2014e9cd5e54",
+	"8026520c-ef8d-43cf-a0c6-c026d445d918",
 	"eb6dc3cc-6d3d-4828-81ed-bd49db4a4118",
-	"5fe8da51-0c36-481c-a0f1-88820fc41ee6",
+	"2f2d5793-5bc3-423b-8808-694d09339294",
 	"05c5073d-007f-44e3-af48-36843430b1e5",
 	0,
 	'',
 	'data value',
 	'point_number',
-	'R4.''precedes''');
+	'R4.''follows''');
 INSERT INTO R_RGO_PROXY
 	VALUES ("58abf0e8-0899-4ba2-8051-db597c0f1c0d",
 	"67485367-eda7-4bb8-ac54-8146df1bdadf",
-	"8026520c-ef8d-43cf-a0c6-c026d445d918",
+	"e6e0aec3-862c-405e-9d8a-2014e9cd5e54",
 	'../testdata.xtuml');
 INSERT INTO O_RTIDA_PROXY
 	VALUES ("eb6dc3cc-6d3d-4828-81ed-bd49db4a4118",
 	"58abf0e8-0899-4ba2-8051-db597c0f1c0d",
 	0,
 	"67485367-eda7-4bb8-ac54-8146df1bdadf",
-	"e6e0aec3-862c-405e-9d8a-2014e9cd5e54",
+	"8026520c-ef8d-43cf-a0c6-c026d445d918",
 	'../testdata.xtuml');
 INSERT INTO O_RATTR
 	VALUES ("eb6dc3cc-6d3d-4828-81ed-bd49db4a4118",
@@ -222,22 +224,22 @@ INSERT INTO O_REF
 	0,
 	"6f7cdaf2-71e6-4e80-aad8-436d01c7d371",
 	"67485367-eda7-4bb8-ac54-8146df1bdadf",
-	"8026520c-ef8d-43cf-a0c6-c026d445d918",
 	"e6e0aec3-862c-405e-9d8a-2014e9cd5e54",
+	"8026520c-ef8d-43cf-a0c6-c026d445d918",
 	"6f7cdaf2-71e6-4e80-aad8-436d01c7d371",
-	"d6e88fd4-611d-4e63-8232-8a1c6cb5d447",
+	"0a1bbc02-9eef-486b-9a7e-fa8ba8c5a35c",
 	"326ed82f-43bd-4bbd-b244-f07d026da2e4",
 	0,
 	'',
 	'data value',
 	'file_name',
-	'R4.''precedes''');
+	'R4.''follows''');
 INSERT INTO O_RTIDA_PROXY
 	VALUES ("6f7cdaf2-71e6-4e80-aad8-436d01c7d371",
 	"58abf0e8-0899-4ba2-8051-db597c0f1c0d",
 	0,
 	"67485367-eda7-4bb8-ac54-8146df1bdadf",
-	"e6e0aec3-862c-405e-9d8a-2014e9cd5e54",
+	"8026520c-ef8d-43cf-a0c6-c026d445d918",
 	'../testdata.xtuml');
 INSERT INTO O_RATTR
 	VALUES ("6f7cdaf2-71e6-4e80-aad8-436d01c7d371",
@@ -268,40 +270,40 @@ INSERT INTO O_REF
 	0,
 	"f969bfeb-7b03-41d3-aa36-897fe808c2fb",
 	"67485367-eda7-4bb8-ac54-8146df1bdadf",
-	"8026520c-ef8d-43cf-a0c6-c026d445d918",
 	"e6e0aec3-862c-405e-9d8a-2014e9cd5e54",
-	"7b415035-cd1e-4e8c-875f-cba8df958364",
-	"9411a075-46bf-4402-8dc7-a2c49db74e52",
+	"8026520c-ef8d-43cf-a0c6-c026d445d918",
+	"2242075f-d8e8-4b0d-9158-a500fa5d2d97",
+	"531cbb09-c1f2-4255-8373-1dca63eb5626",
 	"00000000-0000-0000-0000-000000000000",
 	0,
 	'',
 	'data value',
 	'number',
-	'R4.''precedes''');
+	'R4.''follows''');
 INSERT INTO O_RTIDA_PROXY
 	VALUES ("f969bfeb-7b03-41d3-aa36-897fe808c2fb",
 	"58abf0e8-0899-4ba2-8051-db597c0f1c0d",
 	0,
 	"67485367-eda7-4bb8-ac54-8146df1bdadf",
-	"e6e0aec3-862c-405e-9d8a-2014e9cd5e54",
+	"8026520c-ef8d-43cf-a0c6-c026d445d918",
 	'../testdata.xtuml');
 INSERT INTO O_RATTR
-	VALUES ("7b415035-cd1e-4e8c-875f-cba8df958364",
+	VALUES ("2242075f-d8e8-4b0d-9158-a500fa5d2d97",
 	"58abf0e8-0899-4ba2-8051-db597c0f1c0d",
 	"f969bfeb-7b03-41d3-aa36-897fe808c2fb",
 	"58abf0e8-0899-4ba2-8051-db597c0f1c0d",
 	1,
 	'number');
 INSERT INTO O_ATTR
-	VALUES ("7b415035-cd1e-4e8c-875f-cba8df958364",
+	VALUES ("2242075f-d8e8-4b0d-9158-a500fa5d2d97",
 	"58abf0e8-0899-4ba2-8051-db597c0f1c0d",
 	"29382934-d319-4237-ac95-62e2d0440a8e",
-	'next_number',
+	'prev_number',
 	'',
-	'next_',
+	'prev_',
 	'number',
 	1,
-	"ba5eda7a-def5-0000-0000-000000000007",
+	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
 	'');
 INSERT INTO O_ID
