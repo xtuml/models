@@ -14,4 +14,3 @@ domain RecursiveStructure is
   public service test();
 
 end domain;
-

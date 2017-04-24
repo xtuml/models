@@ -1,0 +1,29 @@
+public service Colouring::test() is 
+  rainbow : RainbowColour;
+  primary : PrimaryColour;
+  name    : string;
+begin
+
+  rainbow := Colouring::RainbowColour.indigo; // Explicit domain and type scope. No ambiguity.
+  rainbow := RainbowColour.indigo;            // Explicit Type scope. No ambiguity.
+  rainbow := Colouring::indigo;               // Explicit domain scope. No ambiguity.
+  rainbow := indigo;                          // No scope, No ambiguity.
+
+  primary := Colouring::PrimaryColour.red;    // Explicit domain and type scope. No ambiguity.
+  primary := PrimaryColour.red;               // Explicit Type scope. No ambiguity.
+  primary := Colouring::red;                  // Explicit domain scope. Ambiguity resolved by examining the assigned to type.
+  primary := red;                             // No scope. Ambiguity resolved by examining the assigned to type.
+
+  name := Colouring::RainbowColour.indigo'image; // Explicit domain and type scope. No ambiguity.
+  name := RainbowColour.indigo'image;            // Explicit Type scope. No ambiguity.
+  name := Colouring::indigo'image;               // Explicit domain scope. No ambiguity.
+  name := indigo'image;                          // No scope, No ambiguity.
+
+  name := Colouring::PrimaryColour.red'image;    // Explicit domain and type scope. No ambiguity.
+  name := PrimaryColour.red'image;               // Explicit Type scope. No ambiguity.
+
+  // The lines commented out below would raise a semantic error, as the ambiguity cannot be resolved.
+  // name := Colouring::red'image;              // Explicit domain scope. ERROR - Ambiguous enumerator name.
+  // name := red'image;                         // No scope. ERROR - Ambiguous enumerator name.
+
+end service;
