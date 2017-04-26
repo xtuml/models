@@ -1,0 +1,18 @@
+
+public service ScheduledEvents::test() is
+  obj : instance of Test;
+begin
+  obj := create Test( Current_State => Exists );
+
+  // Christmas
+  schedule obj.timerId generate Test.SomethingHappened() to obj at @2017-12-25@;
+
+  // Noon every Wednesday
+  schedule obj.timerId generate Test.SomethingHappened() to obj at @2017-04-19T12:00:00Z@ delta @PT24H@;
+
+  // Same time tomorrow
+  schedule obj.timerId generate Test.SomethingHappened() to obj delay @P1D@;
+
+  // Every hour
+  schedule obj.timerId generate Test.SomethingHappened() to obj delay @PT0S@ delta @PT1H@;
+end service;

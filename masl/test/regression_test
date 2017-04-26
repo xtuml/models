@@ -10,6 +10,13 @@ print_usage () {
     echo "        regression_test [-o <output directory>]";
 }
 
+abort () {
+    echo "Aborting..."
+    $BPINSTALL/tools/mc/bin/CLI.sh Launch -abort
+    exit 1
+}
+trap abort SIGINT SIGTERM
+
 # input variables
 BPINSTALL="/build/buildmt/roundtrip/BridgePoint"
 OUT_DIR=
@@ -72,5 +79,5 @@ done
 # shut down eclipse
 $BPINSTALL/tools/mc/bin/CLI.sh Launch -exit
 
-find $OUT_DIR -name "diff_*" -exec ls -l {} \;
+find $OUT_DIR -name "diff_*" -exec ls -l {} \; | sort
 find $OUT_DIR -name "diff_*" -exec ls -l {} \; | wc -l
