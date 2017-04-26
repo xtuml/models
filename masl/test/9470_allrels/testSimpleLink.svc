@@ -1,0 +1,221 @@
+public service Navigation::testSimpleLink() is
+    a  : instance of Simple_A;
+    b  : instance of Simple_B;
+    aa : set of instance of Simple_A;
+    bb : set of instance of Simple_B;
+begin
+
+
+	// A <-> B
+
+	link   a  R11 b;
+	link   a  R11.related_to_b b;
+    link   a  R11.Simple_B b;
+    link   a  R11.related_to_b.Simple_B b;
+    
+	unlink a  R11 b;
+	unlink a  R11.related_to_b b;
+    unlink a  R11.Simple_B b;
+    unlink a  R11.related_to_b.Simple_B b;
+    
+    unlink a  R11;
+    unlink a  R11.related_to_b;
+    unlink a  R11.Simple_B;
+    unlink a  R11.related_to_b.Simple_B;
+
+    unlink aa R11;
+    unlink aa R11.related_to_b;
+    unlink aa R11.Simple_B;
+    unlink aa R11.related_to_b.Simple_B;
+
+	link   b  R11 a;
+	link   b  R11.related_to_a a;
+    link   b  R11.Simple_A a;
+    link   b  R11.related_to_a.Simple_A a;
+
+	unlink b  R11 a;
+	unlink b  R11.related_to_a a;
+    unlink b  R11.Simple_A a;
+    unlink b  R11.related_to_a.Simple_A a;
+
+	unlink b  R11;
+	unlink b  R11.related_to_a;
+    unlink b  R11.Simple_A;
+    unlink b  R11.related_to_a.Simple_A;
+
+	unlink bb R11;
+	unlink bb R11.related_to_a;
+    unlink bb R11.Simple_A;
+    unlink bb R11.related_to_a.Simple_A;
+
+
+	// A <-> B (same role phrase)
+
+	link   a  R12 b;
+	link   a  R12.related_to_x b;
+    link   a  R12.Simple_B b;
+    link   a  R12.related_to_x.Simple_B b;
+    
+	unlink a  R12 b;
+	unlink a  R12.related_to_x b;
+    unlink a  R12.Simple_B b;
+    unlink a  R12.related_to_x.Simple_B b;
+    
+    unlink a  R12;
+    unlink a  R12.related_to_x;
+    unlink a  R12.Simple_B;
+    unlink a  R12.related_to_x.Simple_B;
+
+    unlink aa R12;
+    unlink aa R12.related_to_x;
+    unlink aa R12.Simple_B;
+    unlink aa R12.related_to_x.Simple_B;
+
+	link   b  R12 a;
+	link   b  R12.related_to_x a;
+    link   b  R12.Simple_A a;
+    link   b  R12.related_to_x.Simple_A a;
+
+	unlink b  R12 a;
+	unlink b  R12.related_to_x a;
+    unlink b  R12.Simple_A a;
+    unlink b  R12.related_to_x.Simple_A a;
+
+	unlink b  R12;
+	unlink b  R12.related_to_x;
+    unlink b  R12.Simple_A;
+    unlink b  R12.related_to_x.Simple_A;
+
+	unlink bb R12;
+	unlink bb R12.related_to_x;
+    unlink bb R12.Simple_A;
+    unlink bb R12.related_to_x.Simple_A;
+
+	// A <->> B
+
+	link   a  R13 b;
+	link   a  R13.related_to_b b;
+    link   a  R13.Simple_B b;
+    link   a  R13.related_to_b.Simple_B b;
+    
+	link   a  R13 bb;
+	link   a  R13.related_to_b bb;
+    link   a  R13.Simple_B bb;
+    link   a  R13.related_to_b.Simple_B bb;
+    
+	unlink a  R13 b;
+	unlink a  R13.related_to_b b;
+    unlink a  R13.Simple_B b;
+    unlink a  R13.related_to_b.Simple_B b;
+    
+	unlink a  R13 bb;
+	unlink a  R13.related_to_b bb;
+    unlink a  R13.Simple_B bb;
+    unlink a  R13.related_to_b.Simple_B bb;
+    
+    unlink a  R13;
+    unlink a  R13.related_to_b;
+    unlink a  R13.Simple_B;
+    unlink a  R13.related_to_b.Simple_B;
+
+    unlink aa R13;
+    unlink aa R13.related_to_b;
+    unlink aa R13.Simple_B;
+    unlink aa R13.related_to_b.Simple_B;
+
+
+	link   b  R13 a;
+	link   b  R13.related_to_a a;
+    link   b  R13.Simple_A a;
+    link   b  R13.related_to_a.Simple_A a;
+
+	link   bb R13 a;
+	link   bb R13.related_to_a a;
+    link   bb R13.Simple_A a;
+    link   bb R13.related_to_a.Simple_A a;
+
+	unlink b  R13 a;
+	unlink b  R13.related_to_a a;
+    unlink b  R13.Simple_A a;
+    unlink b  R13.related_to_a.Simple_A a;
+
+	unlink bb R13 a;
+	unlink bb R13.related_to_a a;
+    unlink bb R13.Simple_A a;
+    unlink bb R13.related_to_a.Simple_A a;
+
+	unlink b  R13;
+	unlink b  R13.related_to_a;
+    unlink b  R13.Simple_A;
+    unlink b  R13.related_to_a.Simple_A;
+
+	unlink bb R13;
+	unlink bb R13.related_to_a;
+    unlink bb R13.Simple_A;
+    unlink bb R13.related_to_a.Simple_A;
+
+
+	// A <->> B (same role phrase)
+
+	link   a  R14 b;
+	link   a  R14.related_to_x b;
+    link   a  R14.Simple_B b;
+    link   a  R14.related_to_x.Simple_B b;
+    
+	link   a  R14 bb;
+	link   a  R14.related_to_x bb;
+    link   a  R14.Simple_B bb;
+    link   a  R14.related_to_x.Simple_B bb;
+    
+	unlink a  R14 b;
+	unlink a  R14.related_to_x b;
+    unlink a  R14.Simple_B b;
+    unlink a  R14.related_to_x.Simple_B b;
+    
+	unlink a  R14 bb;
+	unlink a  R14.related_to_x bb;
+    unlink a  R14.Simple_B bb;
+    unlink a  R14.related_to_x.Simple_B bb;
+    
+    unlink a  R14;
+    unlink a  R14.related_to_x;
+    unlink a  R14.Simple_B;
+    unlink a  R14.related_to_x.Simple_B;
+
+    unlink aa R14;
+    unlink aa R14.related_to_x;
+    unlink aa R14.Simple_B;
+    unlink aa R14.related_to_x.Simple_B;
+
+
+	link   b  R14 a;
+	link   b  R14.related_to_x a;
+    link   b  R14.Simple_A a;
+    link   b  R14.related_to_x.Simple_A a;
+
+	link   bb R14 a;
+	link   bb R14.related_to_x a;
+    link   bb R14.Simple_A a;
+    link   bb R14.related_to_x.Simple_A a;
+
+	unlink b  R14 a;
+	unlink b  R14.related_to_x a;
+    unlink b  R14.Simple_A a;
+    unlink b  R14.related_to_x.Simple_A a;
+
+	unlink bb R14 a;
+	unlink bb R14.related_to_x a;
+    unlink bb R14.Simple_A a;
+    unlink bb R14.related_to_x.Simple_A a;
+
+	unlink b  R14;
+	unlink b  R14.related_to_x;
+    unlink b  R14.Simple_A;
+    unlink b  R14.related_to_x.Simple_A;
+
+	unlink bb R14;
+	unlink bb R14.related_to_x;
+    unlink bb R14.Simple_A;
+    unlink bb R14.related_to_x.Simple_A;
+
+end service;
