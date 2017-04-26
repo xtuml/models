@@ -3,6 +3,7 @@
 #  This utility is used to run regression tests on these models
 #
 #   regression_test [-o <output directory>]
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 # USAGE
 print_usage () { 
@@ -64,13 +65,13 @@ while read TEST; do
                 else
                     CMD="$CMD-p "
                 fi
-                CMD="$CMD${projects[$i]} "
+                CMD="$CMD$DIR/${projects[$i]} "
                 i=$[$i +1]
             done
             $BPINSTALL/tools/mc/bin/masl_round_trip $CMD -o $OUT_DIR/$COUNTER
         else
             # run round trip for a domain
-            $BPINSTALL/tools/mc/bin/masl_round_trip -d $TEST -o $OUT_DIR/$COUNTER
+            $BPINSTALL/tools/mc/bin/masl_round_trip -d $DIR/$TEST -o $OUT_DIR/$COUNTER
         fi
     fi
     COUNTER=$[$COUNTER +1]
