@@ -1,0 +1,37 @@
+public service Navigation::testSupSubNav() is
+    a  : instance of Sup_A;
+    b  : instance of Sub_B;
+    d  : instance of Sub_D;
+    aa : set of instance of Sup_A;
+    bb : set of instance of Sub_B;
+    dd : set of instance of Sub_D;
+begin
+
+
+	// A -< BC
+
+    a := (b  -> R31);
+    a := (b  -> R31.Sup_A);
+
+    b := (a  -> R31.Sub_B);
+
+    a := (bb -> R31)'any;
+    a := (bb -> R31.Sup_A)'any;
+
+    b := (aa -> R31.Sub_B)'any;
+
+	// A -< D
+
+    a := (d  -> R32);
+    a := (d  -> R32.Sup_A);
+
+    d := (a  -> R32);
+    d := (a  -> R32.Sub_D);
+
+    a := (dd -> R32)'any;
+    a := (dd -> R32.Sup_A)'any;
+
+    d := (aa -> R32)'any;
+    d := (aa -> R32.Sub_D)'any;
+
+end service;

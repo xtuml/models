@@ -1,0 +1,522 @@
+public service Navigation::testAssocLink() is
+    a : instance of Assoc_A;
+    b : instance of Assoc_B;
+    c : instance of Assoc_C;
+    aa : set of instance of Assoc_A;
+    bb : set of instance of Assoc_B;
+    cc : set of instance of Assoc_C;
+begin
+
+    // A <-C-> B
+	link   a  R21 b using c;
+	link   a  R21.related_to_b b using c;
+	link   a  R21.related_to_b.Assoc_B b using c;
+	link   a  R21.Assoc_B b using c;
+
+	unlink a  R21 b using c;
+	unlink a  R21.related_to_b b using c;
+	unlink a  R21.related_to_b.Assoc_B b using c;
+	unlink a  R21.Assoc_B b using c;
+
+	c := link   a  R21 b;
+	c := link   a  R21.related_to_b b;
+	c := link   a  R21.related_to_b.Assoc_B b;
+	c := link   a  R21.Assoc_B b;
+
+	c := unlink a  R21 b;
+	c := unlink a  R21.related_to_b b;
+	c := unlink a  R21.related_to_b.Assoc_B b;
+	c := unlink a  R21.Assoc_B b;
+
+	c := unlink a  R21;
+	c := unlink a  R21.related_to_b;
+	c := unlink a  R21.related_to_b.Assoc_B;
+	c := unlink a  R21.Assoc_B;
+
+	c := (unlink aa R21)'any;
+	c := (unlink aa R21.related_to_b)'any;
+	c := (unlink aa R21.related_to_b.Assoc_B)'any;
+	c := (unlink aa R21.Assoc_B)'any;
+
+	link   b  R21 a using c;
+	link   b  R21.related_to_a a using c;
+	link   b  R21.related_to_a.Assoc_A a using c;
+	link   b  R21.Assoc_A a using c;
+
+	unlink b  R21 a using c;
+	unlink b  R21.related_to_a a using c;
+	unlink b  R21.related_to_a.Assoc_A a using c;
+	unlink b  R21.Assoc_A a using c;
+
+	c := link   b  R21 a;
+	c := link   b  R21.related_to_a a;
+	c := link   b  R21.related_to_a.Assoc_A a;
+	c := link   b  R21.Assoc_A a;
+
+	c := unlink b  R21 a;
+	c := unlink b  R21.related_to_a a;
+	c := unlink b  R21.related_to_a.Assoc_A a;
+	c := unlink b  R21.Assoc_A a;
+
+	c := unlink b  R21;
+	c := unlink b  R21.related_to_a;
+	c := unlink b  R21.related_to_a.Assoc_A;
+	c := unlink b  R21.Assoc_A;
+
+	c := (unlink bb R21)'any;
+	c := (unlink bb R21.related_to_a)'any;
+	c := (unlink bb R21.related_to_a.Assoc_A)'any;
+	c := (unlink bb R21.Assoc_A)'any;
+
+    // A <-C-> B (same role phrase)
+
+	link   a  R22 b using c;
+	link   a  R22.related_to_x b using c;
+	link   a  R22.related_to_x.Assoc_B b using c;
+	link   a  R22.Assoc_B b using c;
+
+	unlink a  R22 b using c;
+	unlink a  R22.related_to_x b using c;
+	unlink a  R22.related_to_x.Assoc_B b using c;
+	unlink a  R22.Assoc_B b using c;
+
+	c := link   a  R22 b;
+	c := link   a  R22.related_to_x b;
+	c := link   a  R22.related_to_x.Assoc_B b;
+	c := link   a  R22.Assoc_B b;
+
+	c := unlink a  R22 b;
+	c := unlink a  R22.related_to_x b;
+	c := unlink a  R22.related_to_x.Assoc_B b;
+	c := unlink a  R22.Assoc_B b;
+
+	c := unlink a  R22;
+	c := unlink a  R22.related_to_x;
+	c := unlink a  R22.related_to_x.Assoc_B;
+	c := unlink a  R22.Assoc_B;
+
+	c := (unlink aa R22)'any;
+	c := (unlink aa R22.related_to_x)'any;
+	c := (unlink aa R22.related_to_x.Assoc_B)'any;
+	c := (unlink aa R22.Assoc_B)'any;
+
+	link   b  R22 a using c;
+	link   b  R22.related_to_x a using c;
+	link   b  R22.related_to_x.Assoc_A a using c;
+	link   b  R22.Assoc_A a using c;
+
+	unlink b  R22 a using c;
+	unlink b  R22.related_to_x a using c;
+	unlink b  R22.related_to_x.Assoc_A a using c;
+	unlink b  R22.Assoc_A a using c;
+
+	c := link   b  R22 a;
+	c := link   b  R22.related_to_x a;
+	c := link   b  R22.related_to_x.Assoc_A a;
+	c := link   b  R22.Assoc_A a;
+
+	c := unlink b  R22 a;
+	c := unlink b  R22.related_to_x a;
+	c := unlink b  R22.related_to_x.Assoc_A a;
+	c := unlink b  R22.Assoc_A a;
+
+	c := unlink b  R22;
+	c := unlink b  R22.related_to_x;
+	c := unlink b  R22.related_to_x.Assoc_A;
+	c := unlink b  R22.Assoc_A;
+
+	c := (unlink bb R22)'any;
+	c := (unlink bb R22.related_to_x)'any;
+	c := (unlink bb R22.related_to_x.Assoc_A)'any;
+	c := (unlink bb R22.Assoc_A)'any;
+
+    // A <-C->> B
+
+	link   a  R23 b using c;
+	link   a  R23.related_to_b b using c;
+	link   a  R23.related_to_b.Assoc_B b using c;
+	link   a  R23.Assoc_B b using c;
+
+	unlink a  R23 b using c;
+	unlink a  R23.related_to_b b using c;
+	unlink a  R23.related_to_b.Assoc_B b using c;
+	unlink a  R23.Assoc_B b using c;
+
+	c := link   a  R23 b;
+	c := link   a  R23.related_to_b b;
+	c := link   a  R23.related_to_b.Assoc_B b;
+	c := link   a  R23.Assoc_B b;
+
+	c := (link   a  R23 bb)'any;
+	c := (link   a  R23.related_to_b bb)'any;
+	c := (link   a  R23.related_to_b.Assoc_B bb)'any;
+	c := (link   a  R23.Assoc_B bb)'any;
+
+	c := unlink a  R23 b;
+	c := unlink a  R23.related_to_b b;
+	c := unlink a  R23.related_to_b.Assoc_B b;
+	c := unlink a  R23.Assoc_B b;
+
+	c := (unlink a  R23)'any;
+	c := (unlink a  R23.related_to_b)'any;
+	c := (unlink a  R23.related_to_b.Assoc_B)'any;
+	c := (unlink a  R23.Assoc_B)'any;
+
+	c := (unlink aa R23)'any;
+	c := (unlink aa R23.related_to_b)'any;
+	c := (unlink aa R23.related_to_b.Assoc_B)'any;
+	c := (unlink aa R23.Assoc_B)'any;
+
+	link   b  R23 a using c;
+	link   b  R23.related_to_a a using c;
+	link   b  R23.related_to_a.Assoc_A a using c;
+	link   b  R23.Assoc_A a using c;
+
+	unlink b  R23 a using c;
+	unlink b  R23.related_to_a a using c;
+	unlink b  R23.related_to_a.Assoc_A a using c;
+	unlink b  R23.Assoc_A a using c;
+
+	c := link   b  R23 a;
+	c := link   b  R23.related_to_a a;
+	c := link   b  R23.related_to_a.Assoc_A a;
+	c := link   b  R23.Assoc_A a;
+
+	c := (link   bb R23 a)'any;
+	c := (link   bb R23.related_to_a a)'any;
+	c := (link   bb R23.related_to_a.Assoc_A a)'any;
+	c := (link   bb R23.Assoc_A a)'any;
+
+	c := unlink b  R23 a;
+	c := unlink b  R23.related_to_a a;
+	c := unlink b  R23.related_to_a.Assoc_A a;
+	c := unlink b  R23.Assoc_A a;
+
+	c := unlink b  R23;
+	c := unlink b  R23.related_to_a;
+	c := unlink b  R23.related_to_a.Assoc_A;
+	c := unlink b  R23.Assoc_A;
+
+	c := (unlink bb R23)'any;
+	c := (unlink bb R23.related_to_a)'any;
+	c := (unlink bb R23.related_to_a.Assoc_A)'any;
+	c := (unlink bb R23.Assoc_A)'any;
+
+
+    // A <-C->> B (same role phrase)
+
+	link   a  R24 b using c;
+	link   a  R24.related_to_x b using c;
+	link   a  R24.related_to_x.Assoc_B b using c;
+	link   a  R24.Assoc_B b using c;
+
+	unlink a  R24 b using c;
+	unlink a  R24.related_to_x b using c;
+	unlink a  R24.related_to_x.Assoc_B b using c;
+	unlink a  R24.Assoc_B b using c;
+
+	c := link   a  R24 b;
+	c := link   a  R24.related_to_x b;
+	c := link   a  R24.related_to_x.Assoc_B b;
+	c := link   a  R24.Assoc_B b;
+
+	c := (link   a  R24 bb)'any;
+	c := (link   a  R24.related_to_x bb)'any;
+	c := (link   a  R24.related_to_x.Assoc_B bb)'any;
+	c := (link   a  R24.Assoc_B bb)'any;
+
+	c := unlink a  R24 b;
+	c := unlink a  R24.related_to_x b;
+	c := unlink a  R24.related_to_x.Assoc_B b;
+	c := unlink a  R24.Assoc_B b;
+
+	c := (unlink a  R24)'any;
+	c := (unlink a  R24.related_to_x)'any;
+	c := (unlink a  R24.related_to_x.Assoc_B)'any;
+	c := (unlink a  R24.Assoc_B)'any;
+
+	c := (unlink aa R24)'any;
+	c := (unlink aa R24.related_to_x)'any;
+	c := (unlink aa R24.related_to_x.Assoc_B)'any;
+	c := (unlink aa R24.Assoc_B)'any;
+
+	link   b  R24 a using c;
+	link   b  R24.related_to_x a using c;
+	link   b  R24.related_to_x.Assoc_A a using c;
+	link   b  R24.Assoc_A a using c;
+
+	unlink b  R24 a using c;
+	unlink b  R24.related_to_x a using c;
+	unlink b  R24.related_to_x.Assoc_A a using c;
+	unlink b  R24.Assoc_A a using c;
+
+	c := link   b  R24 a;
+	c := link   b  R24.related_to_x a;
+	c := link   b  R24.related_to_x.Assoc_A a;
+	c := link   b  R24.Assoc_A a;
+
+	c := (link   bb R24 a)'any;
+	c := (link   bb R24.related_to_x a)'any;
+	c := (link   bb R24.related_to_x.Assoc_A a)'any;
+	c := (link   bb R24.Assoc_A a)'any;
+
+	c := unlink b  R24 a;
+	c := unlink b  R24.related_to_x a;
+	c := unlink b  R24.related_to_x.Assoc_A a;
+	c := unlink b  R24.Assoc_A a;
+
+	c := unlink b  R24;
+	c := unlink b  R24.related_to_x;
+	c := unlink b  R24.related_to_x.Assoc_A;
+	c := unlink b  R24.Assoc_A;
+
+	c := (unlink bb R24)'any;
+	c := (unlink bb R24.related_to_x)'any;
+	c := (unlink bb R24.related_to_x.Assoc_A)'any;
+	c := (unlink bb R24.Assoc_A)'any;
+
+    // A <<-C->> B
+
+	link   a  R25 b using c;
+	link   a  R25.related_to_b b using c;
+	link   a  R25.related_to_b.Assoc_B b using c;
+	link   a  R25.Assoc_B b using c;
+
+	unlink a  R25 b using c;
+	unlink a  R25.related_to_b b using c;
+	unlink a  R25.related_to_b.Assoc_B b using c;
+	unlink a  R25.Assoc_B b using c;
+
+	c := link   a  R25 b;
+	c := link   a  R25.related_to_b b;
+	c := link   a  R25.related_to_b.Assoc_B b;
+	c := link   a  R25.Assoc_B b;
+
+	c := (link   a  R25 bb)'any;
+	c := (link   a  R25.related_to_b bb)'any;
+	c := (link   a  R25.related_to_b.Assoc_B bb)'any;
+	c := (link   a  R25.Assoc_B bb)'any;
+
+	c := (link   aa R25 b)'any;
+	c := (link   aa R25.related_to_b b)'any;
+	c := (link   aa R25.related_to_b.Assoc_B b)'any;
+	c := (link   aa R25.Assoc_B b)'any;
+
+	c := (link   aa R25 bb)'any;
+	c := (link   aa R25.related_to_b bb)'any;
+	c := (link   aa R25.related_to_b.Assoc_B bb)'any;
+	c := (link   aa R25.Assoc_B bb)'any;
+
+	c := unlink a  R25 b;
+	c := unlink a  R25.related_to_b b;
+	c := unlink a  R25.related_to_b.Assoc_B b;
+	c := unlink a  R25.Assoc_B b;
+
+	c := (unlink a  R25 bb)'any;
+	c := (unlink a  R25.related_to_b bb)'any;
+	c := (unlink a  R25.related_to_b.Assoc_B bb)'any;
+	c := (unlink a  R25.Assoc_B bb)'any;
+
+	c := (unlink aa  R25 b)'any;
+	c := (unlink aa  R25.related_to_b b)'any;
+	c := (unlink aa  R25.related_to_b.Assoc_B b)'any;
+	c := (unlink aa  R25.Assoc_B b)'any;
+
+	c := (unlink aa  R25 bb)'any;
+	c := (unlink aa  R25.related_to_b bb)'any;
+	c := (unlink aa  R25.related_to_b.Assoc_B bb)'any;
+	c := (unlink aa  R25.Assoc_B bb)'any;
+
+	c := (unlink a  R25)'any;
+	c := (unlink a  R25.related_to_b)'any;
+	c := (unlink a  R25.related_to_b.Assoc_B)'any;
+	c := (unlink a  R25.Assoc_B)'any;
+
+	c := (unlink aa R25)'any;
+	c := (unlink aa R25.related_to_b)'any;
+	c := (unlink aa R25.related_to_b.Assoc_B)'any;
+	c := (unlink aa R25.Assoc_B)'any;
+
+	link   b  R25 a using c;
+	link   b  R25.related_to_a a using c;
+	link   b  R25.related_to_a.Assoc_A a using c;
+	link   b  R25.Assoc_A a using c;
+
+	unlink b  R25 a using c;
+	unlink b  R25.related_to_a a using c;
+	unlink b  R25.related_to_a.Assoc_A a using c;
+	unlink b  R25.Assoc_A a using c;
+
+	c := link   b  R25 a;
+	c := link   b  R25.related_to_a a;
+	c := link   b  R25.related_to_a.Assoc_A a;
+	c := link   b  R25.Assoc_A a;
+
+	c := (link   b  R25 aa)'any;
+	c := (link   b  R25.related_to_a aa)'any;
+	c := (link   b  R25.related_to_a.Assoc_A aa)'any;
+	c := (link   b  R25.Assoc_A aa)'any;
+
+	c := (link   bb R25 a)'any;
+	c := (link   bb R25.related_to_a a)'any;
+	c := (link   bb R25.related_to_a.Assoc_A a)'any;
+	c := (link   bb R25.Assoc_A a)'any;
+
+	c := (link   bb R25 aa)'any;
+	c := (link   bb R25.related_to_a aa)'any;
+	c := (link   bb R25.related_to_a.Assoc_A aa)'any;
+	c := (link   bb R25.Assoc_A aa)'any;
+
+	c := unlink b  R25 a;
+	c := unlink b  R25.related_to_a a;
+	c := unlink b  R25.related_to_a.Assoc_A a;
+	c := unlink b  R25.Assoc_A a;
+
+	c := (unlink b  R25 aa)'any;
+	c := (unlink b  R25.related_to_a aa)'any;
+	c := (unlink b  R25.related_to_a.Assoc_A aa)'any;
+	c := (unlink b  R25.Assoc_A aa)'any;
+
+	c := (unlink bb R25 a)'any;
+	c := (unlink bb R25.related_to_a a)'any;
+	c := (unlink bb R25.related_to_a.Assoc_A a)'any;
+	c := (unlink bb R25.Assoc_A a)'any;
+
+	c := (unlink bb R25 aa)'any;
+	c := (unlink bb R25.related_to_a aa)'any;
+	c := (unlink bb R25.related_to_a.Assoc_A aa)'any;
+	c := (unlink bb R25.Assoc_A aa)'any;
+
+	c := (unlink b  R25)'any;
+	c := (unlink b  R25.related_to_a)'any;
+	c := (unlink b  R25.related_to_a.Assoc_A)'any;
+	c := (unlink b  R25.Assoc_A)'any;
+
+	c := (unlink bb R25)'any;
+	c := (unlink bb R25.related_to_a)'any;
+	c := (unlink bb R25.related_to_a.Assoc_A)'any;
+	c := (unlink bb R25.Assoc_A)'any;
+
+    // A <<-C->> B (same role phrase)
+
+	link   a  R26 b using c;
+	link   a  R26.related_to_x b using c;
+	link   a  R26.related_to_x.Assoc_B b using c;
+	link   a  R26.Assoc_B b using c;
+
+	unlink a  R26 b using c;
+	unlink a  R26.related_to_x b using c;
+	unlink a  R26.related_to_x.Assoc_B b using c;
+	unlink a  R26.Assoc_B b using c;
+
+	c := link   a  R26 b;
+	c := link   a  R26.related_to_x b;
+	c := link   a  R26.related_to_x.Assoc_B b;
+	c := link   a  R26.Assoc_B b;
+
+	c := (link   a  R26 bb)'any;
+	c := (link   a  R26.related_to_x bb)'any;
+	c := (link   a  R26.related_to_x.Assoc_B bb)'any;
+	c := (link   a  R26.Assoc_B bb)'any;
+
+	c := (link   aa R26 b)'any;
+	c := (link   aa R26.related_to_x b)'any;
+	c := (link   aa R26.related_to_x.Assoc_B b)'any;
+	c := (link   aa R26.Assoc_B b)'any;
+
+	c := (link   aa R26 bb)'any;
+	c := (link   aa R26.related_to_x bb)'any;
+	c := (link   aa R26.related_to_x.Assoc_B bb)'any;
+	c := (link   aa R26.Assoc_B bb)'any;
+
+	c := unlink a  R26 b;
+	c := unlink a  R26.related_to_x b;
+	c := unlink a  R26.related_to_x.Assoc_B b;
+	c := unlink a  R26.Assoc_B b;
+
+	c := (unlink a  R26 bb)'any;
+	c := (unlink a  R26.related_to_x bb)'any;
+	c := (unlink a  R26.related_to_x.Assoc_B bb)'any;
+	c := (unlink a  R26.Assoc_B bb)'any;
+
+	c := (unlink aa  R26 b)'any;
+	c := (unlink aa  R26.related_to_x b)'any;
+	c := (unlink aa  R26.related_to_x.Assoc_B b)'any;
+	c := (unlink aa  R26.Assoc_B b)'any;
+
+	c := (unlink aa  R26 bb)'any;
+	c := (unlink aa  R26.related_to_x bb)'any;
+	c := (unlink aa  R26.related_to_x.Assoc_B bb)'any;
+	c := (unlink aa  R26.Assoc_B bb)'any;
+
+	c := (unlink a  R26)'any;
+	c := (unlink a  R26.related_to_x)'any;
+	c := (unlink a  R26.related_to_x.Assoc_B)'any;
+	c := (unlink a  R26.Assoc_B)'any;
+
+	c := (unlink aa R26)'any;
+	c := (unlink aa R26.related_to_x)'any;
+	c := (unlink aa R26.related_to_x.Assoc_B)'any;
+	c := (unlink aa R26.Assoc_B)'any;
+
+	link   b  R26 a using c;
+	link   b  R26.related_to_x a using c;
+	link   b  R26.related_to_x.Assoc_A a using c;
+	link   b  R26.Assoc_A a using c;
+
+	unlink b  R26 a using c;
+	unlink b  R26.related_to_x a using c;
+	unlink b  R26.related_to_x.Assoc_A a using c;
+	unlink b  R26.Assoc_A a using c;
+
+	c := link   b  R26 a;
+	c := link   b  R26.related_to_x a;
+	c := link   b  R26.related_to_x.Assoc_A a;
+	c := link   b  R26.Assoc_A a;
+
+	c := (link   b  R26 aa)'any;
+	c := (link   b  R26.related_to_x aa)'any;
+	c := (link   b  R26.related_to_x.Assoc_A aa)'any;
+	c := (link   b  R26.Assoc_A aa)'any;
+
+	c := (link   bb R26 a)'any;
+	c := (link   bb R26.related_to_x a)'any;
+	c := (link   bb R26.related_to_x.Assoc_A a)'any;
+	c := (link   bb R26.Assoc_A a)'any;
+
+	c := (link   bb R26 aa)'any;
+	c := (link   bb R26.related_to_x aa)'any;
+	c := (link   bb R26.related_to_x.Assoc_A aa)'any;
+	c := (link   bb R26.Assoc_A aa)'any;
+
+	c := unlink b  R26 a;
+	c := unlink b  R26.related_to_x a;
+	c := unlink b  R26.related_to_x.Assoc_A a;
+	c := unlink b  R26.Assoc_A a;
+
+	c := (unlink b  R26 aa)'any;
+	c := (unlink b  R26.related_to_x aa)'any;
+	c := (unlink b  R26.related_to_x.Assoc_A aa)'any;
+	c := (unlink b  R26.Assoc_A aa)'any;
+
+	c := (unlink bb R26 a)'any;
+	c := (unlink bb R26.related_to_x a)'any;
+	c := (unlink bb R26.related_to_x.Assoc_A a)'any;
+	c := (unlink bb R26.Assoc_A a)'any;
+
+	c := (unlink bb R26 aa)'any;
+	c := (unlink bb R26.related_to_x aa)'any;
+	c := (unlink bb R26.related_to_x.Assoc_A aa)'any;
+	c := (unlink bb R26.Assoc_A aa)'any;
+
+	c := (unlink b  R26)'any;
+	c := (unlink b  R26.related_to_x)'any;
+	c := (unlink b  R26.related_to_x.Assoc_A)'any;
+	c := (unlink b  R26.Assoc_A)'any;
+
+	c := (unlink bb R26)'any;
+	c := (unlink bb R26.related_to_x)'any;
+	c := (unlink bb R26.related_to_x.Assoc_A)'any;
+	c := (unlink bb R26.Assoc_A)'any;
+
+end service;

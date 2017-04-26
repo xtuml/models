@@ -1,0 +1,104 @@
+public service Navigation::testSimpleNav() is
+    a  : instance of Simple_A;
+    b  : instance of Simple_B;
+    aa : set of instance of Simple_A;
+    bb : set of instance of Simple_B;
+begin
+
+
+	// A <-> B
+
+    a := (b  -> R11);
+    a := (b  -> R11.Simple_A);
+    a := (b  -> R11.related_to_a);  
+    a := (b  -> R11.related_to_a.Simple_A);  
+
+    b := (a  -> R11);
+    b := (a  -> R11.Simple_B);
+    b := (a  -> R11.related_to_b);  
+    b := (a  -> R11.related_to_b.Simple_B);  
+
+    a := (bb -> R11)'any;
+    a := (bb -> R11.Simple_A)'any;
+    a := (bb -> R11.related_to_a)'any;  
+    a := (bb -> R11.related_to_a.Simple_A)'any;  
+
+    b := (aa -> R11)'any;
+    b := (aa -> R11.Simple_B)'any;
+    b := (aa -> R11.related_to_b)'any;  
+    b := (aa -> R11.related_to_b.Simple_B)'any;  
+
+
+	// A <-> B (same role phrase)
+
+    a := (b  -> R12);
+    a := (b  -> R12.Simple_A);
+    a := (b  -> R12.related_to_x);  
+    a := (b  -> R12.related_to_x.Simple_A);  
+
+    b := (a  -> R12);
+    b := (a  -> R12.Simple_B);
+    b := (a  -> R12.related_to_x);  
+    b := (a  -> R12.related_to_x.Simple_B);  
+
+    a := (bb -> R12)'any;
+    a := (bb -> R12.Simple_A)'any;
+    a := (bb -> R12.related_to_x)'any;  
+    a := (bb -> R12.related_to_x.Simple_A)'any;  
+
+    b := (aa -> R12)'any;
+    b := (aa -> R12.Simple_B)'any;
+    b := (aa -> R12.related_to_x)'any;  
+    b := (aa -> R12.related_to_x.Simple_B)'any;  
+
+
+	// A <->> B
+
+    a := (b  -> R13);
+    a := (b  -> R13.Simple_A);
+    a := (b  -> R13.related_to_a);  
+    a := (b  -> R13.related_to_a.Simple_A);  
+
+    b := (a  -> R13)'any;
+    b := (a  -> R13.Simple_B)'any;
+    b := (a  -> R13.related_to_b)'any;  
+    b := (a  -> R13.related_to_b.Simple_B)'any;  
+
+    a := (bb -> R13)'any;
+    a := (bb -> R13.Simple_A)'any;
+    a := (bb -> R13.related_to_a)'any;  
+    a := (bb -> R13.related_to_a.Simple_A)'any;  
+
+    b := (aa -> R13)'any;
+    b := (aa -> R13.Simple_B)'any;
+    b := (aa -> R13.related_to_b)'any;  
+    b := (aa -> R13.related_to_b.Simple_B)'any;  
+
+
+	// A <->> B (same role phrase)
+
+    a := (b  -> R14);
+    a := (b  -> R14.Simple_A);
+    a := (b  -> R14.related_to_x);  
+    a := (b  -> R14.related_to_x.Simple_A);  
+
+    b := (a  -> R14)'any;
+    b := (a  -> R14.Simple_B)'any;
+    b := (a  -> R14.related_to_x)'any;  
+    b := (a  -> R14.related_to_x.Simple_B)'any;  
+
+    a := (bb -> R14)'any;
+    a := (bb -> R14.Simple_A)'any;
+    a := (bb -> R14.related_to_x)'any;  
+    a := (bb -> R14.related_to_x.Simple_A)'any;  
+
+    b := (aa -> R14)'any;
+    b := (aa -> R14.Simple_B)'any;
+    b := (aa -> R14.related_to_x)'any;  
+    b := (aa -> R14.related_to_x.Simple_B)'any;  
+
+
+
+
+
+end service;
