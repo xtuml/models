@@ -1,0 +1,18 @@
+service d::test() is
+  i : integer;
+  s : sequence of integer;
+  intSeq : IntSeq;
+begin
+  s := i; // FAIL
+  s := 1; // OK
+
+  s := s & i; // OK
+  s := s & 1; // OK
+
+  intSeq := i; // FAIL
+  intSeq := 1; // OK
+
+  intSeq := intSeq & i; // FAIL
+  intSeq := intSeq & 1; // FAIL
+  
+end;
