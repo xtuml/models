@@ -1,0 +1,54 @@
+service anonymousTypes::test() is
+    r  : real;
+    l  : long_integer;
+    i  : integer;
+    ar : anonymous real;
+    al : anonymous long_integer;
+    ai : anonymous integer;
+begin
+    // Valid Assignments
+    r  := r;
+    r  := ar;
+    r  := al;
+    r  := ai;
+
+    l  := l;
+    l  := al;
+    l  := ai;
+
+    i  := i;
+    i  := al;
+    i  := ai;
+
+    ar := r;
+    ar := l; 
+    ar := i; 
+    ar := ar;
+    ar := al;
+    ar := ai;
+
+    al := l;
+    al := i;
+    al := al;
+    al := ai;
+
+    ai := l;
+    ai := i;
+    ai := al;
+    ai := ai;
+
+    // Invalid assignments - all the following should fail (when uncommented!)
+//     r  := l;
+//     r  := i;
+//     l  := r;
+//     l  := i;
+//     l  := ar;
+//     i  := r;
+//     i  := l;
+//     i  := ar;
+//     al := r;
+//     al := ar;
+//     ai := r;
+//     ai := ar;
+
+end;
