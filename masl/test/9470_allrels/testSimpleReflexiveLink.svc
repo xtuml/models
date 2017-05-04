@@ -1,0 +1,75 @@
+public service Navigation::testSimpleReflexiveLink() is
+    a  : instance of SimpleReflexive_A;
+    aa : set of instance of SimpleReflexive_A;
+begin
+
+
+	// A <-> A
+
+	link   a  R41.related_to_b a;
+    link   a  R41.related_to_b.SimpleReflexive_A a;
+    
+	unlink a  R41.related_to_b a;
+    unlink a  R41.related_to_b.SimpleReflexive_A a;
+    
+    unlink a  R41.related_to_b;
+    unlink a  R41.related_to_b.SimpleReflexive_A;
+
+    unlink aa R41.related_to_b;
+    unlink aa R41.related_to_b.SimpleReflexive_A;
+
+	link   a  R41.related_to_a a;
+    link   a  R41.related_to_a.SimpleReflexive_A a;
+
+	unlink a  R41.related_to_a a;
+    unlink a  R41.related_to_a.SimpleReflexive_A a;
+
+	unlink a  R41.related_to_a;
+    unlink a  R41.related_to_a.SimpleReflexive_A;
+
+	unlink aa R41.related_to_a;
+    unlink aa R41.related_to_a.SimpleReflexive_A;
+
+
+
+	// A <->> B
+
+	link   a  R43.related_to_b a;
+    link   a  R43.related_to_b.SimpleReflexive_A a;
+    
+	link   a  R43.related_to_b aa;
+    link   a  R43.related_to_b.SimpleReflexive_A aa;
+    
+	unlink a  R43.related_to_b a;
+    unlink a  R43.related_to_b.SimpleReflexive_A a;
+    
+	unlink a  R43.related_to_b aa;
+    unlink a  R43.related_to_b.SimpleReflexive_A aa;
+    
+    unlink a  R43.related_to_b;
+    unlink a  R43.related_to_b.SimpleReflexive_A;
+
+    unlink aa R43.related_to_b;
+    unlink aa R43.related_to_b.SimpleReflexive_A;
+
+
+	link   a  R43.related_to_a a;
+    link   a  R43.related_to_a.SimpleReflexive_A a;
+
+	link   aa R43.related_to_a a;
+    link   aa R43.related_to_a.SimpleReflexive_A a;
+
+	unlink a  R43.related_to_a a;
+    unlink a  R43.related_to_a.SimpleReflexive_A a;
+
+	unlink aa R43.related_to_a a;
+    unlink aa R43.related_to_a.SimpleReflexive_A a;
+
+	unlink a  R43.related_to_a;
+    unlink a  R43.related_to_a.SimpleReflexive_A;
+
+	unlink aa R43.related_to_a;
+    unlink aa R43.related_to_a.SimpleReflexive_A;
+
+
+end service;

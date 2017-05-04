@@ -1,0 +1,164 @@
+public service Navigation::testReflexiveAssocLink() is
+    a : instance of ReflexiveAssoc_A;
+    c : instance of ReflexiveAssoc_C;
+    aa : set of instance of ReflexiveAssoc_A;
+    cc : set of instance of ReflexiveAssoc_C;
+begin
+
+    // A <-C-> A
+	link   a  R51.related_to_b a using c;
+	link   a  R51.related_to_b.ReflexiveAssoc_A a using c;
+
+	unlink a  R51.related_to_b a using c;
+	unlink a  R51.related_to_b.ReflexiveAssoc_A a using c;
+
+	c := link   a  R51.related_to_b a;
+	c := link   a  R51.related_to_b.ReflexiveAssoc_A a;
+
+	c := unlink a  R51.related_to_b a;
+	c := unlink a  R51.related_to_b.ReflexiveAssoc_A a;
+
+	c := unlink a  R51.related_to_b;
+	c := unlink a  R51.related_to_b.ReflexiveAssoc_A;
+
+	c := (unlink aa R51.related_to_b)'any;
+	c := (unlink aa R51.related_to_b.ReflexiveAssoc_A)'any;
+
+	link   a  R51.related_to_a a using c;
+	link   a  R51.related_to_a.ReflexiveAssoc_A a using c;
+
+	unlink a  R51.related_to_a a using c;
+	unlink a  R51.related_to_a.ReflexiveAssoc_A a using c;
+
+	c := link   a  R51.related_to_a a;
+	c := link   a  R51.related_to_a.ReflexiveAssoc_A a;
+
+	c := unlink a  R51.related_to_a a;
+	c := unlink a  R51.related_to_a.ReflexiveAssoc_A a;
+
+	c := unlink a  R51.related_to_a;
+	c := unlink a  R51.related_to_a.ReflexiveAssoc_A;
+
+	c := (unlink aa R51.related_to_a)'any;
+	c := (unlink aa R51.related_to_a.ReflexiveAssoc_A)'any;
+
+
+    // A <-C->> A
+
+	link   a  R53.related_to_b a using c;
+	link   a  R53.related_to_b.ReflexiveAssoc_A a using c;
+
+	unlink a  R53.related_to_b a using c;
+	unlink a  R53.related_to_b.ReflexiveAssoc_A a using c;
+
+	c := link   a  R53.related_to_b a;
+	c := link   a  R53.related_to_b.ReflexiveAssoc_A a;
+
+	c := (link   a  R53.related_to_b aa)'any;
+	c := (link   a  R53.related_to_b.ReflexiveAssoc_A aa)'any;
+
+	c := unlink a  R53.related_to_b a;
+	c := unlink a  R53.related_to_b.ReflexiveAssoc_A a;
+
+	c := (unlink a  R53.related_to_b)'any;
+	c := (unlink a  R53.related_to_b.ReflexiveAssoc_A)'any;
+
+	c := (unlink aa R53.related_to_b)'any;
+	c := (unlink aa R53.related_to_b.ReflexiveAssoc_A)'any;
+
+	link   a  R53.related_to_a a using c;
+	link   a  R53.related_to_a.ReflexiveAssoc_A a using c;
+
+	unlink a  R53.related_to_a a using c;
+	unlink a  R53.related_to_a.ReflexiveAssoc_A a using c;
+
+	c := link   a  R53.related_to_a a;
+	c := link   a  R53.related_to_a.ReflexiveAssoc_A a;
+
+	c := (link   aa R53.related_to_a a)'any;
+	c := (link   aa R53.related_to_a.ReflexiveAssoc_A a)'any;
+
+	c := unlink a  R53.related_to_a a;
+	c := unlink a  R53.related_to_a.ReflexiveAssoc_A a;
+
+	c := unlink a  R53.related_to_a;
+	c := unlink a  R53.related_to_a.ReflexiveAssoc_A;
+
+	c := (unlink aa R53.related_to_a)'any;
+	c := (unlink aa R53.related_to_a.ReflexiveAssoc_A)'any;
+
+    // A <<-C->> A
+
+	link   a  R55.related_to_b a using c;
+	link   a  R55.related_to_b.ReflexiveAssoc_A a using c;
+
+	unlink a  R55.related_to_b a using c;
+	unlink a  R55.related_to_b.ReflexiveAssoc_A a using c;
+
+	c := link   a  R55.related_to_b a;
+	c := link   a  R55.related_to_b.ReflexiveAssoc_A a;
+
+	c := (link   a  R55.related_to_b aa)'any;
+	c := (link   a  R55.related_to_b.ReflexiveAssoc_A aa)'any;
+
+	c := (link   aa R55.related_to_b a)'any;
+	c := (link   aa R55.related_to_b.ReflexiveAssoc_A a)'any;
+
+	c := (link   aa R55.related_to_b aa)'any;
+	c := (link   aa R55.related_to_b.ReflexiveAssoc_A aa)'any;
+
+	c := unlink a  R55.related_to_b a;
+	c := unlink a  R55.related_to_b.ReflexiveAssoc_A a;
+
+	c := (unlink a  R55.related_to_b aa)'any;
+	c := (unlink a  R55.related_to_b.ReflexiveAssoc_A aa)'any;
+
+	c := (unlink aa  R55.related_to_b a)'any;
+	c := (unlink aa  R55.related_to_b.ReflexiveAssoc_A a)'any;
+
+	c := (unlink aa  R55.related_to_b aa)'any;
+	c := (unlink aa  R55.related_to_b.ReflexiveAssoc_A aa)'any;
+
+	c := (unlink a  R55.related_to_b)'any;
+	c := (unlink a  R55.related_to_b.ReflexiveAssoc_A)'any;
+
+	c := (unlink aa R55.related_to_b)'any;
+	c := (unlink aa R55.related_to_b.ReflexiveAssoc_A)'any;
+
+	link   a  R55.related_to_a a using c;
+	link   a  R55.related_to_a.ReflexiveAssoc_A a using c;
+
+	unlink a  R55.related_to_a a using c;
+	unlink a  R55.related_to_a.ReflexiveAssoc_A a using c;
+
+	c := link   a  R55.related_to_a a;
+	c := link   a  R55.related_to_a.ReflexiveAssoc_A a;
+
+	c := (link   a  R55.related_to_a aa)'any;
+	c := (link   a  R55.related_to_a.ReflexiveAssoc_A aa)'any;
+
+	c := (link   aa R55.related_to_a a)'any;
+	c := (link   aa R55.related_to_a.ReflexiveAssoc_A a)'any;
+
+	c := (link   aa R55.related_to_a aa)'any;
+	c := (link   aa R55.related_to_a.ReflexiveAssoc_A aa)'any;
+
+	c := unlink a  R55.related_to_a a;
+	c := unlink a  R55.related_to_a.ReflexiveAssoc_A a;
+
+	c := (unlink a  R55.related_to_a aa)'any;
+	c := (unlink a  R55.related_to_a.ReflexiveAssoc_A aa)'any;
+
+	c := (unlink aa R55.related_to_a a)'any;
+	c := (unlink aa R55.related_to_a.ReflexiveAssoc_A a)'any;
+
+	c := (unlink aa R55.related_to_a aa)'any;
+	c := (unlink aa R55.related_to_a.ReflexiveAssoc_A aa)'any;
+
+	c := (unlink a  R55.related_to_a)'any;
+	c := (unlink a  R55.related_to_a.ReflexiveAssoc_A)'any;
+
+	c := (unlink aa R55.related_to_a)'any;
+	c := (unlink aa R55.related_to_a.ReflexiveAssoc_A)'any;
+
+end service;
