@@ -16,9 +16,9 @@
 #include "DATA_bridge.h"
 #include "lanechange_sys_types.h"
 
-#include "LiDAR_datafile_class.h"
-#include "LiDAR_datapoint_class.h"
-#include "LiDAR_datavalue_class.h"
+#include "GPS_datafile_class.h"
+#include "GPS_datapoint_class.h"
+#include "GPS_datavalue_class.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -71,7 +71,7 @@ void DATA_internal_semantic_create_point() {
 
 void DATA_internal_semantic_create_value() {
   debug_print( "Executing semantic for 'value' rule\n" );
-  LiDAR_datavalue_op_create( filename, valnum++, pointnum, DATA_internal_token_data.string );
+  GPS_datavalue_op_create( filename, valnum++, pointnum, DATA_internal_token_data.string );
 }
 
 /*----------------------------------------------------------------------------
