@@ -21,6 +21,12 @@
 
 #include <math.h>
 
+/*
+ * information about the polyline algorithm here:
+ * https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+ *
+ **/
+
 // encode a single value, return the length of the encoded version
 i_t
 navigation_POLY_encode_value( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], r_t p_value, r_t p_prev_value )
@@ -45,7 +51,7 @@ navigation_POLY_encode_value( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], r_t p_
 
   uc_t chunk;
   uc_t offset = 0;
-  i_t num_bits = ilogb( (double)invert_val );
+  uc_t num_bits = ( (uc_t)logb( (double)invert_val ) ) + 1;
   while ( offset < num_bits ) {
     // set next chunk
     chunk = ( ( invert_val >> offset ) & 0x1f );
