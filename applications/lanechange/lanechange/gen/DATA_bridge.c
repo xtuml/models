@@ -89,7 +89,7 @@ void DATA_internal_semantic_create_value() {
  * COMMA:       ',' ;
  * NEWLINE:     '\n' | EOF ;
  * STRING:      '"' ^[ '"' | '\n' | EOF ]* '"' ;
- * REAL:        [0-9]+ ( '.' [0-9]+ )? ;
+ * REAL:        '-'? [0-9]+ ( '.' [0-9]+ )? ;
  * COMMENT:     '//' .* $ {hidden} ;
  * WS:          ' ' | '\t' | '\r' {hidden};
  *
@@ -168,6 +168,10 @@ int DATA_internal_next_token( int lookahead ) {
     case '9':
       DATA_internal_add_character( character );
       token = DATA_internal_tokenizer_2( cursor + 1 );
+      break;
+    case '-':
+      DATA_internal_add_character( character );
+      token = DATA_internal_tokenizer_7( cursor + 1 );
       break;
     case '/':
       DATA_internal_add_character( character );
@@ -370,6 +374,35 @@ int DATA_internal_tokenizer_6( const int cursor ) {
     default:
       DATA_internal_add_character( character );
       token = DATA_internal_tokenizer_6( cursor + 1 );
+      break;
+  }
+
+  // return the token
+  return token;
+}
+
+int DATA_internal_tokenizer_7( const int cursor ) {
+  // get next character
+  c_t character = DATA_internal_get_char( cursor );
+
+  // check character
+  int token;
+  switch ( character ) {
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+      DATA_internal_add_character( character );
+      token = DATA_internal_tokenizer_2( cursor + 1 );
+      break;
+    default:
+      token = DATA_LEX_ERR;
       break;
   }
 

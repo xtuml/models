@@ -32,6 +32,7 @@ int DATA_internal_tokenizer_3( const int );
 int DATA_internal_tokenizer_4( const int );
 int DATA_internal_tokenizer_5( const int );
 int DATA_internal_tokenizer_6( const int );
+int DATA_internal_tokenizer_7( const int );
 void DATA_internal_tokenizer_init( c_t input[MAX_FILE_LEN] );
 
 #define DATA_LEX_ERR        0
