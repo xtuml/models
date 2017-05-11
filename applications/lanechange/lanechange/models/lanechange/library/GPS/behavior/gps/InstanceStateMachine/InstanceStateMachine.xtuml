@@ -184,7 +184,9 @@ INSERT INTO SM_ACT
 	"a820ffc2-a271-4476-9f9f-c9544f5e7564",
 	1,
 	'// send the gps coordinates
-send gps::location( location:self.location );',
+if ( self.initialized )
+  send gps::location( location:self.location );
+end if;',
 	'',
 	0);
 INSERT INTO SM_TAH
@@ -231,7 +233,10 @@ INSERT INTO SM_ACT
 	VALUES ("b000c9a4-2688-4aaa-9fa9-fbdd92af9ea2",
 	"a820ffc2-a271-4476-9f9f-c9544f5e7564",
 	1,
-	'// read the next data point in the file
+	'// set initialized status
+self.initialized = true;
+
+// read the next data point in the file
 select any reader from instances of datafilereader;
 select one point related by reader->datapoint[R5];
 select one lat_value related by point->datavalue[R3];
@@ -305,6 +310,11 @@ INSERT INTO DIM_CON
 	454.000000,
 	252.000000,
 	"53ab2e80-c8e9-4198-9687-0152a7176577");
+INSERT INTO DIM_CON
+	VALUES ("d26b8ac8-7572-44aa-9600-e0e1ea76b362",
+	588.000000,
+	215.000000,
+	"53ab2e80-c8e9-4198-9687-0152a7176577");
 INSERT INTO GD_GE
 	VALUES ("72bd745e-ba30-4922-9eea-4374608d3a80",
 	"80f99650-90ef-4067-9b52-e05d88693b39",
@@ -348,6 +358,11 @@ INSERT INTO DIM_CON
 	VALUES ("ca849ff6-94d3-4e8c-9e3f-e1944d0ae082",
 	564.000000,
 	612.000000,
+	"72bd745e-ba30-4922-9eea-4374608d3a80");
+INSERT INTO DIM_CON
+	VALUES ("fc2572ac-4460-4d1c-8f53-dfb3bc969c40",
+	648.000000,
+	472.000000,
 	"72bd745e-ba30-4922-9eea-4374608d3a80");
 INSERT INTO GD_GE
 	VALUES ("af5bc266-5ab6-4e4e-96c1-6d24ebd4eab0",
