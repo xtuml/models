@@ -135,8 +135,11 @@ else
   relate self to waypoint across R106;
 end if;
 
-// print the current polyline encoding
-LOG::LogInfo( message:"Current polyline: " + self.encoded_polyline );',
+// query valhalla
+instruction = V::trace_route( encoded_polyline:self.encoded_polyline );
+if ( "" != instruction )
+  LOG::LogInfo( message:instruction );
+end if;',
 	'',
 	0);
 INSERT INTO SM_TAH
