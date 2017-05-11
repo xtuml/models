@@ -125,12 +125,13 @@ INSERT INTO O_ATTR
 INSERT INTO O_DBATTR
 	VALUES ("b051fc71-174d-4064-a892-6287f508be80",
 	"01715b38-3a03-4292-b20f-9ce8923b9a26",
-	'self.encoded_polyline = "";
+	'encoded_polyline = "";
 select one waypoint related by self->waypoint[R102];
 while ( not_empty waypoint )
-  self.encoded_polyline = self.encoded_polyline + waypoint.encoded_polyline;
+  encoded_polyline = encoded_polyline + waypoint.encoded_polyline;
   select one waypoint related by waypoint->waypoint[R104.''precedes''];
-end while;',
+end while;
+self.encoded_polyline = encoded_polyline;',
 	1,
 	0);
 INSERT INTO O_BATTR
