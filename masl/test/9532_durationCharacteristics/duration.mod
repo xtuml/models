@@ -1,3 +1,3 @@
 domain duration is
-service test();
-end
+	public service test();
+end domain;
