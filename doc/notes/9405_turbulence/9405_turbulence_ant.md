@@ -77,7 +77,7 @@ model is populated, the reader class can supply the next data point on demand.
 
 5.1.4 Navigation
 
-The navigation module receives GPS module receives GPS location events and
+The navigation module receives GPS location events and
 populates a map route. To produce verbal instructions from the GPS coordinates
 (i.e. to detect when a turn is made and notify the user), knowledge of map data
 and complex mapping algorithms are needed. Because this is the module that must
@@ -90,7 +90,7 @@ an open platform for mapping applications which provides web APIs for many
 mapping operations and uses Valhalla behind the scenes. The Mapzen API was
 chosen to implement the navigation module.
 
-For navigation map matching needs to be applied to the GPS route produced from
+For navigation _map matching_ needs to be applied to the GPS route produced from
 the GPS events. Map matching attempts to overlay a route of real GPS points over
 a map with some tolerance for imprecise GPS data. We can then use this
 theoretical route from the map to harvest verbal instructions when a turn is
