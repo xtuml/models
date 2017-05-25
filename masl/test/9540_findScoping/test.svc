@@ -1,0 +1,7 @@
+public service FindScope::test() is
+  value : some_struct;
+  obj : instance of Object;
+begin
+  obj := find_one Object ( value = value.element); // LHS refers to the Object.value attribute, RHS to the local variable
+  obj := find_one Object ( colour = colour.red); // LHS refers to Object.colour attribute, RHS to the type
+end service;
