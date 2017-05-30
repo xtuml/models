@@ -96,11 +96,29 @@ INSERT INTO S_BRG
 	'input',
 	'',
 	0,
-	"ba5eda7a-def5-0000-0000-000000000004",
+	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
-	3,
+	1,
 	'',
 	0);
+INSERT INTO S_BPARM
+	VALUES ("450fb4c0-aab1-448c-a222-c7279d40d33f",
+	"5537cee6-5854-475b-a8a7-4526565603de",
+	'input',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_BPARM
+	VALUES ("25f3084a-c46b-417d-af3c-15c739fd4726",
+	"5537cee6-5854-475b-a8a7-4526565603de",
+	'error',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"450fb4c0-aab1-448c-a222-c7279d40d33f",
+	'');
 INSERT INTO S_BRG
 	VALUES ("f6330e5f-b338-4df2-8639-72de6f380b07",
 	"29cf9621-c612-414d-ada3-6e0a76722899",
@@ -164,7 +182,11 @@ INSERT INTO S_SYNC
 	'',
 	'create object instance user of user;
 LOG::LogInfo( message:"Enter your screen name:" );
-user.name = CHAT::input();',
+error = 0;
+ret_val = CHAT::input( input:user.name, error:error );
+if ( -1 == ret_val )
+  LOG::LogFailure( message:"Error!" );
+end if;',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',

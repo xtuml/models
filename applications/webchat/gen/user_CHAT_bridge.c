@@ -20,15 +20,35 @@
 #include "user_CHAT_bridge.h"
 #include "webchat_sys_types.h"
 
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+
+#define STDIN 0
+
 /*
- * Bridge:  get_name
+ * Bridge:  input
  */
-c_t *
-user_CHAT_get_name( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN] )
+i_t
+user_CHAT_input( i_t * p_error, c_t p_input[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  c_t * result = 0;
-  /* Insert your implementation code here... */
-  return result;
+  // read the input
+  i_t bytes_read = 0;
+  i_t ret_val = -1;
+  c_t * newline;
+  do {
+    ret_val = read( STDIN, &p_input[bytes_read], ESCHER_SYS_MAX_STRING_LEN-bytes_read );
+    if ( -1 == ret_val ) {
+      *p_error = errno;
+      return ret_val;
+    }
+    bytes_read += ret_val;
+  } while ( ret_val > 0 && bytes_read < ESCHER_SYS_MAX_STRING_LEN && !(newline=strstr( p_input, "\n" )) );
+
+  // null terminate
+  *newline = '\0';
+
+  return 0;
 }
 
 
@@ -38,9 +58,8 @@ user_CHAT_get_name( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN] )
 i_t
 user_CHAT_checkread( i_t * p_error )
 {
-  i_t result = 0;
-  /* Insert your implementation code here... */
-  return result;
+  *p_error = 35;
+  return -1;
 }
 
 
