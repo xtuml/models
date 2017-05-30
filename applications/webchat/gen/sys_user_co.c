@@ -131,6 +131,7 @@ UserEventCantHappenCalloutf(
 {
   /* Insert implementation specific code here.  */
   SYS_USER_CO_PRINTF( "UserEventCantHappenCallout\n" )
+  printf( "current_state: %d, next_state: %d, event_number: %d\n", current_state, next_state, event_number );
 }
 
 /*
@@ -147,6 +148,7 @@ UserEventNoInstanceCalloutf(
 {
   /* Insert implementation specific code here.  */
   SYS_USER_CO_PRINTF( "UserEventNoInstanceCallout\n" )
+  printf( "event_number: %d\n", event_number );
 }
 
 /*
@@ -173,6 +175,7 @@ UserEmptyHandleDetectedCalloutf( c_t * object_keyletters, c_t * s )
 {
   /* Insert implementation specific code here.  */
   SYS_USER_CO_PRINTF( "UserEmptyHandleDetectedCallout\n" )
+  printf( "keyletters: %s, s: %s\n", object_keyletters, s );
 }
 
 /*
@@ -186,6 +189,7 @@ UserObjectPoolEmptyCalloutf( const Escher_DomainNumber_t component_number, const
 {
   /* Insert implementation specific code here.  */
   SYS_USER_CO_PRINTF( "UserObjectPoolEmptyCallout\n" )
+  printf( "component: %d, class: %d\n", component_number, class_number );
 }
 
 /*
