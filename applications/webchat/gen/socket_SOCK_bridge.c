@@ -15,7 +15,6 @@
 #include "STRING_bridge.h"
 #include "TRACE_bridge.h"
 #include "TIM_bridge.h"
-#include "socket_ERR_bridge.h"
 #include "socket_SOCK_bridge.h"
 #include "socket_SYS_bridge.h"
 #include "socket_classes.h"
