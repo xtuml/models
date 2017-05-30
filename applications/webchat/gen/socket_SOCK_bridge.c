@@ -321,6 +321,7 @@ socket_SOCK_recvchunk( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, i_t
     } while ( ret_val > 0 && bytes_received < *p_size );
 
     // copy the names into the return values
+    memset( p_data, 0, ESCHER_SYS_MAX_STRING_LEN );
     memcpy( p_data, message, *p_size );
   }
   else {
