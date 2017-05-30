@@ -138,6 +138,7 @@ if ( -1 == ret_val )
     t = TIM::timer_start( microseconds:100000, event_inst:e );
   else
     LOG::LogFailure( message:"Error!" );
+    LOG::LogInteger( message:error );
   end if;
 else
   generate user1:send() to self;
@@ -158,9 +159,10 @@ INSERT INTO SM_ACT
 	'// read and send data
 error = 0;
 data = "";
-ret_val = CHAT::read( data:data, error:error );
+ret_val = CHAT::input( input:data, error:error );
 if ( -1 == ret_val )
   LOG::LogFailure( message:"Error!" );
+  LOG::LogInteger( message:error );
 else
   send chat::send_message( name:self.name, message:data );
   generate user2:idle() to self;
@@ -177,7 +179,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("d7fc6a42-744f-4d3e-86ab-5bc25b5ce926",
 	"f6d2ef8b-1780-4053-8d2f-3663feb2ef69",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -191,7 +193,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("50388e19-fcca-4915-9301-42ff1a5c76f7",
 	"f6d2ef8b-1780-4053-8d2f-3663feb2ef69",
-	3,
+	1,
 	'',
 	'',
 	0);
@@ -205,7 +207,7 @@ INSERT INTO SM_AH
 INSERT INTO SM_ACT
 	VALUES ("89bb6b7f-8d40-4d06-8573-69a77ead05bb",
 	"f6d2ef8b-1780-4053-8d2f-3663feb2ef69",
-	3,
+	1,
 	'',
 	'',
 	0);

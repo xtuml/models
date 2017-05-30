@@ -139,36 +139,6 @@ INSERT INTO S_BPARM
 	'',
 	"00000000-0000-0000-0000-000000000000",
 	'');
-INSERT INTO S_BRG
-	VALUES ("fee58d40-00bb-4448-9e24-49238c9ed3d3",
-	"29cf9621-c612-414d-ada3-6e0a76722899",
-	'read',
-	'Receive a chunk of data consisting of a size and data value.
-0 returned if successful, -1 returned if not, error set to the appropriate value',
-	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
-	'',
-	1,
-	'',
-	0);
-INSERT INTO S_BPARM
-	VALUES ("3a6fec4c-3c88-44a8-b2a0-67da15170ca5",
-	"fee58d40-00bb-4448-9e24-49238c9ed3d3",
-	'error',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	1,
-	'',
-	"a21946d3-b02a-4671-86b0-9ca9bbbd7088",
-	'');
-INSERT INTO S_BPARM
-	VALUES ("a21946d3-b02a-4671-86b0-9ca9bbbd7088",
-	"fee58d40-00bb-4448-9e24-49238c9ed3d3",
-	'data',
-	"ba5eda7a-def5-0000-0000-000000000004",
-	1,
-	'',
-	"00000000-0000-0000-0000-000000000000",
-	'');
 INSERT INTO PE_PE
 	VALUES ("29cf9621-c612-414d-ada3-6e0a76722899",
 	1,
@@ -186,7 +156,10 @@ error = 0;
 ret_val = CHAT::input( input:user.name, error:error );
 if ( -1 == ret_val )
   LOG::LogFailure( message:"Error!" );
-end if;',
+  LOG::LogInteger( message:error );
+end if;
+LOG::LogInfo( message:"Welcome, " + user.name + ". Type to send a message." );
+generate user2:idle() to user;',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
