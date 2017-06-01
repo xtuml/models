@@ -75,3 +75,15 @@ socket_UTIL_report_error( const i_t p_code, const webchat_error_levels_t p_level
   else print_debug( message );
 }
 
+
+/*
+ * Bridge:  id_factory
+ */
+i_t
+socket_UTIL_id_factory()
+{
+  static i_t id = 0;
+  id++;
+  return id;
+}
+

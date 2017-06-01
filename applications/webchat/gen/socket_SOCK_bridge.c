@@ -288,13 +288,13 @@ socket_SOCK_recvhandshake( i_t * p_error, c_t p_peer[ESCHER_SYS_MAX_STRING_LEN],
 
 
 /*
- * Bridge:  recvchunk
+ * Bridge:  recvdata
  */
 i_t
-socket_SOCK_recvchunk( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, i_t * p_size, const i_t p_socket )
+socket_SOCK_recvdata( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, i_t * p_size, const i_t p_socket )
 {
-  // get the size (reuse recvlength)
-  i_t ret_val = socket_SOCK_recvlength( p_error, p_size, p_socket );
+  // get the size (reuse recvint)
+  i_t ret_val = socket_SOCK_recvint( p_error, p_socket, p_size );
   if ( -1 == ret_val ) {
     return ret_val;
   }
@@ -332,10 +332,10 @@ socket_SOCK_recvchunk( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, i_t
 
 
 /*
- * Bridge:  recvlength
+ * Bridge:  recvint
  */
 i_t
-socket_SOCK_recvlength( i_t * p_error, i_t * p_len, const i_t p_socket )
+socket_SOCK_recvint( i_t * p_error, const i_t p_socket, i_t * p_value )
 {
   // set buffer for message
   c_t message[sizeof(i_t)];
@@ -357,7 +357,7 @@ socket_SOCK_recvlength( i_t * p_error, i_t * p_len, const i_t p_socket )
   } while ( ret_val > 0 && bytes_received < sizeof(i_t) );
 
   // copy into the return value
-  *p_len = *((i_t*)message);
+  *p_value = *((i_t*)message);
 
   return 0;
 }
@@ -412,13 +412,13 @@ socket_SOCK_checkread( i_t * p_error, const i_t p_socket )
 
 
 /*
- * Bridge:  sendlength
+ * Bridge:  sendint
  */
 i_t
-socket_SOCK_sendlength( i_t * p_error, const i_t p_len, const i_t p_socket )
+socket_SOCK_sendint( i_t * p_error, const i_t p_socket, const i_t p_value )
 {
   // build message
-  i_t message = p_len;
+  i_t message = p_value;
 
   // send the message
   i_t ret_val = send( p_socket, (void*)&message, sizeof(i_t), 0 );
@@ -428,13 +428,13 @@ socket_SOCK_sendlength( i_t * p_error, const i_t p_len, const i_t p_socket )
 
 
 /*
- * Bridge:  sendchunk
+ * Bridge:  senddata
  */
 i_t
-socket_SOCK_sendchunk( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, const i_t p_size, const i_t p_socket )
+socket_SOCK_senddata( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, const i_t p_size, const i_t p_socket )
 {
-  // send the size (reuse sendlength)
-  i_t ret_val = socket_SOCK_sendlength( p_error, p_size, p_socket );
+  // send the size (reuse sendint)
+  i_t ret_val = socket_SOCK_sendint( p_error, p_socket, p_size );
   if ( -1 == ret_val ) {
     return ret_val;
   }
