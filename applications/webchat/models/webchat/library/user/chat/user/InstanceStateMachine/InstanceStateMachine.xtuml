@@ -167,6 +167,20 @@ else
   if ( "users" == data )
     users = chat::get_users();
     LOG::LogInfo( message:"users: " + users );
+  elif ( "sqrt" == data )
+    ret_val = CHAT::input( input:data, error:error );
+    if ( -1 == ret_val )
+      LOG::LogFailure( message:"Error!" );
+      LOG::LogInteger( message:error );
+    else
+      error_msg = "";
+      sqrt = chat::sqrt( operand:STRING::atoi( s:data ), error_message:error_msg );
+      if ( -1 == sqrt )
+        LOG::LogInfo( message:error_msg );
+      else
+        LOG::LogInteger( message:sqrt );
+      end if;
+    end if;
   else
     send chat::send_message( name:self.name, message:data );
   end if;
