@@ -47,6 +47,7 @@ main( int argc, char ** argv )
 {
   UserInitializationCallout();
   Escher_SetFactoryInit( SYS_MAX_CONTAINERS );
+  Escher_InitializeThreading();
   InitializeOoaEventPool();
   ApplicationLevelInitialization();
   UserPreOoaInitializationCallout();
