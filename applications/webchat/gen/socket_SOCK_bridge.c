@@ -263,7 +263,7 @@ socket_SOCK_recvhandshake( i_t * p_error, c_t p_peer[ESCHER_SYS_MAX_STRING_LEN],
       *p_error = 103; // connection reset by peer
       return -1;
     }
-    bytes_received += ret_val;
+    if ( ret_val > 0 ) bytes_received += ret_val;
   } while ( ret_val > 0 && bytes_received < ESCHER_SYS_MAX_STRING_LEN*2+1 && EWOULDBLOCK != errno );
 
   // null terminate
