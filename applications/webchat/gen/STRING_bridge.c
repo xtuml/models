@@ -17,6 +17,8 @@
 #include "STRING_bridge.h"
 #include "webchat_sys_types.h"
 
+#include <string.h>
+
 /*
  * Bridge:  itoa
  */
@@ -73,7 +75,7 @@ STRING_atoi( c_t p_s[ESCHER_SYS_MAX_STRING_LEN] )
 {
   i_t sum = 0;
   i_t factor = 1;
-  c_t * character = p_s + Escher_strlen(p_s) - 1;
+  c_t * character = p_s + strlen(p_s) - 1;
   while ( character >= p_s ) {
     if ( *character <= '9' && *character >= 0 ) {
       sum += factor * (*character - '0');
@@ -96,7 +98,7 @@ c_t *
 STRING_substr( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], const i_t p_begin, const i_t p_end, c_t p_s[ESCHER_SYS_MAX_STRING_LEN] )
 {
   // get length of s
-  i_t len = (i_t)Escher_strlen( p_s );
+  i_t len = (i_t)strlen( p_s );
   A0xtumlsret[0] = '\0';
 
   // check that the indexes are in a valid range
@@ -204,7 +206,7 @@ STRING_getword( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], const i_t p_i, const
 c_t *
 STRING_trim( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], c_t p_s[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  i_t len = Escher_strlen( p_s );
+  i_t len = strlen( p_s );
   A0xtumlsret[0] = '\0';
 
   c_t * a;
