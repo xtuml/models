@@ -34,18 +34,130 @@ INSERT INTO DIM_DIA
 	0.000000,
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO S_SYNC
-	VALUES ("f48a8aaa-c948-4bd3-be87-0a48c6c6fc0e",
+	VALUES ("6220e4ed-6153-4162-bdc0-95944467e7d2",
 	"00000000-0000-0000-0000-000000000000",
-	'route',
+	'setup',
 	'',
-	'send users::display_message( name:param.name, message:param.message );',
+	'create object instance default_room of room;
+default_room.name = "";',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("6220e4ed-6153-4162-bdc0-95944467e7d2",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("4ebd5f17-8c22-4f06-861d-517f5e19be2e",
+	"00000000-0000-0000-0000-000000000000",
+	'join',
+	'',
+	'select any user from instances of user where ( selected.name == param.name );
+if ( empty user )
+  create object instance user of user;
+  user.name = param.name;
+  select any room from instances of room where ( selected.name == "" );
+  relate user to room across R1;
+  return "";
+else
+  return "Screen name taken.";
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("00c37444-4b94-4a5e-953f-391c7fbbbb83",
+	"4ebd5f17-8c22-4f06-861d-517f5e19be2e",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("4ebd5f17-8c22-4f06-861d-517f5e19be2e",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("fbb6283f-503b-4bfa-b0f2-dfce2ca7dd4b",
+	"00000000-0000-0000-0000-000000000000",
+	'get_users',
+	'',
+	'user_names = "";
+select many users from instances of user;
+for each user in users
+  if ( "" != user.room_name )
+    user_names = user_names + user.name + " (" + user.room_name + ")\n";
+  end if;
+end for;
+return user_names;',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("fbb6283f-503b-4bfa-b0f2-dfce2ca7dd4b",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("5a473646-d3c2-43aa-aea6-4a20536842f7",
+	"00000000-0000-0000-0000-000000000000",
+	'get_rooms',
+	'',
+	'room_names = "";
+select many rooms from instances of room;
+for each room in rooms
+  if ( "" != room.name )
+    room_names = room_names + room.name + "\n";
+  end if;
+end for;
+return room_names;',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("5a473646-d3c2-43aa-aea6-4a20536842f7",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("c7270e69-54c1-4555-9a56-c0bcf7afc707",
+	"00000000-0000-0000-0000-000000000000",
+	'send_message',
+	'',
+	'select any user from instances of user where ( selected.name == param.name );
+if ( not_empty user )
+  create object instance new_message of message;
+  new_message.sender = user.name;
+  new_message.value = param.message;
+  select one room related by user->room[R1];
+  select one last_message related by room->message[R2];
+  if ( not_empty last_message )
+    unrelate last_message from room across R2;
+    relate new_message to room across R2;
+    relate new_message to last_message across R3.''follows'';
+  else
+    relate new_message to room across R2;
+  end if;
+  send MSG::display_message( name:user.name, room:room.name, message:new_message.value );
+end if;',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
 	0);
 INSERT INTO S_SPARM
-	VALUES ("d61a51cd-0584-4c08-8c53-9cc4b906aae7",
-	"f48a8aaa-c948-4bd3-be87-0a48c6c6fc0e",
+	VALUES ("a14639fd-bf09-4597-b58e-ca0d7725d9d8",
+	"c7270e69-54c1-4555-9a56-c0bcf7afc707",
 	'name',
 	"ba5eda7a-def5-0000-0000-000000000004",
 	0,
@@ -53,16 +165,209 @@ INSERT INTO S_SPARM
 	"00000000-0000-0000-0000-000000000000",
 	'');
 INSERT INTO S_SPARM
-	VALUES ("5c166e38-3134-48d5-a306-030364050777",
-	"f48a8aaa-c948-4bd3-be87-0a48c6c6fc0e",
+	VALUES ("3cd68da2-10ba-49e2-902f-e71ada7701af",
+	"c7270e69-54c1-4555-9a56-c0bcf7afc707",
 	'message',
 	"ba5eda7a-def5-0000-0000-000000000004",
 	0,
 	'',
-	"d61a51cd-0584-4c08-8c53-9cc4b906aae7",
+	"a14639fd-bf09-4597-b58e-ca0d7725d9d8",
 	'');
 INSERT INTO PE_PE
-	VALUES ("f48a8aaa-c948-4bd3-be87-0a48c6c6fc0e",
+	VALUES ("c7270e69-54c1-4555-9a56-c0bcf7afc707",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f97d5a28-e819-469d-a0d6-0d6cb5a39a40",
+	"00000000-0000-0000-0000-000000000000",
+	'history',
+	'',
+	'hist_len = 10;
+select any user from instances of user where ( selected.name == param.name );
+if ( not_empty user )
+  select one message related by user->room[R1]->message[R2];
+  history = "";
+  i = 0;
+  while ( i < hist_len and not_empty message )
+    history = message.sender + ": " + message.value + history;
+    i = i + 1;
+    select one message related by message->message[R3.''precedes''];
+  end while;
+  send MSG::response( name:param.name, request:"history", success:true, message:history );
+else
+  send MSG::response( name:param.name, request:"history", success:false, message:"Non-existent user" );
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("4de05289-871d-488b-ac18-f6e02e1975cf",
+	"f97d5a28-e819-469d-a0d6-0d6cb5a39a40",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("f97d5a28-e819-469d-a0d6-0d6cb5a39a40",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("17f91528-727a-48bb-b34f-15e486e2676c",
+	"00000000-0000-0000-0000-000000000000",
+	'leave',
+	'',
+	'select any user from instances of user where ( selected.name == param.name );
+if ( not_empty user )
+  select one room related by user->room[R1];
+  unrelate user from room across R1;
+  delete object instance user;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("b4069542-2f28-4aee-97a8-a7db139f4336",
+	"17f91528-727a-48bb-b34f-15e486e2676c",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("17f91528-727a-48bb-b34f-15e486e2676c",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b630240f-6794-4a67-bc63-0ed2cd19ef3f",
+	"00000000-0000-0000-0000-000000000000",
+	'join_room',
+	'',
+	'select any user from instances of user where ( selected.name == param.name );
+if ( not_empty user )
+  select any new_room from instances of room where ( selected.name == param.room );
+  if ( not_empty new_room )
+    if ( new_room.name != user.room_name )
+      select one old_room related by user->room[R1];
+      unrelate user from old_room across R1;
+      relate user to new_room across R1;
+      send MSG::response( name:param.name, request:"join_room", success:true, message:new_room.name );
+    else
+      send MSG::response( name:param.name, request:"join_room", success:false, message:"Cannot join current room" );
+    end if;
+  else
+    send MSG::response( name:param.name, request:"join_room", success:false, message:"Non-existent room" );
+  end if;
+else
+  send MSG::response( name:param.name, request:"join_room", success:false, message:"Non-existent user" );
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("01bc1587-1408-4d83-baea-a06b582e4262",
+	"b630240f-6794-4a67-bc63-0ed2cd19ef3f",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("3b7eea91-0155-47c3-a278-2e71c5a0b9fc",
+	"b630240f-6794-4a67-bc63-0ed2cd19ef3f",
+	'room',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"01bc1587-1408-4d83-baea-a06b582e4262",
+	'');
+INSERT INTO PE_PE
+	VALUES ("b630240f-6794-4a67-bc63-0ed2cd19ef3f",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("2d58662e-37be-4c52-8581-678a8fb6c95e",
+	"00000000-0000-0000-0000-000000000000",
+	'leave_room',
+	'',
+	'select any user from instances of user where ( selected.name == param.name );
+if ( not_empty user )
+  select one old_room related by user->room[R1];
+  select any new_room from instances of room where ( selected.name == "" );
+  unrelate user from old_room across R1;
+  relate user to new_room across R1;
+else
+  send MSG::response( name:param.name, request:"leave_room", success:false, message:"Non-existent user" );
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("d2916426-1394-4cc3-9b18-f64acb15eb45",
+	"2d58662e-37be-4c52-8581-678a8fb6c95e",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("2d58662e-37be-4c52-8581-678a8fb6c95e",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("6693e89e-7a48-411e-acc9-c71e42703ec5",
+	"00000000-0000-0000-0000-000000000000",
+	'create_room',
+	'',
+	'select any room from instances of room where ( selected.name == param.room );
+if ( empty room )
+  create object instance room of room;
+  room.name = param.room;
+else
+  send MSG::response( name:param.name, request:"create_room", success:false, message:"Room ''" + param.room + "'' already exists." );
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("8545b563-6e41-4702-8731-f820e405a119",
+	"6693e89e-7a48-411e-acc9-c71e42703ec5",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("099a9ebb-192f-4a8b-84ce-573889bfb282",
+	"6693e89e-7a48-411e-acc9-c71e42703ec5",
+	'room',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"8545b563-6e41-4702-8731-f820e405a119",
+	'');
+INSERT INTO PE_PE
+	VALUES ("6693e89e-7a48-411e-acc9-c71e42703ec5",
 	1,
 	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
 	"00000000-0000-0000-0000-000000000000",

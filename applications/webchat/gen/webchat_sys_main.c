@@ -6,8 +6,8 @@
  *--------------------------------------------------------------------------*/
 
 #include "webchat_sys_types.h"
-#include "chat_classes.h"
 #include "user_classes.h"
+#include "chat_classes.h"
 #include "socket_classes.h"
 
 /*
@@ -22,7 +22,7 @@ static void ApplicationLevelInitialization( void )
   Escher_ClassNumber_t c;
 
   static const Escher_ClassNumber_t domain_class_count[ SYSTEM_DOMAIN_COUNT ] = {
-    0,
+    chat_MAX_CLASS_NUMBERS,
     socket_MAX_CLASS_NUMBERS,
     user_MAX_CLASS_NUMBERS
   };
@@ -62,5 +62,6 @@ main( int argc, char ** argv )
   Escher_xtUML_run(); /* This is the primary event dispatch loop.  */
   UserPreShutdownCallout();
   UserPostShutdownCallout();
+  Escher_thread_shutdown();
   return 0;
 }
