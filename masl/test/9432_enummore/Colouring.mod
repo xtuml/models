@@ -4,4 +4,5 @@ domain Colouring is
 
   public service test();
   public service test2();
+  public service test9622();
 end domain;
