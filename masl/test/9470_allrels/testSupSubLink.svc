@@ -1,0 +1,60 @@
+public service Navigation::testSupSubLink() is
+    a  : instance of Sup_A;
+    b  : instance of Sub_B;
+    d  : instance of Sub_D;
+    aa : set of instance of Sup_A;
+    bb : set of instance of Sub_B;
+    dd : set of instance of Sub_D;
+begin
+
+
+	// A -< BC
+
+	link   a  R31.Sub_B b;
+
+	unlink a  R31.Sub_B b;
+
+	unlink a  R31.Sub_B;
+
+	unlink aa R31.Sub_B;
+
+	link   b  R31 a;
+	link   b  R31.Sup_A a;
+
+	unlink b  R31 a;
+	unlink b  R31.Sup_A a;
+
+	unlink b  R31;
+	unlink b  R31.Sup_A;
+
+	unlink bb R31;
+	unlink bb R31.Sup_A;
+
+	// A -< D
+
+	link   a  R32 d;
+	link   a  R32.Sub_D d;
+
+	unlink a  R32 d;
+	unlink a  R32.Sub_D d;
+
+	unlink a  R32;
+	unlink a  R32.Sub_D;
+
+	unlink aa R32;
+	unlink aa R32.Sub_D;
+
+	link   d  R32 a;
+	link   d  R32.Sup_A a;
+
+	unlink d  R32 a;
+	unlink d  R32.Sup_A a;
+	
+	unlink d  R32;
+	unlink d  R32.Sup_A;
+
+	unlink dd R32;
+	unlink dd R32.Sup_A;
+
+
+end service;
