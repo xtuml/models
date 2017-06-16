@@ -1,0 +1,14 @@
+domain Colouring2 is
+  public type PrimaryColour is enum (red, green, blue);
+  public type RainbowColour is enum (red, orange, yellow, green, blue, indigo, violet);
+
+  public service primarySvc ( c : in PrimaryColour );
+  public service rainbowSvc ( c : in RainbowColour );
+
+  terminator Term is
+    public service primarySvc ( c : in PrimaryColour );
+    public service rainbowSvc ( c : in RainbowColour );
+  end terminator;   
+
+  public service test();
+end domain;
