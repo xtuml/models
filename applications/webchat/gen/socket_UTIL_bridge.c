@@ -10,17 +10,7 @@
  *--------------------------------------------------------------------------*/
 
 #include "webchat_sys_types.h"
-#include "CSV_bridge.h"
-#include "LOG_bridge.h"
-#include "STRING_bridge.h"
-#include "TRACE_bridge.h"
-#include "TIM_bridge.h"
-#include "socket_SOCK_bridge.h"
-#include "socket_SYS_bridge.h"
 #include "socket_UTIL_bridge.h"
-#include "socket_classes.h"
-#include "socket_UTIL_bridge.h"
-#include "webchat_sys_types.h"
 
 #include <string.h>
 
@@ -38,7 +28,7 @@ void print_fatal( char * s ) {
  * Bridge:  datatostring
  */
 c_t *
-socket_UTIL_datatostring( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], c_t p_data[ESCHER_SYS_MAX_STRING_LEN], const i_t p_size )
+socket_UTIL_datatostring( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], const void * p_data, const i_t p_size )
 {
   memcpy( A0xtumlsret, p_data, p_size );
   A0xtumlsret[p_size] = '\0';
@@ -82,8 +72,18 @@ socket_UTIL_report_error( const i_t p_code, const webchat_error_levels_t p_level
 i_t
 socket_UTIL_id_factory()
 {
-  static i_t id = 0;
-  id++;
+  static i_t id = -1;
+  id += 2;
   return id;
+}
+
+
+/*
+ * Bridge:  stringtodata
+ */
+void *
+socket_UTIL_stringtodata( c_t p_string[ESCHER_SYS_MAX_STRING_LEN] )
+{
+  return (void*)p_string;
 }
 

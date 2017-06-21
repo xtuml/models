@@ -10,20 +10,13 @@
  *--------------------------------------------------------------------------*/
 
 #include "webchat_sys_types.h"
-#include "CSV_bridge.h"
-#include "LOG_bridge.h"
-#include "STRING_bridge.h"
-#include "TRACE_bridge.h"
-#include "socket_SOCK_bridge.h"
 #include "socket_SYS_bridge.h"
-#include "socket_classes.h"
-#include "socket_SYS_bridge.h"
-#include "webchat_sys_types.h"
 
 #include <unistd.h>
 #include <errno.h>
 #include <time.h>
 #include <string.h>
+#include <stdlib.h>
 
 /*
  * Bridge:  close
@@ -52,5 +45,35 @@ socket_SYS_sleep( i_t * p_error, const i_t p_milliseconds )
   i_t ret_val = nanosleep( &sleeptime, NULL );
   *p_error = errno;
   return ret_val;
+}
+
+
+/*
+ * Bridge:  malloc
+ */
+void *
+socket_SYS_malloc( const i_t p_size )
+{
+  return malloc( p_size );
+}
+
+
+/*
+ * Bridge:  free
+ */
+void
+socket_SYS_free( const void * p_ptr )
+{
+  free( p_ptr );
+}
+
+
+/*
+ * Bridge:  memcpy
+ */
+void
+socket_SYS_memcpy( const void * p_dst, const i_t p_size, const void * p_src )
+{
+  memcpy( p_dst, p_src, p_size );
 }
 

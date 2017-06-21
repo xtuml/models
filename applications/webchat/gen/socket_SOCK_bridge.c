@@ -10,16 +10,7 @@
  *--------------------------------------------------------------------------*/
 
 #include "webchat_sys_types.h"
-#include "CSV_bridge.h"
-#include "LOG_bridge.h"
-#include "STRING_bridge.h"
-#include "TRACE_bridge.h"
-#include "TIM_bridge.h"
 #include "socket_SOCK_bridge.h"
-#include "socket_SYS_bridge.h"
-#include "socket_classes.h"
-#include "socket_SOCK_bridge.h"
-#include "webchat_sys_types.h"
 
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -291,7 +282,7 @@ socket_SOCK_recvhandshake( i_t * p_error, c_t p_peer[ESCHER_SYS_MAX_STRING_LEN],
  * Bridge:  recvdata
  */
 i_t
-socket_SOCK_recvdata( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, i_t * p_size, const i_t p_socket )
+socket_SOCK_recvdata( void ** p_data, i_t * p_error, i_t * p_size, const i_t p_socket )
 {
   // get the size (reuse recvint)
   i_t ret_val = socket_SOCK_recvint( p_error, p_socket, p_size );
@@ -300,14 +291,12 @@ socket_SOCK_recvdata( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, i_t 
   }
 
   if ( *p_size > 0 ) {
-    // set buffer for message
-    c_t message[*p_size];
-
     // receive the message
+    c_t * buffer = malloc( *p_size );
     i_t bytes_received = 0;
     ret_val = -1;
     do {
-      ret_val = recv( p_socket, &message[bytes_received], *p_size, 0 );
+      ret_val = recv( p_socket, &buffer[bytes_received], *p_size, 0 );
       if ( -1 == ret_val ) {
         *p_error = errno;
         return ret_val;
@@ -319,12 +308,7 @@ socket_SOCK_recvdata( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, i_t 
       bytes_received += ret_val;
     } while ( ret_val > 0 && bytes_received < *p_size );
 
-    // copy the names into the return values
-    memset( p_data, 0, ESCHER_SYS_MAX_STRING_LEN );
-    memcpy( p_data, message, *p_size );
-  }
-  else {
-    memset( p_data, 0, ESCHER_SYS_MAX_STRING_LEN );
+    *p_data = (void*)buffer;
   }
 
   return 0;
@@ -431,7 +415,7 @@ socket_SOCK_sendint( i_t * p_error, const i_t p_socket, const i_t p_value )
  * Bridge:  senddata
  */
 i_t
-socket_SOCK_senddata( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, const i_t p_size, const i_t p_socket )
+socket_SOCK_senddata( const void * p_data, i_t * p_error, const i_t p_size, const i_t p_socket )
 {
   // send the size (reuse sendint)
   i_t ret_val = socket_SOCK_sendint( p_error, p_socket, p_size );
@@ -440,7 +424,6 @@ socket_SOCK_senddata( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, cons
   }
 
   if ( p_size > 0 ) {
-
     // build message
     c_t message[p_size];
     memcpy( message, p_data, p_size );
@@ -448,7 +431,6 @@ socket_SOCK_senddata( c_t p_data[ESCHER_SYS_MAX_STRING_LEN], i_t * p_error, cons
     // send the message
     ret_val = send( p_socket, message, p_size, 0 );
     *p_error = errno;
-
   }
 
   return ret_val;

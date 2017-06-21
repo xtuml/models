@@ -1,13 +1,10 @@
 CC=gcc
-CFLAGS=-Wno-pointer-to-int-cast -DCLIENT -g
+CFLAGS=-Wno-pointer-to-int-cast -g
 SOURCES := $(shell ls *.c)
 OBJECTS=$(SOURCES:.c=.o)
 EXECUTABLE=chat
 
-all:  clean $(SOURCES) $(EXECUTABLE)
-
-clean:
-	rm -f *main.o
+all:  $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	@$(CC) $(CFLAGS) $^ -o $@

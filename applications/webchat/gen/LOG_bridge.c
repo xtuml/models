@@ -58,7 +58,7 @@ LOG_LogDate( Escher_Date_t p_d, c_t * p_message )
 void
 LOG_LogTime( c_t * p_message, Escher_TimeStamp_t p_t )
 {
-	printf( "%s %ld\n", p_message, p_t );
+	printf( "%s %u\n", p_message, p_t );
 }
 
 
