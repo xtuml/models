@@ -8,6 +8,8 @@ domain Colouring2 is
   object Obj;
   object Obj is
     id : preferred integer;
+    primaryAtt : PrimaryColour;
+    rainbowAtt : RainbowColour;
 
     public instance service primaryISvc ( c : in PrimaryColour );
     public instance service rainbowISvc ( c : in RainbowColour );
