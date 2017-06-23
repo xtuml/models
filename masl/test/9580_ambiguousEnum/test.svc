@@ -51,5 +51,21 @@ begin
   Term~>primarySvc ( PrimaryColour.red ) ;
   Term~>primarySvc ( Colouring2::red ) ;
   Term~>primarySvc ( red ) ;
+  
+  // Issue #9641
+  obj := create Obj (
+            primaryAtt => Colouring2::PrimaryColour.red, 
+            rainbowAtt => Colouring2::RainbowColour.red );
 
+  obj := create Obj (
+            primaryAtt => PrimaryColour.red, 
+            rainbowAtt => RainbowColour.red );
+
+  obj := create Obj (
+            primaryAtt => Colouring2::red, 
+            rainbowAtt => Colouring2::red );
+
+  obj := create Obj (
+            primaryAtt => red, 
+            rainbowAtt => red );
 end service;
