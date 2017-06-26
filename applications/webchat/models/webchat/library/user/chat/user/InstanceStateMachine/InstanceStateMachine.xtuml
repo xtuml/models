@@ -257,18 +257,6 @@ else
   if ( "/users" == data )
     users = MSG::get_users();
     LOG::LogInfo( message:users );
-  elif ( "/rooms" == data )
-    rooms = MSG::get_rooms();
-    LOG::LogInfo( message:rooms );
-  elif ( 0 == STRING::indexof( haystack:data, needle:"/join " ) )
-    send MSG::join_room( name:self.name, room:STRING::substr( s: data, begin:6, end:-1 ) );
-  elif ( 0 == STRING::indexof( haystack:data, needle:"/create " ) )
-    send MSG::create_room( name:self.name, room:STRING::substr( s: data, begin:8, end:-1 ) );
-  elif ( data == "/leave" )
-    send MSG::leave_room( name:self.name );
-    self.room = "";
-  elif ( data == "/history" )
-    send MSG::history( name:self.name );
   elif ( data == "/help" )
     ::help();
   elif ( data == "/exit" )
@@ -334,8 +322,7 @@ INSERT INTO SM_ACT
 	VALUES ("e747dc13-048a-45fb-be06-b3c37e11ca22",
 	"f6d2ef8b-1780-4053-8d2f-3663feb2ef69",
 	1,
-	'self.room = "";
-error = 0;
+	'error = 0;
 logged_in = false;
 while ( not logged_in )
   LOG::LogInfo( message:"Enter your screen name:" );
