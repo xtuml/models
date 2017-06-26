@@ -15,7 +15,7 @@ extern	"C"	{
 #endif
 
 #define SYS_USER_CO_PRINTF_ON
-#define DEBUG_SOCKETS
+//#define DEBUG_SOCKETS
 
 /*
  * UserInitializationCallout
