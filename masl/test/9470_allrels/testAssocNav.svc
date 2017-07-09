@@ -1,0 +1,401 @@
+public service Navigation::testAssocNav() is
+    a : instance of Assoc_A;
+    b : instance of Assoc_B;
+    c : instance of Assoc_C;
+    aa : set of instance of Assoc_A;
+    bb : set of instance of Assoc_B;
+    cc : set of instance of Assoc_C;
+begin
+
+    // A <-C-> B
+
+    a := (b  -> R21.Assoc_A);
+    a := (b  -> R21.related_to_a.Assoc_A);
+	a := (c  -> R21.Assoc_A);
+	a := (c  -> R21.related_to_a.Assoc_A);
+
+    b := (a  -> R21.Assoc_B);
+    b := (a  -> R21.related_to_b.Assoc_B);
+	b := (c  -> R21.Assoc_B);
+	b := (c  -> R21.related_to_b.Assoc_B);
+
+    c := (a  -> R21.Assoc_C);
+    c := (a  -> R21.related_to_b.Assoc_C);
+    c := (b  -> R21.Assoc_C);
+    c := (b  -> R21.related_to_a.Assoc_C);
+
+    a := (bb -> R21.Assoc_A)'any;
+    a := (bb -> R21.related_to_a.Assoc_A)'any;
+    a := (cc -> R21.Assoc_A)'any;
+    a := (cc -> R21.related_to_a.Assoc_A)'any;
+
+    b := (aa -> R21.Assoc_B)'any;
+    b := (aa -> R21.related_to_b.Assoc_B)'any;
+    b := (cc -> R21.Assoc_B)'any;
+    b := (cc -> R21.related_to_b.Assoc_B)'any;
+
+    c := (aa -> R21.Assoc_C)'any;
+    c := (aa -> R21.related_to_b.Assoc_C)'any;
+    c := (bb -> R21.Assoc_C)'any;
+    c := (bb -> R21.related_to_a.Assoc_C)'any;
+
+    c := (a  with b  -> R21);
+    c := (a  with b  -> R21.related_to_b);
+    c := (a  with b  -> R21.related_to_b.Assoc_C);
+
+    c := (a  with bb -> R21)'any;
+    c := (a  with bb -> R21.related_to_b)'any;
+    c := (a  with bb -> R21.related_to_b.Assoc_C)'any;
+    
+    c := (aa with b  -> R21)'any;
+    c := (aa with b  -> R21.related_to_b)'any;
+    c := (aa with b  -> R21.related_to_b.Assoc_C)'any;
+
+    c := (aa with bb -> R21)'any;
+    c := (aa with bb -> R21.related_to_b)'any;
+    c := (aa with bb -> R21.related_to_b.Assoc_C)'any;
+
+
+    c := (b  with a  -> R21);
+    c := (b  with a  -> R21.related_to_a);
+    c := (b  with a  -> R21.related_to_a.Assoc_C);
+
+    c := (b  with aa -> R21)'any;
+    c := (b  with aa -> R21.related_to_a)'any;
+    c := (b  with aa -> R21.related_to_a.Assoc_C)'any;
+    
+    c := (bb with a  -> R21)'any;
+    c := (bb with a  -> R21.related_to_a)'any;
+    c := (bb with a  -> R21.related_to_a.Assoc_C)'any;
+
+    c := (bb with aa -> R21)'any;
+    c := (bb with aa -> R21.related_to_a)'any;
+    c := (bb with aa -> R21.related_to_a.Assoc_C)'any;
+
+    // A <-C-> B (same role phrase)
+
+    a := (b  -> R22.Assoc_A);
+    a := (b  -> R22.related_to_x.Assoc_A);
+	a := (c  -> R22.Assoc_A);
+	a := (c  -> R22.related_to_x.Assoc_A);
+
+    b := (a  -> R22.Assoc_B);
+    b := (a  -> R22.related_to_x.Assoc_B);
+	b := (c  -> R22.Assoc_B);
+	b := (c  -> R22.related_to_x.Assoc_B);
+
+    c := (a  -> R22.Assoc_C);
+    c := (a  -> R22.related_to_x.Assoc_C);
+    c := (b  -> R22.Assoc_C);
+    c := (b  -> R22.related_to_x.Assoc_C);
+
+    a := (bb -> R22.Assoc_A)'any;
+    a := (bb -> R22.related_to_x.Assoc_A)'any;
+    a := (cc -> R22.Assoc_A)'any;
+    a := (cc -> R22.related_to_x.Assoc_A)'any;
+
+    b := (aa -> R22.Assoc_B)'any;
+    b := (aa -> R22.related_to_x.Assoc_B)'any;
+    b := (cc -> R22.Assoc_B)'any;
+    b := (cc -> R22.related_to_x.Assoc_B)'any;
+
+    c := (aa -> R22.Assoc_C)'any;
+    c := (aa -> R22.related_to_x.Assoc_C)'any;
+    c := (bb -> R22.Assoc_C)'any;
+    c := (bb -> R22.related_to_x.Assoc_C)'any;
+
+    c := (a  with b  -> R22);
+    c := (a  with b  -> R22.related_to_x);
+    c := (a  with b  -> R22.related_to_x.Assoc_C);
+
+    c := (a  with bb -> R22)'any;
+    c := (a  with bb -> R22.related_to_x)'any;
+    c := (a  with bb -> R22.related_to_x.Assoc_C)'any;
+    
+    c := (aa with b  -> R22)'any;
+    c := (aa with b  -> R22.related_to_x)'any;
+    c := (aa with b  -> R22.related_to_x.Assoc_C)'any;
+
+    c := (aa with bb -> R22)'any;
+    c := (aa with bb -> R22.related_to_x)'any;
+    c := (aa with bb -> R22.related_to_x.Assoc_C)'any;
+
+
+    c := (b  with a  -> R22);
+    c := (b  with a  -> R22.related_to_x);
+    c := (b  with a  -> R22.related_to_x.Assoc_C);
+
+    c := (b  with aa -> R22)'any;
+    c := (b  with aa -> R22.related_to_x)'any;
+    c := (b  with aa -> R22.related_to_x.Assoc_C)'any;
+    
+    c := (bb with a  -> R22)'any;
+    c := (bb with a  -> R22.related_to_x)'any;
+    c := (bb with a  -> R22.related_to_x.Assoc_C)'any;
+
+    c := (bb with aa -> R22)'any;
+    c := (bb with aa -> R22.related_to_x)'any;
+    c := (bb with aa -> R22.related_to_x.Assoc_C)'any;
+
+    // A <-C->> B
+
+    a := (b  -> R23.Assoc_A);
+    a := (b  -> R23.related_to_a.Assoc_A);
+	a := (c  -> R23.Assoc_A);
+	a := (c  -> R23.related_to_a.Assoc_A);
+
+    b := (a  -> R23.Assoc_B)'any;
+    b := (a  -> R23.related_to_b.Assoc_B)'any;
+	b := (c  -> R23.Assoc_B);
+	b := (c  -> R23.related_to_b.Assoc_B);
+
+    c := (a  -> R23.Assoc_C)'any;
+    c := (a  -> R23.related_to_b.Assoc_C)'any;
+    c := (b  -> R23.Assoc_C);
+    c := (b  -> R23.related_to_a.Assoc_C);
+
+    a := (bb -> R23.Assoc_A)'any;
+    a := (bb -> R23.related_to_a.Assoc_A)'any;
+    a := (cc -> R23.Assoc_A)'any;
+    a := (cc -> R23.related_to_a.Assoc_A)'any;
+
+    b := (aa -> R23.Assoc_B)'any;
+    b := (aa -> R23.related_to_b.Assoc_B)'any;
+    b := (cc -> R23.Assoc_B)'any;
+    b := (cc -> R23.related_to_b.Assoc_B)'any;
+
+    c := (aa -> R23.Assoc_C)'any;
+    c := (aa -> R23.related_to_b.Assoc_C)'any;
+    c := (bb -> R23.Assoc_C)'any;
+    c := (bb -> R23.related_to_a.Assoc_C)'any;
+
+    c := (a  with b  -> R23);
+    c := (a  with b  -> R23.related_to_b);
+    c := (a  with b  -> R23.related_to_b.Assoc_C);
+
+    c := (a  with bb -> R23)'any;
+    c := (a  with bb -> R23.related_to_b)'any;
+    c := (a  with bb -> R23.related_to_b.Assoc_C)'any;
+    
+    c := (aa with b  -> R23)'any;
+    c := (aa with b  -> R23.related_to_b)'any;
+    c := (aa with b  -> R23.related_to_b.Assoc_C)'any;
+
+    c := (aa with bb -> R23)'any;
+    c := (aa with bb -> R23.related_to_b)'any;
+    c := (aa with bb -> R23.related_to_b.Assoc_C)'any;
+
+
+    c := (b  with a  -> R23);
+    c := (b  with a  -> R23.related_to_a);
+    c := (b  with a  -> R23.related_to_a.Assoc_C);
+
+    c := (b  with aa -> R23)'any;
+    c := (b  with aa -> R23.related_to_a)'any;
+    c := (b  with aa -> R23.related_to_a.Assoc_C)'any;
+    
+    c := (bb with a  -> R23)'any;
+    c := (bb with a  -> R23.related_to_a)'any;
+    c := (bb with a  -> R23.related_to_a.Assoc_C)'any;
+
+    c := (bb with aa -> R23)'any;
+    c := (bb with aa -> R23.related_to_a)'any;
+    c := (bb with aa -> R23.related_to_a.Assoc_C)'any;
+
+    // A <-C->> B (same role phrase)
+
+    a := (b  -> R24.Assoc_A);
+    a := (b  -> R24.related_to_x.Assoc_A);
+	a := (c  -> R24.Assoc_A);
+	a := (c  -> R24.related_to_x.Assoc_A);
+
+    b := (a  -> R24.Assoc_B)'any;
+    b := (a  -> R24.related_to_x.Assoc_B)'any;
+	b := (c  -> R24.Assoc_B);
+	b := (c  -> R24.related_to_x.Assoc_B);
+
+    c := (a  -> R24.Assoc_C)'any;
+    c := (a  -> R24.related_to_x.Assoc_C)'any;
+    c := (b  -> R24.Assoc_C);
+    c := (b  -> R24.related_to_x.Assoc_C);
+
+    a := (bb -> R24.Assoc_A)'any;
+    a := (bb -> R24.related_to_x.Assoc_A)'any;
+    a := (cc -> R24.Assoc_A)'any;
+    a := (cc -> R24.related_to_x.Assoc_A)'any;
+
+    b := (aa -> R24.Assoc_B)'any;
+    b := (aa -> R24.related_to_x.Assoc_B)'any;
+    b := (cc -> R24.Assoc_B)'any;
+    b := (cc -> R24.related_to_x.Assoc_B)'any;
+
+    c := (aa -> R24.Assoc_C)'any;
+    c := (aa -> R24.related_to_x.Assoc_C)'any;
+    c := (bb -> R24.Assoc_C)'any;
+    c := (bb -> R24.related_to_x.Assoc_C)'any;
+
+    c := (a  with b  -> R24);
+    c := (a  with b  -> R24.related_to_x);
+    c := (a  with b  -> R24.related_to_x.Assoc_C);
+
+    c := (a  with bb -> R24)'any;
+    c := (a  with bb -> R24.related_to_x)'any;
+    c := (a  with bb -> R24.related_to_x.Assoc_C)'any;
+    
+    c := (aa with b  -> R24)'any;
+    c := (aa with b  -> R24.related_to_x)'any;
+    c := (aa with b  -> R24.related_to_x.Assoc_C)'any;
+
+    c := (aa with bb -> R24)'any;
+    c := (aa with bb -> R24.related_to_x)'any;
+    c := (aa with bb -> R24.related_to_x.Assoc_C)'any;
+
+
+    c := (b  with a  -> R24);
+    c := (b  with a  -> R24.related_to_x);
+    c := (b  with a  -> R24.related_to_x.Assoc_C);
+
+    c := (b  with aa -> R24)'any;
+    c := (b  with aa -> R24.related_to_x)'any;
+    c := (b  with aa -> R24.related_to_x.Assoc_C)'any;
+    
+    c := (bb with a  -> R24)'any;
+    c := (bb with a  -> R24.related_to_x)'any;
+    c := (bb with a  -> R24.related_to_x.Assoc_C)'any;
+
+    c := (bb with aa -> R24)'any;
+    c := (bb with aa -> R24.related_to_x)'any;
+    c := (bb with aa -> R24.related_to_x.Assoc_C)'any;
+
+
+    // A <<-C->> B
+
+    a := (b  -> R25.Assoc_A)'any;
+    a := (b  -> R25.related_to_a.Assoc_A)'any;
+	a := (c  -> R25.Assoc_A);
+	a := (c  -> R25.related_to_a.Assoc_A);
+
+    b := (a  -> R25.Assoc_B)'any;
+    b := (a  -> R25.related_to_b.Assoc_B)'any;
+	b := (c  -> R25.Assoc_B);
+	b := (c  -> R25.related_to_b.Assoc_B);
+
+    c := (a  -> R25.Assoc_C)'any;
+    c := (a  -> R25.related_to_b.Assoc_C)'any;
+    c := (b  -> R25.Assoc_C)'any;
+    c := (b  -> R25.related_to_a.Assoc_C)'any;
+
+    a := (bb -> R25.Assoc_A)'any;
+    a := (bb -> R25.related_to_a.Assoc_A)'any;
+    a := (cc -> R25.Assoc_A)'any;
+    a := (cc -> R25.related_to_a.Assoc_A)'any;
+
+    b := (aa -> R25.Assoc_B)'any;
+    b := (aa -> R25.related_to_b.Assoc_B)'any;
+    b := (cc -> R25.Assoc_B)'any;
+    b := (cc -> R25.related_to_b.Assoc_B)'any;
+
+    c := (aa -> R25.Assoc_C)'any;
+    c := (aa -> R25.related_to_b.Assoc_C)'any;
+    c := (bb -> R25.Assoc_C)'any;
+    c := (bb -> R25.related_to_a.Assoc_C)'any;
+
+    c := (a  with b  -> R25);
+    c := (a  with b  -> R25.related_to_b);
+    c := (a  with b  -> R25.related_to_b.Assoc_C);
+
+    c := (a  with bb -> R25)'any;
+    c := (a  with bb -> R25.related_to_b)'any;
+    c := (a  with bb -> R25.related_to_b.Assoc_C)'any;
+    
+    c := (aa with b  -> R25)'any;
+    c := (aa with b  -> R25.related_to_b)'any;
+    c := (aa with b  -> R25.related_to_b.Assoc_C)'any;
+
+    c := (aa with bb -> R25)'any;
+    c := (aa with bb -> R25.related_to_b)'any;
+    c := (aa with bb -> R25.related_to_b.Assoc_C)'any;
+
+
+    c := (b  with a  -> R25);
+    c := (b  with a  -> R25.related_to_a);
+    c := (b  with a  -> R25.related_to_a.Assoc_C);
+
+    c := (b  with aa -> R25)'any;
+    c := (b  with aa -> R25.related_to_a)'any;
+    c := (b  with aa -> R25.related_to_a.Assoc_C)'any;
+    
+    c := (bb with a  -> R25)'any;
+    c := (bb with a  -> R25.related_to_a)'any;
+    c := (bb with a  -> R25.related_to_a.Assoc_C)'any;
+
+    c := (bb with aa -> R25)'any;
+    c := (bb with aa -> R25.related_to_a)'any;
+    c := (bb with aa -> R25.related_to_a.Assoc_C)'any;
+
+    // A <<-C->> B (same role phrase)
+
+    a := (b  -> R26.Assoc_A)'any;
+    a := (b  -> R26.related_to_x.Assoc_A)'any;
+	a := (c  -> R26.Assoc_A);
+	a := (c  -> R26.related_to_x.Assoc_A);
+
+    b := (a  -> R26.Assoc_B)'any;
+    b := (a  -> R26.related_to_x.Assoc_B)'any;
+	b := (c  -> R26.Assoc_B);
+	b := (c  -> R26.related_to_x.Assoc_B);
+
+    c := (a  -> R26.Assoc_C)'any;
+    c := (a  -> R26.related_to_x.Assoc_C)'any;
+    c := (b  -> R26.Assoc_C)'any;
+    c := (b  -> R26.related_to_x.Assoc_C)'any;
+
+    a := (bb -> R26.Assoc_A)'any;
+    a := (bb -> R26.related_to_x.Assoc_A)'any;
+    a := (cc -> R26.Assoc_A)'any;
+    a := (cc -> R26.related_to_x.Assoc_A)'any;
+
+    b := (aa -> R26.Assoc_B)'any;
+    b := (aa -> R26.related_to_x.Assoc_B)'any;
+    b := (cc -> R26.Assoc_B)'any;
+    b := (cc -> R26.related_to_x.Assoc_B)'any;
+
+    c := (aa -> R26.Assoc_C)'any;
+    c := (aa -> R26.related_to_x.Assoc_C)'any;
+    c := (bb -> R26.Assoc_C)'any;
+    c := (bb -> R26.related_to_x.Assoc_C)'any;
+
+    c := (a  with b  -> R26);
+    c := (a  with b  -> R26.related_to_x);
+    c := (a  with b  -> R26.related_to_x.Assoc_C);
+
+    c := (a  with bb -> R26)'any;
+    c := (a  with bb -> R26.related_to_x)'any;
+    c := (a  with bb -> R26.related_to_x.Assoc_C)'any;
+    
+    c := (aa with b  -> R26)'any;
+    c := (aa with b  -> R26.related_to_x)'any;
+    c := (aa with b  -> R26.related_to_x.Assoc_C)'any;
+
+    c := (aa with bb -> R26)'any;
+    c := (aa with bb -> R26.related_to_x)'any;
+    c := (aa with bb -> R26.related_to_x.Assoc_C)'any;
+
+
+    c := (b  with a  -> R26);
+    c := (b  with a  -> R26.related_to_x);
+    c := (b  with a  -> R26.related_to_x.Assoc_C);
+
+    c := (b  with aa -> R26)'any;
+    c := (b  with aa -> R26.related_to_x)'any;
+    c := (b  with aa -> R26.related_to_x.Assoc_C)'any;
+    
+    c := (bb with a  -> R26)'any;
+    c := (bb with a  -> R26.related_to_x)'any;
+    c := (bb with a  -> R26.related_to_x.Assoc_C)'any;
+
+    c := (bb with aa -> R26)'any;
+    c := (bb with aa -> R26.related_to_x)'any;
+    c := (bb with aa -> R26.related_to_x.Assoc_C)'any;
+
+end service;

@@ -1,0 +1,132 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("6dcc9d74-1431-49d6-9e29-6c2c1090ac63",
+	"00000000-0000-0000-0000-000000000000",
+	"bfd9c7ea-82e5-4547-8798-71b9a1ca6cb0",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("5f4514c2-7d6d-4b9c-b925-d40ba5c246d3",
+	112,
+	"6dcc9d74-1431-49d6-9e29-6c2c1090ac63",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'webchat::library::user::functions');
+INSERT INTO DIM_DIA
+	VALUES ("5f4514c2-7d6d-4b9c-b925-d40ba5c246d3",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("e4ad115e-1daf-4de6-9e26-d3d5cd540366",
+	"00000000-0000-0000-0000-000000000000",
+	'handle_message',
+	'',
+	'select any user from instances of user;
+if ( not_empty user )
+  if ( param.name != user.name )
+    LOG::LogInfo( message:param.name + ": " + param.message );
+  end if;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("f86d6536-d5cc-41d9-a621-973e495f8e1d",
+	"e4ad115e-1daf-4de6-9e26-d3d5cd540366",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("b38854fa-a8dc-43b7-b1af-b8639f071da8",
+	"e4ad115e-1daf-4de6-9e26-d3d5cd540366",
+	'message',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"f86d6536-d5cc-41d9-a621-973e495f8e1d",
+	'');
+INSERT INTO PE_PE
+	VALUES ("e4ad115e-1daf-4de6-9e26-d3d5cd540366",
+	1,
+	"6dcc9d74-1431-49d6-9e29-6c2c1090ac63",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("0d2a4024-7956-4084-a344-f3392a8798d1",
+	"00000000-0000-0000-0000-000000000000",
+	'help',
+	'',
+	'LOG::LogInfo( message:"Available commands:" );
+LOG::LogInfo( message:"  /users                 display active users" );
+LOG::LogInfo( message:"  /exit                  exit the application" );
+LOG::LogInfo( message:"  /help                  display help" );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("0d2a4024-7956-4084-a344-f3392a8798d1",
+	1,
+	"6dcc9d74-1431-49d6-9e29-6c2c1090ac63",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("5cf30b6a-7830-48aa-8599-283beb16a487",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'create object instance user of user;
+generate user4:start() to user;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("5cf30b6a-7830-48aa-8599-283beb16a487",
+	1,
+	"6dcc9d74-1431-49d6-9e29-6c2c1090ac63",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("6dcc9d74-1431-49d6-9e29-6c2c1090ac63",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"58bb6a8d-be59-4ad9-bda1-2f9bf66572d4",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("58bb6a8d-be59-4ad9-bda1-2f9bf66572d4",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'user',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../user.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("bfd9c7ea-82e5-4547-8798-71b9a1ca6cb0",
+	'webchat',
+	1,
+	'../../../webchat.xtuml');

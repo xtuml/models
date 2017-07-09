@@ -1,0 +1,13 @@
+public service Issue9646::test() is 
+  d : instance of Dog;
+  p : instance of Person;
+  ds : set of instance of Dog;
+  ps : set of instance of Person;
+begin
+  ps := find Person ( dob <= timestamp'now() ); 
+  ps := find Person ( sex = sex.Male );
+
+  p := d->R1(dob <= timestamp'now());
+  p := d->R1(sex = sex.Male);
+
+end service;

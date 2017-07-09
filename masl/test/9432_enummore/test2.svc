@@ -1,0 +1,24 @@
+public service Colouring::test2() is 
+  rainbows : sequence of RainbowColour;
+  primaries : sequence of PrimaryColour;
+
+  shapes : sequence of Shapes::Shape;
+  quads : sequence of Shapes::Quadrilateral;
+begin
+
+  rainbows := Colouring::RainbowColour.red;    // Explicit domain and type scope. No ambiguity.
+  rainbows := RainbowColour.red;               // Explicit Type scope. No ambiguity.
+  rainbows := Colouring::red;                  // Explicit domain scope. Ambiguity resolved by examining the assigned to type.
+  rainbows := red;                             // No scope. Ambiguity resolved by examining the assigned to type.
+
+  primaries := Colouring::PrimaryColour.red;   // Explicit domain and type scope. No ambiguity.
+  primaries := PrimaryColour.red;              // Explicit Type scope. No ambiguity.
+  primaries := Colouring::red;                 // Explicit domain scope. Ambiguity resolved by examining the assigned to type.
+  primaries := red;                            // No scope. Ambiguity resolved by examining the assigned to type.
+
+  shapes := Shapes::Shape.square;              // Explicit domain and type scope. No ambiguity.
+  shapes := Shapes::square;                    // Explicit domain scope. Ambiguity resolved by examining the assigned to type.
+
+  quads  := Shapes::Quadrilateral.square;      // Explicit domain and type scope. No ambiguity.
+  quads  := Shapes::square;                    // Explicit domain scope. Ambiguity resolved by examining the assigned to type.
+end service;

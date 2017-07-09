@@ -1,0 +1,193 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	"bfd9c7ea-82e5-4547-8798-71b9a1ca6cb0",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("17b2aef1-9622-4f7a-af06-d7d626ce2382",
+	112,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	200,
+	150,
+	0,
+	'',
+	'webchat::library::chat::functions');
+INSERT INTO DIM_DIA
+	VALUES ("17b2aef1-9622-4f7a-af06-d7d626ce2382",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("6220e4ed-6153-4162-bdc0-95944467e7d2",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("6220e4ed-6153-4162-bdc0-95944467e7d2",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("4ebd5f17-8c22-4f06-861d-517f5e19be2e",
+	"00000000-0000-0000-0000-000000000000",
+	'join',
+	'',
+	'select any user from instances of user where ( selected.name == param.name );
+if ( empty user )
+  create object instance user of user;
+  user.name = param.name;
+  return "";
+else
+  return "Screen name taken.";
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("00c37444-4b94-4a5e-953f-391c7fbbbb83",
+	"4ebd5f17-8c22-4f06-861d-517f5e19be2e",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("4ebd5f17-8c22-4f06-861d-517f5e19be2e",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("fbb6283f-503b-4bfa-b0f2-dfce2ca7dd4b",
+	"00000000-0000-0000-0000-000000000000",
+	'get_users',
+	'',
+	'user_names = "";
+select many users from instances of user;
+separator = "";
+for each user in users
+  user_names = user_names + separator + user.name;
+  separator = ", ";
+end for;
+return user_names;',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("fbb6283f-503b-4bfa-b0f2-dfce2ca7dd4b",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("c7270e69-54c1-4555-9a56-c0bcf7afc707",
+	"00000000-0000-0000-0000-000000000000",
+	'send_message',
+	'',
+	'select any user from instances of user where ( selected.name == param.name );
+if ( not_empty user )
+  send MSG::display_message( name:user.name, message:param.message );
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("a14639fd-bf09-4597-b58e-ca0d7725d9d8",
+	"c7270e69-54c1-4555-9a56-c0bcf7afc707",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("3cd68da2-10ba-49e2-902f-e71ada7701af",
+	"c7270e69-54c1-4555-9a56-c0bcf7afc707",
+	'message',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"a14639fd-bf09-4597-b58e-ca0d7725d9d8",
+	'');
+INSERT INTO PE_PE
+	VALUES ("c7270e69-54c1-4555-9a56-c0bcf7afc707",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("17f91528-727a-48bb-b34f-15e486e2676c",
+	"00000000-0000-0000-0000-000000000000",
+	'leave',
+	'',
+	'select any user from instances of user where ( selected.name == param.name );
+if ( not_empty user )
+  delete object instance user;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("b4069542-2f28-4aee-97a8-a7db139f4336",
+	"17f91528-727a-48bb-b34f-15e486e2676c",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("17f91528-727a-48bb-b34f-15e486e2676c",
+	1,
+	"a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("a3dc1aa5-5ad0-400e-b369-c0a52abf15ba",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"c9716fb4-2e89-4ef7-a3c4-3eb840daca04",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("c9716fb4-2e89-4ef7-a3c4-3eb840daca04",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'chat',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../chat.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("bfd9c7ea-82e5-4547-8798-71b9a1ca6cb0",
+	'webchat',
+	1,
+	'../../../webchat.xtuml');
