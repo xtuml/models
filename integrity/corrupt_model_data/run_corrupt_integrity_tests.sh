@@ -1,5 +1,8 @@
 #/bin/bash
 BPHOME=~/xtuml/BridgePoint
+
+echo "integrity tests beginning"
+
 # First run the clean model data.
 $BPHOME/tools/mc/bin/xtumlmc_build xtuml_integrity -i MWO_clean.xtuml > MWO_clean.actual
 diff -q MWO_clean.expected MWO_clean.actual || echo "failed"
@@ -39,3 +42,5 @@ $BPHOME/tools/mc/bin/xtumlmc_build xtuml_integrity -i NullSubtypeReferential.xtu
 diff -q NullSubtypeReferential.expected NullSubtypeReferential.actual || echo "failed"
 $BPHOME/tools/mc/bin/xtumlmc_build xtuml_integrity -i TwoInstancesWithDuplicateIdentifiers.xtuml > TwoInstancesWithDuplicateIdentifiers.actual
 diff -q TwoInstancesWithDuplicateIdentifiers.expected TwoInstancesWithDuplicateIdentifiers.actual || echo "failed"
+
+echo "integrity tests done"
