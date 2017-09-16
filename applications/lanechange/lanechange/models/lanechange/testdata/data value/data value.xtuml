@@ -17,6 +17,9 @@ INSERT INTO O_TFR
 	'create object instance value of datavalue;
 value.number = param.number;
 value.value = param.value;
+if ( DATA::is_turbulence_enabled() )
+  value.value = RAND::scew( input:value.value, tolerance:1 );  // scew data up to 0.001%
+end if;
 
 if ( 1 == value.number )
   select any point from instances of datapoint where ( selected.file_name == param.file_name and selected.number == param.point_number );

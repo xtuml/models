@@ -17,6 +17,8 @@ extern	"C"	{
 
 #include "lanechange_sys_types.h"
 void DATA_read( c_t[ESCHER_SYS_MAX_STRING_LEN] );
+void DATA_enable_turbulence( void );
+bool DATA_is_turbulence_enabled( void );
 
 #define MAX_FILE_LEN 1000000    // 1 MB
 
