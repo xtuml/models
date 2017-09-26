@@ -86,7 +86,7 @@ UserPostOoaInitializationCalloutf( int argc, char ** argv )
   {
     int c;
     opterr = 0;
-    while ( ( c = getopt ( argc, argv, "a::g::l::" ) ) != -1 ) {
+    while ( ( c = getopt ( argc, argv, "a::g::l::t" ) ) != -1 ) {
       switch ( c ) {
         case 'a':
           if ( optarg )
@@ -99,6 +99,9 @@ UserPostOoaInitializationCalloutf( int argc, char ** argv )
         case 'l':
           if ( optarg )
             strcpy( lidar_file, optarg );
+          break;
+        case 't':
+          DATA_enable_turbulence();
           break;
         case '?':
           fprintf( stderr, "Unknown option character '%c'.\n", optopt );
