@@ -25,6 +25,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+bool DATA_turbulence_enabled = false;
+
 //#define DEBUG
 #ifdef DEBUG
 void debug_print( const char * format, ... ) {
@@ -36,6 +38,26 @@ void debug_print( const char * format, ... ) {
 #else
 void debug_print( const char * format, ... ) {}
 #endif
+
+/*
+ * Bridge:  enable_turbulence
+ */
+void
+DATA_enable_turbulence()
+{
+  DATA_turbulence_enabled = true;
+}
+
+
+/*
+ * Bridge:  is_turbulence_enabled
+ */
+bool
+DATA_is_turbulence_enabled()
+{
+  return DATA_turbulence_enabled;
+}
+
 
 /*
  * Bridge:  read

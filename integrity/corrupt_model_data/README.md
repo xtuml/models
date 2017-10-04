@@ -25,3 +25,6 @@ these models are hand-edited versions of the clean `MWO_clean.xtuml` file,
 which is simply an export of MicrowaveOven.  So to update the model data,
 diff `MWO_clean.xtuml` with each of the corrupt models and make the same
 set of changes to a new version.
+
+`update_expected_results.sh` is a simple script to help vimdiff the
+actual and expected when updating the tests.
