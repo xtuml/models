@@ -90,7 +90,7 @@ INSERT INTO GD_GE
 	"7d7ccc23-22bd-4b70-b503-2da50c8635ed",
 	105,
 	0,
-	'PRU::testbench_capnometer::PRU::lib::capnometer::capnoif');
+	'PRU::testbench_capnometer::PRU::lib::capnometer::::capnoif');
 INSERT INTO GD_CON
 	VALUES ("d646de1e-8bf0-4467-a72a-64b3cbf949a1",
 	"00000000-0000-0000-0000-000000000000");
@@ -198,7 +198,7 @@ INSERT INTO GD_GE
 	"bbbf8710-1e80-4fdc-86d5-271cf72465e0",
 	106,
 	0,
-	'PRU::testbench_capnometer::PRU::lib::capnometer_tb::capnoif');
+	'PRU::testbench_capnometer::PRU::lib::capnometer_tb::Port1::capnoif');
 INSERT INTO GD_CON
 	VALUES ("e5888c72-2cf0-47a6-a53f-85e239008f7c",
 	"00000000-0000-0000-0000-000000000000");
@@ -308,10 +308,15 @@ INSERT INTO CL_IC
 	'',
 	'PRU::lib::capnometer',
 	'');
+INSERT INTO CL_POR
+	VALUES ("bdc0e84c-0311-4810-9344-147f392493c8",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"a657d874-b25d-4e1c-b30c-096495eb1118");
 INSERT INTO CL_IIR
 	VALUES ("7d7ccc23-22bd-4b70-b503-2da50c8635ed",
 	"deeec260-0d58-49fd-9e3f-737c5e16a7a3",
-	"bdc0e84c-0311-4810-9344-147f392493c8",
+	"a657d874-b25d-4e1c-b30c-096495eb1118",
 	"00000000-0000-0000-0000-000000000000",
 	'capnoif',
 	'');
@@ -354,10 +359,15 @@ INSERT INTO CL_IC
 	'',
 	'PRU::lib::capnometer_tb',
 	'');
+INSERT INTO CL_POR
+	VALUES ("2878430f-9b49-432f-9c1a-b0366c5636fd",
+	"11ce6a96-3da0-4909-8266-563697a2460c",
+	'Port1',
+	"a32cf292-6240-4b1d-8ff2-7c448829a468");
 INSERT INTO CL_IIR
 	VALUES ("bbbf8710-1e80-4fdc-86d5-271cf72465e0",
 	"635eeda4-01c0-461f-839d-fcf401d7ea17",
-	"2878430f-9b49-432f-9c1a-b0366c5636fd",
+	"a32cf292-6240-4b1d-8ff2-7c448829a468",
 	"00000000-0000-0000-0000-000000000000",
 	'capnoif',
 	'');
@@ -371,6 +381,13 @@ INSERT INTO C_IR_PROXY
 	"ce07300f-148d-4d9e-8d35-e84f4df3e1e8",
 	"00000000-0000-0000-0000-000000000000",
 	"11ce6a96-3da0-4909-8266-563697a2460c",
+	'../lib/capnometer_tb/capnometer_tb.xtuml');
+INSERT INTO C_PO_PROXY
+	VALUES ("11ce6a96-3da0-4909-8266-563697a2460c",
+	"c55d7eb3-09f5-4d24-90ee-e3fbafe6e79a",
+	'Port1',
+	0,
+	0,
 	'../lib/capnometer_tb/capnometer_tb.xtuml');
 INSERT INTO PE_PE
 	VALUES ("2878430f-9b49-432f-9c1a-b0366c5636fd",
@@ -394,7 +411,7 @@ INSERT INTO C_SF
 	"635eeda4-01c0-461f-839d-fcf401d7ea17",
 	"deeec260-0d58-49fd-9e3f-737c5e16a7a3",
 	'',
-	'capnometer::Port1::capnoif -o)- capnometer_tb::Port1::capnoif');
+	'capnometer::monitor::capnoif -o)- capnometer_tb::Port1::capnoif');
 INSERT INTO PE_PE
 	VALUES ("d1f4ee2c-b4f0-45c9-8e4e-3417da37a4f7",
 	1,
@@ -413,7 +430,7 @@ INSERT INTO C_P_PROXY
 	'capnoif',
 	'Unnamed Interface',
 	'',
-	'capnometer::Port1::capnoif',
+	'capnometer::monitor::capnoif',
 	'../lib/capnometer/capnometer.xtuml');
 INSERT INTO PE_PE
 	VALUES ("5e0b8197-af54-44b2-8ed5-c9267b94b68f",

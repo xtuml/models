@@ -24,7 +24,7 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'4.1.12',
+	'4.1.17',
 	'PRU::testbench_PUI');
 INSERT INTO GD_GE
 	VALUES ("d44759eb-ee63-442e-ab35-1fc7c5b2ef8a",
@@ -100,7 +100,7 @@ INSERT INTO GD_GE
 	"b504fea7-0887-4f0a-9e9f-328e8bcce4ba",
 	105,
 	0,
-	'PRU::testbench_PUI::PRU::lib::PUI::UIbus');
+	'PRU::testbench_PUI::PRU::lib::PUI::monitor::UIbus');
 INSERT INTO GD_CON
 	VALUES ("39ad8311-f699-46c8-ac19-8ecd96f78786",
 	"00000000-0000-0000-0000-000000000000");
@@ -208,7 +208,7 @@ INSERT INTO GD_GE
 	"a1a56549-bc31-4acc-8680-058f01c7edf3",
 	106,
 	0,
-	'PRU::testbench_PUI::PRU::lib::PUI_tb::UIbus');
+	'PRU::testbench_PUI::PRU::lib::PUI_tb::Port1::UIbus');
 INSERT INTO GD_CON
 	VALUES ("4608bfa5-d603-4cea-8e6a-70d4db79f94a",
 	"00000000-0000-0000-0000-000000000000");
@@ -308,7 +308,7 @@ INSERT INTO GD_GE
 	"b5c87d41-9c89-4a8d-b58e-c4a218982b4f",
 	105,
 	0,
-	'PRU::testbench_PUI::PRU::lib::PUI::UIbus');
+	'PRU::testbench_PUI::PRU::lib::PUI::infusion::UIbus');
 INSERT INTO GD_CON
 	VALUES ("eea32f0a-4ffa-4aad-a615-2b8553011fca",
 	"00000000-0000-0000-0000-000000000000");
@@ -416,7 +416,7 @@ INSERT INTO GD_GE
 	"90277e7e-bbdf-4422-87b1-b0ed7afc8ed6",
 	106,
 	0,
-	'PRU::testbench_PUI::PRU::lib::PUI_tb::UIbus');
+	'PRU::testbench_PUI::PRU::lib::PUI_tb::Port2::UIbus');
 INSERT INTO GD_CON
 	VALUES ("8a86da7e-d8e1-4d57-bb12-ecddbad1237a",
 	"00000000-0000-0000-0000-000000000000");
@@ -526,10 +526,15 @@ INSERT INTO CL_IC
 	'',
 	'PRU::lib::PUI',
 	'');
+INSERT INTO CL_POR
+	VALUES ("4dd427a3-e540-4d34-8c90-5bf867bd7edf",
+	"5189160b-6a96-42f9-870c-6c1d252e272d",
+	'monitor',
+	"64ab4989-2787-4e19-9029-7351eb9142d5");
 INSERT INTO CL_IIR
 	VALUES ("b504fea7-0887-4f0a-9e9f-328e8bcce4ba",
 	"e83bbb8f-0b82-4c1f-8fa9-850ba4546801",
-	"4dd427a3-e540-4d34-8c90-5bf867bd7edf",
+	"64ab4989-2787-4e19-9029-7351eb9142d5",
 	"00000000-0000-0000-0000-000000000000",
 	'UIbus',
 	'');
@@ -546,10 +551,22 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"5189160b-6a96-42f9-870c-6c1d252e272d",
 	'../lib/PUI/PUI.xtuml');
+INSERT INTO C_PO_PROXY
+	VALUES ("5189160b-6a96-42f9-870c-6c1d252e272d",
+	"3f0e9d50-3163-45e4-8247-65db1baf9c8b",
+	'monitor',
+	0,
+	0,
+	'../lib/PUI/PUI.xtuml');
+INSERT INTO CL_POR
+	VALUES ("4dd427a3-e540-4d34-8c90-5bf867bd7edf",
+	"23bd0ecd-0bb9-4092-81be-4d68bfdac7f5",
+	'infusion',
+	"0232b29a-7ab4-400b-a0e0-ddb6464fc89c");
 INSERT INTO CL_IIR
 	VALUES ("b5c87d41-9c89-4a8d-b58e-c4a218982b4f",
 	"b0390662-9c2d-44c8-a4ee-21ea8c9366e9",
-	"4dd427a3-e540-4d34-8c90-5bf867bd7edf",
+	"0232b29a-7ab4-400b-a0e0-ddb6464fc89c",
 	"00000000-0000-0000-0000-000000000000",
 	'UIbus',
 	'');
@@ -565,6 +582,13 @@ INSERT INTO C_IR_PROXY
 	"589c7162-b450-4fdd-b6bb-ea9cad4a19f3",
 	"00000000-0000-0000-0000-000000000000",
 	"23bd0ecd-0bb9-4092-81be-4d68bfdac7f5",
+	'../lib/PUI/PUI.xtuml');
+INSERT INTO C_PO_PROXY
+	VALUES ("23bd0ecd-0bb9-4092-81be-4d68bfdac7f5",
+	"3f0e9d50-3163-45e4-8247-65db1baf9c8b",
+	'infusion',
+	0,
+	0,
 	'../lib/PUI/PUI.xtuml');
 INSERT INTO PE_PE
 	VALUES ("4dd427a3-e540-4d34-8c90-5bf867bd7edf",
@@ -592,10 +616,15 @@ INSERT INTO CL_IC
 	'',
 	'PRU::lib::PUI_tb',
 	'');
+INSERT INTO CL_POR
+	VALUES ("1343b91d-fb3b-4f6c-985e-f985de9e2cd6",
+	"1258d0e1-1a23-4215-bd6d-dd6579cf2977",
+	'Port1',
+	"7396a7ea-f0a9-4d8e-b61c-d31f066215da");
 INSERT INTO CL_IIR
 	VALUES ("a1a56549-bc31-4acc-8680-058f01c7edf3",
 	"85f6945d-ffbe-4693-bbb0-9441c5a791d3",
-	"1343b91d-fb3b-4f6c-985e-f985de9e2cd6",
+	"7396a7ea-f0a9-4d8e-b61c-d31f066215da",
 	"00000000-0000-0000-0000-000000000000",
 	'UIbus',
 	'');
@@ -610,10 +639,22 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"1258d0e1-1a23-4215-bd6d-dd6579cf2977",
 	'../lib/PUI_tb/PUI_tb.xtuml');
+INSERT INTO C_PO_PROXY
+	VALUES ("1258d0e1-1a23-4215-bd6d-dd6579cf2977",
+	"8f13b540-1d1b-4380-841e-b1e5fc80e7ea",
+	'Port1',
+	0,
+	0,
+	'../lib/PUI_tb/PUI_tb.xtuml');
+INSERT INTO CL_POR
+	VALUES ("1343b91d-fb3b-4f6c-985e-f985de9e2cd6",
+	"b4cde604-f48b-4f91-a396-343d3386d266",
+	'Port2',
+	"a5de6ea4-35dd-4b6d-82a4-92a7924c6f59");
 INSERT INTO CL_IIR
 	VALUES ("90277e7e-bbdf-4422-87b1-b0ed7afc8ed6",
 	"be996f53-b907-4bd7-8b37-2395721cbe1c",
-	"1343b91d-fb3b-4f6c-985e-f985de9e2cd6",
+	"a5de6ea4-35dd-4b6d-82a4-92a7924c6f59",
 	"00000000-0000-0000-0000-000000000000",
 	'UIbus',
 	'');
@@ -627,6 +668,13 @@ INSERT INTO C_IR_PROXY
 	"589c7162-b450-4fdd-b6bb-ea9cad4a19f3",
 	"00000000-0000-0000-0000-000000000000",
 	"b4cde604-f48b-4f91-a396-343d3386d266",
+	'../lib/PUI_tb/PUI_tb.xtuml');
+INSERT INTO C_PO_PROXY
+	VALUES ("b4cde604-f48b-4f91-a396-343d3386d266",
+	"8f13b540-1d1b-4380-841e-b1e5fc80e7ea",
+	'Port2',
+	0,
+	0,
 	'../lib/PUI_tb/PUI_tb.xtuml');
 INSERT INTO PE_PE
 	VALUES ("1343b91d-fb3b-4f6c-985e-f985de9e2cd6",
