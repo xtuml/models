@@ -90,7 +90,7 @@ INSERT INTO GD_GE
 	"4ea1dbf3-2317-4d5e-9fc5-43c19532e59d",
 	105,
 	0,
-	'BMU::testbench_ECG::BMU::lib::ECG::ECGif');
+	'BMU::testbench_ECG::BMU::lib::ECG::::ECGif');
 INSERT INTO GD_CON
 	VALUES ("7804e4ff-4216-4c35-bd6c-948ca11faa6b",
 	"00000000-0000-0000-0000-000000000000");
@@ -198,7 +198,7 @@ INSERT INTO GD_GE
 	"917ce655-2981-4eb0-8db1-9dba97bc2361",
 	106,
 	0,
-	'BMU::testbench_ECG::BMU::lib::ECG_tb::ECGif');
+	'BMU::testbench_ECG::BMU::lib::ECG_tb::Port1::ECGif');
 INSERT INTO GD_CON
 	VALUES ("cf5e8dc0-2a4a-4dc4-a348-72bf56ccd0bd",
 	"00000000-0000-0000-0000-000000000000");
@@ -308,10 +308,15 @@ INSERT INTO CL_IC
 	'',
 	'BMU::lib::ECG',
 	'');
+INSERT INTO CL_POR
+	VALUES ("8348b171-6b97-4894-8fa0-678fe32003b6",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"fff4a5b5-1590-45e6-aa8d-0d06108fc551");
 INSERT INTO CL_IIR
 	VALUES ("4ea1dbf3-2317-4d5e-9fc5-43c19532e59d",
 	"e5b03b4c-feaa-43cb-ab21-fa5d6eb887ca",
-	"8348b171-6b97-4894-8fa0-678fe32003b6",
+	"fff4a5b5-1590-45e6-aa8d-0d06108fc551",
 	"00000000-0000-0000-0000-000000000000",
 	'ECGif',
 	'');
@@ -354,10 +359,15 @@ INSERT INTO CL_IC
 	'',
 	'BMU::lib::ECG_tb',
 	'');
+INSERT INTO CL_POR
+	VALUES ("d1aa18cd-a3a3-48bd-b7ae-39f31e8bd13d",
+	"58ad4498-b788-4d18-b5d6-3911ef216a40",
+	'Port1',
+	"1d9ff446-941e-43c1-af93-b73190003f6d");
 INSERT INTO CL_IIR
 	VALUES ("917ce655-2981-4eb0-8db1-9dba97bc2361",
 	"04615a88-edac-413b-bd61-bb447a7634f6",
-	"d1aa18cd-a3a3-48bd-b7ae-39f31e8bd13d",
+	"1d9ff446-941e-43c1-af93-b73190003f6d",
 	"00000000-0000-0000-0000-000000000000",
 	'ECGif',
 	'');
@@ -371,6 +381,13 @@ INSERT INTO C_IR_PROXY
 	"c661cbfb-cd8d-4bc3-a8a9-aa6a24796715",
 	"00000000-0000-0000-0000-000000000000",
 	"58ad4498-b788-4d18-b5d6-3911ef216a40",
+	'../lib/ECG_tb/ECG_tb.xtuml');
+INSERT INTO C_PO_PROXY
+	VALUES ("58ad4498-b788-4d18-b5d6-3911ef216a40",
+	"7983a9d8-e4c0-4d97-bf6f-a0721573f231",
+	'Port1',
+	0,
+	0,
 	'../lib/ECG_tb/ECG_tb.xtuml');
 INSERT INTO PE_PE
 	VALUES ("d1aa18cd-a3a3-48bd-b7ae-39f31e8bd13d",
@@ -394,7 +411,7 @@ INSERT INTO C_SF
 	"04615a88-edac-413b-bd61-bb447a7634f6",
 	"e5b03b4c-feaa-43cb-ab21-fa5d6eb887ca",
 	'',
-	'ECG::Port1::ECGif -o)- ECG_tb::Port1::ECGif');
+	'ECG::monitor::ECGif -o)- ECG_tb::Port1::ECGif');
 INSERT INTO PE_PE
 	VALUES ("4d1d8ab9-891e-41c8-8c3b-1a05c1fb0cf6",
 	1,
@@ -413,7 +430,7 @@ INSERT INTO C_P_PROXY
 	'ECGif',
 	'Unnamed Interface',
 	'',
-	'ECG::Port1::ECGif',
+	'ECG::monitor::ECGif',
 	'../lib/ECG/ECG.xtuml');
 INSERT INTO PE_PE
 	VALUES ("e0e3e04e-1535-424e-a323-95d8db172baf",
