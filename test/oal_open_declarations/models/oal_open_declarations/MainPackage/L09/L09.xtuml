@@ -1,0 +1,63 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("d806e2e1-2ead-4aee-9b7d-6a40c7c1231d",
+	'L09',
+	4,
+	'L09',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("8065c254-860e-4428-a78b-f53434eab637",
+	"d806e2e1-2ead-4aee-9b7d-6a40c7c1231d",
+	'L09',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// first few lines are reserved for variable definitions
+transient = 0;
+create object instance testClass of testClass;
+create object instance testClass2 of testClass;
+create event instance testEvent of testClass1 to testClass;
+
+
+// start tests here
+// transient LH
+transient = 1;
+// transient RH
+x = transient;
+// select outside of where
+select one tmp related by testClass->testClass[R1.''''] where (selected.attr == 1);
+// select inside of where
+select any tmp from instances of testClass where (selected.attr == transient);
+// create statement
+create object instance testClass2 of testClass;
+// relate statement
+relate testClass to testClass2 across R1.''other'';',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0);
+INSERT INTO O_ID
+	VALUES (0,
+	"d806e2e1-2ead-4aee-9b7d-6a40c7c1231d");
+INSERT INTO O_ID
+	VALUES (1,
+	"d806e2e1-2ead-4aee-9b7d-6a40c7c1231d");
+INSERT INTO O_ID
+	VALUES (2,
+	"d806e2e1-2ead-4aee-9b7d-6a40c7c1231d");
+INSERT INTO PE_PE
+	VALUES ("d806e2e1-2ead-4aee-9b7d-6a40c7c1231d",
+	1,
+	"3ec5bad9-495a-4663-afb1-5dadebb8cff6",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("3ec5bad9-495a-4663-afb1-5dadebb8cff6",
+	"3c2e6d15-7c21-4146-97b3-f248b4b90e4f",
+	"3c2e6d15-7c21-4146-97b3-f248b4b90e4f",
+	'MainPackage',
+	'',
+	0,
+	'../MainPackage.xtuml');
