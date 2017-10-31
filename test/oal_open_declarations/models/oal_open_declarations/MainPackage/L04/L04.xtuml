@@ -190,8 +190,27 @@ INSERT INTO SPR_PO
 	VALUES ("0da29181-8917-4d0b-8a1e-6fa9f9ddc3f0",
 	'L04',
 	'',
-	'',
-	3,
+	'// first few lines are reserved for variable definitions
+transient = 0;
+create object instance testClass of testClass;
+create object instance testClass2 of testClass;
+create event instance testEvent of testClass1 to testClass;
+
+
+// start tests here
+// transient LH
+transient = 1;
+// transient RH
+x = transient;
+// select outside of where
+select one tmp related by testClass->testClass[R1.''''] where (selected.testAttribute == 1);
+// select inside of where
+select any tmp from instances of testClass where (selected.testAttribute == transient);
+// create statement
+create object instance testClass2 of testClass;
+// relate statement
+relate testClass to testClass2 across R1.''other'';',
+	1,
 	0);
 INSERT INTO C_EP_PROXY
 	VALUES ("87391663-9d5f-4948-8e11-69da92a88b7b",

@@ -1327,7 +1327,7 @@ INSERT INTO GD_GE
 	"91c56c9f-d4a9-4ec4-9672-c10055c0cdbd",
 	94,
 	0,
-	'oal_open_declarations::MainPackage::TestComponent::testInterface::testInterface');
+	'oal_open_declarations::MainPackage::TestComponent::testPort::testInterface');
 INSERT INTO GD_CON
 	VALUES ("7211433c-b206-4dbc-8bc6-729663b7de1d",
 	"00000000-0000-0000-0000-000000000000");
@@ -1638,9 +1638,9 @@ transient = 1;
 // transient RH
 x = transient;
 // select outside of where
-select one tmp related by testClass->testClass[R1.''''] where (selected.attr == 1);
+select one tmp related by testClass->testClass[R1.''''] where (selected.testAttribute == 1);
 // select inside of where
-select any tmp from instances of testClass where (selected.attr == transient);
+select any tmp from instances of testClass where (selected.testAttribute == transient);
 // create statement
 create object instance testClass2 of testClass;
 // relate statement
@@ -1698,9 +1698,9 @@ transient = 1;
 // transient RH
 x = transient;
 // select outside of where
-select one tmp related by testClass->testClass[R1.''''] where (selected.attr == 1);
+select one tmp related by testClass->testClass[R1.''''] where (selected.testAttribute == 1);
 // select inside of where
-select any tmp from instances of testClass where (selected.attr == transient);
+select any tmp from instances of testClass where (selected.testAttribute == transient);
 // create statement
 create object instance testClass2 of testClass;
 // relate statement
@@ -1720,9 +1720,28 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'testFunction',
 	'',
-	'',
+	'// first few lines are reserved for variable definitions
+transient = 0;
+create object instance testClass of testClass;
+create object instance testClass2 of testClass;
+create event instance testEvent of testClass1 to testClass;
+
+
+// start tests here
+// transient LH
+transient = 1;
+// transient RH
+x = transient;
+// select outside of where
+select one tmp related by testClass->testClass[R1.''''] where (selected.testAttribute == 1);
+// select inside of where
+select any tmp from instances of testClass where (selected.testAttribute == transient);
+// create statement
+create object instance testClass2 of testClass;
+// relate statement
+relate testClass to testClass2 across R1.''other'';',
 	"ba5eda7a-def5-0000-0000-000000000000",
-	3,
+	1,
 	'',
 	0);
 INSERT INTO S_SPARM
