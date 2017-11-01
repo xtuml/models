@@ -90,7 +90,7 @@ INSERT INTO GD_GE
 	"fb6d0872-4a12-4e0f-83ff-9b25800e0170",
 	105,
 	0,
-	'BMU::testbench_ARM::BMU::lib::ARM::ARMif');
+	'BMU::testbench_ARM::BMU::lib::ARM::::ARMif');
 INSERT INTO GD_CON
 	VALUES ("3e2f5078-4baf-40c3-951c-971b721f5f67",
 	"00000000-0000-0000-0000-000000000000");
@@ -198,7 +198,7 @@ INSERT INTO GD_GE
 	"62edeafa-d510-464e-83d3-24a1117f072b",
 	106,
 	0,
-	'BMU::testbench_ARM::BMU::lib::ARM_tb::ARMif');
+	'BMU::testbench_ARM::BMU::lib::ARM_tb::Port1::ARMif');
 INSERT INTO GD_CON
 	VALUES ("70590f3d-10b1-4e2d-825b-9d7c53f5d534",
 	"00000000-0000-0000-0000-000000000000");
@@ -308,10 +308,15 @@ INSERT INTO CL_IC
 	'',
 	'BMU::lib::ARM',
 	'');
+INSERT INTO CL_POR
+	VALUES ("aa473e15-45f5-4c67-af2e-bc6b377c83a9",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"133916fe-acb4-4770-a79e-612e88fdae12");
 INSERT INTO CL_IIR
 	VALUES ("fb6d0872-4a12-4e0f-83ff-9b25800e0170",
 	"42a6a39a-b87b-4d3c-b5a2-5bcc60fc659e",
-	"aa473e15-45f5-4c67-af2e-bc6b377c83a9",
+	"133916fe-acb4-4770-a79e-612e88fdae12",
 	"00000000-0000-0000-0000-000000000000",
 	'ARMif',
 	'');
@@ -354,10 +359,15 @@ INSERT INTO CL_IC
 	'',
 	'BMU::lib::ARM_tb',
 	'');
+INSERT INTO CL_POR
+	VALUES ("faf1d56f-a15b-4bf3-9484-7cab751cda8d",
+	"e52b893d-ac84-44b8-a7e3-ce226166d77f",
+	'Port1',
+	"9ff00d12-16df-41f1-a321-dd43b5f8bb4e");
 INSERT INTO CL_IIR
 	VALUES ("62edeafa-d510-464e-83d3-24a1117f072b",
 	"d81fbea8-4f5a-4f0d-964d-8409c6d4d834",
-	"faf1d56f-a15b-4bf3-9484-7cab751cda8d",
+	"9ff00d12-16df-41f1-a321-dd43b5f8bb4e",
 	"00000000-0000-0000-0000-000000000000",
 	'ARMif',
 	'');
@@ -371,6 +381,13 @@ INSERT INTO C_IR_PROXY
 	"f32e4ded-76cd-4d61-9609-a5c00f2dce58",
 	"00000000-0000-0000-0000-000000000000",
 	"e52b893d-ac84-44b8-a7e3-ce226166d77f",
+	'../lib/ARM_tb/ARM_tb.xtuml');
+INSERT INTO C_PO_PROXY
+	VALUES ("e52b893d-ac84-44b8-a7e3-ce226166d77f",
+	"3f7dc6a7-3b3b-452e-807c-ddedf594bfcb",
+	'Port1',
+	0,
+	0,
 	'../lib/ARM_tb/ARM_tb.xtuml');
 INSERT INTO PE_PE
 	VALUES ("faf1d56f-a15b-4bf3-9484-7cab751cda8d",
@@ -394,7 +411,7 @@ INSERT INTO C_SF
 	"d81fbea8-4f5a-4f0d-964d-8409c6d4d834",
 	"42a6a39a-b87b-4d3c-b5a2-5bcc60fc659e",
 	'',
-	'ARM::Port1::ARMif -o)- ARM_tb::Port1::ARMif');
+	'ARM::monitor::ARMif -o)- ARM_tb::Port1::ARMif');
 INSERT INTO PE_PE
 	VALUES ("0f93f4d4-6dba-4bf0-b0a7-010b4708dd62",
 	1,
@@ -413,7 +430,7 @@ INSERT INTO C_P_PROXY
 	'ARMif',
 	'Unnamed Interface',
 	'',
-	'ARM::Port1::ARMif',
+	'ARM::monitor::ARMif',
 	'../lib/ARM/ARM.xtuml');
 INSERT INTO PE_PE
 	VALUES ("28251627-6e18-44bf-b325-d99a51901d85",
