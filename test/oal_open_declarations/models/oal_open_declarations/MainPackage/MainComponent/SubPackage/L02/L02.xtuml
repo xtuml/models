@@ -197,7 +197,7 @@ INSERT INTO SPR_RO
 // This block is just reproduced from the matrix to aide the reader.
 //
 // Type(T)
-//01. T01E01 variable
+//01. T01 E01 variable
 //02. Class Key letters  
 //03. Functions    
 //04. External Entities Key letters  
@@ -216,7 +216,11 @@ T01E01 = 0;
 T01E04 = 1;
 select any T01E13 from instances of T01E13;
 create object instance T01E05 of T01E05_test;
+create object instance T01E06 of T01E06;
+create object instance T01E06Other of T01E06;
 create object instance T13E01_class of T13E01;
+create object instance T01E07 of T01E07;
+select any testClass from instances of testClass;
 
 
 // start tests here
@@ -241,28 +245,31 @@ x = T13E01_class.T13E01;
 select any T01E03 from Instances of T02E03;
 // T01 E04. Select From Instances Where Clause  - T01, T02, T03, T04, T05, T07, T08, T09, T10, T11, T13
 select any tmp from instances of testClass where (selected.testAttribute == T01E04);
-select any tmp from instances of testClass where (selected.keyLett == T02E04);
-select any tmp from instances of testClass where (selected.testAttribute == ::T03E04);
-select any tmp from instances of testClass where (selected.testAttribute == T04E04);
-select any tmp from instances of testClass where (selected.testAttribute == T05E04);
-select any tmp from instances of testClass where (selected.testAttribute == T07E04);
-select any tmp from instances of testClass where (selected.testAttribute == T08E04);
-select any tmp from instances of testClass where (selected.testAttribute == T09E04);
-select any tmp from instances of testClass where (selected.testAttribute == T10E04);
-select any tmp from instances of testClass where (selected.testAttribute == T11E04);
-select any tmp from instances of testClass where (selected.testAttribute == T13E04);
+select any tmp from instances of testClass where (selected.testAttribute == T02E04::testInt());
+select any tmp from instances of testClass where (selected.testAttribute == ::T03E04());
+select any tmp from instances of testClass where (selected.testAttribute == T04E04::testBridge());
+select any tmp from instances of testClass where (selected.testAttribute == T05E04::testOperation());
+select any tmp from instances of testClass where (selected.testAttribute == testClass.T07E04());
+select any tmp from instances of testClass where (selected.testAttribute == testEE::T08E04());
+select any tmp from instances of testClass where (selected.testAttribute == Port2::T09E04());
+// signals have no return, test invalid
+// select any tmp from instances of testClass where (selected.testAttribute == T10E04);
+select any tmp from instances of testClass where (selected.testAttribute == param.T11E04);
+select any tmp from instances of testClass where (selected.testAttribute == testClass.testAttribute);
 // T01 E05. Create Instance  - T01, T02
 create object instance T01E05 of T01E05_test;
+create object instance T02_create of T02E05;
 // T01 E06. Select Related  - T01, T02, T12
-relate T01E03 to T01E032 across R1.''other'';
+select one T01E06 related by T01E06Other->T01E06[R2.''other''];
+select one T02E06 related by T01E06Other->T02E06[R3];
 // T01 E07. Select Related Where Clause  - T01, T02, T03, T04, T05, T07, T08, T09, T10, T11, T13
-select one tmp related by T01E03->testClass[R1.''''] where (selected.testAttribute == 1);
+select one tmp related by T01E07->testClass[R4] where (selected.testAttribute == 1);
 // T01 E08. Create No Variable  - T02
 create object instance of testClass;
 // T01 E09. Create Event Statement  - T01, T02, T04, T06
-create event instance testEvent of testClass1 to T01E03;
+//create event instance testEvent of testClass1 to T01E03;
 // T01 E10. Operation Invocation  - T02, T07
-T01E10::T07E10(testParameter: 0);
+//T01E10::T07E10(testParameter: 0);
 TODO = 1; 
 // T01 E11. Operation Parameter Value  - T01, T02, T03, T04, T05, T07, T08, T09, T10, T11, T13
 TODO = 1; 
