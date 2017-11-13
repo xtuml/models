@@ -1,43 +1,15 @@
--- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
 
-INSERT INTO EP_PKG
-	VALUES ("1b4ec34b-0a78-4bc0-8b9a-b5f75c9c07ca",
-	"00000000-0000-0000-0000-000000000000",
-	"3c2e6d15-7c21-4146-97b3-f248b4b90e4f",
-	'L08',
+INSERT INTO O_OBJ
+	VALUES ("c3315971-f9d8-489a-97b1-c713c8516a1b",
+	'L07',
+	1,
+	'L07',
 	'',
-	0);
-INSERT INTO GD_MD
-	VALUES ("c02af493-dc9e-466b-9072-00c54dc52513",
-	112,
-	"1b4ec34b-0a78-4bc0-8b9a-b5f75c9c07ca",
-	108,
-	0,
-	0,
-	1,
-	1,
-	1,
-	12,
-	1,
-	0,
-	0,
-	0,
-	0,
-	0,
-	'',
-	'oal_open_declarations::MainPackage::MainComponent::L08');
-INSERT INTO DIM_DIA
-	VALUES ("c02af493-dc9e-466b-9072-00c54dc52513",
-	'',
-	1.000000,
-	0.000000,
-	0.000000,
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO S_SYNC
-	VALUES ("3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	"00000000-0000-0000-0000-000000000000",
-	'L08',
-	'',
+INSERT INTO O_DBATTR
+	VALUES ("ed14a409-993a-4b6f-9797-9ad2b1ed4e58",
+	"c3315971-f9d8-489a-97b1-c713c8516a1b",
 	'// This same OAL block is reproduced for every possoble Location(L) (Action body home)
 // called out in the test matrix.
 
@@ -117,7 +89,6 @@ select any T01E25 from instances of assr;
 T01E26 = 1;
 T01E27 = 1;
 T01E28 = 1;
-T01E29 = 1;
 T01E30 = 1;
 select any class1 from instances of class1;
 select any t06 from instances of T06class;
@@ -175,8 +146,6 @@ if ( T01E26 == 1 ) x = 2;
 elif ( T01E27 == 1 ) x = 3; end if;
 // T01 E28
 while ( T01E28 == 1 ) x = 4; end while;
-// T01 E29
-return T01E29;
 // T01 E30
 new_array[T01E30] = 1;
 
@@ -220,8 +189,6 @@ if ( T02E26::intOp() == 1 ) x = 2;
 elif ( T02E27::intOp() == 1 ) x = 3; end if;
 // T02 E28
 while ( T02E28::intOp() == 1 ) x = 4; end while;
-// T02 E29
-return T02E29::intOp();
 // T02 E30
 new_array[T02E30::intOp()] = 1;
 
@@ -253,8 +220,6 @@ if ( ::T03E26() == 1 ) x = 2;
 elif ( ::T03E27() == 1 ) x = 3; end if;
 // T03 E28
 while ( ::T03E28() == 1 ) x = 4; end while;
-// T03 E29
-return ::T03E29();
 // T03 E30
 new_array[::T03E30()] = 1;
 
@@ -286,8 +251,6 @@ if ( T04E26::intOp() == 1 ) x = 2;
 elif ( T04E27::intOp() == 1 ) x = 3; end if;
 // T04 E28
 while ( T04E28::intOp() == 1 ) x = 4; end while;
-// T04 E29
-return T04E29::intOp();
 // T04 E30
 new_array[T04E30::intOp()] = 1;
 
@@ -321,8 +284,6 @@ if ( T05E26::intOp() == 1 ) x = 2;
 elif ( T05E27::intOp() == 1 ) x = 3; end if;
 // T05 E28
 while ( T05E28::intOp() == 1 ) x = 4; end while;
-// T05 E29
-return T05E29::intOp();
 // T05 E30
 new_array[T05E30::intOp()] = 1;
 
@@ -361,8 +322,6 @@ if ( T07class::T07E26() == 1 ) x = 2;
 elif ( T07class::T07E27() == 1 ) x = 3; end if;
 // T07 E28
 while ( T07class::T07E28() == 1 ) x = 4; end while;
-// T07 E29
-return T07class::T07E29();
 // T07 E30
 new_array[T07class::T07E30()] = 1;
 
@@ -394,8 +353,6 @@ if ( T08EE::T08E26() == 1 ) x = 2;
 elif ( T08EE::T08E27() == 1 ) x = 3; end if;
 // T08 E28
 while ( T08EE::T08E28() == 1 ) x = 4; end while;
-// T08 E29
-return T08EE::T08E29();
 // T08 E30
 new_array[T08EE::T08E30()] = 1;
 
@@ -427,8 +384,6 @@ if ( T09T10Port::T09E26() == 1 ) x = 2;
 elif ( T09T10Port::T09E27() == 1 ) x = 3; end if;
 // T09 E28
 while ( T09T10Port::T09E28() == 1 ) x = 4; end while;
-// T09 E29
-return T09T10Port::T09E29();
 // T09 E30
 new_array[T09T10Port::T09E30()] = 1;
 
@@ -436,39 +391,6 @@ new_array[T09T10Port::T09E30()] = 1;
 
 // T10 E20
 T09T10Port::T10E20();
-
-// T11 tests start here
-
-// T11 E01
-param.T11E01 = 1;
-// T11 E02
-x = param.T11E02;
-// T11 E04
-select any foo from instances of testClass where ( param.T11E04 == 1 );
-// T11 E07
-select one foo4 related by class1->class2[R3] where ( param.T11E07 == 1 );
-// T11 E11
-testClass.testOperation( testParameter:param.T11E11 );
-// T11 E13
-generate testClassEventWithParameters1:evt( parameter:param.T11E13 ) to testClassWithParameters;
-// T11 E15
-x = ::testFunc( parameter:param.T11E15 );
-// T11 E17
-testEE::op( parameter:param.T11E17 );
-// T11 E19
-Port2::op_with_param( parameter:param.T11E19 );
-// T11 E21
-Port2::sig_with_param( parameter:param.T11E21 );
-// T11 E26
-if ( param.T11E26 == 1 ) x = 2;
-// T11 E27
-elif ( param.T11E27 == 1 ) x = 3; end if;
-// T11 E28
-while ( param.T11E28 == 1 ) x = 4; end while;
-// T11 E29
-return param.T11E29;
-// T11 E30
-new_array[param.T11E30] = 1;
 
 // T12 tests start here
 
@@ -519,175 +441,47 @@ if ( t13class.T13E26 == 1 ) x = 2;
 elif ( t13class.T13E27 == 1 ) x = 3; end if;
 // T13 E28
 while ( t13class.T13E28 == 1 ) x = 4; end while;
-// T13 E29
-return t13class.T13E29;
 // T13 E30
 new_array[t13class.T13E30] = 1;
-',
-	"ba5eda7a-def5-0000-0000-000000000002",
+
+self.L07 = 1;',
 	1,
-	'',
 	0);
-INSERT INTO S_SPARM
-	VALUES ("1dfc1359-f201-4af9-b7e7-d8be53764994",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E01',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	1,
-	'',
+INSERT INTO O_BATTR
+	VALUES ("ed14a409-993a-4b6f-9797-9ad2b1ed4e58",
+	"c3315971-f9d8-489a-97b1-c713c8516a1b");
+INSERT INTO O_ATTR
+	VALUES ("ed14a409-993a-4b6f-9797-9ad2b1ed4e58",
+	"c3315971-f9d8-489a-97b1-c713c8516a1b",
 	"00000000-0000-0000-0000-000000000000",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("cae0b763-9abf-46dc-a283-cab25a8eb93e",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E02',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
+	'L07',
 	'',
-	"1dfc1359-f201-4af9-b7e7-d8be53764994",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("5556eac3-55a5-478d-88a9-7ff962b6cad2",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E04',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
 	'',
-	"cae0b763-9abf-46dc-a283-cab25a8eb93e",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("46da9be8-c584-4992-b241-87e1e5d0f48b",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E07',
-	"ba5eda7a-def5-0000-0000-000000000002",
+	'L07',
 	0,
-	'',
-	"5556eac3-55a5-478d-88a9-7ff962b6cad2",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("c3a0d39a-179a-490c-a12b-7dfbbb6364c6",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E11',
 	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
 	'',
-	"46da9be8-c584-4992-b241-87e1e5d0f48b",
 	'');
-INSERT INTO S_SPARM
-	VALUES ("c9d18645-fdd0-4aa1-94e9-f169a153b8b6",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E13',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"c3a0d39a-179a-490c-a12b-7dfbbb6364c6",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("84a9186c-cf66-4b68-9f96-08ade26c1d4a",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E15',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"c9d18645-fdd0-4aa1-94e9-f169a153b8b6",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("adbf24ad-45d5-46d4-843a-4d37ba2b0492",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E17',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"84a9186c-cf66-4b68-9f96-08ade26c1d4a",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("21e9bb40-b672-4c7e-bbea-31280fdcd6db",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E19',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"adbf24ad-45d5-46d4-843a-4d37ba2b0492",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("2751b8fa-1ad5-41bd-8da7-cc449133f0f6",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E21',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"21e9bb40-b672-4c7e-bbea-31280fdcd6db",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("6ca1c3f3-04c7-48a9-ad26-7eeaec6d010a",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E26',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"2751b8fa-1ad5-41bd-8da7-cc449133f0f6",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("4c3e529e-6b03-442f-b22a-84661c7921ce",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E27',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"6ca1c3f3-04c7-48a9-ad26-7eeaec6d010a",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("21206f00-6d3e-4d41-9d12-9e3eaf5484ad",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E28',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"4c3e529e-6b03-442f-b22a-84661c7921ce",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("f9b5deae-cd15-42c2-874b-b5cbe16ac3d1",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E29',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"21206f00-6d3e-4d41-9d12-9e3eaf5484ad",
-	'');
-INSERT INTO S_SPARM
-	VALUES ("ffeabb9e-dd08-4b85-af9e-e98adfdfa8e8",
-	"3ac75acc-1d53-419a-be83-0e51ed2c4a03",
-	'T11E30',
-	"ba5eda7a-def5-0000-0000-000000000002",
-	0,
-	'',
-	"f9b5deae-cd15-42c2-874b-b5cbe16ac3d1",
-	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"c3315971-f9d8-489a-97b1-c713c8516a1b");
+INSERT INTO O_ID
+	VALUES (1,
+	"c3315971-f9d8-489a-97b1-c713c8516a1b");
+INSERT INTO O_ID
+	VALUES (2,
+	"c3315971-f9d8-489a-97b1-c713c8516a1b");
 INSERT INTO PE_PE
-	VALUES ("3ac75acc-1d53-419a-be83-0e51ed2c4a03",
+	VALUES ("c3315971-f9d8-489a-97b1-c713c8516a1b",
 	1,
-	"1b4ec34b-0a78-4bc0-8b9a-b5f75c9c07ca",
+	"7aeeaf79-86d1-485e-913d-22720e201503",
 	"00000000-0000-0000-0000-000000000000",
-	1);
-INSERT INTO PE_PE
-	VALUES ("1b4ec34b-0a78-4bc0-8b9a-b5f75c9c07ca",
-	1,
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("7aeeaf79-86d1-485e-913d-22720e201503",
 	"00000000-0000-0000-0000-000000000000",
-	"a41ec029-790e-44e4-b9b2-b349a0b576b7",
-	7);
-INSERT INTO C_C_PROXY
-	VALUES ("a41ec029-790e-44e4-b9b2-b349a0b576b7",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	'MainComponent',
+	"3c2e6d15-7c21-4146-97b3-f248b4b90e4f",
+	'L07',
 	'',
 	0,
-	"00000000-0000-0000-0000-000000000000",
-	0,
-	'',
-	'../MainComponent.xtuml');
-INSERT INTO S_SYS_PROXY
-	VALUES ("3c2e6d15-7c21-4146-97b3-f248b4b90e4f",
-	'oal_open_declarations',
-	1,
-	'../../../oal_open_declarations.xtuml');
+	'../L07.xtuml');
