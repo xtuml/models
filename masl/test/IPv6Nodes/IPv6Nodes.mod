@@ -23,9 +23,13 @@ domain IPv6Nodes is
   object UnicastAddress;
   object UnicastPrefixBasedMulticastAddress;
   
+  public type IPv6Address;
   public type IPv6Address is integer;   
+  public type IPv4Address;
   public type IPv4Address is integer;   
+  public type EUI64Identifier;
   public type EUI64Identifier is sequence of integer;   
+  public type EUI48Identifier;
   public type EUI48Identifier is sequence of integer;   
   
   

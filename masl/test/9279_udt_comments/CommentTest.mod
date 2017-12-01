@@ -1,5 +1,6 @@
 domain CommentTest is
 
+  private type commentedStruct;
   //! A MASL struct whose members have comments
   private type commentedStruct is structure
     //! member number one is an integer
@@ -8,6 +9,7 @@ domain CommentTest is
     mem2: boolean;
   end structure; 
 
+  public type Colour;
   //! A MASL enum whose elements have comments
   public type Colour is enum ( 
     //! element number one is red

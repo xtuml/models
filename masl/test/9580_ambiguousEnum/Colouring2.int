@@ -1,5 +1,7 @@
 domain Colouring2 is
+  public type PrimaryColour;
   public type PrimaryColour is enum (red, green, blue);
+  public type RainbowColour;
   public type RainbowColour is enum (red, orange, yellow, green, blue, indigo, violet);
 
   public service primarySvc ( c : in PrimaryColour );
