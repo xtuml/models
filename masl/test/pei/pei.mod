@@ -26,6 +26,7 @@ domain pei is
   object marriage;
   object person;
   object report_line;
+  private type arbitrary_id;
   //! data type comment
   private type arbitrary_id is integer
   ;
