@@ -9,9 +9,9 @@ domain MissingCommentRecursiveStruct is
   end structure;
 
   public type InnerContainer;
+  public type Container;
   public type InnerContainer is string;
 
-  public type Container;
   //! A container
   public type Container is structure
    child : InnerContainer;
