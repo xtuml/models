@@ -1,0 +1,329 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	'type',
+	1,
+	'type',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("a4011e91-7092-4543-827f-63d39858c05b",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	'populate',
+	'',
+	"4ccb7ab0-a7a7-4015-877b-16c737e02512",
+	0,
+	'create object instance t of type;
+t.name = param.name;
+t.body = param.body;
+t.rendered = false;
+t.declared_forward = false;
+t.lcount = typeminer::referreds( body:t.body, labels:t.labels );
+return t;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("50e11cf6-e102-4a6b-b5fb-908aeea6772c",
+	"a4011e91-7092-4543-827f-63d39858c05b",
+	'name',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("6a64ed42-5d10-4738-a537-131a680fec73",
+	"a4011e91-7092-4543-827f-63d39858c05b",
+	'body',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"50e11cf6-e102-4a6b-b5fb-908aeea6772c",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("4ccb7ab0-a7a7-4015-877b-16c737e02512",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<type>',
+	'',
+	'',
+	'../types.xtuml');
+INSERT INTO O_TFR
+	VALUES ("cb4fe2cb-eb44-4d3d-a853-16de8c05a119",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	'render',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'// Render my string, mark myself as rendered and resolve my references.
+s = "name:" + self.name + " body:" + self.body;
+self.rendered = true;
+select many references related by self->reference[R1.''is referenced by''];
+for each reference in references
+  reference.resolved = true;
+end for;
+return s;',
+	1,
+	'',
+	"2fc40712-0c96-4fb3-890c-ae297e0aecd8",
+	0);
+INSERT INTO O_TFR
+	VALUES ("2fc40712-0c96-4fb3-890c-ae297e0aecd8",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	'populate_references',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'i = self.lcount;
+while ( i > 0 )
+  i = i - 1;
+  // Since type name is a key, there may be only one type to match a given label.
+  select any referred_type from instances of type where ( selected.name == self.labels[ i ] );
+  if ( not_empty referred_type )
+    r = reference::populate( parent:self, child:referred_type );
+  end if;
+end while;',
+	1,
+	'',
+	"a4011e91-7092-4543-827f-63d39858c05b",
+	0);
+INSERT INTO O_TFR
+	VALUES ("745d3530-e5d2-4e81-aff3-8871ece37946",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	'render_leaves',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'select many types from instances of type where ( not selected.rendered );
+count = cardinality types;
+prev_count = count + 1;
+while ( count < prev_count )
+  prev_count = count;
+  for each type in types
+    select any reference related by type->reference[R1.''refers to''] where ( not selected.resolved );
+    if ( empty reference )
+      LOG::LogInfo( message:type.render() );
+    end if;
+  end for;
+  select many types from instances of type where ( not selected.rendered );
+  count = cardinality types;
+end while;
+return count;
+',
+	1,
+	'',
+	"62547a73-be4f-4f12-95ad-437e54667ebd",
+	0);
+INSERT INTO O_TFR
+	VALUES ("4b1c9cb8-92a7-4f70-b4da-203a0ea3019e",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	'render_all',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// Provide forward declarations for self-referential types.
+select many references from instances of reference where ( selected.parent_name == selected.child_name );
+for each reference in references
+  select one type related by reference->type[R1.''refers to''];
+  LOG::LogInfo( message:type.render_forward() );
+end for;
+
+// Render leaf types (those not referenced by others).
+guard = label::max;
+while ( 0 < type::render_leaves() )
+  select any type from instances of type where ( not selected.rendered );
+  if ( not_empty type )
+    LOG::LogInfo( message:type.render_forward() );
+  else
+    LOG::LogFailure( message:"did not find cyclic unresolved type" );
+  end if;
+  LOG::LogInfo( message:"found cycle" );
+  guard = guard - 1;
+  if ( 0 == guard )
+    LOG::LogFailure( message:"did not break cycles" );
+    break;
+  end if;
+end while;
+
+// Break cycles greater than one.
+LOG::LogInfo( message:"done" );',
+	1,
+	'',
+	"745d3530-e5d2-4e81-aff3-8871ece37946",
+	0);
+INSERT INTO O_TFR
+	VALUES ("62547a73-be4f-4f12-95ad-437e54667ebd",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	'render_forward',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'// Render a forward declaration and mark myself so.
+s = "public type " + self.name;
+self.declared_forward = true;
+select many references related by self->reference[R1.''is referenced by''];
+for each reference in references
+  reference.resolved = true;
+end for;
+return s;',
+	1,
+	'',
+	"cb4fe2cb-eb44-4d3d-a853-16de8c05a119",
+	0);
+INSERT INTO O_NBATTR
+	VALUES ("3c73a340-39e1-4c01-99fe-7e9b0f351cb8",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_BATTR
+	VALUES ("3c73a340-39e1-4c01-99fe-7e9b0f351cb8",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_ATTR
+	VALUES ("3c73a340-39e1-4c01-99fe-7e9b0f351cb8",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	"00000000-0000-0000-0000-000000000000",
+	'name',
+	'',
+	'',
+	'name',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("5ebc3487-acd3-45c4-9a9b-a8e6a2b12c13",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_BATTR
+	VALUES ("5ebc3487-acd3-45c4-9a9b-a8e6a2b12c13",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_ATTR
+	VALUES ("5ebc3487-acd3-45c4-9a9b-a8e6a2b12c13",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	"a97ab5ad-2a4b-496b-86df-529aadcec13f",
+	'rendered',
+	'',
+	'',
+	'rendered',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("7ceba2b7-ecf2-4791-9f54-530c486a9fdc",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_BATTR
+	VALUES ("7ceba2b7-ecf2-4791-9f54-530c486a9fdc",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_ATTR
+	VALUES ("7ceba2b7-ecf2-4791-9f54-530c486a9fdc",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	"3c73a340-39e1-4c01-99fe-7e9b0f351cb8",
+	'body',
+	'',
+	'',
+	'body',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("afe42f88-a622-49a7-8d29-931e888c96c4",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_BATTR
+	VALUES ("afe42f88-a622-49a7-8d29-931e888c96c4",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO S_DIM
+	VALUES (1024,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	"afe42f88-a622-49a7-8d29-931e888c96c4",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"c1f5566e-16ef-4a0f-838d-f3fbfcdfcfd8",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("afe42f88-a622-49a7-8d29-931e888c96c4",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	"7ceba2b7-ecf2-4791-9f54-530c486a9fdc",
+	'labels',
+	'',
+	'',
+	'labels',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'[label::max]',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("a97ab5ad-2a4b-496b-86df-529aadcec13f",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_BATTR
+	VALUES ("a97ab5ad-2a4b-496b-86df-529aadcec13f",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_ATTR
+	VALUES ("a97ab5ad-2a4b-496b-86df-529aadcec13f",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	"afe42f88-a622-49a7-8d29-931e888c96c4",
+	'lcount',
+	'',
+	'',
+	'lcount',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("5250aaa7-4abf-4960-807a-77bf55a7b57b",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_BATTR
+	VALUES ("5250aaa7-4abf-4960-807a-77bf55a7b57b",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_ATTR
+	VALUES ("5250aaa7-4abf-4960-807a-77bf55a7b57b",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	"5ebc3487-acd3-45c4-9a9b-a8e6a2b12c13",
+	'declared_forward',
+	'',
+	'',
+	'declared_forward',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_OIDA
+	VALUES ("3c73a340-39e1-4c01-99fe-7e9b0f351cb8",
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	0,
+	'name');
+INSERT INTO O_ID
+	VALUES (1,
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO O_ID
+	VALUES (2,
+	"a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa");
+INSERT INTO PE_PE
+	VALUES ("a8ad8523-58ce-43e5-9e23-f9dbbdc0f5fa",
+	1,
+	"a2b35c99-8f0e-4b1c-8482-ee756a63fae0",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a2b35c99-8f0e-4b1c-8482-ee756a63fae0",
+	"00000000-0000-0000-0000-000000000000",
+	"b3019107-6a72-49c4-b2e2-da4b004e4b13",
+	'types',
+	'',
+	0,
+	'../types.xtuml');
