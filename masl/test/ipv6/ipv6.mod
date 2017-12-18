@@ -14,6 +14,7 @@ domain ipv6 is
   object SiteLocalAddress;
   object UniqueLocalAddress;
   object Zone;
+  private type IPv6Address;
   private type IPv6Address is string
   ;
   relationship R1 is Node unconditionally communicates_via many Interface,
