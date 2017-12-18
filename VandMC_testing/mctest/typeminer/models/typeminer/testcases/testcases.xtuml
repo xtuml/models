@@ -1,0 +1,565 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("712ed779-bba4-4325-8a03-fc0025883aac",
+	"ebe47878-6822-4cda-beba-e79a8ba40bda",
+	"ebe47878-6822-4cda-beba-e79a8ba40bda",
+	'testcases',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("679935e4-3a86-4321-ab4d-33a3412714b9",
+	112,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	200,
+	150,
+	0,
+	'',
+	'typeminer::testcases');
+INSERT INTO DIM_DIA
+	VALUES ("679935e4-3a86-4321-ab4d-33a3412714b9",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("372b90e1-c171-40f3-a79c-31310aacacc2",
+	"00000000-0000-0000-0000-000000000000",
+	'tc01',
+	'',
+	'/*
+
+TEST 1 - self reference in structure type
+
+type BinaryTreeNode is structure
+  value      : Value;
+  parent     : BinaryTreeNode;
+  leftChild  : BinaryTreeNode;
+  rightChild : BinaryTreeNode;
+end structure;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "BinaryTreeNode";
+test_values.body = "structure\n" +
+                   "  value      : Value;\n" +
+                   "  parent     : BinaryTreeNode;\n" +
+                   "  leftChild  : BinaryTreeNode;\n" +
+                   "  rightChild : BinaryTreeNode;\n" +
+                   "end";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 1 == count and UTIL::contains( set:test_values.labels, value:"BinaryTreeNode" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("372b90e1-c171-40f3-a79c-31310aacacc2",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("6d03ce9e-aacf-4956-b2ec-50d7399db737",
+	"00000000-0000-0000-0000-000000000000",
+	'tc02',
+	'',
+	'/*
+
+TEST 2 - sequence in named type reference
+
+type List is sequence of Node;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "List";
+test_values.body = "sequence of Node";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 1 == count and UTIL::contains( set:test_values.labels, value:"Node" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("6d03ce9e-aacf-4956-b2ec-50d7399db737",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("d19fe6d8-971a-4bfe-bf2c-1a996be77199",
+	"00000000-0000-0000-0000-000000000000",
+	'tc03',
+	'',
+	'/*
+
+TEST 3 - array in named type reference
+
+type Array is array (10) of Node;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "Array";
+test_values.body = "array (10) of Node";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 1 == count and UTIL::contains( set:test_values.labels, value:"Node" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("d19fe6d8-971a-4bfe-bf2c-1a996be77199",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("da575bf2-2854-40c5-8f10-3283f51a1145",
+	"00000000-0000-0000-0000-000000000000",
+	'tc04',
+	'',
+	'/*
+
+TEST 4 - set in named type reference
+
+type Set is set of Node;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "Set";
+test_values.body = "set of Node";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 1 == count and UTIL::contains( set:test_values.labels, value:"Node" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("da575bf2-2854-40c5-8f10-3283f51a1145",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("85f8ef0f-d607-4c46-a48e-a2af5b168d01",
+	"00000000-0000-0000-0000-000000000000",
+	'tc05',
+	'',
+	'/*
+
+TEST 5 - set in named type reference
+
+type Bag is bag of Node;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "Bag";
+test_values.body = "bag of Node";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 1 == count and UTIL::contains( set:test_values.labels, value:"Node" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("85f8ef0f-d607-4c46-a48e-a2af5b168d01",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("17a8e583-3cd9-4c10-926e-b80169240931",
+	"00000000-0000-0000-0000-000000000000",
+	'tc06',
+	'',
+	'/*
+
+TEST 6 - dict key in named type reference
+
+type Dict is dictionary Key of string;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "Dict";
+test_values.body = "dictionary Key of string";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 1 == count and UTIL::contains( set:test_values.labels, value:"Key" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("17a8e583-3cd9-4c10-926e-b80169240931",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ad89d499-0672-43c4-9d1c-acfa05680390",
+	"00000000-0000-0000-0000-000000000000",
+	'tc07',
+	'',
+	'/*
+
+TEST 7 - dict value in named type reference
+
+type Dict is dictionary of Node;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "Dict";
+test_values.body = "dictionary of Node";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 1 == count and UTIL::contains( set:test_values.labels, value:"Node" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("ad89d499-0672-43c4-9d1c-acfa05680390",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("5a92bac9-cfa6-4c46-8471-d70f6d27ecfb",
+	"00000000-0000-0000-0000-000000000000",
+	'tc08',
+	'',
+	'/*
+
+TEST 8 - dict key and value in named type reference
+
+type Dict is dictionary Key of Node;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "Dict";
+test_values.body = "dictionary Key of Node";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 2 == count and UTIL::contains( set:test_values.labels, value:"Key" )
+                  and UTIL::contains( set:test_values.labels, value:"Node" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("5a92bac9-cfa6-4c46-8471-d70f6d27ecfb",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("9f6816ee-4344-4214-9516-e4f1a86ca3d1",
+	"00000000-0000-0000-0000-000000000000",
+	'tc09',
+	'',
+	'/*
+
+TEST 9 - anonymous sequence in named type reference
+
+type AnonSeq is anonymous sequence of Node;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "AnonSeq";
+test_values.body = "anonymous sequence of Node";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 1 == count and UTIL::contains( set:test_values.labels, value:"Node" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("9f6816ee-4344-4214-9516-e4f1a86ca3d1",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ae3f9d1c-3019-4d15-aab8-6a9e5dcf968e",
+	"00000000-0000-0000-0000-000000000000",
+	'tc10',
+	'',
+	'/*
+
+TEST 10 - collection types in structure
+
+type CollectionStruct is structure
+  mem1 : sequence (10) of Node1;
+  mem2 : array (10) of Node2;
+  mem3 : set of Node3;
+  mem4 : bag of Node4;
+  mem5 : dictionary Key1 of integer;
+  mem6 : dictionary of Node5;
+  mem7 : dictionary Key2 of Node6;
+  mem8 : anonymous bag of Node7;
+end structure;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "CollectionStruct";
+test_values.body = "structure\n" +
+                   "  mem1 : sequence (10) of Node1;\n" +
+                   "  mem2 : array (10) of Node2;\n" +
+                   "  mem3 : set of Node3;\n" +
+                   "  mem4 : bag of Node4;\n" +
+                   "  mem5 : dictionary Key1 of integer;\n" +
+                   "  mem6 : dictionary of Node5;\n" +
+                   "  mem7 : dictionary Key2 of Node6;\n" +
+                   "  mem8 : anonymous bag of Node7;\n" +
+                   "end";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 9 == count and UTIL::contains( set:test_values.labels, value:"Node1" )
+                  and UTIL::contains( set:test_values.labels, value:"Node2" )
+                  and UTIL::contains( set:test_values.labels, value:"Node3" )
+                  and UTIL::contains( set:test_values.labels, value:"Node4" )
+                  and UTIL::contains( set:test_values.labels, value:"Node5" )
+                  and UTIL::contains( set:test_values.labels, value:"Node6" )
+                  and UTIL::contains( set:test_values.labels, value:"Node7" )
+                  and UTIL::contains( set:test_values.labels, value:"Key1" )
+                  and UTIL::contains( set:test_values.labels, value:"Key2" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("ae3f9d1c-3019-4d15-aab8-6a9e5dcf968e",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("685924d5-1edd-47df-842b-731625f051bf",
+	"00000000-0000-0000-0000-000000000000",
+	'tc11',
+	'',
+	'/*
+
+TEST 11 - type reference with constraint
+
+type Percent is real range 0..100;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "Percent";
+test_values.body = "MyReal range 0..100";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 1 == count and UTIL::contains( set:test_values.labels, value:"MyReal" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("685924d5-1edd-47df-842b-731625f051bf",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("df87372a-a466-4d9b-963a-a4cb737f05ee",
+	"00000000-0000-0000-0000-000000000000",
+	'tc12',
+	'',
+	'/*
+
+TEST 12 - structure with core types
+
+type CoreTypeStruct is structure
+  mem1 : character;
+  mem2 : string;
+  mem3 : boolean;
+  mem4 : byte;
+  mem5 : integer;
+  mem6 : long_integer;
+  mem7 : real;
+  mem8 : device;
+  mem9 : duration;
+  mem10 : timestamp;
+  mem11 : timer;
+  mem12 : MyType;
+end structure;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "CoreTypeStruct";
+test_values.body = "structure\n" +
+                   "  mem1 : character;\n" +
+                   "  mem2 : string;\n" +
+                   "  mem3 : boolean;\n" +
+                   "  mem4 : byte;\n" +
+                   "  mem5 : integer;\n" +
+                   "  mem6 : long_integer;\n" +
+                   "  mem7 : real;\n" +
+                   "  mem8 : device;\n" +
+                   "  mem9 : duration;\n" +
+                   "  mem10 : timestamp;\n" +
+                   "  mem11 : timer;\n" +
+                   "  mem12 : MyType;\n" +
+                   "end";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 1 == count and UTIL::contains( set:test_values.labels, value:"MyType" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("df87372a-a466-4d9b-963a-a4cb737f05ee",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("712ed779-bba4-4325-8a03-fc0025883aac",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO S_SYS_PROXY
+	VALUES ("ebe47878-6822-4cda-beba-e79a8ba40bda",
+	'typeminer',
+	1,
+	'../typeminer.xtuml');
