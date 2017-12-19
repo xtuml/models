@@ -1,9 +1,8 @@
 %{
 #include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "typeminer_sys_types.h"
 extern int yylex();
+extern int yylex_destroy(void);
 extern int yyparse();
 extern int yylineno;
 extern FILE * yyin;
@@ -18,14 +17,19 @@ void typeminer_add_label( c_t label[ESCHER_SYS_MAX_STRING_LEN] );
 }
 
 %token<sval> IDENTIFIER
-%token ANONYMOUS ARRAY ASSIGN BAG COLON COMMA DELTA DICTIONARY DIGITS END ENUM EQUAL
-%token INSTANCE LPAREN LTGT OF PRAGMA RANGE RPAREN SCOPE SEMI SEQUENCE SET STRUCTURE
+
+%token ANONYMOUS ARRAY ASSIGN BAG COLON COMMA DELTA DICTIONARY DIGITS END ENUM
+%token EQUAL INSTANCE LPAREN LTGT OF PRAGMA RANGE RPAREN SCOPE SEMI SEQUENCE
+%token SET STRUCTURE NULL_TERMINATOR UNRECOGNIZED_TOKEN INTEGER
 
 %type<sval> scopedName
 
-%start typeDefinition
+%start type
 
 %%
+
+type                          : typeDefinition NULL_TERMINATOR
+                              ;
 
 typeDefinition                : structureTypeDefinition
                               | enumerationTypeDefinition
@@ -157,16 +161,16 @@ pragmaValues                  : /* Empty */
                               | constExpression
                               | COMMA constExpression pragmaValues
 
-constExpression               : IDENTIFIER
+constExpression               : INTEGER
                               ;
 
 %%
 
-int typeminer_miner( char * input, int length ) {
+void typeminer_miner( char * input, int length ) {
   yylineno = 1;
   yyin = fmemopen( input, length, "r" );
   do {
     yyparse();
   } while(!feof(yyin));
-  return 0;
+  yylex_destroy();
 }

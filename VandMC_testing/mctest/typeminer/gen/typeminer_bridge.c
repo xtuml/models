@@ -15,9 +15,9 @@
 
 int typeminer_miner( char *, int );
 
-c_t typeminer_labels[1024][ESCHER_SYS_MAX_STRING_LEN];
-i_t typeminer_count;
-
+c_t  typeminer_labels[1024][ESCHER_SYS_MAX_STRING_LEN];
+i_t  typeminer_count;
+bool typeminer_parse_error;
 
 /*
  * Bridge:  referreds
@@ -28,9 +28,13 @@ typeminer_referreds( c_t p_body[ESCHER_SYS_MAX_STRING_LEN], c_t p_labels[1024][E
   // clear globals
   memset( typeminer_labels, 0, 1024 * ESCHER_SYS_MAX_STRING_LEN );
   typeminer_count = 0;
+  typeminer_parse_error = 0;
 
   // run the typeminer
   typeminer_miner( p_body, ESCHER_SYS_MAX_STRING_LEN );
+
+  // if there was a parse error, return -1
+  if ( typeminer_parse_error ) return -1;
 
   // copy the results
   memcpy( p_labels, typeminer_labels, 1024 * ESCHER_SYS_MAX_STRING_LEN );
