@@ -11,6 +11,7 @@ void typeminer_add_label( c_t label[ESCHER_SYS_MAX_STRING_LEN] );
 %}
 
 %locations
+%expect 2
 
 %union {
   char sval[ESCHER_SYS_MAX_STRING_LEN];
@@ -18,9 +19,12 @@ void typeminer_add_label( c_t label[ESCHER_SYS_MAX_STRING_LEN] );
 
 %token<sval> IDENTIFIER
 
-%token ANONYMOUS ARRAY ASSIGN BAG COLON COMMA DELTA DICTIONARY DIGITS END ENUM
-%token EQUAL INSTANCE LPAREN LTGT OF PRAGMA RANGE RPAREN SCOPE SEMI SEQUENCE
-%token SET STRUCTURE NULL_TERMINATOR UNRECOGNIZED_TOKEN INTEGER
+%token ABS AND ANONYMOUS ARRAY ASSIGN BAG CHARACTER COLON COMMA CONCATENATE CONSOLE
+%token DELTA DICTIONARY DIGITS DISUNION DIVIDE DURATION END ENDL ENUM EQUAL T_FALSE
+%token FLUSH GT GTE INSTANCE INTEGER INTERSECTION LPAREN LT LTE LTGT MINUS MOD NOT
+%token NOT_EQUAL NOT_IN T_NULL NULL_TERMINATOR OF OR PLUS POWER PRAGMA RANGE RANGE_DOTS
+%token REAL REM RPAREN SCOPE SEMI SEQUENCE SET STRING STRUCTURE THIS TIMES TIMESTAMP
+%token T_TRUE UNION UNRECOGNIZED_TOKEN XOR
 
 %type<sval> scopedName
 
@@ -56,8 +60,8 @@ structureComponentDefinition  : IDENTIFIER COLON typeReference
                               ;
 
 initializer                   : /* Empty */
-                              | ASSIGN constExpression
-                              | EQUAL constExpression
+                              | ASSIGN expression
+                              | EQUAL expression
                               ;
 
 enumerationTypeDefinition     : ENUM LPAREN
@@ -90,13 +94,13 @@ typeConstraint                : rangeConstraint
                               | digitsConstraint
                               ;
 
-rangeConstraint               : RANGE constExpression
+rangeConstraint               : RANGE expression
                               ;
 
-deltaConstraint               : DELTA constExpression rangeConstraint
+deltaConstraint               : DELTA expression rangeConstraint
                               ;
 
-digitsConstraint              : DIGITS constExpression rangeConstraint
+digitsConstraint              : DIGITS expression rangeConstraint
                               ;
 
 typeReferenceWithCA           : typeReference
@@ -104,8 +108,9 @@ typeReferenceWithCA           : typeReference
                               ;
 
 constrainedArrayTypeRef       : namedTypeRef arrayBounds
+                              ;
 
-arrayBounds                   : LPAREN constExpression RPAREN
+arrayBounds                   : LPAREN expression RPAREN
                               ;
 
 unconstrainedArrayDefinition  : ARRAY LPAREN
@@ -125,8 +130,8 @@ instanceTypeRef               : ANONYMOUS INSTANCE OF scopedName
                               | INSTANCE OF IDENTIFIER
                               ;
 
-collectionTypeRef             : ANONYMOUS SEQUENCE LPAREN constExpression RPAREN OF typeReference
-                              | SEQUENCE LPAREN constExpression RPAREN OF typeReference
+collectionTypeRef             : ANONYMOUS SEQUENCE LPAREN expression RPAREN OF typeReference
+                              | SEQUENCE LPAREN expression RPAREN OF typeReference
                               | ANONYMOUS SEQUENCE OF typeReference
                               | SEQUENCE OF typeReference
                               | ANONYMOUS ARRAY arrayBounds OF typeReference
@@ -158,10 +163,90 @@ pragma                        : PRAGMA IDENTIFIER
                               ;
 
 pragmaValues                  : /* Empty */
-                              | constExpression
-                              | COMMA constExpression pragmaValues
+                              | pragmaValue
+                              | COMMA pragmaValue pragmaValues
+                              ;
 
-constExpression               : INTEGER
+pragmaValue                   : IDENTIFIER
+                              | expression
+                              ;
+
+expression                    : rangeExpression
+                              ;
+
+rangeExpression               : logicalOr
+                              | logicalOr RANGE_DOTS logicalOr
+                              ;
+
+logicalOr                     : logicalXor
+                              | logicalXor OR logicalOr
+                              ;
+
+logicalXor                    : logicalAnd
+                              | logicalAnd XOR logicalXor
+                              ;
+
+logicalAnd                    : equality
+                              | equality AND logicalAnd
+                              ;
+
+equality                      : relationalExp
+                              | relationalExp EQUAL equality
+                              | relationalExp NOT_EQUAL equality
+                              ;
+
+relationalExp                 : additiveExp
+                              | additiveExp LT relationalExp
+                              | additiveExp GT relationalExp
+                              | additiveExp LTE relationalExp
+                              | additiveExp GTE relationalExp
+                              ;
+
+additiveExp                   : multExp 
+                              | multExp PLUS additiveExp
+                              | multExp MINUS additiveExp
+                              | multExp CONCATENATE additiveExp
+                              | multExp UNION additiveExp
+                              | multExp NOT_IN additiveExp
+                              ;
+
+multExp                       : unaryExp 
+                              | unaryExp TIMES multExp
+                              | unaryExp DIVIDE multExp
+                              | unaryExp MOD multExp
+                              | unaryExp POWER multExp
+                              | unaryExp REM multExp
+                              | unaryExp INTERSECTION multExp
+                              | unaryExp DISUNION multExp
+                              ;
+
+unaryExp                      : unaryOperator unaryExp
+                              | literal
+                              | parenthesisedExpression
+                              ;
+
+unaryOperator                 : MINUS
+                              | PLUS
+                              | NOT
+                              | ABS
+                              ;
+
+parenthesisedExpression       : LPAREN expression RPAREN
+                              ;
+
+literal                       : INTEGER
+                              | REAL
+                              | CHARACTER
+                              | STRING
+                              | TIMESTAMP
+                              | DURATION
+                              | T_TRUE
+                              | T_FALSE
+                              | T_NULL
+                              | FLUSH
+                              | ENDL
+                              | THIS
+                              | CONSOLE
                               ;
 
 %%
