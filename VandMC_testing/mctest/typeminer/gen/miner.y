@@ -4,9 +4,13 @@
 #include <stdlib.h>
 extern int yylex();
 extern int yyparse();
+extern int yylineno;
 extern FILE * yyin;
-void yyerror(const char* s);
+void typeminer_add_label( char label[256] );
+void yyerror( const char * s );
 %}
+
+%locations
 
 %union {
   char sval[256];
@@ -16,7 +20,6 @@ void yyerror(const char* s);
 %token ANONYMOUS ARRAY ASSIGN BAG COLON COMMA DELTA DICTIONARY DIGITS END ENUM EQUAL
 %token INSTANCE LPAREN LTGT OF PRAGMA RANGE RPAREN SCOPE SEMI SEQUENCE SET STRUCTURE
 
-%type<sval> namedTypeRef
 %type<sval> scopedName
 
 %start typeDefinition
@@ -67,10 +70,10 @@ enumerator                    : IDENTIFIER initializer
 constrainedTypeDefinition     : namedTypeRef typeConstraint
                               ;
 
-namedTypeRef                  : ANONYMOUS scopedName { strncpy( $$, $2, 256 ); }
-                              | scopedName           { strncpy( $$, $1, 256 ); }
-                              | ANONYMOUS IDENTIFIER { strncpy( $$, $2, 256 ); }
-                              | IDENTIFIER           { strncpy( $$, $1, 256 ); }
+namedTypeRef                  : ANONYMOUS scopedName { typeminer_add_label( $2 ); }
+                              | scopedName           { typeminer_add_label( $1 ); }
+                              | ANONYMOUS IDENTIFIER { typeminer_add_label( $2 ); }
+                              | IDENTIFIER           { typeminer_add_label( $1 ); }
                               ;
 
 scopedName                    : IDENTIFIER SCOPE IDENTIFIER { strncpy( $$, $1, 256 ); strncat( $$, $3, 256-strlen($1)); }
@@ -156,14 +159,17 @@ constExpression               : IDENTIFIER
                               ;
 
 %%
-int miner() {
-  yyin = stdin;
+
+int typeminer_miner( char * input, int length ) {
+  printf( "input: '%s'\n", input );
+  yylineno = 1;
+  yyin = fmemopen( input, length, "r" );
   do {
     yyparse();
   } while(!feof(yyin));
   return 0;
 }
-void yyerror(const char* s) {
-  fprintf(stderr, "Parse error: %s\n", s);
-  exit(1);
+
+void typeminer_add_label( char label[256] ) {
+  printf( "label: %s\n", label );
 }

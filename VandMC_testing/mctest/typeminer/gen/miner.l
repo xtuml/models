@@ -1,4 +1,6 @@
 %option noyywrap
+%option yylineno
+
 %{
 #include <stdio.h>
 #include <string.h>
@@ -39,3 +41,8 @@
 [A-Za-z_][A-Za-z_0-9]* { strncpy( yylval.sval, yytext, 256 ); return IDENTIFIER; }
 
 %%
+
+void yyerror( const char * s ) {
+  fprintf(stderr, "typeminer error: line %d: %s\n", yylineno, s);
+  exit(1);
+}
