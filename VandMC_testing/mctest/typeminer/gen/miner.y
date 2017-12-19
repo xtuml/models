@@ -86,7 +86,8 @@ namedTypeRef                  : ANONYMOUS scopedName { typeminer_add_label( $2 )
                               ;
 
 scopedName                    : IDENTIFIER SCOPE IDENTIFIER { strncpy( $$, $1, ESCHER_SYS_MAX_STRING_LEN );
-                                                              strncat( $$, $3, ESCHER_SYS_MAX_STRING_LEN - strlen( $1 ) ); }
+                                                              strncat( $$, "::", 2 );
+                                                              strncat( $$, $3, ESCHER_SYS_MAX_STRING_LEN - 2 - strlen( $1 ) ); }
                               ;
 
 typeConstraint                : rangeConstraint
