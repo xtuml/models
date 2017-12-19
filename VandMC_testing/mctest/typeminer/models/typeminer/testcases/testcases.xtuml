@@ -553,6 +553,66 @@ INSERT INTO PE_PE
 	"712ed779-bba4-4325-8a03-fc0025883aac",
 	"00000000-0000-0000-0000-000000000000",
 	1);
+INSERT INTO S_SYNC
+	VALUES ("50f85448-769e-4278-bcfe-e9848e0acab5",
+	"00000000-0000-0000-0000-000000000000",
+	'tc13',
+	'',
+	'/*
+
+TEST 13 - structure with scoped type and initial values
+
+type LiteralsStruct is structure
+  mem1 : character := ''a'';
+  mem2 : string := "levi";
+  mem3 : boolean := false;
+  mem4 : integer := 100;
+  mem5 : real := 0.1;
+  mem6 : real := .1;
+  mem7 : real := 197.123;
+  mem8 : duration := @P1DT2H@;
+  mem9 : timestamp := @2004-04-12T13:20:00-05:00@;
+  mem10 : MyDom::MyType;
+end structure;
+
+*/
+
+// set up test
+create object instance test_values of test_values;
+test_values.name = "LiteralStruct";
+test_values.body = "structure\n" +
+                   "  mem1 : character := ''a'';\n" +
+                   "  mem2 : string := " + STRING::quote() + "levi" + STRING::quote() + ";\n" +
+                   "  mem3 : boolean := false;\n" +
+                   "  mem4 : integer := 100;\n" +
+                   "  mem5 : real := 0.1;\n" +
+                   "  mem6 : real := .1;\n" +
+                   "  mem7 : real := 197.123;\n" +
+                   "  mem8 : duration := @P1DT2H@;\n" +
+                   "  mem9 : timestamp := @2004-04-12T13:20:00-05:00@;\n" +
+                   "  mem10 : MyDom::MyType;\n" +
+                   "end";
+i = 0;
+while i < label::max
+  test_values.labels[i] = "";
+  i = i + 1;
+end while;
+
+// invoke the miner
+count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
+
+// check the results
+return 1 == count and UTIL::contains( set:test_values.labels, value:"MyDom::MyType" );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("50f85448-769e-4278-bcfe-e9848e0acab5",
+	1,
+	"712ed779-bba4-4325-8a03-fc0025883aac",
+	"00000000-0000-0000-0000-000000000000",
+	1);
 INSERT INTO PE_PE
 	VALUES ("712ed779-bba4-4325-8a03-fc0025883aac",
 	1,
