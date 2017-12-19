@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #define YY_DECL int yylex()
+#include "typeminer_sys_types.h"
 #include "miner.tab.h"
 %}
 
@@ -38,7 +39,7 @@
 "set"          { return SET; }
 "structure"    { return STRUCTURE; }
 
-[A-Za-z_][A-Za-z_0-9]* { strncpy( yylval.sval, yytext, 256 ); return IDENTIFIER; }
+[A-Za-z_][A-Za-z_0-9]* { strncpy( yylval.sval, yytext, ESCHER_SYS_MAX_STRING_LEN ); return IDENTIFIER; }
 
 %%
 

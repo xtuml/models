@@ -2,18 +2,19 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "typeminer_sys_types.h"
 extern int yylex();
 extern int yyparse();
 extern int yylineno;
 extern FILE * yyin;
-void typeminer_add_label( char label[256] );
 void yyerror( const char * s );
+void typeminer_add_label( c_t label[ESCHER_SYS_MAX_STRING_LEN] );
 %}
 
 %locations
 
 %union {
-  char sval[256];
+  char sval[ESCHER_SYS_MAX_STRING_LEN];
 }
 
 %token<sval> IDENTIFIER
@@ -76,7 +77,8 @@ namedTypeRef                  : ANONYMOUS scopedName { typeminer_add_label( $2 )
                               | IDENTIFIER           { typeminer_add_label( $1 ); }
                               ;
 
-scopedName                    : IDENTIFIER SCOPE IDENTIFIER { strncpy( $$, $1, 256 ); strncat( $$, $3, 256-strlen($1)); }
+scopedName                    : IDENTIFIER SCOPE IDENTIFIER { strncpy( $$, $1, ESCHER_SYS_MAX_STRING_LEN );
+                                                              strncat( $$, $3, ESCHER_SYS_MAX_STRING_LEN - strlen( $1 ) ); }
                               ;
 
 typeConstraint                : rangeConstraint
@@ -161,15 +163,10 @@ constExpression               : IDENTIFIER
 %%
 
 int typeminer_miner( char * input, int length ) {
-  printf( "input: '%s'\n", input );
   yylineno = 1;
   yyin = fmemopen( input, length, "r" );
   do {
     yyparse();
   } while(!feof(yyin));
   return 0;
-}
-
-void typeminer_add_label( char label[256] ) {
-  printf( "label: %s\n", label );
 }
