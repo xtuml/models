@@ -573,6 +573,7 @@ type LiteralsStruct is structure
   mem8 : duration := @P1DT2H@;
   mem9 : timestamp := @2004-04-12T13:20:00-05:00@;
   mem10 : MyDom::MyType;
+  mem11 : EnumType := enum1;
 end structure;
 
 */
@@ -591,6 +592,7 @@ test_values.body = "structure\n" +
                    "  mem8 : duration := @P1DT2H@;\n" +
                    "  mem9 : timestamp := @2004-04-12T13:20:00-05:00@;\n" +
                    "  mem10 : MyDom::MyType;\n" +
+                   "  mem11 : EnumType := enum1;\n" +
                    "end";
 i = 0;
 while i < label::max
@@ -602,7 +604,9 @@ end while;
 count = typeminer::referreds( name:test_values.name, body:test_values.body, labels:test_values.labels );
 
 // check the results
-return 1 == count and UTIL::contains( set:test_values.labels, value:"MyDom::MyType" );',
+return 3 == count and UTIL::contains( set:test_values.labels, value:"MyDom::MyType" )
+                  and UTIL::contains( set:test_values.labels, value:"EnumType" )
+                  and UTIL::contains( set:test_values.labels, value:"enum1" );',
 	"ba5eda7a-def5-0000-0000-000000000001",
 	1,
 	'',
