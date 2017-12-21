@@ -13,7 +13,6 @@ void typeminer_clear_buffer();
 %}
 
 %locations
-%expect 2
 
 %union {
   char sval[TYPEMINER_MAX_LABEL_LEN];
@@ -175,17 +174,15 @@ pragmaList                    : /* Empty */
 
 pragma                        : PRAGMA IDENTIFIER
                                 LPAREN
+                                RPAREN
+                              | PRAGMA IDENTIFIER
+                                LPAREN
                                   pragmaValues
                                 RPAREN
                               ;
 
-pragmaValues                  : /* Empty */
-                              | pragmaValue
-                              | COMMA pragmaValue pragmaValues
-                              ;
-
-pragmaValue                   : IDENTIFIER
-                              | expression
+pragmaValues                  : expression
+                              | expression COMMA pragmaValues
                               ;
 
 expression                    : rangeExpression
@@ -240,12 +237,22 @@ multExp                       : unaryExp
 unaryExp                      : unaryOperator unaryExp
                               | literal
                               | parenthesisedExpression
+                              | nameExpression
+                              | collectionTypeRef
                               ;
 
 unaryOperator                 : MINUS
                               | PLUS
                               | NOT
                               | ABS
+                              ;
+
+nameExpression                : scopedName           { typeminer_add_label( typeminer_labels, $1 ); }
+                              | IDENTIFIER           { char * id = (char *)malloc( TYPEMINER_MAX_LABEL_LEN );
+                                                       memset( id, 0, TYPEMINER_MAX_LABEL_LEN );
+                                                       strcpy( id, $1 );
+                                                       typeminer_add_label( typeminer_labels, id );
+                                                     }
                               ;
 
 parenthesisedExpression       : LPAREN expression RPAREN
