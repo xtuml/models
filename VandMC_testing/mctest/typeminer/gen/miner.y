@@ -1,20 +1,23 @@
 %{
 #include <string.h>
 #include "typeminer_sys_types.h"
+#include "miner.h"
 extern int yylex();
 extern int yylex_destroy(void);
 extern int yyparse();
 extern int yylineno;
 extern FILE * yyin;
 void yyerror( const char * s );
-void typeminer_add_label( c_t label[ESCHER_SYS_MAX_STRING_LEN] );
+void typeminer_set_buffer( char *, int );
+void typeminer_clear_buffer();
 %}
 
 %locations
 %expect 2
 
 %union {
-  char sval[ESCHER_SYS_MAX_STRING_LEN];
+  char sval[TYPEMINER_MAX_LABEL_LEN];
+  char * strval;
 }
 
 %token<sval> IDENTIFIER
@@ -26,7 +29,7 @@ void typeminer_add_label( c_t label[ESCHER_SYS_MAX_STRING_LEN] );
 %token REAL REM RPAREN SCOPE SEMI SEQUENCE SET STRING STRUCTURE THIS TIMES TIMESTAMP
 %token T_TRUE UNION UNRECOGNIZED_TOKEN XOR
 
-%type<sval> scopedName
+%type<strval> scopedName
 
 %start type
 
@@ -79,15 +82,28 @@ enumerator                    : IDENTIFIER initializer
 constrainedTypeDefinition     : namedTypeRef typeConstraint
                               ;
 
-namedTypeRef                  : ANONYMOUS scopedName { typeminer_add_label( $2 ); }
-                              | scopedName           { typeminer_add_label( $1 ); }
-                              | ANONYMOUS IDENTIFIER { typeminer_add_label( $2 ); }
-                              | IDENTIFIER           { typeminer_add_label( $1 ); }
+namedTypeRef                  : ANONYMOUS scopedName { typeminer_add_label( typeminer_labels, $2 ); }
+                              | scopedName           { typeminer_add_label( typeminer_labels, $1 ); }
+                              | ANONYMOUS IDENTIFIER { char * id = (char *)malloc( TYPEMINER_MAX_LABEL_LEN );
+                                                       memset( id, 0, TYPEMINER_MAX_LABEL_LEN );
+                                                       strcpy( id, $2 );
+                                                       typeminer_add_label( typeminer_labels, id );
+                                                     }
+                              | IDENTIFIER           { char * id = (char *)malloc( TYPEMINER_MAX_LABEL_LEN );
+                                                       memset( id, 0, TYPEMINER_MAX_LABEL_LEN );
+                                                       strcpy( id, $1 );
+                                                       typeminer_add_label( typeminer_labels, id );
+                                                     }
                               ;
 
-scopedName                    : IDENTIFIER SCOPE IDENTIFIER { strncpy( $$, $1, ESCHER_SYS_MAX_STRING_LEN );
-                                                              strncat( $$, "::", 2 );
-                                                              strncat( $$, $3, ESCHER_SYS_MAX_STRING_LEN - 2 - strlen( $1 ) ); }
+scopedName                    : IDENTIFIER SCOPE IDENTIFIER {  $$ = (char *)malloc( TYPEMINER_MAX_LABEL_LEN );
+                                                               memset( $$, 0, TYPEMINER_MAX_LABEL_LEN );
+                                                               if ( strlen( $1 ) + strlen( $3 ) + 2 < TYPEMINER_MAX_LABEL_LEN ) {
+                                                                 strcpy( $$, $1 );
+                                                                 strcat( $$, "::" );
+                                                                 strcat( $$, $3 );
+                                                               }
+                                                            }
                               ;
 
 typeConstraint                : rangeConstraint
@@ -253,10 +269,8 @@ literal                       : INTEGER
 %%
 
 void typeminer_miner( char * input, int length ) {
+  typeminer_set_buffer( input, length );
   yylineno = 1;
-  yyin = fmemopen( input, length, "r" );
-  do {
-    yyparse();
-  } while(!feof(yyin));
-  yylex_destroy();
+  yyparse();
+  typeminer_clear_buffer();
 }
