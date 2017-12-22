@@ -1,8 +1,7 @@
 domain typeorder is
-  private type BinaryTreeNode;
 //! TEST 1 - self reference in structure type
   private type BinaryTreeNode is structure
-    value      : Value;
+    value      : Dict3;
     parent     : BinaryTreeNode;
     leftChild  : BinaryTreeNode;
     rightChild : BinaryTreeNode;
@@ -12,9 +11,9 @@ domain typeorder is
 //! TEST 3 - array in named type reference
   private type Array is array (10) of Node;
 //! TEST 4 - set in named type reference
-  private type Set is set of Node;
+  private type Set is set of List;
 //! TEST 5 - set in named type reference
-  private type Bag is bag of Node;
+  private type Bag is bag of CollectionStruct;
 //! TEST 6 - dict key in named type reference
   private type Dict1 is dictionary Key of string;
 //! TEST 7 - dict value in named type reference
@@ -22,13 +21,13 @@ domain typeorder is
 //! TEST 8 - dict key and value in named type reference
   private type Dict3 is dictionary Key of Node;
 //! TEST 9 - anonymous sequence in named type reference
-  private type AnonSeq is anonymous sequence of Node;
+  private type AnonSeq is anonymous sequence of List;
 //! TEST 10 - collection types in structure
   private type CollectionStruct is structure
-    mem1 : sequence (10) of Node;
+    mem1 : sequence (10) of Percent;
     mem2 : array (10) of Node;
     mem3 : set of Node;
-    mem4 : bag of Node;
+    mem4 : bag of CoreTypeStruct;
     mem5 : dictionary Key1 of integer;
     mem6 : dictionary of Node;
     mem7 : dictionary Key2 of Node;
@@ -64,6 +63,7 @@ domain typeorder is
     mem9 : timestamp := @2004-04-12T13:20:00-05:00@;
     mem10 : MyDom::MyType;
   end structure;
+  private type BinaryTreeNode;
   private type MyType is integer;
   private type Node is MyType;
 end domain;
