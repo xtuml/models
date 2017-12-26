@@ -2,6 +2,7 @@ domain Issue9646 is
   object Dog;
   object Person;
 
+  public type sex;
   public type sex is enum ( Male, Female );
 
   public service test();

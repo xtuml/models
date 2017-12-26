@@ -18,6 +18,7 @@ domain PragTest is
     member2: integer; pragma prag03();
   end structure; pragma prag04();
 
+  private type no_fwd_decl;
   private type no_fwd_decl is structure
     mem1: integer;
     mem2: boolean;
