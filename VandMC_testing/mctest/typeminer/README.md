@@ -22,6 +22,3 @@ This project depends on xtUML projects `masl`, `mcshared` (`mc` repo) and
 
 * For simplicity the lexer did not implement any based digits or exponents for
   integer and real literals.  
-* Named elements are not allowed in expressions, so references to enum values
-  would not be successfully parsed. Supporting this would be a future
-  enhancement.  

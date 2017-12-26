@@ -6,9 +6,11 @@
 #include <string.h>
 #define YY_DECL int yylex()
 #include "typeminer_sys_types.h"
+#include "miner.h"
 #include "miner.tab.h"
 void yyerror( const char * s );
 extern bool typeminer_parse_error;
+YY_BUFFER_STATE typeminer_buffer_state;
 %}
 
 %%
@@ -80,13 +82,24 @@ extern bool typeminer_parse_error;
 '(\\([btnfr\"\\]|[0-3][0-7][0-7]|[0-7][0-7]|[0-7]|u[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F])|[^\\'])'      return CHARACTER;
 \"(\\([btnfr\"\\]|[0-3][0-7][0-7]|[0-7][0-7]|[0-7]|u[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F])|[^\\\"])*\"  return STRING;
 
-[A-Za-z_][A-Za-z_0-9]*  { strncpy( yylval.sval, yytext, ESCHER_SYS_MAX_STRING_LEN ); return IDENTIFIER; }
+[A-Za-z_][A-Za-z_0-9]*  { memset( yylval.sval, 0, TYPEMINER_MAX_LABEL_LEN ); strncpy( yylval.sval, yytext, TYPEMINER_MAX_LABEL_LEN-1 ); return IDENTIFIER; }
 
-.                       { printf( "0x%x, '%s'\n", yytext[0], yytext ); yyerror( "Unrecognized token" ); return UNRECOGNIZED_TOKEN; }
+.                       { /* printf( "0x%x, '%s'\n", yytext[0], yytext ); */ yyerror( "Unrecognized token" ); return UNRECOGNIZED_TOKEN; }
 
 %%
 
 void yyerror( const char * s ) {
   fprintf(stderr, "typeminer error: line %d: %s\n", yylineno, s);
-  typeminer_parse_error = 1;
+  typeminer_parse_error = TRUE;
+}
+
+void typeminer_set_buffer( char * input, int length ) {
+  char typeminer_input[length+2];
+  memset( typeminer_input, 0, length + 2 );
+  strncpy( typeminer_input, input, length );
+  typeminer_buffer_state = yy_scan_bytes( typeminer_input, length + 2 );
+}
+
+void typeminer_clear_buffer() {
+  yy_delete_buffer( typeminer_buffer_state );
 }
