@@ -1,0 +1,28 @@
+CC=gcc
+CFLAGS=-Wno-pointer-to-int-cast # -g
+SOURCES := $(shell ls *.c) lex.yy.c miner.tab.c
+OBJECTS=$(SOURCES:.c=.o)
+EXECUTABLE=typeminer
+
+all: lex.yy.c miner.tab.c miner.tab.h $(SOURCES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	@$(CC) $(CFLAGS) $^ -o $@
+
+.o:
+	$(CC) $(CFLAGS) -c $<
+
+miner.tab.c miner.tab.h: miner.y
+	bison -d miner.y
+
+lex.yy.c: miner.l miner.tab.h
+	flex miner.l
+
+miner.y:
+	cp ../gen/miner.y .
+
+miner.l:
+	cp ../gen/miner.l .
+
+clean:
+	rm -f *.o lex.yy.c miner.tab.c miner.tab.h miner.y miner.l

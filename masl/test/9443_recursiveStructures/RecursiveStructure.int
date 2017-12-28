@@ -1,6 +1,5 @@
 domain RecursiveStructure is
   public type Component;
-  public type Device;
 
   public type Device is structure
     components: sequence of Component;
