@@ -1,0 +1,7 @@
+private service keypad::init () is
+ui : instance of UI;
+begin
+  ui := create unique UI( Current_State => idle, ticklen => @PT0.000001S@ );
+  connect();
+  schedule ui.ticker generate UI.tick() to ui delay ui.ticklen;
+end service;
