@@ -59,19 +59,6 @@ To build the MASL model compiler, first clone the `masl` repository (found at
 instructions in the `README` (_not_ `README.md`) file to build MASL. This will
 take about 10 minutes (rough estimate).
 
-**Important:** The `README` file instructs the user to create a new directory
-especially for building (`masl-build/`). I found it more convenient for this
-work to build MASL directly in the `masl` repository. To do this, skip the
-following instructions:
-```
-mkdir masl-build
-cd masl-build
-```
-and then instead of `cmake ../masl -G Ninja ...` execute `cmake . -G Ninja ...`
-
-It will be assumed that the reader will build MASL this way for the remainder of
-this README.
-
 **Bonus:** Follow the instructions to run the petrol station model in inspector.
 
 ## Generating and building the calculator project
