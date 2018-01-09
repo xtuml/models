@@ -11,7 +11,7 @@ domain keypad is
   public service error ( message: in string );   
   public service result ( value: in real );   
   private service connect ();   
-  private service init (); pragma scenario( 1 );   
+  private service init (); pragma scenario( 1 ); pragma startup( true );   
   private function getPendingEvent () return calcevent;   
   
   

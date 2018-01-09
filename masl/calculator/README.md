@@ -225,26 +225,9 @@ find $DST/*_OOA -name *.int -exec mv {} $DST/calculator \;
 
 ### Build MASL and the example project
 
-#### Step 7
-
-Generate MASL again:
+Generate and build MASL again:
 ```
 cmake . -G Ninja -DCMAKE_INSTALL_PREFIX=${PWD}/install
-```
-
-This step runs the MASL compiler and produces C++ code for the example project.
-
-#### Step 8
-
-Copy the file `__keypad_private_services.hh` from `cmake-masl/keypad_OOA/src/`
-to `examples/calculator/keypad_OOA/custom`. This step is necessary because
-private services are overridden and the `keypad_services.cc` needs visibility to
-the private service declarations.
-
-#### Step 9
-
-Build the compiler and the example project:
-```
 ninja install
 ```
 
@@ -255,6 +238,11 @@ ninja install
 Launch a Linux installation of BridgePoint and import `keypad` into a workspace.
 Launch the UI by going to "Run Configurations > Java Application > KeypadUI" and
 selecting "Run"
+
+_Important: The Java UI must be running before the `calculator_transient`
+process. This is because the UI waits for socket connections from the
+`calculator_transient` process. If the `calculator_transient` process is
+started first, it will try to connect and fail._
 
 ### Run the `calculator_transient` process
 
@@ -270,10 +258,6 @@ From another shell in the `masl` directory:
 ```
 install/bin/masl-inspector -p 1234 -s examples/calculator
 ```
-
-When the inspector launches, select "keypad" from the domain drop down menu. In
-the "Scenarios" tab, double click "init()". This will initialize a connection
-to the Java UI.
 
 ### Use the calculator
 
