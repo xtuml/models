@@ -79,6 +79,9 @@ if (empty b)
 end if;
 if (b.i != 4)
   LOG::LogFailure( message:"test1.41:  Selected wrong b across R1." );
+  if ( a.bID != b.bID )
+    LOG::LogFailure( message:"test1.42:  A/B referential mismatch" );
+  end if;
 end if;
 
 //
@@ -114,6 +117,9 @@ for each c in cs
   if ( d.name != "DeeTwo" )
     LOG::LogFailure( message:"test1.63:  Failed to select D from C.");
   end if;
+  if ( c.dID != d.dID )
+    LOG::LogFailure( message:"test1.64:  C/D referential mismatch");
+  end if;
 end for;
 
 //
@@ -138,9 +144,12 @@ select any g related by e->G[R3];
 if ( g.gID != 3 )
   LOG::LogFailure( message:"test1.74:  Selected incorrect G.");
 end if;
+if ( ( g.eID != e.eID ) or ( g.fID != f.fID ) )
+  LOG::LogFailure( message:"test1.75:  E/F/G referential mismatch.");
+end if;
 for each e in es
-  if ( ( e.eID == 1 ) and ( e.eID == 2 ) )
-    LOG::LogFailure( message:"test1.75:  Selected incorrect Es.");
+  if ( ( e.eID != 1 ) and ( e.eID != 2 ) )
+    LOG::LogFailure( message:"test1.76:  Selected incorrect Es.");
   end if;
 end for;
 
@@ -154,6 +163,9 @@ end if;
 select one h2 related by h1->H[R4.''precedes''];
 if ( h2.hID != 2 )
   LOG::LogFailure( message:"test1.81:  Selected incorrect H.");
+end if;
+if ( h2.hID != h1.follows )
+  LOG::LogFailure( message:"test1.81a:  H referential mismatch");
 end if;
 select one h3 related by h2->H[R4.''precedes''];
 if ( h3.hID != 3 )
@@ -534,8 +546,8 @@ relate d2 to c2 across R2;
 relate d2 to c3 across R2;
 relate c4 to d2 across R2;
 
+create object instance e0 of E; e0.eID = 100; e0.ratio = 0.1;
 create object instance e1 of E; e1.eID = 1; e1.ratio = 0.314;
-create object instance e0 of E; e1.eID = 100; e1.ratio = 0.1;
 create object instance e2 of E; e2.eID = 2; e2.ratio = 2.718;
 create object instance f3 of F; f3.fID = 3; f3.enabled = true;
 create object instance f2 of F; f2.fID = 2; f2.enabled = false;
