@@ -126,16 +126,23 @@ INSERT INTO O_TFR
 	'// Provide forward declarations for self-referential types.
 select many references from instances of reference where ( selected.parent_name == selected.child_name );
 for each reference in references
-  select one type related by reference->type[R1.''refers to''];
-  LOG::LogInfo( message:type.render_forward() );
+  select one type related by reference->type[R1.''refers to''] where ( not selected.rendered );
+  if ( not_empty type )
+    LOG::LogInfo( message:type.render_forward() );
+  end if;
 end for;
 
 // Render leaf types (those not referenced by others).
 guard = label::max;
 while ( 0 < type::render_leaves() )
-  select any type from instances of type where ( not selected.rendered );
+  // Break a cycle by selecting any referenced type and resolving it.
+  select any reference from instances of reference where ( not selected.resolved );
+  select one type related by reference->type[R1.''refers to''];
   if ( not_empty type )
-    LOG::LogInfo( message:type.render_forward() );
+    s = type.render_forward();
+    if ( "" != s )
+      LOG::LogInfo( message:s );
+    end if;
   else
     LOG::LogFailure( message:"did not find cyclic unresolved type" );
   end if;
@@ -161,8 +168,11 @@ INSERT INTO O_TFR
 	"ba5eda7a-def5-0000-0000-000000000004",
 	1,
 	'// Render a forward declaration and mark myself so.
-s = "public type " + self.name;
-self.declared_forward = true;
+s = "";
+if ( not self.declared_forward )
+  s = "public type " + self.name;
+  self.declared_forward = true;
+end if;
 select many references related by self->reference[R1.''is referenced by''];
 for each reference in references
   reference.resolved = true;
