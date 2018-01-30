@@ -18,6 +18,7 @@ domain typeorder is
 //! TEST 5 - set in named type reference
   private type Bag is bag of Node;
 //! TEST 6 - dict key in named type reference
+  private type Key is integer;
   private type Dict1 is dictionary Key of string;
 //! TEST 7 - dict value in named type reference
   private type Dict2 is dictionary of Node;
@@ -26,6 +27,8 @@ domain typeorder is
 //! TEST 9 - anonymous sequence in named type reference
   private type AnonSeq is anonymous sequence of Node;
 //! TEST 10 - collection types in structure
+  private type Key1 is integer;
+  private type Key2 is integer;
   private type CollectionStruct is structure
     mem1 : sequence (10) of Node;
     mem2 : array (10) of Node;
