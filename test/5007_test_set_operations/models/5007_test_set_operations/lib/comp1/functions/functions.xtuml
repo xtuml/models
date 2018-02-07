@@ -259,6 +259,110 @@ INSERT INTO PE_PE
 	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
 	"00000000-0000-0000-0000-000000000000",
 	1);
+INSERT INTO S_SYNC
+	VALUES ("30a7f2a4-695c-44fa-bc9c-27c6581a33cb",
+	"00000000-0000-0000-0000-000000000000",
+	'test_compare',
+	'',
+	'select many set1 from instances of PERSON;
+select many set2 from instances of PERSON;
+LOG::LogInfo( message:"Compare two equal sets for equality:" );
+if ( set1 == set2 )
+  LOG::LogInfo( message:"passed." );
+else
+  LOG::LogInfo( message:"failed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"Compare two equal sets for inequality:" );
+if ( set1 != set2 )
+  LOG::LogInfo( message:"failed." );
+else
+  LOG::LogInfo( message:"passed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+select many set2 from instances of PERSON where ( selected.age >= 18 );
+LOG::LogInfo( message:"Compare two inequal sets for equality:" );
+if ( set1 == set2 )
+  LOG::LogInfo( message:"failed." );
+else
+  LOG::LogInfo( message:"passed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"Compare two inequal sets for inequality:" );
+if ( set1 != set2 )
+  LOG::LogInfo( message:"passed." );
+else
+  LOG::LogInfo( message:"failed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+select any inst1 from instances of PERSON where ( selected.name == "Ezra" );
+select any inst2 from instances of PERSON where ( selected.name == "Ezra" );
+LOG::LogInfo( message:"Compare two equal instances for equality:" );
+if ( inst1 == inst2 )
+  LOG::LogInfo( message:"passed." );
+else
+  LOG::LogInfo( message:"failed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"Compare two equal instances for inequality:" );
+if ( inst1 != inst2 )
+  LOG::LogInfo( message:"failed." );
+else
+  LOG::LogInfo( message:"passed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+select any inst2 from instances of PERSON where ( selected.name == "Levi" );
+LOG::LogInfo( message:"Compare two inequal instances for equality:" );
+if ( inst1 == inst2 )
+  LOG::LogInfo( message:"failed." );
+else
+  LOG::LogInfo( message:"passed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"Compare two inequal instances for inequality:" );
+if ( inst1 != inst2 )
+  LOG::LogInfo( message:"passed." );
+else
+  LOG::LogInfo( message:"failed." );
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("30a7f2a4-695c-44fa-bc9c-27c6581a33cb",
+	1,
+	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	"00000000-0000-0000-0000-000000000000",
+	1);
 INSERT INTO PE_PE
 	VALUES ("c8e8eb9d-301f-4f2d-95d7-d4705301da18",
 	1,
