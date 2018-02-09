@@ -373,6 +373,7 @@ INSERT INTO S_SYNC
 ::test_union1();
 ::test_intersection1();
 ::test_subtraction1();
+::test_symmetric_difference1();
 ::test_compare();',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
@@ -380,6 +381,47 @@ INSERT INTO S_SYNC
 	0);
 INSERT INTO PE_PE
 	VALUES ("35e7142c-b5d6-498f-b676-a98a880c9456",
+	1,
+	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("1ac09d78-583c-479c-937b-49869c4aace0",
+	"00000000-0000-0000-0000-000000000000",
+	'test_symmetric_difference1',
+	'',
+	'select many people1 from instances of PERSON where ( not selected.male );
+select many people2 from instances of PERSON where ( selected.age < 21 );
+
+LOG::LogInfo( message:"All females:" );
+for each person in people1
+  LOG::LogInfo( message:person.name );
+end for;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"People younger than 21:" );
+for each person in people2
+  LOG::LogInfo( message:person.name );
+end for;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"People younger than 21 or female (but not both):" );
+people3 = people1 ^ people2;
+for each person in people3
+  LOG::LogInfo( message:person.name );
+end for;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("1ac09d78-583c-479c-937b-49869c4aace0",
 	1,
 	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
 	"00000000-0000-0000-0000-000000000000",
