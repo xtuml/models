@@ -237,17 +237,17 @@ select many os related by o->O[R8.''teaches''];
 if ( cardinality os != 3 )
   LOG::LogFailure( message:"test1.C2:  Failed to select Os.");
 end if;
-select one o1 related by o->O[R8.''learns from''];
+select one o1 related by o->O[R8.''learns_from''];
 if ( o1.voo != "Kenny" )
   LOG::LogFailure( message:"test1.C3:  Selected incorrect O.");
 end if;
 select any o from instances of O where ( selected.voo == "Ellen" );
-select one o1 related by o->O[R8.''learns from''];
+select one o1 related by o->O[R8.''learns_from''];
 if ( o1.voo != "Cort" )
   LOG::LogFailure( message:"test1.C4:  Selected incorrect O.");
 end if;
 select any o from instances of O where ( selected.voo == "Amy" );
-select one o1 related by o->O[R8.''learns from''];
+select one o1 related by o->O[R8.''learns_from''];
 if ( o1.voo != "Cort" )
   LOG::LogFailure( message:"test1.C5:  Selected incorrect O.");
 end if;
@@ -288,7 +288,7 @@ for each n in ns
 end for;
 delete object instance n1;
 select any n from instances of N where ( selected.name == "Pete" );
-select one boss related by n->N[R7.''works for''];
+select one boss related by n->N[R7.''works_for''];
 if ( empty boss )
   LOG::LogFailure( message:"test1.B4:  Failed to select boss.");
 else
@@ -297,7 +297,7 @@ else
   end if;
 end if;
 select any n from instances of N where ( selected.name == "Dave" );
-select one m related by n->M[R7.''works for''];
+select one m related by n->M[R7.''works_for''];
 if ( empty m )
   LOG::LogFailure( message:"test1.B6:  Failed to select M.");
   if ( m.department != "MEC" )
@@ -363,17 +363,17 @@ end if;
 // Test 1-1 reflexive associatives.
 //
 select any w from instances of W where ( selected.name == "Rox" );
-select one husband related by w->W[R11.''is wife of''];
+select one husband related by w->W[R11.''is_wife_of''];
 if ( husband.name != "Cort" )
   LOG::LogFailure( message:"test1.F1:  Incorrect W.");
 end if;
 select any w from instances of W where ( selected.name == "Jacqui" );
-select one husband related by w->W[R11.''is wife of''];
+select one husband related by w->W[R11.''is_wife_of''];
 if ( husband.name != "Sean" )
   LOG::LogFailure( message:"test1.F2:  Incorrect W.");
 end if;
 select any huz from instances of W where ( selected.name == "Cort" );
-select one wife related by huz->W[R11.''is husband of''];
+select one wife related by huz->W[R11.''is_husband_of''];
 if ( wife.name != "Rox" )
   LOG::LogFailure( message:"test1.F3:  Incorrect W.");
 end if;
@@ -389,9 +389,9 @@ select any x from instances of X where ( selected.name == "Cort" );
 if ( empty x )
   LOG::LogFailure( message:"test1.X1:  Failed to select X." );
 end if;
-select many xs related by x->X[R12.''is pal of''];
+select many xs related by x->X[R12.''is_pal_of''];
 cardxs = cardinality xs;
-select many xs related by x->X[R12.''is buddy of''];
+select many xs related by x->X[R12.''is_buddy_of''];
 cardxs = cardxs + cardinality xs;
 if ( cardxs != 5 )
   LOG::LogFailure( message:"test1.X2:  Wrong number of friends." );
@@ -406,7 +406,7 @@ select any x from instances of X where ( selected.name == "Sevina" );
 if ( empty x )
   LOG::LogFailure( message:"test1.X4:  Failed to select X." );
 end if;
-select any x1 related by x->X[R12.''is pal of''];
+select any x1 related by x->X[R12.''is_pal_of''];
 if ( x1.name != "Rox" )
   LOG::LogFailure( message:"test1.X5:  Could not find Rox." );
 end if;
@@ -414,7 +414,7 @@ select any x from instances of X where ( selected.name == "Rox" );
 if ( empty x )
   LOG::LogFailure( message:"test1.X6:  Failed to select X." );
 end if;
-select any x1 related by x->X[R12.''is buddy of''];
+select any x1 related by x->X[R12.''is_buddy_of''];
 if ( x1.name != "Sevina" )
   LOG::LogFailure( message:"test1.X6:  Could not find Sevina." );
 end if;
@@ -427,7 +427,7 @@ select any z from instances of Z where ( selected.name == "Joe" );
 if ( empty z )
   LOG::LogFailure( message:"test1.Z1:  Failed to select Z." );
 end if;
-select many zs related by z->Z[R13.''buys from''];
+select many zs related by z->Z[R13.''buys_from''];
 if ( cardinality zs < 2 )
   LOG::LogFailure( message:"test1.Z2:  Could not find Zs." );
 end if;
@@ -536,7 +536,8 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'xit',
 	'',
-	'i = PERSIST::commit();
+	'
+i = PERSIST::commit();
 ARCH::shutdown();
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
@@ -642,8 +643,8 @@ create object instance o4 of O; o4.voo = "Ellen";
 create object instance o5 of O; o5.voo = "Brad";
 relate o1 to o2 across R8.''teaches''; // Kenny teaches Cort.
 relate o2 to o3 across R8.''teaches''; // Cort teaches Amy.
-relate o4 to o2 across R8.''learns from''; // Ellen learns from Cort.
-relate o5 to o2 across R8.''learns from''; // Brad learns from Cort.
+relate o4 to o2 across R8.''learns_from''; // Ellen learns from Cort.
+relate o5 to o2 across R8.''learns_from''; // Brad learns from Cort.
 
 create object instance oo1 of OO; oo1.number = 1;
 create object instance oo2 of OO; oo2.number = 2;
@@ -666,8 +667,8 @@ create object instance m4 of M; m4.department = "MEC";
 create object instance m5 of M; m5.department = "MEC";
 relate n1 to n3 across R7.''manages'' using m1;   // Pete manages Alex.
 relate n1 to n4 across R7.''manages'' using m2;   // Pete manages Jenn.
-relate n5 to n2 across R7.''works for'' using m3; // Cale works for Dave.
-relate n1 to n6 across R7.''works for'' using m4; // Pete works for Chris.
+relate n5 to n2 across R7.''works_for'' using m3; // Cale works for Dave.
+relate n1 to n6 across R7.''works_for'' using m4; // Pete works for Chris.
 relate n6 to n2 across R7.''manages'' using m5; // Chris manages Dave.
 
 create object instance p1 of P; p1.eyedee = "Rox";
@@ -707,8 +708,8 @@ create object instance w3 of W; w3.name = "Sean";
 create object instance w4 of W; w4.name = "Jacqui";
 create object instance v1 of V; v1.year = 1988;
 create object instance v2 of V; v2.year = 1990;
-relate w1 to w2 across R11.''is husband of'' using v1;
-relate w4 to w3 across R11.''is wife of'' using v2;
+relate w1 to w2 across R11.''is_husband_of'' using v1;
+relate w4 to w3 across R11.''is_wife_of'' using v2;
 
 // friends and friendships
 create object instance x1 of X; x1.name = "Cort"; x1.age = 39;
@@ -727,18 +728,18 @@ create object instance y7 of Y; y7.duration = 7; y7.closeness = 70;
 create object instance y8 of Y; y8.duration = 8; y8.closeness = 80;
 create object instance y9 of Y; y9.duration = 9; y9.closeness = 90;
 // Cort''s friends
-relate x1 to x2 across R12.''is buddy of'' using y1;
-relate x1 to x3 across R12.''is pal of'' using y2;
-relate x4 to x1 across R12.''is buddy of'' using y3;
-relate x5 to x1 across R12.''is pal of'' using y4;
-relate x1 to x6 across R12.''is buddy of'' using y5;
+relate x1 to x2 across R12.''is_buddy_of'' using y1;
+relate x1 to x3 across R12.''is_pal_of'' using y2;
+relate x4 to x1 across R12.''is_buddy_of'' using y3;
+relate x5 to x1 across R12.''is_pal_of'' using y4;
+relate x1 to x6 across R12.''is_buddy_of'' using y5;
 // Rox''s friends
-relate x3 to x2 across R12.''is pal of'' using y6;
+relate x3 to x2 across R12.''is_pal_of'' using y6;
 // Joe''s friends
-relate x4 to x5 across R12.''is buddy of'' using y7;
-relate x4 to x6 across R12.''is pal of'' using y8;
+relate x4 to x5 across R12.''is_buddy_of'' using y7;
+relate x4 to x6 across R12.''is_pal_of'' using y8;
 // Scott''s friends
-relate x6 to x5 across R12.''is buddy of'' using y9;
+relate x6 to x5 across R12.''is_buddy_of'' using y9;
 
 
 // dealers and deals
@@ -752,13 +753,13 @@ create object instance zz4 of ZZ; zz4.xaction = 4; zz4.value = 4;
 create object instance zz5 of ZZ; zz5.xaction = 5; zz5.value = -5;
 create object instance zz6 of ZZ; zz6.xaction = 6; zz6.value = 6;
 create object instance zz7 of ZZ; zz7.xaction = 7; zz7.value = -7;
-relate z1 to z2 across R13.''sells to'' using zz1;
-relate z1 to z3 across R13.''buys from'' using zz2;
-relate z2 to z3 across R13.''sells to'' using zz3;
-relate z3 to z1 across R13.''buys from'' using zz4;
-relate z2 to z1 across R13.''sells to'' using zz5;
-relate z2 to z3 across R13.''buys from'' using zz6;
-relate z1 to z2 across R13.''sells to'' using zz7;
+relate z1 to z2 across R13.''sells_to'' using zz1;
+relate z1 to z3 across R13.''buys_from'' using zz2;
+relate z2 to z3 across R13.''sells_to'' using zz3;
+relate z3 to z1 across R13.''buys_from'' using zz4;
+relate z2 to z1 across R13.''sells_to'' using zz5;
+relate z2 to z3 across R13.''buys_from'' using zz6;
+relate z1 to z2 across R13.''sells_to'' using zz7;
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
