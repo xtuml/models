@@ -51,6 +51,12 @@ select many as from instances of A;
 if (cardinality as != 5)
   LOG::LogFailure( message:"test1.21:  Wrong number of As." );
 end if;
+select many as_again from instances of A;
+if ( as == as_again )
+  LOG::LogInfo( message:"as are the same as as_again" );
+else
+  LOG::LogFailure( message:"as and as_again do not match!" );
+end if;
 
 create object instance a1 of A;
 select any a from instances of A where (selected.i == 1);
@@ -154,8 +160,8 @@ if ( g.gID != 3 )
   LOG::LogFailure( message:"test1.74:  Selected incorrect G.");
 end if;
 for each e in es
-  if ( ( e.eID == 1 ) and ( e.eID == 2 ) )
-    LOG::LogFailure( message:"test1.75:  Selected incorrect Es.");
+  if ( ( e.eID != 1 ) and ( e.eID != 2 ) )
+    LOG::LogFailure( message:"test1.76:  Selected incorrect Es.");
   end if;
 end for;
 
@@ -209,13 +215,15 @@ end if;
 select one k related by i->K[R5];
 if ( empty k )
   LOG::LogFailure( message:"test1.91:  Failed to select K.");
-  if ( k.kID != 22 )
+else
+  if ( k.kID != 33 )
     LOG::LogFailure( message:"test1.92:  Selected incorrect K.");
   end if;
 end if;
 select one l related by i->K[R5]->L[R6];
 if ( empty l )
   LOG::LogFailure( message:"test1.93:  Failed to select L.");
+else
   if ( l.lID != 222 )
     LOG::LogFailure( message:"test1.94:  Selected incorrect L.");
   end if;
