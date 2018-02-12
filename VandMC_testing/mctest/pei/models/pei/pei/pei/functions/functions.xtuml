@@ -42,16 +42,16 @@ INSERT INTO S_SYNC
 // Set up instances for existence test later on.
 //
 
-create object instance a of A;  // extras to see in PEIs
-create object instance a of A;
-create object instance a of A; a.i = 1;
-create object instance b of B; b.i = 2;
+create object instance a of A; a.aID = 99;  // extras to see in PEIs
+create object instance a of A; a.aID = 98;
+create object instance a of A; a.aID = 1; a.i = 1;
+create object instance b of B; b.bID = 2; b.i = 2;
 relate a to b across R1;
-create object instance a of A; a.i = 3;
-create object instance b of B; b.i = 4;
+create object instance a of A; a.aID = 3; a.i = 3;
+create object instance b of B; b.bID = 4; b.i = 4;
 relate b to a across R1;
-create object instance a of A; a.i = 5;
-create object instance b of B; b.i = 6;
+create object instance a of A; a.aID = 5; a.i = 5;
+create object instance b of B; b.bID = 6; b.i = 6;
 relate a to b across R1;
 create object instance b of B;  // extra to see it in PEIs
 
@@ -291,8 +291,14 @@ select many as from instances of A;
 if (cardinality as != 5)
   LOG::LogFailure( message:"test1.21:  Wrong number of As." );
 end if;
+select many as_again from instances of A;
+if ( as == as_again )
+  LOG::LogInfo( message:"as are the same as as_again" );
+else
+  LOG::LogFailure( message:"as and as_again do not match!" );
+end if;
 
-create object instance a1 of A;
+create object instance a1 of A; a1.i = 101;
 select any a from instances of A where (selected.i == 1);
 if (empty a)
   LOG::LogFailure( message:"test1.22:  Failed to select a where." );
@@ -321,6 +327,14 @@ if (b.i != 4)
   LOG::LogFailure( message:"test1.41:  Selected wrong b across R1." );
   if ( a.bID != b.bID )
     LOG::LogFailure( message:"test1.42:  A/B referential mismatch" );
+  end if;
+end if;
+select one same_a related by a->B[R1]->A[R1];
+if ( empty same_a )
+  LOG::LogFailure( message:"test1.43:  Did not find a out and back across R1." );
+else
+  if ( a != same_a )
+    LOG::LogFailure( message:"test1.43a:  a and same_a not the same." );
   end if;
 end if;
 
@@ -703,6 +717,7 @@ if ( zz.seller != z.name )
   LOG::LogFailure( message:"test1.Z2b:  Z/ZZ referential mismatch" );
 end if;
 
+LOG::LogSuccess( message:"Made it to the end." );
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
@@ -722,9 +737,9 @@ INSERT INTO S_SYNC
 	'//
 // Generate an event to be sure that b is in the correct current state.
 //
-
 select any b from instances of B;
-generate B1:go() to b;',
+generate B1:go() to b;
+',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
@@ -740,8 +755,7 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'test2',
 	'',
-	'//
-// Do some creates and deletes to to exercise storage.
+	'// Do some creates and deletes to to exercise storage.
 // But delete everything created.
 
 create object instance a of A;
@@ -767,7 +781,8 @@ delete object instance c;
 delete object instance d;
 
 create object instance n of N;
-delete object instance n;',
+delete object instance n;
+',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
@@ -785,7 +800,8 @@ INSERT INTO S_SYNC
 	'',
 	'
 i = PERSIST::commit();
-ARCH::shutdown();',
+ARCH::shutdown();
+',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
