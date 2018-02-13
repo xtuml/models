@@ -10,12 +10,9 @@
  *--------------------------------------------------------------------------*/
 
 #include "pei_sys_types.h"
-#include "ARCH_bridge.h"
 #include "LOG_bridge.h"
-#include "NVS_bridge.h"
-#include "PERSIST_bridge.h"
-#include "LOG_bridge.h"
-#include "pei_sys_types.h"
+
+static char failure = 0;
 
 /*
  * Bridge:  LogInfo
@@ -23,7 +20,7 @@
 void
 LOG_LogInfo( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  printf( "info:  %s\n", p_message );
+  printf( "LOG::LogInfo:  %s\n", p_message );
 }
 
 
@@ -33,7 +30,8 @@ LOG_LogInfo( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 void
 LOG_LogFailure( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  printf( "failure:  %s\n", p_message );
+  printf( "LOG::LogFailure:  %s\n", p_message );
+  failure = 1;
 }
 
 
@@ -43,6 +41,10 @@ LOG_LogFailure( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 void
 LOG_LogSuccess( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  printf( "success:  %s\n", p_message );
+  if ( failure ) {
+    printf( "FAILED\n" );
+  } else {
+    printf( "PASSED - LOG::LogSuccess:  %s\n", p_message );
+  }
 }
 
