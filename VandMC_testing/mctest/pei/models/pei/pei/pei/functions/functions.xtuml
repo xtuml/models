@@ -292,10 +292,8 @@ if (cardinality as != 5)
   LOG::LogFailure( message:"test1.21:  Wrong number of As." );
 end if;
 select many as_again from instances of A;
-if ( as == as_again )
-  LOG::LogInfo( message:"as are the same as as_again" );
-else
-  LOG::LogFailure( message:"as and as_again do not match!" );
+if ( as != as_again )
+  LOG::LogFailure( message:"set of As and As_again do not match." );
 end if;
 
 create object instance a1 of A; a1.i = 101;
