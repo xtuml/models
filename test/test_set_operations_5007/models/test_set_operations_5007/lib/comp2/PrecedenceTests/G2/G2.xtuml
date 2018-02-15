@@ -33,6 +33,58 @@ INSERT INTO DIM_DIA
 	0.000000,
 	0.000000,
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("658689f8-a050-474b-aecc-cbcdb17f530a",
+	"00000000-0000-0000-0000-000000000000",
+	'G2_C1D2E4F3',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results = set1 | set2;
+expected_results = expected_results & set3;
+expected_results = expected_results ^ set4;
+expected_results = expected_results - set5;
+actual_results = ( set1 | set2 ) & set3 ^ set4 - set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("658689f8-a050-474b-aecc-cbcdb17f530a",
+	1,
+	"7b75806e-9127-41ea-a767-82b30c4a5690",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("905c7508-3dcd-41dd-904e-4ba23199b2de",
+	"00000000-0000-0000-0000-000000000000",
+	'G2_C3D2E1F4',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set3 | set4;
+expected_results1 = set2 & expected_results1;
+expected_results1 = expected_results1 ^ set5;
+expected_results = set1 - expected_results1;
+actual_results = set1 - set2 & ( set3 | set4 ) ^ set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("905c7508-3dcd-41dd-904e-4ba23199b2de",
+	1,
+	"7b75806e-9127-41ea-a767-82b30c4a5690",
+	"00000000-0000-0000-0000-000000000000",
+	1);
 INSERT INTO PE_PE
 	VALUES ("7b75806e-9127-41ea-a767-82b30c4a5690",
 	1,
