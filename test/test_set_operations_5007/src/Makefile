@@ -11,3 +11,6 @@ $(EXECUTABLE): $(OBJECTS)
 
 .o:
 	$(CC) $(CFLAGS) -c $<
+
+clean:
+	rm -f *.o set_ops_test
