@@ -1,257 +1,237 @@
--- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+//! ACTIVITY BEGIN. '5b2dd722-eec1-43c7-a8d9-ca28f0be7d11' DO NOT EDIT THIS LINE.
+private service pei::do_creates () is
+a : instance of A;
+b : instance of B;
+c1 : instance of C; c2 : instance of C; c3 : instance of C; c4 : instance of C; c5 : instance of C;
+d1 : instance of D; d2 : instance of D; e0 : instance of E;
+e1 : instance of E; e2 : instance of E;
+f1 : instance of F; f2 : instance of F; f3 : instance of F;
+g1 : instance of G; g2 : instance of G; g3 : instance of G; g4 : instance of G;
+h1 : instance of H; h2 : instance of H; h3 : instance of H; h4 : instance of H; h : instance of H;
+i1 : instance of I; i2 : instance of I; i3 : instance of I; i4 : instance of I;
+j1 : instance of J;
+k1 : instance of K; k2 : instance of K; k3 : instance of K;
+l1 : instance of L; l2 : instance of L; l3 : instance of L;
+m1 : instance of M; m2 : instance of M; m3 : instance of M; m4 : instance of M; m5 : instance of M;
+n1 : instance of N; n2 : instance of N; n3 : instance of N; n4 : instance of N; n5 : instance of N; n6 : instance of N;
+o1 : instance of O; o2 : instance of O; o3 : instance of O; o4 : instance of O; o5 : instance of O;
+p1 : instance of P; p2 : instance of P; p3 : instance of P;
+q1 : instance of Q; q2 : instance of Q; q3 : instance of Q;
+r1 : instance of R; r2 : instance of R; r3 : instance of R;
+s1 : instance of S; s2 : instance of S;
+t1 : instance of T; t2 : instance of T; t3 : instance of T; t4 : instance of T; t5 : instance of T;
+u1 : instance of U; u2 : instance of U; u3 : instance of U; u4 : instance of U; u5 : instance of U;
+v1 : instance of V; v2 : instance of V;
+w1 : instance of W; w2 : instance of W; w3 : instance of W; w4 : instance of W;
+x1 : instance of X; x2 : instance of X; x3 : instance of X; x4 : instance of X; x5 : instance of X; x6 : instance of X;
+y1 : instance of Y; y2 : instance of Y; y3 : instance of Y; y4 : instance of Y; y5 : instance of Y; y6 : instance of Y; y7 : instance of Y; y8 : instance of Y; y9 : instance of Y;
+z1 : instance of Z; z2 : instance of Z; z3 : instance of Z;
+zz1 : instance of ZZ; zz2 : instance of ZZ; zz3 : instance of ZZ; zz4 : instance of ZZ; zz5 : instance of ZZ; zz6 : instance of ZZ; zz7 : instance of ZZ;
 
-INSERT INTO EP_PKG
-	VALUES ("4bf9896e-225c-42da-82e6-68f6491ef16c",
-	"00000000-0000-0000-0000-000000000000",
-	"f8b7229b-f136-42db-8d6c-0444f3c8a0e2",
-	'functions',
-	'',
-	0);
-INSERT INTO GD_MD
-	VALUES ("bbd96073-6d0b-464b-8db8-af5c1dea58ef",
-	112,
-	"4bf9896e-225c-42da-82e6-68f6491ef16c",
-	108,
-	0,
-	0,
-	1,
-	1,
-	1,
-	12,
-	1,
-	0,
-	0,
-	0,
-	0,
-	0,
-	'',
-	'pei::pei::pei::functions');
-INSERT INTO DIM_DIA
-	VALUES ("bbd96073-6d0b-464b-8db8-af5c1dea58ef",
-	'',
-	1.000000,
-	0.000000,
-	0.000000,
-	"00000000-0000-0000-0000-000000000000");
-INSERT INTO S_SYNC
-	VALUES ("5b2dd722-eec1-43c7-a8d9-ca28f0be7d11",
-	"00000000-0000-0000-0000-000000000000",
-	'do_creates',
-	'',
-	'//
+begin
 // Set up instances for existence test later on.
 
 // A R1 B
-create object instance a of A; a.aID = 99;  // extras to see in PEIs
-create object instance a of A; a.aID = 98;
-create object instance a of A; a.aID = 1; a.i = 1;
-create object instance b of B; b.bID = 2; b.i = 2;
-relate a to b across R1;
-create object instance a of A; a.aID = 3; a.i = 3;
-create object instance b of B; b.bID = 4; b.i = 4;
-relate b to a across R1;
-create object instance a of A; a.aID = 5; a.i = 5;
-create object instance b of B; b.bID = 6; b.i = 6;
-relate a to b across R1;
-create object instance b of B;  // extra to see it in PEIs
+a := create A( aID => 99 ); // extras to see in PEIs
+a := create A( aID => 98 );
+b := create B( bID => 2, i => 2 );
+a := create A( aID => 1, i => 1, bID => b.bID );
+link a R1 b;
+b := create B( bID => 4, i => 4 );
+a := create A( aID => 3, i => 3, bID => b.bID );
+link a R1 b;
+b := create B( bID => 6, i => 6 );
+a := create A( aID => 5, i => 5, bID => b.bID );
+link a R1 b;
+b := create B( bID => 8 ); // extra to see it in PEIs
 
 // C R2 D
-create object instance c1 of C; c1.cID = 1;
-create object instance c2 of C; c2.cID = 2;
-create object instance c3 of C; c3.cID = 3;
-create object instance c4 of C; c4.cID = 4;
-create object instance c5 of C;  // extra
-create object instance d1 of D;  // extra
-create object instance d2 of D; d2.name = "DeeTwo";
-relate c1 to d2 across R2;
-relate d2 to c2 across R2;
-relate d2 to c3 across R2;
-relate c4 to d2 across R2;
+d1 := create D( dID => 1 ); // extra
+d2 := create D( dID => 2, name => "DeeTwo" );
+c1 := create C( cID => 1, dID => d2.dID );
+c2 := create C( cID => 2, dID => d2.dID );
+c3 := create C( cID => 3, dID => d2.dID );
+c4 := create C( cID => 4, dID => d2.dID );
+c5 := create C( cID => 5 ); // extra
+link c1 R2 d2;
+link d2 R2 c2;
+link d2 R2 c3;
+link c4 R2 d2;
 
 // E R3 F using G
-create object instance e0 of E; e0.eID = 100; e0.ratio = 0.1;
-create object instance e1 of E; e1.eID = 1; e1.ratio = 0.314;
-create object instance e2 of E; e2.eID = 2; e2.ratio = 2.718;
-create object instance f3 of F; f3.fID = 3; f3.enabled = true;
-create object instance f2 of F; f2.fID = 2; f2.enabled = false;
-create object instance f1 of F; f1.fID = 1; f1.enabled = true;
-create object instance g1 of G; g1.gID = 1;
-create object instance g2 of G; g2.gID = 2;
-create object instance g3 of G; g3.gID = 3;
-create object instance g4 of G; g4.gID = 4;
-relate e1 to f1 across R3 using g1;
-relate f2 to e1 across R3 using g2;
-relate f3 to e2 across R3 using g3;
-relate e1 to f3 across R3 using g4;
+e0 := create E( eID => 100, ratio => 0.1 );
+e1 := create E( eID => 1, ratio => 3.14 );
+e2 := create E( eID => 2, ratio => 2.718 );
+f3 := create F( fID => 3, enabled => true );
+f2 := create F( fID => 2, enabled => false );
+f1 := create F( fID => 1, enabled => true );
+g1 := create G( gID => 1, eID => e1.eID, fID => f1.fID );
+g2 := create G( gID => 2, eID => e1.eID, fID => f2.fID );
+g3 := create G( gID => 3, eID => e2.eID, fID => f3.fID );
+g4 := create G( gID => 4, eID => e1.eID, fID => f3.fID );
+link e1 R3 f1 using g1;
+link f2 R3 e1 using g2;
+link f3 R3 e2 using g3;
+link e1 R3 f3 using g4;
 
 // H R4 (reflexive)
-create object instance h1 of H; h1.hID = 1;
-create object instance h2 of H; h2.hID = 2;
-create object instance h of H; h.hID = 99;  // extra to see in PEIs
-create object instance h3 of H; h3.hID = 3;
-create object instance h4 of H; h4.hID = 4;
-relate h1 to h2 across R4.''precedes'';
-relate h2 to h3 across R4.''precedes'';
-relate h4 to h3 across R4.''follows'';
+h1 := create H( hID => 1 );
+h2 := create H( hID => 2, follows => h1.hID );
+h := create H( hID => 99 ); // extra to see in PEIs
+h3 := create H( hID => 3, follows => h2.hID );
+h4 := create H( hID => 4, follows => h3.hID );
+link h1 R2.precedes h2;
+link h2 R2.precedes h3;
+link h4 R2.follows h3;
 
 // I R5 J, K R6 L
-create object instance i4 of I; i4.iID = 400; i4.common = 400;
-create object instance i3 of I; i3.iID = 300; i3.common = 300;
-create object instance i2 of I; i2.iID = 200; i2.common = 200;
-create object instance i1 of I; i1.iID = 100; i1.common = 100;
-create object instance j1 of J; j1.jID = 2; j1.specialJ = 2;
-create object instance k1 of K; k1.kID = 11; k1.specialcommon = 11;
-create object instance k2 of K; k2.kID = 22; k2.specialcommon = 22;
-create object instance k3 of K; k3.kID = 33; k3.specialcommon = 33;
-create object instance l2 of L; l2.lID = 222; l2.specialL = 222;
-create object instance l3 of L; l3.lID = 333; l3.specialL = 333;
-create object instance l1 of L; l1.lID = 111; l1.specialL = 111;
-relate i1 to j1 across R5;
-relate i2 to k3 across R5;
-relate k2 to i3 across R5;
-relate i4 to k1 across R5;
-relate l1 to k1 across R6;
-relate l3 to k2 across R6;
-relate k3 to l2 across R6;
+i4 := create I( iID => 400, common => 400 );
+i3 := create I( iID => 300, common => 300 );
+i2 := create I( iID => 200, common => 200 );
+i1 := create I( iID => 100, common => 100 );
+j1 := create J( jID => 2, specialJ => 2, iID = i1.iID );
+k1 := create K( kID => 11, specialcommon => 11, iID = i4.iID );
+k2 := create K( kID => 22, specialcommon => 22, iID = i3.iID );
+k3 := create K( kID => 33, specialcommon => 33, iID = i2.iID );
+l2 := create L( lID => 222, specialL => 222, kID = k3.iID );
+l3 := create L( lID => 333, specialL => 333, kID = k2.iID );
+l1 := create L( lID => 111, specialL => 111, kID = k1.iID );
+link i1 R5 j1;
+link i2 R5 k3;
+link k2 R5 i3;
+link i4 R5 k1;
+link l1 R6 k1;
+link l3 R6 k2;
+link k3 R5 l2;
 
 // O R8 reflexive
-create object instance o2 of O; o2.oID = 2; o2.voo = "Cort";
-create object instance o1 of O; o1.oID = 1; o1.voo = "Kenny";
-create object instance o3 of O; o3.oID = 3; o3.voo = "Amy";
-create object instance o4 of O; o4.oID = 4; o4.voo = "Ellen";
-create object instance o5 of O; o5.oID = 5; o5.voo = "Brad";
-relate o1 to o2 across R8.''teaches''; // Kenny teaches Cort.
-relate o2 to o3 across R8.''teaches''; // Cort teaches Amy.
-relate o4 to o2 across R8.''learns_from''; // Ellen learns from Cort.
-relate o5 to o2 across R8.''learns_from''; // Brad learns from Cort.
+o2 := create O( oID => 2, voo => "Cort", teacheroID => o2.OID );
+o1 := create O( oID => 1, voo => "Kenny" );
+o3 := create O( oID => 3, voo => "Amy", teacheroID => o1.OID );
+o4 := create O( oID => 4, voo => "Ellen", teacheroID => o1.OID );
+o5 := create O( oID => 5, voo => "Brad", teacheroID => o1.OID );
+link o1 R8.teaches o2; // Kenny teaches Cort.
+link o2 R8.teaches o3; // Cort teaches Amy.
+link o4 R8.learns_from o2; // Ellen learns from Cort.
+link o5 R8.learns_from o2; // Brad learns from Cort.
 
 // N R7 reflexive using M
-create object instance n1 of N; n1.nID = 1; n1.name = "Pete";
-create object instance n2 of N; n2.nID = 2; n2.name = "Dave";
-create object instance n3 of N; n3.nID = 3; n3.name = "Alex";
-create object instance n4 of N; n4.nID = 4; n4.name = "Jenn";
-create object instance n5 of N; n5.nID = 5; n5.name = "Cale";
-create object instance n6 of N; n6.nID = 6; n6.name = "Chris";
-create object instance m1 of M; m1.mID = 1; m1.department = "SW";
-create object instance m2 of M; m2.mID = 2; m2.department = "SW";
-create object instance m3 of M; m3.mID = 3; m3.department = "HW";
-create object instance m4 of M; m4.mID = 4; m4.department = "MEC";
-create object instance m5 of M; m5.mID = 5; m5.department = "MEC";
-relate n1 to n3 across R7.''manages'' using m1;   // Pete manages Alex.
-relate n1 to n4 across R7.''manages'' using m2;   // Pete manages Jenn.
-relate n5 to n2 across R7.''works_for'' using m3; // Cale works for Dave.
-relate n1 to n6 across R7.''works_for'' using m4; // Pete works for Chris.
-relate n6 to n2 across R7.''manages'' using m5; // Chris manages Dave.
+n1 := create N( nID => 1, name => "Pete" );
+n2 := create N( nID => 2, name => "Dave" );
+n3 := create N( nID => 3, name => "Alex" );
+n4 := create N( nID => 4, name => "Jenn" );
+n5 := create N( nID => 5, name => "Cale" );
+n6 := create N( nID => 6, name => "Chris" );
+m1 := create M( mID => 1, department => "SW", works_for_nID => n1.nID, manages_nID => n3.nID );
+m2 := create M( mID => 2, department => "SW", works_for_nID => n1.nID, manages_nID => n4.nID );
+m3 := create M( mID => 3, department => "HW", works_for_nID => n2.nID, manages_nID => n5.nID );
+m4 := create M( mID => 4, department => "MEC", works_for_nID => n6.nID, manages_nID => n1.nID );
+m5 := create M( mID => 5, department => "MEC", works_for_nID => n6.nID, manages_nID => n2.nID );
+link n1 R7.manages n3 using m1;   // Pete manages Alex.
+link n1 R7.manages n4 using m2;   // Pete manages Jenn.
+link n5 R7.works_for n2 using m3; // Cale works for Dave.
+link n1 R7.works_for n6 using m4; // Pete works for Chris.
+link n6 R7.manages n2 using m5;   // Chris manages Dave.
 
 // P R9 Q using R
-create object instance p1 of P; p1.eyedee = "Rox";
-create object instance p2 of P; p2.eyedee = "Bita";
-create object instance p3 of P; p3.eyedee = "Tina";
-create object instance q1 of Q; q1.deeeye = "Shane";
-create object instance q2 of Q; q2.deeeye = "Rusty";
-create object instance q3 of Q; q3.deeeye = "Cort";
-create object instance r1 of R; r1.city = "Indianapolis";
-create object instance r2 of R; r2.city = "Lockport";
-create object instance r3 of R; r3.city = "Battleground";
-relate p1 to q3 across R9 using r1;
-relate q2 to p2 across R9 using r3;
-relate p3 to q1 across R9 using r2;
+p1 := create P( eyedee => "Rox" );
+p2 := create P( eyedee => "Bita" );
+p3 := create P( eyedee => "Tina" );
+q1 := create Q( deeeye => "Shane" );
+q2 := create Q( deeeye => "Rusty" );
+q3 := create Q( deeeye => "Cort" );
+r1 := create R( city => "Indianapolis", pID => p1.eyedee, qID => q3.deeeye );
+r2 := create R( city => "Lockport", pID => p3.eyedee, qID => q1.deeeye );
+r3 := create R( city => "Battleground", pID => p2.eyedee, qID => q2.deeeye );
+link p1 R9 q3 using r1;
+link q2 R9 p2 using r3;
+link p3 R9 q1 using r2;
 
 // S R10 T using U
-create object instance s1 of S; s1.s = "Rox";
-create object instance s2 of S; s2.s = "Jacqui";
-create object instance t1 of T; t1.t = "Clare";
-create object instance t2 of T; t2.t = "Katrina";
-create object instance t3 of T; t3.t = "Colleen";
-create object instance t4 of T; t4.t = "Hannah";
-create object instance t5 of T; t5.t = "Ruby";
-create object instance u5 of U; u5.s = "Oct";
-create object instance u4 of U; u4.s = "Aug";
-create object instance u3 of U; u3.s = "Apr";
-create object instance u2 of U; u2.s = "Dec";
-create object instance u1 of U; u1.s = "Nov";
-relate s1 to t4 across R10 using u2;
-relate s1 to t5 across R10 using u1;
-relate t1 to s2 across R10 using u5;
-relate t2 to s2 across R10 using u4;
-relate s2 to t3 across R10 using u3;
+s1 := create S( s => "Rox" );
+s2 := create S( s => "Jacqui" );
+t1 := create T( t => "Clare" );
+t2 := create T( t => "Katrina" );
+t3 := create T( t => "Colleen" );
+t4 := create T( t => "Hannah" );
+t5 := create T( t => "Ruby" );
+u5 := create U( s => "Oct", sID => s2.sID, tID => t1.tID );
+u4 := create U( s => "Aug", sID => s2.sID, tID => t2.tID );
+u3 := create U( s => "Apr", sID => s2.sID, tID => t3.tID );
+u2 := create U( s => "Dec", sID => s1.sID, tID => t4.tID );
+u1 := create U( s => "Nov", sID => s1.sID, tID => t5.tID );
+link s1 R10 t4 using u2;
+link s1 R10 t5 using u1;
+link t1 R10 s2 using u5;
+link t2 R10 s2 using u4;
+link s2 R10 t3 using u3;
 
 // W R11 reflexive using V
-create object instance w1 of W; w1.name = "Cort";
-create object instance w2 of W; w2.name = "Rox";
-create object instance w3 of W; w3.name = "Sean";
-create object instance w4 of W; w4.name = "Jacqui";
-create object instance v1 of V; v1.year = 1988;
-create object instance v2 of V; v2.year = 1990;
-relate w1 to w2 across R11.''is_husband_of'' using v1;
-relate w4 to w3 across R11.''is_wife_of'' using v2;
+w1 := create W( name => "Cort" );
+w2 := create W( name => "Rox" );
+w3 := create W( name => "Sean" );
+w4 := create W( name => "Jacqui" );
+v1 := create V( year => 1988, husband => w1.name, wife => w2.name );
+v2 := create V( year => 1990, husband => w3.name, wife => w4.name );
+link w1 R11.is_husband of w2 using v1;
+link w4 R11.is_wife_of w3 using v2;
 
 // friends and friendships
-create object instance x1 of X; x1.name = "Cort"; x1.age = 39;
-create object instance x2 of X; x2.name = "Rox"; x2.age = 38;
-create object instance x3 of X; x3.name = "Sevina"; x3.age = 35;
-create object instance x4 of X; x4.name = "Joe"; x4.age = 43;
-create object instance x5 of X; x5.name = "Scott"; x5.age = 42;
-create object instance x6 of X; x6.name = "Jason"; x6.age = 31;
-create object instance y1 of Y; y1.duration = 1; y1.closeness = 10;
-create object instance y2 of Y; y2.duration = 2; y2.closeness = 20;
-create object instance y3 of Y; y3.duration = 3; y3.closeness = 30;
-create object instance y4 of Y; y4.duration = 4; y4.closeness = 40;
-create object instance y5 of Y; y5.duration = 5; y5.closeness = 50;
-create object instance y6 of Y; y6.duration = 6; y6.closeness = 60;
-create object instance y7 of Y; y7.duration = 7; y7.closeness = 70;
-create object instance y8 of Y; y8.duration = 8; y8.closeness = 80;
-create object instance y9 of Y; y9.duration = 9; y9.closeness = 90;
+x1 := create X( name => "Cort", age => 39 );
+x2 := create X( name => "Rox", age => 38 );
+x3 := create X( name => "Sevina", age => 35 );
+x4 := create X( name => "Joe", age => 43 );
+x5 := create X( name => "Scott", age => 42 );
+x6 := create X( name => "Jason", age => 31 );
+y1 := create Y( duration => 1, closeness => 10, buddy => x1.name, pal => x2.name );
+y2 := create Y( duration => 2, closeness => 20, buddy => x3.name, pal => x1.name );
+y3 := create Y( duration => 3, closeness => 30, buddy => x4.name, pal => x1.name );
+y4 := create Y( duration => 4, closeness => 40, buddy => x5.name, pal => x1.name );
+y5 := create Y( duration => 5, closeness => 50, buddy => x1.name, pal => x6.name );
+y6 := create Y( duration => 6, closeness => 60, buddy => x2.name, pal => x3.name );
+y7 := create Y( duration => 7, closeness => 70, buddy => x4.name, pal => x5.name );
+y8 := create Y( duration => 8, closeness => 80, buddy => x6.name, pal => x4.name );
+y9 := create Y( duration => 9, closeness => 90, buddy => x6.name, pal => x5.name );
 // friends of Cort
-relate x1 to x2 across R12.''is_buddy_of'' using y1;
-relate x1 to x3 across R12.''is_pal_of'' using y2;
-relate x4 to x1 across R12.''is_buddy_of'' using y3;
-relate x5 to x1 across R12.''is_pal_of'' using y4;
-relate x1 to x6 across R12.''is_buddy_of'' using y5;
+link x1 R12.is_buddy_of x2 using y1;
+link x1 R12.is_pal_of x3 using y2;
+link x4 R12.is_buddy_of x1 using y3;
+link x5 R12.is_pal_of x1 using y4;
+link x1 R12.is_buddy_of x6 using y5;
 // friends of Rox
-relate x3 to x2 across R12.''is_pal_of'' using y6;
+link x3 R12.is_pal_of x2 using y6;
 // friends of Joe
-relate x4 to x5 across R12.''is_buddy_of'' using y7;
-relate x4 to x6 across R12.''is_pal_of'' using y8;
+link x4 R12.is_buddy_of x5 using y7;
+link x4 R12.is_pal_of x6 using y8;
 // friends of Scott
-relate x6 to x5 across R12.''is_buddy_of'' using y9;
+link x6 R12.is_buddy_of x5 using y9;
 
 
 // dealers and deals
-create object instance z1 of Z; z1.name = "Joe"; z1.worth = 1;
-create object instance z2 of Z; z2.name = "Pat"; z2.worth = 2;
-create object instance z3 of Z; z3.name = "Jason"; z3.worth = 3;
-create object instance zz1 of ZZ; zz1.xaction = 1; zz1.value = -1;
-create object instance zz2 of ZZ; zz2.xaction = 2; zz2.value = 2;
-create object instance zz3 of ZZ; zz3.xaction = 3; zz3.value = -3;
-create object instance zz4 of ZZ; zz4.xaction = 4; zz4.value = 4;
-create object instance zz5 of ZZ; zz5.xaction = 5; zz5.value = -5;
-create object instance zz6 of ZZ; zz6.xaction = 6; zz6.value = 6;
-create object instance zz7 of ZZ; zz7.xaction = 7; zz7.value = -7;
-relate z1 to z2 across R13.''sells_to'' using zz1;
-relate z1 to z3 across R13.''buys_from'' using zz2;
-relate z2 to z3 across R13.''sells_to'' using zz3;
-relate z3 to z1 across R13.''buys_from'' using zz4;
-relate z2 to z1 across R13.''sells_to'' using zz5;
-relate z2 to z3 across R13.''buys_from'' using zz6;
-relate z1 to z2 across R13.''sells_to'' using zz7;
-',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'',
-	0);
-INSERT INTO PE_PE
-	VALUES ("5b2dd722-eec1-43c7-a8d9-ca28f0be7d11",
-	1,
-	"4bf9896e-225c-42da-82e6-68f6491ef16c",
-	"00000000-0000-0000-0000-000000000000",
-	1);
-INSERT INTO S_SYNC
-	VALUES ("ee0b21c6-3e1f-4b2b-9441-00b6e64ca6eb",
-	"00000000-0000-0000-0000-000000000000",
-	'setup',
-	'',
-	'// 
+z1 := create Z( name => "Joe", worth => 1 );
+z2 := create Z( name => "Pat", worth => 2 );
+z3 := create Z( name => "Jason", worth => 3 );
+zz1 := create ZZ( xaction => 1, value => -1, buyer => z2.name, seller => z1.name );
+zz2 := create ZZ( xaction => 2, value => 2, buyer => z1.name, seller => z3.name );
+zz3 := create ZZ( xaction => 3, value => -3, buyer => z3.name, seller => z2.name );
+zz4 := create ZZ( xaction => 4, value => 4, buyer => z3.name, seller => z1.name );
+zz5 := create ZZ( xaction => 5, value => -5, buyer => z1.name, seller => z2.name );
+zz6 := create ZZ( xaction => 6, value => 6, buyer => z2.name, seller => z3.name );
+zz7 := create ZZ( xaction => 7, value => -7, buyer => z2.name, seller => z1.name );
+link z1 R13.sells_to z2 using zz1;
+link z1 R13.buys_from z3 using zz2;
+link z2 R13.sells_to z3 using zz3;
+link z3 R13.buys_from z1 using zz4;
+link z2 R13.sells_to z1 using zz5;
+link z2 R13.buys_from z3 using zz6;
+link z1 R13.sells_to z2 using zz7;
+
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'ee0b21c6-3e1f-4b2b-9441-00b6e64ca6eb' DO NOT EDIT THIS LINE.
+private service pei::setup () is
+// 
 // Check to see if any instances are already here.
 // This would mean that we have restored from NVS
 // or that preexisting instances were defined in data.
@@ -266,23 +246,12 @@ if ( empty a )
 
   ::do_creates();
 
-end if;   // if empty a',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'',
-	0);
-INSERT INTO PE_PE
-	VALUES ("ee0b21c6-3e1f-4b2b-9441-00b6e64ca6eb",
-	1,
-	"4bf9896e-225c-42da-82e6-68f6491ef16c",
-	"00000000-0000-0000-0000-000000000000",
-	1);
-INSERT INTO S_SYNC
-	VALUES ("b6ece4d0-3a14-4e5a-87e6-23378a779c47",
-	"00000000-0000-0000-0000-000000000000",
-	'test',
-	'',
-	'//
+end if;   // if empty a
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'b6ece4d0-3a14-4e5a-87e6-23378a779c47' DO NOT EDIT THIS LINE.
+private service pei::test () is
+//
 // Test that an instance of A already exists.
 //
 
@@ -416,25 +385,25 @@ select any h1 from instances of H where ( selected.hID == 1 );
 if ( empty h1 )
   LOG::LogFailure( message:"test1.80:  Failed to select H.");
 end if;
-select one h2 related by h1->H[R4.''precedes''];
+select one h2 related by h1->H[R4.'precedes'];
 if ( h2.hID != 2 )
   LOG::LogFailure( message:"test1.81:  Selected incorrect H.");
 end if;
 if ( h1.hID != h2.follows )
   LOG::LogFailure( message:"test1.81a:  H referential mismatch");
 end if;
-select one h3 related by h2->H[R4.''precedes''];
+select one h3 related by h2->H[R4.'precedes'];
 if ( h3.hID != 3 )
   LOG::LogFailure( message:"test1.82:  Selected incorrect H.");
 end if;
 if ( h2.hID != h3.follows )
   LOG::LogFailure( message:"test1.82a:  H referential mismatch");
 end if;
-select one h related by h1->H[R4.''precedes'']->H[R4.''precedes''];
+select one h related by h1->H[R4.'precedes']->H[R4.'precedes'];
 if ( h.hID != 3 )
   LOG::LogFailure( message:"test1.83:  Selected incorrect H.");
 end if;
-select one h related by h3->H[R4.''follows'']->H[R4.''follows''];
+select one h related by h3->H[R4.'follows']->H[R4.'follows'];
 if ( h.hID != 1 )
   LOG::LogFailure( message:"test1.84:  Selected incorrect H.");
 end if;
@@ -442,18 +411,18 @@ select any h from instances of H where ( selected.hID == 2 );
 if ( empty h )
   LOG::LogFailure( message:"test1.85:  Failed to select H.");
 end if;
-select one hp related by h->H[R4.''follows''];
+select one hp related by h->H[R4.'follows'];
 if ( hp.hID != 1 )
   LOG::LogFailure( message:"test1.86:  Selected incorrect H.");
 end if;
 if ( hp.hID != h.follows )
   LOG::LogFailure( message:"test1.86a:  H referential mismatch");
 end if;
-select one hf related by h->H[R4.''precedes''];
+select one hf related by h->H[R4.'precedes'];
 if ( hf.hID != 3 )
   LOG::LogFailure( message:"test1.87:  Selected incorrect H.");
 end if;
-select one h related by h3->H[R4.''precedes''];
+select one h related by h3->H[R4.'precedes'];
 if ( h.hID != 4 )
   LOG::LogFailure( message:"test1.88:  Selected incorrect H.");
 end if;
@@ -495,11 +464,11 @@ end if;
 // Test reflexive asymmetrics.
 //
 select any o from instances of O where ( selected.voo == "Cort" );
-select many os related by o->O[R8.''teaches''];
+select many os related by o->O[R8.'teaches'];
 if ( cardinality os != 3 )
   LOG::LogFailure( message:"test1.C2:  Failed to select Os.");
 end if;
-select one o1 related by o->O[R8.''learns_from''];
+select one o1 related by o->O[R8.'learns_from'];
 if ( o1.voo != "Kenny" )
   LOG::LogFailure( message:"test1.C3:  Selected incorrect O.");
 else
@@ -508,7 +477,7 @@ else
   end if;
 end if;
 select any o from instances of O where ( selected.voo == "Ellen" );
-select one o1 related by o->O[R8.''learns_from''];
+select one o1 related by o->O[R8.'learns_from'];
 if ( o1.voo != "Cort" )
   LOG::LogFailure( message:"test1.C4:  Selected incorrect O.");
 else
@@ -517,7 +486,7 @@ else
   end if;
 end if;
 select any o from instances of O where ( selected.voo == "Amy" );
-select one o1 related by o->O[R8.''learns_from''];
+select one o1 related by o->O[R8.'learns_from'];
 if ( o1.voo != "Cort" )
   LOG::LogFailure( message:"test1.C5:  Selected incorrect O.");
 else
@@ -530,7 +499,7 @@ end if;
 // Test reflexive associatives.
 //
 select any n from instances of N where ( selected.name == "Chris" );
-select many ns related by n->N[R7.''manages''];
+select many ns related by n->N[R7.'manages'];
 if ( cardinality ns != 2 )
   LOG::LogFailure( message:"test1.B2:  Failed to select Ns.");
 end if;
@@ -545,7 +514,7 @@ for each n in ns
 end for;
 delete object instance n1;
 select any n from instances of N where ( selected.name == "Pete" );
-select one boss related by n->N[R7.''works_for''];
+select one boss related by n->N[R7.'works_for'];
 if ( empty boss )
   LOG::LogFailure( message:"test1.B4:  Failed to select boss.");
 else
@@ -554,7 +523,7 @@ else
   end if;
 end if;
 select any n from instances of N where ( selected.name == "Dave" );
-select one m related by n->M[R7.''works_for''];
+select one m related by n->M[R7.'works_for'];
 if ( empty m )
   LOG::LogFailure( message:"test1.B6:  Failed to select M.");
   if ( m.department != "MEC" )
@@ -566,7 +535,7 @@ if ( empty m )
   end if;
 end if;
 select any n from instances of N where ( selected.name == "Pete" );
-select many ns related by n->N[R7.''manages''];
+select many ns related by n->N[R7.'manages'];
 if ( cardinality ns != 2 )
   LOG::LogFailure( message:"test1.B2:  Failed to select Ns.");
 end if;
@@ -632,17 +601,17 @@ end if;
 // Test 1-1 reflexive associatives.
 //
 select any w from instances of W where ( selected.name == "Rox" );
-select one husband related by w->W[R11.''is_wife_of''];
+select one husband related by w->W[R11.'is_wife_of'];
 if ( husband.name != "Cort" )
   LOG::LogFailure( message:"test1.F1:  Incorrect W.");
 end if;
 select any w from instances of W where ( selected.name == "Jacqui" );
-select one husband related by w->W[R11.''is_wife_of''];
+select one husband related by w->W[R11.'is_wife_of'];
 if ( husband.name != "Sean" )
   LOG::LogFailure( message:"test1.F2:  Incorrect W.");
 end if;
 select any huz from instances of W where ( selected.name == "Cort" );
-select one wife related by huz->W[R11.''is_husband_of''];
+select one wife related by huz->W[R11.'is_husband_of'];
 if ( wife.name != "Rox" )
   LOG::LogFailure( message:"test1.F3:  Incorrect W.");
 end if;
@@ -652,15 +621,15 @@ if ( ( v.husband != "Cort" ) or ( v.wife != "Rox" ) )
 end if;
 
 // Test friends and friendships.
-// (Note that this should be symmetric reflexive, but we don''t know how.)
+// (Note that this should be symmetric reflexive, but we don't know how.)
 //
 select any x from instances of X where ( selected.name == "Cort" );
 if ( empty x )
   LOG::LogFailure( message:"test1.X1:  Failed to select X." );
 end if;
-select many xs related by x->X[R12.''is_pal_of''];
+select many xs related by x->X[R12.'is_pal_of'];
 cardxs = cardinality xs;
-select many xs related by x->X[R12.''is_buddy_of''];
+select many xs related by x->X[R12.'is_buddy_of'];
 cardxs = cardxs + cardinality xs;
 if ( cardxs != 5 )
   LOG::LogFailure( message:"test1.X2:  Wrong number of friends." );
@@ -670,12 +639,12 @@ select many ys from instances of Y where ( selected.pal == "Cort" )
 if ( cardinality ys != 5 )
   LOG::LogFailure( message:"test1.Y3:  Wrong number of friends." );
 end if;
-// Test Sevina''s friends.
+// Test Sevina's friends.
 select any x from instances of X where ( selected.name == "Sevina" );
 if ( empty x )
   LOG::LogFailure( message:"test1.X4:  Failed to select X." );
 end if;
-select any x1 related by x->X[R12.''is_pal_of''];
+select any x1 related by x->X[R12.'is_pal_of'];
 if ( x1.name != "Rox" )
   LOG::LogFailure( message:"test1.X5:  Could not find Rox." );
 end if;
@@ -683,16 +652,16 @@ select any x from instances of X where ( selected.name == "Rox" );
 if ( empty x )
   LOG::LogFailure( message:"test1.X6:  Failed to select X." );
 end if;
-select any x1 related by x->X[R12.''is_buddy_of''];
+select any x1 related by x->X[R12.'is_buddy_of'];
 if ( x1.name != "Sevina" )
   LOG::LogFailure( message:"test1.X6:  Could not find Sevina." );
 end if;
 select any y from instances of Y;
-select one x related by y->X[R12.''is_pal_of''];
+select one x related by y->X[R12.'is_pal_of'];
 if ( x.name != y.pal )
   LOG::LogFailure( message:"test1.X6a:  X/Y referential mismatch" );
 end if;
-select one x related by y->X[R12.''is_buddy_of''];
+select one x related by y->X[R12.'is_buddy_of'];
 if ( x.name != y.buddy )
   LOG::LogFailure( message:"test1.X6b:  X/Y referential mismatch" );
 end if;
@@ -705,59 +674,35 @@ select any z from instances of Z where ( selected.name == "Joe" );
 if ( empty z )
   LOG::LogFailure( message:"test1.Z1:  Failed to select Z." );
 end if;
-select many zs related by z->Z[R13.''buys_from''];
+select many zs related by z->Z[R13.'buys_from'];
 if ( cardinality zs < 2 )
   LOG::LogFailure( message:"test1.Z2:  Could not find Zs." );
 end if;
 select any zz from instances of ZZ;
-select one z related by zz->Z[R13.''buys_from''];
+select one z related by zz->Z[R13.'buys_from'];
 if ( zz.buyer != z.name )
   LOG::LogFailure( message:"test1.Z2a:  Z/ZZ referential mismatch" );
 end if;
-select one z related by zz->Z[R13.''sells_to''];
+select one z related by zz->Z[R13.'sells_to'];
 if ( zz.seller != z.name )
   LOG::LogFailure( message:"test1.Z2b:  Z/ZZ referential mismatch" );
 end if;
 
 LOG::LogSuccess( message:"Made it to the end." );
-',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'',
-	0);
-INSERT INTO PE_PE
-	VALUES ("b6ece4d0-3a14-4e5a-87e6-23378a779c47",
-	1,
-	"4bf9896e-225c-42da-82e6-68f6491ef16c",
-	"00000000-0000-0000-0000-000000000000",
-	1);
-INSERT INTO S_SYNC
-	VALUES ("3478bf0f-b428-4b52-b41a-0ce97241c99b",
-	"00000000-0000-0000-0000-000000000000",
-	'test1',
-	'',
-	'//
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '3478bf0f-b428-4b52-b41a-0ce97241c99b' DO NOT EDIT THIS LINE.
+private service pei::test1 () is
+//
 // Generate an event to be sure that b is in the correct current state.
 //
 select any b from instances of B;
 generate B1:go() to b;
-',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'',
-	0);
-INSERT INTO PE_PE
-	VALUES ("3478bf0f-b428-4b52-b41a-0ce97241c99b",
-	1,
-	"4bf9896e-225c-42da-82e6-68f6491ef16c",
-	"00000000-0000-0000-0000-000000000000",
-	1);
-INSERT INTO S_SYNC
-	VALUES ("a20db3d4-77d0-47da-9b8c-6d6a1d4dabf2",
-	"00000000-0000-0000-0000-000000000000",
-	'test2',
-	'',
-	'// Do some creates and deletes to to exercise storage.
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'a20db3d4-77d0-47da-9b8c-6d6a1d4dabf2' DO NOT EDIT THIS LINE.
+private service pei::test2 () is
+// Do some creates and deletes to to exercise storage.
 // But delete everything created.
 
 create object instance a of A;
@@ -784,54 +729,10 @@ delete object instance d;
 
 create object instance n of N;
 delete object instance n;
-',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'',
-	0);
-INSERT INTO PE_PE
-	VALUES ("a20db3d4-77d0-47da-9b8c-6d6a1d4dabf2",
-	1,
-	"4bf9896e-225c-42da-82e6-68f6491ef16c",
-	"00000000-0000-0000-0000-000000000000",
-	1);
-INSERT INTO S_SYNC
-	VALUES ("888d97ee-40a0-4baa-8ca8-41c7678e8e7d",
-	"00000000-0000-0000-0000-000000000000",
-	'xit',
-	'',
-	'
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '888d97ee-40a0-4baa-8ca8-41c7678e8e7d' DO NOT EDIT THIS LINE.
+private service pei::xit () is
 ARCH::shutdown();
-',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'',
-	0);
-INSERT INTO PE_PE
-	VALUES ("888d97ee-40a0-4baa-8ca8-41c7678e8e7d",
-	1,
-	"4bf9896e-225c-42da-82e6-68f6491ef16c",
-	"00000000-0000-0000-0000-000000000000",
-	1);
-INSERT INTO PE_PE
-	VALUES ("4bf9896e-225c-42da-82e6-68f6491ef16c",
-	1,
-	"00000000-0000-0000-0000-000000000000",
-	"515c8018-0c73-4e2e-a7f9-3379de6bc14b",
-	7);
-INSERT INTO C_C_PROXY
-	VALUES ("515c8018-0c73-4e2e-a7f9-3379de6bc14b",
-	"00000000-0000-0000-0000-000000000000",
-	"00000000-0000-0000-0000-000000000000",
-	'pei',
-	'',
-	0,
-	"00000000-0000-0000-0000-000000000000",
-	0,
-	'',
-	'../pei.xtuml');
-INSERT INTO S_SYS_PROXY
-	VALUES ("f8b7229b-f136-42db-8d6c-0444f3c8a0e2",
-	'pei',
-	1,
-	'../../../pei.xtuml');
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
