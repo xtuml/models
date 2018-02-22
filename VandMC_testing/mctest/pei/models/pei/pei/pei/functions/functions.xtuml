@@ -41,7 +41,7 @@ INSERT INTO S_SYNC
 	'//
 // Set up instances for existence test later on.
 
-// A R1 B
+// plug R1 socket
 create object instance a of plug; a.aID = 99;  // extras to see in PEIs
 create object instance a of plug; a.aID = 98;
 create object instance a of plug; a.aID = 1; a.i = 1;
@@ -55,7 +55,7 @@ create object instance b of socket; b.bID = 6; b.i = 6;
 relate a to b across R1;
 create object instance b of socket;  // extra to see it in PEIs
 
-// C R2 D
+// dog R2 dog_owner
 create object instance c1 of dog; c1.cID = 1;
 create object instance c2 of dog; c2.cID = 2;
 create object instance c3 of dog; c3.cID = 3;
@@ -68,7 +68,7 @@ relate d2 to c2 across R2;
 relate d2 to c3 across R2;
 relate c4 to d2 across R2;
 
-// E R3 F using G
+// host R3 device using connection
 create object instance e0 of host; e0.eID = 100; e0.ratio = 0.1;
 create object instance e1 of host; e1.eID = 1; e1.ratio = 0.314;
 create object instance e2 of host; e2.eID = 2; e2.ratio = 2.718;
@@ -84,7 +84,7 @@ relate f2 to e1 across R3 using g2;
 relate f3 to e2 across R3 using g3;
 relate e1 to f3 across R3 using g4;
 
-// H R4 (reflexive)
+// transmission R4 (reflexive)
 create object instance h1 of transmission; h1.hID = 1;
 create object instance h2 of transmission; h2.hID = 2;
 create object instance h of transmission; h.hID = 99;  // extra to see in PEIs
@@ -94,7 +94,7 @@ relate h1 to h2 across R4.''precedes'';
 relate h2 to h3 across R4.''precedes'';
 relate h4 to h3 across R4.''follows'';
 
-// I R5 J, K R6 L
+// car R5 sedan, sports_car R6 convertible
 create object instance i4 of car; i4.iID = 400; i4.common = 400;
 create object instance i3 of car; i3.iID = 300; i3.common = 300;
 create object instance i2 of car; i2.iID = 200; i2.common = 200;
@@ -114,7 +114,7 @@ relate l1 to k1 across R6;
 relate l3 to k2 across R6;
 relate k3 to l2 across R6;
 
-// O R8 reflexive
+// group_member R8 reflexive
 create object instance o2 of group_member; o2.oID = 2; o2.voo = "Cort";
 create object instance o1 of group_member; o1.oID = 1; o1.voo = "Kenny";
 create object instance o3 of group_member; o3.oID = 3; o3.voo = "Amy";
@@ -125,7 +125,7 @@ relate o2 to o3 across R8.''teaches''; // Cort teaches Amy.
 relate o4 to o2 across R8.''learns_from''; // Ellen learns from Cort.
 relate o5 to o2 across R8.''learns_from''; // Brad learns from Cort.
 
-// N R7 reflexive using M
+// employee R7 reflexive using report_line
 create object instance n1 of employee; n1.nID = 1; n1.name = "Pete";
 create object instance n2 of employee; n2.nID = 2; n2.name = "Dave";
 create object instance n3 of employee; n3.nID = 3; n3.name = "Alex";
@@ -143,7 +143,7 @@ relate n5 to n2 across R7.''works_for'' using m3; // Cale works for Dave.
 relate n1 to n6 across R7.''works_for'' using m4; // Pete works for Chris.
 relate n6 to n2 across R7.''manages'' using m5; // Chris manages Dave.
 
-// P R9 Q using R
+// automobile R9 jurisdiction using license
 create object instance p1 of automobile; p1.eyedee = "Rox";
 create object instance p2 of automobile; p2.eyedee = "Bita";
 create object instance p3 of automobile; p3.eyedee = "Tina";
@@ -157,7 +157,7 @@ relate p1 to q3 across R9 using r1;
 relate q2 to p2 across R9 using r3;
 relate p3 to q1 across R9 using r2;
 
-// S R10 T using U
+// AtoD_converter R10 analog_input using sample
 create object instance s1 of AtoD_converter; s1.s = "Rox";
 create object instance s2 of AtoD_converter; s2.s = "Jacqui";
 create object instance t1 of analog_input; t1.t = "Clare";
@@ -176,7 +176,7 @@ relate t1 to s2 across R10 using u5;
 relate t2 to s2 across R10 using u4;
 relate s2 to t3 across R10 using u3;
 
-// W R11 reflexive using V
+// person R11 reflexive using marriage
 create object instance w1 of person; w1.name = "Cort";
 create object instance w2 of person; w2.name = "Rox";
 create object instance w3 of person; w3.name = "Sean";

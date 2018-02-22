@@ -31,7 +31,7 @@ zz1 : instance of deal; zz2 : instance of deal; zz3 : instance of deal; zz4 : in
 begin
 // Set up instances for existence test later on.
 
-// A R1 B
+// plug R1 socket
 a := create plug( aID => 99 ); // extras to see in PEIs
 a := create plug( aID => 98 );
 b := create socket( bID => 2, i => 2 );
@@ -45,7 +45,7 @@ a := create plug( aID => 5, i => 5, bID => b.bID );
 link a R1 b;
 b := create socket( bID => 8 ); // extra to see it in PEIs
 
-// C R2 D
+// dog R2 dog_owner
 d1 := create dog_owner( dID => 1 ); // extra
 d2 := create dog_owner( dID => 2, name => "DeeTwo" );
 c1 := create dog( cID => 1, dID => d2.dID );
@@ -58,7 +58,7 @@ link d2 R2 c2;
 link d2 R2 c3;
 link c4 R2 d2;
 
-// E R3 F using G
+// host R3 device using connection
 e0 := create host( eID => 100, ratio => 0.1 );
 e1 := create host( eID => 1, ratio => 3.14 );
 e2 := create host( eID => 2, ratio => 2.718 );
@@ -74,7 +74,7 @@ link f2 R3 e1 using g2;
 link f3 R3 e2 using g3;
 link e1 R3 f3 using g4;
 
-// H R4 (reflexive)
+// transmission R4 (reflexive)
 h1 := create transmission( hID => 1 );
 h2 := create transmission( hID => 2, follows => h1.hID );
 h := create transmission( hID => 99 ); // extra to see in PEIs
@@ -84,7 +84,7 @@ link h1 R2.precedes h2;
 link h2 R2.precedes h3;
 link h4 R2.follows h3;
 
-// I R5 J, K R6 L
+// car R5 sedan, sports_car R6 convertible
 i4 := create car( iID => 400, common => 400 );
 i3 := create car( iID => 300, common => 300 );
 i2 := create car( iID => 200, common => 200 );
@@ -104,7 +104,7 @@ link l1 R6 k1;
 link l3 R6 k2;
 link k3 R5 l2;
 
-// O R8 reflexive
+// group_member R8 reflexive
 o2 := create group_member( oID => 2, voo => "Cort", teacheroID => o2.OID );
 o1 := create group_member( oID => 1, voo => "Kenny" );
 o3 := create group_member( oID => 3, voo => "Amy", teacheroID => o1.OID );
@@ -115,7 +115,7 @@ link o2 R8.teaches o3; // Cort teaches Amy.
 link o4 R8.learns_from o2; // Ellen learns from Cort.
 link o5 R8.learns_from o2; // Brad learns from Cort.
 
-// N R7 reflexive using M
+// employee R7 reflexive using report_line
 n1 := create employee( nID => 1, name => "Pete" );
 n2 := create employee( nID => 2, name => "Dave" );
 n3 := create employee( nID => 3, name => "Alex" );
@@ -133,7 +133,7 @@ link n5 R7.works_for n2 using m3; // Cale works for Dave.
 link n1 R7.works_for n6 using m4; // Pete works for Chris.
 link n6 R7.manages n2 using m5;   // Chris manages Dave.
 
-// P R9 Q using R
+// automobile R9 jurisdiction using license
 p1 := create automobile( eyedee => "Rox" );
 p2 := create automobile( eyedee => "Bita" );
 p3 := create automobile( eyedee => "Tina" );
@@ -147,7 +147,7 @@ link p1 R9 q3 using r1;
 link q2 R9 p2 using r3;
 link p3 R9 q1 using r2;
 
-// S R10 T using U
+// AtoD_converter R10 analog_input using sample
 s1 := create AtoD_converter( s => "Rox" );
 s2 := create AtoD_converter( s => "Jacqui" );
 t1 := create analog_input( t => "Clare" );
@@ -166,7 +166,7 @@ link t1 R10 s2 using u5;
 link t2 R10 s2 using u4;
 link s2 R10 t3 using u3;
 
-// W R11 reflexive using V
+// person R11 reflexive using marriage
 w1 := create person( name => "Cort" );
 w2 := create person( name => "Rox" );
 w3 := create person( name => "Sean" );
