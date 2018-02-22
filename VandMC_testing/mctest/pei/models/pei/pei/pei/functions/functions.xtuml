@@ -42,70 +42,70 @@ INSERT INTO S_SYNC
 // Set up instances for existence test later on.
 
 // A R1 B
-create object instance a of A; a.aID = 99;  // extras to see in PEIs
-create object instance a of A; a.aID = 98;
-create object instance a of A; a.aID = 1; a.i = 1;
-create object instance b of B; b.bID = 2; b.i = 2;
+create object instance a of plug; a.aID = 99;  // extras to see in PEIs
+create object instance a of plug; a.aID = 98;
+create object instance a of plug; a.aID = 1; a.i = 1;
+create object instance b of socket; b.bID = 2; b.i = 2;
 relate a to b across R1;
-create object instance a of A; a.aID = 3; a.i = 3;
-create object instance b of B; b.bID = 4; b.i = 4;
+create object instance a of plug; a.aID = 3; a.i = 3;
+create object instance b of socket; b.bID = 4; b.i = 4;
 relate b to a across R1;
-create object instance a of A; a.aID = 5; a.i = 5;
-create object instance b of B; b.bID = 6; b.i = 6;
+create object instance a of plug; a.aID = 5; a.i = 5;
+create object instance b of socket; b.bID = 6; b.i = 6;
 relate a to b across R1;
-create object instance b of B;  // extra to see it in PEIs
+create object instance b of socket;  // extra to see it in PEIs
 
 // C R2 D
-create object instance c1 of C; c1.cID = 1;
-create object instance c2 of C; c2.cID = 2;
-create object instance c3 of C; c3.cID = 3;
-create object instance c4 of C; c4.cID = 4;
-create object instance c5 of C;  // extra
-create object instance d1 of D;  // extra
-create object instance d2 of D; d2.name = "DeeTwo";
+create object instance c1 of dog; c1.cID = 1;
+create object instance c2 of dog; c2.cID = 2;
+create object instance c3 of dog; c3.cID = 3;
+create object instance c4 of dog; c4.cID = 4;
+create object instance c5 of dog;  // extra
+create object instance d1 of dog_owner;  // extra
+create object instance d2 of dog_owner; d2.name = "DeeTwo";
 relate c1 to d2 across R2;
 relate d2 to c2 across R2;
 relate d2 to c3 across R2;
 relate c4 to d2 across R2;
 
 // E R3 F using G
-create object instance e0 of E; e0.eID = 100; e0.ratio = 0.1;
-create object instance e1 of E; e1.eID = 1; e1.ratio = 0.314;
-create object instance e2 of E; e2.eID = 2; e2.ratio = 2.718;
-create object instance f3 of F; f3.fID = 3; f3.enabled = true;
-create object instance f2 of F; f2.fID = 2; f2.enabled = false;
-create object instance f1 of F; f1.fID = 1; f1.enabled = true;
-create object instance g1 of G; g1.gID = 1;
-create object instance g2 of G; g2.gID = 2;
-create object instance g3 of G; g3.gID = 3;
-create object instance g4 of G; g4.gID = 4;
+create object instance e0 of host; e0.eID = 100; e0.ratio = 0.1;
+create object instance e1 of host; e1.eID = 1; e1.ratio = 0.314;
+create object instance e2 of host; e2.eID = 2; e2.ratio = 2.718;
+create object instance f3 of device; f3.fID = 3; f3.enabled = true;
+create object instance f2 of device; f2.fID = 2; f2.enabled = false;
+create object instance f1 of device; f1.fID = 1; f1.enabled = true;
+create object instance g1 of connection; g1.gID = 1;
+create object instance g2 of connection; g2.gID = 2;
+create object instance g3 of connection; g3.gID = 3;
+create object instance g4 of connection; g4.gID = 4;
 relate e1 to f1 across R3 using g1;
 relate f2 to e1 across R3 using g2;
 relate f3 to e2 across R3 using g3;
 relate e1 to f3 across R3 using g4;
 
 // H R4 (reflexive)
-create object instance h1 of H; h1.hID = 1;
-create object instance h2 of H; h2.hID = 2;
-create object instance h of H; h.hID = 99;  // extra to see in PEIs
-create object instance h3 of H; h3.hID = 3;
-create object instance h4 of H; h4.hID = 4;
+create object instance h1 of transmission; h1.hID = 1;
+create object instance h2 of transmission; h2.hID = 2;
+create object instance h of transmission; h.hID = 99;  // extra to see in PEIs
+create object instance h3 of transmission; h3.hID = 3;
+create object instance h4 of transmission; h4.hID = 4;
 relate h1 to h2 across R4.''precedes'';
 relate h2 to h3 across R4.''precedes'';
 relate h4 to h3 across R4.''follows'';
 
 // I R5 J, K R6 L
-create object instance i4 of I; i4.iID = 400; i4.common = 400;
-create object instance i3 of I; i3.iID = 300; i3.common = 300;
-create object instance i2 of I; i2.iID = 200; i2.common = 200;
-create object instance i1 of I; i1.iID = 100; i1.common = 100;
-create object instance j1 of J; j1.jID = 2; j1.specialJ = 2;
-create object instance k1 of K; k1.kID = 11; k1.specialcommon = 11;
-create object instance k2 of K; k2.kID = 22; k2.specialcommon = 22;
-create object instance k3 of K; k3.kID = 33; k3.specialcommon = 33;
-create object instance l2 of L; l2.lID = 222; l2.specialL = 222;
-create object instance l3 of L; l3.lID = 333; l3.specialL = 333;
-create object instance l1 of L; l1.lID = 111; l1.specialL = 111;
+create object instance i4 of car; i4.iID = 400; i4.common = 400;
+create object instance i3 of car; i3.iID = 300; i3.common = 300;
+create object instance i2 of car; i2.iID = 200; i2.common = 200;
+create object instance i1 of car; i1.iID = 100; i1.common = 100;
+create object instance j1 of sedan; j1.jID = 2; j1.specialJ = 2;
+create object instance k1 of sports_car; k1.kID = 11; k1.specialcommon = 11;
+create object instance k2 of sports_car; k2.kID = 22; k2.specialcommon = 22;
+create object instance k3 of sports_car; k3.kID = 33; k3.specialcommon = 33;
+create object instance l2 of convertible; l2.lID = 222; l2.specialL = 222;
+create object instance l3 of convertible; l3.lID = 333; l3.specialL = 333;
+create object instance l1 of convertible; l1.lID = 111; l1.specialL = 111;
 relate i1 to j1 across R5;
 relate i2 to k3 across R5;
 relate k2 to i3 across R5;
@@ -115,28 +115,28 @@ relate l3 to k2 across R6;
 relate k3 to l2 across R6;
 
 // O R8 reflexive
-create object instance o2 of O; o2.oID = 2; o2.voo = "Cort";
-create object instance o1 of O; o1.oID = 1; o1.voo = "Kenny";
-create object instance o3 of O; o3.oID = 3; o3.voo = "Amy";
-create object instance o4 of O; o4.oID = 4; o4.voo = "Ellen";
-create object instance o5 of O; o5.oID = 5; o5.voo = "Brad";
+create object instance o2 of group_member; o2.oID = 2; o2.voo = "Cort";
+create object instance o1 of group_member; o1.oID = 1; o1.voo = "Kenny";
+create object instance o3 of group_member; o3.oID = 3; o3.voo = "Amy";
+create object instance o4 of group_member; o4.oID = 4; o4.voo = "Ellen";
+create object instance o5 of group_member; o5.oID = 5; o5.voo = "Brad";
 relate o1 to o2 across R8.''teaches''; // Kenny teaches Cort.
 relate o2 to o3 across R8.''teaches''; // Cort teaches Amy.
 relate o4 to o2 across R8.''learns_from''; // Ellen learns from Cort.
 relate o5 to o2 across R8.''learns_from''; // Brad learns from Cort.
 
 // N R7 reflexive using M
-create object instance n1 of N; n1.nID = 1; n1.name = "Pete";
-create object instance n2 of N; n2.nID = 2; n2.name = "Dave";
-create object instance n3 of N; n3.nID = 3; n3.name = "Alex";
-create object instance n4 of N; n4.nID = 4; n4.name = "Jenn";
-create object instance n5 of N; n5.nID = 5; n5.name = "Cale";
-create object instance n6 of N; n6.nID = 6; n6.name = "Chris";
-create object instance m1 of M; m1.mID = 1; m1.department = "SW";
-create object instance m2 of M; m2.mID = 2; m2.department = "SW";
-create object instance m3 of M; m3.mID = 3; m3.department = "HW";
-create object instance m4 of M; m4.mID = 4; m4.department = "MEC";
-create object instance m5 of M; m5.mID = 5; m5.department = "MEC";
+create object instance n1 of employee; n1.nID = 1; n1.name = "Pete";
+create object instance n2 of employee; n2.nID = 2; n2.name = "Dave";
+create object instance n3 of employee; n3.nID = 3; n3.name = "Alex";
+create object instance n4 of employee; n4.nID = 4; n4.name = "Jenn";
+create object instance n5 of employee; n5.nID = 5; n5.name = "Cale";
+create object instance n6 of employee; n6.nID = 6; n6.name = "Chris";
+create object instance m1 of report_line; m1.mID = 1; m1.department = "SW";
+create object instance m2 of report_line; m2.mID = 2; m2.department = "SW";
+create object instance m3 of report_line; m3.mID = 3; m3.department = "HW";
+create object instance m4 of report_line; m4.mID = 4; m4.department = "MEC";
+create object instance m5 of report_line; m5.mID = 5; m5.department = "MEC";
 relate n1 to n3 across R7.''manages'' using m1;   // Pete manages Alex.
 relate n1 to n4 across R7.''manages'' using m2;   // Pete manages Jenn.
 relate n5 to n2 across R7.''works_for'' using m3; // Cale works for Dave.
@@ -144,32 +144,32 @@ relate n1 to n6 across R7.''works_for'' using m4; // Pete works for Chris.
 relate n6 to n2 across R7.''manages'' using m5; // Chris manages Dave.
 
 // P R9 Q using R
-create object instance p1 of P; p1.eyedee = "Rox";
-create object instance p2 of P; p2.eyedee = "Bita";
-create object instance p3 of P; p3.eyedee = "Tina";
-create object instance q1 of Q; q1.deeeye = "Shane";
-create object instance q2 of Q; q2.deeeye = "Rusty";
-create object instance q3 of Q; q3.deeeye = "Cort";
-create object instance r1 of R; r1.city = "Indianapolis";
-create object instance r2 of R; r2.city = "Lockport";
-create object instance r3 of R; r3.city = "Battleground";
+create object instance p1 of automobile; p1.eyedee = "Rox";
+create object instance p2 of automobile; p2.eyedee = "Bita";
+create object instance p3 of automobile; p3.eyedee = "Tina";
+create object instance q1 of jurisdiction; q1.deeeye = "Shane";
+create object instance q2 of jurisdiction; q2.deeeye = "Rusty";
+create object instance q3 of jurisdiction; q3.deeeye = "Cort";
+create object instance r1 of license; r1.city = "Indianapolis";
+create object instance r2 of license; r2.city = "Lockport";
+create object instance r3 of license; r3.city = "Battleground";
 relate p1 to q3 across R9 using r1;
 relate q2 to p2 across R9 using r3;
 relate p3 to q1 across R9 using r2;
 
 // S R10 T using U
-create object instance s1 of S; s1.s = "Rox";
-create object instance s2 of S; s2.s = "Jacqui";
-create object instance t1 of T; t1.t = "Clare";
-create object instance t2 of T; t2.t = "Katrina";
-create object instance t3 of T; t3.t = "Colleen";
-create object instance t4 of T; t4.t = "Hannah";
-create object instance t5 of T; t5.t = "Ruby";
-create object instance u5 of U; u5.s = "Oct";
-create object instance u4 of U; u4.s = "Aug";
-create object instance u3 of U; u3.s = "Apr";
-create object instance u2 of U; u2.s = "Dec";
-create object instance u1 of U; u1.s = "Nov";
+create object instance s1 of AtoD_converter; s1.s = "Rox";
+create object instance s2 of AtoD_converter; s2.s = "Jacqui";
+create object instance t1 of analog_input; t1.t = "Clare";
+create object instance t2 of analog_input; t2.t = "Katrina";
+create object instance t3 of analog_input; t3.t = "Colleen";
+create object instance t4 of analog_input; t4.t = "Hannah";
+create object instance t5 of analog_input; t5.t = "Ruby";
+create object instance u5 of sample; u5.s = "Oct";
+create object instance u4 of sample; u4.s = "Aug";
+create object instance u3 of sample; u3.s = "Apr";
+create object instance u2 of sample; u2.s = "Dec";
+create object instance u1 of sample; u1.s = "Nov";
 relate s1 to t4 across R10 using u2;
 relate s1 to t5 across R10 using u1;
 relate t1 to s2 across R10 using u5;
@@ -177,31 +177,31 @@ relate t2 to s2 across R10 using u4;
 relate s2 to t3 across R10 using u3;
 
 // W R11 reflexive using V
-create object instance w1 of W; w1.name = "Cort";
-create object instance w2 of W; w2.name = "Rox";
-create object instance w3 of W; w3.name = "Sean";
-create object instance w4 of W; w4.name = "Jacqui";
-create object instance v1 of V; v1.year = 1988;
-create object instance v2 of V; v2.year = 1990;
+create object instance w1 of person; w1.name = "Cort";
+create object instance w2 of person; w2.name = "Rox";
+create object instance w3 of person; w3.name = "Sean";
+create object instance w4 of person; w4.name = "Jacqui";
+create object instance v1 of marriage; v1.year = 1988;
+create object instance v2 of marriage; v2.year = 1990;
 relate w1 to w2 across R11.''is_husband_of'' using v1;
 relate w4 to w3 across R11.''is_wife_of'' using v2;
 
 // friends and friendships
-create object instance x1 of X; x1.name = "Cort"; x1.age = 39;
-create object instance x2 of X; x2.name = "Rox"; x2.age = 38;
-create object instance x3 of X; x3.name = "Sevina"; x3.age = 35;
-create object instance x4 of X; x4.name = "Joe"; x4.age = 43;
-create object instance x5 of X; x5.name = "Scott"; x5.age = 42;
-create object instance x6 of X; x6.name = "Jason"; x6.age = 31;
-create object instance y1 of Y; y1.duration = 1; y1.closeness = 10;
-create object instance y2 of Y; y2.duration = 2; y2.closeness = 20;
-create object instance y3 of Y; y3.duration = 3; y3.closeness = 30;
-create object instance y4 of Y; y4.duration = 4; y4.closeness = 40;
-create object instance y5 of Y; y5.duration = 5; y5.closeness = 50;
-create object instance y6 of Y; y6.duration = 6; y6.closeness = 60;
-create object instance y7 of Y; y7.duration = 7; y7.closeness = 70;
-create object instance y8 of Y; y8.duration = 8; y8.closeness = 80;
-create object instance y9 of Y; y9.duration = 9; y9.closeness = 90;
+create object instance x1 of friend; x1.name = "Cort"; x1.age = 39;
+create object instance x2 of friend; x2.name = "Rox"; x2.age = 38;
+create object instance x3 of friend; x3.name = "Sevina"; x3.age = 35;
+create object instance x4 of friend; x4.name = "Joe"; x4.age = 43;
+create object instance x5 of friend; x5.name = "Scott"; x5.age = 42;
+create object instance x6 of friend; x6.name = "Jason"; x6.age = 31;
+create object instance y1 of friendship; y1.duration = 1; y1.closeness = 10;
+create object instance y2 of friendship; y2.duration = 2; y2.closeness = 20;
+create object instance y3 of friendship; y3.duration = 3; y3.closeness = 30;
+create object instance y4 of friendship; y4.duration = 4; y4.closeness = 40;
+create object instance y5 of friendship; y5.duration = 5; y5.closeness = 50;
+create object instance y6 of friendship; y6.duration = 6; y6.closeness = 60;
+create object instance y7 of friendship; y7.duration = 7; y7.closeness = 70;
+create object instance y8 of friendship; y8.duration = 8; y8.closeness = 80;
+create object instance y9 of friendship; y9.duration = 9; y9.closeness = 90;
 // friends of Cort
 relate x1 to x2 across R12.''is_buddy_of'' using y1;
 relate x1 to x3 across R12.''is_pal_of'' using y2;
@@ -218,16 +218,16 @@ relate x6 to x5 across R12.''is_buddy_of'' using y9;
 
 
 // dealers and deals
-create object instance z1 of Z; z1.name = "Joe"; z1.worth = 1;
-create object instance z2 of Z; z2.name = "Pat"; z2.worth = 2;
-create object instance z3 of Z; z3.name = "Jason"; z3.worth = 3;
-create object instance zz1 of ZZ; zz1.xaction = 1; zz1.value = -1;
-create object instance zz2 of ZZ; zz2.xaction = 2; zz2.value = 2;
-create object instance zz3 of ZZ; zz3.xaction = 3; zz3.value = -3;
-create object instance zz4 of ZZ; zz4.xaction = 4; zz4.value = 4;
-create object instance zz5 of ZZ; zz5.xaction = 5; zz5.value = -5;
-create object instance zz6 of ZZ; zz6.xaction = 6; zz6.value = 6;
-create object instance zz7 of ZZ; zz7.xaction = 7; zz7.value = -7;
+create object instance z1 of dealer; z1.name = "Joe"; z1.worth = 1;
+create object instance z2 of dealer; z2.name = "Pat"; z2.worth = 2;
+create object instance z3 of dealer; z3.name = "Jason"; z3.worth = 3;
+create object instance zz1 of deal; zz1.xaction = 1; zz1.value = -1;
+create object instance zz2 of deal; zz2.xaction = 2; zz2.value = 2;
+create object instance zz3 of deal; zz3.xaction = 3; zz3.value = -3;
+create object instance zz4 of deal; zz4.xaction = 4; zz4.value = 4;
+create object instance zz5 of deal; zz5.xaction = 5; zz5.value = -5;
+create object instance zz6 of deal; zz6.xaction = 6; zz6.value = 6;
+create object instance zz7 of deal; zz7.xaction = 7; zz7.value = -7;
 relate z1 to z2 across R13.''sells_to'' using zz1;
 relate z1 to z3 across R13.''buys_from'' using zz2;
 relate z2 to z3 across R13.''sells_to'' using zz3;
@@ -257,7 +257,7 @@ INSERT INTO S_SYNC
 // or that preexisting instances were defined in data.
 //
 
-select any a from instances of A;
+select any a from instances of plug;
 if ( empty a )
 
   //
@@ -286,21 +286,21 @@ INSERT INTO S_SYNC
 // Test that an instance of A already exists.
 //
 
-select any a from instances of A;
+select any a from instances of plug;
 if (empty a)
   LOG::LogFailure( message:"test1.20:  Failed to select a." );
 end if;
 
-select many as from instances of A;
+select many as from instances of plug;
 if (cardinality as != 5)
   LOG::LogFailure( message:"test1.21:  Wrong number of As." );
 end if;
-select many as_again from instances of A;
+select many as_again from instances of plug;
 if ( as != as_again )
   LOG::LogFailure( message:"set of As and As_again do not match." );
 end if;
 
-create object instance a1 of A; a1.i = 101;
+create object instance a1 of plug; a1.i = 101;
 select any a from instances of A where (selected.i == 1);
 if (empty a)
   LOG::LogFailure( message:"test1.22:  Failed to select a where." );
@@ -534,8 +534,8 @@ select many ns related by n->N[R7.''manages''];
 if ( cardinality ns != 2 )
   LOG::LogFailure( message:"test1.B2:  Failed to select Ns.");
 end if;
-create object instance n1 of N;
-create object instance n2 of N;
+create object instance n1 of employee;
+create object instance n2 of employee;
 delete object instance n2;
 n1.name = "Vijay";
 for each n in ns
@@ -687,7 +687,7 @@ select any x1 related by x->X[R12.''is_buddy_of''];
 if ( x1.name != "Sevina" )
   LOG::LogFailure( message:"test1.X6:  Could not find Sevina." );
 end if;
-select any y from instances of Y;
+select any y from instances of friendship;
 select one x related by y->X[R12.''is_pal_of''];
 if ( x.name != y.pal )
   LOG::LogFailure( message:"test1.X6a:  X/Y referential mismatch" );
@@ -709,7 +709,7 @@ select many zs related by z->Z[R13.''buys_from''];
 if ( cardinality zs < 2 )
   LOG::LogFailure( message:"test1.Z2:  Could not find Zs." );
 end if;
-select any zz from instances of ZZ;
+select any zz from instances of deal;
 select one z related by zz->Z[R13.''buys_from''];
 if ( zz.buyer != z.name )
   LOG::LogFailure( message:"test1.Z2a:  Z/ZZ referential mismatch" );
@@ -739,7 +739,7 @@ INSERT INTO S_SYNC
 	'//
 // Generate an event to be sure that b is in the correct current state.
 //
-select any b from instances of B;
+select any b from instances of socket;
 generate B1:go() to b;
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
@@ -760,17 +760,17 @@ INSERT INTO S_SYNC
 	'// Do some creates and deletes to to exercise storage.
 // But delete everything created.
 
-create object instance a of A;
+create object instance a of plug;
 delete object instance a;
 
-create object instance a of A;
-create object instance b of B;
+create object instance a of plug;
+create object instance b of socket;
 relate a to b across R1;
-create object instance c of C;
-create object instance d of D;
+create object instance c of dog;
+create object instance d of dog_owner;
 relate c to d across R2;
-create object instance y of Y;
-create object instance z of Z;
+create object instance y of friendship;
+create object instance z of dealer;
 
 unrelate c from d across R2;
 unrelate a from b across R1;
@@ -782,7 +782,7 @@ delete object instance y;
 delete object instance c;
 delete object instance d;
 
-create object instance n of N;
+create object instance n of employee;
 delete object instance n;
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
