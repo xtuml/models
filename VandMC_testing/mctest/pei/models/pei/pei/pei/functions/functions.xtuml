@@ -301,18 +301,18 @@ if ( as != as_again )
 end if;
 
 create object instance a1 of plug; a1.i = 101;
-select any a from instances of A where (selected.i == 1);
+select any a from instances of plug where (selected.i == 1);
 if (empty a)
   LOG::LogFailure( message:"test1.22:  Failed to select a where." );
 end if;
 delete object instance a1;
 
-select any b from instances of B where (selected.i == 20);
+select any b from instances of socket where (selected.i == 20);
 if (not empty b)
   LOG::LogFailure( message:"test1.23:  Selected non-existant B." );
 end if;
 
-select any b from instances of B where (selected.i == 2);
+select any b from instances of socket where (selected.i == 2);
 if (empty b)
   LOG::LogFailure( message:"test1.24:  Failed to select b where." );
 end if;
@@ -320,8 +320,8 @@ end if;
 //
 // Test that there is a B related to this A.
 //
-select any a from instances of A where (selected.i == 3);
-select one b related by a->B[R1];
+select any a from instances of plug where (selected.i == 3);
+select one b related by a->socket[R1];
 if (empty b)
   LOG::LogFailure( message:"test1.40:  Failed to select b across R1." );
 end if;
@@ -331,7 +331,7 @@ if (b.i != 4)
     LOG::LogFailure( message:"test1.42:  A/B referential mismatch" );
   end if;
 end if;
-select one same_a related by a->B[R1]->A[R1];
+select one same_a related by a->socket[R1]->plug[R1];
 if ( empty same_a )
   LOG::LogFailure( message:"test1.43:  Did not find a out and back across R1." );
 else
@@ -343,7 +343,7 @@ end if;
 //
 // Test that there is an A related to this B.
 //
-select one a related by b->A[R1];
+select one a related by b->plug[R1];
 if (empty a)
   LOG::LogFailure( message:"test1.44:  Failed to select a across R1." );
 end if;
@@ -356,7 +356,7 @@ relate a to b across R1;
 //
 // Test for a D.
 //
-select any d from instances of D where ( selected.name == "DeeTwo" );
+select any d from instances of dog_owner where ( selected.name == "DeeTwo" );
 if (empty d)
   LOG::LogFailure( message:"test1.52:  Failed to select d from Ds.");
 end if;
@@ -364,12 +364,12 @@ end if;
 //
 // Test for many Cs related to D.
 //
-select many cs related by d->C[R2];
+select many cs related by d->dog[R2];
 if ( cardinality cs != 4 )
   LOG::LogFailure( message:"test1.62:  Failed to select Cs from D.");
 end if;
 for each c in cs
-  select one d related by c->D[R2];
+  select one d related by c->dog_owner[R2];
   if ( d.name != "DeeTwo" )
     LOG::LogFailure( message:"test1.63:  Failed to select D from C.");
   end if;
@@ -381,22 +381,22 @@ end for;
 //
 // Test associatives.
 //
-select any e from instances of E where ( selected.eID == 2 );
+select any e from instances of host where ( selected.eID == 2 );
 if ( empty e )
   LOG::LogFailure( message:"test1.70:  Failed to select E.");
 end if;
-select any f related by e->F[R3];
+select any f related by e->device[R3];
 if ( empty f )
   LOG::LogFailure( message:"test1.71:  Failed to select F.");
   if ( f.fID != 3 )
     LOG::LogFailure( message:"test1.72:  Selected wrong F across R3.");
   end if;
 end if;
-select many es related by f->E[R3];
+select many es related by f->host[R3];
 if ( cardinality es != 2 )
   LOG::LogFailure( message:"test1.73:  Selected wrong count of Fs.");
 end if;
-select any g related by e->G[R3];
+select any g related by e->connection[R3];
 if ( g.gID != 3 )
   LOG::LogFailure( message:"test1.74:  Selected incorrect G.");
 end if;
@@ -412,48 +412,48 @@ end for;
 //
 // Test reflexives.
 //
-select any h1 from instances of H where ( selected.hID == 1 );
+select any h1 from instances of transmission where ( selected.hID == 1 );
 if ( empty h1 )
   LOG::LogFailure( message:"test1.80:  Failed to select H.");
 end if;
-select one h2 related by h1->H[R4.''precedes''];
+select one h2 related by h1->transmission[R4.''precedes''];
 if ( h2.hID != 2 )
   LOG::LogFailure( message:"test1.81:  Selected incorrect H.");
 end if;
 if ( h1.hID != h2.follows )
   LOG::LogFailure( message:"test1.81a:  H referential mismatch");
 end if;
-select one h3 related by h2->H[R4.''precedes''];
+select one h3 related by h2->transmission[R4.''precedes''];
 if ( h3.hID != 3 )
   LOG::LogFailure( message:"test1.82:  Selected incorrect H.");
 end if;
 if ( h2.hID != h3.follows )
   LOG::LogFailure( message:"test1.82a:  H referential mismatch");
 end if;
-select one h related by h1->H[R4.''precedes'']->H[R4.''precedes''];
+select one h related by h1->transmission[R4.''precedes'']->transmission[R4.''precedes''];
 if ( h.hID != 3 )
   LOG::LogFailure( message:"test1.83:  Selected incorrect H.");
 end if;
-select one h related by h3->H[R4.''follows'']->H[R4.''follows''];
+select one h related by h3->transmission[R4.''follows'']->transmission[R4.''follows''];
 if ( h.hID != 1 )
   LOG::LogFailure( message:"test1.84:  Selected incorrect H.");
 end if;
-select any h from instances of H where ( selected.hID == 2 );
+select any h from instances of transmission where ( selected.hID == 2 );
 if ( empty h )
   LOG::LogFailure( message:"test1.85:  Failed to select H.");
 end if;
-select one hp related by h->H[R4.''follows''];
+select one hp related by h->transmission[R4.''follows''];
 if ( hp.hID != 1 )
   LOG::LogFailure( message:"test1.86:  Selected incorrect H.");
 end if;
 if ( hp.hID != h.follows )
   LOG::LogFailure( message:"test1.86a:  H referential mismatch");
 end if;
-select one hf related by h->H[R4.''precedes''];
+select one hf related by h->transmission[R4.''precedes''];
 if ( hf.hID != 3 )
   LOG::LogFailure( message:"test1.87:  Selected incorrect H.");
 end if;
-select one h related by h3->H[R4.''precedes''];
+select one h related by h3->transmission[R4.''precedes''];
 if ( h.hID != 4 )
   LOG::LogFailure( message:"test1.88:  Selected incorrect H.");
 end if;
@@ -464,11 +464,11 @@ end if;
 //
 // Test sub/supers.
 //
-select any i from instances of I where ( selected.iID == 200 );
+select any i from instances of car where ( selected.iID == 200 );
 if ( empty i )
   LOG::LogFailure( message:"test1.90:  Failed to select I.");
 end if;
-select one k related by i->K[R5];
+select one k related by i->sports_car[R5];
 if ( empty k )
   LOG::LogFailure( message:"test1.91:  Failed to select K.");
 else
@@ -479,7 +479,7 @@ else
     LOG::LogFailure( message:"test1.92a:  I/K referential mismatch");
   end if;
 end if;
-select one l related by i->K[R5]->L[R6];
+select one l related by i->sports_car[R5]->convertible[R6];
 if ( empty l )
   LOG::LogFailure( message:"test1.93:  Failed to select L.");
 else
@@ -494,12 +494,12 @@ end if;
 //
 // Test reflexive asymmetrics.
 //
-select any o from instances of O where ( selected.voo == "Cort" );
-select many os related by o->O[R8.''teaches''];
+select any o from instances of group_member where ( selected.voo == "Cort" );
+select many os related by o->group_member[R8.''teaches''];
 if ( cardinality os != 3 )
   LOG::LogFailure( message:"test1.C2:  Failed to select Os.");
 end if;
-select one o1 related by o->O[R8.''learns_from''];
+select one o1 related by o->group_member[R8.''learns_from''];
 if ( o1.voo != "Kenny" )
   LOG::LogFailure( message:"test1.C3:  Selected incorrect O.");
 else
@@ -507,8 +507,8 @@ else
     LOG::LogFailure( message:"test1.C3a:  O referential mismatch");
   end if;
 end if;
-select any o from instances of O where ( selected.voo == "Ellen" );
-select one o1 related by o->O[R8.''learns_from''];
+select any o from instances of group_member where ( selected.voo == "Ellen" );
+select one o1 related by o->group_member[R8.''learns_from''];
 if ( o1.voo != "Cort" )
   LOG::LogFailure( message:"test1.C4:  Selected incorrect O.");
 else
@@ -516,8 +516,8 @@ else
     LOG::LogFailure( message:"test1.C4a:  O referential mismatch");
   end if;
 end if;
-select any o from instances of O where ( selected.voo == "Amy" );
-select one o1 related by o->O[R8.''learns_from''];
+select any o from instances of group_member where ( selected.voo == "Amy" );
+select one o1 related by o->group_member[R8.''learns_from''];
 if ( o1.voo != "Cort" )
   LOG::LogFailure( message:"test1.C5:  Selected incorrect O.");
 else
@@ -529,8 +529,8 @@ end if;
 //
 // Test reflexive associatives.
 //
-select any n from instances of N where ( selected.name == "Chris" );
-select many ns related by n->N[R7.''manages''];
+select any n from instances of employee where ( selected.name == "Chris" );
+select many ns related by n->employee[R7.''manages''];
 if ( cardinality ns != 2 )
   LOG::LogFailure( message:"test1.B2:  Failed to select Ns.");
 end if;
@@ -544,8 +544,8 @@ for each n in ns
   end if;
 end for;
 delete object instance n1;
-select any n from instances of N where ( selected.name == "Pete" );
-select one boss related by n->N[R7.''works_for''];
+select any n from instances of employee where ( selected.name == "Pete" );
+select one boss related by n->employee[R7.''works_for''];
 if ( empty boss )
   LOG::LogFailure( message:"test1.B4:  Failed to select boss.");
 else
@@ -553,8 +553,8 @@ else
     LOG::LogFailure( message:"test1.B5:  Selected incorrect boss.");
   end if;
 end if;
-select any n from instances of N where ( selected.name == "Dave" );
-select one m related by n->M[R7.''works_for''];
+select any n from instances of employee where ( selected.name == "Dave" );
+select one m related by n->report_line[R7.''works_for''];
 if ( empty m )
   LOG::LogFailure( message:"test1.B6:  Failed to select M.");
   if ( m.department != "MEC" )
@@ -565,8 +565,8 @@ if ( empty m )
     end if;
   end if;
 end if;
-select any n from instances of N where ( selected.name == "Pete" );
-select many ns related by n->N[R7.''manages''];
+select any n from instances of employee where ( selected.name == "Pete" );
+select many ns related by n->employee[R7.''manages''];
 if ( cardinality ns != 2 )
   LOG::LogFailure( message:"test1.B2:  Failed to select Ns.");
 end if;
@@ -580,18 +580,18 @@ end for;
 //
 // Test 1-1 associatives.
 //
-select any p from instances of P where ( selected.eyedee == "Rox" );
-select one q related by p->Q[R9];
+select any p from instances of automobile where ( selected.eyedee == "Rox" );
+select one q related by p->jurisdiction[R9];
 if ( q.deeeye != "Cort" )
   LOG::LogFailure( message:"test1.D1:  Selected incorrect Q.");
 end if;
-select any q from instances of Q where ( selected.deeeye == "Rusty" );
-select one p related by q->P[R9];
+select any q from instances of jurisdiction where ( selected.deeeye == "Rusty" );
+select one p related by q->automobile[R9];
 if ( p.eyedee != "Bita" )
   LOG::LogFailure( message:"test1.D2:  Selected incorrect P.");
 end if;
-select any p from instances of P where ( selected.eyedee == "Tina" );
-select one r related by p->R[R9];
+select any p from instances of automobile where ( selected.eyedee == "Tina" );
+select one r related by p->license[R9];
 if ( r.city != "Lockport" )
   LOG::LogFailure( message:"test1.D3:  Selected incorrect R.");
 else
@@ -603,8 +603,8 @@ end if;
 //
 // Test 1-M associatives.
 //
-select any s from instances of S where ( selected.s == "Rox" );
-select many ts related by s->T[R10];
+select any s from instances of AtoD_converter where ( selected.s == "Rox" );
+select many ts related by s->analog_input[R10];
 if ( cardinality ts != 2 )
   LOG::LogFailure( message:"test1.E1:  Incorrect number of Ts.");
 end if;
@@ -612,14 +612,14 @@ for each t in ts
   if ( ( t.t != "Hannah" ) and ( t.t != "Ruby" ) )
     LOG::LogFailure( message:"test1.E2:  Incorrect T.");
   end if;
-  select one s related by t->S[R10];
+  select one s related by t->AtoD_converter[R10];
   if ( s.s != "Rox" )
     LOG::LogFailure( message:"test1.E3:  Incorrect S.");
   end if;
 end for;
-select any t from instances of T where ( selected.t == "Katrina" );
-select one s related by t->S[R10];
-select any u related by s->U[R10] where ( selected.s == "Aug" );
+select any t from instances of analog_input where ( selected.t == "Katrina" );
+select one s related by t->AtoD_converter[R10];
+select any u related by s->sample[R10] where ( selected.s == "Aug" );
 if ( empty u )
   LOG::LogFailure( message:"test1.E4:  Incorrect U.");
 else
@@ -631,22 +631,22 @@ end if;
 //
 // Test 1-1 reflexive associatives.
 //
-select any w from instances of W where ( selected.name == "Rox" );
-select one husband related by w->W[R11.''is_wife_of''];
+select any w from instances of person where ( selected.name == "Rox" );
+select one husband related by w->person[R11.''is_wife_of''];
 if ( husband.name != "Cort" )
   LOG::LogFailure( message:"test1.F1:  Incorrect W.");
 end if;
-select any w from instances of W where ( selected.name == "Jacqui" );
-select one husband related by w->W[R11.''is_wife_of''];
+select any w from instances of person where ( selected.name == "Jacqui" );
+select one husband related by w->person[R11.''is_wife_of''];
 if ( husband.name != "Sean" )
   LOG::LogFailure( message:"test1.F2:  Incorrect W.");
 end if;
-select any huz from instances of W where ( selected.name == "Cort" );
-select one wife related by huz->W[R11.''is_husband_of''];
+select any huz from instances of person where ( selected.name == "Cort" );
+select one wife related by huz->person[R11.''is_husband_of''];
 if ( wife.name != "Rox" )
   LOG::LogFailure( message:"test1.F3:  Incorrect W.");
 end if;
-select any v from instances of V where ( selected.year == 1988 );
+select any v from instances of marriage where ( selected.year == 1988 );
 if ( ( v.husband != "Cort" ) or ( v.wife != "Rox" ) )
   LOG::LogFailure( message:"test1.F4:  Incorrect V or referential mismatch." );
 end if;
@@ -654,45 +654,45 @@ end if;
 // Test friends and friendships.
 // (Note that this should be symmetric reflexive, but we don''t know how.)
 //
-select any x from instances of X where ( selected.name == "Cort" );
+select any x from instances of friend where ( selected.name == "Cort" );
 if ( empty x )
   LOG::LogFailure( message:"test1.X1:  Failed to select X." );
 end if;
-select many xs related by x->X[R12.''is_pal_of''];
+select many xs related by x->friend[R12.''is_pal_of''];
 cardxs = cardinality xs;
-select many xs related by x->X[R12.''is_buddy_of''];
+select many xs related by x->friend[R12.''is_buddy_of''];
 cardxs = cardxs + cardinality xs;
 if ( cardxs != 5 )
   LOG::LogFailure( message:"test1.X2:  Wrong number of friends." );
 end if;
-select many ys from instances of Y where ( selected.pal == "Cort" )
+select many ys from instances of friendship where ( selected.pal == "Cort" )
   or ( selected.buddy == "Cort" );
 if ( cardinality ys != 5 )
   LOG::LogFailure( message:"test1.Y3:  Wrong number of friends." );
 end if;
 // Test Sevina''s friends.
-select any x from instances of X where ( selected.name == "Sevina" );
+select any x from instances of friend where ( selected.name == "Sevina" );
 if ( empty x )
   LOG::LogFailure( message:"test1.X4:  Failed to select X." );
 end if;
-select any x1 related by x->X[R12.''is_pal_of''];
+select any x1 related by x->friend[R12.''is_pal_of''];
 if ( x1.name != "Rox" )
   LOG::LogFailure( message:"test1.X5:  Could not find Rox." );
 end if;
-select any x from instances of X where ( selected.name == "Rox" );
+select any x from instances of friend where ( selected.name == "Rox" );
 if ( empty x )
   LOG::LogFailure( message:"test1.X6:  Failed to select X." );
 end if;
-select any x1 related by x->X[R12.''is_buddy_of''];
+select any x1 related by x->friend[R12.''is_buddy_of''];
 if ( x1.name != "Sevina" )
   LOG::LogFailure( message:"test1.X6:  Could not find Sevina." );
 end if;
 select any y from instances of friendship;
-select one x related by y->X[R12.''is_pal_of''];
+select one x related by y->friend[R12.''is_pal_of''];
 if ( x.name != y.pal )
   LOG::LogFailure( message:"test1.X6a:  X/Y referential mismatch" );
 end if;
-select one x related by y->X[R12.''is_buddy_of''];
+select one x related by y->friend[R12.''is_buddy_of''];
 if ( x.name != y.buddy )
   LOG::LogFailure( message:"test1.X6b:  X/Y referential mismatch" );
 end if;
@@ -701,20 +701,20 @@ end if;
 //
 // Test dealers and deals.
 //
-select any z from instances of Z where ( selected.name == "Joe" );
+select any z from instances of dealer where ( selected.name == "Joe" );
 if ( empty z )
   LOG::LogFailure( message:"test1.Z1:  Failed to select Z." );
 end if;
-select many zs related by z->Z[R13.''buys_from''];
+select many zs related by z->dealer[R13.''buys_from''];
 if ( cardinality zs < 2 )
   LOG::LogFailure( message:"test1.Z2:  Could not find Zs." );
 end if;
 select any zz from instances of deal;
-select one z related by zz->Z[R13.''buys_from''];
+select one z related by zz->dealer[R13.''buys_from''];
 if ( zz.buyer != z.name )
   LOG::LogFailure( message:"test1.Z2a:  Z/ZZ referential mismatch" );
 end if;
-select one z related by zz->Z[R13.''sells_to''];
+select one z related by zz->dealer[R13.''sells_to''];
 if ( zz.seller != z.name )
   LOG::LogFailure( message:"test1.Z2b:  Z/ZZ referential mismatch" );
 end if;
@@ -740,7 +740,7 @@ INSERT INTO S_SYNC
 // Generate an event to be sure that b is in the correct current state.
 //
 select any b from instances of socket;
-generate B1:go() to b;
+generate socket1:go() to b;
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
