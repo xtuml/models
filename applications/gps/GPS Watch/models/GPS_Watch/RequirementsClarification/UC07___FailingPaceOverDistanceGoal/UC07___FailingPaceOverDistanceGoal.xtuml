@@ -1,0 +1,76 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("56d59c26-fe0b-4f23-9798-745eee99c58c",
+	"00000000-0000-0000-0000-000000000000",
+	"36a41cf7-d411-488d-99fc-74866d4fea39",
+	'UC07___FailingPaceOverDistanceGoal',
+	'',
+	0);
+INSERT INTO SQ_P
+	VALUES ("54a7f6d9-5e5d-4bc4-b0dc-dbac3327332f",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO IA_UCP
+	VALUES ("54a7f6d9-5e5d-4bc4-b0dc-dbac3327332f",
+	'UC07___FailingPaceOverDistanceGoal',
+	'Pre-conditions
+	No Track logs exist on the device.
+	Timer is stopped.
+	Elapsed time is zero. 
+	Accumulated distance is zero.
+	Display shows elapsed time and accumulated distance.
+
+Post-conditions
+	A track log exists on the device.
+	A pace over distance goal exists on the device.
+	An indication of when during the workout the goal was being met exists on the device.
+	Timer is stopped.
+	Elapsed time and pace are displayed.
+
+Scenario
+	1.  User establishes a single goal for maintaining a bounded pace over a certain distance.
+	2.	User pushes the start/stop button and begins moving (walking, running, flying, cycling, etc.).
+	3.	The timer starts.
+	4.  User pushes the Mode button until pace is displayed.
+	5.	The display shows:
+		a.	Current pace
+		b.	Elapsed time
+	6.	Periodically throughout the workout the device stores, in the active track log, 
+	    the current location of the device.
+	7.  User pushes Set Target button
+	8.	Evaluation of the goal starts.
+	9.  The device stores an indication of when during the workout the goal is being met.
+	    In this case the goal is being met across only a portion of the distance specified.
+	10.	The display shows:
+		a.	Current pace
+		b.	Elapsed time
+		c.  An indication of whether the current goal is being met.
+	11.	User pushes the start/stop button.
+	12.	The timer stops.
+	13. The elapsed time and distance stop accumulating.
+	');
+INSERT INTO PE_PE
+	VALUES ("54a7f6d9-5e5d-4bc4-b0dc-dbac3327332f",
+	1,
+	"56d59c26-fe0b-4f23-9798-745eee99c58c",
+	"00000000-0000-0000-0000-000000000000",
+	14);
+INSERT INTO PE_PE
+	VALUES ("56d59c26-fe0b-4f23-9798-745eee99c58c",
+	1,
+	"9247ba7c-6725-443a-8272-e929f9bfb098",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("9247ba7c-6725-443a-8272-e929f9bfb098",
+	"36a41cf7-d411-488d-99fc-74866d4fea39",
+	"36a41cf7-d411-488d-99fc-74866d4fea39",
+	'RequirementsClarification',
+	'',
+	0,
+	'../RequirementsClarification.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("36a41cf7-d411-488d-99fc-74866d4fea39",
+	'GPS_Watch',
+	1,
+	'../../GPS_Watch.xtuml');
