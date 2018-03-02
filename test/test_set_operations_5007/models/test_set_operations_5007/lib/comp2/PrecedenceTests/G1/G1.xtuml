@@ -1,0 +1,782 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	"a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'G1',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("89b91fbd-dd3e-4119-8ebc-c1a12402635a",
+	112,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'test_set_operations_5007::lib::comp2::PrecedenceTests::G1');
+INSERT INTO DIM_DIA
+	VALUES ("89b91fbd-dd3e-4119-8ebc-c1a12402635a",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("902eae44-f493-45cb-9653-7ed17af3705b",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C1D1E1F1',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results = set1 + set2;
+expected_results = expected_results | set3;
+expected_results = expected_results + set4;
+expected_results = expected_results | set5;
+actual_results = set1 + set2 | set3 + set4 | set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("902eae44-f493-45cb-9653-7ed17af3705b",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("eee939b3-61ec-45cb-aea6-e3777024e5b3",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C1D2E4F3',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set2 & set3;
+expected_results1 = expected_results1 ^ set4;
+expected_results = set1 | expected_results1;
+expected_results = expected_results - set5;
+actual_results = set1 | set2 & set3 ^ set4 - set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("eee939b3-61ec-45cb-aea6-e3777024e5b3",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("833c9cb4-4a58-4e86-bec4-d52cc20cea75",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C1D2E3F4',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set2 & set3;
+expected_results2 = set4 ^ set5;
+expected_results = set1 | expected_results1;
+expected_results = expected_results - expected_results2;
+actual_results = set1 | set2 & set3 - set4 ^ set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("833c9cb4-4a58-4e86-bec4-d52cc20cea75",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("e678ae04-b706-421b-aa7d-215d89bcff86",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C1D3E2F4',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set3 & set4;
+expected_results1 = expected_results1 ^ set5;
+expected_results = set1 | set2;
+expected_results = expected_results - expected_results1;
+actual_results = set1 | set2 - set3 & set4 ^ set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("e678ae04-b706-421b-aa7d-215d89bcff86",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("c3d76500-b292-4afc-ae12-cf56c072d36d",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C1D3E4F2',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set3 ^ set4;
+expected_results1 = expected_results1 & set5;
+expected_results = set1 | set2;
+expected_results = expected_results - expected_results1;
+actual_results = set1 | set2 - set3 ^ set4 & set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("c3d76500-b292-4afc-ae12-cf56c072d36d",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("4d64e447-2d47-484f-b23a-33a854369b62",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C1D4E2F3',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set2 ^ set3;
+expected_results1 = expected_results1 & set4;
+expected_results = set1 | expected_results1;
+expected_results = expected_results - set5;
+actual_results = set1 | set2 ^ set3 & set4 - set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("4d64e447-2d47-484f-b23a-33a854369b62",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("fbcda78a-a949-44ca-9545-3e9a0eb08199",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C1D4E3F2',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set2 ^ set3;
+expected_results2 = set4 & set5;
+expected_results = set1 | expected_results1;
+expected_results = expected_results - expected_results2;
+actual_results = set1 | set2 ^ set3 - set4 & set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("fbcda78a-a949-44ca-9545-3e9a0eb08199",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("13ce9310-089f-4781-853e-269c39b31de8",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C2D1E3F4',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set1 & set2;
+expected_results2 = set4 ^ set5;
+expected_results = expected_results1 | set3;
+expected_results = expected_results - expected_results2;
+actual_results = set1 & set2 | set3 - set4 ^ set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("13ce9310-089f-4781-853e-269c39b31de8",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("cd9c0110-143a-4963-a635-d752e17e1d21",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C2D1E4F3',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set1 & set2;
+expected_results2 = set3 ^ set4;
+expected_results = expected_results1 | expected_results2;
+expected_results = expected_results - set5;
+actual_results = set1 & set2 | set3 ^ set4 - set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("cd9c0110-143a-4963-a635-d752e17e1d21",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("c81e6476-c293-49b4-93c1-fbc4f85d4ff7",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C2D2E2F2',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results = set1 & set2;
+expected_results = expected_results & set3;
+expected_results = expected_results & set4;
+expected_results = expected_results & set5;
+actual_results = set1 & set2 & set3 & set4 & set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("c81e6476-c293-49b4-93c1-fbc4f85d4ff7",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("001b56b6-c399-40ad-8630-b952652318b8",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C2D3E1F4',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set1 & set2;
+expected_results2 = set4 ^ set5;
+expected_results = expected_results1 - set3;
+expected_results = expected_results | expected_results2;
+actual_results = set1 & set2 - set3 | set4 ^ set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("001b56b6-c399-40ad-8630-b952652318b8",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("12b9e602-60c8-46e6-a860-641aabfb8ce1",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C2D3E4F1',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set1 & set2;
+expected_results2 = set3 ^ set4;
+expected_results = expected_results1 - expected_results2;
+expected_results = expected_results | set5;
+actual_results = set1 & set2 - set3 ^ set4 | set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("12b9e602-60c8-46e6-a860-641aabfb8ce1",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("3ccce9c0-cf04-4087-b3cc-4267cd7afa95",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C2D4E1F3',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results = set1 & set2;
+expected_results = expected_results ^ set3;
+expected_results = expected_results | set4;
+expected_results = expected_results - set5;
+actual_results = set1 & set2 ^ set3 | set4 - set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("3ccce9c0-cf04-4087-b3cc-4267cd7afa95",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("74df6a77-01ff-4a24-b48e-fb4214e91e8a",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C2D4E3F1',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results = set1 & set2;
+expected_results = expected_results ^ set3;
+expected_results = expected_results - set4;
+expected_results = expected_results | set5;
+actual_results = set1 & set2 ^ set3 - set4 | set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("74df6a77-01ff-4a24-b48e-fb4214e91e8a",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("cb87a02b-cb25-42ab-b84f-1c45b8aa67bc",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C3D1E2F4',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set3 & set4;
+expected_results1 = expected_results1 ^ set5;
+expected_results = set1 - set2;
+expected_results = expected_results | expected_results1;
+actual_results = set1 - set2 | set3 & set4 ^ set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("cb87a02b-cb25-42ab-b84f-1c45b8aa67bc",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("0cd95fec-3792-40de-8a07-bd0df5366a18",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C3D1E4F2',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set3 ^ set4;
+expected_results1 = expected_results1 & set5;
+expected_results = set1 - set2;
+expected_results = expected_results | expected_results1;
+actual_results = set1 - set2 | set3 ^ set4 & set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("0cd95fec-3792-40de-8a07-bd0df5366a18",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("9184d1e3-407f-41fb-9cd0-6f43bd52ac35",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C3D2E1F4',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set2 & set3;
+expected_results2 = set4 ^ set5;
+expected_results = set1 - expected_results1;
+expected_results = expected_results | expected_results2;
+actual_results = set1 - set2 & set3 | set4 ^ set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("9184d1e3-407f-41fb-9cd0-6f43bd52ac35",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("084a428e-db09-44da-805d-9a9e34f431d5",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C3D2E4F1',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set2 & set3;
+expected_results1 = expected_results1 ^ set4;
+expected_results = set1 - expected_results1;
+expected_results = expected_results | set5;
+actual_results = set1 - set2 & set3 ^ set4 | set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("084a428e-db09-44da-805d-9a9e34f431d5",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("679b9cf2-a1d4-409e-b520-01f732ac048c",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C3D3E3F3',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results = set1 - set2;
+expected_results = expected_results - set3;
+expected_results = expected_results - set4;
+expected_results = expected_results - set5;
+actual_results = set1 - set2 - set3 - set4 - set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("679b9cf2-a1d4-409e-b520-01f732ac048c",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("99da5efc-e935-4129-93b8-c2f13444d559",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C3D4E1F2',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set2 ^ set3;
+expected_results2 = set4 & set5;
+expected_results = set1 - expected_results1;
+expected_results = expected_results | expected_results2;
+actual_results = set1 - set2 ^ set3 | set4 & set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("99da5efc-e935-4129-93b8-c2f13444d559",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("334a1f88-1ed9-4d41-8165-8566c952b8f9",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C3D4E2F1',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set2 ^ set3;
+expected_results1 = expected_results1 & set4;
+expected_results = set1 - expected_results1;
+expected_results = expected_results | set5;
+actual_results = set1 - set2 ^ set3 & set4 | set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("334a1f88-1ed9-4d41-8165-8566c952b8f9",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("279805f6-e712-4d84-b6a7-6bff75241cfe",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C4D1E2F3',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set1 ^ set2;
+expected_results2 = set3 & set4;
+expected_results = expected_results1 | expected_results2;
+expected_results = expected_results - set5;
+actual_results = set1 ^ set2 | set3 & set4 - set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("279805f6-e712-4d84-b6a7-6bff75241cfe",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("03e557c7-7263-4588-9d52-26958580320a",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C4D1E3F2',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set1 ^ set2;
+expected_results2 = set4 & set5;
+expected_results = expected_results1 | set3;
+expected_results = expected_results - expected_results2;
+actual_results = set1 ^ set2 | set3 - set4 & set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("03e557c7-7263-4588-9d52-26958580320a",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("968f54a5-2e0b-4073-b767-c43336260d0a",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C4D2E1F3',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results = set1 ^ set2;
+expected_results = expected_results & set3;
+expected_results = expected_results | set4;
+expected_results = expected_results - set5;
+actual_results = set1 ^ set2 & set3 | set4 - set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("968f54a5-2e0b-4073-b767-c43336260d0a",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("e5a1da38-9884-4a9c-bcae-99c0f4e3bbad",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C4D2E3F1',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results = set1 ^ set2;
+expected_results = expected_results & set3;
+expected_results = expected_results - set4;
+expected_results = expected_results | set5;
+actual_results = set1 ^ set2 & set3 - set4 | set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("e5a1da38-9884-4a9c-bcae-99c0f4e3bbad",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b4e1ccfe-62d7-4bab-bed4-094913366f39",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C4D3E1F2',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set1 ^ set2;
+expected_results2 = set4 & set5;
+expected_results = expected_results1 - set3;
+expected_results = expected_results | expected_results2;
+actual_results = set1 ^ set2 - set3 | set4 & set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("b4e1ccfe-62d7-4bab-bed4-094913366f39",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("871af2c6-b278-4838-8bf7-3e274010be2e",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C4D3E2F1',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set1 ^ set2;
+expected_results2 = set3 & set4;
+expected_results = expected_results1 - expected_results2;
+expected_results = expected_results | set5;
+actual_results = set1 ^ set2 - set3 & set4 | set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("871af2c6-b278-4838-8bf7-3e274010be2e",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("9fe0d5bb-865c-4bd8-9356-5537a814ac4d",
+	"00000000-0000-0000-0000-000000000000",
+	'G1_C4D4E4F4',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results = set1 ^ set2;
+expected_results = expected_results ^ set3;
+expected_results = expected_results ^ set4;
+expected_results = expected_results ^ set5;
+actual_results = set1 ^ set2 ^ set3 ^ set4 ^ set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("9fe0d5bb-865c-4bd8-9356-5537a814ac4d",
+	1,
+	"0946997a-76f5-4356-a040-80291f19c65a",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("0946997a-76f5-4356-a040-80291f19c65a",
+	1,
+	"bed2634c-c457-439f-a503-063b78b02885",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("bed2634c-c457-439f-a503-063b78b02885",
+	"00000000-0000-0000-0000-000000000000",
+	"a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'PrecedenceTests',
+	'',
+	0,
+	'../PrecedenceTests.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'test_set_operations_5007',
+	1,
+	'../../../../test_set_operations_5007.xtuml');

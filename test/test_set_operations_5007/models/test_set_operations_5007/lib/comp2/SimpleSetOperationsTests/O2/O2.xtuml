@@ -1,0 +1,134 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("076239d7-cdba-47ce-8ae6-194205dd1672",
+	"00000000-0000-0000-0000-000000000000",
+	"a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'O2',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("9791ab66-0c34-4fc9-952a-8b266ea7a445",
+	112,
+	"076239d7-cdba-47ce-8ae6-194205dd1672",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'4.1.17',
+	'test_set_operations_5007::lib::comp2::SimpleSetOperationsTests::O2');
+INSERT INTO DIM_DIA
+	VALUES ("9791ab66-0c34-4fc9-952a-8b266ea7a445",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("0a63ea1c-4006-4a7c-9d03-73fa4bac1942",
+	"00000000-0000-0000-0000-000000000000",
+	'O2_A1B1',
+	'',
+	'select any int1 from instances of INTEGER where ( selected.value == 1 );
+select any int2 from instances of INTEGER where ( selected.value == 2 );
+select many expected_results from instances of INTEGER where ( selected.value == 1 and selected.value == 2 );
+actual_results = int1 & int2;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("0a63ea1c-4006-4a7c-9d03-73fa4bac1942",
+	1,
+	"076239d7-cdba-47ce-8ae6-194205dd1672",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("a8ec597d-9aa2-46ba-a9bb-8a605c7d4d9f",
+	"00000000-0000-0000-0000-000000000000",
+	'O2_A1B2',
+	'',
+	'select any int1 from instances of INTEGER where ( selected.value == 8 );
+select many set2 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many expected_results from instances of INTEGER where ( selected.value == 8 and selected.value % 2 == 0 );
+actual_results = int1 & set2;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("a8ec597d-9aa2-46ba-a9bb-8a605c7d4d9f",
+	1,
+	"076239d7-cdba-47ce-8ae6-194205dd1672",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("5b34545c-257a-4e05-b339-85437e9d331d",
+	"00000000-0000-0000-0000-000000000000",
+	'O2_A2B1',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value % 3 == 0 );
+select any int2 from instances of INTEGER where ( selected.value == 12 );
+select many expected_results from instances of INTEGER where ( selected.value % 3 == 0 and selected.value == 12 );
+actual_results = set1 & int2;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("5b34545c-257a-4e05-b339-85437e9d331d",
+	1,
+	"076239d7-cdba-47ce-8ae6-194205dd1672",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("99c550f8-32a1-40a4-95e9-ee80fc3d23c0",
+	"00000000-0000-0000-0000-000000000000",
+	'O2_A2B2',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set2 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many expected_results from instances of INTEGER where ( selected.value % 3 == 0 and selected.value % 2 == 0 );
+actual_results = set1 & set2;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("99c550f8-32a1-40a4-95e9-ee80fc3d23c0",
+	1,
+	"076239d7-cdba-47ce-8ae6-194205dd1672",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("076239d7-cdba-47ce-8ae6-194205dd1672",
+	1,
+	"5f4bf12b-2e96-4d79-9b31-526d2eb1a3da",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("5f4bf12b-2e96-4d79-9b31-526d2eb1a3da",
+	"00000000-0000-0000-0000-000000000000",
+	"a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'SimpleSetOperationsTests',
+	'',
+	0,
+	'../SimpleSetOperationsTests.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'test_set_operations_5007',
+	1,
+	'../../../../test_set_operations_5007.xtuml');

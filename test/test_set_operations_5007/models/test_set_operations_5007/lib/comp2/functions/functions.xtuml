@@ -1,0 +1,247 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("2fd6124e-830b-4196-9e5f-ddea56b111b8",
+	"00000000-0000-0000-0000-000000000000",
+	"a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("b91d8fa8-920f-4cf9-b095-201eb51b6791",
+	112,
+	"2fd6124e-830b-4196-9e5f-ddea56b111b8",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'test_set_operations_5007::lib::comp2::functions');
+INSERT INTO DIM_DIA
+	VALUES ("b91d8fa8-920f-4cf9-b095-201eb51b6791",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("c9775457-dcad-4eb6-b821-f705d127afd1",
+	"00000000-0000-0000-0000-000000000000",
+	'populate',
+	'',
+	'LOG::LogInfo( message:"Creating population..." );
+// create integers 1 to 100
+max = 100;
+i = 1;
+while ( i <= max )
+  // create new integer
+  create object instance new_int of INTEGER;
+  new_int.value = i;
+  i = i + 1;
+end while;
+LOG::LogInfo( message:"Done." );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("c9775457-dcad-4eb6-b821-f705d127afd1",
+	1,
+	"2fd6124e-830b-4196-9e5f-ddea56b111b8",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("3701b4bd-82d0-426e-b78a-bdf4bb83c087",
+	"00000000-0000-0000-0000-000000000000",
+	'execute_all_tests',
+	'',
+	'::populate();
+::execute_compare_tests();
+::execute_simple_tests();
+::execute_precedence_tests();
+ARCH::shutdown();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("3701b4bd-82d0-426e-b78a-bdf4bb83c087",
+	1,
+	"2fd6124e-830b-4196-9e5f-ddea56b111b8",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("8f80a54b-c1ea-49ca-803a-0b1e422dcf1d",
+	"00000000-0000-0000-0000-000000000000",
+	'execute_simple_tests',
+	'',
+	'LOG::LogInfo( message:"\nExecuting simple set operations tests:\n" );
+passed = 0;
+failed = 0;
+if ( ::O1_A1B1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O1_A1B2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O1_A2B1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O1_A2B2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O2_A1B1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O2_A1B2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O2_A2B1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O2_A2B2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O3_A1B1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O3_A1B2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O3_A2B1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O3_A2B2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O4_A1B1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O4_A1B2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O4_A2B1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::O4_A2B2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+LOG::LogInfo( message:"\n" );
+LOG::LogInfo( message:"Tests run: " + STRING::itoa( i:passed+failed ) + ", Passed: " + STRING::itoa( i:passed ) + ", Failed: " + STRING::itoa( i:failed ) + "\n\n" );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("8f80a54b-c1ea-49ca-803a-0b1e422dcf1d",
+	1,
+	"2fd6124e-830b-4196-9e5f-ddea56b111b8",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("e7b23c69-ce95-4489-8db9-aea63d8efac6",
+	"00000000-0000-0000-0000-000000000000",
+	'execute_precedence_tests',
+	'',
+	'LOG::LogInfo( message:"\nExecuting set operations precedence tests:\n" );
+passed = 0;
+failed = 0;
+if ( ::G1_C1D1E1F1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C1D2E3F4() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C1D2E4F3() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C1D3E2F4() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C1D3E4F2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C1D4E2F3() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C1D4E3F2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C2D1E3F4() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C2D1E4F3() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C2D2E2F2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C2D3E1F4() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C2D3E4F1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C2D4E1F3() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C2D4E3F1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C3D1E2F4() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C3D1E4F2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C3D2E1F4() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C3D2E4F1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C3D3E3F3() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C3D4E1F2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C3D4E2F1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C4D1E2F3() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C4D1E3F2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C4D2E1F3() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C4D2E3F1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C4D3E1F2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C4D3E2F1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G1_C4D4E4F4() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G2_C1D2E4F3() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::G2_C3D2E1F4() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+LOG::LogInfo( message:"\n" );
+LOG::LogInfo( message:"Tests run: " + STRING::itoa( i:passed+failed ) + ", Passed: " + STRING::itoa( i:passed ) + ", Failed: " + STRING::itoa( i:failed ) + "\n\n" );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("e7b23c69-ce95-4489-8db9-aea63d8efac6",
+	1,
+	"2fd6124e-830b-4196-9e5f-ddea56b111b8",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("7619f017-bc82-43a8-bb1b-15781a7d0440",
+	"00000000-0000-0000-0000-000000000000",
+	'execute_compare_tests',
+	'',
+	'LOG::LogInfo( message:"\nExecuting set equality tests:\n" );
+passed = 0;
+failed = 0;
+if ( ::H1_I1J1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::H1_I1J2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::H1_I2J1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::H1_I2J2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::H2_I1J1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::H2_I1J2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::H2_I2J1() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+if ( ::H2_I2J2() ) LOG::LogInfo( message:"." ); passed = passed + 1; else LOG::LogInfo( message:"F" ); failed = failed + 1; end if;
+LOG::LogInfo( message:"\n" );
+LOG::LogInfo( message:"Tests run: " + STRING::itoa( i:passed+failed ) + ", Passed: " + STRING::itoa( i:passed ) + ", Failed: " + STRING::itoa( i:failed ) + "\n\n" );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("7619f017-bc82-43a8-bb1b-15781a7d0440",
+	1,
+	"2fd6124e-830b-4196-9e5f-ddea56b111b8",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("84464900-4819-41cc-9d39-5aadf8da2a5f",
+	"00000000-0000-0000-0000-000000000000",
+	'report',
+	'',
+	'if ( param.result )
+  LOG::LogSuccess( message:"passed." );
+else
+  LOG::LogFailure( message:"failed." );
+end if;
+return param.result;',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("d1ff7c50-930a-4315-b3ce-391d3140468e",
+	"84464900-4819-41cc-9d39-5aadf8da2a5f",
+	'result',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("84464900-4819-41cc-9d39-5aadf8da2a5f",
+	1,
+	"2fd6124e-830b-4196-9e5f-ddea56b111b8",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("2fd6124e-830b-4196-9e5f-ddea56b111b8",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"bd147a66-393b-4a50-bdb3-ef7ab39224ab",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("bd147a66-393b-4a50-bdb3-ef7ab39224ab",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'comp2',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../comp2.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'test_set_operations_5007',
+	1,
+	'../../../test_set_operations_5007.xtuml');
