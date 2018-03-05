@@ -234,7 +234,8 @@ select one display related by
   self->WorkoutSession[R8.''acts as the stopwatch for'']->
   Display[R7.''current status indicated on''];
 generate Display2:refresh to display;',
-	'');
+	'',
+	0);
 INSERT INTO SM_MOAH
 	VALUES ("5eef4bed-2b88-4d47-8a15-7a7600a01f7c",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -247,7 +248,8 @@ INSERT INTO SM_ACT
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_MOAH
 	VALUES ("25fd1bf1-6ba6-43b6-8a24-6489cd571b89",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -260,7 +262,8 @@ INSERT INTO SM_ACT
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("a9b703ef-5e80-4bc4-a3f9-ab8963f59c86",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -274,7 +277,8 @@ INSERT INTO SM_ACT
 	1,
 	'// Start the timer.
 self.activate();',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("3da4f095-7712-40f1-95d8-c771bdfd5bbe",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -290,7 +294,8 @@ INSERT INTO SM_ACT
 if (not empty trackLog)
   trackLog.addLapMarker();
 end if;',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("0efc69c4-b15e-41a4-91c8-91b4e2dcdf61",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -303,7 +308,8 @@ INSERT INTO SM_ACT
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("955485bd-b7c0-4400-b495-1cc80738298f",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -316,7 +322,8 @@ INSERT INTO SM_ACT
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
 	'self.activate();',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("77284468-ce95-43be-8eb5-36da20133121",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -329,7 +336,8 @@ INSERT INTO SM_ACT
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
 	'self.deactivate();',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("e1cd66da-563e-426d-bc06-88e2c9e757f1",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -351,7 +359,8 @@ trackLog.addTrackPoint();
 
 // Refresh the user interface.
 send UI::setTime(time: self.time);',
-	'');
+	'',
+	0);
 INSERT INTO GD_MD
 	VALUES ("d86382ae-a17a-4343-942e-2f48534575e2",
 	8,
@@ -1216,15 +1225,15 @@ INSERT INTO O_OBJ_PROXY
 	'WorkoutTimer',
 	1,
 	'WorkoutTimer',
-	'As a singleton, no more than one instance of this class exists 
-at any given time.
-
-Along with managing the stopwatch portion of the application,
-this class also knows:
+	'Represents the stopwatch portion of the device.
+This class also knows:
 - Track points are stored only when the stopwatch is running.
+- If a goal is executing, evaluation of it must be paused when
+the timer pauses.
 - How to handle the lap/reset signal based on whether the 
 stopwatch is currently running.
 
+This is a singleton instance.
 ',
 	"00000000-0000-0000-0000-000000000000",
 	'../WorkoutTimer.xtuml');

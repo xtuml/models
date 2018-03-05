@@ -168,7 +168,7 @@ INSERT INTO GD_GE
 	"3117e820-87ac-4015-af6a-130ebf57197b",
 	105,
 	0,
-	'GPS Watch::System::GPS Watch::Library::UI::UI');
+	'GPS Watch::System::GPS Watch::Library::UI::::UI');
 INSERT INTO GD_CON
 	VALUES ("d9a2371c-5e16-492a-bb9b-7a27b92a93c0",
 	"00000000-0000-0000-0000-000000000000");
@@ -276,7 +276,7 @@ INSERT INTO GD_GE
 	"94258a81-7090-453c-98e7-b5907238b723",
 	106,
 	0,
-	'GPS Watch::System::GPS Watch::Library::Tracking::LocationProvider');
+	'GPS Watch::System::GPS Watch::Library::Tracking::::LocationProvider');
 INSERT INTO GD_CON
 	VALUES ("31e3d100-4b58-4c78-9d31-19b7108b80df",
 	"00000000-0000-0000-0000-000000000000");
@@ -376,7 +376,7 @@ INSERT INTO GD_GE
 	"46857727-4d14-4f0e-9751-f782efe3c9b0",
 	106,
 	0,
-	'GPS Watch::System::GPS Watch::Library::Tracking::UI');
+	'GPS Watch::System::GPS Watch::Library::Tracking::::UI');
 INSERT INTO GD_CON
 	VALUES ("4feb866a-da57-4d56-b426-bfb4b44be93b",
 	"00000000-0000-0000-0000-000000000000");
@@ -476,7 +476,7 @@ INSERT INTO GD_GE
 	"2b652270-5bc0-4a3b-8c2a-06c2e7b14229",
 	106,
 	0,
-	'GPS Watch::System::GPS Watch::Library::Tracking::HeartRateProvider');
+	'GPS Watch::System::GPS Watch::Library::Tracking::::HeartRateProvider');
 INSERT INTO GD_CON
 	VALUES ("be229cac-1577-404a-b45b-c8bde807cbc1",
 	"00000000-0000-0000-0000-000000000000");
@@ -576,7 +576,7 @@ INSERT INTO GD_GE
 	"9dc53726-5acc-471f-b635-6cd3aa355989",
 	106,
 	0,
-	'GPS Watch::System::GPS Watch::Library::Tracking::LocationUtil');
+	'GPS Watch::System::GPS Watch::Library::Tracking::::LocationUtil');
 INSERT INTO GD_CON
 	VALUES ("451ba546-72ce-4c88-bbd5-fbd264b39762",
 	"00000000-0000-0000-0000-000000000000");
@@ -676,7 +676,7 @@ INSERT INTO GD_GE
 	"77cfb7f5-f0cb-459e-8fda-73dcb9e03b80",
 	105,
 	0,
-	'GPS Watch::System::GPS Watch::Library::Location::LocationProvider');
+	'GPS Watch::System::GPS Watch::Library::Location::::LocationProvider');
 INSERT INTO GD_CON
 	VALUES ("3ec0109d-7091-4620-a426-e4d98f859e7a",
 	"00000000-0000-0000-0000-000000000000");
@@ -784,7 +784,7 @@ INSERT INTO GD_GE
 	"e78e9b96-4493-4a05-aa48-8514deb381af",
 	105,
 	0,
-	'GPS Watch::System::GPS Watch::Library::Location::LocationUtil');
+	'GPS Watch::System::GPS Watch::Library::Location::::LocationUtil');
 INSERT INTO GD_CON
 	VALUES ("d93e848c-9aff-4e14-aa58-1076693b5e94",
 	"00000000-0000-0000-0000-000000000000");
@@ -892,7 +892,7 @@ INSERT INTO GD_GE
 	"cb4f1685-d919-4808-a2b8-b0c2f3ae36ae",
 	105,
 	0,
-	'GPS Watch::System::GPS Watch::Library::HeartRateMonitor::HeartRateProvider');
+	'GPS Watch::System::GPS Watch::Library::HeartRateMonitor::::HeartRateProvider');
 INSERT INTO GD_CON
 	VALUES ("22babf88-f3e7-495b-9e7a-01ee7ff99c9d",
 	"00000000-0000-0000-0000-000000000000");
@@ -1010,10 +1010,15 @@ INSERT INTO CL_IC
 	'',
 	'GPS Watch::Library::UI',
 	'');
+INSERT INTO CL_POR
+	VALUES ("c77335f2-4175-474d-aa51-f34050086656",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"8ecc6c13-9d60-4739-8a4a-52e03fb32745");
 INSERT INTO CL_IIR
 	VALUES ("3117e820-87ac-4015-af6a-130ebf57197b",
 	"4bf1a145-d815-460c-a4df-745f6e8974a0",
-	"c77335f2-4175-474d-aa51-f34050086656",
+	"8ecc6c13-9d60-4739-8a4a-52e03fb32745",
 	"00000000-0000-0000-0000-000000000000",
 	'UI',
 	'');
@@ -1041,11 +1046,14 @@ INSERT INTO C_C_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000",
 	'UI',
-	'Simulates the user interface and has the ability to connect an external GUI.
+	'Simulates the user interface and has the ability to connect an external GUI
+representing the physical watch.
 
-It is using the BridgePoint Java API to connect to the GUI in Verifier mode.
-There are also handwritten C code that implments parts of this component to 
-allow generated code to connect to the exact same GUI.',
+Uses the BridgePoint Java API to connect to an animated version of the watch
+while the models are executing in Verifier.
+
+There is also hand-written C code that implments parts of this component to 
+allow generated code to connect to the exact same animated watch.',
 	0,
 	"00000000-0000-0000-0000-000000000000",
 	0,
@@ -1060,10 +1068,15 @@ INSERT INTO CL_IC
 	'',
 	'GPS Watch::Library::Location',
 	'');
+INSERT INTO CL_POR
+	VALUES ("3984a0e4-a3de-4098-b5c1-d83203889e21",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"65f8645d-9ec5-4181-abcb-b4116f3d0218");
 INSERT INTO CL_IIR
 	VALUES ("77cfb7f5-f0cb-459e-8fda-73dcb9e03b80",
 	"f5aac2f0-f369-43f5-9c93-082599586590",
-	"3984a0e4-a3de-4098-b5c1-d83203889e21",
+	"65f8645d-9ec5-4181-abcb-b4116f3d0218",
 	"00000000-0000-0000-0000-000000000000",
 	'LocationProvider',
 	'');
@@ -1080,10 +1093,15 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"e0c03225-6067-49eb-8ee3-2cfa4f1e90cf",
 	'../Library/Location/Location.xtuml');
+INSERT INTO CL_POR
+	VALUES ("3984a0e4-a3de-4098-b5c1-d83203889e21",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"e13b18b7-f445-4fad-9bde-50a0274c3d94");
 INSERT INTO CL_IIR
 	VALUES ("e78e9b96-4493-4a05-aa48-8514deb381af",
 	"71a772a0-070a-4315-99d9-c778534909e6",
-	"3984a0e4-a3de-4098-b5c1-d83203889e21",
+	"e13b18b7-f445-4fad-9bde-50a0274c3d94",
 	"00000000-0000-0000-0000-000000000000",
 	'LocationUtil',
 	'');
@@ -1126,10 +1144,15 @@ INSERT INTO CL_IC
 	'',
 	'GPS Watch::Library::Tracking',
 	'');
+INSERT INTO CL_POR
+	VALUES ("24c4c6ef-38db-4499-b7d5-e79f13beda8b",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"80add1ad-43d8-4688-944b-f8a9e3131457");
 INSERT INTO CL_IIR
 	VALUES ("94258a81-7090-453c-98e7-b5907238b723",
 	"b945d9de-e8b2-4a09-8727-391d7b0799a6",
-	"24c4c6ef-38db-4499-b7d5-e79f13beda8b",
+	"80add1ad-43d8-4688-944b-f8a9e3131457",
 	"00000000-0000-0000-0000-000000000000",
 	'LocationProvider',
 	'');
@@ -1144,10 +1167,15 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"fef2a8c2-7c8d-491f-bf92-78816d9f25fa",
 	'../Library/Tracking/Tracking.xtuml');
+INSERT INTO CL_POR
+	VALUES ("24c4c6ef-38db-4499-b7d5-e79f13beda8b",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"fa3dc9d4-96fd-4c93-8e36-b2995dcb7bb0");
 INSERT INTO CL_IIR
 	VALUES ("46857727-4d14-4f0e-9751-f782efe3c9b0",
 	"f093414e-3df2-4f9c-a0b4-61ba8e8a6ed9",
-	"24c4c6ef-38db-4499-b7d5-e79f13beda8b",
+	"fa3dc9d4-96fd-4c93-8e36-b2995dcb7bb0",
 	"00000000-0000-0000-0000-000000000000",
 	'UI',
 	'');
@@ -1162,10 +1190,15 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"b4125f60-d089-4f44-82ab-7bc6e6d2227a",
 	'../Library/Tracking/Tracking.xtuml');
+INSERT INTO CL_POR
+	VALUES ("24c4c6ef-38db-4499-b7d5-e79f13beda8b",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"d434ac53-a0ee-4e00-9ab7-9c396bb38eec");
 INSERT INTO CL_IIR
 	VALUES ("2b652270-5bc0-4a3b-8c2a-06c2e7b14229",
 	"c1c325db-d8ea-4b68-bc1f-435f127dc4d3",
-	"24c4c6ef-38db-4499-b7d5-e79f13beda8b",
+	"d434ac53-a0ee-4e00-9ab7-9c396bb38eec",
 	"00000000-0000-0000-0000-000000000000",
 	'HeartRateProvider',
 	'');
@@ -1180,10 +1213,15 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"19c0e075-5214-40d2-8897-2cfd1f6e60a1",
 	'../Library/Tracking/Tracking.xtuml');
+INSERT INTO CL_POR
+	VALUES ("24c4c6ef-38db-4499-b7d5-e79f13beda8b",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"700d8bcf-7ab0-4c6b-af0b-44d95132daa6");
 INSERT INTO CL_IIR
 	VALUES ("9dc53726-5acc-471f-b635-6cd3aa355989",
 	"f5cfe7dd-e20c-4c2a-ad2a-89aafbad331d",
-	"24c4c6ef-38db-4499-b7d5-e79f13beda8b",
+	"700d8bcf-7ab0-4c6b-af0b-44d95132daa6",
 	"00000000-0000-0000-0000-000000000000",
 	'LocationUtil',
 	'');
@@ -1226,10 +1264,15 @@ INSERT INTO CL_IC
 	'',
 	'GPS Watch::Library::HeartRateMonitor',
 	'');
+INSERT INTO CL_POR
+	VALUES ("6a0cc33b-29d6-416c-9738-4f8b906dc574",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"6b8ee91d-884c-4d21-ae27-57f393ad4626");
 INSERT INTO CL_IIR
 	VALUES ("cb4f1685-d919-4808-a2b8-b0c2f3ae36ae",
 	"5659a879-3ecf-47ee-99d2-11f373c4a8b8",
-	"6a0cc33b-29d6-416c-9738-4f8b906dc574",
+	"6b8ee91d-884c-4d21-ae27-57f393ad4626",
 	"00000000-0000-0000-0000-000000000000",
 	'HeartRateProvider',
 	'');

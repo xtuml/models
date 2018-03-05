@@ -198,7 +198,8 @@ INSERT INTO SM_ACT
 	"c3d49607-24d2-4317-8d00-9534cc3ce7c6",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("faa20aef-4613-45fa-a1ee-f8523efa56e7",
 	"c3d49607-24d2-4317-8d00-9534cc3ce7c6",
@@ -213,7 +214,8 @@ INSERT INTO SM_ACT
 	'create event instance evt of UI_A3:setTargetPressed() to UI class;
 GuiBridge::feedSetTargetPressedEvent(evt: evt);
 ::sendTargetPressed();',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("3167043f-25c5-46ff-8884-5b295c6d187e",
 	"c3d49607-24d2-4317-8d00-9534cc3ce7c6",
@@ -228,7 +230,8 @@ INSERT INTO SM_ACT
 	'create event instance evt of UI_A4:startStopPressed() to UI class;
 GuiBridge::feedStartStopPressedEvent(evt: evt);
 ::sendStartStopPressed();',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("948880f3-c938-4e5b-b91a-986f02edcae4",
 	"c3d49607-24d2-4317-8d00-9534cc3ce7c6",
@@ -243,7 +246,8 @@ INSERT INTO SM_ACT
 	'create event instance evt of UI_A5:lapResetPressed() to UI class;
 GuiBridge::feedLapResetPressedEvent(evt: evt);
 ::sendLapResetPressed();',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("2ded2afe-f23e-4840-aef3-1132e75a9d3c",
 	"c3d49607-24d2-4317-8d00-9534cc3ce7c6",
@@ -258,7 +262,8 @@ INSERT INTO SM_ACT
 	'create event instance evt of UI_A6:lightPressed() to UI class;
 GuiBridge::feedLightPressedEvent(evt: evt);
 ::sendLightPressed();',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("ef35ea84-3587-402c-9982-0efb4b8b467a",
 	"c3d49607-24d2-4317-8d00-9534cc3ce7c6",
@@ -273,7 +278,8 @@ INSERT INTO SM_ACT
 	'create event instance evt of UI_A7:modePressed() to UI class;
 GuiBridge::feedModePressedEvent(evt: evt);
 ::sendModePressed();',
-	'');
+	'',
+	0);
 INSERT INTO GD_MD
 	VALUES ("7904e75f-bda6-43ad-946f-49ea183a7fb1",
 	10,
@@ -1044,6 +1050,22 @@ INSERT INTO O_OBJ_PROXY
 	'UI',
 	1,
 	'UI',
-	'',
+	'Provides an interface between Verifier and an external user interface representing 
+the watch, in this case an animated rendition of the watch containing virtual
+buttons that can be "pushed" by clicking on them with a mouse.
+
+The system is first primed by creating, within the Verifier execution engine, an 
+instance of each event that can be received by this class-based state machine.
+This priming is done through execution of the feed*() bridge operations within 
+the GuiBridge external entity.  Each of these operations is bound to a realized
+Java function that queues the appropriate event within the Verifier execution 
+engine.
+
+Whenever a button on the animated watch is pushed, it causes the associated
+event to be generated.  The activity on the transition then queues another instance
+of the same event within the Verifier execution engine before sending the 
+corresponding interface signal out through the UI port.  That interface signal 
+can then be received by an application, such as the Tracking component, that is 
+controlled by the animated watch.',
 	"00000000-0000-0000-0000-000000000000",
 	'../UI.xtuml');

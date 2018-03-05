@@ -22,6 +22,7 @@ INSERT INTO SPR_PS_PROXY
 	'',
 	'',
 	1,
+	0,
 	'../../../HeartRateMonitor.xtuml');
 INSERT INTO SM_SEVT
 	VALUES ("75522ea9-7f8d-4a13-8a34-261382aa624d",
@@ -50,6 +51,7 @@ INSERT INTO SPR_PS_PROXY
 	'',
 	'',
 	1,
+	0,
 	'../../../HeartRateMonitor.xtuml');
 INSERT INTO SM_SEVT
 	VALUES ("d87f2ba8-8584-4de2-9563-52a4f15df114",
@@ -190,7 +192,8 @@ INSERT INTO SM_ACT
 	"8ca672ac-4c8d-4785-c037-63b1fec94f59",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_MOAH
 	VALUES ("ad64c0a4-629b-42bb-abd8-7a8e461449e0",
 	"8ca672ac-4c8d-4785-c037-63b1fec94f59",
@@ -205,7 +208,8 @@ INSERT INTO SM_ACT
 	'select any monitor from instances of HeartRateMonitor;
 send HR::heartRateChanged(heartRate: monitor.recentHeartRate);
 monitor.recentHeartRate = monitor.recentHeartRate + 1;',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("dacab554-fe00-4c11-a59e-06b71c1770e3",
 	"8ca672ac-4c8d-4785-c037-63b1fec94f59",
@@ -229,7 +233,8 @@ LOG::LogInfo(message: "listener registered");
 // start timer
 create event instance timeout of HeartRateMonitor_A3:timeout() to HeartRateMonitor class;
 monitor.timer = TIM::timer_start_recurring( event_inst: timeout, microseconds: (HeartRateSamplingPeriod * 1000000) ); ',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("d010be6b-0e95-4a7f-b75c-7c90f5b75a13",
 	"8ca672ac-4c8d-4785-c037-63b1fec94f59",
@@ -248,7 +253,8 @@ if ( res )
 else
   LOG::LogFailure( message: "Heart Rate Monitor: timer_cancel() failed." );
 end if;',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("3b92c017-5c77-40c3-ba52-ca9a72f7db4a",
 	"8ca672ac-4c8d-4785-c037-63b1fec94f59",
@@ -261,7 +267,8 @@ INSERT INTO SM_ACT
 	"8ca672ac-4c8d-4785-c037-63b1fec94f59",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO GD_MD
 	VALUES ("4fccaad3-edc3-4961-b0c7-8c9361b81145",
 	10,
