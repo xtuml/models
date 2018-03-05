@@ -140,9 +140,9 @@ p3 := create automobile( eyedee => "Tina" );
 q1 := create jurisdiction( deeeye => "Shane" );
 q2 := create jurisdiction( deeeye => "Rusty" );
 q3 := create jurisdiction( deeeye => "Cort" );
-//r1 := create license( city => "Indianapolis", pID => p1.eyedee, qID => q3.deeeye );
-//r2 := create license( city => "Lockport", pID => p3.eyedee, qID => q1.deeeye );
-//r3 := create license( city => "Battleground", pID => p2.eyedee, qID => q2.deeeye );
+r1 := create license( city => "Indianapolis", pID => p1.pID, qID => q3.qID );
+r2 := create license( city => "Lockport", pID => p3.pID, qID => q1.qID );
+r3 := create license( city => "Battleground", pID => p2.pID, qID => q2.qID );
 //link p1 R9 q3 using r1;
 //link q2 R9 p2 using r3;
 //link p3 R9 q1 using r2;
@@ -240,7 +240,7 @@ begin
 // or that preexisting instances were defined in data.
 //
 
-a := find_one( plug );
+a := find_one plug();
 if ( null = a ) then
 
   //
@@ -256,7 +256,7 @@ end service;
 //! ACTIVITY BEGIN. 'b6ece4d0-3a14-4e5a-87e6-23378a779c47' DO NOT EDIT THIS LINE.
 private service pei::test () is
 a : instance of plug; a1 : instance of plug; same_a : instance of plug;
-as : set of instance of plug;
+as : set of instance of plug; as_again : set of instance of plug;
 b : instance of socket;
 
 h : instance of transmission; h1 : instance of transmission; h2 : instance of transmission; h3 : instance of transmission; hp : instance of transmission; hf : instance of transmission;
@@ -711,7 +711,7 @@ begin
 // Generate an event to be sure that b is in the correct current state.
 //
 b := find_one socket();
-generate socket1:go() to b;
+generate socket.go() to b;
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
@@ -719,6 +719,11 @@ end service;
 private service pei::test2 () is
 a : instance of plug;
 b : instance of socket;
+c : instance of dog;
+d : instance of dog_owner;
+n : instance of employee;
+y : instance of friendship;
+z : instance of dealer;
 
 begin
 // Do some creates and deletes to to exercise storage.
@@ -731,7 +736,7 @@ b := create socket( bID => 77, i => 77 );
 a := create plug( aID => 77, i => 77, bID => b.bID );
 link a R1 b;
 d := create dog_owner( dID => 88 ); // extra
-c := create dog( cID => 88, dID => d2.dID );
+c := create dog( cID => 88, dID => d.dID );
 link c R2 d;
 y := create unique friendship();
 z := create unique dealer();
@@ -755,7 +760,7 @@ end service;
 //! ACTIVITY BEGIN. '888d97ee-40a0-4baa-8ca8-41c7678e8e7d' DO NOT EDIT THIS LINE.
 private service pei::xit () is
 begin
-ARCH::shutdown();
+//ARCH::shutdown();
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
