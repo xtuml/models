@@ -250,6 +250,7 @@ if ( null = a ) then
   do_creates();
 
 end if;   // if empty a
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'b6ece4d0-3a14-4e5a-87e6-23378a779c47' DO NOT EDIT THIS LINE.
@@ -522,7 +523,7 @@ for n in ns'elements loop
   end if;
 end loop;
 delete object instance n1;
-n := find_one employee( name == "Pete" );
+n := find_one employee( name = "Pete" );
 boss := n->R7.works_for;
 if ( null = boss ) then
   LOG::LogFailure( message:"test1.B4:  Failed to select boss.");
@@ -531,49 +532,49 @@ else
     LOG::LogFailure( message:"test1.B5:  Selected incorrect boss.");
   end if;
 end if;
-n := find_one employee( name == "Dave" );
+n := find_one employee( name = "Dave" );
 m := n->R7.works_for;
 if ( null = m ) then
   LOG::LogFailure( message:"test1.B6:  Failed to select M.");
-  if ( m.department != "MEC" )
+  if ( m.department /= "MEC" ) then
     LOG::LogFailure( message:"test1.B7:  Selected incorrect department.");
   else
-    if ( m.works_for_nID != n.nID )
+    if ( m.works_for_nID /= n.nID ) then
       LOG::LogFailure( message:"test1.B7a:  M/N referential mismatch");
     end if;
   end if;
 end if;
-select any n from instances of N where ( selected.name == "Pete" );
-select many ns related by n->N[R7.'manages'];
-if ( cardinality ns != 2 )
+n := find_one employee( name = "Pete" );
+ns := n->R7.manages;
+if ( ns'length /= 2 ) then
   LOG::LogFailure( message:"test1.B2:  Failed to select Ns.");
 end if;
-for each n in ns
-  if ( n.name != "Alex" ) and ( n.name != "Jenn" )
+for n in ns'elements loop
+  if ( n.name /= "Alex" ) and ( n.name /= "Jenn" ) then
     LOG::LogFailure( message:"test1.B3:  Selected incorrect Ns.");
   end if;
-end for;
+end loop;
 
 
 //
 // Test 1-1 associatives.
 //
-select any p from instances of P where ( selected.eyedee == "Rox" );
-select one q related by p->Q[R9];
-if ( q.deeeye != "Cort" )
+p := find_one automobile( eyedee = "Rox" );
+q := p->R9.jurisdiction;
+if ( q.deeeye /= "Cort" ) then
   LOG::LogFailure( message:"test1.D1:  Selected incorrect Q.");
 end if;
-select any q from instances of Q where ( selected.deeeye == "Rusty" );
-select one p related by q->P[R9];
-if ( p.eyedee != "Bita" )
+q := find_one jurisdction( deeeye = "Rusty" );
+p := q->R9.automobile;
+if ( p.eyedee /= "Bita" ) then
   LOG::LogFailure( message:"test1.D2:  Selected incorrect P.");
 end if;
-select any p from instances of P where ( selected.eyedee == "Tina" );
-select one r related by p->R[R9];
-if ( r.city != "Lockport" )
+p := find_one automobile( eyedee = "Tina" );
+r := p->R9.license;
+if ( r.city /= "Lockport" ) then
   LOG::LogFailure( message:"test1.D3:  Selected incorrect R.");
 else
-  if ( p.pID != r.pID )
+  if ( p.pID /= r.pID ) then
     LOG::LogFailure( message:"test1.D3a:  P/R referential mismatch");
   end if;
 end if;
@@ -581,27 +582,27 @@ end if;
 //
 // Test 1-M associatives.
 //
-select any s from instances of S where ( selected.s == "Rox" );
-select many ts related by s->T[R10];
-if ( cardinality ts != 2 )
+s := find_one AtoD_converter( s = "Rox" );
+ts := s->R10.analog_input;
+if ( ts'length /= 2 ) then
   LOG::LogFailure( message:"test1.E1:  Incorrect number of Ts.");
 end if;
-for each t in ts
-  if ( ( t.t != "Hannah" ) and ( t.t != "Ruby" ) )
+for t in ts'elements loop
+  if ( ( t.t /= "Hannah" ) and ( t.t /= "Ruby" ) ) then
     LOG::LogFailure( message:"test1.E2:  Incorrect T.");
   end if;
-  select one s related by t->S[R10];
-  if ( s.s != "Rox" )
+  s := t->R10.AtoD_converter;
+  if ( s.s /= "Rox" ) then
     LOG::LogFailure( message:"test1.E3:  Incorrect S.");
   end if;
 end for;
-select any t from instances of T where ( selected.t == "Katrina" );
-select one s related by t->S[R10];
-select any u related by s->U[R10] where ( selected.s == "Aug" );
-if ( empty u )
+t := find_one analog_input( t = "Katrina" );
+s := t->R10.AtoD_converter;
+u := s->R10.sample( s = "Aug" );
+if ( null = u ) then
   LOG::LogFailure( message:"test1.E4:  Incorrect U.");
 else
-  if ( s.sID != u.sID )
+  if ( s.sID /= u.sID ) then
     LOG::LogFailure( message:"test1.E4a:  S/U referential mismatch");
   end if;
 end if;
@@ -609,69 +610,69 @@ end if;
 //
 // Test 1-1 reflexive associatives.
 //
-select any w from instances of W where ( selected.name == "Rox" );
-select one husband related by w->W[R11.'is_wife_of'];
-if ( husband.name != "Cort" )
+w := find_one person( name = "Rox" );
+husband := w->R11.is_wife_of;
+if ( husband.name /= "Cort" ) then
   LOG::LogFailure( message:"test1.F1:  Incorrect W.");
 end if;
-select any w from instances of W where ( selected.name == "Jacqui" );
-select one husband related by w->W[R11.'is_wife_of'];
-if ( husband.name != "Sean" )
+w := find_one person( name = "Jacqui" );
+husband := w->R11.is_wife_of;
+if ( husband.name /= "Sean" ) then
   LOG::LogFailure( message:"test1.F2:  Incorrect W.");
 end if;
-select any huz from instances of W where ( selected.name == "Cort" );
-select one wife related by huz->W[R11.'is_husband_of'];
-if ( wife.name != "Rox" )
+huz := find_one person( name = "Cort" );
+wife := huz->R11.is_husband_of.person;
+if ( wife.name /= "Rox" ) then
   LOG::LogFailure( message:"test1.F3:  Incorrect W.");
 end if;
-select any v from instances of V where ( selected.year == 1988 );
-if ( ( v.husband != "Cort" ) or ( v.wife != "Rox" ) )
+v := find_one( year = 1988 );
+if ( ( v.husband /= "Cort" ) or ( v.wife /= "Rox" ) ) then
   LOG::LogFailure( message:"test1.F4:  Incorrect V or referential mismatch." );
 end if;
 
 // Test friends and friendships.
 // (Note that this should be symmetric reflexive, but we don't know how.)
 //
-select any x from instances of X where ( selected.name == "Cort" );
-if ( empty x )
+x := find_one friend( name = "Cort" );
+if ( null = x ) then
   LOG::LogFailure( message:"test1.X1:  Failed to select X." );
 end if;
-select many xs related by x->X[R12.'is_pal_of'];
-cardxs = cardinality xs;
-select many xs related by x->X[R12.'is_buddy_of'];
-cardxs = cardxs + cardinality xs;
-if ( cardxs != 5 )
+xs := x->R12.is_pal_of.friend;
+cardxs := xs'length;
+xs := x->R12.is_buddy_of.friend;
+cardxs := cardxs + xs'length;
+if ( cardxs /= 5 ) then
   LOG::LogFailure( message:"test1.X2:  Wrong number of friends." );
 end if;
-select many ys from instances of Y where ( selected.pal == "Cort" )
-  or ( selected.buddy == "Cort" );
-if ( cardinality ys != 5 )
+ys := find_all friendship( ( pal = "Cort" )
+  or ( buddy = "Cort" ) );
+if ( ys'length /= 5 ) then
   LOG::LogFailure( message:"test1.Y3:  Wrong number of friends." );
 end if;
 // Test Sevina's friends.
-select any x from instances of X where ( selected.name == "Sevina" );
-if ( empty x )
+x := find_one friend( name = "Sevina" );
+if ( null = x ) then
   LOG::LogFailure( message:"test1.X4:  Failed to select X." );
 end if;
-select any x1 related by x->X[R12.'is_pal_of'];
-if ( x1.name != "Rox" )
+x1 := x->R12.is_pal_of.friend;
+if ( x1.name /= "Rox" ) then
   LOG::LogFailure( message:"test1.X5:  Could not find Rox." );
 end if;
-select any x from instances of X where ( selected.name == "Rox" );
-if ( empty x )
+c := find_one friend( name = "Rox" );
+if ( null = x ) then
   LOG::LogFailure( message:"test1.X6:  Failed to select X." );
 end if;
-select any x1 related by x->X[R12.'is_buddy_of'];
-if ( x1.name != "Sevina" )
+x1 := x->R12.is_buddy_of.friend;
+if ( x1.name /= "Sevina" ) then
   LOG::LogFailure( message:"test1.X6:  Could not find Sevina." );
 end if;
-select any y from instances of friendship;
-select one x related by y->X[R12.'is_pal_of'];
-if ( x.name != y.pal )
+y := find_one friendship();
+x := y->R12.is_pal_of.friend;
+if ( x.name /= y.pal ) then
   LOG::LogFailure( message:"test1.X6a:  X/Y referential mismatch" );
 end if;
-select one x related by y->X[R12.'is_buddy_of'];
-if ( x.name != y.buddy )
+x := y->R12.is_buddy_of.friend;
+if ( x.name /= y.buddy ) then
   LOG::LogFailure( message:"test1.X6b:  X/Y referential mismatch" );
 end if;
 
@@ -679,69 +680,82 @@ end if;
 //
 // Test dealers and deals.
 //
-select any z from instances of Z where ( selected.name == "Joe" );
-if ( empty z )
+z := find_one dealer( name = "Joe" );
+if ( null = z ) then
   LOG::LogFailure( message:"test1.Z1:  Failed to select Z." );
 end if;
-select many zs related by z->Z[R13.'buys_from'];
-if ( cardinality zs < 2 )
+zs := z->R13.buys_from.dealer;
+if ( zs'length < 2 ) then
   LOG::LogFailure( message:"test1.Z2:  Could not find Zs." );
 end if;
-select any zz from instances of deal;
-select one z related by zz->Z[R13.'buys_from'];
-if ( zz.buyer != z.name )
+zz := find_one deal();
+z := zz->R13.buys_from;
+if ( zz.buyer /= z.name ) then
   LOG::LogFailure( message:"test1.Z2a:  Z/ZZ referential mismatch" );
 end if;
-select one z related by zz->Z[R13.'sells_to'];
-if ( zz.seller != z.name )
+z := zz->R13.sells_to.dealer;
+if ( zz.seller /= z.name ) then
   LOG::LogFailure( message:"test1.Z2b:  Z/ZZ referential mismatch" );
 end if;
 
 LOG::LogSuccess( message:"Made it to the end." );
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '3478bf0f-b428-4b52-b41a-0ce97241c99b' DO NOT EDIT THIS LINE.
 private service pei::test1 () is
+b : instance of socket;
+
+begin
 //
 // Generate an event to be sure that b is in the correct current state.
 //
-select any b from instances of socket;
-generate B1:go() to b;
+b := find_one socket();
+generate socket1:go() to b;
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'a20db3d4-77d0-47da-9b8c-6d6a1d4dabf2' DO NOT EDIT THIS LINE.
 private service pei::test2 () is
+a : instance of plug;
+b : instance of socket;
+
+begin
 // Do some creates and deletes to to exercise storage.
 // But delete everything created.
 
-create object instance a of plug;
-delete object instance a;
+a := create plug( aID => 55 );
+delete a;
 
-create object instance a of plug;
-create object instance b of socket;
-relate a to b across R1;
-create object instance c of dog;
-create object instance d of dog_owner;
-relate c to d across R2;
-create object instance y of friendship;
-create object instance z of dealer;
+b := create socket( bID => 77, i => 77 );
+a := create plug( aID => 77, i => 77, bID => b.bID );
+link a R1 b;
+d := create dog_owner( dID => 88 ); // extra
+c := create dog( cID => 88, dID => d2.dID );
+link c R2 d;
+y := create unique friendship();
+z := create unique dealer();
 
-unrelate c from d across R2;
-unrelate a from b across R1;
+unlink c R2 d;
+unlink a R1 b;
 
-delete object instance a;
-delete object instance b;
-delete object instance z;
-delete object instance y;
-delete object instance c;
-delete object instance d;
+delete a;
+delete b;
+delete z;
+delete y;
+delete c;
+delete d;
 
-create object instance n of employee;
-delete object instance n;
+n := create unique employee();
+delete n;
+
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '888d97ee-40a0-4baa-8ca8-41c7678e8e7d' DO NOT EDIT THIS LINE.
 private service pei::xit () is
+begin
 ARCH::shutdown();
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
