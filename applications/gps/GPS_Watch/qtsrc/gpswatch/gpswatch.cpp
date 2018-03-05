@@ -65,14 +65,14 @@ gpswatch::gpswatch(QWidget *parent) : QDialog(parent), tcpServer(0), networkSess
   setLayout(mainLayout);
 
   readout.display( "00:00" );
-  setWindowTitle(tr("GPS Watch"));
+  setWindowTitle(tr("GPS_Watch"));
 }
 
 void gpswatch::sessionOpened()
 {
   tcpServer = new QTcpServer(this);
   if (!tcpServer->listen(QHostAddress::Any,2003)) {
-    QMessageBox::critical(this, tr("GPS Watch"), tr("Unable to start the server: %1.") .arg(tcpServer->errorString()));
+    QMessageBox::critical(this, tr("GPS_Watch"), tr("Unable to start the server: %1.") .arg(tcpServer->errorString()));
     close();
     return;
   }
