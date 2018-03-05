@@ -231,80 +231,89 @@ end service;
 
 //! ACTIVITY BEGIN. 'ee0b21c6-3e1f-4b2b-9441-00b6e64ca6eb' DO NOT EDIT THIS LINE.
 private service pei::setup () is
+a : instance of plug;
+
+begin
 // 
 // Check to see if any instances are already here.
 // This would mean that we have restored from NVS
 // or that preexisting instances were defined in data.
 //
 
-select any a from instances of plug;
-if ( empty a )
+a := find_one( plug );
+if ( null = a ) then
 
   //
   // Set up instances for existance test later on.
   //
 
-  ::do_creates();
+  do_creates();
 
 end if;   // if empty a
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'b6ece4d0-3a14-4e5a-87e6-23378a779c47' DO NOT EDIT THIS LINE.
 private service pei::test () is
+a : instance of plug; a1 : instance of plug; same_a : instance of plug;
+as : set of instance of plug;
+b : instance of socket;
+
+h : instance of transmission; h1 : instance of transmission; h2 : instance of transmission; h3 : instance of transmission; hp : instance of transmission; hf : instance of transmission;
+i : instance of car;
+k : instance of sports_car;
+l : instance of convertible;
+
+begin
 //
 // Test that an instance of A already exists.
 //
 
-select any a from instances of plug;
-if (empty a)
+if ( null = find_one plug() ) then
   LOG::LogFailure( message:"test1.20:  Failed to select a." );
 end if;
 
-select many as from instances of plug;
-if (cardinality as != 5)
+as := find_all plug();
+if ( as'length /= 5 )
   LOG::LogFailure( message:"test1.21:  Wrong number of As." );
 end if;
-select many as_again from instances of plug;
-if ( as != as_again )
+as_again := find_all plug();
+if ( as /= as_again )
   LOG::LogFailure( message:"set of As and As_again do not match." );
 end if;
 
-create object instance a1 of plug; a1.i = 101;
-select any a from instances of A where (selected.i == 1);
-if (empty a)
+a1 := create plug( i => 101 );
+if ( find_one plug( i = 1 ) = null ) then
   LOG::LogFailure( message:"test1.22:  Failed to select a where." );
 end if;
-delete object instance a1;
+delete a1;
 
-select any b from instances of B where (selected.i == 20);
-if (not empty b)
+if ( null /= find_one socket( i = 20 ) ) then
   LOG::LogFailure( message:"test1.23:  Selected non-existant B." );
 end if;
 
-select any b from instances of B where (selected.i == 2);
-if (empty b)
+if ( null = find_ond socket( i = 2 ) ) then
   LOG::LogFailure( message:"test1.24:  Failed to select b where." );
 end if;
 
 //
 // Test that there is a B related to this A.
 //
-select any a from instances of A where (selected.i == 3);
-select one b related by a->B[R1];
-if (empty b)
+a := find_one plug( i = 3 );
+b := a->R1;
+if ( null = b ) then
   LOG::LogFailure( message:"test1.40:  Failed to select b across R1." );
 end if;
-if (b.i != 4)
+if ( b.i /= 4 ) then
   LOG::LogFailure( message:"test1.41:  Selected wrong b across R1." );
-  if ( a.bID != b.bID )
+  if ( a.bID /= b.bID ) then
     LOG::LogFailure( message:"test1.42:  A/B referential mismatch" );
   end if;
 end if;
-select one same_a related by a->B[R1]->A[R1];
-if ( empty same_a )
+same_a := a->R1.socket->R1.plug;
+if ( null = same_a ) then
   LOG::LogFailure( message:"test1.43:  Did not find a out and back across R1." );
 else
-  if ( a != same_a )
+  if ( a /= same_a ) then
     LOG::LogFailure( message:"test1.43a:  a and same_a not the same." );
   end if;
 end if;
@@ -312,150 +321,151 @@ end if;
 //
 // Test that there is an A related to this B.
 //
-select one a related by b->A[R1];
-if (empty a)
+a := b->R1;
+if ( null = a ) then
   LOG::LogFailure( message:"test1.44:  Failed to select a across R1." );
 end if;
-if (a.i != 3)
+if (a.i != 3) then
   LOG::LogFailure( message:"test1.45:  Selected wrong a across R1." );
 end if;
-unrelate a from b across R1;
-relate a to b across R1;
+unlink a R1 b;
+link a R1 b;
 
 //
 // Test for a D.
 //
-select any d from instances of D where ( selected.name == "DeeTwo" );
-if (empty d)
+d := find_one dog_owner( name = "DeeTwo" );
+if ( null = d );
   LOG::LogFailure( message:"test1.52:  Failed to select d from Ds.");
 end if;
 
 //
 // Test for many Cs related to D.
 //
-select many cs related by d->C[R2];
-if ( cardinality cs != 4 )
+cs := d->R2.dog;
+if ( cs'length /= 4 ) then
   LOG::LogFailure( message:"test1.62:  Failed to select Cs from D.");
 end if;
-for each c in cs
-  select one d related by c->D[R2];
-  if ( d.name != "DeeTwo" )
+for c in cs'elements loop
+  d := c->R2;
+  if ( d.name /= "DeeTwo" ) then
     LOG::LogFailure( message:"test1.63:  Failed to select D from C.");
   end if;
-  if ( c.dID != d.dID )
+  if ( c.dID /= d.dID )
     LOG::LogFailure( message:"test1.64:  C/D referential mismatch");
   end if;
-end for;
+end loop;
 
 //
 // Test associatives.
 //
-select any e from instances of E where ( selected.eID == 2 );
-if ( empty e )
+e := find_one host( eID = 2 );
+if ( null = e ) then
   LOG::LogFailure( message:"test1.70:  Failed to select E.");
 end if;
-select any f related by e->F[R3];
-if ( empty f )
+f := e->R3.device;
+if ( null = f ) then
   LOG::LogFailure( message:"test1.71:  Failed to select F.");
-  if ( f.fID != 3 )
+else
+  if ( f.fID /= 3 ) then
     LOG::LogFailure( message:"test1.72:  Selected wrong F across R3.");
   end if;
 end if;
-select many es related by f->E[R3];
-if ( cardinality es != 2 )
+es := f->E[R3];
+if ( es'length /= 2 ) then
   LOG::LogFailure( message:"test1.73:  Selected wrong count of Fs.");
 end if;
-select any g related by e->G[R3];
-if ( g.gID != 3 )
+g := e->R3.connection;
+if ( g.gID /= 3 ) then
   LOG::LogFailure( message:"test1.74:  Selected incorrect G.");
 end if;
-if ( ( g.eID != e.eID ) or ( g.fID != f.fID ) )
+if ( ( g.eID /= e.eID ) or ( g.fID /= f.fID ) ) then
   LOG::LogFailure( message:"test1.75:  E/F/G referential mismatch.");
 end if;
-for each e in es
-  if ( ( e.eID != 1 ) and ( e.eID != 2 ) )
+for e in es'elements loop
+  if ( ( e.eID /= 1 ) and ( e.eID /= 2 ) ) then
     LOG::LogFailure( message:"test1.76:  Selected incorrect Es.");
   end if;
-end for;
+end loop;
 
 //
 // Test reflexives.
 //
-select any h1 from instances of H where ( selected.hID == 1 );
-if ( empty h1 )
+h1 := find_one transmission( hID = 1 );
+if ( null = h1 ) then
   LOG::LogFailure( message:"test1.80:  Failed to select H.");
 end if;
-select one h2 related by h1->H[R4.'precedes'];
-if ( h2.hID != 2 )
+h2 := h1->R4.precedes.transmission;
+if ( h2.hID /= 2 ) then
   LOG::LogFailure( message:"test1.81:  Selected incorrect H.");
 end if;
-if ( h1.hID != h2.follows )
+if ( h1.hID /= h2.follows ) then
   LOG::LogFailure( message:"test1.81a:  H referential mismatch");
 end if;
-select one h3 related by h2->H[R4.'precedes'];
-if ( h3.hID != 3 )
+h3 := h2->R2.precedes;
+if ( h3.hID /= 3 ) then
   LOG::LogFailure( message:"test1.82:  Selected incorrect H.");
 end if;
-if ( h2.hID != h3.follows )
+if ( h2.hID /= h3.follows ) then
   LOG::LogFailure( message:"test1.82a:  H referential mismatch");
 end if;
-select one h related by h1->H[R4.'precedes']->H[R4.'precedes'];
-if ( h.hID != 3 )
+h := h1->R4.precedes->R4.precedes;
+if ( h.hID /= 3 ) then
   LOG::LogFailure( message:"test1.83:  Selected incorrect H.");
 end if;
-select one h related by h3->H[R4.'follows']->H[R4.'follows'];
-if ( h.hID != 1 )
+h := h3->R4.follows->R4.follows;
+if ( h.hID /= 1 ) then
   LOG::LogFailure( message:"test1.84:  Selected incorrect H.");
 end if;
-select any h from instances of H where ( selected.hID == 2 );
-if ( empty h )
+h := find_one transmission( hID = 2 );
+if ( null = h )
   LOG::LogFailure( message:"test1.85:  Failed to select H.");
 end if;
-select one hp related by h->H[R4.'follows'];
-if ( hp.hID != 1 )
+hp := h->R4.follows.transmission;
+if ( hp.hID /= 1 ) then
   LOG::LogFailure( message:"test1.86:  Selected incorrect H.");
 end if;
-if ( hp.hID != h.follows )
+if ( hp.hID /= h.follows ) then
   LOG::LogFailure( message:"test1.86a:  H referential mismatch");
 end if;
-select one hf related by h->H[R4.'precedes'];
-if ( hf.hID != 3 )
+hf := h->R4.precedes;
+if ( hf.hID /= 3 ) then
   LOG::LogFailure( message:"test1.87:  Selected incorrect H.");
 end if;
-select one h related by h3->H[R4.'precedes'];
-if ( h.hID != 4 )
+h := h3->R4.precedes;
+if ( h.hID /= 4 ) then
   LOG::LogFailure( message:"test1.88:  Selected incorrect H.");
 end if;
-if ( h3.hID != h.follows )
+if ( h3.hID /= h.follows ) then
   LOG::LogFailure( message:"test1.88a:  H referential mismatch");
 end if;
 
 //
 // Test sub/supers.
 //
-select any i from instances of I where ( selected.iID == 200 );
-if ( empty i )
+i := find_one car( iID = 200 );
+if ( null = i ) then
   LOG::LogFailure( message:"test1.90:  Failed to select I.");
 end if;
-select one k related by i->K[R5];
-if ( empty k )
+k := i->R5.sports_car;
+if ( null = k ) then
   LOG::LogFailure( message:"test1.91:  Failed to select K.");
 else
-  if ( k.kID != 33 )
+  if ( k.kID /= 33 ) then
     LOG::LogFailure( message:"test1.92:  Selected incorrect K.");
   end if;
-  if ( i.iID != k.iID )
+  if ( i.iID /= k.iID ) then
     LOG::LogFailure( message:"test1.92a:  I/K referential mismatch");
   end if;
 end if;
-select one l related by i->K[R5]->L[R6];
-if ( empty l )
+l := i->R5.sports_car->R6.convertible;
+if ( null = l ) then
   LOG::LogFailure( message:"test1.93:  Failed to select L.");
 else
-  if ( l.lID != 222 )
+  if ( l.lID /= 222 ) then
     LOG::LogFailure( message:"test1.94:  Selected incorrect L.");
   end if;
-  if ( l.kID != k.kID )
+  if ( l.kID /= k.kID ) then
     LOG::LogFailure( message:"test1.94a:  L/K referential mismatch");
   end if;
 end if;
@@ -463,34 +473,34 @@ end if;
 //
 // Test reflexive asymmetrics.
 //
-select any o from instances of O where ( selected.voo == "Cort" );
-select many os related by o->O[R8.'teaches'];
-if ( cardinality os != 3 )
+o := find_one group_member( voo = "Cort" );
+os := o->R8.teaches.group_member;
+if ( os'length /= 3 ) then
   LOG::LogFailure( message:"test1.C2:  Failed to select Os.");
 end if;
-select one o1 related by o->O[R8.'learns_from'];
-if ( o1.voo != "Kenny" )
+o1 := o->R8.learns_from;
+if ( o1.voo /= "Kenny" ) then
   LOG::LogFailure( message:"test1.C3:  Selected incorrect O.");
 else
-  if ( o.teacheroID != o1.oID )
+  if ( o.teacheroID /= o1.oID ) then
     LOG::LogFailure( message:"test1.C3a:  O referential mismatch");
   end if;
 end if;
-select any o from instances of O where ( selected.voo == "Ellen" );
-select one o1 related by o->O[R8.'learns_from'];
-if ( o1.voo != "Cort" )
+o := find_one group_member( voo = "Ellen" );
+o1 := o->R8.learns_from;
+if ( o1.voo /= "Cort" ) then
   LOG::LogFailure( message:"test1.C4:  Selected incorrect O.");
 else
-  if ( o.teacheroID != o1.oID )
+  if ( o.teacheroID /= o1.oID ) then
     LOG::LogFailure( message:"test1.C4a:  O referential mismatch");
   end if;
 end if;
-select any o from instances of O where ( selected.voo == "Amy" );
-select one o1 related by o->O[R8.'learns_from'];
-if ( o1.voo != "Cort" )
+o := find_one group_member( voo = "Amy" );
+o1 := o->R8.learns_from.group_member;
+if ( o1.voo /= "Cort" ) then
   LOG::LogFailure( message:"test1.C5:  Selected incorrect O.");
 else
-  if ( o.teacheroID != o1.oID )
+  if ( o.teacheroID /= o1.oID ) then
     LOG::LogFailure( message:"test1.C5a:  O referential mismatch");
   end if;
 end if;
@@ -498,33 +508,32 @@ end if;
 //
 // Test reflexive associatives.
 //
-select any n from instances of N where ( selected.name == "Chris" );
-select many ns related by n->N[R7.'manages'];
-if ( cardinality ns != 2 )
+n := find_one employee( name = "Chris" );
+ns := n->R7.manages.employee;
+if ( ns'length /= 2 ) then
   LOG::LogFailure( message:"test1.B2:  Failed to select Ns.");
 end if;
-create object instance n1 of employee;
-create object instance n2 of employee;
-delete object instance n2;
-n1.name = "Vijay";
-for each n in ns
-  if ( n.name != "Dave" ) and ( n.name != "Pete" )
+n1 := create employee( name => "Vijay" );
+n2 := create employee( name => "do not care" );
+delete n2;
+for n in ns'elements loop
+  if ( n.name /= "Dave" ) and ( n.name /= "Pete" ) then
     LOG::LogFailure( message:"test1.B3:  Selected incorrect Ns.");
   end if;
-end for;
+end loop;
 delete object instance n1;
-select any n from instances of N where ( selected.name == "Pete" );
-select one boss related by n->N[R7.'works_for'];
-if ( empty boss )
+n := find_one employee( name == "Pete" );
+boss := n->R7.works_for;
+if ( null = boss ) then
   LOG::LogFailure( message:"test1.B4:  Failed to select boss.");
 else
-  if ( boss.name != "Chris" )
+  if ( boss.name /= "Chris" ) then
     LOG::LogFailure( message:"test1.B5:  Selected incorrect boss.");
   end if;
 end if;
-select any n from instances of N where ( selected.name == "Dave" );
-select one m related by n->M[R7.'works_for'];
-if ( empty m )
+n := find_one employee( name == "Dave" );
+m := n->R7.works_for;
+if ( null = m ) then
   LOG::LogFailure( message:"test1.B6:  Failed to select M.");
   if ( m.department != "MEC" )
     LOG::LogFailure( message:"test1.B7:  Selected incorrect department.");
