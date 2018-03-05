@@ -80,22 +80,22 @@ h2 := create transmission( hID => 2, follows => h1.hID );
 h := create transmission( hID => 99 ); // extra to see in PEIs
 h3 := create transmission( hID => 3, follows => h2.hID );
 h4 := create transmission( hID => 4, follows => h3.hID );
-link h1 R2.precedes h2;
-link h2 R2.precedes h3;
-link h4 R2.follows h3;
+link h1 R4.precedes h2;
+link h2 R4.precedes h3;
+link h4 R4.follows h3;
 
 // car R5 sedan, sports_car R6 convertible
 i4 := create car( iID => 400, common => 400 );
 i3 := create car( iID => 300, common => 300 );
 i2 := create car( iID => 200, common => 200 );
 i1 := create car( iID => 100, common => 100 );
-j1 := create sedan( jID => 2, specialJ => 2, iID = i1.iID );
-k1 := create sports_car( kID => 11, specialcommon => 11, iID = i4.iID );
-k2 := create sports_car( kID => 22, specialcommon => 22, iID = i3.iID );
-k3 := create sports_car( kID => 33, specialcommon => 33, iID = i2.iID );
-l2 := create convertible( lID => 222, specialL => 222, kID = k3.iID );
-l3 := create convertible( lID => 333, specialL => 333, kID = k2.iID );
-l1 := create convertible( lID => 111, specialL => 111, kID = k1.iID );
+j1 := create sedan( jID => 2, specialJ => 2, iID => i1.iID );
+k1 := create sports_car( kID => 11, specialcommon => 11, iID => i4.iID );
+k2 := create sports_car( kID => 22, specialcommon => 22, iID => i3.iID );
+k3 := create sports_car( kID => 33, specialcommon => 33, iID => i2.iID );
+l2 := create convertible( lID => 222, specialL => 222, kID => k3.iID );
+l3 := create convertible( lID => 333, specialL => 333, kID => k2.iID );
+l1 := create convertible( lID => 111, specialL => 111, kID => k1.iID );
 link i1 R5 j1;
 link i2 R5 k3;
 link k2 R5 i3;
@@ -105,11 +105,11 @@ link l3 R6 k2;
 link k3 R5 l2;
 
 // group_member R8 reflexive
-o2 := create group_member( oID => 2, voo => "Cort", teacheroID => o2.OID );
+o2 := create group_member( oID => 2, voo => "Cort", teacheroID => o2.oID );
 o1 := create group_member( oID => 1, voo => "Kenny" );
-o3 := create group_member( oID => 3, voo => "Amy", teacheroID => o1.OID );
-o4 := create group_member( oID => 4, voo => "Ellen", teacheroID => o1.OID );
-o5 := create group_member( oID => 5, voo => "Brad", teacheroID => o1.OID );
+o3 := create group_member( oID => 3, voo => "Amy", teacheroID => o1.oID );
+o4 := create group_member( oID => 4, voo => "Ellen", teacheroID => o1.oID );
+o5 := create group_member( oID => 5, voo => "Brad", teacheroID => o1.oID );
 link o1 R8.teaches o2; // Kenny teaches Cort.
 link o2 R8.teaches o3; // Cort teaches Amy.
 link o4 R8.learns_from o2; // Ellen learns from Cort.
@@ -140,12 +140,12 @@ p3 := create automobile( eyedee => "Tina" );
 q1 := create jurisdiction( deeeye => "Shane" );
 q2 := create jurisdiction( deeeye => "Rusty" );
 q3 := create jurisdiction( deeeye => "Cort" );
-r1 := create license( city => "Indianapolis", pID => p1.eyedee, qID => q3.deeeye );
-r2 := create license( city => "Lockport", pID => p3.eyedee, qID => q1.deeeye );
-r3 := create license( city => "Battleground", pID => p2.eyedee, qID => q2.deeeye );
-link p1 R9 q3 using r1;
-link q2 R9 p2 using r3;
-link p3 R9 q1 using r2;
+//r1 := create license( city => "Indianapolis", pID => p1.eyedee, qID => q3.deeeye );
+//r2 := create license( city => "Lockport", pID => p3.eyedee, qID => q1.deeeye );
+//r3 := create license( city => "Battleground", pID => p2.eyedee, qID => q2.deeeye );
+//link p1 R9 q3 using r1;
+//link q2 R9 p2 using r3;
+//link p3 R9 q1 using r2;
 
 // AtoD_converter R10 analog_input using sample
 s1 := create AtoD_converter( s => "Rox" );
@@ -173,7 +173,7 @@ w3 := create person( name => "Sean" );
 w4 := create person( name => "Jacqui" );
 v1 := create marriage( year => 1988, husband => w1.name, wife => w2.name );
 v2 := create marriage( year => 1990, husband => w3.name, wife => w4.name );
-link w1 R11.is_husband of w2 using v1;
+link w1 R11.is_husband_of w2 using v1;
 link w4 R11.is_wife_of w3 using v2;
 
 // friends and friendships
