@@ -274,11 +274,11 @@ if ( null = find_one plug() ) then
 end if;
 
 as := find_all plug();
-if ( as'length /= 5 )
+if ( as'length /= 5 ) then
   LOG::LogFailure( message:"test1.21:  Wrong number of As." );
 end if;
 as_again := find_all plug();
-if ( as /= as_again )
+if ( as /= as_again ) then
   LOG::LogFailure( message:"set of As and As_again do not match." );
 end if;
 
@@ -326,7 +326,7 @@ a := b->R1;
 if ( null = a ) then
   LOG::LogFailure( message:"test1.44:  Failed to select a across R1." );
 end if;
-if (a.i != 3) then
+if (a.i /= 3) then
   LOG::LogFailure( message:"test1.45:  Selected wrong a across R1." );
 end if;
 unlink a R1 b;
@@ -352,7 +352,7 @@ for c in cs'elements loop
   if ( d.name /= "DeeTwo" ) then
     LOG::LogFailure( message:"test1.63:  Failed to select D from C.");
   end if;
-  if ( c.dID /= d.dID )
+  if ( c.dID /= d.dID ) then
     LOG::LogFailure( message:"test1.64:  C/D referential mismatch");
   end if;
 end loop;
@@ -419,7 +419,7 @@ if ( h.hID /= 1 ) then
   LOG::LogFailure( message:"test1.84:  Selected incorrect H.");
 end if;
 h := find_one transmission( hID = 2 );
-if ( null = h )
+if ( null = h ) then
   LOG::LogFailure( message:"test1.85:  Failed to select H.");
 end if;
 hp := h->R4.follows.transmission;
