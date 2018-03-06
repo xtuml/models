@@ -279,8 +279,9 @@ v : instance of marriage;
 w : instance of person; husband : instance of person; huz : instance of person; wife : instance of person;
 x : instance of friend; x1 : instance of friend; xs : set of instance of friend;
 y : instance of friendship; ys : set of instance of friendship;
-z : instance of dealer;
+z : instance of dealer; zs : set of instance of dealer;
 zz : instance of deal;
+cardxs : integer;
 
 begin
 //
@@ -394,7 +395,7 @@ es := f->R3.host;
 if ( es'length /= 2 ) then
   LOG::LogFailure( "test1.73:  Selected wrong count of Fs.");
 end if;
-g := e->R3.connection;
+g := find_one( e->R3.connection )();
 if ( g.gID /= 3 ) then
   LOG::LogFailure( "test1.74:  Selected incorrect G.");
 end if;
@@ -421,7 +422,7 @@ end if;
 if ( h1.hID /= h2.follows ) then
   LOG::LogFailure( "test1.81a:  H referential mismatch");
 end if;
-h3 := h2->R2.precedes;
+h3 := h2->R4.precedes;
 if ( h3.hID /= 3 ) then
   LOG::LogFailure( "test1.82:  Selected incorrect H.");
 end if;
@@ -551,7 +552,7 @@ else
   end if;
 end if;
 n := find_one employee( name = "Dave" );
-m := n->R7.works_for;
+m := n->R7.works_for.report_line;
 if ( null = m ) then
   LOG::LogFailure( "test1.B6:  Failed to select M.");
   if ( m.department /= "MEC" ) then
@@ -582,7 +583,7 @@ q := p->R9.jurisdiction;
 if ( q.deeeye /= "Cort" ) then
   LOG::LogFailure( "test1.D1:  Selected incorrect Q.");
 end if;
-q := find_one jurisdction( deeeye = "Rusty" );
+q := find_one jurisdiction( deeeye = "Rusty" );
 p := q->R9.automobile;
 if ( p.eyedee /= "Bita" ) then
   LOG::LogFailure( "test1.D2:  Selected incorrect P.");
@@ -616,7 +617,7 @@ for t in ts'elements loop
 end loop;
 t := find_one analog_input( t = "Katrina" );
 s := t->R10.AtoD_converter;
-u := s->R10.sample( s = "Aug" );
+u := find_one( s->R10.sample )( s = "Aug" );
 if ( null = u ) then
   LOG::LogFailure( "test1.E4:  Incorrect U.");
 else
@@ -672,15 +673,15 @@ x := find_one friend( name = "Sevina" );
 if ( null = x ) then
   LOG::LogFailure( "test1.X4:  Failed to select X." );
 end if;
-x1 := x->R12.is_pal_of.friend;
+x1 := find_one( x->R12.is_pal_of.friend )();
 if ( x1.name /= "Rox" ) then
   LOG::LogFailure( "test1.X5:  Could not find Rox." );
 end if;
-c := find_one friend( name = "Rox" );
+x := find_one friend( name = "Rox" );
 if ( null = x ) then
   LOG::LogFailure( "test1.X6:  Failed to select X." );
 end if;
-x1 := x->R12.is_buddy_of.friend;
+x1 := find_one( x->R12.is_buddy_of.friend )();
 if ( x1.name /= "Sevina" ) then
   LOG::LogFailure( "test1.X6:  Could not find Sevina." );
 end if;
