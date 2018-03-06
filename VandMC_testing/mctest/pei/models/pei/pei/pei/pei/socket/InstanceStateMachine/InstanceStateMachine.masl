@@ -1,9 +1,11 @@
 //! ACTIVITY BEGIN. '7df185ce-ceab-4a76-90e1-6fba2ceef136' 'e73c04c2-03d7-4e84-8ad9-5ad3872ee64a' DO NOT EDIT THIS LINE.
 state pei::socket.first () is
+results : string;
+
 begin
 //
 LOG::LogInfo( message:"got to the end... exiting" );
-results = "Test succeeded.";
+results := "Test succeeded.";
 xit();
 end state;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
@@ -12,7 +14,7 @@ end state;
 state pei::socket.second () is
 begin
 test2();
-generate socket1:go() to self;
+generate socket.go() to this;
 end state;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
@@ -20,7 +22,7 @@ end state;
 state pei::socket.third () is
 begin
 test2();
-generate socket1:go() to self;
+generate socket.go() to this;
 end state;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
