@@ -35,14 +35,14 @@ INSERT INTO GD_MD
 	150,
 	0,
 	'4.1.12',
-	'GPS_Watch::Library::UI');
+	'GPS_Watch::UI::UI');
 INSERT INTO GD_GE
 	VALUES ("86e6e218-7cc5-45d4-91eb-ff5f3bf78f9f",
 	"216f064d-f8ea-44d8-a2ca-71c89eed2247",
 	"f24e8f1c-a3b3-4005-986d-28b8ed39ea3c",
 	103,
 	0,
-	'GPS_Watch::Library::UI');
+	'GPS_Watch::UI::UI');
 INSERT INTO GD_SHP
 	VALUES ("86e6e218-7cc5-45d4-91eb-ff5f3bf78f9f");
 INSERT INTO GD_CTR
@@ -71,7 +71,7 @@ INSERT INTO GD_GE
 	"4bf1a145-d815-460c-a4df-745f6e8974a0",
 	94,
 	0,
-	'GPS_Watch::Library::UI::UI::UI');
+	'GPS_Watch::UI::UI::UI::UI');
 INSERT INTO GD_CON
 	VALUES ("cbff0d9f-1735-4f44-8fb1-6d04b75b941b",
 	"00000000-0000-0000-0000-000000000000");
@@ -171,7 +171,7 @@ INSERT INTO GD_GE
 	"e19163dd-5922-4bdf-947c-9707f93285ad",
 	108,
 	0,
-	'GPS_Watch::Library::UI::UI');
+	'GPS_Watch::UI::UI::UI');
 INSERT INTO GD_SHP
 	VALUES ("916907f9-393b-4428-b2d2-8c3c28aea45e");
 INSERT INTO GD_NCS
@@ -195,7 +195,7 @@ INSERT INTO GD_GE
 	"eef0f981-a7f5-4c6a-93e5-76e1ba61cb80",
 	108,
 	0,
-	'GPS_Watch::Library::UI::TestCases');
+	'GPS_Watch::UI::UI::TestCases');
 INSERT INTO GD_SHP
 	VALUES ("ad05b2e0-a38e-4591-a325-cd8f5daa4c59");
 INSERT INTO GD_NCS
@@ -219,7 +219,7 @@ INSERT INTO GD_GE
 	"a8b1c702-aabf-4119-8438-464bae707f04",
 	108,
 	0,
-	'GPS_Watch::Library::UI::External Entities');
+	'GPS_Watch::UI::UI::External Entities');
 INSERT INTO GD_SHP
 	VALUES ("11c2458d-a04f-43be-8e56-c556ac13cd8b");
 INSERT INTO GD_NCS
@@ -243,7 +243,7 @@ INSERT INTO GD_GE
 	"f94360a9-26ee-489f-820b-aebe91648c3b",
 	108,
 	0,
-	'GPS_Watch::Library::UI::ButtonFunctions');
+	'GPS_Watch::UI::UI::ButtonFunctions');
 INSERT INTO GD_SHP
 	VALUES ("a58e70da-ebdc-466f-94cc-229e2c40837d");
 INSERT INTO GD_NCS
@@ -507,88 +507,14 @@ INSERT INTO C_I_PROXY
 INSERT INTO PE_PE
 	VALUES ("f24e8f1c-a3b3-4005-986d-28b8ed39ea3c",
 	1,
-	"2b0c8fd6-d69a-4306-9ef2-2fa3c850b738",
+	"f65a16c4-0d8e-43c1-a1e1-328c1226eb8d",
 	"00000000-0000-0000-0000-000000000000",
 	2);
 INSERT INTO EP_PKG_PROXY
-	VALUES ("2b0c8fd6-d69a-4306-9ef2-2fa3c850b738",
+	VALUES ("f65a16c4-0d8e-43c1-a1e1-328c1226eb8d",
 	"36a41cf7-d411-488d-99fc-74866d4fea39",
 	"36a41cf7-d411-488d-99fc-74866d4fea39",
-	'Library',
-	'// ########## START OAL_1 ##########
-// always initialize data
-self.currentLocation.longitude = 0.0;
-self.currentLocation.latitude  = 0.0;
-self.currentLocation.speed     = 0.0;
-self.interval                  = 2000000;
-
-LOG::LogInfo(message: "Location listener registered.");
-
- // start timer based on requested interval
-create event instance timeout of GPS3:timeout() to self;
-self.timer = TIM::timer_start_recurring(event_inst: timeout, microseconds: self.interval);
-// ########### END OAL_1 ###########
-
-
-
-// ########## START OAL_2 ##########
-// prepare signal data with some dummy values that change over time
-self.currentLocation.longitude = self.currentLocation.longitude + 2.0;
-self.currentLocation.latitude  = self.currentLocation.latitude  + 3.0;
-self.currentLocation.speed     = 
-                                (self.currentLocation.latitude - 
-                                 self.currentLocation.longitude) / 5.0;
-
-// pass the new location to client component
-send LocationProvider::locationUpdate(location: self.currentLocation);
-// ########### END OAL_2 ###########
-
-
-
-// ########## START OAL_3 ##########
-res = TIM::timer_cancel(timer_inst_ref: self.timer);
-// ########### END OAL_3 ###########
-
-
-
-// ########## START OAL_4 ##########
-select any gps from instances of GPS;
-if (empty gps)
-  // asynchronously create a new instance of GPS
-  generate GPS1:registerListener() to GPS creator;
-end if;
-// ########### END OAL_4 ###########
-
-
-// ########## START OAL_5 ##########
-// forward message to single instance of GPS
-select any gps from instances of GPS;
-if (not empty gps)
-  generate GPS2:unregisterListener() to gps;
-end if;
-// ########### END OAL_5 ###########
-
-
-// ########## START OAL_6 ##########
-// create an instance of the workout timer if it does not exist
-select any workoutTimer from instances of WorkoutTimer;
-if (empty workoutTimer)
-  create object instance workoutTimer of WorkoutTimer;
-end if;
-
-// forward message to the single instance of WorkoutTimer 
-generate WorkoutTimer1:startStopPressed() to workoutTimer;
-// ########### END OAL_6 ###########
-
-
-
-// ########## START OAL_7 ##########
-// print the new location to the console
-LOG::LogInfo(message: "location updated: ");
-LOG::LogReal(message: "longitude", r: param.location.longitude);
-LOG::LogReal(message: "latitude",  r: param.location.latitude );
-LOG::LogReal(message: "speed",     r: param.location.speed    );
-// ########### END OAL_7 ###########
-',
+	'UI',
+	'',
 	0,
-	'../Library.xtuml');
+	'../UI.xtuml');
