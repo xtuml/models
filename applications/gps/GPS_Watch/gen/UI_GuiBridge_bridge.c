@@ -9,7 +9,7 @@
  * (C) Copyright 1998-2014 Mentor Graphics Corporation.  All rights reserved.
  *--------------------------------------------------------------------------*/
 
-#include "GPSWatch_sys_types.h"
+#include "GPS_Watch_sys_types.h"
 #include "UI_classes.h"
 #include "UI_GuiBridge_bridge.h"
 
