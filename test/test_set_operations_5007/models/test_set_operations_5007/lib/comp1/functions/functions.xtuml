@@ -1,0 +1,450 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	"00000000-0000-0000-0000-000000000000",
+	"a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("45b3381a-dc42-4e1e-b594-657ccbf5f7e4",
+	112,
+	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'test_set_operations_5007::lib::comp1::functions');
+INSERT INTO DIM_DIA
+	VALUES ("45b3381a-dc42-4e1e-b594-657ccbf5f7e4",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("d8a71860-3e9c-4642-8565-7a9eda458a6d",
+	"00000000-0000-0000-0000-000000000000",
+	'test_union1',
+	'',
+	'select many people1 from instances of PERSON where ( selected.age < 5 );
+select many people2 from instances of PERSON where ( selected.age >= 21 );
+
+LOG::LogInfo( message:"People younger than five:" );
+for each person in people1
+  LOG::LogInfo( message:person.name );
+end for;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"People at least 21:" );
+for each person in people2
+  LOG::LogInfo( message:person.name );
+end for;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"People younger than five or at least 21:" );
+people3 = people1 | people2;
+for each person in people3
+  LOG::LogInfo( message:person.name );
+end for;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"People younger than five or at least 21 and Lexi:" );
+select any lexi from instances of PERSON where ( selected.name == "Lexi" );
+people3 = people3 + lexi;
+for each person in people3
+  LOG::LogInfo( message:person.name );
+end for;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("d8a71860-3e9c-4642-8565-7a9eda458a6d",
+	1,
+	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("758c01e3-6a32-4429-84d9-8e210e9d6032",
+	"00000000-0000-0000-0000-000000000000",
+	'create_instances',
+	'',
+	'LOG::LogInfo( message:"Creating instances..." );
+
+create object instance levi of PERSON;
+levi.name = "Levi";
+levi.age = 23;
+levi.male = true;
+
+create object instance courtney of PERSON;
+courtney.name = "Courtney";
+courtney.age = 21;
+courtney.male = false;
+
+relate levi to courtney across R1.''husband of'';
+
+create object instance lexi of PERSON;
+lexi.name = "Lexi";
+lexi.age = 9;
+lexi.male = false;
+
+create object instance ezra of PERSON;
+ezra.name = "Ezra";
+ezra.age = 0;
+ezra.male = true;
+
+create object instance cort of PERSON;
+cort.name = "Cort";
+cort.age = 53;
+cort.male = true;
+
+create object instance rox of PERSON;
+rox.name = "Roxanne";
+rox.age = 52;
+rox.male = false;
+
+relate cort to rox across R1.''husband of'';
+
+LOG::LogInfo( message:"Done." );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("758c01e3-6a32-4429-84d9-8e210e9d6032",
+	1,
+	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("aa7bb59f-b570-4351-98e7-45b8b1ccf860",
+	"00000000-0000-0000-0000-000000000000",
+	'list_people',
+	'',
+	'select many people from instances of PERSON;
+first = true;
+for each person in people
+  if ( first )
+    first = false;
+  else
+    LOG::LogInfo( message:"" );
+    LOG::LogInfo( message:"-------------------------------" );
+    LOG::LogInfo( message:"" );
+  end if;
+  LOG::LogInfo( message:"Name: " + person.name );
+  LOG::LogInfo( message:"Age:" );
+  LOG::LogInteger( message:person.age );
+  if ( person.male )
+    LOG::LogInfo( message:"Sex: M" );
+    select one wife related by person->PERSON[R1.''husband of''];
+    if ( not_empty wife )
+      LOG::LogInfo( message:"Wife name: " + wife.name );
+    end if;
+  else
+    LOG::LogInfo( message:"Sex: F" );
+    select one husband related by person->PERSON[R1.''wife of''];
+    if ( not_empty husband )
+      LOG::LogInfo( message:"Husband name: " + husband.name );
+    end if;
+  end if;
+end for;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("aa7bb59f-b570-4351-98e7-45b8b1ccf860",
+	1,
+	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("45701afd-6f75-43ad-87aa-1a7fcd73ae40",
+	"00000000-0000-0000-0000-000000000000",
+	'test_intersection1',
+	'',
+	'select many people1 from instances of PERSON where ( selected.age >= 18 );
+select many people2 from instances of PERSON where ( selected.male );
+
+LOG::LogInfo( message:"People at least 18:" );
+for each person in people1
+  LOG::LogInfo( message:person.name );
+end for;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"All males:" );
+for each person in people2
+  LOG::LogInfo( message:person.name );
+end for;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"All males over 18:" );
+people3 = people1 & people2;
+for each person in people3
+  LOG::LogInfo( message:person.name );
+end for;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("45701afd-6f75-43ad-87aa-1a7fcd73ae40",
+	1,
+	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("824f42a9-6e1b-4125-9a62-effe29ab4bc7",
+	"00000000-0000-0000-0000-000000000000",
+	'test_subtraction1',
+	'',
+	'select many people1 from instances of PERSON where ( selected.age < 30 );
+
+LOG::LogInfo( message:"People under 30:" );
+for each person in people1
+  LOG::LogInfo( message:person.name );
+end for;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+people2 = people1;
+for each person in people1
+  select one husband related by person->PERSON[R1.''wife of''];
+  select one wife related by person->PERSON[R1.''husband of''];
+  if ( not_empty husband or not_empty wife )
+    people2 = people2 - person;
+  end if;
+end for;
+
+LOG::LogInfo( message:"People under 30 who are unmarried:" );
+for each person in people2
+  LOG::LogInfo( message:person.name );
+end for;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("824f42a9-6e1b-4125-9a62-effe29ab4bc7",
+	1,
+	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("30a7f2a4-695c-44fa-bc9c-27c6581a33cb",
+	"00000000-0000-0000-0000-000000000000",
+	'test_compare',
+	'',
+	'select many set1 from instances of PERSON;
+select many set2 from instances of PERSON;
+LOG::LogInfo( message:"Compare two equal sets for equality:" );
+if ( set1 == set2 )
+  LOG::LogInfo( message:"passed." );
+else
+  LOG::LogInfo( message:"failed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"Compare two equal sets for inequality:" );
+if ( set1 != set2 )
+  LOG::LogInfo( message:"failed." );
+else
+  LOG::LogInfo( message:"passed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+select many set2 from instances of PERSON where ( selected.age >= 18 );
+LOG::LogInfo( message:"Compare two inequal sets for equality:" );
+if ( set1 == set2 )
+  LOG::LogInfo( message:"failed." );
+else
+  LOG::LogInfo( message:"passed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"Compare two inequal sets for inequality:" );
+if ( set1 != set2 )
+  LOG::LogInfo( message:"passed." );
+else
+  LOG::LogInfo( message:"failed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+select any inst1 from instances of PERSON where ( selected.name == "Ezra" );
+select any inst2 from instances of PERSON where ( selected.name == "Ezra" );
+LOG::LogInfo( message:"Compare two equal instances for equality:" );
+if ( inst1 == inst2 )
+  LOG::LogInfo( message:"passed." );
+else
+  LOG::LogInfo( message:"failed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"Compare two equal instances for inequality:" );
+if ( inst1 != inst2 )
+  LOG::LogInfo( message:"failed." );
+else
+  LOG::LogInfo( message:"passed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+select any inst2 from instances of PERSON where ( selected.name == "Levi" );
+LOG::LogInfo( message:"Compare two inequal instances for equality:" );
+if ( inst1 == inst2 )
+  LOG::LogInfo( message:"failed." );
+else
+  LOG::LogInfo( message:"passed." );
+end if;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"Compare two inequal instances for inequality:" );
+if ( inst1 != inst2 )
+  LOG::LogInfo( message:"passed." );
+else
+  LOG::LogInfo( message:"failed." );
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("30a7f2a4-695c-44fa-bc9c-27c6581a33cb",
+	1,
+	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("35e7142c-b5d6-498f-b676-a98a880c9456",
+	"00000000-0000-0000-0000-000000000000",
+	'test_all',
+	'',
+	'::create_instances();
+::list_people();
+::test_union1();
+::test_intersection1();
+::test_subtraction1();
+::test_symmetric_difference1();
+::test_compare();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("35e7142c-b5d6-498f-b676-a98a880c9456",
+	1,
+	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("1ac09d78-583c-479c-937b-49869c4aace0",
+	"00000000-0000-0000-0000-000000000000",
+	'test_symmetric_difference1',
+	'',
+	'select many people1 from instances of PERSON where ( not selected.male );
+select many people2 from instances of PERSON where ( selected.age < 21 );
+
+LOG::LogInfo( message:"All females:" );
+for each person in people1
+  LOG::LogInfo( message:person.name );
+end for;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"People younger than 21:" );
+for each person in people2
+  LOG::LogInfo( message:person.name );
+end for;
+
+LOG::LogInfo( message:"" );
+LOG::LogInfo( message:"-------------------------------" );
+LOG::LogInfo( message:"" );
+
+LOG::LogInfo( message:"People younger than 21 or female (but not both):" );
+people3 = people1 ^ people2;
+for each person in people3
+  LOG::LogInfo( message:person.name );
+end for;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("1ac09d78-583c-479c-937b-49869c4aace0",
+	1,
+	"c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("c8e8eb9d-301f-4f2d-95d7-d4705301da18",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"24e0f854-4416-437b-9cdf-da334f106274",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("24e0f854-4416-437b-9cdf-da334f106274",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'comp1',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../comp1.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'test_set_operations_5007',
+	1,
+	'../../../test_set_operations_5007.xtuml');

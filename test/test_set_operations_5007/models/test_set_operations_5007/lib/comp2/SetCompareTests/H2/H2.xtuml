@@ -1,0 +1,126 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("11d1e707-6123-4c7f-bee7-b9bf7235ab50",
+	"00000000-0000-0000-0000-000000000000",
+	"a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'H2',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("c4492a7a-2d9c-4dbb-b828-f5871df0da2b",
+	112,
+	"11d1e707-6123-4c7f-bee7-b9bf7235ab50",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'test_set_operations_5007::lib::comp2::SetCompareTests::H2');
+INSERT INTO DIM_DIA
+	VALUES ("c4492a7a-2d9c-4dbb-b828-f5871df0da2b",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("5cffe149-5e5b-47ef-bc7a-9207f26f6993",
+	"00000000-0000-0000-0000-000000000000",
+	'H2_I1J1',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set2 from instances of INTEGER where ( selected.value % 2 == 0 );
+return ::report( result:( not_empty set1 and not_empty set2 and ( ( set1 == set2 ) == true ) ) );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("5cffe149-5e5b-47ef-bc7a-9207f26f6993",
+	1,
+	"11d1e707-6123-4c7f-bee7-b9bf7235ab50",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("8d3ef93e-c1cb-45c4-847b-656a011073bd",
+	"00000000-0000-0000-0000-000000000000",
+	'H2_I1J2',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set2 from instances of INTEGER where ( selected.value % 3 == 0 );
+return ::report( result:( not_empty set1 and not_empty set2 and ( ( set1 == set2 ) == false ) ) );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("8d3ef93e-c1cb-45c4-847b-656a011073bd",
+	1,
+	"11d1e707-6123-4c7f-bee7-b9bf7235ab50",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("1a58dc64-629d-4d8d-9e3c-60bda212e2e8",
+	"00000000-0000-0000-0000-000000000000",
+	'H2_I2J1',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set2 from instances of INTEGER where ( selected.value % 2 == 0 );
+return ::report( result:( not_empty set1 and not_empty set2 and ( ( set1 != set2 ) == false ) ) );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("1a58dc64-629d-4d8d-9e3c-60bda212e2e8",
+	1,
+	"11d1e707-6123-4c7f-bee7-b9bf7235ab50",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("eee587ff-0925-4f52-a787-8ab3504a04ec",
+	"00000000-0000-0000-0000-000000000000",
+	'H2_I2J2',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set2 from instances of INTEGER where ( selected.value % 3 == 0 );
+return ::report( result:( not_empty set1 and not_empty set2 and ( ( set1 != set2 ) == true ) ) );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("eee587ff-0925-4f52-a787-8ab3504a04ec",
+	1,
+	"11d1e707-6123-4c7f-bee7-b9bf7235ab50",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("11d1e707-6123-4c7f-bee7-b9bf7235ab50",
+	1,
+	"4f58db97-5440-4b53-9b02-3052bf9651c9",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("4f58db97-5440-4b53-9b02-3052bf9651c9",
+	"00000000-0000-0000-0000-000000000000",
+	"a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'SetCompareTests',
+	'',
+	0,
+	'../SetCompareTests.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'test_set_operations_5007',
+	1,
+	'../../../../test_set_operations_5007.xtuml');

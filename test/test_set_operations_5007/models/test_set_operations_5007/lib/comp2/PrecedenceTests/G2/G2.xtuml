@@ -1,0 +1,106 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("7b75806e-9127-41ea-a767-82b30c4a5690",
+	"00000000-0000-0000-0000-000000000000",
+	"a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'G2',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("fca273c8-5fdf-4828-bb6d-5d5b80d6b2f7",
+	112,
+	"7b75806e-9127-41ea-a767-82b30c4a5690",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'test_set_operations_5007::lib::comp2::PrecedenceTests::G2');
+INSERT INTO DIM_DIA
+	VALUES ("fca273c8-5fdf-4828-bb6d-5d5b80d6b2f7",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("658689f8-a050-474b-aecc-cbcdb17f530a",
+	"00000000-0000-0000-0000-000000000000",
+	'G2_C1D2E4F3',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results = set1 | set2;
+expected_results = expected_results & set3;
+expected_results = expected_results ^ set4;
+expected_results = expected_results - set5;
+actual_results = ( set1 | set2 ) & set3 ^ set4 - set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("658689f8-a050-474b-aecc-cbcdb17f530a",
+	1,
+	"7b75806e-9127-41ea-a767-82b30c4a5690",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("905c7508-3dcd-41dd-904e-4ba23199b2de",
+	"00000000-0000-0000-0000-000000000000",
+	'G2_C3D2E1F4',
+	'',
+	'select many set1 from instances of INTEGER where ( selected.value < 5 );
+select many set2 from instances of INTEGER where ( selected.value > 75 );
+select many set3 from instances of INTEGER where ( selected.value % 2 == 0 );
+select many set4 from instances of INTEGER where ( selected.value % 3 == 0 );
+select many set5 from instances of INTEGER where ( selected.value % 5 == 0 );
+expected_results1 = set3 | set4;
+expected_results1 = set2 & expected_results1;
+expected_results1 = expected_results1 ^ set5;
+expected_results = set1 - expected_results1;
+actual_results = set1 - set2 & ( set3 | set4 ) ^ set5;
+return ::report( result:actual_results == expected_results );',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("905c7508-3dcd-41dd-904e-4ba23199b2de",
+	1,
+	"7b75806e-9127-41ea-a767-82b30c4a5690",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("7b75806e-9127-41ea-a767-82b30c4a5690",
+	1,
+	"bed2634c-c457-439f-a503-063b78b02885",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("bed2634c-c457-439f-a503-063b78b02885",
+	"00000000-0000-0000-0000-000000000000",
+	"a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'PrecedenceTests',
+	'',
+	0,
+	'../PrecedenceTests.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("a1671df1-931b-4279-a1c1-73d1f686fa07",
+	'test_set_operations_5007',
+	1,
+	'../../../../test_set_operations_5007.xtuml');

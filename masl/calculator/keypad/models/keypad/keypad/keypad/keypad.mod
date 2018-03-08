@@ -15,7 +15,7 @@ end structure
     );
     private service init (
     );
-pragma scenario ( 1 ); 
+pragma scenario ( 1 ); pragma startup ( true ); 
     private service getPendingEvent (
     ) return calcevent;
   terminator keyIO is
