@@ -1,0 +1,39 @@
+private service pei::test2 () is
+a : instance of plug;
+b : instance of socket;
+c : instance of dog;
+d : instance of dog_owner;
+n : instance of employee;
+y : instance of friendship;
+z : instance of dealer;
+
+begin
+// Do some creates and deletes to to exercise storage.
+// But delete everything created.
+
+a := create plug( aID => 55 );
+delete a;
+
+b := create socket( bID => 77, i => 77 );
+a := create plug( aID => 77, i => 77, bID => b.bID );
+link a R1 b;
+d := create dog_owner( dID => 88 ); // extra
+c := create dog( cID => 88, dID => d.dID );
+link c R2 d;
+y := create unique friendship();
+z := create unique dealer();
+
+unlink c R2 d;
+unlink a R1 b;
+
+delete a;
+delete b;
+delete z;
+delete y;
+delete c;
+delete d;
+
+n := create unique employee();
+delete n;
+
+end service;

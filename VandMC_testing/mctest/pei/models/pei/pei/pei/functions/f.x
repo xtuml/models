@@ -1,0 +1,839 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("4bf9896e-225c-42da-82e6-68f6491ef16c",
+	"00000000-0000-0000-0000-000000000000",
+	"f8b7229b-f136-42db-8d6c-0444f3c8a0e2",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("bbd96073-6d0b-464b-8db8-af5c1dea58ef",
+	112,
+	"4bf9896e-225c-42da-82e6-68f6491ef16c",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'pei::pei::pei::functions');
+INSERT INTO DIM_DIA
+	VALUES ("bbd96073-6d0b-464b-8db8-af5c1dea58ef",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("5b2dd722-eec1-43c7-a8d9-ca28f0be7d11",
+	"00000000-0000-0000-0000-000000000000",
+	'do_creates',
+	'',
+	'//
+// Set up instances for existence test later on.
+
+// plug R1 socket
+create object instance a of plug; a.aID = 99;  // extras to see in PEIs
+create object instance a of plug; a.aID = 98;
+create object instance a of plug; a.aID = 1; a.i = 1;
+create object instance b of socket; b.bID = 2; b.i = 2;
+relate a to b across R1;
+create object instance a of plug; a.aID = 3; a.i = 3;
+create object instance b of socket; b.bID = 4; b.i = 4;
+relate b to a across R1;
+create object instance a of plug; a.aID = 5; a.i = 5;
+create object instance b of socket; b.bID = 6; b.i = 6;
+relate a to b across R1;
+create object instance b of socket;  // extra to see it in PEIs
+
+// dog R2 dog_owner
+create object instance c1 of dog; c1.cID = 1;
+create object instance c2 of dog; c2.cID = 2;
+create object instance c3 of dog; c3.cID = 3;
+create object instance c4 of dog; c4.cID = 4;
+create object instance c5 of dog;  // extra
+create object instance d1 of dog_owner;  // extra
+create object instance d2 of dog_owner; d2.name = "DeeTwo";
+relate c1 to d2 across R2;
+relate d2 to c2 across R2;
+relate d2 to c3 across R2;
+relate c4 to d2 across R2;
+
+// host R3 device using connection
+create object instance e0 of host; e0.eID = 100; e0.ratio = 0.1;
+create object instance e1 of host; e1.eID = 1; e1.ratio = 0.314;
+create object instance e2 of host; e2.eID = 2; e2.ratio = 2.718;
+create object instance f3 of device; f3.fID = 3; f3.enabled = true;
+create object instance f2 of device; f2.fID = 2; f2.enabled = false;
+create object instance f1 of device; f1.fID = 1; f1.enabled = true;
+create object instance g1 of connection; g1.gID = 1;
+create object instance g2 of connection; g2.gID = 2;
+create object instance g3 of connection; g3.gID = 3;
+create object instance g4 of connection; g4.gID = 4;
+relate e1 to f1 across R3 using g1;
+relate f2 to e1 across R3 using g2;
+relate f3 to e2 across R3 using g3;
+relate e1 to f3 across R3 using g4;
+
+// transmission R4 (reflexive)
+create object instance h1 of transmission; h1.hID = 1;
+create object instance h2 of transmission; h2.hID = 2;
+create object instance h of transmission; h.hID = 99;  // extra to see in PEIs
+create object instance h3 of transmission; h3.hID = 3;
+create object instance h4 of transmission; h4.hID = 4;
+relate h1 to h2 across R4.''precedes'';
+relate h2 to h3 across R4.''precedes'';
+relate h4 to h3 across R4.''follows'';
+
+// car R5 sedan, sports_car R6 convertible
+create object instance i4 of car; i4.iID = 400; i4.common = 400;
+create object instance i3 of car; i3.iID = 300; i3.common = 300;
+create object instance i2 of car; i2.iID = 200; i2.common = 200;
+create object instance i1 of car; i1.iID = 100; i1.common = 100;
+create object instance j1 of sedan; j1.jID = 2; j1.specialJ = 2;
+create object instance k1 of sports_car; k1.kID = 11; k1.specialcommon = 11;
+create object instance k2 of sports_car; k2.kID = 22; k2.specialcommon = 22;
+create object instance k3 of sports_car; k3.kID = 33; k3.specialcommon = 33;
+create object instance l2 of convertible; l2.lID = 222; l2.specialL = 222;
+create object instance l3 of convertible; l3.lID = 333; l3.specialL = 333;
+create object instance l1 of convertible; l1.lID = 111; l1.specialL = 111;
+relate i1 to j1 across R5;
+relate i2 to k3 across R5;
+relate k2 to i3 across R5;
+relate i4 to k1 across R5;
+relate l1 to k1 across R6;
+relate l3 to k2 across R6;
+relate k3 to l2 across R6;
+
+// group_member R8 reflexive
+create object instance o2 of group_member; o2.oID = 2; o2.voo = "Cort";
+create object instance o1 of group_member; o1.oID = 1; o1.voo = "Kenny";
+create object instance o3 of group_member; o3.oID = 3; o3.voo = "Amy";
+create object instance o4 of group_member; o4.oID = 4; o4.voo = "Ellen";
+create object instance o5 of group_member; o5.oID = 5; o5.voo = "Brad";
+relate o1 to o2 across R8.''teaches''; // Kenny teaches Cort.
+relate o2 to o3 across R8.''teaches''; // Cort teaches Amy.
+relate o4 to o2 across R8.''learns_from''; // Ellen learns from Cort.
+relate o5 to o2 across R8.''learns_from''; // Brad learns from Cort.
+
+// employee R7 reflexive using report_line
+create object instance n1 of employee; n1.nID = 1; n1.name = "Pete";
+create object instance n2 of employee; n2.nID = 2; n2.name = "Dave";
+create object instance n3 of employee; n3.nID = 3; n3.name = "Alex";
+create object instance n4 of employee; n4.nID = 4; n4.name = "Jenn";
+create object instance n5 of employee; n5.nID = 5; n5.name = "Cale";
+create object instance n6 of employee; n6.nID = 6; n6.name = "Chris";
+create object instance m1 of report_line; m1.mID = 1; m1.department = "SW";
+create object instance m2 of report_line; m2.mID = 2; m2.department = "SW";
+create object instance m3 of report_line; m3.mID = 3; m3.department = "HW";
+create object instance m4 of report_line; m4.mID = 4; m4.department = "MEC";
+create object instance m5 of report_line; m5.mID = 5; m5.department = "MEC";
+relate n1 to n3 across R7.''manages'' using m1;   // Pete manages Alex.
+relate n1 to n4 across R7.''manages'' using m2;   // Pete manages Jenn.
+relate n5 to n2 across R7.''works_for'' using m3; // Cale works for Dave.
+relate n1 to n6 across R7.''works_for'' using m4; // Pete works for Chris.
+relate n6 to n2 across R7.''manages'' using m5; // Chris manages Dave.
+
+// automobile R9 jurisdiction using license
+create object instance p1 of automobile; p1.eyedee = "Rox";
+create object instance p2 of automobile; p2.eyedee = "Bita";
+create object instance p3 of automobile; p3.eyedee = "Tina";
+create object instance q1 of jurisdiction; q1.deeeye = "Shane";
+create object instance q2 of jurisdiction; q2.deeeye = "Rusty";
+create object instance q3 of jurisdiction; q3.deeeye = "Cort";
+create object instance r1 of license; r1.city = "Indianapolis";
+create object instance r2 of license; r2.city = "Lockport";
+create object instance r3 of license; r3.city = "Battleground";
+relate p1 to q3 across R9 using r1;
+relate q2 to p2 across R9 using r3;
+relate p3 to q1 across R9 using r2;
+
+// AtoD_converter R10 analog_input using sample
+create object instance s1 of AtoD_converter; s1.s = "Rox";
+create object instance s2 of AtoD_converter; s2.s = "Jacqui";
+create object instance t1 of analog_input; t1.t = "Clare";
+create object instance t2 of analog_input; t2.t = "Katrina";
+create object instance t3 of analog_input; t3.t = "Colleen";
+create object instance t4 of analog_input; t4.t = "Hannah";
+create object instance t5 of analog_input; t5.t = "Ruby";
+create object instance u5 of sample; u5.s = "Oct";
+create object instance u4 of sample; u4.s = "Aug";
+create object instance u3 of sample; u3.s = "Apr";
+create object instance u2 of sample; u2.s = "Dec";
+create object instance u1 of sample; u1.s = "Nov";
+relate s1 to t4 across R10 using u2;
+relate s1 to t5 across R10 using u1;
+relate t1 to s2 across R10 using u5;
+relate t2 to s2 across R10 using u4;
+relate s2 to t3 across R10 using u3;
+
+// person R11 reflexive using marriage
+create object instance w1 of person; w1.name = "Cort";
+create object instance w2 of person; w2.name = "Rox";
+create object instance w3 of person; w3.name = "Sean";
+create object instance w4 of person; w4.name = "Jacqui";
+create object instance v1 of marriage; v1.year = 1988;
+create object instance v2 of marriage; v2.year = 1990;
+relate w1 to w2 across R11.''is_husband_of'' using v1;
+relate w4 to w3 across R11.''is_wife_of'' using v2;
+
+// friends and friendships
+create object instance x1 of friend; x1.name = "Cort"; x1.age = 39;
+create object instance x2 of friend; x2.name = "Rox"; x2.age = 38;
+create object instance x3 of friend; x3.name = "Sevina"; x3.age = 35;
+create object instance x4 of friend; x4.name = "Joe"; x4.age = 43;
+create object instance x5 of friend; x5.name = "Scott"; x5.age = 42;
+create object instance x6 of friend; x6.name = "Jason"; x6.age = 31;
+create object instance y1 of friendship; y1.duration = 1; y1.closeness = 10;
+create object instance y2 of friendship; y2.duration = 2; y2.closeness = 20;
+create object instance y3 of friendship; y3.duration = 3; y3.closeness = 30;
+create object instance y4 of friendship; y4.duration = 4; y4.closeness = 40;
+create object instance y5 of friendship; y5.duration = 5; y5.closeness = 50;
+create object instance y6 of friendship; y6.duration = 6; y6.closeness = 60;
+create object instance y7 of friendship; y7.duration = 7; y7.closeness = 70;
+create object instance y8 of friendship; y8.duration = 8; y8.closeness = 80;
+create object instance y9 of friendship; y9.duration = 9; y9.closeness = 90;
+// friends of Cort
+relate x1 to x2 across R12.''is_buddy_of'' using y1;
+relate x1 to x3 across R12.''is_pal_of'' using y2;
+relate x4 to x1 across R12.''is_buddy_of'' using y3;
+relate x5 to x1 across R12.''is_pal_of'' using y4;
+relate x1 to x6 across R12.''is_buddy_of'' using y5;
+// friends of Rox
+relate x3 to x2 across R12.''is_pal_of'' using y6;
+// friends of Joe
+relate x4 to x5 across R12.''is_buddy_of'' using y7;
+relate x4 to x6 across R12.''is_pal_of'' using y8;
+// friends of Scott
+relate x6 to x5 across R12.''is_buddy_of'' using y9;
+
+
+// dealers and deals
+create object instance z1 of dealer; z1.name = "Joe"; z1.worth = 1;
+create object instance z2 of dealer; z2.name = "Pat"; z2.worth = 2;
+create object instance z3 of dealer; z3.name = "Jason"; z3.worth = 3;
+create object instance zz1 of deal; zz1.xaction = 1; zz1.value = -1;
+create object instance zz2 of deal; zz2.xaction = 2; zz2.value = 2;
+create object instance zz3 of deal; zz3.xaction = 3; zz3.value = -3;
+create object instance zz4 of deal; zz4.xaction = 4; zz4.value = 4;
+create object instance zz5 of deal; zz5.xaction = 5; zz5.value = -5;
+create object instance zz6 of deal; zz6.xaction = 6; zz6.value = 6;
+create object instance zz7 of deal; zz7.xaction = 7; zz7.value = -7;
+relate z1 to z2 across R13.''sells_to'' using zz1;
+relate z1 to z3 across R13.''buys_from'' using zz2;
+relate z2 to z3 across R13.''sells_to'' using zz3;
+relate z3 to z1 across R13.''buys_from'' using zz4;
+relate z2 to z1 across R13.''sells_to'' using zz5;
+relate z2 to z3 across R13.''buys_from'' using zz6;
+relate z1 to z2 across R13.''sells_to'' using zz7;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1);
+INSERT INTO PE_PE
+	VALUES ("5b2dd722-eec1-43c7-a8d9-ca28f0be7d11",
+	1,
+	"4bf9896e-225c-42da-82e6-68f6491ef16c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ee0b21c6-3e1f-4b2b-9441-00b6e64ca6eb",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'// 
+// Check to see if any instances are already here.
+// This would mean that we have restored from NVS
+// or that preexisting instances were defined in data.
+//
+
+select any a from instances of plug;
+if ( empty a )
+
+  //
+  // Set up instances for existance test later on.
+  //
+
+  ::do_creates();
+
+end if;   // if empty a',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1);
+INSERT INTO PE_PE
+	VALUES ("ee0b21c6-3e1f-4b2b-9441-00b6e64ca6eb",
+	1,
+	"4bf9896e-225c-42da-82e6-68f6491ef16c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b6ece4d0-3a14-4e5a-87e6-23378a779c47",
+	"00000000-0000-0000-0000-000000000000",
+	'test',
+	'',
+	'//
+// Test that an instance of A already exists.
+//
+
+select any a from instances of plug;
+if (empty a)
+  LOG::LogFailure( message:"test1.20:  Failed to select a." );
+end if;
+
+select many as from instances of plug;
+if (cardinality as != 5)
+  LOG::LogFailure( message:"test1.21:  Wrong number of As." );
+end if;
+select many as_again from instances of plug;
+if ( as != as_again )
+  LOG::LogFailure( message:"set of As and As_again do not match." );
+end if;
+
+create object instance a1 of plug; a1.i = 101;
+select any a from instances of plug where (selected.i == 1);
+if (empty a)
+  LOG::LogFailure( message:"test1.22:  Failed to select a where." );
+end if;
+delete object instance a1;
+
+select any b from instances of socket where (selected.i == 20);
+if (not empty b)
+  LOG::LogFailure( message:"test1.23:  Selected non-existant B." );
+end if;
+
+select any b from instances of socket where (selected.i == 2);
+if (empty b)
+  LOG::LogFailure( message:"test1.24:  Failed to select b where." );
+end if;
+
+//
+// Test that there is a B related to this A.
+//
+select any a from instances of plug where (selected.i == 3);
+select one b related by a->socket[R1];
+if (empty b)
+  LOG::LogFailure( message:"test1.40:  Failed to select b across R1." );
+end if;
+if (b.i != 4)
+  LOG::LogFailure( message:"test1.41:  Selected wrong b across R1." );
+  if ( a.bID != b.bID )
+    LOG::LogFailure( message:"test1.42:  A/B referential mismatch" );
+  end if;
+end if;
+select one same_a related by a->socket[R1]->plug[R1];
+if ( empty same_a )
+  LOG::LogFailure( message:"test1.43:  Did not find a out and back across R1." );
+else
+  if ( a != same_a )
+    LOG::LogFailure( message:"test1.43a:  a and same_a not the same." );
+  end if;
+end if;
+
+//
+// Test that there is an A related to this B.
+//
+select one a related by b->plug[R1];
+if (empty a)
+  LOG::LogFailure( message:"test1.44:  Failed to select a across R1." );
+end if;
+if (a.i != 3)
+  LOG::LogFailure( message:"test1.45:  Selected wrong a across R1." );
+end if;
+unrelate a from b across R1;
+relate a to b across R1;
+
+//
+// Test for a D.
+//
+select any d from instances of dog_owner where ( selected.name == "DeeTwo" );
+if (empty d)
+  LOG::LogFailure( message:"test1.52:  Failed to select d from Ds.");
+end if;
+
+//
+// Test for many Cs related to D.
+//
+select many cs related by d->dog[R2];
+if ( cardinality cs != 4 )
+  LOG::LogFailure( message:"test1.62:  Failed to select Cs from D.");
+end if;
+for each c in cs
+  select one d related by c->dog_owner[R2];
+  if ( d.name != "DeeTwo" )
+    LOG::LogFailure( message:"test1.63:  Failed to select D from C.");
+  end if;
+  if ( c.dID != d.dID )
+    LOG::LogFailure( message:"test1.64:  C/D referential mismatch");
+  end if;
+end for;
+
+//
+// Test associatives.
+//
+select any e from instances of host where ( selected.eID == 2 );
+if ( empty e )
+  LOG::LogFailure( message:"test1.70:  Failed to select E.");
+end if;
+select any f related by e->device[R3];
+if ( empty f )
+  LOG::LogFailure( message:"test1.71:  Failed to select F.");
+else
+  if ( f.fID != 3 )
+    LOG::LogFailure( message:"test1.72:  Selected wrong F across R3.");
+  end if;
+end if;
+select many es related by f->host[R3];
+if ( cardinality es != 2 )
+  LOG::LogFailure( message:"test1.73:  Selected wrong count of Fs.");
+end if;
+select any g related by e->connection[R3];
+if ( g.gID != 3 )
+  LOG::LogFailure( message:"test1.74:  Selected incorrect G.");
+end if;
+if ( ( g.eID != e.eID ) or ( g.fID != f.fID ) )
+  LOG::LogFailure( message:"test1.75:  E/F/G referential mismatch.");
+end if;
+for each e in es
+  if ( ( e.eID != 1 ) and ( e.eID != 2 ) )
+    LOG::LogFailure( message:"test1.76:  Selected incorrect Es.");
+  end if;
+end for;
+
+//
+// Test reflexives.
+//
+select any h1 from instances of transmission where ( selected.hID == 1 );
+if ( empty h1 )
+  LOG::LogFailure( message:"test1.80:  Failed to select H.");
+end if;
+select one h2 related by h1->transmission[R4.''precedes''];
+if ( h2.hID != 2 )
+  LOG::LogFailure( message:"test1.81:  Selected incorrect H.");
+end if;
+if ( h1.hID != h2.follows )
+  LOG::LogFailure( message:"test1.81a:  H referential mismatch");
+end if;
+select one h3 related by h2->transmission[R4.''precedes''];
+if ( h3.hID != 3 )
+  LOG::LogFailure( message:"test1.82:  Selected incorrect H.");
+end if;
+if ( h2.hID != h3.follows )
+  LOG::LogFailure( message:"test1.82a:  H referential mismatch");
+end if;
+select one h related by h1->transmission[R4.''precedes'']->transmission[R4.''precedes''];
+if ( h.hID != 3 )
+  LOG::LogFailure( message:"test1.83:  Selected incorrect H.");
+end if;
+select one h related by h3->transmission[R4.''follows'']->transmission[R4.''follows''];
+if ( h.hID != 1 )
+  LOG::LogFailure( message:"test1.84:  Selected incorrect H.");
+end if;
+select any h from instances of transmission where ( selected.hID == 2 );
+if ( empty h )
+  LOG::LogFailure( message:"test1.85:  Failed to select H.");
+end if;
+select one hp related by h->transmission[R4.''follows''];
+if ( hp.hID != 1 )
+  LOG::LogFailure( message:"test1.86:  Selected incorrect H.");
+end if;
+if ( hp.hID != h.follows )
+  LOG::LogFailure( message:"test1.86a:  H referential mismatch");
+end if;
+select one hf related by h->transmission[R4.''precedes''];
+if ( hf.hID != 3 )
+  LOG::LogFailure( message:"test1.87:  Selected incorrect H.");
+end if;
+select one h related by h3->transmission[R4.''precedes''];
+if ( h.hID != 4 )
+  LOG::LogFailure( message:"test1.88:  Selected incorrect H.");
+end if;
+if ( h3.hID != h.follows )
+  LOG::LogFailure( message:"test1.88a:  H referential mismatch");
+end if;
+
+//
+// Test sub/supers.
+//
+select any i from instances of car where ( selected.iID == 200 );
+if ( empty i )
+  LOG::LogFailure( message:"test1.90:  Failed to select I.");
+end if;
+select one k related by i->sports_car[R5];
+if ( empty k )
+  LOG::LogFailure( message:"test1.91:  Failed to select K.");
+else
+  if ( k.kID != 33 )
+    LOG::LogFailure( message:"test1.92:  Selected incorrect K.");
+  end if;
+  if ( i.iID != k.iID )
+    LOG::LogFailure( message:"test1.92a:  I/K referential mismatch");
+  end if;
+end if;
+select one l related by i->sports_car[R5]->convertible[R6];
+if ( empty l )
+  LOG::LogFailure( message:"test1.93:  Failed to select L.");
+else
+  if ( l.lID != 222 )
+    LOG::LogFailure( message:"test1.94:  Selected incorrect L.");
+  end if;
+  if ( l.kID != k.kID )
+    LOG::LogFailure( message:"test1.94a:  L/K referential mismatch");
+  end if;
+end if;
+
+//
+// Test reflexive asymmetrics.
+//
+select any o from instances of group_member where ( selected.voo == "Cort" );
+select many os related by o->group_member[R8.''teaches''];
+if ( cardinality os != 3 )
+  LOG::LogFailure( message:"test1.C2:  Failed to select Os.");
+end if;
+select one o1 related by o->group_member[R8.''learns_from''];
+if ( o1.voo != "Kenny" )
+  LOG::LogFailure( message:"test1.C3:  Selected incorrect O.");
+else
+  if ( o.teacheroID != o1.oID )
+    LOG::LogFailure( message:"test1.C3a:  O referential mismatch");
+  end if;
+end if;
+select any o from instances of group_member where ( selected.voo == "Ellen" );
+select one o1 related by o->group_member[R8.''learns_from''];
+if ( o1.voo != "Cort" )
+  LOG::LogFailure( message:"test1.C4:  Selected incorrect O.");
+else
+  if ( o.teacheroID != o1.oID )
+    LOG::LogFailure( message:"test1.C4a:  O referential mismatch");
+  end if;
+end if;
+select any o from instances of group_member where ( selected.voo == "Amy" );
+select one o1 related by o->group_member[R8.''learns_from''];
+if ( o1.voo != "Cort" )
+  LOG::LogFailure( message:"test1.C5:  Selected incorrect O.");
+else
+  if ( o.teacheroID != o1.oID )
+    LOG::LogFailure( message:"test1.C5a:  O referential mismatch");
+  end if;
+end if;
+
+//
+// Test reflexive associatives.
+//
+select any n from instances of employee where ( selected.name == "Chris" );
+select many ns related by n->employee[R7.''manages''];
+if ( cardinality ns != 2 )
+  LOG::LogFailure( message:"test1.B2:  Failed to select Ns.");
+end if;
+create object instance n1 of employee;
+create object instance n2 of employee;
+delete object instance n2;
+n1.name = "Vijay";
+for each n in ns
+  if ( n.name != "Dave" ) and ( n.name != "Pete" )
+    LOG::LogFailure( message:"test1.B3:  Selected incorrect Ns.");
+  end if;
+end for;
+delete object instance n1;
+select any n from instances of employee where ( selected.name == "Pete" );
+select one boss related by n->employee[R7.''works_for''];
+if ( empty boss )
+  LOG::LogFailure( message:"test1.B4:  Failed to select boss.");
+else
+  if ( boss.name != "Chris" )
+    LOG::LogFailure( message:"test1.B5:  Selected incorrect boss.");
+  end if;
+end if;
+select any n from instances of employee where ( selected.name == "Dave" );
+select one m related by n->report_line[R7.''works_for''];
+if ( empty m )
+  LOG::LogFailure( message:"test1.B6:  Failed to select M.");
+else
+  if ( m.department != "MEC" )
+    LOG::LogFailure( message:"test1.B7:  Selected incorrect department.");
+  else
+    if ( m.works_for_nID != n.nID )
+      LOG::LogFailure( message:"test1.B7a:  M/N referential mismatch");
+    end if;
+  end if;
+end if;
+select any n from instances of employee where ( selected.name == "Pete" );
+select many ns related by n->employee[R7.''manages''];
+if ( cardinality ns != 2 )
+  LOG::LogFailure( message:"test1.B2:  Failed to select Ns.");
+end if;
+for each n in ns
+  if ( n.name != "Alex" ) and ( n.name != "Jenn" )
+    LOG::LogFailure( message:"test1.B3:  Selected incorrect Ns.");
+  end if;
+end for;
+
+
+//
+// Test 1-1 associatives.
+//
+select any p from instances of automobile where ( selected.eyedee == "Rox" );
+select one q related by p->jurisdiction[R9];
+if ( q.deeeye != "Cort" )
+  LOG::LogFailure( message:"test1.D1:  Selected incorrect Q.");
+end if;
+select any q from instances of jurisdiction where ( selected.deeeye == "Rusty" );
+select one p related by q->automobile[R9];
+if ( p.eyedee != "Bita" )
+  LOG::LogFailure( message:"test1.D2:  Selected incorrect P.");
+end if;
+select any p from instances of automobile where ( selected.eyedee == "Tina" );
+select one r related by p->license[R9];
+if ( r.city != "Lockport" )
+  LOG::LogFailure( message:"test1.D3:  Selected incorrect R.");
+else
+  if ( p.pID != r.pID )
+    LOG::LogFailure( message:"test1.D3a:  P/R referential mismatch");
+  end if;
+end if;
+
+//
+// Test 1-M associatives.
+//
+select any s from instances of AtoD_converter where ( selected.s == "Rox" );
+select many ts related by s->analog_input[R10];
+if ( cardinality ts != 2 )
+  LOG::LogFailure( message:"test1.E1:  Incorrect number of Ts.");
+end if;
+for each t in ts
+  if ( ( t.t != "Hannah" ) and ( t.t != "Ruby" ) )
+    LOG::LogFailure( message:"test1.E2:  Incorrect T.");
+  end if;
+  select one s related by t->AtoD_converter[R10];
+  if ( s.s != "Rox" )
+    LOG::LogFailure( message:"test1.E3:  Incorrect S.");
+  end if;
+end for;
+select any t from instances of analog_input where ( selected.t == "Katrina" );
+select one s related by t->AtoD_converter[R10];
+select any u related by s->sample[R10] where ( selected.s == "Aug" );
+if ( empty u )
+  LOG::LogFailure( message:"test1.E4:  Incorrect U.");
+else
+  if ( s.sID != u.sID )
+    LOG::LogFailure( message:"test1.E4a:  S/U referential mismatch");
+  end if;
+end if;
+
+//
+// Test 1-1 reflexive associatives.
+//
+select any w from instances of person where ( selected.name == "Rox" );
+select one husband related by w->person[R11.''is_wife_of''];
+if ( husband.name != "Cort" )
+  LOG::LogFailure( message:"test1.F1:  Incorrect W.");
+end if;
+select any w from instances of person where ( selected.name == "Jacqui" );
+select one husband related by w->person[R11.''is_wife_of''];
+if ( husband.name != "Sean" )
+  LOG::LogFailure( message:"test1.F2:  Incorrect W.");
+end if;
+select any huz from instances of person where ( selected.name == "Cort" );
+select one wife related by huz->person[R11.''is_husband_of''];
+if ( wife.name != "Rox" )
+  LOG::LogFailure( message:"test1.F3:  Incorrect W.");
+end if;
+select any v from instances of marriage where ( selected.year == 1988 );
+if ( ( v.husband != "Cort" ) or ( v.wife != "Rox" ) )
+  LOG::LogFailure( message:"test1.F4:  Incorrect V or referential mismatch." );
+end if;
+
+// Test friends and friendships.
+// (Note that this should be symmetric reflexive, but we don''t know how.)
+//
+select any x from instances of friend where ( selected.name == "Cort" );
+if ( empty x )
+  LOG::LogFailure( message:"test1.X1:  Failed to select X." );
+end if;
+select many xs related by x->friend[R12.''is_pal_of''];
+cardxs = cardinality xs;
+select many xs related by x->friend[R12.''is_buddy_of''];
+cardxs = cardxs + cardinality xs;
+if ( cardxs != 5 )
+  LOG::LogFailure( message:"test1.X2:  Wrong number of friends." );
+end if;
+select many ys from instances of friendship where ( selected.pal == "Cort" )
+  or ( selected.buddy == "Cort" );
+if ( cardinality ys != 5 )
+  LOG::LogFailure( message:"test1.Y3:  Wrong number of friends." );
+end if;
+// Test Sevina''s friends.
+select any x from instances of friend where ( selected.name == "Sevina" );
+if ( empty x )
+  LOG::LogFailure( message:"test1.X4:  Failed to select X." );
+end if;
+select any x1 related by x->friend[R12.''is_pal_of''];
+if ( x1.name != "Rox" )
+  LOG::LogFailure( message:"test1.X5:  Could not find Rox." );
+end if;
+select any x from instances of friend where ( selected.name == "Rox" );
+if ( empty x )
+  LOG::LogFailure( message:"test1.X6:  Failed to select X." );
+end if;
+select any x1 related by x->friend[R12.''is_buddy_of''];
+if ( x1.name != "Sevina" )
+  LOG::LogFailure( message:"test1.X6:  Could not find Sevina." );
+end if;
+select any y from instances of friendship;
+select one x related by y->friend[R12.''is_pal_of''];
+if ( x.name != y.pal )
+  LOG::LogFailure( message:"test1.X6a:  X/Y referential mismatch" );
+end if;
+select one x related by y->friend[R12.''is_buddy_of''];
+if ( x.name != y.buddy )
+  LOG::LogFailure( message:"test1.X6b:  X/Y referential mismatch" );
+end if;
+
+
+//
+// Test dealers and deals.
+//
+select any z from instances of dealer where ( selected.name == "Joe" );
+if ( empty z )
+  LOG::LogFailure( message:"test1.Z1:  Failed to select Z." );
+end if;
+select many zs related by z->dealer[R13.''buys_from''];
+if ( cardinality zs < 2 )
+  LOG::LogFailure( message:"test1.Z2:  Could not find Zs." );
+end if;
+select any zz from instances of deal;
+select one z related by zz->dealer[R13.''buys_from''];
+if ( zz.buyer != z.name )
+  LOG::LogFailure( message:"test1.Z2a:  Z/ZZ referential mismatch" );
+end if;
+select one z related by zz->dealer[R13.''sells_to''];
+if ( zz.seller != z.name )
+  LOG::LogFailure( message:"test1.Z2b:  Z/ZZ referential mismatch" );
+end if;
+
+LOG::LogSuccess( message:"Made it to the end." );
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1);
+INSERT INTO PE_PE
+	VALUES ("b6ece4d0-3a14-4e5a-87e6-23378a779c47",
+	1,
+	"4bf9896e-225c-42da-82e6-68f6491ef16c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("3478bf0f-b428-4b52-b41a-0ce97241c99b",
+	"00000000-0000-0000-0000-000000000000",
+	'test1',
+	'',
+	'//
+// Generate an event to be sure that b is in the correct current state.
+//
+select any b from instances of socket;
+generate socket1:go() to b;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1);
+INSERT INTO PE_PE
+	VALUES ("3478bf0f-b428-4b52-b41a-0ce97241c99b",
+	1,
+	"4bf9896e-225c-42da-82e6-68f6491ef16c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("a20db3d4-77d0-47da-9b8c-6d6a1d4dabf2",
+	"00000000-0000-0000-0000-000000000000",
+	'test2',
+	'',
+	'// Do some creates and deletes to to exercise storage.
+// But delete everything created.
+
+create object instance a of plug;
+delete object instance a;
+
+create object instance a of plug;
+create object instance b of socket;
+relate a to b across R1;
+create object instance c of dog;
+create object instance d of dog_owner;
+relate c to d across R2;
+create object instance y of friendship;
+create object instance z of dealer;
+
+unrelate c from d across R2;
+unrelate a from b across R1;
+
+delete object instance a;
+delete object instance b;
+delete object instance z;
+delete object instance y;
+delete object instance c;
+delete object instance d;
+
+create object instance n of employee;
+delete object instance n;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1);
+INSERT INTO PE_PE
+	VALUES ("a20db3d4-77d0-47da-9b8c-6d6a1d4dabf2",
+	1,
+	"4bf9896e-225c-42da-82e6-68f6491ef16c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("888d97ee-40a0-4baa-8ca8-41c7678e8e7d",
+	"00000000-0000-0000-0000-000000000000",
+	'xit',
+	'',
+	'
+ARCH::shutdown();
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1);
+INSERT INTO PE_PE
+	VALUES ("888d97ee-40a0-4baa-8ca8-41c7678e8e7d",
+	1,
+	"4bf9896e-225c-42da-82e6-68f6491ef16c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("4bf9896e-225c-42da-82e6-68f6491ef16c",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"515c8018-0c73-4e2e-a7f9-3379de6bc14b",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("515c8018-0c73-4e2e-a7f9-3379de6bc14b",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'pei',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../pei.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("f8b7229b-f136-42db-8d6c-0444f3c8a0e2",
+	'pei',
+	1,
+	'../../../pei.xtuml');

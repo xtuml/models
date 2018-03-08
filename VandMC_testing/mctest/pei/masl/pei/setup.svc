@@ -1,0 +1,21 @@
+private service pei::setup () is
+a : instance of plug;
+
+begin
+// 
+// Check to see if any instances are already here.
+// This would mean that we have restored from NVS
+// or that preexisting instances were defined in data.
+//
+
+a := find_one plug();
+if ( null = a ) then
+
+  //
+  // Set up instances for existance test later on.
+  //
+
+  do_creates();
+
+end if;   // if empty a
+end service;

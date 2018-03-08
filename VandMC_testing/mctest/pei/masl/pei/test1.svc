@@ -1,0 +1,10 @@
+private service pei::test1 () is
+b : instance of socket;
+
+begin
+//
+// Generate an event to be sure that b is in the correct current state.
+//
+b := find_one socket();
+generate socket.go() to b;
+end service;

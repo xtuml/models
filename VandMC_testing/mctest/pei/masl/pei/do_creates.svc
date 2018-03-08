@@ -1,0 +1,228 @@
+private service pei::do_creates () is
+a : instance of plug;
+b : instance of socket;
+c1 : instance of dog; c2 : instance of dog; c3 : instance of dog; c4 : instance of dog; c5 : instance of dog;
+d1 : instance of dog_owner; d2 : instance of dog_owner; e0 : instance of host;
+e1 : instance of host; e2 : instance of host;
+f1 : instance of device; f2 : instance of device; f3 : instance of device;
+g1 : instance of connection; g2 : instance of connection; g3 : instance of connection; g4 : instance of connection;
+h1 : instance of transmission; h2 : instance of transmission; h3 : instance of transmission; h4 : instance of transmission; h : instance of transmission;
+i1 : instance of car; i2 : instance of car; i3 : instance of car; i4 : instance of car;
+j1 : instance of sedan;
+k1 : instance of sports_car; k2 : instance of sports_car; k3 : instance of sports_car;
+l1 : instance of convertible; l2 : instance of convertible; l3 : instance of convertible;
+m1 : instance of report_line; m2 : instance of report_line; m3 : instance of report_line; m4 : instance of report_line; m5 : instance of report_line;
+n1 : instance of employee; n2 : instance of employee; n3 : instance of employee; n4 : instance of employee; n5 : instance of employee; n6 : instance of employee;
+o1 : instance of group_member; o2 : instance of group_member; o3 : instance of group_member; o4 : instance of group_member; o5 : instance of group_member;
+p1 : instance of automobile; p2 : instance of automobile; p3 : instance of automobile;
+q1 : instance of jurisdiction; q2 : instance of jurisdiction; q3 : instance of jurisdiction;
+r1 : instance of license; r2 : instance of license; r3 : instance of license;
+s1 : instance of AtoD_converter; s2 : instance of AtoD_converter;
+t1 : instance of analog_input; t2 : instance of analog_input; t3 : instance of analog_input; t4 : instance of analog_input; t5 : instance of analog_input;
+u1 : instance of sample; u2 : instance of sample; u3 : instance of sample; u4 : instance of sample; u5 : instance of sample;
+v1 : instance of marriage; v2 : instance of marriage;
+w1 : instance of person; w2 : instance of person; w3 : instance of person; w4 : instance of person;
+x1 : instance of friend; x2 : instance of friend; x3 : instance of friend; x4 : instance of friend; x5 : instance of friend; x6 : instance of friend;
+y1 : instance of friendship; y2 : instance of friendship; y3 : instance of friendship; y4 : instance of friendship; y5 : instance of friendship; y6 : instance of friendship; y7 : instance of friendship; y8 : instance of friendship; y9 : instance of friendship;
+z1 : instance of dealer; z2 : instance of dealer; z3 : instance of dealer;
+zz1 : instance of deal; zz2 : instance of deal; zz3 : instance of deal; zz4 : instance of deal; zz5 : instance of deal; zz6 : instance of deal; zz7 : instance of deal;
+
+begin
+// Set up instances for existence test later on.
+
+// plug R1 socket
+a := create plug( aID => 99 ); // extras to see in PEIs
+a := create plug( aID => 98 );
+b := create socket( bID => 2, i => 2 );
+a := create plug( aID => 1, i => 1, bID => b.bID );
+link a R1 b;
+b := create socket( bID => 4, i => 4 );
+a := create plug( aID => 3, i => 3, bID => b.bID );
+link a R1 b;
+b := create socket( bID => 6, i => 6 );
+a := create plug( aID => 5, i => 5, bID => b.bID );
+link a R1 b;
+b := create socket( bID => 8 ); // extra to see it in PEIs
+
+// dog R2 dog_owner
+d1 := create dog_owner( dID => 1 ); // extra
+d2 := create dog_owner( dID => 2, name => "DeeTwo" );
+c1 := create dog( cID => 1, dID => d2.dID );
+c2 := create dog( cID => 2, dID => d2.dID );
+c3 := create dog( cID => 3, dID => d2.dID );
+c4 := create dog( cID => 4, dID => d2.dID );
+c5 := create dog( cID => 5 ); // extra
+link c1 R2 d2;
+link d2 R2 c2;
+link d2 R2 c3;
+link c4 R2 d2;
+
+// host R3 device using connection
+e0 := create host( eID => 100, ratio => 0.1 );
+e1 := create host( eID => 1, ratio => 3.14 );
+e2 := create host( eID => 2, ratio => 2.718 );
+f3 := create device( fID => 3, enabled => true );
+f2 := create device( fID => 2, enabled => false );
+f1 := create device( fID => 1, enabled => true );
+g1 := create connection( gID => 1, eID => e1.eID, fID => f1.fID );
+g2 := create connection( gID => 2, eID => e1.eID, fID => f2.fID );
+g3 := create connection( gID => 3, eID => e2.eID, fID => f3.fID );
+g4 := create connection( gID => 4, eID => e1.eID, fID => f3.fID );
+link e1 R3 f1 using g1;
+link f2 R3 e1 using g2;
+link f3 R3 e2 using g3;
+link e1 R3 f3 using g4;
+
+// transmission R4 (reflexive)
+h1 := create transmission( hID => 1 );
+h2 := create transmission( hID => 2, follows => h1.hID );
+h := create transmission( hID => 99 ); // extra to see in PEIs
+h3 := create transmission( hID => 3, follows => h2.hID );
+h4 := create transmission( hID => 4, follows => h3.hID );
+link h1 R4.precedes h2;
+link h2 R4.precedes h3;
+link h4 R4.follows h3;
+
+// car R5 sedan, sports_car R6 convertible
+i4 := create car( iID => 400, common => 400 );
+i3 := create car( iID => 300, common => 300 );
+i2 := create car( iID => 200, common => 200 );
+i1 := create car( iID => 100, common => 100 );
+j1 := create sedan( jID => 2, specialJ => 2, iID => i1.iID );
+k1 := create sports_car( kID => 11, specialcommon => 11, iID => i4.iID );
+k2 := create sports_car( kID => 22, specialcommon => 22, iID => i3.iID );
+k3 := create sports_car( kID => 33, specialcommon => 33, iID => i2.iID );
+l2 := create convertible( lID => 222, specialL => 222, kID => k3.iID );
+l3 := create convertible( lID => 333, specialL => 333, kID => k2.iID );
+l1 := create convertible( lID => 111, specialL => 111, kID => k1.iID );
+link i1 R5 j1;
+link i2 R5 k3;
+link k2 R5 i3;
+link i4 R5 k1;
+link l1 R6 k1;
+link l3 R6 k2;
+link k3 R5 l2;
+
+// group_member R8 reflexive
+o2 := create group_member( oID => 2, voo => "Cort", teacheroID => o2.oID );
+o1 := create group_member( oID => 1, voo => "Kenny" );
+o3 := create group_member( oID => 3, voo => "Amy", teacheroID => o1.oID );
+o4 := create group_member( oID => 4, voo => "Ellen", teacheroID => o1.oID );
+o5 := create group_member( oID => 5, voo => "Brad", teacheroID => o1.oID );
+link o1 R8.teaches o2; // Kenny teaches Cort.
+link o2 R8.teaches o3; // Cort teaches Amy.
+link o4 R8.learns_from o2; // Ellen learns from Cort.
+link o5 R8.learns_from o2; // Brad learns from Cort.
+
+// employee R7 reflexive using report_line
+n1 := create employee( nID => 1, name => "Pete" );
+n2 := create employee( nID => 2, name => "Dave" );
+n3 := create employee( nID => 3, name => "Alex" );
+n4 := create employee( nID => 4, name => "Jenn" );
+n5 := create employee( nID => 5, name => "Cale" );
+n6 := create employee( nID => 6, name => "Chris" );
+m1 := create report_line( mID => 1, department => "SW", works_for_nID => n1.nID, manages_nID => n3.nID );
+m2 := create report_line( mID => 2, department => "SW", works_for_nID => n1.nID, manages_nID => n4.nID );
+m3 := create report_line( mID => 3, department => "HW", works_for_nID => n2.nID, manages_nID => n5.nID );
+m4 := create report_line( mID => 4, department => "MEC", works_for_nID => n6.nID, manages_nID => n1.nID );
+m5 := create report_line( mID => 5, department => "MEC", works_for_nID => n6.nID, manages_nID => n2.nID );
+link n1 R7.manages n3 using m1;   // Pete manages Alex.
+link n1 R7.manages n4 using m2;   // Pete manages Jenn.
+link n5 R7.works_for n2 using m3; // Cale works for Dave.
+link n1 R7.works_for n6 using m4; // Pete works for Chris.
+link n6 R7.manages n2 using m5;   // Chris manages Dave.
+
+// automobile R9 jurisdiction using license
+p1 := create automobile( eyedee => "Rox" );
+p2 := create automobile( eyedee => "Bita" );
+p3 := create automobile( eyedee => "Tina" );
+q1 := create jurisdiction( deeeye => "Shane" );
+q2 := create jurisdiction( deeeye => "Rusty" );
+q3 := create jurisdiction( deeeye => "Cort" );
+r1 := create license( city => "Indianapolis", pID => p1.pID, qID => q3.qID );
+r2 := create license( city => "Lockport", pID => p3.pID, qID => q1.qID );
+r3 := create license( city => "Battleground", pID => p2.pID, qID => q2.qID );
+//link p1 R9 q3 using r1;
+//link q2 R9 p2 using r3;
+//link p3 R9 q1 using r2;
+
+// AtoD_converter R10 analog_input using sample
+s1 := create AtoD_converter( s => "Rox" );
+s2 := create AtoD_converter( s => "Jacqui" );
+t1 := create analog_input( t => "Clare" );
+t2 := create analog_input( t => "Katrina" );
+t3 := create analog_input( t => "Colleen" );
+t4 := create analog_input( t => "Hannah" );
+t5 := create analog_input( t => "Ruby" );
+u5 := create sample( s => "Oct", sID => s2.sID, tID => t1.tID );
+u4 := create sample( s => "Aug", sID => s2.sID, tID => t2.tID );
+u3 := create sample( s => "Apr", sID => s2.sID, tID => t3.tID );
+u2 := create sample( s => "Dec", sID => s1.sID, tID => t4.tID );
+u1 := create sample( s => "Nov", sID => s1.sID, tID => t5.tID );
+link s1 R10 t4 using u2;
+link s1 R10 t5 using u1;
+link t1 R10 s2 using u5;
+link t2 R10 s2 using u4;
+link s2 R10 t3 using u3;
+
+// person R11 reflexive using marriage
+w1 := create person( name => "Cort" );
+w2 := create person( name => "Rox" );
+w3 := create person( name => "Sean" );
+w4 := create person( name => "Jacqui" );
+v1 := create marriage( year => 1988, husband => w1.name, wife => w2.name );
+v2 := create marriage( year => 1990, husband => w3.name, wife => w4.name );
+link w1 R11.is_husband_of w2 using v1;
+link w4 R11.is_wife_of w3 using v2;
+
+// friends and friendships
+x1 := create friend( name => "Cort", age => 39 );
+x2 := create friend( name => "Rox", age => 38 );
+x3 := create friend( name => "Sevina", age => 35 );
+x4 := create friend( name => "Joe", age => 43 );
+x5 := create friend( name => "Scott", age => 42 );
+x6 := create friend( name => "Jason", age => 31 );
+y1 := create friendship( duration => 1, closeness => 10, buddy => x1.name, pal => x2.name );
+y2 := create friendship( duration => 2, closeness => 20, buddy => x3.name, pal => x1.name );
+y3 := create friendship( duration => 3, closeness => 30, buddy => x4.name, pal => x1.name );
+y4 := create friendship( duration => 4, closeness => 40, buddy => x5.name, pal => x1.name );
+y5 := create friendship( duration => 5, closeness => 50, buddy => x1.name, pal => x6.name );
+y6 := create friendship( duration => 6, closeness => 60, buddy => x2.name, pal => x3.name );
+y7 := create friendship( duration => 7, closeness => 70, buddy => x4.name, pal => x5.name );
+y8 := create friendship( duration => 8, closeness => 80, buddy => x6.name, pal => x4.name );
+y9 := create friendship( duration => 9, closeness => 90, buddy => x6.name, pal => x5.name );
+// friends of Cort
+link x1 R12.is_buddy_of x2 using y1;
+link x1 R12.is_pal_of x3 using y2;
+link x4 R12.is_buddy_of x1 using y3;
+link x5 R12.is_pal_of x1 using y4;
+link x1 R12.is_buddy_of x6 using y5;
+// friends of Rox
+link x3 R12.is_pal_of x2 using y6;
+// friends of Joe
+link x4 R12.is_buddy_of x5 using y7;
+link x4 R12.is_pal_of x6 using y8;
+// friends of Scott
+link x6 R12.is_buddy_of x5 using y9;
+
+
+// dealers and deals
+z1 := create dealer( name => "Joe", worth => 1 );
+z2 := create dealer( name => "Pat", worth => 2 );
+z3 := create dealer( name => "Jason", worth => 3 );
+zz1 := create deal( xaction => 1, value => -1, buyer => z2.name, seller => z1.name );
+zz2 := create deal( xaction => 2, value => 2, buyer => z1.name, seller => z3.name );
+zz3 := create deal( xaction => 3, value => -3, buyer => z3.name, seller => z2.name );
+zz4 := create deal( xaction => 4, value => 4, buyer => z3.name, seller => z1.name );
+zz5 := create deal( xaction => 5, value => -5, buyer => z1.name, seller => z2.name );
+zz6 := create deal( xaction => 6, value => 6, buyer => z2.name, seller => z3.name );
+zz7 := create deal( xaction => 7, value => -7, buyer => z2.name, seller => z1.name );
+link z1 R13.sells_to z2 using zz1;
+link z1 R13.buys_from z3 using zz2;
+link z2 R13.sells_to z3 using zz3;
+link z3 R13.buys_from z1 using zz4;
+link z2 R13.sells_to z1 using zz5;
+link z2 R13.buys_from z3 using zz6;
+link z1 R13.sells_to z2 using zz7;
+
+end service;
