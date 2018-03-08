@@ -28,14 +28,14 @@ INSERT INTO GD_MD
 	0,
 	0,
 	'4.1.12',
-	'GPS_Watch::Library::Location');
+	'GPS_Watch::Location::Location');
 INSERT INTO GD_GE
 	VALUES ("cd2bda06-9fff-418e-9dd5-1cc65fc67cc1",
 	"d804b404-7200-448d-bb3d-da5cb06b2d26",
 	"2a5126a3-4272-42f2-810c-07c57c5a58d1",
 	103,
 	0,
-	'GPS_Watch::Library::Location');
+	'GPS_Watch::Location::Location');
 INSERT INTO GD_SHP
 	VALUES ("cd2bda06-9fff-418e-9dd5-1cc65fc67cc1");
 INSERT INTO GD_CTR
@@ -69,7 +69,7 @@ INSERT INTO GD_GE
 	"f5aac2f0-f369-43f5-9c93-082599586590",
 	94,
 	0,
-	'GPS_Watch::Library::Location::LOC::LocationProvider');
+	'GPS_Watch::Location::Location::LOC::LocationProvider');
 INSERT INTO GD_CON
 	VALUES ("79367881-7175-41ea-9f25-858eb15335bd",
 	"00000000-0000-0000-0000-000000000000");
@@ -169,7 +169,7 @@ INSERT INTO GD_GE
 	"71a772a0-070a-4315-99d9-c778534909e6",
 	94,
 	0,
-	'GPS_Watch::Library::Location::UTIL::LocationUtil');
+	'GPS_Watch::Location::Location::UTIL::LocationUtil');
 INSERT INTO GD_CON
 	VALUES ("3727e9c1-e577-4515-a1df-a345ef309743",
 	"00000000-0000-0000-0000-000000000000");
@@ -269,7 +269,7 @@ INSERT INTO GD_GE
 	"7501c561-d515-4ee0-9d06-282c52269a7f",
 	108,
 	0,
-	'GPS_Watch::Library::Location::Location');
+	'GPS_Watch::Location::Location::Location');
 INSERT INTO GD_SHP
 	VALUES ("8b86944a-7e0f-4e30-accd-db45eaea560f");
 INSERT INTO GD_NCS
@@ -428,88 +428,14 @@ INSERT INTO C_I_PROXY
 INSERT INTO PE_PE
 	VALUES ("2a5126a3-4272-42f2-810c-07c57c5a58d1",
 	1,
-	"2b0c8fd6-d69a-4306-9ef2-2fa3c850b738",
+	"3442a0b8-254c-4c11-98f8-286f882f6f97",
 	"00000000-0000-0000-0000-000000000000",
 	2);
 INSERT INTO EP_PKG_PROXY
-	VALUES ("2b0c8fd6-d69a-4306-9ef2-2fa3c850b738",
+	VALUES ("3442a0b8-254c-4c11-98f8-286f882f6f97",
 	"36a41cf7-d411-488d-99fc-74866d4fea39",
 	"36a41cf7-d411-488d-99fc-74866d4fea39",
-	'Library',
-	'// ########## START OAL_1 ##########
-// always initialize data
-self.currentLocation.longitude = 0.0;
-self.currentLocation.latitude  = 0.0;
-self.currentLocation.speed     = 0.0;
-self.interval                  = 2000000;
-
-LOG::LogInfo(message: "Location listener registered.");
-
- // start timer based on requested interval
-create event instance timeout of GPS3:timeout() to self;
-self.timer = TIM::timer_start_recurring(event_inst: timeout, microseconds: self.interval);
-// ########### END OAL_1 ###########
-
-
-
-// ########## START OAL_2 ##########
-// prepare signal data with some dummy values that change over time
-self.currentLocation.longitude = self.currentLocation.longitude + 2.0;
-self.currentLocation.latitude  = self.currentLocation.latitude  + 3.0;
-self.currentLocation.speed     = 
-                                (self.currentLocation.latitude - 
-                                 self.currentLocation.longitude) / 5.0;
-
-// pass the new location to client component
-send LocationProvider::locationUpdate(location: self.currentLocation);
-// ########### END OAL_2 ###########
-
-
-
-// ########## START OAL_3 ##########
-res = TIM::timer_cancel(timer_inst_ref: self.timer);
-// ########### END OAL_3 ###########
-
-
-
-// ########## START OAL_4 ##########
-select any gps from instances of GPS;
-if (empty gps)
-  // asynchronously create a new instance of GPS
-  generate GPS1:registerListener() to GPS creator;
-end if;
-// ########### END OAL_4 ###########
-
-
-// ########## START OAL_5 ##########
-// forward message to single instance of GPS
-select any gps from instances of GPS;
-if (not empty gps)
-  generate GPS2:unregisterListener() to gps;
-end if;
-// ########### END OAL_5 ###########
-
-
-// ########## START OAL_6 ##########
-// create an instance of the workout timer if it does not exist
-select any workoutTimer from instances of WorkoutTimer;
-if (empty workoutTimer)
-  create object instance workoutTimer of WorkoutTimer;
-end if;
-
-// forward message to the single instance of WorkoutTimer 
-generate WorkoutTimer1:startStopPressed() to workoutTimer;
-// ########### END OAL_6 ###########
-
-
-
-// ########## START OAL_7 ##########
-// print the new location to the console
-LOG::LogInfo(message: "location updated: ");
-LOG::LogReal(message: "longitude", r: param.location.longitude);
-LOG::LogReal(message: "latitude",  r: param.location.latitude );
-LOG::LogReal(message: "speed",     r: param.location.speed    );
-// ########### END OAL_7 ###########
-',
+	'Location',
+	'',
 	0,
-	'../Library.xtuml');
+	'../Location.xtuml');
