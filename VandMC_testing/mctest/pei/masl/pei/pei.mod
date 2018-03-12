@@ -1,8 +1,5 @@
 domain pei is
   
-  object AtoD_converter;
-  object analog_input;
-  object automobile;
   object car;
   object dealer;
   object device;
@@ -12,21 +9,24 @@ domain pei is
   object friendship;
   object group_member;
   object host;
-  object jurisdiction;
-  object license;
   object person;
   object report_line;
-  object sample;
   object sedan;
   object socket;
   object sports_car;
   object transmission;
+  object sample;
   object plug;
   object marriage;
+  object license;
+  object jurisdiction;
   object dog;
   object deal;
   object convertible;
   object connection;
+  object automobile;
+  object analog_input;
+  object AtoD_converter;
   
   //!Arbitrary ID with core data type of unique_id (integer in MASL).
   public type arbitrary_id is integer;   
@@ -85,30 +85,6 @@ domain pei is
                       using deal;   
   
   
-  
-  object AtoD_converter is
-    
-    sID: preferred arbitrary_id;     
-    s: string;     
-    
-  end object;
-  pragma key_letter( "AtoD_converter" );
-  
-  object analog_input is
-    
-    tID: preferred arbitrary_id;     
-    t: string;     
-    
-  end object;
-  pragma key_letter( "analog_input" );
-  
-  object automobile is
-    
-    pID: preferred arbitrary_id;     
-    eyedee: string;     
-    
-  end object;
-  pragma key_letter( "automobile" );
   
   object car is
     
@@ -185,24 +161,6 @@ domain pei is
   end object;
   pragma key_letter( "host" );
   
-  object jurisdiction is
-    
-    qID: preferred arbitrary_id;     
-    deeeye: string;     
-    
-  end object;
-  pragma key_letter( "jurisdiction" );
-  
-  object license is
-    
-    rID: arbitrary_id;     
-    city: string;     
-    pID: preferred referential ( R9.licenses.automobile.pID ) arbitrary_id;     
-    qID: preferred referential ( R9.is_licensed_in.jurisdiction.qID ) arbitrary_id;     
-    
-  end object;
-  pragma key_letter( "license" );
-  
   object person is
     
     name: preferred string;     
@@ -221,18 +179,6 @@ domain pei is
     
   end object;
   pragma key_letter( "report_line" );
-  
-  object sample is
-    
-    uID: preferred arbitrary_id;     
-    s: string;     
-    sID: referential ( R10.is_sampled_by.AtoD_converter.sID ) arbitrary_id;     
-    tID: referential ( R10.samples.analog_input.tID ) arbitrary_id;     
-    
-    identifier is ( sID, tID );     
-    
-  end object;
-  pragma key_letter( "sample" );
   
   object socket is
     
@@ -263,6 +209,18 @@ domain pei is
   end object;
   pragma key_letter( "transmission" );
   
+  object sample is
+    
+    uID: preferred arbitrary_id;     
+    s: string;     
+    sID: referential ( R10.is_sampled_by.AtoD_converter.sID ) arbitrary_id;     
+    tID: referential ( R10.samples.analog_input.tID ) arbitrary_id;     
+    
+    identifier is ( sID, tID );     
+    
+  end object;
+  pragma key_letter( "sample" );
+  
   object plug is
     
     aID: preferred integer;     
@@ -283,6 +241,24 @@ domain pei is
     
   end object;
   pragma key_letter( "marriage" );
+  
+  object license is
+    
+    rID: arbitrary_id;     
+    city: string;     
+    pID: preferred referential ( R9.licenses.automobile.pID ) arbitrary_id;     
+    qID: preferred referential ( R9.is_licensed_in.jurisdiction.qID ) arbitrary_id;     
+    
+  end object;
+  pragma key_letter( "license" );
+  
+  object jurisdiction is
+    
+    qID: preferred arbitrary_id;     
+    deeeye: string;     
+    
+  end object;
+  pragma key_letter( "jurisdiction" );
   
   object dog is
     
@@ -312,6 +288,30 @@ domain pei is
     
   end object;
   pragma key_letter( "connection" );
+  
+  object automobile is
+    
+    pID: preferred arbitrary_id;     
+    eyedee: string;     
+    
+  end object;
+  pragma key_letter( "automobile" );
+  
+  object analog_input is
+    
+    tID: preferred arbitrary_id;     
+    t: string;     
+    
+  end object;
+  pragma key_letter( "analog_input" );
+  
+  object AtoD_converter is
+    
+    sID: preferred arbitrary_id;     
+    s: string;     
+    
+  end object;
+  pragma key_letter( "AtoD_converter" );
   
   object sedan is
     
