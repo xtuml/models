@@ -1,0 +1,49 @@
+CC=g++
+MASLLIB=-L/$(HOME)/git/masl/install/lib
+MASLINCLUDE=-I/$(HOME)/git/masl/install/include
+CFLAGS=
+OUTDIR=bin
+SRCDIR=src
+
+all: LOG_interface LOG LOG_sqlite LOG_metadata LOG_if_metadata LOG_inspector LOG_if_inspector LOG_transient
+
+LOG_interface:
+	$(CC) $(CFLAGS) $(MASLINCLUDE) -Iinclude -fPIC -shared -o $(OUTDIR)/libLOG_interface.so \
+    $(SRCDIR)/__LOG_types.cc \
+    $(SRCDIR)/__LOG_interface.cc
+
+LOG:
+	$(CC) $(CFLAGS) $(MASLINCLUDE) -Iinclude -fPIC -shared -o $(OUTDIR)/libLOG.so \
+    $(SRCDIR)/__LOG.cc \
+    $(SRCDIR)/__LOG_private_types.cc \
+    $(SRCDIR)/__LOG__LogSuccess.cc \
+    $(SRCDIR)/__LOG__LogFailure.cc \
+    $(SRCDIR)/__LOG__LogInfo.cc
+
+LOG_sqlite:
+	$(CC) $(CFLAGS) $(MASLINCLUDE) -Iinclude -fPIC -shared -o $(OUTDIR)/libLOG_sqlite.so \
+    $(SRCDIR)/sqlite_dummy.cc
+
+LOG_metadata:
+	$(CC) $(CFLAGS) $(MASLINCLUDE) -Iinclude -fPIC -shared -o $(OUTDIR)/libLOG_metadata.so \
+    $(SRCDIR)/MetaData__LOG.cc
+
+LOG_if_metadata:
+	$(CC) $(CFLAGS) $(MASLINCLUDE) -Iinclude -fPIC -shared -o $(OUTDIR)/libLOG_if_metadata.so \
+    $(SRCDIR)/MetaData__if__LOG.cc
+
+LOG_inspector:
+	$(CC) $(CFLAGS) $(MASLINCLUDE) -Iinclude -fPIC -shared -o $(OUTDIR)/libLOG_inspector.so \
+    $(SRCDIR)/Inspector__LOG.cc \
+    $(SRCDIR)/Inspector_private_types__LOG.cc
+
+LOG_if_inspector:
+	$(CC) $(CFLAGS) $(MASLINCLUDE) -Iinclude -fPIC -shared -o $(OUTDIR)/libLOG_if_inspector.so \
+    $(SRCDIR)/Inspector_types__LOG.cc
+
+LOG_transient:
+	$(CC) $(CFLAGS) $(MASLINCLUDE) -Iinclude -fPIC -shared -o $(OUTDIR)/libLOG_transient.so \
+    $(SRCDIR)/transient_dummy.cc
+
+clean:
+	rm -f $(OUTDIR)/*
