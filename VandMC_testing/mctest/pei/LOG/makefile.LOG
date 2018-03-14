@@ -1,21 +1,22 @@
 MASLLIB=-L/$(HOME)/git/masl/install/lib
 MASLINCLUDE=-I/$(HOME)/git/masl/install/include
-CXXFLAGS=$(MASLINCLUDE) -Iinclude -fPIC
+CXXFLAGS=$(MASLINCLUDE) -Iinclude -fPIC -g
 OUTDIR=bin
 SRCDIR=src
 
-ARTIFACTS=                libLOG_interface.so \
-                          libLOG.so \
-                          libLOG_sqlite.so \
-                          libLOG_metadata.so \
-                          libLOG_if_metadata.so \
-                          libLOG_inspector.so \
-                          libLOG_if_inspector.so \
-                          libLOG_transient.so
+ARTIFACTS=                $(OUTDIR)/libLOG_interface.so \
+                          $(OUTDIR)/libLOG.so \
+                          $(OUTDIR)/libLOG_sqlite.so \
+                          $(OUTDIR)/libLOG_metadata.so \
+                          $(OUTDIR)/libLOG_if_metadata.so \
+                          $(OUTDIR)/libLOG_inspector.so \
+                          $(OUTDIR)/libLOG_if_inspector.so \
+                          $(OUTDIR)/libLOG_transient.so
 
 LOG_interface_SOURCES=    $(SRCDIR)/__LOG_types.cc \
                           $(SRCDIR)/__LOG_interface.cc
 LOG_interface_OBJECTS=    $(LOG_interface_SOURCES:.cc=.o)
+LOG_interface_LIBS=       -lswa -lasn1
 
 LOG_SOURCES=              $(SRCDIR)/__LOG.cc \
                           $(SRCDIR)/__LOG_private_types.cc \
@@ -23,51 +24,58 @@ LOG_SOURCES=              $(SRCDIR)/__LOG.cc \
                           $(SRCDIR)/__LOG__LogFailure.cc \
                           $(SRCDIR)/__LOG__LogInfo.cc
 LOG_OBJECTS=              $(LOG_SOURCES:.cc=.o)
+LOG_LIBS=                 -lswa -lLOG_interface -lLogger_interface
 
 LOG_sqlite_SOURCES=       $(SRCDIR)/sqlite_dummy.cc
 LOG_sqlite_OBJECTS=       $(LOG_sqlite_SOURCES:.cc=.o)
+LOG_sqlite_LIBS=          -lLOG -lsqlite -lasn1
 
 LOG_metadata_SOURCES=     $(SRCDIR)/MetaData__LOG.cc
 LOG_metadata_OBJECTS=     $(LOG_metadata_SOURCES:.cc=.o)
+LOG_metadata_LIBS=        -lMetaData -lLOG_interface -lswa
 
 LOG_if_metadata_SOURCES=  $(SRCDIR)/MetaData__if__LOG.cc
 LOG_if_metadata_OBJECTS=  $(LOG_if_metadata_SOURCES:.cc=.o)
+LOG_if_metadata_LIBS=     -lMetaData -lLOG_interface -lswa
 
 LOG_inspector_SOURCES=    $(SRCDIR)/Inspector__LOG.cc \
                           $(SRCDIR)/Inspector_private_types__LOG.cc
 LOG_inspector_OBJECTS=    $(LOG_inspector_SOURCES:.cc=.o)
+LOG_inspector_LIBS=       -lInspector -lLOG_if_inspector -lLOG_interface -lboost_system -lswa
 
 LOG_if_inspector_SOURCES= $(SRCDIR)/Inspector_types__LOG.cc
 LOG_if_inspector_OBJECTS= $(LOG_if_inspector_SOURCES:.cc=.o)
+LOG_if_inspector_LIBS=    -lInspector
 
 LOG_transient_SOURCES=    $(SRCDIR)/transient_dummy.cc
 LOG_transient_OBJECTS=    $(LOG_transient_SOURCES:.cc=.o)
+LOG_transient_LIBS=       -ltransient -lLOG
 
 all: $(ARTIFACTS)
 
-libLOG_interface.so: $(LOG_interface_OBJECTS)
-	@$(CXX) $(CXXFLAGS) -shared $^ -o $(OUTDIR)/$@
+$(OUTDIR)/libLOG_interface.so: $(LOG_interface_OBJECTS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(LOG_interface_OBJECTS) -o $@ $(LOG_interface_LIBS)
 
-libLOG.so: $(LOG_OBJECTS)
-	@$(CXX) $(CXXFLAGS) -shared $^ -o $(OUTDIR)/$@
+$(OUTDIR)/libLOG.so: $(LOG_OBJECTS) $(OUTDIR)/libLOG_interface.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(LOG_OBJECTS) -o $@ $(LOG_LIBS)
 
-libLOG_sqlite.so: $(LOG_sqlite_OBJECTS)
-	@$(CXX) $(CXXFLAGS) -shared $^ -o $(OUTDIR)/$@
+$(OUTDIR)/libLOG_sqlite.so: $(LOG_sqlite_OBJECTS) $(OUTDIR)/libLOG.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(LOG_sqlite_OBJECTS) -o $@ $(LOG_sqlite_LIBS)
 
-libLOG_metadata.so: $(LOG_metadata_OBJECTS)
-	@$(CXX) $(CXXFLAGS) -shared $^ -o $(OUTDIR)/$@
+$(OUTDIR)/libLOG_metadata.so: $(LOG_metadata_OBJECTS) $(OUTDIR)/libLOG_interface.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(LOG_metadata_OBJECTS) -o $@ $(LOG_metadata_LIBS)
 
-libLOG_if_metadata.so: $(LOG_if_metadata_OBJECTS)
-	@$(CXX) $(CXXFLAGS) -shared $^ -o $(OUTDIR)/$@
+$(OUTDIR)/libLOG_if_metadata.so: $(LOG_if_metadata_OBJECTS) $(OUTDIR)/libLOG_interface.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(LOG_if_metadata_OBJECTS) -o $@ $(LOG_if_metadata_LIBS)
 
-libLOG_inspector.so: $(LOG_inspector_OBJECTS)
-	@$(CXX) $(CXXFLAGS) -shared $^ -o $(OUTDIR)/$@
+$(OUTDIR)/libLOG_inspector.so: $(LOG_inspector_OBJECTS) $(OUTDIR)/libLOG_interface.so $(OUTDIR)/libLOG_if_inspector.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(LOG_inspector_OBJECTS) -o $@ $(LOG_inspector_LIBS)
 
-libLOG_if_inspector.so: $(LOG_if_inspector_OBJECTS)
-	@$(CXX) $(CXXFLAGS) -shared $^ -o $(OUTDIR)/$@
+$(OUTDIR)/libLOG_if_inspector.so: $(LOG_if_inspector_OBJECTS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(LOG_if_inspector_OBJECTS) -o $@ $(LOG_if_inspector_LIBS)
 
-libLOG_transient.so: $(LOG_transient_OBJECTS)
-	@$(CXX) $(CXXFLAGS) -shared $^ -o $(OUTDIR)/$@
+$(OUTDIR)/libLOG_transient.so: $(LOG_transient_OBJECTS) $(OUTDIR)/libLOG.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(LOG_transient_OBJECTS) -o $@ $(LOG_transient_LIBS)
 
 .o:
 	$(CXX) $(CXXFLAGS) -c $<
