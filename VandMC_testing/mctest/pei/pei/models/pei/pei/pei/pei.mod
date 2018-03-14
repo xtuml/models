@@ -33,10 +33,8 @@ domain pei is
     );
     private service setup (
     );
-pragma startup ( true ); 
     private service test (
     );
-pragma startup ( true ); 
     private service test1 (
     );
     private service test2 (
@@ -45,6 +43,7 @@ pragma startup ( true );
     );
     public service start_test (
     );
+pragma startup ( true ); 
   relationship R1 is socket conditionally receives one plug,
     plug conditionally enters one socket;
   relationship R2 is dog_owner conditionally owns many dog,
