@@ -32,12 +32,12 @@ domain pei is
   public type arbitrary_id is integer;   
   
   private service do_creates ();   
-  private service setup (); pragma startup( true );   
-  private service test (); pragma startup( true );   
+  private service setup ();   
+  private service test ();   
   private service test1 ();   
   private service test2 ();   
   private service xit ();   
-  public service start_test ();   
+  public service start_test (); pragma startup( true );   
   
   
   relationship R1 is socket conditionally receives one plug,
