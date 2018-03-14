@@ -33,19 +33,19 @@ pei_sys_transient_LIBS=    -lpei_sys -lpei_transient
 all: $(ARTIFACTS)
 
 $(OUTDIR)/pei_sys_sqlite: $(pei_sys_sqlite_OBJECTS) $(OUTDIR)/libpei_sys.so
-	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin $(pei_sys_sqlite_OBJECTS) -o $@ $(pei_sys_sqlite_LIBS)
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -L../pei/bin $(pei_sys_sqlite_OBJECTS) -o $@ $(pei_sys_sqlite_LIBS)
 
 $(OUTDIR)/pei_sys_transient: $(pei_sys_transient_OBJECTS) $(OUTDIR)/libpei_sys.so
-	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin $(pei_sys_transient_OBJECTS) -o $@ $(pei_sys_transient_LIBS)
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -L../pei/bin $(pei_sys_transient_OBJECTS) -o $@ $(pei_sys_transient_LIBS)
 
 $(OUTDIR)/libpei_sys.so: $(pei_sys_OBJECTS)
-	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_sys_OBJECTS) -o $@ $(pei_sys_LIBS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -L../pei/bin -shared $(pei_sys_OBJECTS) -o $@ $(pei_sys_LIBS)
 
 $(OUTDIR)/libpei_sys_metadata.so: $(pei_sys_metadata_OBJECTS)
-	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_sys_metadata_OBJECTS) -o $@ $(pei_sys_metadata_LIBS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -L../pei/bin -shared $(pei_sys_metadata_OBJECTS) -o $@ $(pei_sys_metadata_LIBS)
 
 $(OUTDIR)/libpei_sys_inspector.so: $(pei_sys_inspector_OBJECTS)
-	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_sys_inspector_OBJECTS) -o $@ $(pei_sys_inspector_LIBS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -L../pei/bin -shared $(pei_sys_inspector_OBJECTS) -o $@ $(pei_sys_inspector_LIBS)
 
 .o:
 	$(CXX) $(CXXFLAGS) -c $<
