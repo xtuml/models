@@ -1,0 +1,54 @@
+MASLLIB=-L/$(HOME)/git/masl/install/lib
+MASLINCLUDE=-I/$(HOME)/git/masl/install/include
+CXXFLAGS=$(MASLINCLUDE) -I../LOG/include -I../pei/include -Iinclude -fPIC -g
+OUTDIR=bin
+SRCDIR=src
+
+ARTIFACTS=                 $(OUTDIR)/libpei_sys.so \
+                           $(OUTDIR)/libpei_sys_metadata.so \
+                           $(OUTDIR)/libpei_sys_inspector.so \
+                           $(OUTDIR)/pei_sys_sqlite \
+                           $(OUTDIR)/pei_sys_transient
+
+pei_sys_SOURCES=           $(SRCDIR)/__pei_sys.cc
+pei_sys_OBJECTS=           $(pei_sys_SOURCES:.cc=.o)
+pei_sys_LIBS=              -lswa
+
+pei_sys_metadata_SOURCES=  $(SRCDIR)/MetaData__pei_sys.cc
+pei_sys_metadata_OBJECTS=  $(pei_sys_metadata_SOURCES:.cc=.o)
+pei_sys_metadata_LIBS=     -lMetaData -lpei_metadata
+
+pei_sys_inspector_SOURCES= $(SRCDIR)/Inspector__pei_sys.cc
+pei_sys_inspector_OBJECTS= $(pei_sys_inspector_SOURCES:.cc=.o)
+pei_sys_inspector_LIBS=    -lInspector -lpei_inspector
+
+pei_sys_sqlite_SOURCES=    $(SRCDIR)/sqlite_dummy.cc
+pei_sys_sqlite_OBJECTS=    $(pei_sys_sqlite_SOURCES:.cc=.o)
+pei_sys_sqlite_LIBS=       -lpei_sys -lpei_sqlite
+
+pei_sys_transient_SOURCES= $(SRCDIR)/transient_dummy.cc
+pei_sys_transient_OBJECTS= $(pei_sys_transient_SOURCES:.cc=.o)
+pei_sys_transient_LIBS=    -lpei_sys -lpei_transient
+
+all: $(ARTIFACTS)
+
+$(OUTDIR)/pei_sys_sqlite: $(pei_sys_sqlite_OBJECTS) $(OUTDIR)/libpei_sys.so
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin $(pei_sys_sqlite_OBJECTS) -o $@ $(pei_sys_sqlite_LIBS)
+
+$(OUTDIR)/pei_sys_transient: $(pei_sys_transient_OBJECTS) $(OUTDIR)/libpei_sys.so
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin $(pei_sys_transient_OBJECTS) -o $@ $(pei_sys_transient_LIBS)
+
+$(OUTDIR)/libpei_sys.so: $(pei_sys_OBJECTS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_sys_OBJECTS) -o $@ $(pei_sys_LIBS)
+
+$(OUTDIR)/libpei_sys_metadata.so: $(pei_sys_metadata_OBJECTS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_sys_metadata_OBJECTS) -o $@ $(pei_sys_metadata_LIBS)
+
+$(OUTDIR)/libpei_sys_inspector.so: $(pei_sys_inspector_OBJECTS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_sys_inspector_OBJECTS) -o $@ $(pei_sys_inspector_LIBS)
+
+.o:
+	$(CXX) $(CXXFLAGS) -c $<
+
+clean:
+	rm -f $(OUTDIR)/* $(SRCDIR)/*.o
