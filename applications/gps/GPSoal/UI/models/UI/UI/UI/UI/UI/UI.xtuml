@@ -30,26 +30,50 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
-	'GuiBridge::connect();
+	'// make sre the singleton exists
+select any ui from instances of UI;
+if (empty ui)
+  create object instance ui of UI;
+end if;
 
-create event instance evt of UI_A3:setTargetPressed() to UI class;
+GuiBridge::connect();
+
+create event instance evt of UI3:setTargetPressed() to ui;
 GuiBridge::feedSetTargetPressedEvent(evt: evt);
 
-create event instance evt of UI_A4:startStopPressed() to UI class;
+create event instance evt of UI4:startStopPressed() to ui;
 GuiBridge::feedStartStopPressedEvent(evt: evt);
 
-create event instance evt of UI_A5:lapResetPressed() to UI class;
+create event instance evt of UI5:lapResetPressed() to ui;
 GuiBridge::feedLapResetPressedEvent(evt: evt);
 
-create event instance evt of UI_A6:lightPressed() to UI class;
+create event instance evt of UI6:lightPressed() to ui;
 GuiBridge::feedLightPressedEvent(evt: evt);
 
-create event instance evt of UI_A7:modePressed() to UI class;
+create event instance evt of UI7:modePressed() to ui;
 GuiBridge::feedModePressedEvent(evt: evt);',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000",
 	0);
+INSERT INTO O_NBATTR
+	VALUES ("e985b318-f34a-497e-a310-2d00da9e1e54",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_BATTR
+	VALUES ("e985b318-f34a-497e-a310-2d00da9e1e54",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_ATTR
+	VALUES ("e985b318-f34a-497e-a310-2d00da9e1e54",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	"00000000-0000-0000-0000-000000000000",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
 INSERT INTO O_ID
 	VALUES (0,
 	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
