@@ -232,7 +232,12 @@ INSERT INTO SPR_PS
 	VALUES ("95d8bd78-3d3b-45b0-ab16-4289c0af092e",
 	'registerListener',
 	'',
-	'',
+	'select any hr from instances of HeartRateMonitor;
+if (empty hr)
+  generate HeartRateMonitor10:createHeartRateMonitor() to HeartRateMonitor creator;
+else
+  generate HeartRateMonitor8:registerListener() to hr;
+end if;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -250,7 +255,9 @@ INSERT INTO SPR_PS
 	VALUES ("f3d5d876-13df-40ca-8b23-f3b89bb9e437",
 	'unregisterListener',
 	'',
-	'',
+	'select any hr from instances of HeartRateMonitor;
+generate HeartRateMonitor9:unregisterListener() to hr; 
+',
 	1,
 	0);
 INSERT INTO C_EP_PROXY

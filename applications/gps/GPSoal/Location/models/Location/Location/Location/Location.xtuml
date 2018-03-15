@@ -319,7 +319,13 @@ INSERT INTO SPR_PS
 	VALUES ("55d56674-a44b-4b05-8204-464a33fc6490",
 	'registerListener',
 	'',
-	'',
+	'select any gps from instances of GPS;
+if (empty gps)
+  generate GPS9:createListener() to GPS creator;
+else
+  generate GPS10:registerListener() to gps;
+end if;
+',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -337,7 +343,9 @@ INSERT INTO SPR_PS
 	VALUES ("9317eb2f-573f-4674-bb32-b2695b39d02d",
 	'unregisterListener',
 	'',
-	'',
+	'select any gps from instances of GPS;
+generate GPS11:unregisterListener() to gps; 
+',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
