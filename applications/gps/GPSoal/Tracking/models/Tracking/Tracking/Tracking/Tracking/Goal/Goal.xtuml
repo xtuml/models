@@ -30,6 +30,8 @@ if ( not empty goalSpec )
   relate goal to goalSpec across R9.''specified by'';
   select any session from instances of WorkoutSession;  // WorkoutSession is a singleton
   relate goal to session across R11.''is currently executing within'';
+  goal.ID = goalSpec.last_goal_ID + 1;
+  goalSpec.last_goal_ID = goal.ID;
 
   // Initialize this goal.
   goal.calculateStart();
@@ -271,7 +273,7 @@ INSERT INTO O_ATTR
 	'',
 	'ID',
 	0,
-	"ba5eda7a-def5-0000-0000-000000000005",
+	"ba5eda7a-def5-0000-0000-000000000002",
 	'',
 	'');
 INSERT INTO O_NBATTR
