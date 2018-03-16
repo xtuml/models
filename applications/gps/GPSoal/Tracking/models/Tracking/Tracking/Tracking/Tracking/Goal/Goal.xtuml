@@ -27,9 +27,9 @@ select any goalSpec from instances of GoalSpec
   where ( selected.sequenceNumber == param.sequenceNumber );
 if ( not empty goalSpec )
   create object instance goal of Goal;
-  relate goal to goalSpec across R9.''specified by'';
+  relate goal to goalSpec across R9.''specified_by'';
   select any session from instances of WorkoutSession;  // WorkoutSession is a singleton
-  relate goal to session across R11.''is currently executing within'';
+  relate goal to session across R11.''is_currently_executing_within'';
   goal.ID = goalSpec.last_goal_ID + 1;
   goalSpec.last_goal_ID = goal.ID;
 
@@ -65,13 +65,13 @@ INSERT INTO O_TFR
 	1,
 	'// Based on the span type for this goal, calculate and
 //   store the value of the start attribute.
-select one goalSpec related by self->GoalSpec[R9.''specified by''];
+select one goalSpec related by self->GoalSpec[R9.''specified_by''];
 if ( goalSpec.spanType == GoalSpan::Time )
   select one workoutTimer related by 
-    self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
+    self->WorkoutSession[R11.''is_currently_executing_within'']->WorkoutTimer[R8.''is_timed_by''];
   self.start = workoutTimer.time;
 elif ( goalSpec.spanType == GoalSpan::Distance )
-  select one session related by self->WorkoutSession[R11.''is currently executing within''];
+  select one session related by self->WorkoutSession[R11.''is_currently_executing_within''];
   self.start = session.accumulatedDistance;
 else
   LOG::LogFailure( message: "Goal.calculateStart: Unknown Goal Span Type." );
@@ -92,8 +92,8 @@ INSERT INTO O_TFR
 //   the disposition of the this goal.    
 
 // Find the related goal specification and workout session for this goal.
-select one goalSpec related by self->GoalSpec[R9.''specified by''];
-select one session related by self->WorkoutSession[R11.''is currently executing within''];
+select one goalSpec related by self->GoalSpec[R9.''specified_by''];
+select one session related by self->WorkoutSession[R11.''is_currently_executing_within''];
 
 // Based on the goal criteria type, get the appropriate current value
 //   for comparison against the criteria (minimum and maximum).
@@ -148,17 +148,17 @@ INSERT INTO O_TFR
 //  records as necessary, and advance to the next goal
 //  if appropriate.
 
-select one goalSpec related by self->GoalSpec[R9.''specified by''];
+select one goalSpec related by self->GoalSpec[R9.''specified_by''];
 
 // Based on the span type for the goal, get the elapsed span 
 //   for comparison against the specified span for the goal.
 elapsedSpan = 0.0;  // Explicit declaration
 if ( goalSpec.spanType == GoalSpan::Distance )
-  select one session related by self->WorkoutSession[R11.''is currently executing within''];
+  select one session related by self->WorkoutSession[R11.''is_currently_executing_within''];
   elapsedSpan = session.accumulatedDistance - self.start;
 elif ( goalSpec.spanType == GoalSpan::Time )
   select one workoutTimer related by 
-    self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
+    self->WorkoutSession[R11.''is_currently_executing_within'']->WorkoutTimer[R8.''is_timed_by''];
   elapsedSpan = workoutTimer.time - self.start;
 else
   LOG::LogFailure( message: "Goal.evaluateCompletion: Unknown Goal Span Type." );
@@ -167,7 +167,7 @@ end if;
 // Compare the current value against the specified span to determine 
 //   whether the execution of this workout goal is complete.
 if ( elapsedSpan >= goalSpec.span )
-  select one openAchievement related by self->Achievement[R14.''has open''];
+  select one openAchievement related by self->Achievement[R14.''has_open''];
   if ( not empty openAchievement )
     openAchievement.close();
   end if;
@@ -194,7 +194,7 @@ INSERT INTO O_TFR
 //    if one exists.
 select any session from instances of WorkoutSession;  // WorkoutSession is a singleton.
 if ( not empty session )
-  select one goal related by session->Goal[R11.''is currently executing''];
+  select one goal related by session->Goal[R11.''is_currently_executing''];
   if ( not empty goal )
     generate Goal1:Completed to goal;
   else
@@ -327,7 +327,7 @@ INSERT INTO O_REF
 	'',
 	'WorkoutSession',
 	'startDate',
-	'R13.''was executed within''');
+	'R13.''was_executed_within''');
 INSERT INTO R_RGO_PROXY
 	VALUES ("c1022670-c44d-401e-bb23-dfcef6084fba",
 	"3755f3e3-3d22-4f05-a9f0-c93d3c6abd63",
@@ -355,7 +355,7 @@ INSERT INTO O_REF
 	'',
 	'GoalSpec',
 	'session_startDate',
-	'R9.''specified by''');
+	'R9.''specified_by''');
 INSERT INTO R_RGO_PROXY
 	VALUES ("c1022670-c44d-401e-bb23-dfcef6084fba",
 	"78e3e6fd-b6ad-409d-a611-d20499f533da",
@@ -383,7 +383,7 @@ INSERT INTO O_REF
 	'',
 	'WorkoutSession',
 	'startDate',
-	'R11.''is currently executing within''');
+	'R11.''is_currently_executing_within''');
 INSERT INTO R_RGO_PROXY
 	VALUES ("c1022670-c44d-401e-bb23-dfcef6084fba",
 	"50d628e2-9d2f-4810-93d9-44fb62bf9031",
@@ -438,7 +438,7 @@ INSERT INTO O_REF
 	'',
 	'WorkoutSession',
 	'startTime',
-	'R13.''was executed within''');
+	'R13.''was_executed_within''');
 INSERT INTO O_RTIDA_PROXY
 	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a",
@@ -461,7 +461,7 @@ INSERT INTO O_REF
 	'',
 	'GoalSpec',
 	'session_startTime',
-	'R9.''specified by''');
+	'R9.''specified_by''');
 INSERT INTO O_RTIDA_PROXY
 	VALUES ("f08d1723-c13d-473f-8cd7-05a3f01d3371",
 	"be6ddd8b-37a5-4534-961b-772bb1d940ac",
@@ -484,7 +484,7 @@ INSERT INTO O_REF
 	'',
 	'WorkoutSession',
 	'startTime',
-	'R11.''is currently executing within''');
+	'R11.''is_currently_executing_within''');
 INSERT INTO O_RTIDA_PROXY
 	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a",
@@ -534,7 +534,7 @@ INSERT INTO O_REF
 	'',
 	'GoalSpec',
 	'sequenceNumber',
-	'R9.''specified by''');
+	'R9.''specified_by''');
 INSERT INTO O_RTIDA_PROXY
 	VALUES ("f568c69e-b0ba-41ee-aef1-25eb2c07142f",
 	"be6ddd8b-37a5-4534-961b-772bb1d940ac",

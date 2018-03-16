@@ -22,16 +22,16 @@ INSERT INTO O_TFR
 	1,
 	'// Add a new heart-rate sample and notify the UI of the current heart rate.
 
-select one workoutTimer related by self->WorkoutTimer[R8.''is timed by''];
+select one workoutTimer related by self->WorkoutTimer[R8.''is_timed_by''];
 
 // Create and initialize a new heart-rate sample.
 create object instance sample of HeartRateSample;
 sample.heartRate = param.heartRate;
 sample.time = workoutTimer.time;
-relate self to sample across R6.''tracks heart rate over time as'';
+relate self to sample across R6.''tracks_heart_rate_over_time_as'';
 
 // Notify UI of the new heart rate.
-select one display related by self->Display[R7.''current status indicated on''];
+select one display related by self->Display[R7.''current_status_indicated_on''];
 generate Display2:refresh to display;',
 	1,
 	'',
@@ -107,9 +107,9 @@ if ( empty session )
   create object instance display of Display;
 
   // Relate them all together.
-  relate trackLog to session across R4.''represents path for'';
-  relate workoutTimer to session across R8.''acts as the stopwatch for'';
-  relate display to session across R7.''indicates current status of'';
+  relate trackLog to session across R4.''represents_path_for'';
+  relate workoutTimer to session across R8.''acts_as_the_stopwatch_for'';
+  relate display to session across R7.''indicates_current_status_of'';
   
 end if;
 ',
@@ -128,11 +128,11 @@ INSERT INTO O_TFR
 // goals, and achievement records.
 
 // Reset the timer.
-select one workoutTimer related by self->WorkoutTimer[R8.''is timed by''];
+select one workoutTimer related by self->WorkoutTimer[R8.''is_timed_by''];
 workoutTimer.initialize();
 
 // Reset the track log.
-select one trackLog related by self->TrackLog[R4.''captures path in''];
+select one trackLog related by self->TrackLog[R4.''captures_path_in''];
 trackLog.clearTrackPoints();
 trackLog.clearLapMarkers();
 
@@ -144,26 +144,26 @@ for each goalSpec in goalSpecs
 end for;
 
 // Remove any currently executing goal and open achievement record.
-select one executingGoal related by self->Goal[R11.''is currently executing''];
+select one executingGoal related by self->Goal[R11.''is_currently_executing''];
 if ( not empty executingGoal )
-  select one openAchievement related by executingGoal->Achievement[R14.''has open''];
+  select one openAchievement related by executingGoal->Achievement[R14.''has_open''];
   if ( not empty openAchievement )
-    unrelate openAchievement from executingGoal across R14.''is open for'';
+    unrelate openAchievement from executingGoal across R14.''is_open_for'';
     delete object instance openAchievement;
   end if;
-  unrelate self from executingGoal across R11.''is currently executing'';
+  unrelate self from executingGoal across R11.''is_currently_executing'';
   delete object instance executingGoal;
 end if;
 
 // Remove all other goals and achievement records.
-select many goals related by self->Goal[R13.''has executed''];
+select many goals related by self->Goal[R13.''has_executed''];
 for each goal in goals
-  select many achievements related by goal->Achievement[R12.''has recorded''];
+  select many achievements related by goal->Achievement[R12.''has_recorded''];
   for each achievement in achievements
-    unrelate goal from achievement across R12.''has recorded'';
+    unrelate goal from achievement across R12.''has_recorded'';
     delete object instance achievement;
   end for;
-  unrelate self from goal across R13.''has executed'';
+  unrelate self from goal across R13.''has_executed'';
   delete object instance goal;
 end for;
 
@@ -187,7 +187,7 @@ INSERT INTO O_TFR
 // track points and then dividing that sum by the elapsed time between 
 // the first and last point in the subset used for the calculation.
 
-select one lastPoint related by self->TrackLog[R4.''captures path in'']->TrackPoint[R3.''has last''];
+select one lastPoint related by self->TrackLog[R4.''captures_path_in'']->TrackPoint[R3.''has_last''];
 speed = 0.0;
 if ( not empty lastPoint )
   cursor = lastPoint;
@@ -244,8 +244,8 @@ INSERT INTO O_TFR
 	1,
 	'// Calculate sliding average using the most recent samples.
 
-select one workoutTimer related by self->WorkoutTimer[R8.''is timed by''];
-select many samples related by self->HeartRateSample[R6.''tracks heart rate over time as'']
+select one workoutTimer related by self->WorkoutTimer[R8.''is_timed_by''];
+select many samples related by self->HeartRateSample[R6.''tracks_heart_rate_over_time_as'']
   where ( selected.time >= ( workoutTimer.time - (HeartRateSamplingPeriod * HeartRateAveragingWindow) ) );
 numberOfSamples = 0;
 sum = 0;

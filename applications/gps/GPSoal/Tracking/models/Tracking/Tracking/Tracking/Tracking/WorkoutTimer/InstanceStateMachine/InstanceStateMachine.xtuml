@@ -980,14 +980,14 @@ INSERT INTO SM_ACT
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
 	'// Reset the session
-select one session related by self->WorkoutSession[R8.''acts as the stopwatch for''];
+select one session related by self->WorkoutSession[R8.''acts_as_the_stopwatch_for''];
 session.reset();
 
 // Update the UI.
 send UI::setTime(time: self.time);
 select one display related by
-  self->WorkoutSession[R8.''acts as the stopwatch for'']->
-  Display[R7.''current status indicated on''];
+  self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->
+  Display[R7.''current_status_indicated_on''];
 generate Display2:refresh to display;',
 	'',
 	0);
@@ -1180,7 +1180,7 @@ self.time = self.time + timerPeriod;
 
 // Store a new track point.
 select one trackLog related by 
-  self->WorkoutSession[R8.''acts as the stopwatch for'']->TrackLog[R4.''captures path in''];
+  self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->TrackLog[R4.''captures_path_in''];
 trackLog.addTrackPoint();
 
 // Refresh the user interface.

@@ -25,7 +25,7 @@ INSERT INTO O_TFR
 // Create a new track point, retrieving the current location from the GPS.
 create object instance trackPoint of TrackPoint;
 select one workoutTimer related by 
-  self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
+  self->WorkoutSession[R4.''represents_path_for'']->WorkoutTimer[R8.''is_timed_by''];
 trackPoint.time = workoutTimer.time;
 send LOC::getLocation( latitude: trackPoint.latitude, longitude: trackPoint.longitude );
 
@@ -39,14 +39,14 @@ lastLatitude = 0.0;
 lastLongitude = 0.0;  
 if (empty firstPoint)
   isFirstTrackPoint = true;
-  relate self to trackPoint across R1.''has first'';
-  relate self to trackPoint across R3.''has last'';
+  relate self to trackPoint across R1.''has_first'';
+  relate self to trackPoint across R3.''has_last'';
 else 
   // Save last location for use in updating accumulated distance.
   lastLatitude = lastPoint.latitude;
   lastLongitude = lastPoint.longitude;
-  unrelate self from lastPoint across R3.''has last'';
-  relate self to trackPoint across R3.''has last'';
+  unrelate self from lastPoint across R3.''has_last'';
+  relate self to trackPoint across R3.''has_last'';
   relate lastPoint to trackPoint across R2.''follows'';
 end if;
 
@@ -57,7 +57,7 @@ if (not isFirstTrackPoint)
                                      toLat: trackPoint.latitude, toLong: trackPoint.longitude );
 end if;
 
-select one session related by self->WorkoutSession[R4.''represents path for''];
+select one session related by self->WorkoutSession[R4.''represents_path_for''];
 session.accumulatedDistance = session.accumulatedDistance + distance;
 
 // Notify display of of the updated values.
@@ -104,10 +104,10 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'select one timer related by self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
+	'select one timer related by self->WorkoutSession[R4.''represents_path_for'']->WorkoutTimer[R8.''is_timed_by''];
 create object instance lapMarker of LapMarker;
 lapMarker.lapTime = timer.time; 
-relate self to lapMarker across R5.''has laps defined by'';
+relate self to lapMarker across R5.''has_laps_defined_by'';
 
 // Notify display of the new value.
 self.updateDisplay();',
@@ -140,7 +140,7 @@ INSERT INTO O_TFR
 	1,
 	'// Update the display so that newly updated values will be shown.
 select one display related by 
-  self->WorkoutSession[R4.''represents path for'']->Display[R7.''current status indicated on''];
+  self->WorkoutSession[R4.''represents_path_for'']->Display[R7.''current_status_indicated_on''];
 generate Display2:refresh to display;',
 	1,
 	'',
@@ -161,7 +161,7 @@ INSERT INTO O_REF
 	'',
 	'WorkoutSession',
 	'startDate',
-	'R4.''represents path for''');
+	'R4.''represents_path_for''');
 INSERT INTO R_RGO_PROXY
 	VALUES ("d2828038-110a-4559-8452-91651af0adcb",
 	"f84935c8-946a-434d-91c1-1a845ca84868",
@@ -212,7 +212,7 @@ INSERT INTO O_REF
 	'',
 	'WorkoutSession',
 	'startTime',
-	'R4.''represents path for''');
+	'R4.''represents_path_for''');
 INSERT INTO O_RTIDA_PROXY
 	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a",

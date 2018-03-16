@@ -340,13 +340,13 @@ disposition = self.evaluateAchievement();
 if ( (self.disposition != GoalDisposition::Achieving) and (disposition == GoalDisposition::Achieving) )
   // Case 1, create achievement record, store start time, relate it as open record.
   create object instance achievement of Achievement;
-  relate self to achievement across R14.''has open'';
+  relate self to achievement across R14.''has_open'';
   select one workoutTimer related by 
-    self->WorkoutSession[R11.''is currently executing within'']->WorkoutTimer[R8.''is timed by''];
+    self->WorkoutSession[R11.''is_currently_executing_within'']->WorkoutTimer[R8.''is_timed_by''];
   achievement.startTime = workoutTimer.time;
 elif ( (self.disposition == GoalDisposition::Achieving) and (disposition != GoalDisposition::Achieving) )
   // Case 2, store end time, relate as recorded record, unrelate as open record.
-  select one achievement related by self->Achievement[R14.''has open''];
+  select one achievement related by self->Achievement[R14.''has_open''];
   achievement.close();
 end if;
 
@@ -376,20 +376,20 @@ INSERT INTO SM_ACT
 cancelSucceeded = TIM::timer_cancel( timer_inst_ref: self.evaluationTimer );
 
 // If this goal has an open achievement record, close it.
-select one openAchievement related by self->Achievement[R14.''has open''];
+select one openAchievement related by self->Achievement[R14.''has_open''];
 if ( not empty openAchievement )
   openAchievement.close();
 end if;
 
 // Add this goal to the collection of those that have already executed.
-select one session related by self->WorkoutSession[R11.''is currently executing within''];
-relate self to session across R13.''was executed within'';
+select one session related by self->WorkoutSession[R11.''is_currently_executing_within''];
+relate self to session across R13.''was_executed_within'';
 
 // Remove this goal from the collection of currently executing ones.
-unrelate self from session across R11.''is currently executing within'';
+unrelate self from session across R11.''is_currently_executing_within'';
 
 // Find the next goal specification in the sequence and start executing it, if it exists.
-select one currentGoalSpec related by self->GoalSpec[R9.''specified by''];
+select one currentGoalSpec related by self->GoalSpec[R9.''specified_by''];
 
 select any nextGoalSpec related by session->GoalSpec[R10.''includes'']
   where ( selected.sequenceNumber == (currentGoalSpec.sequenceNumber + 1) );
