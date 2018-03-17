@@ -24,7 +24,7 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'',
+	'4.1.17',
 	'pei::pei::pei::functions');
 INSERT INTO DIM_DIA
 	VALUES ("bbd96073-6d0b-464b-8db8-af5c1dea58ef",
@@ -562,7 +562,7 @@ else
   if ( m.department != "MEC" )
     LOG::LogFailure( message:"test1.B7:  Selected incorrect department.");
   else
-    if ( m.works_for_nID != n.nID )
+    if ( m.manages_nID != n.nID )
       LOG::LogFailure( message:"test1.B7a:  M/N referential mismatch");
     end if;
   end if;
@@ -691,11 +691,11 @@ if ( x1.name != "Sevina" )
 end if;
 select any y from instances of friendship;
 select one x related by y->friend[R12.''is_pal_of''];
-if ( x.name != y.pal )
+if ( x.name != y.buddy )
   LOG::LogFailure( message:"test1.X6a:  X/Y referential mismatch" );
 end if;
 select one x related by y->friend[R12.''is_buddy_of''];
-if ( x.name != y.buddy )
+if ( x.name != y.pal )
   LOG::LogFailure( message:"test1.X6b:  X/Y referential mismatch" );
 end if;
 
@@ -713,11 +713,11 @@ if ( cardinality zs < 2 )
 end if;
 select any zz from instances of deal;
 select one z related by zz->dealer[R13.''buys_from''];
-if ( zz.buyer != z.name )
+if ( zz.seller != z.name )
   LOG::LogFailure( message:"test1.Z2a:  Z/ZZ referential mismatch" );
 end if;
 select one z related by zz->dealer[R13.''sells_to''];
-if ( zz.seller != z.name )
+if ( zz.buyer != z.name )
   LOG::LogFailure( message:"test1.Z2b:  Z/ZZ referential mismatch" );
 end if;
 
