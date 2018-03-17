@@ -1,6 +1,7 @@
 MASLLIB=-L/$(HOME)/git/masl/install/lib
+LOG_LOC=../../../masl/EEs/LOG
 MASLINCLUDE=-I/$(HOME)/git/masl/install/include
-CXXFLAGS=$(MASLINCLUDE) -I../LOG/include -Iinclude -fPIC -g -w -fpermissive -Wl,--no-as-needed
+CXXFLAGS=$(MASLINCLUDE) -I$(LOG_LOC)/include -Iinclude -fPIC -g -w -fpermissive -Wl,--no-as-needed
 OUTDIR=bin
 SRCDIR=src
 
@@ -327,34 +328,34 @@ pei_transient_standalone_LIBS=    -lpei_transient -lpei -lLOG_transient -lLOG -l
 all: $(ARTIFACTS)
 
 $(OUTDIR)/pei_sqlite_standalone: $(pei_sqlite_standalone_OBJECTS) $(OUTDIR)/libpei_sqlite.so $(OUTDIR)/libpei.so
-	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin $(pei_sqlite_standalone_OBJECTS) -o $@ $(pei_sqlite_standalone_LIBS)
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin $(pei_sqlite_standalone_OBJECTS) -o $@ $(pei_sqlite_standalone_LIBS)
 
 $(OUTDIR)/pei_transient_standalone: $(pei_transient_standalone_OBJECTS) $(OUTDIR)/libpei_transient.so $(OUTDIR)/libpei.so
-	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin $(pei_transient_standalone_OBJECTS) -o $@ $(pei_transient_standalone_LIBS)
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin $(pei_transient_standalone_OBJECTS) -o $@ $(pei_transient_standalone_LIBS)
 
 $(OUTDIR)/libpei_interface.so: $(pei_interface_OBJECTS)
-	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_interface_OBJECTS) -o $@ $(pei_interface_LIBS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_interface_OBJECTS) -o $@ $(pei_interface_LIBS)
 
 $(OUTDIR)/libpei.so: $(pei_OBJECTS) $(OUTDIR)/libpei_interface.so
-	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_OBJECTS) -o $@ $(pei_LIBS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_OBJECTS) -o $@ $(pei_LIBS)
 
 $(OUTDIR)/libpei_sqlite.so: $(pei_sqlite_OBJECTS) $(OUTDIR)/libpei.so $(OUTDIR)/libpei_interface.so
-	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_sqlite_OBJECTS) -o $@ $(pei_sqlite_LIBS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_sqlite_OBJECTS) -o $@ $(pei_sqlite_LIBS)
 
 $(OUTDIR)/libpei_metadata.so: $(pei_metadata_OBJECTS) $(OUTDIR)/libpei.so $(OUTDIR)/libpei_interface.so
-	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_metadata_OBJECTS) -o $@ $(pei_metadata_LIBS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_metadata_OBJECTS) -o $@ $(pei_metadata_LIBS)
 
 $(OUTDIR)/libpei_if_metadata.so: $(pei_if_metadata_OBJECTS) $(OUTDIR)/libpei_interface.so
-	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_if_metadata_OBJECTS) -o $@ $(pei_if_metadata_LIBS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_if_metadata_OBJECTS) -o $@ $(pei_if_metadata_LIBS)
 
 $(OUTDIR)/libpei_inspector.so: $(pei_inspector_OBJECTS) $(OUTDIR)/libpei.so $(OUTDIR)/libpei_interface.so $(OUTDIR)/libpei_if_inspector.so
-	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_inspector_OBJECTS) -o $@ $(pei_inspector_LIBS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_inspector_OBJECTS) -o $@ $(pei_inspector_LIBS)
 
 $(OUTDIR)/libpei_if_inspector.so: $(pei_if_inspector_OBJECTS)
-	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_if_inspector_OBJECTS) -o $@ $(pei_if_inspector_LIBS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_if_inspector_OBJECTS) -o $@ $(pei_if_inspector_LIBS)
 
 $(OUTDIR)/libpei_transient.so: $(pei_transient_OBJECTS) $(OUTDIR)/libpei.so $(OUTDIR)/libpei_interface.so
-	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L../LOG/bin -shared $(pei_transient_OBJECTS) -o $@ $(pei_transient_LIBS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_transient_OBJECTS) -o $@ $(pei_transient_LIBS)
 
 .o:
 	$(CXX) $(CXXFLAGS) -c $<
