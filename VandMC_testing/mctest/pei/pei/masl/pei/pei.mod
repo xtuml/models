@@ -275,6 +275,8 @@ domain pei is
     buyer: referential ( R13.buys_from.dealer.name ) string;     
     seller: referential ( R13.sells_to.dealer.name ) string;     
     
+    identifier is ( buyer, seller );     
+    
   end object;
   pragma key_letter( "deal" );
   

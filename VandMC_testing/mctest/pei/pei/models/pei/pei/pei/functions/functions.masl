@@ -93,9 +93,9 @@ begin
   k1 := create sports_car( kID => 11, specialcommon => 11, iID => i4.iID );
   k2 := create sports_car( kID => 22, specialcommon => 22, iID => i3.iID );
   k3 := create sports_car( kID => 33, specialcommon => 33, iID => i2.iID );
-  l2 := create convertible( lID => 222, specialL => 222, kID => k3.iID );
-  l3 := create convertible( lID => 333, specialL => 333, kID => k2.iID );
-  l1 := create convertible( lID => 111, specialL => 111, kID => k1.iID );
+  l2 := create convertible( lID => 222, specialL => 222, kID => k3.kID );
+  l3 := create convertible( lID => 333, specialL => 333, kID => k2.kID );
+  l1 := create convertible( lID => 111, specialL => 111, kID => k1.kID );
   link i1 R5.sedan j1;
   link i2 R5.sports_car k3;
   link k2 R5 i3;
@@ -122,11 +122,11 @@ begin
   n4 := create employee( nID => 4, name => "Jenn" );
   n5 := create employee( nID => 5, name => "Cale" );
   n6 := create employee( nID => 6, name => "Chris" );
-  m1 := create report_line( mID => 1, department => "SW", works_for_nID => n1.nID, manages_nID => n3.nID );
-  m2 := create report_line( mID => 2, department => "SW", works_for_nID => n1.nID, manages_nID => n4.nID );
-  m3 := create report_line( mID => 3, department => "HW", works_for_nID => n2.nID, manages_nID => n5.nID );
-  m4 := create report_line( mID => 4, department => "MEC", works_for_nID => n6.nID, manages_nID => n1.nID );
-  m5 := create report_line( mID => 5, department => "MEC", works_for_nID => n6.nID, manages_nID => n2.nID );
+  m1 := create report_line( mID => 1, department => "SW", works_for_nID => n3.nID, manages_nID => n1.nID );
+  m2 := create report_line( mID => 2, department => "SW", works_for_nID => n4.nID, manages_nID => n1.nID );
+  m3 := create report_line( mID => 3, department => "HW", works_for_nID => n5.nID, manages_nID => n2.nID );
+  m4 := create report_line( mID => 4, department => "MEC", works_for_nID => n1.nID, manages_nID => n6.nID );
+  m5 := create report_line( mID => 5, department => "MEC", works_for_nID => n2.nID, manages_nID => n6.nID );
   link n1 R7.manages n3 using m1;   // Pete manages Alex.
   link n1 R7.manages n4 using m2;   // Pete manages Jenn.
   link n5 R7.works_for n2 using m3; // Cale works for Dave.
@@ -143,9 +143,9 @@ begin
   r1 := create license( city => "Indianapolis", pID => p1.pID, qID => q3.qID );
   r2 := create license( city => "Lockport", pID => p3.pID, qID => q1.qID );
   r3 := create license( city => "Battleground", pID => p2.pID, qID => q2.qID );
-  //link p1 R9 q3 using r1; TODO
-  //link q2 R9 p2 using r3;
-  //link p3 R9 q1 using r2;
+  link p1 R9 q3 using r1;
+  link q2 R9 p2 using r3;
+  link p3 R9 q1 using r2;
   
   // AtoD_converter R10 analog_input using sample
   s1 := create AtoD_converter( sID => 1, s => "Rox" );
@@ -183,15 +183,15 @@ begin
   x4 := create friend( name => "Joe", age => 43 );
   x5 := create friend( name => "Scott", age => 42 );
   x6 := create friend( name => "Jason", age => 31 );
-  y1 := create friendship( duration => 1, closeness => 10, buddy => x1.name, pal => x2.name );
-  y2 := create friendship( duration => 2, closeness => 20, buddy => x3.name, pal => x1.name );
-  y3 := create friendship( duration => 3, closeness => 30, buddy => x4.name, pal => x1.name );
+  y1 := create friendship( duration => 1, closeness => 10, buddy => x2.name, pal => x1.name );
+  y2 := create friendship( duration => 2, closeness => 20, buddy => x1.name, pal => x3.name );
+  y3 := create friendship( duration => 3, closeness => 30, buddy => x1.name, pal => x4.name );
   y4 := create friendship( duration => 4, closeness => 40, buddy => x5.name, pal => x1.name );
-  y5 := create friendship( duration => 5, closeness => 50, buddy => x1.name, pal => x6.name );
-  y6 := create friendship( duration => 6, closeness => 60, buddy => x2.name, pal => x3.name );
-  y7 := create friendship( duration => 7, closeness => 70, buddy => x4.name, pal => x5.name );
-  y8 := create friendship( duration => 8, closeness => 80, buddy => x6.name, pal => x4.name );
-  y9 := create friendship( duration => 9, closeness => 90, buddy => x6.name, pal => x5.name );
+  y5 := create friendship( duration => 5, closeness => 50, buddy => x6.name, pal => x1.name );
+  y6 := create friendship( duration => 6, closeness => 60, buddy => x3.name, pal => x2.name );
+  y7 := create friendship( duration => 7, closeness => 70, buddy => x5.name, pal => x4.name );
+  y8 := create friendship( duration => 8, closeness => 80, buddy => x4.name, pal => x6.name );
+  y9 := create friendship( duration => 9, closeness => 90, buddy => x5.name, pal => x6.name );
   // friends of Cort
   link x1 R12.is_buddy_of x2 using y1;
   link x1 R12.is_pal_of x3 using y2;
@@ -211,20 +211,18 @@ begin
   z1 := create dealer( name => "Joe", worth => 1 );
   z2 := create dealer( name => "Pat", worth => 2 );
   z3 := create dealer( name => "Jason", worth => 3 );
-  zz1 := create deal( xaction => 1, value => -1 );
-  zz2 := create deal( xaction => 2, value => 2 );
-  zz3 := create deal( xaction => 3, value => -3 );
-  zz4 := create deal( xaction => 4, value => 4 );
-  zz5 := create deal( xaction => 5, value => -5 );
-  zz6 := create deal( xaction => 6, value => 6 );
-  zz7 := create deal( xaction => 7, value => -7 );
+  zz1 := create deal( xaction => 1, value => -1, buyer => z1.name, seller => z2.name );
+  zz2 := create deal( xaction => 2, value => 2, buyer => z3.name, seller => z1.name );
+  zz3 := create deal( xaction => 3, value => -3, buyer => z2.name, seller => z3.name );
+  zz4 := create deal( xaction => 4, value => 4, buyer => z1.name, seller => z3.name );
+  zz5 := create deal( xaction => 5, value => -5, buyer => z2.name, seller => z1.name );
+  zz6 := create deal( xaction => 6, value => 6, buyer => z3.name, seller => z2.name );
   link z1 R13.sells_to z2 using zz1;
   link z1 R13.buys_from z3 using zz2;
   link z2 R13.sells_to z3 using zz3;
   link z3 R13.buys_from z1 using zz4;
   link z2 R13.sells_to z1 using zz5;
   link z2 R13.buys_from z3 using zz6;
-  link z1 R13.sells_to z2 using zz7;
 
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
