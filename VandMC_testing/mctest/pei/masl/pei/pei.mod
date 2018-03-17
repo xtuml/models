@@ -1,32 +1,32 @@
 domain pei is
   
+  object AtoD_converter;
+  object analog_input;
+  object automobile;
   object car;
+  object connection;
+  object convertible;
   object dealer;
   object device;
+  object dog;
   object dog_owner;
   object employee;
   object friend;
-  object friendship;
   object group_member;
   object host;
+  object jurisdiction;
+  object license;
+  object marriage;
   object person;
-  object report_line;
+  object plug;
+  object sample;
   object sedan;
   object socket;
   object sports_car;
   object transmission;
-  object sample;
-  object plug;
-  object marriage;
-  object license;
-  object jurisdiction;
-  object dog;
   object deal;
-  object convertible;
-  object connection;
-  object automobile;
-  object analog_input;
-  object AtoD_converter;
+  object friendship;
+  object report_line;
   
   //!Arbitrary ID with core data type of unique_id (integer in MASL).
   public type arbitrary_id is integer;   
@@ -86,6 +86,30 @@ domain pei is
   
   
   
+  object AtoD_converter is
+    
+    sID: preferred arbitrary_id;     
+    s: string;     
+    
+  end object;
+  pragma key_letter( "AtoD_converter" );
+  
+  object analog_input is
+    
+    tID: preferred arbitrary_id;     
+    t: string;     
+    
+  end object;
+  pragma key_letter( "analog_input" );
+  
+  object automobile is
+    
+    pID: preferred arbitrary_id;     
+    eyedee: string;     
+    
+  end object;
+  pragma key_letter( "automobile" );
+  
   object car is
     
     iID: preferred integer;     
@@ -93,6 +117,17 @@ domain pei is
     
   end object;
   pragma key_letter( "car" );
+  
+  object connection is
+    
+    gID: preferred integer;     
+    eID: referential ( R3.connects_to.host.eID ) integer;     
+    fID: referential ( R3.connects_to.device.fID ) integer;     
+    
+    identifier is ( eID, fID );     
+    
+  end object;
+  pragma key_letter( "connection" );
   
   object dealer is
     
@@ -109,6 +144,14 @@ domain pei is
     
   end object;
   pragma key_letter( "device" );
+  
+  object dog is
+    
+    cID: preferred integer;     
+    dID: referential ( R2.is_owned_by.dog_owner.dID ) integer;     
+    
+  end object;
+  pragma key_letter( "dog" );
   
   object dog_owner is
     
@@ -134,16 +177,6 @@ domain pei is
   end object;
   pragma key_letter( "friend" );
   
-  object friendship is
-    
-    duration: integer;     
-    closeness: integer;     
-    buddy: preferred referential ( R12.is_buddy_of.friend.name ) string;     
-    pal: preferred referential ( R12.is_pal_of.friend.name ) string;     
-    
-  end object;
-  pragma key_letter( "friendship" );
-  
   object group_member is
     
     oID: preferred integer;     
@@ -161,6 +194,36 @@ domain pei is
   end object;
   pragma key_letter( "host" );
   
+  object jurisdiction is
+    
+    qID: preferred arbitrary_id;     
+    deeeye: string;     
+    
+  end object;
+  pragma key_letter( "jurisdiction" );
+  
+  object license is
+    
+    rID: arbitrary_id;     
+    city: string;     
+    pID: preferred referential ( R9.licenses.automobile.pID ) arbitrary_id;     
+    qID: preferred referential ( R9.is_licensed_in.jurisdiction.qID ) arbitrary_id;     
+    
+  end object;
+  pragma key_letter( "license" );
+  
+  object marriage is
+    
+    vID: preferred arbitrary_id;     
+    year: integer;     
+    wife: referential ( R11.is_husband_of.person.name ) string;     
+    husband: referential ( R11.is_wife_of.person.name ) string;     
+    
+    identifier is ( wife, husband );     
+    
+  end object;
+  pragma key_letter( "marriage" );
+  
   object person is
     
     name: preferred string;     
@@ -168,17 +231,26 @@ domain pei is
   end object;
   pragma key_letter( "person" );
   
-  object report_line is
+  object plug is
     
-    mID: preferred integer;     
-    works_for_nID: referential ( R7.manages.employee.nID ) integer;     
-    manages_nID: referential ( R7.works_for.employee.nID ) integer;     
-    department: string;     
-    
-    identifier is ( manages_nID, works_for_nID );     
+    aID: preferred integer;     
+    i: integer;     
+    bID: referential ( R1.enters.socket.bID ) integer;     
     
   end object;
-  pragma key_letter( "report_line" );
+  pragma key_letter( "plug" );
+  
+  object sample is
+    
+    uID: preferred arbitrary_id;     
+    s: string;     
+    sID: referential ( R10.is_sampled_by.AtoD_converter.sID ) arbitrary_id;     
+    tID: referential ( R10.samples.analog_input.tID ) arbitrary_id;     
+    
+    identifier is ( sID, tID );     
+    
+  end object;
+  pragma key_letter( "sample" );
   
   object socket is
     
@@ -209,111 +281,39 @@ domain pei is
   end object;
   pragma key_letter( "transmission" );
   
-  object sample is
-    
-    uID: preferred arbitrary_id;     
-    s: string;     
-    sID: referential ( R10.is_sampled_by.AtoD_converter.sID ) arbitrary_id;     
-    tID: referential ( R10.samples.analog_input.tID ) arbitrary_id;     
-    
-    identifier is ( sID, tID );     
-    
-  end object;
-  pragma key_letter( "sample" );
-  
-  object plug is
-    
-    aID: preferred integer;     
-    i: integer;     
-    bID: referential ( R1.enters.socket.bID ) integer;     
-    
-  end object;
-  pragma key_letter( "plug" );
-  
-  object marriage is
-    
-    vID: preferred arbitrary_id;     
-    year: integer;     
-    wife: referential ( R11.is_husband_of.person.name ) string;     
-    husband: referential ( R11.is_wife_of.person.name ) string;     
-    
-    identifier is ( wife, husband );     
-    
-  end object;
-  pragma key_letter( "marriage" );
-  
-  object license is
-    
-    rID: arbitrary_id;     
-    city: string;     
-    pID: preferred referential ( R9.licenses.automobile.pID ) arbitrary_id;     
-    qID: preferred referential ( R9.is_licensed_in.jurisdiction.qID ) arbitrary_id;     
-    
-  end object;
-  pragma key_letter( "license" );
-  
-  object jurisdiction is
-    
-    qID: preferred arbitrary_id;     
-    deeeye: string;     
-    
-  end object;
-  pragma key_letter( "jurisdiction" );
-  
-  object dog is
-    
-    cID: preferred integer;     
-    dID: referential ( R2.is_owned_by.dog_owner.dID ) integer;     
-    
-  end object;
-  pragma key_letter( "dog" );
-  
   object deal is
     
     xaction: preferred integer;     
     value: integer;     
-    buyer: referential ( R13.buys_from.dealer.name ) string;     
-    seller: referential ( R13.sells_to.dealer.name ) string;     
+    seller: referential ( R13.buys_from.dealer.name ) string;     
+    buyer: referential ( R13.sells_to.dealer.name ) string;     
     
-    identifier is ( buyer, seller );     
+    identifier is ( seller, buyer );     
     
   end object;
   pragma key_letter( "deal" );
   
-  object connection is
+  object friendship is
     
-    gID: preferred integer;     
-    eID: referential ( R3.connects_to.host.eID ) integer;     
-    fID: referential ( R3.connects_to.device.fID ) integer;     
-    
-    identifier is ( eID, fID );     
+    duration: integer;     
+    closeness: integer;     
+    pal: preferred referential ( R12.is_buddy_of.friend.name ) string;     
+    buddy: preferred referential ( R12.is_pal_of.friend.name ) string;     
     
   end object;
-  pragma key_letter( "connection" );
+  pragma key_letter( "friendship" );
   
-  object automobile is
+  object report_line is
     
-    pID: preferred arbitrary_id;     
-    eyedee: string;     
+    mID: preferred integer;     
+    manages_nID: referential ( R7.manages.employee.nID ) integer;     
+    works_for_nID: referential ( R7.works_for.employee.nID ) integer;     
+    department: string;     
     
-  end object;
-  pragma key_letter( "automobile" );
-  
-  object analog_input is
-    
-    tID: preferred arbitrary_id;     
-    t: string;     
+    identifier is ( works_for_nID, manages_nID );     
     
   end object;
-  pragma key_letter( "analog_input" );
-  
-  object AtoD_converter is
-    
-    sID: preferred arbitrary_id;     
-    s: string;     
-    
-  end object;
-  pragma key_letter( "AtoD_converter" );
+  pragma key_letter( "report_line" );
   
   object sedan is
     

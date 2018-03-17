@@ -308,7 +308,7 @@ begin
     if ( m.department /= "MEC" ) then
       LOG::LogFailure( "test1.B7:  Selected incorrect department.");
     else
-      if ( m.works_for_nID /= n.nID ) then
+      if ( m.manages_nID /= n.nID ) then
         LOG::LogFailure( "test1.B7a:  M/N referential mismatch");
       end if;
     end if;
@@ -437,11 +437,11 @@ begin
   end if;
   y := find_one friendship();
   x := y->R12.is_pal_of.friend;
-  if ( x.name /= y.pal ) then
+  if ( x.name /= y.buddy ) then
     LOG::LogFailure( "test1.X6a:  X/Y referential mismatch" );
   end if;
   x := y->R12.is_buddy_of.friend;
-  if ( x.name /= y.buddy ) then
+  if ( x.name /= y.pal ) then
     LOG::LogFailure( "test1.X6b:  X/Y referential mismatch" );
   end if;
   
@@ -459,11 +459,11 @@ begin
   end if;
   zz := find_one deal();
   z := zz->R13.buys_from;
-  if ( zz.buyer /= z.name ) then
+  if ( zz.seller /= z.name ) then
     LOG::LogFailure( "test1.Z2a:  Z/ZZ referential mismatch" );
   end if;
   z := zz->R13.sells_to.dealer;
-  if ( zz.seller /= z.name ) then
+  if ( zz.buyer /= z.name ) then
     LOG::LogFailure( "test1.Z2b:  Z/ZZ referential mismatch" );
   end if;
   

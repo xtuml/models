@@ -1,31 +1,31 @@
 domain pei is
+  object AtoD_converter;
+  object analog_input;
+  object automobile;
   object car;
+  object connection;
+  object convertible;
+  object deal;
   object dealer;
   object device;
+  object dog;
   object dog_owner;
   object employee;
   object friend;
   object friendship;
   object group_member;
   object host;
+  object jurisdiction;
+  object license;
+  object marriage;
   object person;
+  object plug;
   object report_line;
+  object sample;
   object sedan;
   object socket;
   object sports_car;
   object transmission;
-  object sample;
-  object plug;
-  object marriage;
-  object license;
-  object jurisdiction;
-  object dog;
-  object deal;
-  object convertible;
-  object connection;
-  object automobile;
-  object analog_input;
-  object AtoD_converter;
 //!Arbitrary ID with core data type of unique_id (integer in MASL).
   public type arbitrary_id is integer
   ;
@@ -75,11 +75,41 @@ pragma startup ( true );
   relationship R13 is dealer conditionally buys_from many dealer,
     dealer conditionally sells_to many dealer
     using deal;
+  object AtoD_converter is
+    sID : preferred  arbitrary_id;
+    s :   string;
+  end object;
+pragma key_letter ( "AtoD_converter" ); 
+  object analog_input is
+    tID : preferred  arbitrary_id;
+    t :   string;
+  end object;
+pragma key_letter ( "analog_input" ); 
+  object automobile is
+    pID : preferred  arbitrary_id;
+    eyedee :   string;
+  end object;
+pragma key_letter ( "automobile" ); 
   object car is
     iID : preferred  integer;
     common :   integer;
   end object;
 pragma key_letter ( "car" ); 
+  object connection is
+    gID : preferred  integer;
+    eID :   referential ( R3.connects_to.host.eID ) integer;
+    fID :   referential ( R3.connects_to.device.fID ) integer;
+    identifier is ( eID, fID );
+  end object;
+pragma key_letter ( "connection" ); 
+  object deal is
+    xaction : preferred  integer;
+    value :   integer;
+    buyer :   referential ( R13.buys_from.dealer.name ) string;
+    seller :   referential ( R13.sells_to.dealer.name ) string;
+    identifier is ( buyer, seller );
+  end object;
+pragma key_letter ( "deal" ); 
   object dealer is
     name : preferred  string;
     worth :   integer;
@@ -90,6 +120,11 @@ pragma key_letter ( "dealer" );
     enabled :   boolean;
   end object;
 pragma key_letter ( "device" ); 
+  object dog is
+    cID : preferred  integer;
+    dID :   referential ( R2.is_owned_by.dog_owner.dID ) integer;
+  end object;
+pragma key_letter ( "dog" ); 
   object dog_owner is
     dID : preferred  integer;
     name :   string;
@@ -123,10 +158,36 @@ pragma key_letter ( "group_member" );
     ratio :   real;
   end object;
 pragma key_letter ( "host" ); 
+  object jurisdiction is
+    qID : preferred  arbitrary_id;
+    deeeye :   string;
+  end object;
+pragma key_letter ( "jurisdiction" ); 
+  object license is
+    rID :   arbitrary_id;
+    city :   string;
+    pID : preferred  referential ( R9.licenses.automobile.pID ) arbitrary_id;
+    qID : preferred  referential ( R9.is_licensed_in.jurisdiction.qID ) arbitrary_id;
+  end object;
+pragma key_letter ( "license" ); 
+  object marriage is
+    vID : preferred  arbitrary_id;
+    year :   integer;
+    wife :   referential ( R11.is_husband_of.person.name ) string;
+    husband :   referential ( R11.is_wife_of.person.name ) string;
+    identifier is ( wife, husband );
+  end object;
+pragma key_letter ( "marriage" ); 
   object person is
     name : preferred  string;
   end object;
 pragma key_letter ( "person" ); 
+  object plug is
+    aID : preferred  integer;
+    i :   integer;
+    bID :   referential ( R1.enters.socket.bID ) integer;
+  end object;
+pragma key_letter ( "plug" ); 
   object report_line is
     mID : preferred  integer;
     works_for_nID :   referential ( R7.manages.employee.nID ) integer;
@@ -135,6 +196,14 @@ pragma key_letter ( "person" );
     identifier is ( manages_nID, works_for_nID );
   end object;
 pragma key_letter ( "report_line" ); 
+  object sample is
+    uID : preferred  arbitrary_id;
+    s :   string;
+    sID :   referential ( R10.is_sampled_by.AtoD_converter.sID ) arbitrary_id;
+    tID :   referential ( R10.samples.analog_input.tID ) arbitrary_id;
+    identifier is ( sID, tID );
+  end object;
+pragma key_letter ( "sample" ); 
   object socket is
     bID : preferred  integer;
     i :   integer;
@@ -159,75 +228,6 @@ pragma key_letter ( "socket" );
     follows :   referential ( R4.follows.transmission.hID ) integer;
   end object;
 pragma key_letter ( "transmission" ); 
-  object sample is
-    uID : preferred  arbitrary_id;
-    s :   string;
-    sID :   referential ( R10.is_sampled_by.AtoD_converter.sID ) arbitrary_id;
-    tID :   referential ( R10.samples.analog_input.tID ) arbitrary_id;
-    identifier is ( sID, tID );
-  end object;
-pragma key_letter ( "sample" ); 
-  object plug is
-    aID : preferred  integer;
-    i :   integer;
-    bID :   referential ( R1.enters.socket.bID ) integer;
-  end object;
-pragma key_letter ( "plug" ); 
-  object marriage is
-    vID : preferred  arbitrary_id;
-    year :   integer;
-    wife :   referential ( R11.is_husband_of.person.name ) string;
-    husband :   referential ( R11.is_wife_of.person.name ) string;
-    identifier is ( wife, husband );
-  end object;
-pragma key_letter ( "marriage" ); 
-  object license is
-    rID :   arbitrary_id;
-    city :   string;
-    pID : preferred  referential ( R9.licenses.automobile.pID ) arbitrary_id;
-    qID : preferred  referential ( R9.is_licensed_in.jurisdiction.qID ) arbitrary_id;
-  end object;
-pragma key_letter ( "license" ); 
-  object jurisdiction is
-    qID : preferred  arbitrary_id;
-    deeeye :   string;
-  end object;
-pragma key_letter ( "jurisdiction" ); 
-  object dog is
-    cID : preferred  integer;
-    dID :   referential ( R2.is_owned_by.dog_owner.dID ) integer;
-  end object;
-pragma key_letter ( "dog" ); 
-  object deal is
-    xaction : preferred  integer;
-    value :   integer;
-    buyer :   referential ( R13.buys_from.dealer.name ) string;
-    seller :   referential ( R13.sells_to.dealer.name ) string;
-    identifier is ( buyer, seller );
-  end object;
-pragma key_letter ( "deal" ); 
-  object connection is
-    gID : preferred  integer;
-    eID :   referential ( R3.connects_to.host.eID ) integer;
-    fID :   referential ( R3.connects_to.device.fID ) integer;
-    identifier is ( eID, fID );
-  end object;
-pragma key_letter ( "connection" ); 
-  object automobile is
-    pID : preferred  arbitrary_id;
-    eyedee :   string;
-  end object;
-pragma key_letter ( "automobile" ); 
-  object analog_input is
-    tID : preferred  arbitrary_id;
-    t :   string;
-  end object;
-pragma key_letter ( "analog_input" ); 
-  object AtoD_converter is
-    sID : preferred  arbitrary_id;
-    s :   string;
-  end object;
-pragma key_letter ( "AtoD_converter" ); 
   object sedan is
     jID : preferred  integer;
     specialJ :   integer;
