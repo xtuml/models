@@ -1,0 +1,364 @@
+MASLLIB=-L/$(HOME)/git/masl/install/lib
+LOG_LOC=../../../masl/EEs/LOG
+MASLINCLUDE=-I/$(HOME)/git/masl/install/include
+CXXFLAGS=$(MASLINCLUDE) -I$(LOG_LOC)/include -Iinclude -fPIC -g -w -fpermissive -Wl,--no-as-needed
+OUTDIR=bin
+SRCDIR=src
+
+ARTIFACTS=                        $(OUTDIR)/libpei_interface.so \
+                                  $(OUTDIR)/libpei.so \
+                                  $(OUTDIR)/libpei_sqlite.so \
+                                  $(OUTDIR)/libpei_metadata.so \
+                                  $(OUTDIR)/libpei_if_metadata.so \
+                                  $(OUTDIR)/libpei_inspector.so \
+                                  $(OUTDIR)/libpei_if_inspector.so \
+                                  $(OUTDIR)/libpei_transient.so \
+                                  $(OUTDIR)/pei_sqlite_standalone \
+                                  $(OUTDIR)/pei_transient_standalone
+
+pei_interface_SOURCES=            $(SRCDIR)/__pei_types.cc \
+                                  $(SRCDIR)/__pei_interface.cc
+pei_interface_OBJECTS=            $(pei_interface_SOURCES:.cc=.o)
+pei_interface_LIBS=               -lswa -lasn1
+
+pei_SOURCES=                      $(SRCDIR)/__pei.cc \
+                                  $(SRCDIR)/__pei_private_types.cc \
+                                  $(SRCDIR)/__pei__car.cc \
+                                  $(SRCDIR)/__pei__dealer.cc \
+                                  $(SRCDIR)/__pei__device.cc \
+                                  $(SRCDIR)/__pei__dog_owner.cc \
+                                  $(SRCDIR)/__pei__employee.cc \
+                                  $(SRCDIR)/__pei__friend.cc \
+                                  $(SRCDIR)/__pei__friendship.cc \
+                                  $(SRCDIR)/__pei__group_member.cc \
+                                  $(SRCDIR)/__pei__host.cc \
+                                  $(SRCDIR)/__pei__person.cc \
+                                  $(SRCDIR)/__pei__report_line.cc \
+                                  $(SRCDIR)/__pei__sedan.cc \
+                                  $(SRCDIR)/__pei__socket.cc \
+                                  $(SRCDIR)/__pei__sports_car.cc \
+                                  $(SRCDIR)/__pei__transmission.cc \
+                                  $(SRCDIR)/__pei__sample.cc \
+                                  $(SRCDIR)/__pei__plug.cc \
+                                  $(SRCDIR)/__pei__marriage.cc \
+                                  $(SRCDIR)/__pei__license.cc \
+                                  $(SRCDIR)/__pei__jurisdiction.cc \
+                                  $(SRCDIR)/__pei__dog.cc \
+                                  $(SRCDIR)/__pei__deal.cc \
+                                  $(SRCDIR)/__pei__convertible.cc \
+                                  $(SRCDIR)/__pei__connection.cc \
+                                  $(SRCDIR)/__pei__automobile.cc \
+                                  $(SRCDIR)/__pei__analog_input.cc \
+                                  $(SRCDIR)/__pei__AtoD_converter.cc \
+                                  $(SRCDIR)/__pei__carPopulation.cc \
+                                  $(SRCDIR)/__pei__dealerPopulation.cc \
+                                  $(SRCDIR)/__pei__devicePopulation.cc \
+                                  $(SRCDIR)/__pei__dog_ownerPopulation.cc \
+                                  $(SRCDIR)/__pei__employeePopulation.cc \
+                                  $(SRCDIR)/__pei__friendPopulation.cc \
+                                  $(SRCDIR)/__pei__friendshipPopulation.cc \
+                                  $(SRCDIR)/__pei__group_memberPopulation.cc \
+                                  $(SRCDIR)/__pei__hostPopulation.cc \
+                                  $(SRCDIR)/__pei__personPopulation.cc \
+                                  $(SRCDIR)/__pei__report_linePopulation.cc \
+                                  $(SRCDIR)/__pei__sedanPopulation.cc \
+                                  $(SRCDIR)/__pei__socketPopulation.cc \
+                                  $(SRCDIR)/__pei__sports_carPopulation.cc \
+                                  $(SRCDIR)/__pei__transmissionPopulation.cc \
+                                  $(SRCDIR)/__pei__samplePopulation.cc \
+                                  $(SRCDIR)/__pei__plugPopulation.cc \
+                                  $(SRCDIR)/__pei__marriagePopulation.cc \
+                                  $(SRCDIR)/__pei__licensePopulation.cc \
+                                  $(SRCDIR)/__pei__jurisdictionPopulation.cc \
+                                  $(SRCDIR)/__pei__dogPopulation.cc \
+                                  $(SRCDIR)/__pei__dealPopulation.cc \
+                                  $(SRCDIR)/__pei__convertiblePopulation.cc \
+                                  $(SRCDIR)/__pei__connectionPopulation.cc \
+                                  $(SRCDIR)/__pei__automobilePopulation.cc \
+                                  $(SRCDIR)/__pei__analog_inputPopulation.cc \
+                                  $(SRCDIR)/__pei__AtoD_converterPopulation.cc \
+                                  $(SRCDIR)/__pei__socket__first.cc \
+                                  $(SRCDIR)/__pei__socket__second.cc \
+                                  $(SRCDIR)/__pei__socket__third.cc \
+                                  $(SRCDIR)/__pei__do_creates.cc \
+                                  $(SRCDIR)/__pei__setup.cc \
+                                  $(SRCDIR)/__pei__test.cc \
+                                  $(SRCDIR)/__pei__test1.cc \
+                                  $(SRCDIR)/__pei__test2.cc \
+                                  $(SRCDIR)/__pei__xit.cc \
+                                  $(SRCDIR)/__pei__start_test.cc
+pei_OBJECTS=                      $(pei_SOURCES:.cc=.o)
+pei_LIBS=                         -lswa -lpei_interface -lboost_system -lLOG_interface
+
+pei_sqlite_SOURCES=               $(SRCDIR)/Sqlite__pei__R1MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R2MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R4MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R3MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R5MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R6MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R7MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R8MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R9MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R10MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R11MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R12MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__R13MapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__car.cc \
+                                  $(SRCDIR)/Sqlite__pei__carPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__carMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__carMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__dealer.cc \
+                                  $(SRCDIR)/Sqlite__pei__dealerPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__dealerMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__dealerMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__device.cc \
+                                  $(SRCDIR)/Sqlite__pei__devicePopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__deviceMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__deviceMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__dog_owner.cc \
+                                  $(SRCDIR)/Sqlite__pei__dog_ownerPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__dog_ownerMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__dog_ownerMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__employee.cc \
+                                  $(SRCDIR)/Sqlite__pei__employeePopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__employeeMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__employeeMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__friend.cc \
+                                  $(SRCDIR)/Sqlite__pei__friendPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__friendMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__friendMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__friendship.cc \
+                                  $(SRCDIR)/Sqlite__pei__friendshipPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__friendshipMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__friendshipMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__group_member.cc \
+                                  $(SRCDIR)/Sqlite__pei__group_memberPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__group_memberMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__group_memberMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__host.cc \
+                                  $(SRCDIR)/Sqlite__pei__hostPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__hostMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__hostMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__person.cc \
+                                  $(SRCDIR)/Sqlite__pei__personPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__personMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__personMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__report_line.cc \
+                                  $(SRCDIR)/Sqlite__pei__report_linePopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__report_lineMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__report_lineMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__sedan.cc \
+                                  $(SRCDIR)/Sqlite__pei__sedanPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__sedanMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__sedanMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__socket.cc \
+                                  $(SRCDIR)/Sqlite__pei__socketPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__socketMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__socketMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__sports_car.cc \
+                                  $(SRCDIR)/Sqlite__pei__sports_carPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__sports_carMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__sports_carMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__transmission.cc \
+                                  $(SRCDIR)/Sqlite__pei__transmissionPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__transmissionMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__transmissionMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__sample.cc \
+                                  $(SRCDIR)/Sqlite__pei__samplePopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__sampleMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__sampleMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__plug.cc \
+                                  $(SRCDIR)/Sqlite__pei__plugPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__plugMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__plugMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__marriage.cc \
+                                  $(SRCDIR)/Sqlite__pei__marriagePopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__marriageMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__marriageMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__license.cc \
+                                  $(SRCDIR)/Sqlite__pei__licensePopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__licenseMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__licenseMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__jurisdiction.cc \
+                                  $(SRCDIR)/Sqlite__pei__jurisdictionPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__jurisdictionMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__jurisdictionMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__dog.cc \
+                                  $(SRCDIR)/Sqlite__pei__dogPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__dogMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__dogMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__deal.cc \
+                                  $(SRCDIR)/Sqlite__pei__dealPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__dealMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__dealMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__convertible.cc \
+                                  $(SRCDIR)/Sqlite__pei__convertiblePopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__convertibleMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__convertibleMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__connection.cc \
+                                  $(SRCDIR)/Sqlite__pei__connectionPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__connectionMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__connectionMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__automobile.cc \
+                                  $(SRCDIR)/Sqlite__pei__automobilePopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__automobileMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__automobileMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__analog_input.cc \
+                                  $(SRCDIR)/Sqlite__pei__analog_inputPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__analog_inputMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__analog_inputMapperSql.cc \
+                                  $(SRCDIR)/Sqlite__pei__AtoD_converter.cc \
+                                  $(SRCDIR)/Sqlite__pei__AtoD_converterPopulation.cc \
+                                  $(SRCDIR)/Sqlite__pei__AtoD_converterMapper.cc \
+                                  $(SRCDIR)/Sqlite__pei__AtoD_converterMapperSql.cc
+pei_sqlite_OBJECTS=               $(pei_sqlite_SOURCES:.cc=.o)
+pei_sqlite_LIBS=                  -lpei -lsqlite -lasn1 -lboost_system -lswa -lsql -lpei_interface
+
+pei_metadata_SOURCES=             $(SRCDIR)/MetaData__pei.cc
+pei_metadata_OBJECTS=             $(pei_metadata_SOURCES:.cc=.o)
+pei_metadata_LIBS=                -lMetaData -lswa -lpei_interface -lpei
+
+pei_if_metadata_SOURCES=          $(SRCDIR)/MetaData__if__pei.cc
+pei_if_metadata_OBJECTS=          $(pei_if_metadata_SOURCES:.cc=.o)
+pei_if_metadata_LIBS=             -lMetaData -lswa -lpei_interface
+
+pei_inspector_SOURCES=            $(SRCDIR)/Inspector__pei.cc \
+                                  $(SRCDIR)/Inspector_private_types__pei.cc \
+                                  $(SRCDIR)/Inspector__pei__car.cc \
+                                  $(SRCDIR)/Inspector__pei__dealer.cc \
+                                  $(SRCDIR)/Inspector__pei__device.cc \
+                                  $(SRCDIR)/Inspector__pei__dog_owner.cc \
+                                  $(SRCDIR)/Inspector__pei__employee.cc \
+                                  $(SRCDIR)/Inspector__pei__friend.cc \
+                                  $(SRCDIR)/Inspector__pei__friendship.cc \
+                                  $(SRCDIR)/Inspector__pei__group_member.cc \
+                                  $(SRCDIR)/Inspector__pei__host.cc \
+                                  $(SRCDIR)/Inspector__pei__person.cc \
+                                  $(SRCDIR)/Inspector__pei__report_line.cc \
+                                  $(SRCDIR)/Inspector__pei__sedan.cc \
+                                  $(SRCDIR)/Inspector__pei__socket.cc \
+                                  $(SRCDIR)/Inspector__pei__sports_car.cc \
+                                  $(SRCDIR)/Inspector__pei__transmission.cc \
+                                  $(SRCDIR)/Inspector__pei__sample.cc \
+                                  $(SRCDIR)/Inspector__pei__plug.cc \
+                                  $(SRCDIR)/Inspector__pei__marriage.cc \
+                                  $(SRCDIR)/Inspector__pei__license.cc \
+                                  $(SRCDIR)/Inspector__pei__jurisdiction.cc \
+                                  $(SRCDIR)/Inspector__pei__dog.cc \
+                                  $(SRCDIR)/Inspector__pei__deal.cc \
+                                  $(SRCDIR)/Inspector__pei__convertible.cc \
+                                  $(SRCDIR)/Inspector__pei__connection.cc \
+                                  $(SRCDIR)/Inspector__pei__automobile.cc \
+                                  $(SRCDIR)/Inspector__pei__analog_input.cc \
+                                  $(SRCDIR)/Inspector__pei__AtoD_converter.cc
+pei_inspector_OBJECTS=            $(pei_inspector_SOURCES:.cc=.o)
+pei_inspector_LIBS=               -lpei_if_inspector -lInspector -lboost_system -lswa -lpei_interface -lpei
+
+pei_if_inspector_SOURCES=         $(SRCDIR)/Inspector_types__pei.cc
+pei_if_inspector_OBJECTS=         $(pei_if_inspector_SOURCES:.cc=.o)
+pei_if_inspector_LIBS=            -lInspector
+
+pei_transient_SOURCES=            $(SRCDIR)/Transient__pei__car.cc \
+                                  $(SRCDIR)/Transient__pei__carPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__dealer.cc \
+                                  $(SRCDIR)/Transient__pei__dealerPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__device.cc \
+                                  $(SRCDIR)/Transient__pei__devicePopulation.cc \
+                                  $(SRCDIR)/Transient__pei__dog_owner.cc \
+                                  $(SRCDIR)/Transient__pei__dog_ownerPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__employee.cc \
+                                  $(SRCDIR)/Transient__pei__employeePopulation.cc \
+                                  $(SRCDIR)/Transient__pei__friend.cc \
+                                  $(SRCDIR)/Transient__pei__friendPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__friendship.cc \
+                                  $(SRCDIR)/Transient__pei__friendshipPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__group_member.cc \
+                                  $(SRCDIR)/Transient__pei__group_memberPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__host.cc \
+                                  $(SRCDIR)/Transient__pei__hostPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__person.cc \
+                                  $(SRCDIR)/Transient__pei__personPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__report_line.cc \
+                                  $(SRCDIR)/Transient__pei__report_linePopulation.cc \
+                                  $(SRCDIR)/Transient__pei__sedan.cc \
+                                  $(SRCDIR)/Transient__pei__sedanPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__socket.cc \
+                                  $(SRCDIR)/Transient__pei__socketPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__sports_car.cc \
+                                  $(SRCDIR)/Transient__pei__sports_carPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__transmission.cc \
+                                  $(SRCDIR)/Transient__pei__transmissionPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__sample.cc \
+                                  $(SRCDIR)/Transient__pei__samplePopulation.cc \
+                                  $(SRCDIR)/Transient__pei__plug.cc \
+                                  $(SRCDIR)/Transient__pei__plugPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__marriage.cc \
+                                  $(SRCDIR)/Transient__pei__marriagePopulation.cc \
+                                  $(SRCDIR)/Transient__pei__license.cc \
+                                  $(SRCDIR)/Transient__pei__licensePopulation.cc \
+                                  $(SRCDIR)/Transient__pei__jurisdiction.cc \
+                                  $(SRCDIR)/Transient__pei__jurisdictionPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__dog.cc \
+                                  $(SRCDIR)/Transient__pei__dogPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__deal.cc \
+                                  $(SRCDIR)/Transient__pei__dealPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__convertible.cc \
+                                  $(SRCDIR)/Transient__pei__convertiblePopulation.cc \
+                                  $(SRCDIR)/Transient__pei__connection.cc \
+                                  $(SRCDIR)/Transient__pei__connectionPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__automobile.cc \
+                                  $(SRCDIR)/Transient__pei__automobilePopulation.cc \
+                                  $(SRCDIR)/Transient__pei__analog_input.cc \
+                                  $(SRCDIR)/Transient__pei__analog_inputPopulation.cc \
+                                  $(SRCDIR)/Transient__pei__AtoD_converter.cc \
+                                  $(SRCDIR)/Transient__pei__AtoD_converterPopulation.cc
+pei_transient_OBJECTS=            $(pei_transient_SOURCES:.cc=.o)
+pei_transient_LIBS=               -ltransient -lpei -lswa -lboost_system -lpei_interface
+
+pei_sqlite_standalone_SOURCES=    $(SRCDIR)/initStandalone.cc
+pei_sqlite_standalone_OBJECTS=    $(pei_sqlite_standalone_SOURCES:.cc=.o)
+pei_sqlite_standalone_LIBS=       -lpei_sqlite -lpei -lLOG_sqlite -lLOG -lLogger_sqlite -lLogger -lFormat_sqlite -lFormat -lswa -llogging \
+                                  -lsqlite -lasn1 -lsql -lpei_interface -lLOG_interface -lLogger_interface -lFormat_interface
+
+pei_transient_standalone_SOURCES= $(SRCDIR)/initStandalone.cc
+pei_transient_standalone_OBJECTS= $(pei_transient_standalone_SOURCES:.cc=.o)
+pei_transient_standalone_LIBS=    -lpei_transient -lpei -lLOG_transient -lLOG -lLogger_transient -lFormat_transient -lLogger -lFormat -lswa -llogging \
+                                  -ltransient -lpei_interface -lLOG_interface -lLogger_interface -lFormat_interface -lasn1
+
+all: $(ARTIFACTS)
+
+$(OUTDIR)/pei_sqlite_standalone: $(pei_sqlite_standalone_OBJECTS) $(OUTDIR)/libpei_sqlite.so $(OUTDIR)/libpei.so
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin $(pei_sqlite_standalone_OBJECTS) -o $@ $(pei_sqlite_standalone_LIBS)
+
+$(OUTDIR)/pei_transient_standalone: $(pei_transient_standalone_OBJECTS) $(OUTDIR)/libpei_transient.so $(OUTDIR)/libpei.so
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin $(pei_transient_standalone_OBJECTS) -o $@ $(pei_transient_standalone_LIBS)
+
+$(OUTDIR)/libpei_interface.so: $(pei_interface_OBJECTS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_interface_OBJECTS) -o $@ $(pei_interface_LIBS)
+
+$(OUTDIR)/libpei.so: $(pei_OBJECTS) $(OUTDIR)/libpei_interface.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_OBJECTS) -o $@ $(pei_LIBS)
+
+$(OUTDIR)/libpei_sqlite.so: $(pei_sqlite_OBJECTS) $(OUTDIR)/libpei.so $(OUTDIR)/libpei_interface.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_sqlite_OBJECTS) -o $@ $(pei_sqlite_LIBS)
+
+$(OUTDIR)/libpei_metadata.so: $(pei_metadata_OBJECTS) $(OUTDIR)/libpei.so $(OUTDIR)/libpei_interface.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_metadata_OBJECTS) -o $@ $(pei_metadata_LIBS)
+
+$(OUTDIR)/libpei_if_metadata.so: $(pei_if_metadata_OBJECTS) $(OUTDIR)/libpei_interface.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_if_metadata_OBJECTS) -o $@ $(pei_if_metadata_LIBS)
+
+$(OUTDIR)/libpei_inspector.so: $(pei_inspector_OBJECTS) $(OUTDIR)/libpei.so $(OUTDIR)/libpei_interface.so $(OUTDIR)/libpei_if_inspector.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_inspector_OBJECTS) -o $@ $(pei_inspector_LIBS)
+
+$(OUTDIR)/libpei_if_inspector.so: $(pei_if_inspector_OBJECTS)
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_if_inspector_OBJECTS) -o $@ $(pei_if_inspector_LIBS)
+
+$(OUTDIR)/libpei_transient.so: $(pei_transient_OBJECTS) $(OUTDIR)/libpei.so $(OUTDIR)/libpei_interface.so
+	@$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(LOG_LOC)/bin -shared $(pei_transient_OBJECTS) -o $@ $(pei_transient_LIBS)
+
+.o:
+	$(CXX) $(CXXFLAGS) -c $<
+
+clean:
+	rm -f $(OUTDIR)/* $(SRCDIR)/*.o
