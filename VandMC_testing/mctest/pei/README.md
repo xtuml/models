@@ -105,3 +105,51 @@ model exists in a separate branch `pei_masl`.
   the shared libraries and executables to be relinked. Deleting a `.o` file will
   cause the corresponding `.cc` file to be recompiled. This can be done in lieu
   of a full clean and can save time when troubleshooting a build.
+
+## Differences between OAL and MASL versions
+
+The following is the list of differences between the OAL and MASL versions of
+the model:
+
+```
+ VandMC_testing/mctest/pei/.cproject                                                                     |  29 +++++--
+ VandMC_testing/mctest/pei/.dependencies                                                                 |   1 +
+ VandMC_testing/mctest/pei/.externalToolBuilders/MASL compiler pei.launch                                |  10 +++
+ VandMC_testing/mctest/pei/.externalToolBuilders/Model Compiler.launch                                   |  10 ---
+ VandMC_testing/mctest/pei/.gitignore                                                                    |   2 +
+ VandMC_testing/mctest/pei/.launches/pei.launch                                                          |  31 --------
+ VandMC_testing/mctest/pei/.launches/pei_transient_standalone.launch                                     |  24 ++++++
+ VandMC_testing/mctest/pei/.launches/pei_transient_standalone_with_inspector.launch                      |  25 ++++++
+ VandMC_testing/mctest/pei/.launches/pei_verifier.launch                                                 |  10 ---
+ VandMC_testing/mctest/pei/.project                                                                      |   6 +-
+ VandMC_testing/mctest/pei/bin/.gitignore                                                                |   4 +-
+ VandMC_testing/mctest/pei/gen/LOG_bridge.c                                                              |  50 ------------
+ VandMC_testing/mctest/pei/gen/application.mark                                                          |  29 +++++++
+ VandMC_testing/mctest/pei/gen/domain.mark                                                               |   4 -
+ VandMC_testing/mctest/pei/gen/features.mark                                                             |   7 ++
+ VandMC_testing/mctest/pei/gen/generate-masl.sh                                                          |   3 +
+ VandMC_testing/mctest/pei/gen/system.mark                                                               |   2 -
+ VandMC_testing/mctest/pei/include/.gitignore                                                            |   2 +
+ VandMC_testing/mctest/pei/makefile.pei                                                                  | 367 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---
+ VandMC_testing/mctest/pei/masl/.gitignore                                                               |   1 +
+ VandMC_testing/mctest/pei/masl/pei/do_creates.svc                                                       | 226 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ VandMC_testing/mctest/pei/masl/pei/pei.int                                                              |   9 +++
+ VandMC_testing/mctest/pei/masl/pei/pei.mod                                                              | 353 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ VandMC_testing/mctest/pei/masl/pei/setup.svc                                                            |  21 +++++
+ VandMC_testing/mctest/pei/masl/pei/socket_first.al                                                      |   9 +++
+ VandMC_testing/mctest/pei/masl/pei/socket_second.al                                                     |   5 ++
+ VandMC_testing/mctest/pei/masl/pei/socket_third.al                                                      |   5 ++
+ VandMC_testing/mctest/pei/masl/pei/start_test.svc                                                       |   6 ++
+ VandMC_testing/mctest/pei/masl/pei/test.svc                                                             | 472 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ VandMC_testing/mctest/pei/masl/pei/test1.svc                                                            |  10 +++
+ VandMC_testing/mctest/pei/masl/pei/test2.svc                                                            |  39 ++++++++++
+ VandMC_testing/mctest/pei/masl/pei/xit.svc                                                              |   5 ++
+ VandMC_testing/mctest/pei/models/pei/pei/pei/functions/functions.masl                                   | 800 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ VandMC_testing/mctest/pei/models/pei/pei/pei/functions/functions.xtuml                                  | 718 ++++--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ VandMC_testing/mctest/pei/models/pei/pei/pei/pei.int                                                    |   9 +++
+ VandMC_testing/mctest/pei/models/pei/pei/pei/pei.mod                                                    | 253 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ VandMC_testing/mctest/pei/models/pei/pei/pei/pei/socket/InstanceStateMachine/InstanceStateMachine.masl  |  28 +++++++
+ VandMC_testing/mctest/pei/models/pei/pei/pei/pei/socket/InstanceStateMachine/InstanceStateMachine.xtuml |  19 ++---
+ VandMC_testing/mctest/pei/src/.gitignore                                                                |   5 +-
+ 39 files changed, 2765 insertions(+), 844 deletions(-)
+```
