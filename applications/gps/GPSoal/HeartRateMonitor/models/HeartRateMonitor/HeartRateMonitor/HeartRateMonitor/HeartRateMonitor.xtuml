@@ -234,10 +234,10 @@ INSERT INTO SPR_PS
 	'',
 	'select any hr from instances of HeartRateMonitor;
 if (empty hr)
-  generate HeartRateMonitor10:createHeartRateMonitor() to HeartRateMonitor creator;
-else
-  generate HeartRateMonitor8:registerListener() to hr;
-end if;',
+  create object instance hr of HeartRateMonitor;
+end if;
+generate HeartRateMonitor8:registerListener() to hr;
+',
 	1,
 	0);
 INSERT INTO C_EP_PROXY

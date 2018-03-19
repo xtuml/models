@@ -221,10 +221,9 @@ INSERT INTO SPR_PS
 	'',
 	'select any gps from instances of GPS;
 if (empty gps)
-  generate GPS9:createListener() to GPS creator;
-else
-  generate GPS10:registerListener() to gps;
+  create object instance gps of GPS;
 end if;
+generate GPS10:registerListener() to gps;
 ',
 	1,
 	0);
