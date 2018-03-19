@@ -23,10 +23,8 @@ INSERT INTO O_TFR
 // and current speed, and then notify the UI.
 
 // Create a new track point, retrieving the current location from the GPS.
-create object instance trackPoint of TrackPoint;
-select one workoutTimer related by 
-  self->WorkoutSession[R4.''represents_path_for'']->WorkoutTimer[R8.''is_timed_by''];
-trackPoint.time = workoutTimer.time;
+select one workoutTimer related by self->WorkoutSession[R4.''represents_path_for'']->WorkoutTimer[R8.''is_timed_by''];
+create object instance trackPoint of TrackPoint; trackPoint.time = workoutTimer.time;
 send LOC::getLocation( latitude: trackPoint.latitude, longitude: trackPoint.longitude );
 
 // Add the newly created track point to the track log.
@@ -53,8 +51,7 @@ end if;
 // Update accumulated distance and current speed.
 distance = 0.0;
 if (not isFirstTrackPoint)
-  send distance = LOC::getDistance( fromLat: lastLatitude, fromLong: lastLongitude,
-                                     toLat: trackPoint.latitude, toLong: trackPoint.longitude );
+  send distance = LOC::getDistance( fromLat: lastLatitude, fromLong: lastLongitude, toLat: trackPoint.latitude, toLong: trackPoint.longitude );
 end if;
 
 select one session related by self->WorkoutSession[R4.''represents_path_for''];
@@ -105,8 +102,7 @@ INSERT INTO O_TFR
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'select one timer related by self->WorkoutSession[R4.''represents_path_for'']->WorkoutTimer[R8.''is_timed_by''];
-create object instance lapMarker of LapMarker;
-lapMarker.lapTime = timer.time; 
+create object instance lapMarker of LapMarker; lapMarker.lapTime = timer.time; 
 relate self to lapMarker across R5.''has_laps_defined_by'';
 
 // Notify display of the new value.
@@ -139,8 +135,7 @@ INSERT INTO O_TFR
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'// Update the display so that newly updated values will be shown.
-select one display related by 
-  self->WorkoutSession[R4.''represents_path_for'']->Display[R7.''current_status_indicated_on''];
+select one display related by self->WorkoutSession[R4.''represents_path_for'']->Display[R7.''current_status_indicated_on''];
 generate Display2:refresh to display;',
 	1,
 	'',

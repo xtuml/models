@@ -339,11 +339,9 @@ disposition = self.evaluateAchievement();
 // Case 2 requires the storing of the end time for the open achievement record.
 if ( (self.disposition != GoalDisposition::Achieving) and (disposition == GoalDisposition::Achieving) )
   // Case 1, create achievement record, store start time, relate it as open record.
-  create object instance achievement of Achievement;
+  select one workoutTimer related by self->WorkoutSession[R11.''is_currently_executing_within'']->WorkoutTimer[R8.''is_timed_by''];
+  create object instance achievement of Achievement; achievement.startTime = workoutTimer.time;
   relate self to achievement across R14.''has_open'';
-  select one workoutTimer related by 
-    self->WorkoutSession[R11.''is_currently_executing_within'']->WorkoutTimer[R8.''is_timed_by''];
-  achievement.startTime = workoutTimer.time;
 elif ( (self.disposition == GoalDisposition::Achieving) and (disposition != GoalDisposition::Achieving) )
   // Case 2, store end time, relate as recorded record, unrelate as open record.
   select one achievement related by self->Achievement[R14.''has_open''];
@@ -391,8 +389,7 @@ unrelate self from session across R11.''is_currently_executing_within'';
 // Find the next goal specification in the sequence and start executing it, if it exists.
 select one currentGoalSpec related by self->GoalSpec[R9.''specified_by''];
 
-select any nextGoalSpec related by session->GoalSpec[R10.''includes'']
-  where ( selected.sequenceNumber == (currentGoalSpec.sequenceNumber + 1) );
+select any nextGoalSpec related by session->GoalSpec[R10.''includes''] where ( selected.sequenceNumber == (currentGoalSpec.sequenceNumber + 1) );
   
 if ( not empty nextGoalSpec )
   Goal::create( sequenceNumber: nextGoalSpec.sequenceNumber );
@@ -484,8 +481,7 @@ INSERT INTO SM_ACT
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
 	1,
 	'// Start a timer that periodically causes evaluation of goal achievement.
-create event instance evaluateEvent of Goal2:Evaluate to self;
-self.evaluationTimer = TIM::timer_start_recurring( event_inst: evaluateEvent, microseconds: evaluationPeriod );
+create event instance evaluateEvent of Goal2:Evaluate to self; self.evaluationTimer = TIM::timer_start_recurring( event_inst: evaluateEvent, microseconds: evaluationPeriod );
 
 generate Goal4:evaluationComplete() to self;',
 	'',

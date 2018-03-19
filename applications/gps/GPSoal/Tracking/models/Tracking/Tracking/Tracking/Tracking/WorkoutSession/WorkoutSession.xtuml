@@ -25,9 +25,8 @@ INSERT INTO O_TFR
 select one workoutTimer related by self->WorkoutTimer[R8.''is_timed_by''];
 
 // Create and initialize a new heart-rate sample.
-create object instance sample of HeartRateSample;
+create object instance sample of HeartRateSample; sample.time = workoutTimer.time;
 sample.heartRate = param.heartRate;
-sample.time = workoutTimer.time;
 relate self to sample across R6.''tracks_heart_rate_over_time_as'';
 
 // Notify UI of the new heart rate.
@@ -200,8 +199,7 @@ if ( not empty lastPoint )
     if ( empty previousPoint )
       break;
     end if;
-    send distance = LOC::getDistance( fromLat:cursor.latitude, fromLong: cursor.longitude,
-                                      toLat: previousPoint.latitude, toLong: previousPoint.longitude );
+    send distance = LOC::getDistance( fromLat:cursor.latitude, fromLong: cursor.longitude, toLat: previousPoint.latitude, toLong: previousPoint.longitude );
     totalDistance = totalDistance + distance;
     index = index - 1;
     cursor = previousPoint;
@@ -245,8 +243,7 @@ INSERT INTO O_TFR
 	'// Calculate sliding average using the most recent samples.
 
 select one workoutTimer related by self->WorkoutTimer[R8.''is_timed_by''];
-select many samples related by self->HeartRateSample[R6.''tracks_heart_rate_over_time_as'']
-  where ( selected.time >= ( workoutTimer.time - (HeartRateSamplingPeriod * HeartRateAveragingWindow) ) );
+select many samples related by self->HeartRateSample[R6.''tracks_heart_rate_over_time_as''] where ( selected.time >= ( workoutTimer.time - (HeartRateSamplingPeriod * HeartRateAveragingWindow) ) );
 numberOfSamples = 0;
 sum = 0;
 result = 0;

@@ -24,12 +24,10 @@ INSERT INTO O_TFR
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'// Start the underlying timer that drives the workout timer.
-create event instance evt of WorkoutTimer3:tick() to self;
-self.timer = TIM::timer_start_recurring( event_inst: evt, microseconds: (timerPeriod * 1000000) );
+create event instance evt of WorkoutTimer3:tick() to self; self.timer = TIM::timer_start_recurring( event_inst: evt, microseconds: (timerPeriod * 1000000) );
 
 // Resume evaluation of the currently executing goal, if there is one.
-select one executingGoal related by
-  self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->Goal[R11.''is_currently_executing''];
+select one executingGoal related by self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->Goal[R11.''is_currently_executing''];
 if ( not empty executingGoal )
   generate Goal2:Evaluate to executingGoal;
 end if;
@@ -52,8 +50,7 @@ INSERT INTO O_TFR
 cancelSucceeded = TIM::timer_cancel(timer_inst_ref: self.timer);
 
 // Pause evaluation of the currently executing goal, if there is one.
-select one executingGoal related by
-  self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->Goal[R11.''is_currently_executing''];
+select one executingGoal related by self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->Goal[R11.''is_currently_executing''];
 if ( not empty executingGoal )
   generate Goal3:Pause to executingGoal;
 end if;

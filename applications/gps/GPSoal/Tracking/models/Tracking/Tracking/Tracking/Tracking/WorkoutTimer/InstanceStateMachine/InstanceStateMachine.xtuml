@@ -985,9 +985,7 @@ session.reset();
 
 // Update the UI.
 send UI::setTime(time: self.time);
-select one display related by
-  self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->
-  Display[R7.''current_status_indicated_on''];
+select one display related by self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->Display[R7.''current_status_indicated_on''];
 generate Display2:refresh to display;',
 	'',
 	0);
@@ -1179,8 +1177,7 @@ INSERT INTO SM_ACT
 self.time = self.time + timerPeriod;
 
 // Store a new track point.
-select one trackLog related by 
-  self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->TrackLog[R4.''captures_path_in''];
+select one trackLog related by self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->TrackLog[R4.''captures_path_in''];
 trackLog.addTrackPoint();
 
 // Refresh the user interface.
