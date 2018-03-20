@@ -24,8 +24,8 @@ INSERT INTO GD_MD
 	1,
 	0,
 	0,
-	0,
-	0,
+	200,
+	150,
 	0,
 	'4.1.12',
 	'Location::Location::Location');
@@ -221,7 +221,7 @@ INSERT INTO SPR_PS
 	'',
 	'select any gps from instances of GPS;
 if (empty gps)
-  create object instance gps of GPS;
+  create object instance gps of GPS; gps.id = 1;
 end if;
 generate GPS10:registerListener() to gps;
 ',
@@ -289,10 +289,15 @@ The coordinates must be passed as decimal degrees.',
 	'// Return the straight-line distance, expressed in meters, between the 
 // two points passed as parameters, expressed in decimal degrees.
 
+select any distance from instances of Distance;
+if ( empty distance )
+  Distance::initialize();
+  select any distance from instances of Distance;
+end if;
 deltaLat = param.toLat - param.fromLat;
 deltaLong = param.toLong - param.fromLong;
 sumSquares = (deltaLat * deltaLat) + (deltaLong * deltaLong);
-return ( (MATH::sqrt( x: sumSquares ) * kmPerDegree * 1000 ) );',
+return ( (MATH::sqrt( x: sumSquares ) * distance.kmPerDegree * 1000 ) );',
 	1,
 	0);
 INSERT INTO C_EP_PROXY

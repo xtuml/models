@@ -24,7 +24,12 @@ INSERT INTO O_TFR
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'// Start the underlying timer that drives the workout timer.
-create event instance evt of WorkoutTimer3:tick() to self; self.timer = TIM::timer_start_recurring( event_inst: evt, microseconds: (timerPeriod * 1000000) );
+select any wtc from instances of WorkoutTimerConstants;
+if ( empty wtc )
+  WorkoutTimerConstants::initialize();
+  select any wtc from instances of WorkoutTimerConstants;
+end if;
+create event instance evt of WorkoutTimer3:tick() to self; self.timer = TIM::timer_start_recurring( event_inst: evt, microseconds: (wtc.timerPeriod * 1000000) );
 
 // Resume evaluation of the currently executing goal, if there is one.
 select one executingGoal related by self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->Goal[R11.''is_currently_executing''];

@@ -411,15 +411,20 @@ INSERT INTO SM_ACT
 	1,
 	'// Simulate movement.
 select any gps from instances of GPS;
+select any simgps from instances of simulatedGPS;
+if ( empty simgps )
+  simulatedGPS::initialize();
+  select any simgps from instances of simulatedGPS;
+end if;
 if ( (gps.motionSegments % 3) == 0 )
-  gps.currentLongitude = gps.currentLongitude + (longitudeIncrement * 2);
-  gps.currentLatitude = gps.currentLatitude + latitudeIncrement;
+  gps.currentLongitude = gps.currentLongitude + (simgps.longitudeIncrement * 2);
+  gps.currentLatitude = gps.currentLatitude + simgps.latitudeIncrement;
 elif ( (gps.motionSegments %5) == 0 )
-  gps.currentLongitude = gps.currentLongitude + longitudeIncrement;
-  gps.currentLatitude = gps.currentLatitude + (latitudeIncrement * 3);
+  gps.currentLongitude = gps.currentLongitude + simgps.longitudeIncrement;
+  gps.currentLatitude = gps.currentLatitude + (simgps.latitudeIncrement * 3);
 else
-  gps.currentLongitude = gps.currentLongitude + longitudeIncrement;
-  gps.currentLatitude = gps.currentLatitude + latitudeIncrement;
+  gps.currentLongitude = gps.currentLongitude + simgps.longitudeIncrement;
+  gps.currentLatitude = gps.currentLatitude + simgps.latitudeIncrement;
 end if;
 ',
 	'',

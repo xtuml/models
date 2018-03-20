@@ -17,16 +17,21 @@ INSERT INTO O_TFR
 	'// The GPS is a singleton instance, so create it if it does not exist.
 
 select any gps from instances of GPS;
+select any simgps from instances of simulatedGPS;
+if ( empty simgps )
+  simulatedGPS::initialize();
+  select any simgps from instances of simulatedGPS;
+end if;
 if ( empty gps )
   // Create and initialize the singleton instance of the GPS.
-  create object instance gps of GPS;
+  create object instance gps of GPS; gps.id = 1;
   gps.motionSegments = 0;
-  gps.currentLatitude  = initialLatitude;
-  gps.currentLongitude = initialLongitude;
+  gps.currentLatitude  = simgps.initialLatitude;
+  gps.currentLongitude = simgps.initialLongitude;
 end if;
 
 // Establish recurring timer for periodic position updates.
-create event instance tick of GPS1:tick() to gps; gps.timer = TIM::timer_start_recurring( event_inst: tick, microseconds: updatePeriod );',
+create event instance tick of GPS1:tick() to gps; gps.timer = TIM::timer_start_recurring( event_inst: tick, microseconds: simgps.updatePeriod );',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000",
@@ -59,7 +64,7 @@ INSERT INTO O_BATTR
 INSERT INTO O_ATTR
 	VALUES ("89922d9d-dc0d-48d2-9b3b-64ad81cbabc7",
 	"0679851b-cc52-42de-bb1e-f7d26a404f38",
-	"00000000-0000-0000-0000-000000000000",
+	"9e316383-f1a3-417a-bc55-67831689b1ac",
 	'currentLatitude',
 	'Current latitude, expressed in decimal degrees, of the simulated GPS.',
 	'',
@@ -122,9 +127,32 @@ INSERT INTO O_ATTR
 	"ba5eda7a-def5-0000-0000-000000000006",
 	'',
 	'');
+INSERT INTO O_NBATTR
+	VALUES ("9e316383-f1a3-417a-bc55-67831689b1ac",
+	"0679851b-cc52-42de-bb1e-f7d26a404f38");
+INSERT INTO O_BATTR
+	VALUES ("9e316383-f1a3-417a-bc55-67831689b1ac",
+	"0679851b-cc52-42de-bb1e-f7d26a404f38");
+INSERT INTO O_ATTR
+	VALUES ("9e316383-f1a3-417a-bc55-67831689b1ac",
+	"0679851b-cc52-42de-bb1e-f7d26a404f38",
+	"00000000-0000-0000-0000-000000000000",
+	'id',
+	'',
+	'',
+	'id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
 INSERT INTO O_ID
 	VALUES (0,
 	"0679851b-cc52-42de-bb1e-f7d26a404f38");
+INSERT INTO O_OIDA
+	VALUES ("9e316383-f1a3-417a-bc55-67831689b1ac",
+	"0679851b-cc52-42de-bb1e-f7d26a404f38",
+	0,
+	'id');
 INSERT INTO O_ID
 	VALUES (1,
 	"0679851b-cc52-42de-bb1e-f7d26a404f38");

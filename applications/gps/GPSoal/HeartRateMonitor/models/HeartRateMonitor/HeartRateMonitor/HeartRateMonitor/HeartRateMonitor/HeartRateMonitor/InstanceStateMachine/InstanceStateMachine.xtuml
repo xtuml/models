@@ -430,14 +430,19 @@ INSERT INTO SM_ACT
 	'
 select any monitor from instances of HeartRateMonitor;
 if (empty monitor)
-  create object instance monitor of HeartRateMonitor;
+  create object instance monitor of HeartRateMonitor; monitor.id = 1;
 end if;
 monitor.recentHeartRate = 50;
 
 LOG::LogInfo(message: "listener registered");
 
 // start timer
-create event instance timeout of HeartRateMonitor3:timeout() to monitor; monitor.timer = TIM::timer_start_recurring( event_inst: timeout, microseconds: (HeartRateSamplingPeriod * 1000000) ); 
+select any hrc from instances of HeartRateConstants;
+if ( empty hrc )
+  HeartRateConstants::initialize();
+  select any hrc from instances of HeartRateConstants;
+end if;
+create event instance timeout of HeartRateMonitor3:timeout() to monitor; monitor.timer = TIM::timer_start_recurring( event_inst: timeout, microseconds: (hrc.HeartRateSamplingPeriod * 1000000) ); 
 
 generate HeartRateMonitor5:registerComplete() to monitor;',
 	'',

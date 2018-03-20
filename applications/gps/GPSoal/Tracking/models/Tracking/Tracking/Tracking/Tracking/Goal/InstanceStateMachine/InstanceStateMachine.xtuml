@@ -481,7 +481,12 @@ INSERT INTO SM_ACT
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
 	1,
 	'// Start a timer that periodically causes evaluation of goal achievement.
-create event instance evaluateEvent of Goal2:Evaluate to self; self.evaluationTimer = TIM::timer_start_recurring( event_inst: evaluateEvent, microseconds: evaluationPeriod );
+select any goalachievement from instances of GoalAchievement;
+if ( empty goalachievement )
+  GoalAchievement::initialize();
+  select any goalachievement from instances of GoalAchievement;
+end if;
+create event instance evaluateEvent of Goal2:Evaluate to self; self.evaluationTimer = TIM::timer_start_recurring( event_inst: evaluateEvent, microseconds: goalachievement.evaluationPeriod );
 
 generate Goal4:evaluationComplete() to self;',
 	'',
