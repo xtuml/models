@@ -1,0 +1,82 @@
+MASLLIB=-L$(HOME)/git/masl/install/lib
+MASLINCLUDE=-I$(HOME)/git/masl/install/include
+CXXFLAGS=$(MASLINCLUDE) -Iinclude -fPIC -g -w -fpermissive -Wl,--no-as-needed
+OUTDIR=bin
+SRCDIR=src
+
+ARTIFACTS=                $(OUTDIR)/libARCH_interface.so \
+                          $(OUTDIR)/libARCH.so \
+                          $(OUTDIR)/libARCH_sqlite.so \
+                          $(OUTDIR)/libARCH_metadata.so \
+                          $(OUTDIR)/libARCH_if_metadata.so \
+                          $(OUTDIR)/libARCH_inspector.so \
+                          $(OUTDIR)/libARCH_if_inspector.so \
+                          $(OUTDIR)/libARCH_transient.so
+
+ARCH_interface_SOURCES=    $(SRCDIR)/__ARCH_types.cc \
+                          $(SRCDIR)/__ARCH_interface.cc
+ARCH_interface_OBJECTS=    $(ARCH_interface_SOURCES:.cc=.o)
+ARCH_interface_LIBS=       -lswa -lasn1
+
+ARCH_SOURCES=              $(SRCDIR)/__ARCH.cc \
+                          $(SRCDIR)/__ARCH_private_types.cc \
+                          $(SRCDIR)/__ARCH__shutdown.cc
+ARCH_OBJECTS=              $(ARCH_SOURCES:.cc=.o)
+ARCH_LIBS=                 -lswa -lARCH_interface
+
+ARCH_sqlite_SOURCES=       $(SRCDIR)/sqlite_dummy.cc
+ARCH_sqlite_OBJECTS=       $(ARCH_sqlite_SOURCES:.cc=.o)
+ARCH_sqlite_LIBS=          -lARCH -lsqlite -lasn1
+
+ARCH_metadata_SOURCES=     $(SRCDIR)/MetaData__ARCH.cc
+ARCH_metadata_OBJECTS=     $(ARCH_metadata_SOURCES:.cc=.o)
+ARCH_metadata_LIBS=        -lMetaData -lARCH_interface -lswa
+
+ARCH_if_metadata_SOURCES=  $(SRCDIR)/MetaData__if__ARCH.cc
+ARCH_if_metadata_OBJECTS=  $(ARCH_if_metadata_SOURCES:.cc=.o)
+ARCH_if_metadata_LIBS=     -lMetaData -lARCH_interface -lswa
+
+ARCH_inspector_SOURCES=    $(SRCDIR)/Inspector__ARCH.cc \
+                          $(SRCDIR)/Inspector_private_types__ARCH.cc
+ARCH_inspector_OBJECTS=    $(ARCH_inspector_SOURCES:.cc=.o)
+ARCH_inspector_LIBS=       -lInspector -lARCH_if_inspector -lARCH_interface -lboost_system -lswa
+
+ARCH_if_inspector_SOURCES= $(SRCDIR)/Inspector_types__ARCH.cc
+ARCH_if_inspector_OBJECTS= $(ARCH_if_inspector_SOURCES:.cc=.o)
+ARCH_if_inspector_LIBS=    -lInspector
+
+ARCH_transient_SOURCES=    $(SRCDIR)/transient_dummy.cc
+ARCH_transient_OBJECTS=    $(ARCH_transient_SOURCES:.cc=.o)
+ARCH_transient_LIBS=       -ltransient -lARCH
+
+all: $(ARTIFACTS)
+
+$(OUTDIR)/libARCH_interface.so: $(ARCH_interface_OBJECTS)
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(ARCH_interface_OBJECTS) -o $@ $(ARCH_interface_LIBS)
+
+$(OUTDIR)/libARCH.so: $(ARCH_OBJECTS) $(OUTDIR)/libARCH_interface.so
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(ARCH_OBJECTS) -o $@ $(ARCH_LIBS)
+
+$(OUTDIR)/libARCH_sqlite.so: $(ARCH_sqlite_OBJECTS) $(OUTDIR)/libARCH.so
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(ARCH_sqlite_OBJECTS) -o $@ $(ARCH_sqlite_LIBS)
+
+$(OUTDIR)/libARCH_metadata.so: $(ARCH_metadata_OBJECTS) $(OUTDIR)/libARCH_interface.so
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(ARCH_metadata_OBJECTS) -o $@ $(ARCH_metadata_LIBS)
+
+$(OUTDIR)/libARCH_if_metadata.so: $(ARCH_if_metadata_OBJECTS) $(OUTDIR)/libARCH_interface.so
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(ARCH_if_metadata_OBJECTS) -o $@ $(ARCH_if_metadata_LIBS)
+
+$(OUTDIR)/libARCH_inspector.so: $(ARCH_inspector_OBJECTS) $(OUTDIR)/libARCH_interface.so $(OUTDIR)/libARCH_if_inspector.so
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(ARCH_inspector_OBJECTS) -o $@ $(ARCH_inspector_LIBS)
+
+$(OUTDIR)/libARCH_if_inspector.so: $(ARCH_if_inspector_OBJECTS)
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(ARCH_if_inspector_OBJECTS) -o $@ $(ARCH_if_inspector_LIBS)
+
+$(OUTDIR)/libARCH_transient.so: $(ARCH_transient_OBJECTS) $(OUTDIR)/libARCH.so
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(ARCH_transient_OBJECTS) -o $@ $(ARCH_transient_LIBS)
+
+.o:
+	$(CXX) $(CXXFLAGS) -c $<
+
+clean:
+	rm -f $(OUTDIR)/* $(SRCDIR)/*.o
