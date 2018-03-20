@@ -984,7 +984,7 @@ select one session related by self->WorkoutSession[R8.''acts as the stopwatch fo
 session.reset();
 
 // Update the UI.
-send UI::setTime(time: self.time);
+send Tracking_UI::setTime(time: self.time);
 select one display related by
   self->WorkoutSession[R8.''acts as the stopwatch for'']->
   Display[R7.''current status indicated on''];
@@ -1184,7 +1184,7 @@ select one trackLog related by
 trackLog.addTrackPoint();
 
 // Refresh the user interface.
-send UI::setTime(time: self.time);
+send Tracking_UI::setTime(time: self.time);
 
 generate WorkoutTimer7:tickComplete() to self;',
 	'',
