@@ -27,7 +27,7 @@ create object instance trackPoint of TrackPoint;
 select one workoutTimer related by 
   self->WorkoutSession[R4.''represents path for'']->WorkoutTimer[R8.''is timed by''];
 trackPoint.time = workoutTimer.time;
-send Tracking_Location::getLocation( latitude: trackPoint.latitude, longitude: trackPoint.longitude );
+send LOC::getLocation( latitude: trackPoint.latitude, longitude: trackPoint.longitude );
 
 // Add the newly created track point to the track log.
 select one firstPoint related by self->TrackPoint[R1];
@@ -53,7 +53,7 @@ end if;
 // Update accumulated distance and current speed.
 distance = 0.0;
 if (not isFirstTrackPoint)
-  send distance = Tracking_Location::getDistance( fromLat: lastLatitude, fromLong: lastLongitude,
+  send distance = LOC::getDistance( fromLat: lastLatitude, fromLong: lastLongitude,
                                      toLat: trackPoint.latitude, toLong: trackPoint.longitude );
 end if;
 
