@@ -222,7 +222,7 @@ UI_GuiBridge_sendModePressed( void )
   {
   /*  SEND UI::modePressed() */
   XTUML_OAL_STMT_TRACE( 1, " SEND UI::modePressed()" );
-  UI_UI_modePressed();
+  UI_Tracking_modePressed();
   }
 }
 
@@ -237,7 +237,7 @@ UI_GuiBridge_sendLightPressed( void )
   {
   /*  SEND UI::lightPressed() */
   XTUML_OAL_STMT_TRACE( 1, " SEND UI::lightPressed()" );
-  UI_UI_lightPressed();
+  UI_Tracking_lightPressed();
   }
 }
 
@@ -252,7 +252,7 @@ UI_GuiBridge_sendLapResetPressed( void )
   {
   /*  SEND UI::lapResetPressed() */
   XTUML_OAL_STMT_TRACE( 1, " SEND UI::lapResetPressed()" );
-  UI_UI_lapResetPressed();
+  UI_Tracking_lapResetPressed();
   }
 }
 
@@ -267,7 +267,7 @@ UI_GuiBridge_sendStartStopPressed( void )
   {
   /*  SEND UI::startStopPressed() */
   XTUML_OAL_STMT_TRACE( 1, " SEND UI::startStopPressed()" );
-  UI_UI_startStopPressed();
+  UI_Tracking_startStopPressed();
   }
 }
 
@@ -282,7 +282,7 @@ UI_GuiBridge_sendTargetPressed( void )
   {
   /*  SEND UI::setTargetPressed() */
   XTUML_OAL_STMT_TRACE( 1, " SEND UI::setTargetPressed()" );
-  UI_UI_setTargetPressed();
+  UI_Tracking_setTargetPressed();
   }
 }
 
@@ -299,19 +299,19 @@ void WorkerThread( void *dummy )
 	char c = File_Buf[0];
 	switch (c) {
 	case '0':
-      UI_UI_startStopPressed();
+      UI_Tracking_startStopPressed();
       break;
 	case '1':
-	  UI_UI_setTargetPressed();
+	  UI_Tracking_setTargetPressed();
       break;
 	case '2':
-	  UI_UI_lapResetPressed();
+	  UI_Tracking_lapResetPressed();
       break;
 	case '3':
-	  UI_UI_lightPressed();
+	  UI_Tracking_lightPressed();
       break;
 	case '4':
-      UI_UI_modePressed();
+      UI_Tracking_modePressed();
       break;
 	}
   } while (res > 0);
