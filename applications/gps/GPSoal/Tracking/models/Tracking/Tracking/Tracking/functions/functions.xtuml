@@ -38,7 +38,15 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'heartRateChanged',
 	'',
-	'',
+	'// Find the singleton instance of the workout session
+// and forward this signal, as an event, to it.
+// If there is no active workout session, then this 
+// sample is simply ignored and not recorded.
+
+select any session from instances of WorkoutSession;
+if (not empty session)
+  session.addHeartRateSample(heartRate: param.heartRate);
+end if;',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',

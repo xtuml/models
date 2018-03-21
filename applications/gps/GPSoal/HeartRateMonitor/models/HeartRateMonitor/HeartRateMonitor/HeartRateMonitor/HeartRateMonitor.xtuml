@@ -24,8 +24,8 @@ INSERT INTO GD_MD
 	1,
 	0,
 	0,
-	0,
-	0,
+	200,
+	150,
 	0,
 	'4.1.17',
 	'HeartRateMonitor::HeartRateMonitor::HeartRateMonitor');
@@ -193,7 +193,7 @@ INSERT INTO GD_GE
 	"bf354ae0-7c23-49cb-858f-b9b7fd192600",
 	93,
 	0,
-	'HeartRateMonitor::HeartRateMonitor::HeartRateMonitor::Unspecified::HeartRateMonitor_Unspecified');
+	'HeartRateMonitor::HeartRateMonitor::HeartRateMonitor::HRChange::HRChange');
 INSERT INTO GD_CON
 	VALUES ("4b32731d-7975-4b28-b566-e0a24ab45eef",
 	"00000000-0000-0000-0000-000000000000");
@@ -287,6 +287,30 @@ INSERT INTO DIM_ED
 	VALUES ("92d88973-f356-477a-be31-43b62496f125",
 	"00000000-0000-0000-0000-000000000000",
 	"4b32731d-7975-4b28-b566-e0a24ab45eef");
+INSERT INTO GD_GE
+	VALUES ("466179ed-127f-46f4-b9da-100ee1945752",
+	"c4da8568-47cc-4936-b560-11764e39bcc2",
+	"531d1f1e-2aca-441e-9931-d7c9508d75ad",
+	108,
+	0,
+	'HeartRateMonitor::HeartRateMonitor::HeartRateMonitor::functions');
+INSERT INTO GD_SHP
+	VALUES ("466179ed-127f-46f4-b9da-100ee1945752");
+INSERT INTO GD_NCS
+	VALUES ("466179ed-127f-46f4-b9da-100ee1945752");
+INSERT INTO DIM_ND
+	VALUES (200.000000,
+	150.000000,
+	"466179ed-127f-46f4-b9da-100ee1945752");
+INSERT INTO DIM_GE
+	VALUES (2228.000000,
+	1368.000000,
+	"466179ed-127f-46f4-b9da-100ee1945752",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("466179ed-127f-46f4-b9da-100ee1945752",
+	0,
+	"b8754355-f8d4-430f-a0c1-f82a7a0abead");
 INSERT INTO DIM_DIA
 	VALUES ("c4da8568-47cc-4936-b560-11764e39bcc2",
 	'',
@@ -312,61 +336,36 @@ INSERT INTO C_P
 	'',
 	'HeartRateMonitor::HR::HeartRateProvider');
 INSERT INTO SPR_PEP
-	VALUES ("ddd8f5ca-f72b-4a30-b76f-4f1fd8f75250",
-	"189a8d5e-b6a0-4065-ab18-27b86bf644c9",
+	VALUES ("493ede4d-7900-46a7-95c9-ae787abd6fd2",
+	"b67a34b5-bd41-44b7-8add-e0222651bfea",
 	"5659a879-3ecf-47ee-99d2-11f373c4a8b8");
-INSERT INTO SPR_PS
-	VALUES ("ddd8f5ca-f72b-4a30-b76f-4f1fd8f75250",
-	'heartRateChanged',
-	'',
-	'',
-	1,
-	0);
-INSERT INTO C_EP_PROXY
-	VALUES ("189a8d5e-b6a0-4065-ab18-27b86bf644c9",
-	"203a4287-09f9-4c6c-97fa-12e9ac462a4e",
-	-1,
-	'heartRateChanged',
-	'',
-	'../Shared/HeartRateProvider/HeartRateProvider.xtuml');
-INSERT INTO SPR_PEP
-	VALUES ("95d8bd78-3d3b-45b0-ab16-4289c0af092e",
-	"16339605-5b9e-4c14-943b-0f6b3b77cff0",
-	"5659a879-3ecf-47ee-99d2-11f373c4a8b8");
-INSERT INTO SPR_PS
-	VALUES ("95d8bd78-3d3b-45b0-ab16-4289c0af092e",
+INSERT INTO SPR_PO
+	VALUES ("493ede4d-7900-46a7-95c9-ae787abd6fd2",
 	'registerListener',
 	'',
-	'select any hr from instances of HeartRateMonitor;
-if (empty hr)
-  create object instance hr of HeartRateMonitor; hr.id = 1;
-end if;
-generate HeartRateMonitor8:registerListener() to hr;
-',
+	'::registerListener();',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
-	VALUES ("16339605-5b9e-4c14-943b-0f6b3b77cff0",
+	VALUES ("b67a34b5-bd41-44b7-8add-e0222651bfea",
 	"203a4287-09f9-4c6c-97fa-12e9ac462a4e",
 	-1,
 	'registerListener',
 	'',
 	'../Shared/HeartRateProvider/HeartRateProvider.xtuml');
 INSERT INTO SPR_PEP
-	VALUES ("f3d5d876-13df-40ca-8b23-f3b89bb9e437",
-	"b282e6e7-fede-42cb-adc3-e60dee8200b6",
+	VALUES ("a405708b-c6ff-452c-b809-eb92abc24db1",
+	"2100990b-cdd9-48df-b4b0-0cf7643a1c04",
 	"5659a879-3ecf-47ee-99d2-11f373c4a8b8");
-INSERT INTO SPR_PS
-	VALUES ("f3d5d876-13df-40ca-8b23-f3b89bb9e437",
+INSERT INTO SPR_PO
+	VALUES ("a405708b-c6ff-452c-b809-eb92abc24db1",
 	'unregisterListener',
 	'',
-	'select any hr from instances of HeartRateMonitor;
-generate HeartRateMonitor9:unregisterListener() to hr; 
-',
+	'::unregisterListener();',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
-	VALUES ("b282e6e7-fede-42cb-adc3-e60dee8200b6",
+	VALUES ("2100990b-cdd9-48df-b4b0-0cf7643a1c04",
 	"203a4287-09f9-4c6c-97fa-12e9ac462a4e",
 	-1,
 	'unregisterListener',
@@ -381,7 +380,7 @@ INSERT INTO C_I_PROXY
 INSERT INTO C_PO
 	VALUES ("7716e6a3-1751-4a35-8656-baa01aef3a58",
 	"fff30510-d90f-4286-962f-f99732ae7c5a",
-	'Unspecified',
+	'HRChange',
 	0,
 	0);
 INSERT INTO C_IR
@@ -391,10 +390,10 @@ INSERT INTO C_IR
 	"7716e6a3-1751-4a35-8656-baa01aef3a58");
 INSERT INTO C_R
 	VALUES ("bf354ae0-7c23-49cb-858f-b9b7fd192600",
-	'HeartRateMonitor_Unspecified',
+	'HRChange',
 	'',
 	'Unnamed Interface',
-	'HeartRateMonitor::Unspecified::HeartRateMonitor_Unspecified');
+	'HeartRateMonitor::HRChange::HRChange');
 INSERT INTO SPR_REP
 	VALUES ("d75813f5-99d8-4302-87c3-72eeb47e7cb7",
 	"398fe950-0307-497b-9d52-b90ce0cf681f",
@@ -412,13 +411,13 @@ INSERT INTO C_EP_PROXY
 	0,
 	'heartRateChanged',
 	'',
-	'../Shared/HeartRateMonitor_Unspecified/HeartRateMonitor_Unspecified.xtuml');
+	'../Shared/HRChange/HRChange.xtuml');
 INSERT INTO C_I_PROXY
 	VALUES ("9aacb9a4-ef7c-4010-be8c-768ccb9361dc",
 	"00000000-0000-0000-0000-000000000000",
-	'HeartRateMonitor_Unspecified',
+	'HRChange',
 	'',
-	'../Shared/HeartRateMonitor_Unspecified/HeartRateMonitor_Unspecified.xtuml');
+	'../Shared/HRChange/HRChange.xtuml');
 INSERT INTO PE_PE
 	VALUES ("fff30510-d90f-4286-962f-f99732ae7c5a",
 	1,
