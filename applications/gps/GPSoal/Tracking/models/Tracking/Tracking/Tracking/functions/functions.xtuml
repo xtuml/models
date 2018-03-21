@@ -151,7 +151,7 @@ INSERT INTO S_SYNC
 //   workout session (if it exists), and notify it.
 select any session from instances of WorkoutSession;
 if ( not empty session )
-  select one display related by session->Display[R7.''current status indicated on''];
+  select one display related by session->Display[R7.''current_status_indicated_on''];
   generate Display1:modeChange to display;
 end if;',
 	"ba5eda7a-def5-0000-0000-000000000000",
@@ -180,7 +180,7 @@ if ( not empty session )
   goalSpec.span = param.span;
   goalSpec.criteriaType = param.criteriaType;
   goalSpec.spanType = param.spanType;
-  relate goalSpec to session across R10.''included in'';
+  relate goalSpec to session across R10.''included_in'';
 end if;',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
