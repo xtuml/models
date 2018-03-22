@@ -38,10 +38,8 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'registerListener',
 	'',
-	'select any hr from instances of HeartRateMonitor;
-if (empty hr)
-  create object instance hr of HeartRateMonitor; hr.id = 1;
-end if;
+	'HeartRateMonitor::create();
+select any hr from instances of HeartRateMonitor;
 generate HeartRateMonitor8:registerListener() to hr;
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
