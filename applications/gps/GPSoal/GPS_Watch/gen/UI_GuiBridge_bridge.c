@@ -4,9 +4,9 @@
  * Description:
  * Methods for bridging to an external entity.
  *
- * External Entity:  Graphical User Interface (GuiBridge)
+ * External Entity:  Graphical_User_Interface (GuiBridge)
  * 
- * (C) Copyright 1998-2014 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "GPS_Watch_sys_types.h"
@@ -30,13 +30,13 @@
 
 #define SOCKET int
 
-#ifdef __unix__
+#if defined(__unix__) || defined(__APPLE__)
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
-#include <pthread.h>
+#include <fcntl.h>
 #endif
 
 #endif
@@ -48,79 +48,18 @@
 
 SOCKET sock;                       /* socket details */
 
-void WorkerThread( void *dummy );
 #if defined(_WIN32) || defined(WIN32)
 void handle_error(void);           /* Error handler routine */
-#elif defined(__unix__)
+#elif defined(__unix__) || defined(__APPLE__)
 void handle_error(char *msg);           /* Error handler routine */
 void handle_error_en(int en, char *msg);
 #endif
 
 /*
- * Bridge:  feedSetTargetPressedEvent
- */
-void
-UI_GuiBridge_feedSetTargetPressedEvent( Escher_xtUMLEvent_t * p_evt )
-{
-  /* Replace the following instructions with your implementation code.  */
-  {
-  }
-}
-
-
-/*
- * Bridge:  feedModePressedEvent
- */
-void
-UI_GuiBridge_feedModePressedEvent( Escher_xtUMLEvent_t * p_evt )
-{
-  /* Replace the following instructions with your implementation code.  */
-  {
-  }
-}
-
-
-/*
- * Bridge:  feedLightPressedEvent
- */
-void
-UI_GuiBridge_feedLightPressedEvent( Escher_xtUMLEvent_t * p_evt )
-{
-  /* Replace the following instructions with your implementation code.  */
-  {
-  }
-}
-
-
-/*
- * Bridge:  feedLapResetPressedEvent
- */
-void
-UI_GuiBridge_feedLapResetPressedEvent( Escher_xtUMLEvent_t * p_evt )
-{
-  /* Replace the following instructions with your implementation code.  */
-  {
-  }
-}
-
-
-/*
- * Bridge:  feedStartStopPressedEvent
- */
-void
-UI_GuiBridge_feedStartStopPressedEvent( Escher_xtUMLEvent_t * p_evt )
-{
-  /* Replace the following instructions with your implementation code.  */
-  {
-  }
-}
-
-
-/*
  * Bridge:  setData
  */
 void
-UI_GuiBridge_setData( i_t p_unit, r_t p_value )
+UI_GuiBridge_setData( const i_t p_unit, const r_t p_value )
 {
   int err;
   char buf[50];
@@ -128,22 +67,12 @@ UI_GuiBridge_setData( i_t p_unit, r_t p_value )
   err = send(sock,buf,strlen(buf),0); 
 }
 
-/*
- * Bridge:  setIndicator
- */
-void
-UI_GuiBridge_setIndicator( i_t p_value )
-{
-  int err;
-  char buf[50];
-  sprintf(buf, "%d,%d\n", SIGNAL_NO_SET_INDICATOR, p_value );
-  err = send(sock,buf,strlen(buf),0);
-}
+
 /*
  * Bridge:  setTime
  */
 void
-UI_GuiBridge_setTime( i_t p_time )
+UI_GuiBridge_setTime( const i_t p_time )
 {
   int err;
   char buf[50];
@@ -155,171 +84,106 @@ UI_GuiBridge_setTime( i_t p_time )
 /*
  * Bridge:  connect
  */
-void
-UI_GuiBridge_connect( void )
+i_t
+UI_GuiBridge_connect()
 {
 #if defined(_WIN32) || defined(WIN32)
   WORD wVersionRequested;          /* socket dll version info */
   WSADATA wsaData;                 /* data for socket lib initialisation */
   float socklib_ver;               /* socket dll version */
-#elif defined(__unix__)
-pthread_t   threadId;
-int en;
+#elif defined(__unix__) || defined(__APPLE__)
+  int en;
 #endif
   struct sockaddr_in address;      /* socket address stuff */
   char cIP[50];
   
 #if defined(_WIN32) || defined(WIN32)
-    wVersionRequested = MAKEWORD( 1, 1 );
-    if ( WSAStartup( wVersionRequested, &wsaData ) != 0 )
-      handle_error();
-    socklib_ver = HIBYTE( wsaData.wVersion ) / 10.0;
-    socklib_ver += LOBYTE( wsaData.wVersion );
-    if ( socklib_ver < 1.1 )
-    {
-      printf ("\nError: socket library must support 1.1 or greater.\n");
-      WSACleanup();
-    }
+  wVersionRequested = MAKEWORD( 1, 1 );
+  if ( WSAStartup( wVersionRequested, &wsaData ) != 0 )
+    handle_error();
+  socklib_ver = HIBYTE( wsaData.wVersion ) / 10.0;
+  socklib_ver += LOBYTE( wsaData.wVersion );
+  if ( socklib_ver < 1.1 )
+  {
+    printf ("\nError: socket library must support 1.1 or greater.\n");
+    WSACleanup();
+  }
 #endif
 
 #if defined(_WIN32) || defined(WIN32)
-    if ( (sock = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET )
-      handle_error();
-#elif defined(__unix__)
+  if ( (sock = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET )
+    handle_error();
+#elif defined(__unix__) || defined(__APPLE__)
   if ( (sock = socket(AF_INET, SOCK_STREAM, 0)) < 0 )
     handle_error_en(sock, "Socket creation error ");
 #endif
 
-    address.sin_family=AF_INET;       /* internet */
-    address.sin_port = htons(2003);   /* port 2003 */
+  address.sin_family=AF_INET;       /* internet */
+  address.sin_port = htons(2003);   /* port 2003 */
 
-    strcpy(cIP, "127.0.0.1");         /* local host */
-    address.sin_addr.s_addr = inet_addr(cIP);
+  strcpy(cIP, "127.0.0.1");         /* local host */
+  address.sin_addr.s_addr = inet_addr(cIP);
 #if defined(_WIN32) || defined(WIN32)
   if ((connect(sock,(struct sockaddr *) &address, sizeof(address))) != 0)
-      handle_error();
-#elif defined(__unix__)
+    handle_error();
+#elif defined(__unix__) || defined(__APPLE__)
   if ((en = connect(sock,(struct sockaddr *) &address, sizeof(address))) < 0)
     handle_error_en(en, "Socket connect error ");
 #endif
-  // start a new thread to handle messages from the GUI
+
+  // set the socket to non-blocking if it is set to blocking
 #if defined(_WIN32) || defined(WIN32)
-  _beginthread( WorkerThread, 0, NULL );
-#elif defined(__unix__)
-  if ((en = pthread_create(&threadId, NULL, (void*(*)(void*))WorkerThread, NULL)) < 0)
-    handle_error_en(en, "Thread create error ");
+  unsigned long mode = 1;
+  int ret_val;
+  if ( (ret_val = ioctlsocket( sock, FIONBIO, &mode ) == SOCKET_ERROR )
+    handle_error();
+#elif defined(__unix__) || defined(__APPLE__)
+  int ret_val; 
+  if ( (ret_val = fcntl( sock, F_GETFL )) < 0 )
+    handle_error_en(ret_val, "Socket creation error ");
+  if ( (ret_val = fcntl( sock, F_SETFL, ret_val | O_NONBLOCK )) < 0 )
+    handle_error_en(ret_val, "Socket creation error ");
 #endif
-}
- 
 
-/*
- * Bridge:  sendModePressed
- */
-void
-UI_GuiBridge_sendModePressed( void )
-{
-  /* Replace the following instructions with your implementation code.  */
-  {
-  /*  SEND UI::modePressed() */
-  XTUML_OAL_STMT_TRACE( 1, " SEND UI::modePressed()" );
-  UI_Tracking_modePressed();
-  }
+  return sock;
 }
 
 
 /*
- * Bridge:  sendLightPressed
+ * Bridge:  setIndicator
  */
 void
-UI_GuiBridge_sendLightPressed( void )
+UI_GuiBridge_setIndicator( const i_t p_value )
 {
-  /* Replace the following instructions with your implementation code.  */
-  {
-  /*  SEND UI::lightPressed() */
-  XTUML_OAL_STMT_TRACE( 1, " SEND UI::lightPressed()" );
-  UI_Tracking_lightPressed();
-  }
+  int err;
+  char buf[50];
+  sprintf(buf, "%d,%d\n", SIGNAL_NO_SET_INDICATOR, p_value );
+  err = send(sock,buf,strlen(buf),0);
 }
 
 
 /*
- * Bridge:  sendLapResetPressed
+ * Bridge:  poll
  */
-void
-UI_GuiBridge_sendLapResetPressed( void )
-{
-  /* Replace the following instructions with your implementation code.  */
-  {
-  /*  SEND UI::lapResetPressed() */
-  XTUML_OAL_STMT_TRACE( 1, " SEND UI::lapResetPressed()" );
-  UI_Tracking_lapResetPressed();
-  }
-}
-
-
-/*
- * Bridge:  sendStartStopPressed
- */
-void
-UI_GuiBridge_sendStartStopPressed( void )
-{
-  /* Replace the following instructions with your implementation code.  */
-  {
-  /*  SEND UI::startStopPressed() */
-  XTUML_OAL_STMT_TRACE( 1, " SEND UI::startStopPressed()" );
-  UI_Tracking_startStopPressed();
-  }
-}
-
-
-/*
- * Bridge:  sendTargetPressed
- */
-void
-UI_GuiBridge_sendTargetPressed( void )
-{
-  /* Replace the following instructions with your implementation code.  */
-  {
-  /*  SEND UI::setTargetPressed() */
-  XTUML_OAL_STMT_TRACE( 1, " SEND UI::setTargetPressed()" );
-  UI_Tracking_setTargetPressed();
-  }
-}
-
-
-void WorkerThread( void *dummy )
+i_t
+UI_GuiBridge_poll()
 {
   const int BUF_LEN = 1000;       /* Buffer size for transfers */
   char File_Buf[BUF_LEN];         /* file buffer */
   int res;                        /* error trapping */
 
-  do {
-    res = recv(sock, File_Buf, BUF_LEN, 0); // blocking call
-
-	char c = File_Buf[0];
-	switch (c) {
-	case '0':
-      UI_Tracking_startStopPressed();
-      break;
-	case '1':
-	  UI_Tracking_setTargetPressed();
-      break;
-	case '2':
-	  UI_Tracking_lapResetPressed();
-      break;
-	case '3':
-	  UI_Tracking_lightPressed();
-      break;
-	case '4':
-      UI_Tracking_modePressed();
-      break;
-	}
-  } while (res > 0);
-
+  if ( (res = recv(sock, File_Buf, BUF_LEN, 0)) < 0 ) {
 #if defined(_WIN32) || defined(WIN32)
-  WSACleanup();
+    handle_error();
+#elif defined(__unix__) || defined(__APPLE__)
+    if ( EWOULDBLOCK == errno )
+      return 0;
+    else
+      handle_error_en(sock, "Receive error ");
 #endif
-  exit(0);
+  }
+
+  return File_Buf[0] - '0';
 }
 
 #if defined(_WIN32) || defined(WIN32)
@@ -405,7 +269,7 @@ void handle_error(void)
   }
   WSACleanup();
 }
-#elif defined(__unix__)
+#elif defined(__unix__) || defined(__APPLE__)
 void handle_error(char *msg)
 {
   perror(msg);
