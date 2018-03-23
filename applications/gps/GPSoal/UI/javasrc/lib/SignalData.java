@@ -18,11 +18,12 @@ public class SignalData implements Serializable, Runnable {
 	public static final int SIGNAL_NO_SET_INDICATOR = 2;
 	
 	//server to client signals
-	public static final int SIGNAL_NO_START_STOP_PRESSED = 0;
-	public static final int SIGNAL_NO_TARGET_PRESSED     = 1;
-	public static final int SIGNAL_NO_LAP_RESET_PRESSED  = 2;
-	public static final int SIGNAL_NO_LIGHT_PRESSED      = 3;
-	public static final int SIGNAL_NO_MODE_PRESSED       = 4;
+	public static final int SIGNAL_NO_NULL_SIGNAL        = 0;
+	public static final int SIGNAL_NO_START_STOP_PRESSED = 1;
+	public static final int SIGNAL_NO_TARGET_PRESSED     = 2;
+	public static final int SIGNAL_NO_LAP_RESET_PRESSED  = 3;
+	public static final int SIGNAL_NO_LIGHT_PRESSED      = 4;
+	public static final int SIGNAL_NO_MODE_PRESSED       = 5;
 	
 	public int signalNo;
 	

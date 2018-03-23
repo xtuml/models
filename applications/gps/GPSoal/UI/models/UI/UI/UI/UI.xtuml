@@ -248,7 +248,7 @@ INSERT INTO GD_GE
 	"f94360a9-26ee-489f-820b-aebe91648c3b",
 	108,
 	0,
-	'ButtonFunctions');
+	'UI::UI::UI::ButtonFunctions');
 INSERT INTO GD_SHP
 	VALUES ("a58e70da-ebdc-466f-94cc-229e2c40837d");
 INSERT INTO GD_NCS
@@ -398,7 +398,10 @@ INSERT INTO SPR_PO
 	VALUES ("b53a7803-29b0-406b-aca0-d552f4864fd2",
 	'setTime',
 	'',
-	'GuiBridge::setTime(time: param.time);',
+	'select any ui from instances of UI;
+if ( not_empty ui )
+  ui.setTime(time: param.time);
+end if;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -416,31 +419,32 @@ INSERT INTO SPR_PO
 	VALUES ("7cd568d7-8faa-478b-9284-703e44735d24",
 	'setData',
 	'',
-	'if (param.unit == Unit::km)
-  GuiBridge::setData(value: param.value, unit: 0);
-elif (param.unit == Unit::meters)
-  GuiBridge::setData(value: param.value, unit: 1);
-elif (param.unit == Unit::minPerKm)
-  GuiBridge::setData(value: param.value, unit: 2);
-elif (param.unit == Unit::kmPerHour)
-  GuiBridge::setData(value: param.value, unit: 3);
-elif (param.unit == Unit::miles)
-  GuiBridge::setData(value: param.value, unit: 4);
-elif (param.unit == Unit::yards)
-  GuiBridge::setData(value: param.value, unit: 5);
-elif (param.unit == Unit::feet)
-  GuiBridge::setData(value: param.value, unit: 6);
-elif (param.unit == Unit::minPerMile)
-  GuiBridge::setData(value: param.value, unit: 7);
-elif (param.unit == Unit::mph)
-  GuiBridge::setData(value: param.value, unit: 8);
-elif (param.unit == Unit::bpm)
-  GuiBridge::setData(value: param.value, unit: 9);
-elif (param.unit == Unit::laps)
-  GuiBridge::setData(value: param.value, unit: 10);
-end if;
-
-',
+	'select any ui from instances of UI;
+if ( not_empty ui )
+  if (param.unit == Unit::km)
+    ui.setData(value: param.value, unit: 0);
+  elif (param.unit == Unit::meters)
+    ui.setData(value: param.value, unit: 1);
+  elif (param.unit == Unit::minPerKm)
+    ui.setData(value: param.value, unit: 2);
+  elif (param.unit == Unit::kmPerHour)
+    ui.setData(value: param.value, unit: 3);
+  elif (param.unit == Unit::miles)
+    ui.setData(value: param.value, unit: 4);
+  elif (param.unit == Unit::yards)
+    ui.setData(value: param.value, unit: 5);
+  elif (param.unit == Unit::feet)
+    ui.setData(value: param.value, unit: 6);
+  elif (param.unit == Unit::minPerMile)
+    ui.setData(value: param.value, unit: 7);
+  elif (param.unit == Unit::mph)
+    ui.setData(value: param.value, unit: 8);
+  elif (param.unit == Unit::bpm)
+    ui.setData(value: param.value, unit: 9);
+  elif (param.unit == Unit::laps)
+    ui.setData(value: param.value, unit: 10);
+  end if;
+end if;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -479,14 +483,17 @@ INSERT INTO SPR_PO
 	'setIndicator',
 	'',
 	'// Map values of UIDatatypes/Indicator to values defined in WatchGUI.java.
-if ( param.indicator == Indicator::Blank  )
-  GuiBridge::setIndicator( value: 0 );
-elif ( param.indicator == Indicator::Down )
-  GuiBridge::setIndicator( value: 1 );
-elif ( param.indicator == Indicator::Flat )
-  GuiBridge::setIndicator( value: 2 );
-elif ( param.indicator == Indicator::Up )
-  GuiBridge::setIndicator( value: 3 );
+select any ui from instances of UI;
+if ( not_empty ui )
+  if ( param.indicator == Indicator::Blank  )
+    ui.setIndicator( value: 0 );
+  elif ( param.indicator == Indicator::Down )
+    ui.setIndicator( value: 1 );
+  elif ( param.indicator == Indicator::Flat )
+    ui.setIndicator( value: 2 );
+  elif ( param.indicator == Indicator::Up )
+    ui.setIndicator( value: 3 );
+  end if;
 end if;',
 	1,
 	0);

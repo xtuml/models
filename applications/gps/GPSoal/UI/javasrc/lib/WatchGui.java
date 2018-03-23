@@ -439,6 +439,7 @@ public class WatchGui extends JFrame {
 				while (true) {
 					try {
 						String msg = in.readLine();
+						if ( null == msg ) continue;
 						
 						// data arrives in a comma separated list
 						StringTokenizer tokenizer = new StringTokenizer(msg, ",");
