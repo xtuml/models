@@ -88,8 +88,10 @@ end if;
 deltaLat = param.toLat - param.fromLat;
 deltaLong = param.toLong - param.fromLong;
 sumSquares = (deltaLat * deltaLat) + (deltaLong * deltaLong);
-result = (MATH::sqrt( x: sumSquares ) * distance.kmPerDegree * 1000 );
+sqrtSum = ::sqrt( x:sumSquares );
+result = (sqrtSum * distance.kmPerDegree * 1000 );
 return result;
+
 ',
 	"ba5eda7a-def5-0000-0000-000000000003",
 	1,
@@ -170,6 +172,59 @@ generate GPS11:unregisterListener() to gps;
 	0);
 INSERT INTO PE_PE
 	VALUES ("4ba09871-89f8-4672-bf62-b6be7bbeff78",
+	1,
+	"da3fda07-4196-4054-b778-71bbfa6a59c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("c2ec9b94-4dfc-4749-8937-739ce002fe7d",
+	"00000000-0000-0000-0000-000000000000",
+	'sqrt',
+	'',
+	'// TODO:FIXME There is a bug in verifier in handling of realized external entities in 
+//      a multi-domain project. I am working around this by getting a sqrt approximation.
+//sqrtSum = MATH::sqrt( x: sumSquares );
+//      So, this is introduced as a workaround to give an approximation of sqrt.
+result = 0.0;
+
+inputValue = param.x;
+
+// If a negative is passed-in take the abs value
+if inputValue < 0
+  inputValue = -param.x;
+end if;
+
+if (param.x > 0) 
+
+	guess = param.x;
+	MAX_ITERATIONS = 24;
+	i = 0;
+	prev_value = -1.0;
+	while (i < MAX_ITERATIONS and prev_value != guess)
+      prev_value = guess;
+      guess = guess - (((guess*guess)-inputValue)/(2*guess));
+	  i = i + 1;
+	end while;
+    result = guess;
+end if;
+
+return result;
+',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("383d1877-3353-4a6c-b627-072c50b2bc09",
+	"c2ec9b94-4dfc-4749-8937-739ce002fe7d",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("c2ec9b94-4dfc-4749-8937-739ce002fe7d",
 	1,
 	"da3fda07-4196-4054-b778-71bbfa6a59c6",
 	"00000000-0000-0000-0000-000000000000",
