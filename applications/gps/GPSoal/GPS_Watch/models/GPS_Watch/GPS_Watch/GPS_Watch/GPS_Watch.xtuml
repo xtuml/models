@@ -1717,7 +1717,13 @@ INSERT INTO SPR_PO
 	VALUES ("2d0ef754-8f71-4aac-8273-9627169a8eba",
 	'getLocation',
 	'',
-	'Location::getLocation( latitude:param.latitude, longitude: param.longitude);',
+	'// Transient varible is used here to workaround a bug (#10160)
+lat = param.latitude;
+longi = param.longitude;
+Location::getLocation( latitude:lat, longitude: longi);
+param.latitude = lat;
+param.longitude = longi;
+',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
