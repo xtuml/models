@@ -12,7 +12,7 @@ begin
   signal_no := this.poll();
   if ( uiconst.SOCKET_ERROR = signal_no ) then
     this.socket_id := uiconst.SOCKET_ERROR;
-    //cancel this.timer;
+    cancel this.timer;
   elsif ( uiconst.SIGNAL_NO_START_STOP_PRESSED = signal_no ) then
     generate UI.startStopPressed() to this;
   elsif ( uiconst.SIGNAL_NO_TARGET_PRESSED = signal_no ) then

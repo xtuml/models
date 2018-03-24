@@ -63,33 +63,33 @@ domain UI is
     terminal state testCaseFinished();
      state initialize(        iterations : in integer);
      state Idle();
-     event delay();
+     event doDelay();
      event finish();
      event initializationComplete();
      event initialize(        iterations : in integer);
      transition is
       Non_Existent (
-        delay => Cannot_Happen,
+        doDelay => Cannot_Happen,
         finish => Cannot_Happen,
         initializationComplete => Cannot_Happen,
         initialize => Cannot_Happen      ); 
       pressStartStop (
-        delay => pressStartStop,
+        doDelay => pressStartStop,
         finish => testCaseFinished,
         initializationComplete => Cannot_Happen,
         initialize => Cannot_Happen      ); 
       testCaseFinished (
-        delay => Cannot_Happen,
+        doDelay => Cannot_Happen,
         finish => Cannot_Happen,
         initializationComplete => Cannot_Happen,
         initialize => Cannot_Happen      ); 
       initialize (
-        delay => Cannot_Happen,
+        doDelay => Cannot_Happen,
         finish => Cannot_Happen,
         initializationComplete => pressStartStop,
         initialize => Cannot_Happen      ); 
       Idle (
-        delay => Cannot_Happen,
+        doDelay => Cannot_Happen,
         finish => Cannot_Happen,
         initializationComplete => Cannot_Happen,
         initialize => initialize      ); 
@@ -115,7 +115,7 @@ domain UI is
   object UI is
     id : preferred  integer;
     socket_id :   integer;
-    timer :   inst_ref<Timer>;
+    timer :   timer;
     public  service connect (
     );
     public instance service poll (
