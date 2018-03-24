@@ -48,12 +48,12 @@ INSERT INTO GD_SHP
 INSERT INTO GD_CTR
 	VALUES ("86e6e218-7cc5-45d4-91eb-ff5f3bf78f9f");
 INSERT INTO DIM_ND
-	VALUES (1331.000000,
-	606.000000,
+	VALUES (3383.000000,
+	1974.000000,
 	"86e6e218-7cc5-45d4-91eb-ff5f3bf78f9f");
 INSERT INTO DIM_GE
-	VALUES (2040.000000,
-	1356.000000,
+	VALUES (-12.000000,
+	-12.000000,
 	"86e6e218-7cc5-45d4-91eb-ff5f3bf78f9f",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -366,6 +366,30 @@ INSERT INTO DIM_ED
 	VALUES ("8ac58c60-5fbc-4ea2-a295-dcc56994f598",
 	"00000000-0000-0000-0000-000000000000",
 	"eaea17af-b186-4cc4-b68b-ff1cb315baed");
+INSERT INTO GD_GE
+	VALUES ("bab119b1-9316-4cce-a1a2-53809cf7617b",
+	"216f064d-f8ea-44d8-a2ca-71c89eed2247",
+	"9355a9c5-a9cd-4901-9d5e-81b85fba2a5b",
+	108,
+	0,
+	'UI::UI::UI::PublicFunctions');
+INSERT INTO GD_SHP
+	VALUES ("bab119b1-9316-4cce-a1a2-53809cf7617b");
+INSERT INTO GD_NCS
+	VALUES ("bab119b1-9316-4cce-a1a2-53809cf7617b");
+INSERT INTO DIM_ND
+	VALUES (200.000000,
+	150.000000,
+	"bab119b1-9316-4cce-a1a2-53809cf7617b");
+INSERT INTO DIM_GE
+	VALUES (0.000000,
+	0.000000,
+	"bab119b1-9316-4cce-a1a2-53809cf7617b",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO DIM_ELE
+	VALUES ("bab119b1-9316-4cce-a1a2-53809cf7617b",
+	0,
+	"86e6e218-7cc5-45d4-91eb-ff5f3bf78f9f");
 INSERT INTO DIM_DIA
 	VALUES ("216f064d-f8ea-44d8-a2ca-71c89eed2247",
 	'',
@@ -398,10 +422,7 @@ INSERT INTO SPR_PO
 	VALUES ("b53a7803-29b0-406b-aca0-d552f4864fd2",
 	'setTime',
 	'',
-	'select any ui from instances of UI;
-if ( not_empty ui )
-  ui.setTime(time: param.time);
-end if;',
+	'::setTime( time:param.time );',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -419,32 +440,7 @@ INSERT INTO SPR_PO
 	VALUES ("7cd568d7-8faa-478b-9284-703e44735d24",
 	'setData',
 	'',
-	'select any ui from instances of UI;
-if ( not_empty ui )
-  if (param.unit == Unit::km)
-    ui.setData(value: param.value, unit: 0);
-  elif (param.unit == Unit::meters)
-    ui.setData(value: param.value, unit: 1);
-  elif (param.unit == Unit::minPerKm)
-    ui.setData(value: param.value, unit: 2);
-  elif (param.unit == Unit::kmPerHour)
-    ui.setData(value: param.value, unit: 3);
-  elif (param.unit == Unit::miles)
-    ui.setData(value: param.value, unit: 4);
-  elif (param.unit == Unit::yards)
-    ui.setData(value: param.value, unit: 5);
-  elif (param.unit == Unit::feet)
-    ui.setData(value: param.value, unit: 6);
-  elif (param.unit == Unit::minPerMile)
-    ui.setData(value: param.value, unit: 7);
-  elif (param.unit == Unit::mph)
-    ui.setData(value: param.value, unit: 8);
-  elif (param.unit == Unit::bpm)
-    ui.setData(value: param.value, unit: 9);
-  elif (param.unit == Unit::laps)
-    ui.setData(value: param.value, unit: 10);
-  end if;
-end if;',
+	'::setData( value:param.value, unit:param.unit );',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -462,9 +458,7 @@ INSERT INTO SPR_PO
 	VALUES ("8959a595-f737-490a-86be-acfcbe37c94a",
 	'startTest',
 	'',
-	'create object instance tc of TestCase; tc.id = 1;
-generate TestCase5:initialize( iterations: 2 ) to tc;
-',
+	'::startTest();',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -482,19 +476,7 @@ INSERT INTO SPR_PO
 	VALUES ("f6491653-ca13-4746-8e74-1814fca55f86",
 	'setIndicator',
 	'',
-	'// Map values of UIDatatypes/Indicator to values defined in WatchGUI.java.
-select any ui from instances of UI;
-if ( not_empty ui )
-  if ( param.indicator == Indicator::Blank  )
-    ui.setIndicator( value: 0 );
-  elif ( param.indicator == Indicator::Down )
-    ui.setIndicator( value: 1 );
-  elif ( param.indicator == Indicator::Flat )
-    ui.setIndicator( value: 2 );
-  elif ( param.indicator == Indicator::Up )
-    ui.setIndicator( value: 3 );
-  end if;
-end if;',
+	'::setIndicator( indicator:param.indicator );',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
