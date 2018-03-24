@@ -30,26 +30,11 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
-	'// make sre the singleton exists
-select any uiconst from instances of UIConstants;
-if ( empty uiconst )
-  UIConstants::initialize();
-  select any uiconst from instances of UIConstants;
-end if;
-select any ui from instances of UI;
-if (empty ui)
-  UI::initialize();
-  select any ui from instances of UI;
-end if;
-
-ui.socket_id = GuiBridge::connect();
-if ( uiconst.SOCKET_ERROR != ui.socket_id )
-  create event instance evt of UI9:tick() to ui; ui.timer = TIM::timer_start_recurring( event_inst: evt, microseconds: uiconst.tick_period );
-end if;',
+	'',
 	1,
 	'',
 	"fef2ff86-8f1a-412c-a37b-24366ad87ccd",
-	0);
+	1);
 INSERT INTO O_TFR
 	VALUES ("038bda67-585d-4c8b-8b5a-377340cbe0bc",
 	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
@@ -57,11 +42,11 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000002",
 	1,
-	'return GuiBridge::poll();',
+	'',
 	1,
 	'',
 	"d5627d6f-0234-4b59-8c9c-e87eecb086f0",
-	0);
+	1);
 INSERT INTO O_TFR
 	VALUES ("031e9ce1-d60b-46cd-a99e-d51f071c30ee",
 	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
@@ -69,11 +54,11 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'GuiBridge::setData( value:param.value, unit:param.unit );',
+	'',
 	1,
 	'',
 	"038bda67-585d-4c8b-8b5a-377340cbe0bc",
-	0);
+	1);
 INSERT INTO O_TPARM
 	VALUES ("26b52e4f-075e-4a56-9add-fd9c8842e941",
 	"031e9ce1-d60b-46cd-a99e-d51f071c30ee",
@@ -99,11 +84,11 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'GuiBridge::setIndicator( value:param.value );',
+	'',
 	1,
 	'',
 	"031e9ce1-d60b-46cd-a99e-d51f071c30ee",
-	0);
+	1);
 INSERT INTO O_TPARM
 	VALUES ("2be886b3-9be3-46f1-8f82-0391012aab9f",
 	"4d80669c-2aa8-4d9b-9f74-3395a3e681ef",
@@ -120,11 +105,11 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'GuiBridge::setTime( time:param.time );',
+	'',
 	1,
 	'',
 	"4d80669c-2aa8-4d9b-9f74-3395a3e681ef",
-	0);
+	1);
 INSERT INTO O_TPARM
 	VALUES ("4d21db23-c46a-450e-9fad-34ec59216a35",
 	"6545d02d-9adb-405c-9a43-3c03e015cac1",
@@ -141,22 +126,11 @@ INSERT INTO O_TFR
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
-	'// make sre the singleton exists
-select any ui from instances of UI;
-if (empty ui)
-  select any uiconst from instances of UIConstants;
-  if ( empty uiconst )
-    UIConstants::initialize();
-    select any uiconst from instances of UIConstants;
-  end if;
-  create object instance ui of UI; 
-  ui.id = 1;
-  ui.socket_id = uiconst.SOCKET_ERROR;
-end if;',
+	'',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000",
-	0);
+	1);
 INSERT INTO O_NBATTR
 	VALUES ("e985b318-f34a-497e-a310-2d00da9e1e54",
 	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");

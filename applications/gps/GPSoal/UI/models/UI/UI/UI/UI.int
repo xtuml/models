@@ -1,0 +1,37 @@
+//!Simulates the user interface and has the ability to connect an external GUI
+//!representing the physical watch.
+//!
+//!Uses the BridgePoint Java API to connect to an animated version of the watch
+//!while the models are executing in Verifier.
+//!
+//!There is also hand-written C code that implments parts of this component to 
+//!allow generated code to connect to the exact same animated watch.
+domain UI is
+//!Graphical indicator.
+  public type Indicator is enum (Blank, Down, Flat, Up)
+  ;
+  public type Unit is enum (km, meters, minPerKm, kmPerHour, miles, yards, feet, minPerMile, mph, bpm, laps)
+  ;
+    public service setData (
+        value : in real,        unit : in Unit    );
+    public service setIndicator (
+        indicator : in Indicator    );
+    public service setTime (
+        time : in integer    );
+    public service startTest (
+    );
+  terminator Tracking is
+    public service setTargetPressed (
+    );
+    public service startStopPressed (
+    );
+    public service lapResetPressed (
+    );
+    public service lightPressed (
+    );
+    public service modePressed (
+    );
+    public service newGoalSpec (
+        spanType : in Tracking::GoalSpan,        criteriaType : in Tracking::GoalCriteria,        span : in real,        maximum : in real,        minimum : in real,        sequenceNumber : in integer    );
+  end terminator;
+end domain;

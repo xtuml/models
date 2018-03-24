@@ -1,0 +1,38 @@
+//! ACTIVITY BEGIN. '424af756-01fa-45af-adae-776bfaf64479' '4b91b930-772b-466a-8e4d-6390c0fec10a' DO NOT EDIT THIS LINE.
+state UI::TestCase.pressStartStop () is
+handle: timer;
+begin
+  if (this.iterations > 0) then
+    this.iterations := this.iterations - 1;
+    //schedule handle generate TestCase.delay1() to this delay @PT4S@;
+    Tracking~>startStopPressed();
+  else
+    generate TestCase.finish() to this;
+    Tracking~>lapResetPressed();
+  end if;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '424af756-01fa-45af-adae-776bfaf64479' 'e83c0fdf-c1d0-4987-a2c3-dceda86dfa0b' DO NOT EDIT THIS LINE.
+terminal state UI::TestCase.testCaseFinished () is
+begin
+  LOG::LogInfo("End of test case");
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '424af756-01fa-45af-adae-776bfaf64479' '2dadc557-c758-4690-83c7-ffbe5a07cea2' DO NOT EDIT THIS LINE.
+state UI::TestCase.initialize ( iterations : in integer ) is
+begin
+  LOG::LogInfo("Start of test case"); 
+  this.iterations := iterations * 2;
+  generate TestCase.initializationComplete() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '424af756-01fa-45af-adae-776bfaf64479' '85b6a99b-d43d-40d9-9287-174ddf5d6c50' DO NOT EDIT THIS LINE.
+state UI::TestCase.Idle () is
+begin
+  null;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
