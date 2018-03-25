@@ -15,16 +15,6 @@ domain UI is
   ;
   public type Unit is enum (km, meters, minPerKm, kmPerHour, miles, yards, feet, minPerMile, mph, bpm, laps)
   ;
-    private service sendLapResetPressed (
-    );
-    private service sendLightPressed (
-    );
-    private service sendModePressed (
-    );
-    private service sendStartStopPressed (
-    );
-    private service sendTargetPressed (
-    );
     public service setData (
         value : in real,        unit : in Unit    );
     public service setIndicator (
@@ -40,6 +30,16 @@ domain UI is
     private service init (
     );
 pragma startup ( true ); 
+    private service sendLapResetPressed (
+    );
+    private service sendLightPressed (
+    );
+    private service sendModePressed (
+    );
+    private service sendStartStopPressed (
+    );
+    private service sendTargetPressed (
+    );
   terminator TRACK is
     public service setTargetPressed (
     );
