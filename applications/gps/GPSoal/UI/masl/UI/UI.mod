@@ -28,7 +28,7 @@ domain UI is
   public service startTest ();   
   private service RunTestCase ();   
   private service createGoals_1 ();   
-  private service init ();   
+  private service init (); pragma startup( true );   
   
   
   terminator TRACK is
@@ -89,6 +89,7 @@ domain UI is
     end transition;
     
   end object;
+  pragma key_letter( "TestCase" );
   
   //!Provides an interface between Verifier and an external user interface representing 
   //!the watch, in this case an animated rendition of the watch containing virtual
@@ -189,6 +190,7 @@ domain UI is
     end transition;
     
   end object;
+  pragma key_letter( "UI" );
   
   object UIConstants is
     
@@ -205,6 +207,8 @@ domain UI is
     public service initialize ();     
     
   end object;
+  pragma key_letter( "UIConstants" );
   
   
 end domain;
+pragma number( 1 );

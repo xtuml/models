@@ -63,7 +63,8 @@ UI_SOURCES=               $(SRCDIR)/__UI.cc \
                           $(SRCDIR)/__UI__sendLightPressed.cc \
                           $(SRCDIR)/__UI__sendModePressed.cc \
                           $(SRCDIR)/__UI__sendStartStopPressed.cc \
-                          $(SRCDIR)/__UI__sendTargetPressed.cc
+                          $(SRCDIR)/__UI__sendTargetPressed.cc \
+                          $(SRCDIR)/UI_GuiBridge_bridge.c
 UI_OBJECTS=               $(UI_SOURCES:.cc=.o)
 UI_LIBS=                  -lswa -lUI_interface -lTracking_interface -lLOG_interface
 
@@ -151,4 +152,4 @@ $(OUTDIR)/libUI_transient.so: $(UI_transient_OBJECTS) $(OUTDIR)/libUI.so
 	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
-	rm -f $(OUTDIR)/*.so $(SRCDIR)/*.o
+	rm -f $(ARTIFACTS) $(SRCDIR)/*.o

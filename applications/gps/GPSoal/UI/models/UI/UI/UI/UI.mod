@@ -39,6 +39,7 @@ domain UI is
     );
     private service init (
     );
+pragma startup ( true ); 
   terminator TRACK is
     public service setTargetPressed (
     );
@@ -95,6 +96,7 @@ domain UI is
         initialize => initialize      ); 
     end transition;
   end object;
+pragma key_letter ( "TestCase" ); 
 //!Provides an interface between Verifier and an external user interface representing 
 //!the watch, in this case an animated rendition of the watch containing virtual
 //!buttons that can be "pushed" by clicking on them with a mouse.
@@ -200,6 +202,7 @@ domain UI is
         tick => Ignore      ); 
     end transition;
   end object;
+pragma key_letter ( "UI" ); 
   object UIConstants is
     id : preferred  integer;
     SIGNAL_NO_NULL_SIGNAL :   integer;
@@ -213,4 +216,6 @@ domain UI is
     public  service initialize (
     );
   end object;
+pragma key_letter ( "UIConstants" ); 
 end domain;
+pragma number ( 1 ); 
