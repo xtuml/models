@@ -9,8 +9,6 @@ SRCDIR=src
 ARTIFACTS=                $(OUTDIR)/libUI_interface.so \
                           $(OUTDIR)/libUI.so \
                           $(OUTDIR)/libUI_sqlite.so \
-                          $(OUTDIR)/libUI_metadata.so \
-                          $(OUTDIR)/libUI_if_metadata.so \
                           $(OUTDIR)/libUI_inspector.so \
                           $(OUTDIR)/libUI_if_inspector.so \
                           $(OUTDIR)/libUI_transient.so \
@@ -26,16 +24,16 @@ UI_SOURCES=               $(SRCDIR)/__UI.cc \
                           $(SRCDIR)/__UI__TestCase.cc \
                           $(SRCDIR)/__UI__UI.cc \
                           $(SRCDIR)/__UI__UIConstants.cc \
-                          $(SRCDIR)/__UI__Tracking.cc \
+                          $(SRCDIR)/__UI__TRACK.cc \
                           $(SRCDIR)/__UI__TestCasePopulation.cc \
                           $(SRCDIR)/__UI__UIPopulation.cc \
                           $(SRCDIR)/__UI__UIConstantsPopulation.cc \
-                          $(SRCDIR)/__UI__Tracking__setTargetPressed.cc \
-                          $(SRCDIR)/__UI__Tracking__startStopPressed.cc \
-                          $(SRCDIR)/__UI__Tracking__lapResetPressed.cc \
-                          $(SRCDIR)/__UI__Tracking__lightPressed.cc \
-                          $(SRCDIR)/__UI__Tracking__modePressed.cc \
-                          $(SRCDIR)/__UI__Tracking__newGoalSpec.cc \
+                          $(SRCDIR)/__UI__TRACK__setTargetPressed.cc \
+                          $(SRCDIR)/__UI__TRACK__startStopPressed.cc \
+                          $(SRCDIR)/__UI__TRACK__lapResetPressed.cc \
+                          $(SRCDIR)/__UI__TRACK__lightPressed.cc \
+                          $(SRCDIR)/__UI__TRACK__modePressed.cc \
+                          $(SRCDIR)/__UI__TRACK__newGoalSpec.cc \
                           $(SRCDIR)/__UI__TestCase__execute.cc \
                           $(SRCDIR)/__UI__TestCase__pressStartStop.cc \
                           $(SRCDIR)/__UI__TestCase__testCaseFinished.cc \
@@ -97,7 +95,7 @@ UI_inspector_SOURCES=     $(SRCDIR)/Inspector__UI.cc \
                           $(SRCDIR)/Inspector__UI__TestCase.cc \
                           $(SRCDIR)/Inspector__UI__UI.cc \
                           $(SRCDIR)/Inspector__UI__UIConstants.cc \
-                          $(SRCDIR)/Inspector__UI__Tracking.cc
+                          $(SRCDIR)/Inspector__UI__TRACK.cc
 UI_inspector_OBJECTS=     $(UI_inspector_SOURCES:.cc=.o)
 UI_inspector_LIBS=        -lUI_if_inspector -lInspector -lswa -lUI -lboost_system -lUI_interface -lTracking_interface
 
@@ -129,19 +127,19 @@ $(OUTDIR)/libUI_interface.so: $(UI_interface_OBJECTS)
 	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(UI_interface_OBJECTS) -o $@ $(UI_interface_LIBS)
 
 $(OUTDIR)/libUI.so: $(UI_OBJECTS) $(OUTDIR)/libUI_interface.so
-	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(UI_OBJECTS) -o $@ $(UI_LIBS)
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(TRACKING_LOC)/bin -L$(LOG_LOC)/bin -shared $(UI_OBJECTS) -o $@ $(UI_LIBS)
 
 $(OUTDIR)/libUI_sqlite.so: $(UI_sqlite_OBJECTS) $(OUTDIR)/libUI.so
 	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(UI_sqlite_OBJECTS) -o $@ $(UI_sqlite_LIBS)
 
 $(OUTDIR)/libUI_metadata.so: $(UI_metadata_OBJECTS) $(OUTDIR)/libUI_interface.so
-	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(UI_metadata_OBJECTS) -o $@ $(UI_metadata_LIBS)
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(TRACKING_LOC)/bin -shared $(UI_metadata_OBJECTS) -o $@ $(UI_metadata_LIBS)
 
 $(OUTDIR)/libUI_if_metadata.so: $(UI_if_metadata_OBJECTS) $(OUTDIR)/libUI_interface.so
 	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(UI_if_metadata_OBJECTS) -o $@ $(UI_if_metadata_LIBS)
 
 $(OUTDIR)/libUI_inspector.so: $(UI_inspector_OBJECTS) $(OUTDIR)/libUI_interface.so $(OUTDIR)/libUI_if_inspector.so
-	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(UI_inspector_OBJECTS) -o $@ $(UI_inspector_LIBS)
+	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -L$(TRACKING_LOC)/bin -shared $(UI_inspector_OBJECTS) -o $@ $(UI_inspector_LIBS)
 
 $(OUTDIR)/libUI_if_inspector.so: $(UI_if_inspector_OBJECTS)
 	$(CXX) $(CXXFLAGS) $(MASLLIB) -L$(OUTDIR) -shared $(UI_if_inspector_OBJECTS) -o $@ $(UI_if_inspector_LIBS)
@@ -153,4 +151,4 @@ $(OUTDIR)/libUI_transient.so: $(UI_transient_OBJECTS) $(OUTDIR)/libUI.so
 	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
-	rm -f $(OUTDIR)/* $(SRCDIR)/*.o
+	rm -f $(OUTDIR)/*.so $(SRCDIR)/*.o
