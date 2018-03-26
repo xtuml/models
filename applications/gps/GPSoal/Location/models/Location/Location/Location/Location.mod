@@ -25,6 +25,7 @@ domain Location is
     public  service initialize (
     );
   end object;
+pragma key_letter ( "Distance" ); 
 //!Simulates a GPS.
   object GPS is
 //!Handle for underlying timer mechanism enabling the generation 
@@ -81,6 +82,7 @@ domain Location is
         unregisterComplete => idle      ); 
     end transition;
   end object;
+pragma key_letter ( "GPS" ); 
 //!Constants specifying the behavior of the simulated GPS.
 //!
 //!initialLatitude and initialLongitude specify, as decimal degrees,
@@ -102,4 +104,6 @@ domain Location is
     public  service initialize (
     );
   end object;
+pragma key_letter ( "simulatedGPS" ); 
 end domain;
+pragma number ( 2 ); 

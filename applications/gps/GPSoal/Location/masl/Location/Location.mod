@@ -30,6 +30,7 @@ domain Location is
     public service initialize ();     
     
   end object;
+  pragma key_letter( "Distance" );
   
   //!Simulates a GPS.
   object GPS is
@@ -87,6 +88,7 @@ domain Location is
     end transition;
     
   end object;
+  pragma key_letter( "GPS" );
   
   //!Constants specifying the behavior of the simulated GPS.
   //!
@@ -111,6 +113,8 @@ domain Location is
     public service initialize ();     
     
   end object;
+  pragma key_letter( "simulatedGPS" );
   
   
 end domain;
+pragma number( 2 );
