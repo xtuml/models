@@ -3,11 +3,8 @@ uiconst: instance of UIConstants;
 ui: instance of UI;
 signal_no: integer;
 begin
+  UIConstants.initialize();
   uiconst := find_one UIConstants();
-  if ( null = uiconst ) then
-    UIConstants.initialize();
-    uiconst := find_one UIConstants();
-  end if;
   signal_no := this.poll();
   if ( uiconst.SOCKET_ERROR = signal_no ) then
     this.socket_id := uiconst.SOCKET_ERROR;
