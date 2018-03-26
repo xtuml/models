@@ -1,0 +1,23 @@
+public service Location::getDistance ( fromLat: in real,
+                                       fromLong: in real,
+                                       toLat: in real,
+                                       toLong: in real ) return real is
+distance: instance of Distance;
+deltaLat: real;
+deltaLong: real;
+sumSquares: real;
+sqrtSum: real;
+result: real;
+begin
+  // Return the straight-line distance, expressed in meters, between the 
+  // two points passed as parameters, expressed in decimal degrees.
+
+  Distance.initialize();
+  distance := find_one Distance();
+  deltaLat := toLat - fromLat;
+  deltaLong := toLong - fromLong;
+  sumSquares := (deltaLat * deltaLat) + (deltaLong * deltaLong);
+  sqrtSum := sqrt( sumSquares );
+  result := (sqrtSum * distance.kmPerDegree * 1000 );
+  return result;
+end service;

@@ -1,0 +1,10 @@
+public service Location::getLocation ( latitude: out real,
+                                       longitude: out real ) is
+gps: instance of GPS;
+begin
+  // Return, via reference arguments, the current position of the singleton 
+  // instance of the simulated GPS.
+  gps := find_one GPS();
+  latitude := gps.currentLatitude;
+  longitude := gps.currentLongitude;
+end service;

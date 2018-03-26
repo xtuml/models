@@ -1,0 +1,98 @@
+//! ACTIVITY BEGIN. 'dda63c94-453e-4795-a429-0953dfe153ad' DO NOT EDIT THIS LINE.
+public service Location::getLocation ( latitude : out real,
+                                      longitude : out real ) is
+gps: instance of GPS;
+begin
+  // Return, via reference arguments, the current position of the singleton 
+  // instance of the simulated GPS.
+  gps := find_one GPS();
+  latitude := gps.currentLatitude;
+  longitude := gps.currentLongitude;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'adafb9d7-46a3-4dee-a66d-9707db17d79a' DO NOT EDIT THIS LINE.
+public service Location::getDistance ( fromLat : in real,
+                                      fromLong : in real,
+                                      toLat : in real,
+                                      toLong : in real ) return real is
+distance: instance of Distance;
+deltaLat: real;
+deltaLong: real;
+sumSquares: real;
+sqrtSum: real;
+result: real;
+begin
+  // Return the straight-line distance, expressed in meters, between the 
+  // two points passed as parameters, expressed in decimal degrees.
+
+  Distance.initialize();
+  distance := find_one Distance();
+  deltaLat := toLat - fromLat;
+  deltaLong := toLong - fromLong;
+  sumSquares := (deltaLat * deltaLat) + (deltaLong * deltaLong);
+  sqrtSum := sqrt( sumSquares );
+  result := (sqrtSum * distance.kmPerDegree * 1000 );
+  return result;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'f3cc6047-9e47-439b-b974-25e0cc8d620b' DO NOT EDIT THIS LINE.
+public service Location::registerListener () is
+gps: instance of GPS;
+begin
+  GPS.initialize();
+  gps := find_one GPS();
+  generate GPS.registerListener() to gps;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '4ba09871-89f8-4672-bf62-b6be7bbeff78' DO NOT EDIT THIS LINE.
+public service Location::unregisterListener () is
+gps: instance of GPS;
+begin
+  gps := find_one GPS();
+  generate GPS.unregisterListener() to gps;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'c2ec9b94-4dfc-4749-8937-739ce002fe7d' DO NOT EDIT THIS LINE.
+private service Location::sqrt ( x : in real ) return real is
+result: real;
+inputValue: real;
+guess: real;
+MAX_ITERATIONS: integer;
+i: integer;
+prev_value: real;
+begin
+  // TODO:FIXME There is a bug in verifier in handling of realized external entities in 
+  //      a multi-domain project. I am working around this by getting a sqrt approximation.
+  //sqrtSum = MATH::sqrt( x: sumSquares );
+  //      So, this is introduced as a workaround to give an approximation of sqrt.
+  result := 0.0;
+
+  inputValue := x;
+
+  // If a negative is passed-in take the abs value
+  if ( inputValue < 0 ) then
+    inputValue := -x;
+  end if;
+
+  if (x > 0) then
+
+	  guess := x;
+	  MAX_ITERATIONS := 24;
+	  i := 0;
+	  prev_value := -1.0;
+	  while (i < MAX_ITERATIONS and prev_value /= guess) loop
+      prev_value := guess;
+      guess := guess - (((guess*guess)-inputValue)/(2*guess));
+	    i := i + 1;
+	  end loop;
+    result := guess;
+  end if;
+
+  return result;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

@@ -38,16 +38,11 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'getLocation',
 	'',
-	'// Return, via reference arguments, the current position of the singleton 
-// instance of the simulated GPS.
-
-select any gps from instances of GPS;
-param.latitude = gps.currentLatitude;
-param.longitude = gps.currentLongitude; ',
+	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
-	0);
+	1);
 INSERT INTO S_SPARM
 	VALUES ("a142975c-b9e6-480a-a98a-83e2ec3204a5",
 	"dda63c94-453e-4795-a429-0953dfe153ad",
@@ -77,26 +72,11 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'getDistance',
 	'',
-	'// Return the straight-line distance, expressed in meters, between the 
-// two points passed as parameters, expressed in decimal degrees.
-
-select any distance from instances of Distance;
-if ( empty distance )
-  Distance::initialize();
-  select any distance from instances of Distance;
-end if;
-deltaLat = param.toLat - param.fromLat;
-deltaLong = param.toLong - param.fromLong;
-sumSquares = (deltaLat * deltaLat) + (deltaLong * deltaLong);
-sqrtSum = ::sqrt( x:sumSquares );
-result = (sqrtSum * distance.kmPerDegree * 1000 );
-return result;
-
-',
+	'',
 	"ba5eda7a-def5-0000-0000-000000000003",
 	1,
 	'',
-	0);
+	1);
 INSERT INTO S_SPARM
 	VALUES ("5060efa7-b254-4079-b366-a63069a6ea98",
 	"adafb9d7-46a3-4dee-a66d-9707db17d79a",
@@ -144,14 +124,11 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'registerListener',
 	'',
-	'GPS::create();
-select any gps from instances of GPS;
-generate GPS10:registerListener() to gps;
-',
+	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
-	0);
+	1);
 INSERT INTO PE_PE
 	VALUES ("f3cc6047-9e47-439b-b974-25e0cc8d620b",
 	1,
@@ -163,13 +140,11 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'unregisterListener',
 	'',
-	'select any gps from instances of GPS;
-generate GPS11:unregisterListener() to gps; 
-',
+	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
-	0);
+	1);
 INSERT INTO PE_PE
 	VALUES ("4ba09871-89f8-4672-bf62-b6be7bbeff78",
 	1,
@@ -181,39 +156,11 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'sqrt',
 	'',
-	'// TODO:FIXME There is a bug in verifier in handling of realized external entities in 
-//      a multi-domain project. I am working around this by getting a sqrt approximation.
-//sqrtSum = MATH::sqrt( x: sumSquares );
-//      So, this is introduced as a workaround to give an approximation of sqrt.
-result = 0.0;
-
-inputValue = param.x;
-
-// If a negative is passed-in take the abs value
-if inputValue < 0
-  inputValue = -param.x;
-end if;
-
-if (param.x > 0) 
-
-	guess = param.x;
-	MAX_ITERATIONS = 24;
-	i = 0;
-	prev_value = -1.0;
-	while (i < MAX_ITERATIONS and prev_value != guess)
-      prev_value = guess;
-      guess = guess - (((guess*guess)-inputValue)/(2*guess));
-	  i = i + 1;
-	end while;
-    result = guess;
-end if;
-
-return result;
-',
+	'',
 	"ba5eda7a-def5-0000-0000-000000000003",
 	1,
 	'',
-	0);
+	1);
 INSERT INTO S_SPARM
 	VALUES ("383d1877-3353-4a6c-b627-072c50b2bc09",
 	"c2ec9b94-4dfc-4749-8937-739ce002fe7d",

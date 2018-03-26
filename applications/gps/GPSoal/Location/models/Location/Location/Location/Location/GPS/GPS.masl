@@ -1,0 +1,21 @@
+//! ACTIVITY BEGIN. '7943a748-3633-4cd5-961a-13e79e4e3098' DO NOT EDIT THIS LINE.
+public service Location::GPS.initialize () is
+gps: instance of GPS;
+simgps: instance of simulatedGPS;
+begin
+  // The GPS is a singleton instance, so create it if it does not exist.
+
+  gps := find_one GPS();
+  if ( null = gps ) then
+    // Create and initialize the singleton instance of the GPS.
+    gps := create GPS( id => 1, Current_State => idle );
+    gps.motionSegments := 0;
+  
+    simulatedGPS.initialize();
+    simulatedGPS := find_one simulatedGPS();
+    gps.currentLatitude  := simgps.initialLatitude;
+    gps.currentLongitude := simgps.initialLongitude;
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
