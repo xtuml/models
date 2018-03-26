@@ -31,16 +31,11 @@ INSERT INTO O_TFR
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
 	'// make sre the singleton exists
+UIConstants::initialize();
 select any uiconst from instances of UIConstants;
-if ( empty uiconst )
-  UIConstants::initialize();
-  select any uiconst from instances of UIConstants;
-end if;
 select any ui from instances of UI;
-if (empty ui)
-  UI::initialize();
-  select any ui from instances of UI;
-end if;
+UI::initialize();
+select any ui from instances of UI;
 
 ui.socket_id = GuiBridge::connect();
 if ( uiconst.SOCKET_ERROR != ui.socket_id )
@@ -144,11 +139,8 @@ INSERT INTO O_TFR
 	'// make sre the singleton exists
 select any ui from instances of UI;
 if (empty ui)
+  UIConstants::initialize();
   select any uiconst from instances of UIConstants;
-  if ( empty uiconst )
-    UIConstants::initialize();
-    select any uiconst from instances of UIConstants;
-  end if;
   create object instance ui of UI; 
   ui.id = 1;
   ui.socket_id = uiconst.SOCKET_ERROR;
