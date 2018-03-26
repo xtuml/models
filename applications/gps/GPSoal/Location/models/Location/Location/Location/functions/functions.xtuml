@@ -41,6 +41,7 @@ INSERT INTO S_SYNC
 	'// Return, via reference arguments, the current position of the singleton 
 // instance of the simulated GPS.
 
+GPS::initialize();
 select any gps from instances of GPS;
 param.latitude = gps.currentLatitude;
 param.longitude = gps.currentLongitude; ',
@@ -80,11 +81,8 @@ INSERT INTO S_SYNC
 	'// Return the straight-line distance, expressed in meters, between the 
 // two points passed as parameters, expressed in decimal degrees.
 
+Distance::initialize();
 select any distance from instances of Distance;
-if ( empty distance )
-  Distance::initialize();
-  select any distance from instances of Distance;
-end if;
 deltaLat = param.toLat - param.fromLat;
 deltaLong = param.toLong - param.fromLong;
 sumSquares = (deltaLat * deltaLat) + (deltaLong * deltaLong);
@@ -144,7 +142,7 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'registerListener',
 	'',
-	'GPS::create();
+	'GPS::initialize();
 select any gps from instances of GPS;
 generate GPS10:registerListener() to gps;
 ',
@@ -163,7 +161,8 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'unregisterListener',
 	'',
-	'select any gps from instances of GPS;
+	'GPS::initialize();
+select any gps from instances of GPS;
 generate GPS11:unregisterListener() to gps; 
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",

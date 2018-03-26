@@ -398,11 +398,8 @@ INSERT INTO SM_ACT
 	"77ed88df-af92-4f7f-8b31-8a8618436d91",
 	1,
 	'// Simulate movement.
+simulatedGPS::initialize();
 select any simgps from instances of simulatedGPS;
-if ( empty simgps )
-  simulatedGPS::initialize();
-  select any simgps from instances of simulatedGPS;
-end if;
 if ( (self.motionSegments % 3) == 0 )
   self.currentLongitude = self.currentLongitude + (simgps.longitudeIncrement * 2);
   self.currentLatitude = self.currentLatitude + simgps.latitudeIncrement;
@@ -431,11 +428,8 @@ INSERT INTO SM_ACT
 	1,
 	'// Activate the simulated GPS (this creates the GPS instance, if needed).
 // Establish recurring timer for periodic position updates.
+simulatedGPS::initialize();
 select any simgps from instances of simulatedGPS;
-if ( empty simgps )
-  simulatedGPS::initialize();
-  select any simgps from instances of simulatedGPS;
-end if;
 create event instance tick of GPS1:tick() to self;
 self.timer = TIM::timer_start_recurring( event_inst: tick, microseconds: simgps.updatePeriod );
 LOG::LogInfo(message: "Location listener registered.");  

@@ -10,7 +10,7 @@ INSERT INTO O_OBJ
 INSERT INTO O_TFR
 	VALUES ("7943a748-3633-4cd5-961a-13e79e4e3098",
 	"0679851b-cc52-42de-bb1e-f7d26a404f38",
-	'create',
+	'initialize',
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
@@ -19,15 +19,11 @@ INSERT INTO O_TFR
 select any gps from instances of GPS;
 if ( empty gps )
   // Create and initialize the singleton instance of the GPS.
-  create object instance gps of GPS; 
-  gps.id = 1;
+  create object instance gps of GPS; gps.id = 1;
   gps.motionSegments = 0;
   
+  simulatedGPS::initialize();
   select any simgps from instances of simulatedGPS;
-  if ( empty simgps )
-    simulatedGPS::initialize();
-    select any simgps from instances of simulatedGPS;
-  end if;
   gps.currentLatitude  = simgps.initialLatitude;
   gps.currentLongitude = simgps.initialLongitude;
 end if;
