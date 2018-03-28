@@ -392,7 +392,7 @@ select one currentGoalSpec related by self->GoalSpec[R9.''specified_by''];
 select any nextGoalSpec related by session->GoalSpec[R10.''includes''] where ( selected.sequenceNumber == (currentGoalSpec.sequenceNumber + 1) );
   
 if ( not empty nextGoalSpec )
-  Goal::create( sequenceNumber: nextGoalSpec.sequenceNumber );
+  Goal::initialize( sequenceNumber: nextGoalSpec.sequenceNumber );
 end if;
 ',
 	'',
