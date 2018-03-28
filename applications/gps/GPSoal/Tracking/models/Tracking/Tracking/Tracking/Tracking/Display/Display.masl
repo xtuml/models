@@ -1,27 +1,32 @@
 //! ACTIVITY BEGIN. 'a29d7ebd-8df6-44b9-a088-55d69709c957' DO NOT EDIT THIS LINE.
-public service Tracking::Display.goalDispositionIndicator () return Indicator is
-// Return the indicator value representing the disposition of 
-// the currently executing goal, if one exists.  If there is
-// no currently executing goal, return Blank.
-
-// Find the currently executing goal (if one exists) associated 
-// with the singleton instance of the workout session.
-select any session from instances of WorkoutSession;
-select one goal related by session->Goal[R11.'is_currently_executing'];
-
-// Convert the disposition of the currently executing goal
-// (if it exists) to a UI indicator.
-indicator = Indicator::Blank;
-if ( not empty goal )
-  if ( goal.disposition == GoalDisposition::Increase )
-    indicator = Indicator::Up;
-  elif ( goal.disposition == GoalDisposition::Decrease )
-    indicator = Indicator::Down;
-  else
-    indicator = Indicator::Flat;
+public service Tracking::Display.goalDispositionIndicator () return UI::Indicator is
+session: instance of WorkoutSession;
+goal: instance of Goal;
+indicator: UI::Indicator;
+begin
+  // Return the indicator value representing the disposition of 
+  // the currently executing goal, if one exists.  If there is
+  // no currently executing goal, return Blank.
+  
+  // Find the currently executing goal (if one exists) associated 
+  // with the singleton instance of the workout session.
+  session := find_one WorkoutSession();
+  goal := session->R11.is_currently_executing.Goal;
+  
+  // Convert the disposition of the currently executing goal
+  // (if it exists) to a UI indicator.
+  indicator := UI::Blank;
+  if ( null /= goal ) then
+    if ( goal.disposition = Increase ) then
+      indicator := UI::Up;
+    elsif ( goal.disposition = Decrease ) then
+      indicator := UI::Down;
+    else
+      indicator := UI::Flat;
+    end if;
   end if;
-end if;
-
-return( indicator );
+  
+  return( indicator );
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 

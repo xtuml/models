@@ -1,63 +1,81 @@
 //! ACTIVITY BEGIN. '6a867eb5-2ed9-4284-891f-cfd24cc9c660' DO NOT EDIT THIS LINE.
 public service Tracking::heartRateChanged ( heartRate : in integer ) is
-// Find the singleton instance of the workout session
-// and forward this signal, as an event, to it.
-// If there is no active workout session, then this 
-// sample is simply ignored and not recorded.
-
-select any session from instances of WorkoutSession;
-if (not empty session)
-  session.addHeartRateSample(heartRate: param.heartRate);
-end if;
+session: instance of WorkoutSession;
+begin
+  // Find the singleton instance of the workout session
+  // and forward this signal, as an event, to it.
+  // If there is no active workout session, then this 
+  // sample is simply ignored and not recorded.
+  
+  session := find_one WorkoutSession();
+  if (null /= session) then
+    session.addHeartRateSample(heartRate);
+  end if;
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '3057893e-40f7-4b65-ad5c-84daa26a0d7e' DO NOT EDIT THIS LINE.
 public service Tracking::setTargetPressed () is
-// If a goal is currently executing, advance to the next one,
-//   otherwise start the first specified goal, if it exists.
-Goal::nextGoal();
+begin
+  // If a goal is currently executing, advance to the next one,
+  //   otherwise start the first specified goal, if it exists.
+  Goal.nextGoal();
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '269a9744-3613-4c08-bded-4f1db0a2c2e5' DO NOT EDIT THIS LINE.
 public service Tracking::startStopPressed () is
-// If necessary, create a workout session and everything required to 
-// support it.  Then, forward this signal to the workout timer.
-
-WorkoutSession::initialize();
-
-// Forward this signal, as an event, to the singleton instance of WorkoutTimer.
-select any workoutTimer from instances of WorkoutTimer;
-generate WorkoutTimer1:startStopPressed() to workoutTimer;
+workoutTimer: instance of WorkoutTimer;
+begin
+  // If necessary, create a workout session and everything required to 
+  // support it.  Then, forward this signal to the workout timer.
+  
+  WorkoutSession.initialize();
+  
+  // Forward this signal, as an event, to the singleton instance of WorkoutTimer.
+  workoutTimer := find_one WorkoutTimer();
+  generate WorkoutTimer.startStopPressed() to workoutTimer;
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'b1ad149c-61a8-427e-b793-a7141bc6bc26' DO NOT EDIT THIS LINE.
 public service Tracking::lapResetPressed () is
-// Find the singleton instance of the workout timer 
-// and forward this signal, as an event, to it.
-
-select any workoutTimer from instances of WorkoutTimer;
-if (not empty workoutTimer)
-  generate WorkoutTimer2:lapResetPressed() to workoutTimer;
-else
-  LOG::LogFailure( message:"Tracking:UI:lapResetPressed - No WorkoutTimer, so nothing to do." );
-end if;
+workoutTimer: instance of WorkoutTimer;
+begin
+  // Find the singleton instance of the workout timer 
+  // and forward this signal, as an event, to it.
+  
+  workoutTimer := find_one WorkoutTimer();
+  if (null /= workoutTimer) then
+    generate WorkoutTimer.lapResetPressed() to workoutTimer;
+  else
+    LOG::LogFailure( "Tracking:UI:lapResetPressed - No WorkoutTimer, so nothing to do." );
+  end if;
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'ee09d978-064b-45da-a5d3-2de05dd46417' DO NOT EDIT THIS LINE.
 public service Tracking::lightPressed () is
+begin
+  null;
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'ad0d93b0-625f-4e5a-a8aa-11008a582f4f' DO NOT EDIT THIS LINE.
 public service Tracking::modePressed () is
-// Notify the display to change modes.
-
-// Find the display related to the singleton instance of 
-//   workout session (if it exists), and notify it.
-select any session from instances of WorkoutSession;
-if ( not empty session )
-  select one display related by session->Display[R7.'current_status_indicated_on'];
-  generate Display1:modeChange to display;
-end if;
+session: instance of WorkoutSession;
+display: instance of Display;
+begin
+  // Notify the display to change modes.
+  
+  // Find the display related to the singleton instance of 
+  //   workout session (if it exists), and notify it.
+  session := find_one WorkoutSession();
+  if ( null /= session ) then
+    display := session->R7.Display;
+    generate Display.modeChange() to display;
+  end if;
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '2b5b7939-af5c-46dc-abff-7c64296919a1' DO NOT EDIT THIS LINE.
@@ -67,18 +85,22 @@ public service Tracking::newGoalSpec ( spanType : in GoalSpan,
                                       maximum : in real,
                                       minimum : in real,
                                       sequenceNumber : in integer ) is
-// Create a new goal specification and relate it to the
-//   singleton instance of workout session if it exists.
-select any session from instances of WorkoutSession;
-if ( not empty session )
-  create object instance goalSpec of GoalSpec;
-  goalSpec.sequenceNumber = param.sequenceNumber;
-  goalSpec.minimum = param.minimum;
-  goalSpec.maximum = param.maximum;
-  goalSpec.span = param.span;
-  goalSpec.criteriaType = param.criteriaType;
-  goalSpec.spanType = param.spanType;
-  relate goalSpec to session across R10.'included_in';
-end if;
+session: instance of WorkoutSession;
+goalSpec: instance of GoalSpec;
+begin
+  // Create a new goal specification and relate it to the
+  //   singleton instance of workout session if it exists.
+  session := find_one WorkoutSession();
+  if ( null /= session ) then
+    goalSpec := create GoalSpec( session_startTime => session.startTime, sequenceNumber => sequenceNumber );
+    goalSpec.minimum := minimum;
+    goalSpec.maximum := maximum;
+    goalSpec.span := span;
+    goalSpec.criteriaType := criteriaType;
+    goalSpec.spanType := spanType;
+    goalSpec.last_goal_ID := 0;
+    link goalSpec R10.included_in session;
+  end if;
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 

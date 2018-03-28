@@ -1,0 +1,24 @@
+public service Tracking::Goal.nextGoal () is
+session: instance of WorkoutSession;
+goal: instance of Goal;
+gsc: instance of GoalSpecConstants;
+begin
+  // Advance to the next goal or start the first one if one
+  //   is currently not exectuing.
+  
+  //  If there is a goal currently executing, notify it that its execution
+  //    has completed.
+  //  Otherwise, create and start a goal for the first goal specification
+  //    if one exists.
+  session := find_one WorkoutSession();  // WorkoutSession is a singleton.
+  if ( null /= session ) then
+    goal := session->R11.is_currently_executing.Goal;
+    if ( null /= goal ) then
+      generate Goal.Completed() to goal;
+    else
+      GoalSpecConstants.initialize();
+      gsc := find_one GoalSpecConstants();
+      Goal.initialize( gsc.GoalSpecOrigin );
+    end if;
+  end if;
+end service;

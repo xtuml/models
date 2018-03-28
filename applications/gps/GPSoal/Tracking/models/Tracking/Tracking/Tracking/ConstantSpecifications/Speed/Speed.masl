@@ -1,10 +1,13 @@
 //! ACTIVITY BEGIN. '705b176d-9fe0-4f92-81a6-01b9114f764e' DO NOT EDIT THIS LINE.
 public service Tracking::Speed.initialize () is
-select any speed from instances of Speed;
-if ( empty speed )
-  create object instance speed of Speed; speed.id = 1;
-  speed.SpeedAveragingWindow = 5;
-  speed.SecondsPerHour = 3600;
-end if;
+speed: instance of Speed;
+begin
+  speed := find_one Speed();
+  if ( null = speed ) then
+    speed := create Speed( id => 1 );
+    speed.SpeedAveragingWindow := 5;
+    speed.SecondsPerHour := 3600;
+  end if;
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 

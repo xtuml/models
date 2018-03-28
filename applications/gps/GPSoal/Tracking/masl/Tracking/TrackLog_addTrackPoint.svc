@@ -1,0 +1,52 @@
+public instance service Tracking::TrackLog.addTrackPoint () is
+workoutTimer: instance of WorkoutTimer;
+trackPoint: instance of TrackPoint;
+firstPoint: instance of TrackPoint;
+lastPoint: instance of TrackPoint;
+isFirstTrackPoint: boolean;
+lastLatitude: real;
+lastLongitude: real;
+distance: real;
+session: instance of WorkoutSession;
+begin
+  // Add a track point to this track log, update the accumulated distance
+  // and current speed, and then notify the UI.
+  
+  // Create a new track point, retrieving the current location from the GPS.
+  workoutTimer := this->R4.represents_path_for.WorkoutSession->R8.is_timed_by.WorkoutTimer;
+  trackPoint := create TrackPoint( session_startTime => this.session_startTime, time => workoutTimer.time );
+  LOC~>getLocation( trackPoint.latitude, trackPoint.longitude );
+  
+  // Add the newly created track point to the track log.
+  firstPoint := this->R1.TrackPoint;
+  lastPoint := this->R3.TrackPoint;
+  
+  // Explicit variable declarations for later use outside if-else clause.
+  isFirstTrackPoint := false;
+  lastLatitude := 0.0;
+  lastLongitude := 0.0;  
+  if (null = firstPoint) then
+    isFirstTrackPoint := true;
+    link this R1.has_first trackPoint;
+    link this R3.has_last trackPoint;
+  else 
+    // Save last location for use in updating accumulated distance.
+    lastLatitude := lastPoint.latitude;
+    lastLongitude := lastPoint.longitude;
+    unlink this R3.has_last lastPoint;
+    link this R3.has_last trackPoint;
+    link lastPoint R2.follows trackPoint;
+  end if;
+  
+  // Update accumulated distance and current speed.
+  distance := 0.0;
+  if (not isFirstTrackPoint) then
+    distance := LOC~>getDistance( lastLatitude, lastLongitude, trackPoint.latitude, trackPoint.longitude );
+  end if;
+  
+  session := this->R4.represents_path_for.WorkoutSession;
+  session.accumulatedDistance := session.accumulatedDistance + distance;
+  
+  // Notify display of of the updated values.
+  this.updateDisplay();
+end service;

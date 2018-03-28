@@ -1,4 +1,51 @@
+//!The Tracking component encapsulates the entire application software. This is the 
+//!only component in the system from which code will be generated for the final 
+//!product.
 domain Tracking is
-  public type GoalCriteria is enum ( HeartRate, Pace ); 
-  public type GoalSpan is enum ( Distance, Time ); 
+//!The criteria type for a particular workout goal.  
+  public type GoalCriteria is enum (HeartRate, Pace)
+  ;
+//!Disposition of a currently executing goal.
+  public type GoalDisposition is enum (Achieving, Increase, Decrease)
+  ;
+  public type GoalSpan is enum (Distance, Time)
+  ;
+    public service heartRateChanged (
+        heartRate : in integer    );
+    public service setTargetPressed (
+    );
+    public service startStopPressed (
+    );
+    public service lapResetPressed (
+    );
+    public service lightPressed (
+    );
+    public service modePressed (
+    );
+    public service newGoalSpec (
+        spanType : in GoalSpan,        criteriaType : in GoalCriteria,        span : in real,        maximum : in real,        minimum : in real,        sequenceNumber : in integer    );
+  terminator HR is
+    public service registerListener (
+    );
+    public service unregisterListener (
+    );
+  end terminator;
+  terminator LOC is
+    public service getDistance (
+        toLong : in real,        toLat : in real,        fromLong : in real,        fromLat : in real    ) return real;
+    public service getLocation (
+        longitude : out real,        latitude : out real    );
+    public service registerListener (
+    );
+    public service unregisterListener (
+    );
+  end terminator;
+  terminator UI is
+    public service setData (
+        unit : in UI::Unit,        value : in real    );
+    public service setIndicator (
+        indicator : in UI::Indicator    );
+    public service setTime (
+        time : in integer    );
+  end terminator;
 end domain;

@@ -1,0 +1,16 @@
+public instance service Tracking::WorkoutTimer.deactivate () is
+executingGoal: instance of Goal;
+begin
+  // Cancel the timer driving the workout timer, ignoring the return code.
+  cancel this.timer;
+  
+  // Pause evaluation of the currently executing goal, if there is one.
+  executingGoal := this->R8.acts_as_the_stopwatch_for.WorkoutSession->R11.is_currently_executing.Goal;
+  if ( null /= executingGoal ) then
+    generate Goal.Pause() to executingGoal;
+  end if;
+  
+  // Stop listening for updates from the GPS and heart monitor.
+  LOC~>unregisterListener();
+  HR~>unregisterListener();
+end service;

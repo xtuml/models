@@ -1,10 +1,13 @@
 //! ACTIVITY BEGIN. '80138b30-4d2d-4ff4-b7ea-0c3e4ea9cd96' DO NOT EDIT THIS LINE.
 public service Tracking::HeartRateConstants.initialize () is
-select any hrc from instances of HeartRateConstants;
-if ( empty hrc )
-  create object instance hrc of HeartRateConstants; hrc.id = 1;
-  hrc.HeartRateAveragingWindow = 5;
-  hrc.HeartRateSamplingPeriod = 3;
-end if;
+hrc: instance of HeartRateConstants;
+begin
+  hrc := find_one HeartRateConstants();
+  if ( null = hrc ) then
+    hrc := create HeartRateConstants( id => 1 );
+    hrc.HeartRateAveragingWindow := 5;
+    hrc.HeartRateSamplingPeriod := 3;
+  end if;
+end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 

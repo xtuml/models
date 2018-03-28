@@ -1,0 +1,9 @@
+public service Tracking::GoalAchievement.initialize () is
+goalachievement: instance of GoalAchievement;
+begin
+  goalachievement := find_one GoalAchievement();
+  if ( null = goalachievement ) then
+    goalachievement := create GoalAchievement( id => 1 );
+    goalachievement.evaluationPeriod := 3000000;
+  end if;
+end service;
