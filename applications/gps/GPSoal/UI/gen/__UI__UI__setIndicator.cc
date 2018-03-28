@@ -9,7 +9,10 @@
 #include <stdint.h>
 #include "swa/Domain.hh"
 #include "swa/Stack.hh"
+
+extern "C" {
 #include "UI_GuiBridge_bridge.h"
+}
 
 namespace masld_UI
 {

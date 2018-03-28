@@ -17,7 +17,10 @@
 #include "swa/Stack.hh"
 #include "swa/Timestamp.hh"
 #include "swa/types.hh"
+
+extern "C" {
 #include "UI_GuiBridge_bridge.h"
+}
 
 namespace masld_UI
 {
