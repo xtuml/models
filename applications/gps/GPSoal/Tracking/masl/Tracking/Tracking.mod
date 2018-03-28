@@ -25,8 +25,6 @@ domain Tracking is
   public type GoalDisposition is enum ( Achieving, Increase, Decrease );   
   public type GoalSpan is enum ( Distance, Time );   
   
-  private service Initialize ();   
-  private service GoalTest_1 ();   
   public service heartRateChanged ( heartRate: in integer );   
   public service setTargetPressed ();   
   public service startStopPressed ();   
@@ -39,6 +37,8 @@ domain Tracking is
                                maximum: in real,
                                minimum: in real,
                                sequenceNumber: in integer );   
+  private service Initialize ();   
+  private service GoalTest_1 ();   
   
   
   terminator HR is
@@ -161,6 +161,7 @@ domain Tracking is
     next_time: referential ( R2.preceeds.TrackPoint.time ) integer;     
     
   end object;
+  pragma key_letter( "TrackPoint" );
   
   //!Each instance represents a single lap marker.
   object LapMarker is
@@ -170,6 +171,7 @@ domain Tracking is
     session_startTime: preferred referential ( R5.marks_end_of_lap_in.TrackLog.session_startTime ) timestamp;     
     
   end object;
+  pragma key_letter( "LapMarker" );
   
   //!Each instance represents a single heart-rate sample.
   object HeartRateSample is
@@ -181,6 +183,7 @@ domain Tracking is
     session_startTime: preferred referential ( R6.was_collected_during.WorkoutSession.startTime ) timestamp;     
     
   end object;
+  pragma key_letter( "HeartRateSample" );
   
   //!Each instance specifies one particular workout goal.  The actual execution of the goal
   //!along with evaluation of whether it is currently being achieved is handled by another
@@ -222,6 +225,7 @@ domain Tracking is
     last_goal_ID: integer;     
     
   end object;
+  pragma key_letter( "GoalSpec" );
   
   //!Each instance represents one contiguous period of time during 
   //!which a particular goal was being met (achieved).
@@ -240,6 +244,7 @@ domain Tracking is
     public instance service close ();     
     
   end object;
+  pragma key_letter( "Achievement" );
   
   //!Represents the display for the device, managing the sequence of screens
   //!and displaying the appropriate values based on the current mode of the 
@@ -276,6 +281,7 @@ domain Tracking is
     end transition;
     
   end object;
+  pragma key_letter( "Display" );
   
   //!Each instance represents a particular goal as it is executing.
   //!This class knows how to evaluate whether the goal is being achieved 
@@ -352,6 +358,7 @@ domain Tracking is
     end transition;
     
   end object;
+  pragma key_letter( "Goal" );
   
   //!Each instance represents a single workout session.  
   //!
@@ -376,6 +383,7 @@ domain Tracking is
     public instance service getCurrentHeartRate () return integer;     
     
   end object;
+  pragma key_letter( "WorkoutSession" );
   
   //!Represents the stopwatch portion of the device.
   //!This class also knows:
@@ -460,6 +468,7 @@ domain Tracking is
     end transition;
     
   end object;
+  pragma key_letter( "WorkoutTimer" );
   
   //!The collection of track points stored during a workout session.
   //!
@@ -478,6 +487,7 @@ domain Tracking is
     public instance service updateDisplay ();     
     
   end object;
+  pragma key_letter( "TrackLog" );
   
   //!evaluationPeriod is the period, expressed in microseconds, at which goal achievement is evaluated.
   object GoalAchievement is
@@ -488,6 +498,7 @@ domain Tracking is
     public service initialize ();     
     
   end object;
+  pragma key_letter( "GoalAchievement" );
   
   //!GoalSpecOrigin indicates the sequence number of the first goal.
   object GoalSpecConstants is
@@ -498,6 +509,7 @@ domain Tracking is
     public service initialize ();     
     
   end object;
+  pragma key_letter( "GoalSpecConstants" );
   
   //!SamplingPeriod is expressed in seconds and represents the period at which heart-rate samples are recorded.
   //!AveragingWindow is expressed in samples and represents the number of samples used when calculating the current average.
@@ -510,6 +522,7 @@ domain Tracking is
     public service initialize ();     
     
   end object;
+  pragma key_letter( "HeartRateConstants" );
   
   //!SpeedAveragingWindow is the number of track points used to calculate the current average speed.
   //!SecondsPerHour is the number of seconds in one hour.
@@ -522,6 +535,7 @@ domain Tracking is
     public service initialize ();     
     
   end object;
+  pragma key_letter( "Speed" );
   
   //!timerPeriod specifies, in seconds, the period for the workout timer.
   object WorkoutTimerConstants is
@@ -532,6 +546,8 @@ domain Tracking is
     public service initialize ();     
     
   end object;
+  pragma key_letter( "WorkoutTimerConstants" );
   
   
 end domain;
+pragma number( 4 );
