@@ -24,6 +24,9 @@ domain Tracking is
   //!Disposition of a currently executing goal.
   public type GoalDisposition is enum ( Achieving, Increase, Decrease );   
   public type GoalSpan is enum ( Distance, Time );   
+  //!Graphical indicator.
+  public type Indicator is enum ( Blank, Down, Flat, Up );   
+  public type Unit is enum ( km, meters, minPerKm, kmPerHour, miles, yards, feet, minPerMile, mph, bpm, laps );   
   
   public service heartRateChanged ( heartRate: in integer );   
   public service setTargetPressed ();   
@@ -59,9 +62,9 @@ domain Tracking is
   end terminator;
   
   terminator UI is
-    public service setData ( unit: in UI::Unit,
+    public service setData ( unit: in Unit,
                              value: in real );     
-    public service setIndicator ( indicator: in UI::Indicator );     
+    public service setIndicator ( indicator: in Indicator );     
     public service setTime ( time: in integer );     
   end terminator;
   
@@ -254,7 +257,7 @@ domain Tracking is
     
     session_startTime: preferred referential ( R7.indicates_current_status_of.WorkoutSession.startTime ) timestamp;     
     
-    public service goalDispositionIndicator () return UI::Indicator;     
+    public service goalDispositionIndicator () return Indicator;     
     
     state displayDistance ();     
     state displaySpeed ();     

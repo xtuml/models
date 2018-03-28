@@ -10,11 +10,6 @@ domain UI is
   object TestCase;
   object UI;
   object UIConstants;
-//!Graphical indicator.
-  public type Indicator is enum (Blank, Down, Flat, Up)
-  ;
-  public type Unit is enum (km, meters, minPerKm, kmPerHour, miles, yards, feet, minPerMile, mph, bpm, laps)
-  ;
     private service sendLapResetPressed (
     );
     private service sendLightPressed (
@@ -26,9 +21,9 @@ domain UI is
     private service sendTargetPressed (
     );
     public service setData (
-        value : in real,        unit : in Unit    );
+        value : in real,        unit : in Tracking::Unit    );
     public service setIndicator (
-        indicator : in Indicator    );
+        indicator : in Tracking::Indicator    );
     public service setTime (
         time : in integer    );
     public service startTest (

@@ -1,31 +1,31 @@
 //! ACTIVITY BEGIN. '14298a5c-0acb-4b3b-9d90-f66bab9b321f' DO NOT EDIT THIS LINE.
 public service UI::setData ( value : in real,
-                            unit : in Unit ) is
+                            unit : in Tracking::Unit ) is
 ui: instance of UI;
 begin
   ui := find_one UI();
   if ( null /= ui ) then
-    if (unit = km) then
+    if (unit = Tracking::km) then
       ui.setData(value, 0);
-    elsif (unit = meters) then
+    elsif (unit = Tracking::meters) then
       ui.setData(value, 1);
-    elsif (unit = minPerKm) then
+    elsif (unit = Tracking::minPerKm) then
       ui.setData(value, 2);
-    elsif (unit = kmPerHour) then
+    elsif (unit = Tracking::kmPerHour) then
       ui.setData(value, 3);
-    elsif (unit = miles) then
+    elsif (unit = Tracking::miles) then
       ui.setData(value, 4);
-    elsif (unit = yards) then
+    elsif (unit = Tracking::yards) then
       ui.setData(value, 5);
-    elsif (unit = feet) then
+    elsif (unit = Tracking::feet) then
       ui.setData(value, 6);
-    elsif (unit = minPerMile) then
+    elsif (unit = Tracking::minPerMile) then
       ui.setData(value, 7);
-    elsif (unit = mph) then
+    elsif (unit = Tracking::mph) then
       ui.setData(value, 8);
-    elsif (unit = bpm) then
+    elsif (unit = Tracking::bpm) then
       ui.setData(value, 9);
-    elsif (unit = laps) then
+    elsif (unit = Tracking::laps) then
       ui.setData(value, 10);
     end if;
   end if;
@@ -33,19 +33,19 @@ end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '082d2805-3f24-47e4-be98-df8768a77df4' DO NOT EDIT THIS LINE.
-public service UI::setIndicator ( indicator : in Indicator ) is
+public service UI::setIndicator ( indicator : in Tracking::Indicator ) is
 ui: instance of UI;
 begin
   // Map values of UIDatatypes/Indicator to values defined in WatchGUI.java.
   ui := find_one UI();
   if ( null /= ui ) then
-    if ( indicator = Blank  ) then
+    if ( indicator = Tracking::Blank  ) then
       ui.setIndicator( 0 );
-    elsif ( indicator = Down ) then
+    elsif ( indicator = Tracking::Down ) then
       ui.setIndicator( 1 );
-    elsif ( indicator = Flat ) then
+    elsif ( indicator = Tracking::Flat ) then
       ui.setIndicator( 2 );
-    elsif ( indicator = Up ) then
+    elsif ( indicator = Tracking::Up ) then
       ui.setIndicator( 3 );
     end if;
   end if;

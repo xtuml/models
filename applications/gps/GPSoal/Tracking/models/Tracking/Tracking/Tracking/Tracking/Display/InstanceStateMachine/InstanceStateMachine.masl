@@ -6,9 +6,9 @@ begin
   session := this->R7.indicates_current_status_of.WorkoutSession;
   distance := session.accumulatedDistance;
   if ( distance > 1000.0 ) then
-    UI~>setData(UI::km, distance / 1000.0);
+    UI~>setData(km, distance / 1000.0);
   else 
-    UI~>setData(UI::meters, distance);
+    UI~>setData(meters, distance);
   end if;
   UI~>setIndicator( Display.goalDispositionIndicator() );
 end state;
@@ -21,7 +21,7 @@ speed: real;
 begin
   session := this->R7.indicates_current_status_of.WorkoutSession;
   speed := session.getCurrentSpeed();
-  UI~>setData(UI::kmPerHour, speed);
+  UI~>setData(kmPerHour, speed);
   UI~>setIndicator( Display.goalDispositionIndicator() );
 end state;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
@@ -33,7 +33,7 @@ pace: real;
 begin
   session := this->R7.indicates_current_status_of.WorkoutSession;
   pace := session.getCurrentPace();
-  UI~>setData(UI::minPerKm, pace);
+  UI~>setData(minPerKm, pace);
   UI~>setIndicator( Display.goalDispositionIndicator() );
 end state;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
@@ -45,7 +45,7 @@ heartRate: integer;
 begin
   session := this->R7.indicates_current_status_of.WorkoutSession;
   heartRate := session.getCurrentHeartRate();
-  UI~>setData(UI::bpm, real(heartRate));
+  UI~>setData(bpm, real(heartRate));
   UI~>setIndicator( Display.goalDispositionIndicator() );
 end state;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
@@ -55,7 +55,7 @@ state Tracking::Display.displayLapCount () is
 lapMarkers: set of instance of LapMarker;
 begin
   lapMarkers := this->R7.indicates_current_status_of.WorkoutSession->R4.captures_path_in.TrackLog->R5.has_laps_defined_by.LapMarker;
-  UI~>setData(UI::laps, real(lapMarkers'length));
+  UI~>setData(laps, real(lapMarkers'length));
   UI~>setIndicator( Display.goalDispositionIndicator() );
 end state;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.

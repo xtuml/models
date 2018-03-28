@@ -4,6 +4,6 @@ pace: real;
 begin
   session := this->R7.indicates_current_status_of.WorkoutSession;
   pace := session.getCurrentPace();
-  UI~>setData(UI::minPerKm, pace);
+  UI~>setData(minPerKm, pace);
   UI~>setIndicator( Display.goalDispositionIndicator() );
 end state;

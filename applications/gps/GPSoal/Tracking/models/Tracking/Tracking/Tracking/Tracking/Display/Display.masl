@@ -1,8 +1,8 @@
 //! ACTIVITY BEGIN. 'a29d7ebd-8df6-44b9-a088-55d69709c957' DO NOT EDIT THIS LINE.
-public service Tracking::Display.goalDispositionIndicator () return UI::Indicator is
+public service Tracking::Display.goalDispositionIndicator () return Indicator is
 session: instance of WorkoutSession;
 goal: instance of Goal;
-indicator: UI::Indicator;
+indicator: Indicator;
 begin
   // Return the indicator value representing the disposition of 
   // the currently executing goal, if one exists.  If there is
@@ -15,14 +15,14 @@ begin
   
   // Convert the disposition of the currently executing goal
   // (if it exists) to a UI indicator.
-  indicator := UI::Blank;
+  indicator := Blank;
   if ( null /= goal ) then
     if ( goal.disposition = Increase ) then
-      indicator := UI::Up;
+      indicator := Up;
     elsif ( goal.disposition = Decrease ) then
-      indicator := UI::Down;
+      indicator := Down;
     else
-      indicator := UI::Flat;
+      indicator := Flat;
     end if;
   end if;
   
