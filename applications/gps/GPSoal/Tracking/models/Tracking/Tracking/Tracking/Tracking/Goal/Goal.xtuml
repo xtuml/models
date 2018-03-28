@@ -36,11 +36,8 @@ if ( not empty goalSpec )
   goal.disposition = GoalDisposition::Increase;
 
   // Start a timer that periodically causes evaluation of goal achievement.
+  GoalAchievement::initialize();
   select any goalachievement from instances of GoalAchievement;
-  if ( empty goalachievement )
-    GoalAchievement::initialize();
-    select any goalachievement from instances of GoalAchievement;
-  end if;
   create event instance evaluateEvent of Goal2:Evaluate to goal; goal.evaluationTimer = TIM::timer_start_recurring( event_inst: evaluateEvent, microseconds: goalachievement.evaluationPeriod );
 end if;
 
@@ -192,11 +189,8 @@ INSERT INTO O_TFR
 //    has completed.
 //  Otherwise, create and start a goal for the first goal specification
 //    if one exists.
+GoalSpecConstants::initialize();
 select any gsc from instances of GoalSpecConstants;
-if ( empty gsc )
-  GoalSpecConstants::initialize();
-  select any gsc from instances of GoalSpecConstants;
-end if;
 select any session from instances of WorkoutSession;  // WorkoutSession is a singleton.
 if ( not empty session )
   select one goal related by session->Goal[R11.''is_currently_executing''];

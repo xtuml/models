@@ -171,11 +171,8 @@ INSERT INTO O_TFR
 // track points and then dividing that sum by the elapsed time between 
 // the first and last point in the subset used for the calculation.
 
+Speed::initialize();
 select any spd from instances of Speed;
-if ( empty spd )
-  Speed::initialize();
-  select any spd from instances of Speed;
-end if;
 select one lastPoint related by self->TrackLog[R4.''captures_path_in'']->TrackPoint[R3.''has_last''];
 speed = 0.0;
 if ( not empty lastPoint )
@@ -232,11 +229,8 @@ INSERT INTO O_TFR
 	1,
 	'// Calculate sliding average using the most recent samples.
 
+HeartRateConstants::initialize();
 select any hrc from instances of HeartRateConstants;
-if ( empty hrc )
-  HeartRateConstants::initialize();
-  select any hrc from instances of HeartRateConstants;
-end if;
 select one workoutTimer related by self->WorkoutTimer[R8.''is_timed_by''];
 select many samples related by self->HeartRateSample[R6.''tracks_heart_rate_over_time_as''] where ( selected.time >= ( workoutTimer.time - (hrc.HeartRateSamplingPeriod * hrc.HeartRateAveragingWindow) ) );
 numberOfSamples = 0;
