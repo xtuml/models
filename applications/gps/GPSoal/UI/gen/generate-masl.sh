@@ -2,7 +2,7 @@
 MASLMC=$HOME/git/masl/core-java/install/masl-core/bin/masl-core
 CWD=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )
 if [[ "" == $GEN_UI_Tracking_LOC ]]; then
-  GEN_UI_Tracking_LOC="$CWD/../Tracking/masl/Tracking"
+  GEN_UI_Tracking_LOC="$CWD/../Tracking/masl/Tracking_interface"
 fi
 if [[ "" == $GEN_UI_LOG_LOC ]]; then
   GEN_UI_LOG_LOC="$CWD/../../../../masl/EEs/LOG/masl/LOG"
