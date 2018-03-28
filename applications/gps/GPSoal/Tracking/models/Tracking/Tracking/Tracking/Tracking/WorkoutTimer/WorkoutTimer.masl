@@ -1,0 +1,45 @@
+//! ACTIVITY BEGIN. '1363f0df-e630-4deb-a831-ed6cbcc9a974' DO NOT EDIT THIS LINE.
+public instance service Tracking::WorkoutTimer.activate () is
+// Start the underlying timer that drives the workout timer.
+select any wtc from instances of WorkoutTimerConstants;
+if ( empty wtc )
+  WorkoutTimerConstants::initialize();
+  select any wtc from instances of WorkoutTimerConstants;
+end if;
+create event instance evt of WorkoutTimer3:tick() to self; 
+self.timer = TIM::timer_start_recurring( event_inst: evt, microseconds: (wtc.timerPeriod * 1000000) );
+
+// Resume evaluation of the currently executing goal, if there is one.
+select one executingGoal related by self->WorkoutSession[R8.'acts_as_the_stopwatch_for']->Goal[R11.'is_currently_executing'];
+if ( not empty executingGoal )
+  generate Goal2:Evaluate to executingGoal;
+end if;
+
+// Resume listening for updates from the GPS and heart monitor.
+send LOC::registerListener();
+send HR::registerListener();
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'e44223c1-ae4c-4d58-a2d6-8d8f3cd56581' DO NOT EDIT THIS LINE.
+public instance service Tracking::WorkoutTimer.deactivate () is
+// Cancel the timer driving the workout timer, ignoring the return code.
+cancelSucceeded = TIM::timer_cancel(timer_inst_ref: self.timer);
+
+// Pause evaluation of the currently executing goal, if there is one.
+select one executingGoal related by self->WorkoutSession[R8.'acts_as_the_stopwatch_for']->Goal[R11.'is_currently_executing'];
+if ( not empty executingGoal )
+  generate Goal3:Pause to executingGoal;
+end if;
+
+// Stop listening for updates from the GPS and heart monitor.
+send LOC::unregisterListener();
+send HR::unregisterListener();
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'e8f31568-926d-492c-b21d-afc08ba9b69c' DO NOT EDIT THIS LINE.
+public instance service Tracking::WorkoutTimer.initialize () is
+// Initialize this instance.
+
+self.time = 0;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

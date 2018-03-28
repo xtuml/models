@@ -1,0 +1,93 @@
+//! ACTIVITY BEGIN. '0f45bbc6-da36-4b5b-a2dd-f739a6f0cbdd' DO NOT EDIT THIS LINE.
+public instance service Tracking::TrackLog.addTrackPoint () is
+// Add a track point to this track log, update the accumulated distance
+// and current speed, and then notify the UI.
+
+// Create a new track point, retrieving the current location from the GPS.
+select one workoutTimer related by self->WorkoutSession[R4.'represents_path_for']->WorkoutTimer[R8.'is_timed_by'];
+create object instance trackPoint of TrackPoint; trackPoint.time = workoutTimer.time;
+send LOC::getLocation( latitude: trackPoint.latitude, longitude: trackPoint.longitude );
+
+// Add the newly created track point to the track log.
+select one firstPoint related by self->TrackPoint[R1];
+select one lastPoint related by self->TrackPoint[R3];
+
+// Explicit variable declarations for later use outside if-else clause.
+isFirstTrackPoint = false;
+lastLatitude = 0.0;
+lastLongitude = 0.0;  
+if (empty firstPoint)
+  isFirstTrackPoint = true;
+  relate self to trackPoint across R1.'has_first';
+  relate self to trackPoint across R3.'has_last';
+else 
+  // Save last location for use in updating accumulated distance.
+  lastLatitude = lastPoint.latitude;
+  lastLongitude = lastPoint.longitude;
+  unrelate self from lastPoint across R3.'has_last';
+  relate self to trackPoint across R3.'has_last';
+  relate lastPoint to trackPoint across R2.'follows';
+end if;
+
+// Update accumulated distance and current speed.
+distance = 0.0;
+if (not isFirstTrackPoint)
+  send distance = LOC::getDistance( fromLat: lastLatitude, fromLong: lastLongitude, toLat: trackPoint.latitude, toLong: trackPoint.longitude );
+end if;
+
+select one session related by self->WorkoutSession[R4.'represents_path_for'];
+session.accumulatedDistance = session.accumulatedDistance + distance;
+
+// Notify display of of the updated values.
+self.updateDisplay();
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '7dbac40f-6e89-4ad2-a576-0f1fcfbe2dc5' DO NOT EDIT THIS LINE.
+public instance service Tracking::TrackLog.clearTrackPoints () is
+select one nextPoint related by self->TrackPoint[R1];
+select one lastPoint related by self->TrackPoint[R3];
+
+if (not empty lastPoint)
+  unrelate self from lastPoint across R3;
+end if;
+
+if (not empty nextPoint)
+  unrelate self from nextPoint across R1;
+end if;
+
+while (not empty nextPoint)
+  prevPoint = nextPoint;
+  select one nextPoint related by nextPoint->TrackPoint[R2.'follows'];
+  if ( not_empty nextPoint )
+    unrelate prevPoint from nextPoint across R2.'follows';
+  end if;
+  delete object instance prevPoint;
+end while;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '83ad7ae5-197c-4e8a-b9f5-b7d1c03db0b7' DO NOT EDIT THIS LINE.
+public instance service Tracking::TrackLog.addLapMarker () is
+select one timer related by self->WorkoutSession[R4.'represents_path_for']->WorkoutTimer[R8.'is_timed_by'];
+create object instance lapMarker of LapMarker; lapMarker.lapTime = timer.time; 
+relate self to lapMarker across R5.'has_laps_defined_by';
+
+// Notify display of the new value.
+self.updateDisplay();
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '9d05da67-cf3d-4220-b15a-0f2e28652584' DO NOT EDIT THIS LINE.
+public instance service Tracking::TrackLog.clearLapMarkers () is
+select many lapMarkers related by self->LapMarker[R5];
+for each lapMarker in lapMarkers
+  unrelate self from lapMarker across R5;
+  delete object instance lapMarker;
+end for;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '9723d50b-bb3d-4fed-86de-6413406a6a2e' DO NOT EDIT THIS LINE.
+public instance service Tracking::TrackLog.updateDisplay () is
+// Update the display so that newly updated values will be shown.
+select one display related by self->WorkoutSession[R4.'represents_path_for']->Display[R7.'current_status_indicated_on'];
+generate Display2:refresh to display;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

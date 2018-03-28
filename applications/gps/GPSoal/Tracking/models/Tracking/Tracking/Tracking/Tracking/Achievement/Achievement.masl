@@ -1,0 +1,11 @@
+//! ACTIVITY BEGIN. '6fac41c9-c339-4dbe-8651-11ff5f9db899' DO NOT EDIT THIS LINE.
+public instance service Tracking::Achievement.close () is
+// Close this open achievement record by storing the end time, relating this
+//   record as a recorded one and unrelating it as the open one.
+select one goal related by self->Goal[R14.'is_open_for'];
+select one workoutTimer related by goal->WorkoutSession[R11.'is_currently_executing_within']->WorkoutTimer[R8.'is_timed_by'];
+self.endTime = workoutTimer.time;
+unrelate self from goal across R14.'is_open_for';
+relate self to goal across R12.'specifies_achievement_of';
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

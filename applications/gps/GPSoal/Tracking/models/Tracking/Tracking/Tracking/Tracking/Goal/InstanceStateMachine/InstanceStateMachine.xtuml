@@ -326,36 +326,9 @@ INSERT INTO SM_ACT
 	VALUES ("68a5f818-7dab-42d9-8593-79e79e2cc28b",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
 	1,
-	'// Determine whether this goal is currently being achieved.
-disposition = self.evaluateAchievement();
-
-// Update achievement records if necessary.  There are four cases:
-//   0. Still not achieving this goal. 
-//   1. Just started achieving this goal.
-//   2. Just stopped achieving this goal.
-//   3. Still achieving this goal.
-// For cases 0 and 3, there is nothing to be done for achievement records.
-// Case 1 requires the creation of a new achievment record, storing the start time.
-// Case 2 requires the storing of the end time for the open achievement record.
-if ( (self.disposition != GoalDisposition::Achieving) and (disposition == GoalDisposition::Achieving) )
-  // Case 1, create achievement record, store start time, relate it as open record.
-  select one workoutTimer related by self->WorkoutSession[R11.''is_currently_executing_within'']->WorkoutTimer[R8.''is_timed_by''];
-  create object instance achievement of Achievement; achievement.startTime = workoutTimer.time;
-  relate self to achievement across R14.''has_open'';
-elif ( (self.disposition == GoalDisposition::Achieving) and (disposition != GoalDisposition::Achieving) )
-  // Case 2, store end time, relate as recorded record, unrelate as open record.
-  select one achievement related by self->Achievement[R14.''has_open''];
-  achievement.close();
-end if;
-
-// Update disposition of this goal.
-self.disposition = disposition;
-
-// Determine whether execution of this goal is complete, 
-//  and if so, advance to the next one if it exists.
-self.evaluateCompletion();',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_MOAH
 	VALUES ("4c799586-a213-493c-8525-7d7046820ad2",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
@@ -367,36 +340,9 @@ INSERT INTO SM_ACT
 	VALUES ("4c799586-a213-493c-8525-7d7046820ad2",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
 	1,
-	'// Stop executing this goal and begin executing the next one, if there is one.
-
-// Stop the goal-evaluation timer, ignoring the return code which indicates 
-//   whether a timer event was in flight when the timer was cancelled.
-cancelSucceeded = TIM::timer_cancel( timer_inst_ref: self.evaluationTimer );
-
-// If this goal has an open achievement record, close it.
-select one openAchievement related by self->Achievement[R14.''has_open''];
-if ( not empty openAchievement )
-  openAchievement.close();
-end if;
-
-// Add this goal to the collection of those that have already executed.
-select one session related by self->WorkoutSession[R11.''is_currently_executing_within''];
-relate self to session across R13.''was_executed_within'';
-
-// Remove this goal from the collection of currently executing ones.
-unrelate self from session across R11.''is_currently_executing_within'';
-
-// Find the next goal specification in the sequence and start executing it, if it exists.
-select one currentGoalSpec related by self->GoalSpec[R9.''specified_by''];
-
-select any nextGoalSpec related by session->GoalSpec[R10.''includes''] where ( selected.sequenceNumber == (currentGoalSpec.sequenceNumber + 1) );
-  
-if ( not empty nextGoalSpec )
-  Goal::initialize( sequenceNumber: nextGoalSpec.sequenceNumber );
-end if;
-',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_TAH
 	VALUES ("2dc59cdd-01b1-43c9-acb1-a07fd46b57aa",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
@@ -436,11 +382,9 @@ INSERT INTO SM_ACT
 	VALUES ("e6accc06-aa6e-4858-b4ba-b47beb51fae5",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
 	1,
-	'// Deactivate evaluation timer, ignoring the return code because this 
-//   state model ignores any latent timer events.
-cancelSucceeded = TIM::timer_cancel( timer_inst_ref: self.evaluationTimer );',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_TAH
 	VALUES ("7a395b9a-8d08-4e5f-9796-e1ae72cb16e0",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
@@ -480,17 +424,9 @@ INSERT INTO SM_ACT
 	VALUES ("23f1d730-f476-4796-880d-ecae3d4f1985",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
 	1,
-	'// Start a timer that periodically causes evaluation of goal achievement.
-select any goalachievement from instances of GoalAchievement;
-if ( empty goalachievement )
-  GoalAchievement::initialize();
-  select any goalachievement from instances of GoalAchievement;
-end if;
-create event instance evaluateEvent of Goal2:Evaluate to self; self.evaluationTimer = TIM::timer_start_recurring( event_inst: evaluateEvent, microseconds: goalachievement.evaluationPeriod );
-
-generate Goal4:evaluationComplete() to self;',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_TAH
 	VALUES ("dfa760b2-f136-4ca0-a39f-e60daa82af4e",
 	"7fc80988-4415-437c-acc5-4c130cc2715d",
