@@ -62,25 +62,9 @@ end for;',
 	"e3f7be53-3ad2-47d3-862a-9a65846facde",
 	0);
 INSERT INTO O_TFR
-	VALUES ("56c15cf0-cc7e-4c80-bed9-75d6c2f085dd",
-	"2522ffa2-db69-4807-ab45-06acf4cf893a",
-	'initialize',
-	'',
-	"ba5eda7a-def5-0000-0000-000000000000",
-	1,
-	'// Initialize this workout session.
-
-self.startDate = TIM::current_date();
-self.startTime = TIM::current_clock();
-self.accumulatedDistance = 0.0;',
-	1,
-	'',
-	"0a3c180b-9d9a-457a-ab39-2114964b5908",
-	0);
-INSERT INTO O_TFR
 	VALUES ("3c3e9447-7fbe-40c3-835d-aa668b911afa",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a",
-	'create',
+	'initialize',
 	'',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	0,
@@ -93,7 +77,8 @@ if ( empty session )
 
   // Create a workout session.
   create object instance session of WorkoutSession;
-  session.initialize();
+  session.startTime = TIM::current_clock();
+  session.accumulatedDistance = 0.0;
 
   // Create a workout timer.
   create object instance workoutTimer of WorkoutTimer;
@@ -114,7 +99,7 @@ end if;
 ',
 	1,
 	'',
-	"56c15cf0-cc7e-4c80-bed9-75d6c2f085dd",
+	"0a3c180b-9d9a-457a-ab39-2114964b5908",
 	0);
 INSERT INTO O_TFR
 	VALUES ("a20ddab3-779d-44fd-bea2-d5477b04a7b3",
@@ -271,33 +256,15 @@ return result;',
 	"8a49c77a-61a5-4d4e-b83c-04ba076f93ea",
 	0);
 INSERT INTO O_NBATTR
-	VALUES ("f9ea9144-48ad-45cb-82c6-6320037767b3",
+	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a");
 INSERT INTO O_BATTR
-	VALUES ("f9ea9144-48ad-45cb-82c6-6320037767b3",
+	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a");
 INSERT INTO O_ATTR
-	VALUES ("f9ea9144-48ad-45cb-82c6-6320037767b3",
+	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a",
 	"00000000-0000-0000-0000-000000000000",
-	'startDate',
-	'UTC Date on which this session commenced.',
-	'',
-	'startDate',
-	0,
-	"ba5eda7a-def5-0000-0000-00000000000e",
-	'',
-	'');
-INSERT INTO O_NBATTR
-	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
-	"2522ffa2-db69-4807-ab45-06acf4cf893a");
-INSERT INTO O_BATTR
-	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
-	"2522ffa2-db69-4807-ab45-06acf4cf893a");
-INSERT INTO O_ATTR
-	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
-	"2522ffa2-db69-4807-ab45-06acf4cf893a",
-	"f9ea9144-48ad-45cb-82c6-6320037767b3",
 	'startTime',
 	'UTC time at which this session commenced.',
 	'',
@@ -327,11 +294,6 @@ INSERT INTO O_ATTR
 INSERT INTO O_ID
 	VALUES (0,
 	"2522ffa2-db69-4807-ab45-06acf4cf893a");
-INSERT INTO O_OIDA
-	VALUES ("f9ea9144-48ad-45cb-82c6-6320037767b3",
-	"2522ffa2-db69-4807-ab45-06acf4cf893a",
-	0,
-	'startDate');
 INSERT INTO O_OIDA
 	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
 	"2522ffa2-db69-4807-ab45-06acf4cf893a",
