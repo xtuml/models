@@ -432,11 +432,8 @@ self.recentHeartRate = 50;
 LOG::LogInfo(message: "listener registered");
 
 // start timer
+HeartRateConstants::initialize();
 select any hrc from instances of HeartRateConstants;
-if ( empty hrc )
-  HeartRateConstants::initialize();
-  select any hrc from instances of HeartRateConstants;
-end if;
 create event instance timeout of HeartRateMonitor3:timeout() to self; 
 self.timer = TIM::timer_start_recurring( event_inst: timeout, microseconds: (hrc.HeartRateSamplingPeriod * 1000000) ); 
 
