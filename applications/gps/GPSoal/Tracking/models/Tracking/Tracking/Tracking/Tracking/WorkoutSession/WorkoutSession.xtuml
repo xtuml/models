@@ -171,12 +171,12 @@ INSERT INTO O_TFR
 // track points and then dividing that sum by the elapsed time between 
 // the first and last point in the subset used for the calculation.
 
-Speed::initialize();
-select any spd from instances of Speed;
 select one lastPoint related by self->TrackLog[R4.''captures_path_in'']->TrackPoint[R3.''has_last''];
 speed = 0.0;
 if ( not empty lastPoint )
   cursor = lastPoint;
+  Speed::initialize();
+  select any spd from instances of Speed;
   index = spd.SpeedAveragingWindow;  // Number of track points to use when calculating average speed.
   totalDistance = 0.0;
   elapsedTime = 0.0;  // Explicit delcaration because a Real is required for a later calculation.

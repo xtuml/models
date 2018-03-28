@@ -67,10 +67,10 @@ INSERT INTO O_TFR
 select one goalSpec related by self->GoalSpec[R9.''specified_by''];
 if ( goalSpec.spanType == GoalSpan::Time )
   select one workoutTimer related by self->WorkoutSession[R11.''is_currently_executing_within'']->WorkoutTimer[R8.''is_timed_by''];
-  self.start = workoutTimer.time;
+  self.startingPoint = workoutTimer.time;
 elif ( goalSpec.spanType == GoalSpan::Distance )
   select one session related by self->WorkoutSession[R11.''is_currently_executing_within''];
-  self.start = session.accumulatedDistance;
+  self.startingPoint = session.accumulatedDistance;
 else
   LOG::LogFailure( message: "Goal.calculateStart: Unknown Goal Span Type." );
 end if;',
@@ -153,10 +153,10 @@ select one goalSpec related by self->GoalSpec[R9.''specified_by''];
 elapsedSpan = 0.0;  // Explicit declaration
 if ( goalSpec.spanType == GoalSpan::Distance )
   select one session related by self->WorkoutSession[R11.''is_currently_executing_within''];
-  elapsedSpan = session.accumulatedDistance - self.start;
+  elapsedSpan = session.accumulatedDistance - self.startingPoint;
 elif ( goalSpec.spanType == GoalSpan::Time )
   select one workoutTimer related by self->WorkoutSession[R11.''is_currently_executing_within'']->WorkoutTimer[R8.''is_timed_by''];
-  elapsedSpan = workoutTimer.time - self.start;
+  elapsedSpan = workoutTimer.time - self.startingPoint;
 else
   LOG::LogFailure( message: "Goal.evaluateCompletion: Unknown Goal Span Type." );
 end if;
@@ -189,14 +189,14 @@ INSERT INTO O_TFR
 //    has completed.
 //  Otherwise, create and start a goal for the first goal specification
 //    if one exists.
-GoalSpecConstants::initialize();
-select any gsc from instances of GoalSpecConstants;
 select any session from instances of WorkoutSession;  // WorkoutSession is a singleton.
 if ( not empty session )
   select one goal related by session->Goal[R11.''is_currently_executing''];
   if ( not empty goal )
     generate Goal1:Completed to goal;
   else
+    GoalSpecConstants::initialize();
+    select any gsc from instances of GoalSpecConstants;
     Goal::initialize( sequenceNumber: gsc.GoalSpecOrigin );
   end if;
 end if;',
