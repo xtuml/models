@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(Location VERSION 1.0)
+project(HeartRateMonitor VERSION 1.0)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} $ENV{HOME}/git/masl/core-cpp/cmake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} $ENV{HOME}/git/masl/install/lib/cmake/MaslCore)
@@ -17,7 +17,7 @@ find_package(Sqlite3 REQUIRED)
 find_package(Boost REQUIRED QUIET COMPONENTS system)
 link_libraries(Boost::boost)
 
-add_subdirectory(gen/code_generation/Location)
+add_subdirectory(gen/code_generation/HeartRateMonitor)
 add_subdirectory(gen/code_generation/LOG)
 add_subdirectory(gen/code_generation/Logger)
 add_subdirectory(gen/code_generation/Format)

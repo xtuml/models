@@ -25,6 +25,7 @@ domain HeartRateMonitor is
     public service initialize ();     
     
   end object;
+  pragma key_letter( "HeartRateConstants" );
   
   //!Represents the heart-rate monitoring facility.
   object HeartRateMonitor is
@@ -79,6 +80,8 @@ domain HeartRateMonitor is
     end transition;
     
   end object;
+  pragma key_letter( "HeartRateMonitor" );
   
   
 end domain;
+pragma number( 3 );

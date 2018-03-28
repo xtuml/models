@@ -19,6 +19,7 @@ domain HeartRateMonitor is
     public  service initialize (
     );
   end object;
+pragma key_letter ( "HeartRateConstants" ); 
 //!Represents the heart-rate monitoring facility.
   object HeartRateMonitor is
 //!Most recent heart-rate sample, expressed in beats per minute.
@@ -72,4 +73,6 @@ domain HeartRateMonitor is
         unregisterListener => Cannot_Happen      ); 
     end transition;
   end object;
+pragma key_letter ( "HeartRateMonitor" ); 
 end domain;
+pragma number ( 3 ); 
