@@ -7,10 +7,11 @@ domain Location is
   
   public service getLocation ( latitude: out real,
                                longitude: out real );   
-  public service getDistance ( fromLat: in real,
+  public service getDistance ( result: out real,
+                               fromLat: in real,
                                fromLong: in real,
                                toLat: in real,
-                               toLong: in real ) return real;   
+                               toLong: in real );   
   public service registerListener ();   
   public service unregisterListener ();   
   private service sqrt ( x: in real ) return real;   

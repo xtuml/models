@@ -6,7 +6,7 @@ domain Location is
     public service getLocation (
         latitude : out real,        longitude : out real    );
     public service getDistance (
-        fromLat : in real,        fromLong : in real,        toLat : in real,        toLong : in real    ) return real;
+        result : out real,        fromLat : in real,        fromLong : in real,        toLat : in real,        toLong : in real    );
     public service registerListener (
     );
     public service unregisterListener (
