@@ -1,0 +1,13 @@
+//! ACTIVITY BEGIN. '7bf9ed09-c220-46d8-9c18-5034ac1604da' DO NOT EDIT THIS LINE.
+public service HeartRateMonitor::HeartRateConstants.initialize () is
+hrc: instance of HeartRateConstants;
+begin
+  hrc := find_one HeartRateConstants();
+  if ( null = hrc ) then
+    hrc := create HeartRateConstants( id => 1 );
+    hrc.HeartRateAveragingWindow := 5;
+    hrc.HeartRateSamplingPeriod := 3;
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
