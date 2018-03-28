@@ -51,7 +51,7 @@ end if;
 // Update accumulated distance and current speed.
 distance = 0.0;
 if (not isFirstTrackPoint)
-  send distance = LOC::getDistance( fromLat: lastLatitude, fromLong: lastLongitude, toLat: trackPoint.latitude, toLong: trackPoint.longitude );
+  send LOC::getDistance( result:distance, fromLat: lastLatitude, fromLong: lastLongitude, toLat: trackPoint.latitude, toLong: trackPoint.longitude );
 end if;
 
 select one session related by self->WorkoutSession[R4.''represents_path_for''];

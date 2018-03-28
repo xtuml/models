@@ -186,7 +186,8 @@ if ( not empty lastPoint )
     if ( empty previousPoint )
       break;
     end if;
-    send distance = LOC::getDistance( fromLat:cursor.latitude, fromLong: cursor.longitude, toLat: previousPoint.latitude, toLong: previousPoint.longitude );
+    distance = 0.0;
+    send LOC::getDistance( result:distance, fromLat:cursor.latitude, fromLong: cursor.longitude, toLat: previousPoint.latitude, toLong: previousPoint.longitude );
     totalDistance = totalDistance + distance;
     index = index - 1;
     cursor = previousPoint;
