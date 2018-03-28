@@ -1,225 +1,326 @@
 domain pei is
-  object A1;
-  object B1;
-  object CM;
-  object D1;
-  object EM;
-  object FM;
-  object G1AMM;
-  object H1;
-  object Isuper;
-  object Jsub;
-  object Ksubsuper;
-  object Lsub;
-  object Orasym;
-  object Paone;
-  object Qaoth;
-  object Rassr11;
-  object Saone;
-  object Taoth;
-  object Uassr1M;
-  object deal;
+  
+  object AtoD_converter;
+  object analog_input;
+  object automobile;
+  object car;
+  object connection;
+  object convertible;
   object dealer;
+  object device;
+  object dog;
+  object dog_owner;
   object employee;
   object friend;
-  object friendship;
+  object group_member;
+  object host;
+  object jurisdiction;
+  object license;
   object marriage;
   object person;
+  object plug;
+  object sample;
+  object sedan;
+  object socket;
+  object sports_car;
+  object transmission;
+  object deal;
+  object friendship;
   object report_line;
-  //! data type comment
-  private type arbitrary_id is integer
-  ;
-    private service test (
-    );
-    private service setup (
-    );
-    private service test2 (
-    );
-    private service xit (
-    );
-    private service do_creates (
-    );
-    private service test1 (
-    );
-  relationship R1 is B1 conditionally aend one A1,
-    A1 conditionally bend one B1;
-  relationship R2 is D1 conditionally cmany many CM,
-    CM conditionally done one D1;
-  relationship R4 is H1 conditionally precedes one H1,
-    H1 conditionally follows one H1;
-  relationship R3 is FM conditionally emany many EM,
-    EM conditionally fmany many FM
-    using G1AMM;
-  relationship R5 is Isuper is_a ( Jsub, Ksubsuper );
-  relationship R6 is Ksubsuper is_a ( Lsub );
+  
+  //!Arbitrary ID with core data type of unique_id (integer in MASL).
+  public type arbitrary_id is integer;   
+  
+  private service do_creates ();   
+  private service setup ();   
+  private service test ();   
+  private service test1 ();   
+  private service test2 ();   
+  private service xit ();   
+  public service start_test (); pragma startup( true );   
+  
+  
+  relationship R1 is socket conditionally receives one plug,
+                     plug conditionally enters one socket;   
+  
+  relationship R2 is dog_owner conditionally owns many dog,
+                     dog conditionally is_owned_by one dog_owner;   
+  
+  relationship R4 is transmission conditionally precedes one transmission,
+                     transmission conditionally follows one transmission;   
+  
+  relationship R3 is device conditionally connects_to many host,
+                     host conditionally connects_to many device
+                     using connection;   
+  
+  relationship R5 is car is_a ( sedan, sports_car );   
+  
+  relationship R6 is sports_car is_a ( convertible );   
+  
   relationship R7 is employee unconditionally manages many employee,
-    employee conditionally works_for one employee
-    using report_line;
-  relationship R8 is Orasym conditionally teaches many Orasym,
-    Orasym conditionally learns_from one Orasym;
-  relationship R9 is Qaoth conditionally pone one Paone,
-    Paone conditionally qoth one Qaoth
-    using Rassr11;
-  relationship R10 is Saone conditionally taoth many Taoth,
-    Taoth conditionally saone one Saone
-    using Uassr1M;
+                     employee conditionally works_for one employee
+                     using report_line;   
+  
+  relationship R8 is group_member conditionally teaches many group_member,
+                     group_member conditionally learns_from one group_member;   
+  
+  relationship R9 is jurisdiction conditionally licenses one automobile,
+                     automobile conditionally is_licensed_in one jurisdiction
+                     using license;   
+  
+  relationship R10 is AtoD_converter conditionally samples many analog_input,
+                      analog_input conditionally is_sampled_by one AtoD_converter
+                      using sample;   
+  
   relationship R11 is person conditionally is_husband_of one person,
-    person conditionally is_wife_of one person
-    using marriage;
+                      person conditionally is_wife_of one person
+                      using marriage;   
+  
   relationship R12 is friend unconditionally is_buddy_of many friend,
-    friend unconditionally is_pal_of many friend
-    using friendship;
+                      friend unconditionally is_pal_of many friend
+                      using friendship;   
+  
   relationship R13 is dealer conditionally buys_from many dealer,
-    dealer conditionally sells_to many dealer
-    using deal;
-  object A1 is
-    aID : preferred  integer;
-    i :   integer;
-    bID :   referential ( R1.bend.B1.bID ) integer;
+                      dealer conditionally sells_to many dealer
+                      using deal;   
+  
+  
+  
+  object AtoD_converter is
+    
+    sID: preferred arbitrary_id;     
+    s: string;     
+    
   end object;
-  object B1 is
-    bID : preferred  integer;
-    i :   integer;
-     //! state one comment
-     state first();
-     //! state two comment
-     //! line two
-     state second();
-     state third();
-     //! event comment
-     event go();
-     transition is
-      Non_Existent (
-        go => Cannot_Happen      ); 
-      first (
-        go => second      ); 
-      second (
-        go => third      ); 
-      third (
-        go => first      ); 
-    end transition;
+  
+  object analog_input is
+    
+    tID: preferred arbitrary_id;     
+    t: string;     
+    
   end object;
-  object CM is
-    cID : preferred  integer;
-    dID :   referential ( R2.done.D1.dID ) integer;
+  
+  object automobile is
+    
+    pID: preferred arbitrary_id;     
+    eyedee: string;     
+    
   end object;
-  object D1 is
-    dID : preferred  integer;
-    name :   string;
+  
+  object car is
+    
+    iID: preferred integer;     
+    common: integer;     
+    
   end object;
-  object EM is
-    eID : preferred  integer;
-    ratio :   real;
+  
+  object connection is
+    
+    gID: preferred integer;     
+    eID: referential ( R3.connects_to.host.eID ) integer;     
+    fID: referential ( R3.connects_to.device.fID ) integer;     
+    
+    identifier is ( eID, fID );     
+    
   end object;
-  object FM is
-    fID : preferred  integer;
-    enabled :   boolean;
-  end object;
-  object G1AMM is
-    gID : preferred  integer;
-    eID :   referential ( R3.emany.EM.eID ) integer;
-    fID :   referential ( R3.fmany.FM.fID ) integer;
-    identifier is ( eID, fID );
-  end object;
-  object H1 is
-    hID : preferred  integer;
-    follows :   referential ( R4.follows.H1.hID ) integer;
-  end object;
-  object Isuper is
-    iID : preferred  integer;
-    common :   integer;
-  end object;
-  object Jsub is
-    jID : preferred  integer;
-    specialJ :   integer;
-    iID :   referential ( R5.iID ) integer;
-    identifier is ( iID );
-  end object;
-  object Ksubsuper is
-    kID : preferred  integer;
-    specialcommon :   integer;
-    iID :   referential ( R5.iID ) integer;
-    identifier is ( iID );
-  end object;
-  object Lsub is
-    lID : preferred  integer;
-    specialL :   integer;
-    kID :   referential ( R6.kID ) integer;
-    identifier is ( kID );
-  end object;
-  object Orasym is
-    oID : preferred  integer;
-    voo :   string;
-    teacheroID :   referential ( R8.learns_from.Orasym.oID ) integer;
-  end object;
-  object Paone is
-    pID : preferred  arbitrary_id;
-    eyedee :   string;
-  end object;
-  object Qaoth is
-    qID : preferred  arbitrary_id;
-    deeeye :   string;
-  end object;
-  object Rassr11 is
-    rID :   arbitrary_id;
-    city :   string;
-    pID : preferred  referential ( R9.pone.Paone.pID ) arbitrary_id;
-    qID : preferred  referential ( R9.qoth.Qaoth.qID ) arbitrary_id;
-  end object;
-  object Saone is
-    sID : preferred  arbitrary_id;
-    s :   string;
-  end object;
-  object Taoth is
-    tID : preferred  arbitrary_id;
-    t :   string;
-  end object;
-  object Uassr1M is
-    uID : preferred  arbitrary_id;
-    s :   string;
-    sID :   referential ( R10.saone.Saone.sID ) arbitrary_id;
-    tID :   referential ( R10.taoth.Taoth.tID ) arbitrary_id;
-    identifier is ( sID, tID );
-  end object;
-  object deal is
-    xaction : preferred  integer;
-    value :   integer;
-    buyer :   referential ( R13.buys_from.dealer.name ) string;
-    seller :   referential ( R13.sells_to.dealer.name ) string;
-  end object;
+  
   object dealer is
-    name : preferred  string;
-    worth :   integer;
+    
+    name: preferred string;     
+    worth: integer;     
+    
   end object;
+  
+  object device is
+    
+    fID: preferred integer;     
+    enabled: boolean;     
+    
+  end object;
+  
+  object dog is
+    
+    cID: preferred integer;     
+    dID: referential ( R2.is_owned_by.dog_owner.dID ) integer;     
+    
+  end object;
+  
+  object dog_owner is
+    
+    dID: preferred integer;     
+    name: string;     
+    
+  end object;
+  
   object employee is
-    nID : preferred  integer;
-    name :   string;
+    
+    nID: preferred integer;     
+    name: string;     
+    
   end object;
+  
   object friend is
-    name : preferred  string;
-    age :   integer;
+    
+    name: preferred string;     
+    age: integer;     
+    
   end object;
-  object friendship is
-    duration :   integer;
-    closeness :   integer;
-    buddy : preferred  referential ( R12.is_buddy_of.friend.name ) string;
-    pal : preferred  referential ( R12.is_pal_of.friend.name ) string;
+  
+  object group_member is
+    
+    oID: preferred integer;     
+    voo: string;     
+    teacheroID: referential ( R8.learns_from.group_member.oID ) integer;     
+    
   end object;
+  
+  object host is
+    
+    eID: preferred integer;     
+    ratio: real;     
+    
+  end object;
+  
+  object jurisdiction is
+    
+    qID: preferred arbitrary_id;     
+    deeeye: string;     
+    
+  end object;
+  
+  object license is
+    
+    rID: arbitrary_id;     
+    city: string;     
+    pID: preferred referential ( R9.licenses.automobile.pID ) arbitrary_id;     
+    qID: preferred referential ( R9.is_licensed_in.jurisdiction.qID ) arbitrary_id;     
+    
+  end object;
+  
   object marriage is
-    vID : preferred  arbitrary_id;
-    year :   integer;
-    wife :   referential ( R11.is_husband_of.person.name ) string;
-    husband :   referential ( R11.is_wife_of.person.name ) string;
-    identifier is ( wife, husband );
+    
+    vID: preferred arbitrary_id;     
+    year: integer;     
+    wife: referential ( R11.is_husband_of.person.name ) string;     
+    husband: referential ( R11.is_wife_of.person.name ) string;     
+    
+    identifier is ( wife, husband );     
+    
   end object;
+  
   object person is
-    name : preferred  string;
+    
+    name: preferred string;     
+    
   end object;
+  
+  object plug is
+    
+    aID: preferred integer;     
+    i: integer;     
+    bID: referential ( R1.enters.socket.bID ) integer;     
+    
+  end object;
+  
+  object sample is
+    
+    uID: preferred arbitrary_id;     
+    s: string;     
+    sID: referential ( R10.is_sampled_by.AtoD_converter.sID ) arbitrary_id;     
+    tID: referential ( R10.samples.analog_input.tID ) arbitrary_id;     
+    
+    identifier is ( sID, tID );     
+    
+  end object;
+  
+  object socket is
+    
+    bID: preferred integer;     
+    i: integer;     
+    
+    state first ();     
+    state second ();     
+    state third ();     
+    
+    event go ();     
+    
+    transition is
+      Non_Existent ( go => Cannot_Happen );       
+      first ( go => second );       
+      second ( go => third );       
+      third ( go => first );       
+    end transition;
+    
+  end object;
+  
+  object transmission is
+    
+    hID: preferred integer;     
+    follows: referential ( R4.follows.transmission.hID ) integer;     
+    
+  end object;
+  
+  object deal is
+    
+    xaction: preferred integer;     
+    value: integer;     
+    seller: referential ( R13.buys_from.dealer.name ) string;     
+    buyer: referential ( R13.sells_to.dealer.name ) string;     
+    
+    identifier is ( seller, buyer );     
+    
+  end object;
+  
+  object friendship is
+    
+    duration: integer;     
+    closeness: integer;     
+    pal: preferred referential ( R12.is_buddy_of.friend.name ) string;     
+    buddy: preferred referential ( R12.is_pal_of.friend.name ) string;     
+    
+  end object;
+  
   object report_line is
-    mID : preferred  integer;
-    works_for_nID :   referential ( R7.manages.employee.nID ) integer;
-    manages_nID :   referential ( R7.works_for.employee.nID ) integer;
-    department :   string;
-    identifier is ( manages_nID, works_for_nID );
+    
+    mID: preferred integer;     
+    manages_nID: referential ( R7.manages.employee.nID ) integer;     
+    works_for_nID: referential ( R7.works_for.employee.nID ) integer;     
+    department: string;     
+    
+    identifier is ( works_for_nID, manages_nID );     
+    
   end object;
+  
+  object sedan is
+    
+    jID: preferred integer;     
+    specialJ: integer;     
+    iID: referential ( R5.iID ) integer;     
+    
+    identifier is ( iID );     
+    
+  end object;
+  
+  object sports_car is
+    
+    kID: preferred integer;     
+    specialcommon: integer;     
+    iID: referential ( R5.iID ) integer;     
+    
+    identifier is ( iID );     
+    
+  end object;
+  
+  object convertible is
+    
+    lID: preferred integer;     
+    specialL: integer;     
+    kID: referential ( R6.kID ) integer;     
+    
+    identifier is ( kID );     
+    
+  end object;
+  
+  
 end domain;
+pragma number( 1 );
