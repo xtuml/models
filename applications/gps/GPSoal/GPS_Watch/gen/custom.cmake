@@ -1,0 +1,8 @@
+configure_file( ${CMAKE_CURRENT_LIST_DIR}/../../UI/gen/__UI__UI__connect.cc       ${CMAKE_CURRENT_LIST_DIR}/code_generation/UI/src/__UI__UI__connect.cc       COPYONLY )
+configure_file( ${CMAKE_CURRENT_LIST_DIR}/../../UI/gen/__UI__UI__poll.cc          ${CMAKE_CURRENT_LIST_DIR}/code_generation/UI/src/__UI__UI__poll.cc          COPYONLY )
+configure_file( ${CMAKE_CURRENT_LIST_DIR}/../../UI/gen/__UI__UI__setData.cc       ${CMAKE_CURRENT_LIST_DIR}/code_generation/UI/src/__UI__UI__setData.cc       COPYONLY )
+configure_file( ${CMAKE_CURRENT_LIST_DIR}/../../UI/gen/__UI__UI__setIndicator.cc  ${CMAKE_CURRENT_LIST_DIR}/code_generation/UI/src/__UI__UI__setIndicator.cc  COPYONLY )
+configure_file( ${CMAKE_CURRENT_LIST_DIR}/../../UI/gen/__UI__UI__setTime.cc       ${CMAKE_CURRENT_LIST_DIR}/code_generation/UI/src/__UI__UI__setTime.cc       COPYONLY )
+configure_file( ${CMAKE_CURRENT_LIST_DIR}/../../UI/gen/UI_GuiBridge_bridge.h      ${CMAKE_CURRENT_LIST_DIR}/code_generation/UI/src/UI_GuiBridge_bridge.h      COPYONLY )
+configure_file( ${CMAKE_CURRENT_LIST_DIR}/../../UI/gen/UI_GuiBridge_bridge.c      ${CMAKE_CURRENT_LIST_DIR}/code_generation/UI/src/UI_GuiBridge_bridge.c      COPYONLY )
+target_sources( UI PRIVATE ${CMAKE_CURRENT_LIST_DIR}/code_generation/UI/src/UI_GuiBridge_bridge.c )
