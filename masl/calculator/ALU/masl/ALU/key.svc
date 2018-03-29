@@ -1,0 +1,11 @@
+public service ALU::key ( code: in integer ) is
+begin
+  if ( 0 <= code and code <= 15 ) then
+    // Create the calculator instance population on the first call
+    if ( null = find_one Calculator() ) then
+      ( create unique Calculator() ).init();
+    end if;
+    // generate the key press to the display
+    generate Display.keypress( code ) to ( find_one Calculator() )->R1.Display;
+  end if;
+end service;
