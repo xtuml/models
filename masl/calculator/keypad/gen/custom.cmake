@@ -1,2 +1,2 @@
-target_include_directories ( keypad_interface PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src )
-target_sources( keypad_interface PRIVATE ${CMAKE_CURRENT_LIST_DIR}/keypad_services.cc )
+configure_file( ${CMAKE_CURRENT_LIST_DIR}/keypad_services.cc ${CMAKE_CURRENT_LIST_DIR}/code_generation/keypad/src/keypad_services.cc COPYONLY )
+target_sources( keypad PRIVATE ${CMAKE_CURRENT_LIST_DIR}/code_generation/keypad/src/keypad_services.cc )
