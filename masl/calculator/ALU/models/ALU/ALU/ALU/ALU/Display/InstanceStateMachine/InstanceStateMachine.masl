@@ -1,0 +1,100 @@
+//! ACTIVITY BEGIN. '9a93de90-163d-40be-b24e-63f4501f90cb' '8b197121-8866-4639-a4e5-5570651031bf' DO NOT EDIT THIS LINE.
+state ALU::Display.displaying_memory_value () is
+begin
+  // reset the display
+  this.clearDisplay();
+  // display the value in memory
+  disp~>result( (this->R3.Memory).value );
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '9a93de90-163d-40be-b24e-63f4501f90cb' '222f5ce1-b23e-412b-9849-e48e3240a21e' DO NOT EDIT THIS LINE.
+state ALU::Display.toggling_sign ( key : in integer ) is
+begin
+  // -
+  if ( 11 = key ) then
+    // toggle the sign
+    this.sign := -1;
+  // .
+  elsif ( 15 = key ) then
+    generate Display.point( key ) to this;
+  // numbers 0-9
+  elsif ( 0 <= key and key <= 9 ) then
+    generate Display.digit( key ) to this;
+  else
+    generate Display.error( "Invalid key press" ) to this;
+  end if;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '9a93de90-163d-40be-b24e-63f4501f90cb' '3ae55861-10fb-4067-a2ec-8b5657daac43' DO NOT EDIT THIS LINE.
+state ALU::Display.receiving_whole_part ( key : in integer ) is
+mem : instance of Memory;
+op : instance of Operation;
+begin
+  // .
+  if ( 15 = key ) then
+    generate Display.point( key ) to this;
+  // numbers 0-9
+  elsif ( 0 <= key and key <= 9 ) then
+    // add to the whole part
+    if ( 0 = this.whole_part ) then
+      this.whole_part := integer(key);
+    else
+      this.whole_part := key + this.whole_part * 10;
+    end if;
+    this.value := this.sign * ( real(this.whole_part) + this.fractional_part );
+    // display the new value
+    disp~>result( this.value );
+  // +, -, *, /, =
+  elsif ( 10 <= key and key <= 14) then
+    generate Display.operator( key ) to this;
+  else
+    generate Display.error( "invalid key press" ) to this;
+  end if;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '9a93de90-163d-40be-b24e-63f4501f90cb' 'e5638f4e-03c4-4252-b825-3dd91889ab2f' DO NOT EDIT THIS LINE.
+state ALU::Display.receiving_fractional_part ( key : in integer ) is
+begin
+  // .
+  if ( 15 = key ) then
+    // ignore
+  // numbers 0-9
+  elsif ( 0 <= key and key <= 9 ) then
+    // add to the fractional part
+    this.fractional_part := this.fractional_part + ( key / 10.0 );
+    this.value := this.sign * ( real(this.whole_part) + this.fractional_part );
+    // display the new value
+    disp~>result( this.value );
+  // +, -, *, /, =
+  elsif ( 10 <= key and key <= 14 ) then
+    generate Display.operator( key ) to this;
+  else
+    generate Display.error( "invalid key press" ) to this;
+  end if;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '9a93de90-163d-40be-b24e-63f4501f90cb' 'd3d69e75-cd9a-4642-afcd-878d0d93a553' DO NOT EDIT THIS LINE.
+state ALU::Display.evaluating ( key : in integer ) is
+begin
+  // evaluate with the last saved operation
+  (this->R3.Operation).op := (this->R1.Calculator).current_op;
+  (this->R3.Operation).evaluate();
+  // store the operation for the next evaluation
+  (this->R1.Calculator).current_op := key;
+  // reset the display
+  generate Display.reset() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '9a93de90-163d-40be-b24e-63f4501f90cb' '1bdf6312-4b59-470a-9207-6554d485df8c' DO NOT EDIT THIS LINE.
+state ALU::Display.displaying_error ( message : in string ) is
+begin
+  // send the error to the display
+  disp~>error( message );
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
