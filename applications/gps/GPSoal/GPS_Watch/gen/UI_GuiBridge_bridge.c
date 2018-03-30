@@ -135,7 +135,7 @@ UI_GuiBridge_connect()
 #if defined(_WIN32) || defined(WIN32)
   unsigned long mode = 1;
   int ret_val;
-  if ( (ret_val = ioctlsocket( sock, FIONBIO, &mode ) == SOCKET_ERROR )
+  if ( (ret_val = ioctlsocket( sock, FIONBIO, &mode )) == SOCKET_ERROR )
     handle_error();
 #elif defined(__unix__) || defined(__APPLE__)
   int ret_val; 
@@ -174,7 +174,10 @@ UI_GuiBridge_poll()
 
   if ( (res = recv(sock, File_Buf, BUF_LEN, 0)) < 0 ) {
 #if defined(_WIN32) || defined(WIN32)
-    handle_error();
+    if ( WSAEWOULDBLOCK == WSAGetLastError() )
+      return 0;
+    else
+      handle_error();
 #elif defined(__unix__) || defined(__APPLE__)
     if ( EWOULDBLOCK == errno )
       return 0;
