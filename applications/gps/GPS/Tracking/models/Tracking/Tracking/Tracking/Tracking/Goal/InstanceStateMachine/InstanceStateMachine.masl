@@ -1,0 +1,96 @@
+//! ACTIVITY BEGIN. '7fc80988-4415-437c-acc5-4c130cc2715d' '68a5f818-7dab-42d9-8593-79e79e2cc28b' DO NOT EDIT THIS LINE.
+state Tracking::Goal.Executing () is
+disposition: GoalDisposition;
+workoutTimer: instance of WorkoutTimer;
+achievement: instance of Achievement;
+begin
+  // Determine whether this goal is currently being achieved.
+  disposition := this.evaluateAchievement();
+  
+  // Update achievement records if necessary.  There are four cases:
+  //   0. Still not achieving this goal. 
+  //   1. Just started achieving this goal.
+  //   2. Just stopped achieving this goal.
+  //   3. Still achieving this goal.
+  // For cases 0 and 3, there is nothing to be done for achievement records.
+  // Case 1 requires the creation of a new achievment record, storing the start time.
+  // Case 2 requires the storing of the end time for the open achievement record.
+  if ( (this.disposition /= Achieving) and (disposition = Achieving) ) then
+    // Case 1, create achievement record, store start time, relate it as open record.
+    workoutTimer := this->R11.is_currently_executing_within.WorkoutSession->R8.is_timed_by.WorkoutTimer;
+    achievement := create Achievement( session_startTime => this.session_startTime, spec_sequenceNumber => this.spec_sequenceNumber, goal_ID => this.ID, startTime => workoutTimer.time );
+    link this R14.has_open achievement;
+  elsif ( (this.disposition = Achieving) and (disposition /= Achieving) ) then
+    // Case 2, store end time, relate as recorded record, unrelate as open record.
+    achievement := this->R14.has_open.Achievement;
+    achievement.close();
+  end if;
+  
+  // Update disposition of this goal.
+  this.disposition := disposition;
+  
+  // Determine whether execution of this goal is complete, 
+  //  and if so, advance to the next one if it exists.
+  this.evaluateCompletion();
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '7fc80988-4415-437c-acc5-4c130cc2715d' '4c799586-a213-493c-8525-7d7046820ad2' DO NOT EDIT THIS LINE.
+state Tracking::Goal.Completed () is
+openAchievement: instance of Achievement;
+session: instance of WorkoutSession;
+currentGoalSpec: instance of GoalSpec;
+nextGoalSpec: instance of GoalSpec;
+begin
+  // Stop executing this goal and begin executing the next one, if there is one.
+  
+  // Stop the goal-evaluation timer, ignoring the return code which indicates 
+  //   whether a timer event was in flight when the timer was cancelled.
+  cancel this.evaluationTimer;
+  
+  // If this goal has an open achievement record, close it.
+  openAchievement := this->R14.has_open.Achievement;
+  if ( null /= openAchievement ) then
+    openAchievement.close();
+  end if;
+  
+  // Add this goal to the collection of those that have already executed.
+  session := this->R11.is_currently_executing_within.WorkoutSession;
+  link this R13.was_executed_within session;
+  
+  // Remove this goal from the collection of currently executing ones.
+  unlink this R11.is_currently_executing_within session;
+  
+  // Find the next goal specification in the sequence and start executing it, if it exists.
+  currentGoalSpec := this->R9.specified_by.GoalSpec;
+  
+  nextGoalSpec := find_one (session->R10.includes.GoalSpec)( sequenceNumber = (currentGoalSpec.sequenceNumber + 1) );
+    
+  if ( null /= nextGoalSpec ) then
+    Goal.initialize( nextGoalSpec.sequenceNumber );
+  end if;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '7fc80988-4415-437c-acc5-4c130cc2715d' 'e6accc06-aa6e-4858-b4ba-b47beb51fae5' DO NOT EDIT THIS LINE.
+state Tracking::Goal.Paused () is
+begin
+  // Deactivate evaluation timer, ignoring the return code because this 
+  //   state model ignores any latent timer events.
+  cancel this.evaluationTimer;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '7fc80988-4415-437c-acc5-4c130cc2715d' '23f1d730-f476-4796-880d-ecae3d4f1985' DO NOT EDIT THIS LINE.
+state Tracking::Goal.Evaluating () is
+goalachievement: instance of GoalAchievement;
+begin
+  // Start a timer that periodically causes evaluation of goal achievement.
+  GoalAchievement.initialize();
+  goalachievement := find_one GoalAchievement();
+  schedule this.evaluationTimer generate Goal.Evaluate() to this delay @PT0.000001S@ * goalachievement.evaluationPeriod delta @PT0.000001S@ * goalachievement.evaluationPeriod;
+  
+  generate Goal.evaluationComplete() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

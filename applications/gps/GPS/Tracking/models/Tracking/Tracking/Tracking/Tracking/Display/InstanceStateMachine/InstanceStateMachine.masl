@@ -1,0 +1,62 @@
+//! ACTIVITY BEGIN. 'a976fe2a-d67c-4ae5-b5fd-21cf77c5de22' 'c1c13511-e488-4147-9f31-fb7cb4888407' DO NOT EDIT THIS LINE.
+state Tracking::Display.displayDistance () is
+session: instance of WorkoutSession;
+distance: real;
+begin
+  session := this->R7.indicates_current_status_of.WorkoutSession;
+  distance := session.accumulatedDistance;
+  if ( distance > 1000.0 ) then
+    UI~>setData(km, distance / 1000.0);
+  else 
+    UI~>setData(meters, distance);
+  end if;
+  UI~>setIndicator( Display.goalDispositionIndicator() );
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'a976fe2a-d67c-4ae5-b5fd-21cf77c5de22' '49e1102e-0e00-4fe3-bffe-c39c2e793234' DO NOT EDIT THIS LINE.
+state Tracking::Display.displaySpeed () is
+session: instance of WorkoutSession;
+speed: real;
+begin
+  session := this->R7.indicates_current_status_of.WorkoutSession;
+  speed := session.getCurrentSpeed();
+  UI~>setData(kmPerHour, speed);
+  UI~>setIndicator( Display.goalDispositionIndicator() );
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'a976fe2a-d67c-4ae5-b5fd-21cf77c5de22' 'ef2fa515-19f8-475a-9f98-0170c72e8bab' DO NOT EDIT THIS LINE.
+state Tracking::Display.displayPace () is
+session: instance of WorkoutSession;
+pace: real;
+begin
+  session := this->R7.indicates_current_status_of.WorkoutSession;
+  pace := session.getCurrentPace();
+  UI~>setData(minPerKm, pace);
+  UI~>setIndicator( Display.goalDispositionIndicator() );
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'a976fe2a-d67c-4ae5-b5fd-21cf77c5de22' 'd70b5596-8d73-4521-b4d2-066c2d1c76b5' DO NOT EDIT THIS LINE.
+state Tracking::Display.displayHeartRate () is
+session: instance of WorkoutSession;
+heartRate: integer;
+begin
+  session := this->R7.indicates_current_status_of.WorkoutSession;
+  heartRate := session.getCurrentHeartRate();
+  UI~>setData(bpm, real(heartRate));
+  UI~>setIndicator( Display.goalDispositionIndicator() );
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'a976fe2a-d67c-4ae5-b5fd-21cf77c5de22' '9c72c94b-0c22-4f17-815e-d5de9d25b547' DO NOT EDIT THIS LINE.
+state Tracking::Display.displayLapCount () is
+lapMarkers: set of instance of LapMarker;
+begin
+  lapMarkers := this->R7.indicates_current_status_of.WorkoutSession->R4.captures_path_in.TrackLog->R5.has_laps_defined_by.LapMarker;
+  UI~>setData(laps, real(lapMarkers'length));
+  UI~>setIndicator( Display.goalDispositionIndicator() );
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

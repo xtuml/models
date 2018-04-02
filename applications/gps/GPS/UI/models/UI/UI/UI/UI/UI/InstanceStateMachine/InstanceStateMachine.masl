@@ -1,0 +1,66 @@
+//! ACTIVITY BEGIN. '98973337-b44c-44b1-9e49-3eaf89aa859e' '2a48a072-fb8d-4a2d-9ad9-3bc0679b43c0' DO NOT EDIT THIS LINE.
+state UI::UI.running () is
+uiconst: instance of UIConstants;
+ui: instance of UI;
+signal_no: integer;
+begin
+  UIConstants.initialize();
+  uiconst := find_one UIConstants();
+  signal_no := this.poll();
+  if ( uiconst.SOCKET_ERROR = signal_no ) then
+    this.socket_id := uiconst.SOCKET_ERROR;
+    cancel this.timer;
+  elsif ( uiconst.SIGNAL_NO_START_STOP_PRESSED = signal_no ) then
+    generate UI.startStopPressed() to this;
+  elsif ( uiconst.SIGNAL_NO_TARGET_PRESSED = signal_no ) then
+    generate UI.setTargetPressed() to this;
+  elsif ( uiconst.SIGNAL_NO_LAP_RESET_PRESSED = signal_no )	then
+    generate UI.lapResetPressed() to this;
+  elsif ( uiconst.SIGNAL_NO_LIGHT_PRESSED = signal_no )	then
+    generate UI.lightPressed() to this;
+  elsif ( uiconst.SIGNAL_NO_MODE_PRESSED = signal_no ) then
+    generate UI.modePressed() to this;
+  end if;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '98973337-b44c-44b1-9e49-3eaf89aa859e' '60a9746d-8ad3-43de-8dbc-922a0a69501d' DO NOT EDIT THIS LINE.
+state UI::UI.setTargetPressed () is
+begin
+  sendTargetPressed();
+  generate UI.running() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '98973337-b44c-44b1-9e49-3eaf89aa859e' '7e78baf1-c37f-4630-9044-fb8c40784b19' DO NOT EDIT THIS LINE.
+state UI::UI.startStopPresssed () is
+begin
+  sendStartStopPressed();
+  generate UI.running() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '98973337-b44c-44b1-9e49-3eaf89aa859e' '6e61008f-0933-46a2-a3fb-92f29e721999' DO NOT EDIT THIS LINE.
+state UI::UI.lapResetPressed () is
+begin
+  sendLapResetPressed();
+  generate UI.running() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '98973337-b44c-44b1-9e49-3eaf89aa859e' '83474c7c-eee6-4cfd-afa7-e0fd33566eef' DO NOT EDIT THIS LINE.
+state UI::UI.lightPressed () is
+begin
+  sendLightPressed();
+  generate UI.running() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '98973337-b44c-44b1-9e49-3eaf89aa859e' '02cb0197-7c5d-431e-ad10-0a7ca7156ad6' DO NOT EDIT THIS LINE.
+state UI::UI.modePressed () is
+begin
+  sendModePressed();
+  generate UI.running() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

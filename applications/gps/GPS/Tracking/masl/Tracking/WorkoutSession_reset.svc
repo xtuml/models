@@ -1,0 +1,56 @@
+public instance service Tracking::WorkoutSession.reset () is
+workoutTimer: instance of WorkoutTimer;
+trackLog: instance of TrackLog;
+goalSpecs: set of instance of GoalSpec;
+executingGoal: instance of Goal;
+openAchievement: instance of Achievement;
+goals: set of instance of Goal;
+achievements: set of instance of Achievement;
+begin
+  // Reset this session, including the timer, track log, goal specifications,
+  // goals, and achievement records.
+  
+  // Reset the timer.
+  workoutTimer := this->R8.is_timed_by.WorkoutTimer;
+  workoutTimer.initialize();
+  
+  // Reset the track log.
+  trackLog := this->R4.captures_path_in.TrackLog;
+  trackLog.clearTrackPoints();
+  trackLog.clearLapMarkers();
+  
+  // Remove all goal specifications.
+  goalSpecs := this->R10.includes.GoalSpec;
+  for goalSpec in goalSpecs loop
+    unlink this R10.includes goalSpec;
+    delete goalSpec;
+  end loop;
+  
+  // Remove any currently executing goal and open achievement record.
+  executingGoal := this->R11.is_currently_executing.Goal;
+  if ( null /= executingGoal ) then
+    openAchievement := executingGoal->R14.has_open.Achievement;
+    if ( null /= openAchievement ) then
+      unlink openAchievement R14.is_open_for executingGoal;
+      delete openAchievement;
+    end if;
+    unlink this R11.is_currently_executing executingGoal;
+    delete executingGoal;
+  end if;
+  
+  // Remove all other goals and achievement records.
+  goals := this->R13.has_executed.Goal;
+  for goal in goals loop
+    achievements := goal->R12.has_recorded.Achievement;
+    for achievement in achievements loop
+      unlink goal R12.has_recorded achievement;
+      delete achievement;
+    end loop;
+    unlink this R13.has_executed goal;
+    delete goal;
+  end loop;
+  
+  // Reset the session.
+  this.accumulatedDistance := 0.0;
+  this.clearHeartRateSamples();
+end service;

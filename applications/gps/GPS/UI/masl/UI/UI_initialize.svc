@@ -1,0 +1,13 @@
+public service UI::UI.initialize () is
+ui: instance of UI;
+uiconst: instance of UIConstants;
+begin
+  // make sure the singleton exists
+  ui := find_one UI();
+  if (null = ui) then
+    UIConstants.initialize();
+    uiconst := find_one UIConstants();
+    ui := create UI( id => 1, Current_State => running );
+    ui.socket_id := uiconst.SOCKET_ERROR;
+  end if;
+end service;

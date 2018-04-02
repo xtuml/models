@@ -1,0 +1,37 @@
+private service Location::sqrt ( x: in real ) return real is
+result: real;
+inputValue: real;
+guess: real;
+MAX_ITERATIONS: integer;
+i: integer;
+prev_value: real;
+begin
+  // TODO:FIXME There is a bug in verifier in handling of realized external entities in 
+  //      a multi-domain project. I am working around this by getting a sqrt approximation.
+  //sqrtSum = MATH::sqrt( x: sumSquares );
+  //      So, this is introduced as a workaround to give an approximation of sqrt.
+  result := 0.0;
+
+  inputValue := x;
+
+  // If a negative is passed-in take the abs value
+  if ( inputValue < 0 ) then
+    inputValue := -x;
+  end if;
+
+  if (x > 0) then
+
+	  guess := x;
+	  MAX_ITERATIONS := 24;
+	  i := 0;
+	  prev_value := -1.0;
+	  while (i < MAX_ITERATIONS and prev_value /= guess) loop
+      prev_value := guess;
+      guess := guess - (((guess*guess)-inputValue)/(2*guess));
+	    i := i + 1;
+	  end loop;
+    result := guess;
+  end if;
+
+  return result;
+end service;

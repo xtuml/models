@@ -1,0 +1,45 @@
+public instance service Tracking::Goal.evaluateAchievement () return GoalDisposition is
+goalSpec: instance of GoalSpec;
+session: instance of WorkoutSession;
+currentValue: real;
+goalDisposition: GoalDisposition;
+begin
+  // Based on the type of goal, determine whether this one is 
+  //   currently being achieved and return a value indicating
+  //   the disposition of the this goal.    
+  
+  // Find the related goal specification and workout session for this goal.
+  goalSpec := this->R9.specified_by.GoalSpec;
+  session := this->R11.is_currently_executing_within.WorkoutSession;
+  
+  // Based on the goal criteria type, get the appropriate current value
+  //   for comparison against the criteria (minimum and maximum).
+  currentValue := 0.0;  // Explicit declaration
+  if ( goalSpec.criteriaType = HeartRate ) then
+    currentValue := real(session.getCurrentHeartRate());
+  elsif ( goalSpec.criteriaType = Pace ) then
+    currentValue := session.getCurrentPace();
+  else
+    LOG::LogFailure( "Goal.evaluateAchievement: Unknown Goal Criteria Type." );
+  end if;
+   
+  // Compare the current value against the criteria to calculate the return value.
+  goalDisposition := Achieving; 
+  if ( currentValue < goalSpec.minimum ) then
+    goalDisposition := Increase;
+  elsif ( currentValue > goalSpec.maximum ) then
+    goalDisposition := Decrease;
+  end if;
+  
+  // Invert the disposition value to produce a logical, semantic disposition for
+  //   goal types, such as pace, that require it.
+  if ( goalSpec.criteriaType = Pace ) then
+    if ( goalDisposition = Increase ) then
+      goalDisposition := Decrease;
+    elsif ( goalDisposition = Decrease ) then
+      goalDisposition := Increase;
+    end if;
+  end if;
+   
+  return( goalDisposition );
+end service;

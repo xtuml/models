@@ -1,0 +1,17 @@
+public service UI::setIndicator ( indicator: in Tracking::Indicator ) is
+ui: instance of UI;
+begin
+  // Map values of UIDatatypes/Indicator to values defined in WatchGUI.java.
+  ui := find_one UI();
+  if ( null /= ui ) then
+    if ( indicator = Tracking::Blank  ) then
+      ui.setIndicator( 0 );
+    elsif ( indicator = Tracking::Down ) then
+      ui.setIndicator( 1 );
+    elsif ( indicator = Tracking::Flat ) then
+      ui.setIndicator( 2 );
+    elsif ( indicator = Tracking::Up ) then
+      ui.setIndicator( 3 );
+    end if;
+  end if;
+end service;

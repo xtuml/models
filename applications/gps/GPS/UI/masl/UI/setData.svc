@@ -1,0 +1,31 @@
+public service UI::setData ( value: in real,
+                             unit: in Tracking::Unit ) is
+ui: instance of UI;
+begin
+  ui := find_one UI();
+  if ( null /= ui ) then
+    if (unit = Tracking::km) then
+      ui.setData(value, 0);
+    elsif (unit = Tracking::meters) then
+      ui.setData(value, 1);
+    elsif (unit = Tracking::minPerKm) then
+      ui.setData(value, 2);
+    elsif (unit = Tracking::kmPerHour) then
+      ui.setData(value, 3);
+    elsif (unit = Tracking::miles) then
+      ui.setData(value, 4);
+    elsif (unit = Tracking::yards) then
+      ui.setData(value, 5);
+    elsif (unit = Tracking::feet) then
+      ui.setData(value, 6);
+    elsif (unit = Tracking::minPerMile) then
+      ui.setData(value, 7);
+    elsif (unit = Tracking::mph) then
+      ui.setData(value, 8);
+    elsif (unit = Tracking::bpm) then
+      ui.setData(value, 9);
+    elsif (unit = Tracking::laps) then
+      ui.setData(value, 10);
+    end if;
+  end if;
+end service;

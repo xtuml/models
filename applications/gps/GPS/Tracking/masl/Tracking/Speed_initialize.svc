@@ -1,0 +1,10 @@
+public service Tracking::Speed.initialize () is
+speed: instance of Speed;
+begin
+  speed := find_one Speed();
+  if ( null = speed ) then
+    speed := create Speed( id => 1 );
+    speed.SpeedAveragingWindow := 5;
+    speed.SecondsPerHour := 3600;
+  end if;
+end service;

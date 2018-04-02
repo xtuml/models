@@ -1,0 +1,1 @@
+/* Included for compatibliity with OAL implementation of GuiBridge */

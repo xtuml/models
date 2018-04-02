@@ -1,0 +1,12 @@
+public service Tracking::startStopPressed () is
+workoutTimer: instance of WorkoutTimer;
+begin
+  // If necessary, create a workout session and everything required to 
+  // support it.  Then, forward this signal to the workout timer.
+  
+  WorkoutSession.initialize();
+  
+  // Forward this signal, as an event, to the singleton instance of WorkoutTimer.
+  workoutTimer := find_one WorkoutTimer();
+  generate WorkoutTimer.startStopPressed() to workoutTimer;
+end service;

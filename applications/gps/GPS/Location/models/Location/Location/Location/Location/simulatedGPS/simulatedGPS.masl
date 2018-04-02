@@ -1,0 +1,16 @@
+//! ACTIVITY BEGIN. '80c32b62-021d-4e2b-9c7b-7aa9b86ac84c' DO NOT EDIT THIS LINE.
+public service Location::simulatedGPS.initialize () is
+simgps: instance of simulatedGPS;
+begin
+  simgps := find_one simulatedGPS();
+  if ( null = simgps ) then
+    simgps := create simulatedGPS( id => 1 );
+    simgps.initialLatitude := 32.432237;
+    simgps.initialLongitude := -110.812283;
+    simgps.latitudeIncrement := 0.00001;
+    simgps.longitudeIncrement := 0.00002;
+    simgps.updatePeriod := 1000000;
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

@@ -385,7 +385,7 @@ INSERT INTO SM_ACT
 	1,
 	'',
 	'',
-	0);
+	1);
 INSERT INTO SM_MOAH
 	VALUES ("1f619bf8-93a3-4e1d-bfd1-a90bb01119f9",
 	"c5127a63-0904-48b9-80eb-4face31b6410",
@@ -397,10 +397,9 @@ INSERT INTO SM_ACT
 	VALUES ("1f619bf8-93a3-4e1d-bfd1-a90bb01119f9",
 	"c5127a63-0904-48b9-80eb-4face31b6410",
 	1,
-	'send HRChange::heartRateChanged(heartRate: self.recentHeartRate);
-self.recentHeartRate = self.recentHeartRate + 1;',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_TAH
 	VALUES ("ad9ea3d1-8c5a-4a74-9eff-1f872dd2a82b",
 	"c5127a63-0904-48b9-80eb-4face31b6410",
@@ -426,20 +425,9 @@ INSERT INTO SM_ACT
 	VALUES ("5a9d71fe-a21e-42bd-9155-ef9278102c49",
 	"c5127a63-0904-48b9-80eb-4face31b6410",
 	1,
-	'
-self.recentHeartRate = 50;
-
-LOG::LogInfo(message: "listener registered");
-
-// start timer
-HeartRateConstants::initialize();
-select any hrc from instances of HeartRateConstants;
-create event instance timeout of HeartRateMonitor3:timeout() to self; 
-self.timer = TIM::timer_start_recurring( event_inst: timeout, microseconds: (hrc.HeartRateSamplingPeriod * 1000000) ); 
-
-generate HeartRateMonitor5:registerComplete() to self;',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_MOAH
 	VALUES ("02e40bce-f163-42a3-8dda-d76a54a4128c",
 	"c5127a63-0904-48b9-80eb-4face31b6410",
@@ -451,17 +439,9 @@ INSERT INTO SM_ACT
 	VALUES ("02e40bce-f163-42a3-8dda-d76a54a4128c",
 	"c5127a63-0904-48b9-80eb-4face31b6410",
 	1,
-	'res = TIM::timer_cancel(timer_inst_ref: self.timer);
-if ( res )
-  LOG::LogSuccess( message: "Heart Rate Monitor: timer_cancel() succeeded." );
-else
-  LOG::LogFailure( message: "Heart Rate Monitor: timer_cancel() failed." );
-end if;
-
-generate HeartRateMonitor7:unregisterComplete() to self;
-',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_TAH
 	VALUES ("ec52a447-04aa-440f-9ad1-20ed9cb38e42",
 	"c5127a63-0904-48b9-80eb-4face31b6410",

@@ -1,0 +1,12 @@
+//! ACTIVITY BEGIN. 'bccaa7bb-2dfd-43aa-82b3-87b4d3767a2f' DO NOT EDIT THIS LINE.
+public service Tracking::WorkoutTimerConstants.initialize () is
+wtc: instance of WorkoutTimerConstants;
+begin
+  wtc := find_one WorkoutTimerConstants();
+  if ( null = wtc ) then
+    wtc := create WorkoutTimerConstants( id => 1 );
+    wtc.timerPeriod := 1;
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

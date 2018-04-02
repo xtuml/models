@@ -18,33 +18,11 @@ INSERT INTO O_TFR
 	'',
 	"0c2280ac-677d-4cc7-a34f-fde18b6c9506",
 	0,
-	'// Return the indicator value representing the disposition of 
-// the currently executing goal, if one exists.  If there is
-// no currently executing goal, return Blank.
-
-// Find the currently executing goal (if one exists) associated 
-// with the singleton instance of the workout session.
-select any session from instances of WorkoutSession;
-select one goal related by session->Goal[R11.''is_currently_executing''];
-
-// Convert the disposition of the currently executing goal
-// (if it exists) to a UI indicator.
-indicator = Indicator::Blank;
-if ( not empty goal )
-  if ( goal.disposition == GoalDisposition::Increase )
-    indicator = Indicator::Up;
-  elif ( goal.disposition == GoalDisposition::Decrease )
-    indicator = Indicator::Down;
-  else
-    indicator = Indicator::Flat;
-  end if;
-end if;
-
-return( indicator );',
+	'',
 	1,
 	'',
 	"00000000-0000-0000-0000-000000000000",
-	0);
+	1);
 INSERT INTO S_DT_PROXY
 	VALUES ("0c2280ac-677d-4cc7-a34f-fde18b6c9506",
 	"00000000-0000-0000-0000-000000000000",

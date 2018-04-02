@@ -606,16 +606,9 @@ INSERT INTO SM_ACT
 	VALUES ("60d86bf9-08ac-4175-a409-67bec22595c3",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
-	'// Reset the session
-select one session related by self->WorkoutSession[R8.''acts_as_the_stopwatch_for''];
-session.reset();
-
-// Update the UI.
-send UI::setTime(time: self.time);
-select one display related by self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->Display[R7.''current_status_indicated_on''];
-generate Display2:refresh to display;',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_MOAH
 	VALUES ("5eef4bed-2b88-4d47-8a15-7a7600a01f7c",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -627,20 +620,9 @@ INSERT INTO SM_ACT
 	VALUES ("5eef4bed-2b88-4d47-8a15-7a7600a01f7c",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
-	'// Update the stopwatch time.
-WorkoutTimerConstants::initialize();
-select any wtc from instances of WorkoutTimerConstants;
-self.time = self.time + wtc.timerPeriod;
-
-// Store a new track point.
-select one trackLog related by self->WorkoutSession[R8.''acts_as_the_stopwatch_for'']->TrackLog[R4.''captures_path_in''];
-trackLog.addTrackPoint();
-
-// Refresh the user interface.
-send UI::setTime(time: self.time);
-',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_MOAH
 	VALUES ("25fd1bf1-6ba6-43b6-8a24-6489cd571b89",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -652,10 +634,9 @@ INSERT INTO SM_ACT
 	VALUES ("25fd1bf1-6ba6-43b6-8a24-6489cd571b89",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
-	'self.deactivate();
-',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_TAH
 	VALUES ("0efc69c4-b15e-41a4-91c8-91b4e2dcdf61",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -681,11 +662,9 @@ INSERT INTO SM_ACT
 	VALUES ("beaff8d4-1945-45f5-9826-4027e865b161",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
-	'// Start the timer.
-self.activate();
-generate WorkoutTimer6:startTimer() to self;',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_TAH
 	VALUES ("9bdcafac-bb52-4ec2-adf0-b6df35382ef4",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
@@ -725,13 +704,9 @@ INSERT INTO SM_ACT
 	VALUES ("d943c567-457f-4071-a0ba-35650b354eea",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",
 	1,
-	'select any trackLog from instances of TrackLog;
-if (not empty trackLog)
-  trackLog.addLapMarker();
-end if;
-generate WorkoutTimer8:lapResetComplete() to self;',
 	'',
-	0);
+	'',
+	1);
 INSERT INTO SM_TAH
 	VALUES ("b20793e2-a1ce-4847-8781-f32b5762281e",
 	"c4cafc68-b5c2-f769-2746-b4aaac0bac84",

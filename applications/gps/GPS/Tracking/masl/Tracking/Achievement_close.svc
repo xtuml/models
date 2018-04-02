@@ -1,0 +1,12 @@
+public instance service Tracking::Achievement.close () is
+goal: instance of Goal;
+workoutTimer: instance of WorkoutTimer;
+begin
+  // Close this open achievement record by storing the end time, relating this
+  //   record as a recorded one and unrelating it as the open one.
+  goal := this->R14.is_open_for.Goal;
+  workoutTimer := goal->R11.is_currently_executing_within.WorkoutSession->R8.is_timed_by.WorkoutTimer;
+  this.endTime := workoutTimer.time;
+  unlink this R14.is_open_for goal;
+  link this R12.specifies_achievement_of goal;
+end service;
