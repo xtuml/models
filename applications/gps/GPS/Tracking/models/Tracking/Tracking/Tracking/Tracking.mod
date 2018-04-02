@@ -2,16 +2,16 @@
 //!only component in the system from which code will be generated for the final 
 //!product.
 domain Tracking is
+  object WorkoutSession;
+  object WorkoutTimer;
   object TrackPoint;
+  object TrackLog;
   object LapMarker;
   object HeartRateSample;
   object GoalSpec;
-  object Achievement;
-  object Display;
   object Goal;
-  object WorkoutSession;
-  object WorkoutTimer;
-  object TrackLog;
+  object Display;
+  object Achievement;
   object GoalAchievement;
   object GoalSpecConstants;
   object HeartRateConstants;
@@ -30,6 +30,10 @@ domain Tracking is
   ;
   public type Unit is enum (km, meters, minPerKm, kmPerHour, miles, yards, feet, minPerMile, mph, bpm, laps)
   ;
+    private service Initialize (
+    );
+    private service GoalTest_1 (
+    );
     public service heartRateChanged (
         heartRate : in integer    );
     public service setTargetPressed (
@@ -44,10 +48,6 @@ domain Tracking is
     );
     public service newGoalSpec (
         spanType : in GoalSpan,        criteriaType : in GoalCriteria,        span : in real,        maximum : in real,        minimum : in real,        sequenceNumber : in integer    );
-    private service Initialize (
-    );
-    private service GoalTest_1 (
-    );
   terminator HR is
     public service registerListener (
     );
@@ -134,209 +134,6 @@ domain Tracking is
 //!while the currently executing goal is being achieved.
   relationship R14 is Goal conditionally has_open one Achievement,
     Achievement conditionally is_open_for one Goal;
-//!Each instance represents a single location through which the device
-//!passed during a workout session.
-  object TrackPoint is
-//!Number of seconds between start time for the associated workout and recording of this location.
-    time : preferred  integer;
-//!Longitude, expressed in decimal degrees where eastern figures are positve
-//!and western ones are negative.
-    longitude :   real;
-//!Latitude, expressed in decimal degrees, where northern figures are positive
-//!and southern ones are negative.
-    latitude :   real;
-    session_startTime : preferred  referential ( R1.is_start_of.TrackLog.session_startTime, R3.is_last_for.TrackLog.session_startTime, R2.preceeds.TrackPoint.session_startTime ) timestamp;
-    next_time :   referential ( R2.preceeds.TrackPoint.time ) integer;
-  end object;
-pragma key_letter ( "TrackPoint" ); 
-//!Each instance represents a single lap marker.
-  object LapMarker is
-//!Number of seconds between start time for the associated workout and this lap marker.
-    lapTime : preferred  integer;
-    session_startTime : preferred  referential ( R5.marks_end_of_lap_in.TrackLog.session_startTime ) timestamp;
-  end object;
-pragma key_letter ( "LapMarker" ); 
-//!Each instance represents a single heart-rate sample.
-  object HeartRateSample is
-//!Heart rate expressed in beats per minute.
-    heartRate :   integer;
-//!Number of seconds between start time for the associated workout and recording of this heart rate sample.
-    time : preferred  integer;
-    session_startTime : preferred  referential ( R6.was_collected_during.WorkoutSession.startTime ) timestamp;
-  end object;
-pragma key_letter ( "HeartRateSample" ); 
-//!Each instance specifies one particular workout goal.  The actual execution of the goal
-//!along with evaluation of whether it is currently being achieved is handled by another
-//!class, not this one.
-//!
-//!The criteria for the goal are merely numerical figures for comparison against the 
-//!measured quantity.  Accordingly, the terms may create confusion with certain goal
-//!types such as pace.  Since pace is the inverse of speed, a lower number represents
-//!a faster speed.  Even so, when specifying a pace-related goal the value for 
-//!minimum should be the lowest number (fastest pace) and the value for maximum should
-//!be the higher number (slower pace).
-  object GoalSpec is
-//!The minimum value for the quantity associated with the goal.
-//!For example, a minimum heart rate to be maintained.
-//!The units (e.g., beats per minute or minutes per km) for this
-//!attribute are determined by another attribute indicating the 
-//!type of criteria for this goal.
-    minimum :   real;
-//!The maximum value for the quantity associated with the goal.
-//!For example, a maximum pace to be maintained.
-//!The units (e.g., beats per minute or minutes per km) for this
-//!attribute are determined by another attribute indicating the 
-//!type of criteria for this goal.
-    maximum :   real;
-//!The span of the goal.  For example, a time-based goal specifies a span
-//!as a duration or length of time, while a distance-based goal uses specifies
-//!a distance.  The units for this attribute (e.g., seconds or km) are specified 
-//!by another attribute indicating the type of span.
-    span :   real;
-//!See data type description.
-    criteriaType :   GoalCriteria;
-//!See data type description.
-    spanType :   GoalSpan;
-//!Workout goals are sequenced according to a number specified by the user when the goal
-//!is specified.  This attribute represents that user-specified number. 
-    sequenceNumber : preferred  integer;
-    session_startTime : preferred  referential ( R10.included_in.WorkoutSession.startTime ) timestamp;
-    last_goal_ID :   integer;
-  end object;
-pragma key_letter ( "GoalSpec" ); 
-//!Each instance represents one contiguous period of time during 
-//!which a particular goal was being met (achieved).
-  object Achievement is
-//!Starting time for this achievement, expressed as the number of seconds
-//!since the beginning of the associated workout session.
-    startTime : preferred  integer;
-//!Ending time for this achievement, expressed as the number of seconds
-//!since the beginning of the associated workout session.
-    endTime :   integer;
-    session_startTime : preferred  referential ( R12.specifies_achievement_of.Goal.session_startTime, R14.is_open_for.Goal.session_startTime ) timestamp;
-    goal_ID : preferred  referential ( R12.specifies_achievement_of.Goal.ID, R14.is_open_for.Goal.ID ) integer;
-    spec_sequenceNumber : preferred  referential ( R12.specifies_achievement_of.Goal.spec_sequenceNumber, R14.is_open_for.Goal.spec_sequenceNumber ) integer;
-    public instance service close (
-    );
-  end object;
-pragma key_letter ( "Achievement" ); 
-//!Represents the display for the device, managing the sequence of screens
-//!and displaying the appropriate values based on the current mode of the 
-//!display.  
-//!This is a singleton instance.
-  object Display is
-    session_startTime : preferred  referential ( R7.indicates_current_status_of.WorkoutSession.startTime ) timestamp;
-    public  service goalDispositionIndicator (
-    ) return Indicator;
-     state displayDistance();
-     state displaySpeed();
-     state displayPace();
-     state displayHeartRate();
-     state displayLapCount();
-     event modeChange();
-     event refresh();
-     transition is
-      Non_Existent (
-        modeChange => Cannot_Happen,
-        refresh => Cannot_Happen      ); 
-      displayDistance (
-        modeChange => displaySpeed,
-        refresh => displayDistance      ); 
-      displaySpeed (
-        modeChange => displayPace,
-        refresh => displaySpeed      ); 
-      displayPace (
-        modeChange => displayHeartRate,
-        refresh => displayPace      ); 
-      displayHeartRate (
-        modeChange => displayLapCount,
-        refresh => displayHeartRate      ); 
-      displayLapCount (
-        modeChange => displayDistance,
-        refresh => displayLapCount      ); 
-    end transition;
-  end object;
-pragma key_letter ( "Display" ); 
-//!Each instance represents a particular goal as it is executing.
-//!This class knows how to evaluate whether the goal is being achieved 
-//!and whether the goal has completed.
-  object Goal is
-    session_startTime : preferred  referential ( R13.was_executed_within.WorkoutSession.startTime, R9.specified_by.GoalSpec.session_startTime, R11.is_currently_executing_within.WorkoutSession.startTime ) timestamp;
-//!An arbitrary identifier.
-    ID : preferred  integer;
-    spec_sequenceNumber : preferred  referential ( R9.specified_by.GoalSpec.sequenceNumber ) integer;
-//!The disposition of this goal.  See data type descriptions for details.
-//!This attribute represents the logical or semantic disposition of the goal.
-//!For example, a disposition indicating the need to increase the value in question
-//!for a heart-rate goal means that activity should be increased to drive up the 
-//!heart rate.  Since pace is the inverse of speed, a disposition indicating 
-//!the need to increase the value in question (pace) means that the user must
-//!increase speed, causing a lower (faster) pace number.
-    disposition :   GoalDisposition;
-//!Captures the starting point of the span for this particular goal so 
-//!that the end of the goal execution period can be determined.  In other
-//!words, using the value of this attribute together with the span specified
-//!by the associated goal specification, the goal knows when it is finished.
-//!
-//!For distance-based goals, it is expressed as the accumulated distance
-//!in meters for the associated workout session at the time this goal
-//!execution commenced.
-//!
-//!For time-based goals, it is expressed as the elapsed time in seconds
-//!for the associated workout session at the time this goal execution
-//!commenced.
-    startingPoint :   real;
-//!Handle for the timer used for periodic evaluation of goal achievement.
-    evaluationTimer :   timer;
-    public  service initialize (
-        sequenceNumber : in integer    );
-    public instance service calculateStart (
-    );
-    public instance service evaluateAchievement (
-    ) return GoalDisposition;
-    public instance service evaluateCompletion (
-    );
-    public  service nextGoal (
-    );
-     state Executing();
-     state Completed();
-     state Paused();
-     state Evaluating();
-//!Indicates that execution of this goal has been completed.  
-     event Completed();
-//!Indicates that this goal should be evaluated for completeness and achievement.
-     event Evaluate();
-     event Pause();
-     event evaluationComplete();
-     transition is
-      Non_Existent (
-        Completed => Cannot_Happen,
-        Evaluate => Cannot_Happen,
-        Pause => Cannot_Happen,
-        evaluationComplete => Cannot_Happen      ); 
-      Executing (
-        Completed => Completed,
-        Evaluate => Executing,
-        Pause => Paused,
-        evaluationComplete => Cannot_Happen      ); 
-      Completed (
-        Completed => Ignore,
-        Evaluate => Ignore,
-        Pause => Cannot_Happen,
-        evaluationComplete => Cannot_Happen      ); 
-      Paused (
-        Completed => Completed,
-        Evaluate => Evaluating,
-        Pause => Cannot_Happen,
-        evaluationComplete => Cannot_Happen      ); 
-      Evaluating (
-        Completed => Cannot_Happen,
-        Evaluate => Cannot_Happen,
-        Pause => Cannot_Happen,
-        evaluationComplete => Executing      ); 
-    end transition;
-  end object;
-pragma key_letter ( "Goal" ); 
 //!Each instance represents a single workout session.  
 //!
 //!Presently, the device supports only a single session, 
@@ -452,6 +249,21 @@ pragma key_letter ( "WorkoutSession" );
     end transition;
   end object;
 pragma key_letter ( "WorkoutTimer" ); 
+//!Each instance represents a single location through which the device
+//!passed during a workout session.
+  object TrackPoint is
+//!Number of seconds between start time for the associated workout and recording of this location.
+    time : preferred  integer;
+//!Longitude, expressed in decimal degrees where eastern figures are positve
+//!and western ones are negative.
+    longitude :   real;
+//!Latitude, expressed in decimal degrees, where northern figures are positive
+//!and southern ones are negative.
+    latitude :   real;
+    session_startTime : preferred  referential ( R1.is_start_of.TrackLog.session_startTime, R3.is_last_for.TrackLog.session_startTime, R2.preceeds.TrackPoint.session_startTime ) timestamp;
+    next_time :   referential ( R2.preceeds.TrackPoint.time ) integer;
+  end object;
+pragma key_letter ( "TrackPoint" ); 
 //!The collection of track points stored during a workout session.
 //!
 //!Presently the device supports only a single track log, and it 
@@ -472,6 +284,194 @@ pragma key_letter ( "WorkoutTimer" );
     );
   end object;
 pragma key_letter ( "TrackLog" ); 
+//!Each instance represents a single lap marker.
+  object LapMarker is
+//!Number of seconds between start time for the associated workout and this lap marker.
+    lapTime : preferred  integer;
+    session_startTime : preferred  referential ( R5.marks_end_of_lap_in.TrackLog.session_startTime ) timestamp;
+  end object;
+pragma key_letter ( "LapMarker" ); 
+//!Each instance represents a single heart-rate sample.
+  object HeartRateSample is
+//!Heart rate expressed in beats per minute.
+    heartRate :   integer;
+//!Number of seconds between start time for the associated workout and recording of this heart rate sample.
+    time : preferred  integer;
+    session_startTime : preferred  referential ( R6.was_collected_during.WorkoutSession.startTime ) timestamp;
+  end object;
+pragma key_letter ( "HeartRateSample" ); 
+//!Each instance specifies one particular workout goal.  The actual execution of the goal
+//!along with evaluation of whether it is currently being achieved is handled by another
+//!class, not this one.
+//!
+//!The criteria for the goal are merely numerical figures for comparison against the 
+//!measured quantity.  Accordingly, the terms may create confusion with certain goal
+//!types such as pace.  Since pace is the inverse of speed, a lower number represents
+//!a faster speed.  Even so, when specifying a pace-related goal the value for 
+//!minimum should be the lowest number (fastest pace) and the value for maximum should
+//!be the higher number (slower pace).
+  object GoalSpec is
+//!The minimum value for the quantity associated with the goal.
+//!For example, a minimum heart rate to be maintained.
+//!The units (e.g., beats per minute or minutes per km) for this
+//!attribute are determined by another attribute indicating the 
+//!type of criteria for this goal.
+    minimum :   real;
+//!The maximum value for the quantity associated with the goal.
+//!For example, a maximum pace to be maintained.
+//!The units (e.g., beats per minute or minutes per km) for this
+//!attribute are determined by another attribute indicating the 
+//!type of criteria for this goal.
+    maximum :   real;
+//!The span of the goal.  For example, a time-based goal specifies a span
+//!as a duration or length of time, while a distance-based goal uses specifies
+//!a distance.  The units for this attribute (e.g., seconds or km) are specified 
+//!by another attribute indicating the type of span.
+    span :   real;
+//!See data type description.
+    criteriaType :   GoalCriteria;
+//!See data type description.
+    spanType :   GoalSpan;
+//!Workout goals are sequenced according to a number specified by the user when the goal
+//!is specified.  This attribute represents that user-specified number. 
+    sequenceNumber : preferred  integer;
+    session_startTime : preferred  referential ( R10.included_in.WorkoutSession.startTime ) timestamp;
+    last_goal_ID :   integer;
+  end object;
+pragma key_letter ( "GoalSpec" ); 
+//!Each instance represents a particular goal as it is executing.
+//!This class knows how to evaluate whether the goal is being achieved 
+//!and whether the goal has completed.
+  object Goal is
+//!The disposition of this goal.  See data type descriptions for details.
+//!This attribute represents the logical or semantic disposition of the goal.
+//!For example, a disposition indicating the need to increase the value in question
+//!for a heart-rate goal means that activity should be increased to drive up the 
+//!heart rate.  Since pace is the inverse of speed, a disposition indicating 
+//!the need to increase the value in question (pace) means that the user must
+//!increase speed, causing a lower (faster) pace number.
+    disposition :   GoalDisposition;
+//!Captures the starting point of the span for this particular goal so 
+//!that the end of the goal execution period can be determined.  In other
+//!words, using the value of this attribute together with the span specified
+//!by the associated goal specification, the goal knows when it is finished.
+//!
+//!For distance-based goals, it is expressed as the accumulated distance
+//!in meters for the associated workout session at the time this goal
+//!execution commenced.
+//!
+//!For time-based goals, it is expressed as the elapsed time in seconds
+//!for the associated workout session at the time this goal execution
+//!commenced.
+    startingPoint :   real;
+//!An arbitrary identifier.
+    ID : preferred  integer;
+//!Handle for the timer used for periodic evaluation of goal achievement.
+    evaluationTimer :   timer;
+    session_startTime : preferred  referential ( R13.was_executed_within.WorkoutSession.startTime, R9.specified_by.GoalSpec.session_startTime, R11.is_currently_executing_within.WorkoutSession.startTime ) timestamp;
+    spec_sequenceNumber : preferred  referential ( R9.specified_by.GoalSpec.sequenceNumber ) integer;
+    public  service initialize (
+        sequenceNumber : in integer    );
+    public instance service calculateStart (
+    );
+    public instance service evaluateAchievement (
+    ) return GoalDisposition;
+    public instance service evaluateCompletion (
+    );
+    public  service nextGoal (
+    );
+     state Executing();
+     state Completed();
+     state Paused();
+     state Evaluating();
+//!Indicates that execution of this goal has been completed.  
+     event Completed();
+//!Indicates that this goal should be evaluated for completeness and achievement.
+     event Evaluate();
+     event Pause();
+     event evaluationComplete();
+     transition is
+      Non_Existent (
+        Completed => Cannot_Happen,
+        Evaluate => Cannot_Happen,
+        Pause => Cannot_Happen,
+        evaluationComplete => Cannot_Happen      ); 
+      Executing (
+        Completed => Completed,
+        Evaluate => Executing,
+        Pause => Paused,
+        evaluationComplete => Cannot_Happen      ); 
+      Completed (
+        Completed => Ignore,
+        Evaluate => Ignore,
+        Pause => Cannot_Happen,
+        evaluationComplete => Cannot_Happen      ); 
+      Paused (
+        Completed => Completed,
+        Evaluate => Evaluating,
+        Pause => Cannot_Happen,
+        evaluationComplete => Cannot_Happen      ); 
+      Evaluating (
+        Completed => Cannot_Happen,
+        Evaluate => Cannot_Happen,
+        Pause => Cannot_Happen,
+        evaluationComplete => Executing      ); 
+    end transition;
+  end object;
+pragma key_letter ( "Goal" ); 
+//!Represents the display for the device, managing the sequence of screens
+//!and displaying the appropriate values based on the current mode of the 
+//!display.  
+//!This is a singleton instance.
+  object Display is
+    session_startTime : preferred  referential ( R7.indicates_current_status_of.WorkoutSession.startTime ) timestamp;
+    public  service goalDispositionIndicator (
+    ) return Indicator;
+     state displayDistance();
+     state displaySpeed();
+     state displayPace();
+     state displayHeartRate();
+     state displayLapCount();
+     event modeChange();
+     event refresh();
+     transition is
+      Non_Existent (
+        modeChange => Cannot_Happen,
+        refresh => Cannot_Happen      ); 
+      displayDistance (
+        modeChange => displaySpeed,
+        refresh => displayDistance      ); 
+      displaySpeed (
+        modeChange => displayPace,
+        refresh => displaySpeed      ); 
+      displayPace (
+        modeChange => displayHeartRate,
+        refresh => displayPace      ); 
+      displayHeartRate (
+        modeChange => displayLapCount,
+        refresh => displayHeartRate      ); 
+      displayLapCount (
+        modeChange => displayDistance,
+        refresh => displayLapCount      ); 
+    end transition;
+  end object;
+pragma key_letter ( "Display" ); 
+//!Each instance represents one contiguous period of time during 
+//!which a particular goal was being met (achieved).
+  object Achievement is
+//!Starting time for this achievement, expressed as the number of seconds
+//!since the beginning of the associated workout session.
+    startTime : preferred  integer;
+//!Ending time for this achievement, expressed as the number of seconds
+//!since the beginning of the associated workout session.
+    endTime :   integer;
+    session_startTime : preferred  referential ( R12.specifies_achievement_of.Goal.session_startTime, R14.is_open_for.Goal.session_startTime ) timestamp;
+    goal_ID : preferred  referential ( R12.specifies_achievement_of.Goal.ID, R14.is_open_for.Goal.ID ) integer;
+    spec_sequenceNumber : preferred  referential ( R12.specifies_achievement_of.Goal.spec_sequenceNumber, R14.is_open_for.Goal.spec_sequenceNumber ) integer;
+    public instance service close (
+    );
+  end object;
+pragma key_letter ( "Achievement" ); 
 //!evaluationPeriod is the period, expressed in microseconds, at which goal achievement is evaluated.
   object GoalAchievement is
     id : preferred  integer;

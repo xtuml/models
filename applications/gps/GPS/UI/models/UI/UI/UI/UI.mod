@@ -10,16 +10,6 @@ domain UI is
   object TestCase;
   object UI;
   object UIConstants;
-    private service sendLapResetPressed (
-    );
-    private service sendLightPressed (
-    );
-    private service sendModePressed (
-    );
-    private service sendStartStopPressed (
-    );
-    private service sendTargetPressed (
-    );
     public service setData (
         value : in real,        unit : in Tracking::Unit    );
     public service setIndicator (
@@ -35,6 +25,16 @@ domain UI is
     private service init (
     );
 pragma startup ( true ); 
+    private service sendLapResetPressed (
+    );
+    private service sendLightPressed (
+    );
+    private service sendModePressed (
+    );
+    private service sendStartStopPressed (
+    );
+    private service sendTargetPressed (
+    );
   terminator TRACK is
     public service setTargetPressed (
     );
@@ -113,19 +113,19 @@ pragma key_letter ( "TestCase" );
     id : preferred  integer;
     socket_id :   integer;
     timer :   timer;
-//!This operation is realized
+//!This operation is realized.
     public  service connect (
     );
-//!This operation is realized
+//!This operation is realized.
     public instance service poll (
     ) return integer;
-//!This operation is realized
+//!This operation is realized.
     public instance service setData (
         value : in real,        unit : in integer    );
-//!This operation is realized
+//!This operation is realized.
     public instance service setIndicator (
         value : in integer    );
-//!This operation is realized
+//!This operation is realized.
     public instance service setTime (
         time : in integer    );
     public  service initialize (
