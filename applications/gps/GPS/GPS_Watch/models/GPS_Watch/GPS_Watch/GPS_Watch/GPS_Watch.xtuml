@@ -1518,8 +1518,23 @@ INSERT INTO SPR_PO
 	VALUES ("7d72cc27-7fdd-403a-b110-bc81352e3841",
 	'newGoalSpec',
 	'',
-	'Tracking::newGoalSpec( spanType:param.spanType, criteriaType:param.criteriaType, 
-		span:param.span, maximum:param.maximum, minimum:param.minimum, sequenceNumber:param.sequenceNumber);',
+	'if ( param.criteriaType == UIGoalCriteria::HeartRate )
+  if ( param.spanType == UIGoalSpan::Distance )
+    Tracking::newGoalSpec( spanType:GoalSpan::Distance, criteriaType:GoalCriteria::HeartRate, 
+        span:param.span, maximum:param.maximum, minimum:param.minimum, sequenceNumber:param.sequenceNumber);
+  elif ( param.spanType == UIGoalSpan::Time )
+    Tracking::newGoalSpec( spanType:GoalSpan::Time, criteriaType:GoalCriteria::HeartRate, 
+        span:param.span, maximum:param.maximum, minimum:param.minimum, sequenceNumber:param.sequenceNumber);
+  end if;
+elif ( param.criteriaType == UIGoalCriteria::Pace )
+  if ( param.spanType == UIGoalSpan::Distance )
+    Tracking::newGoalSpec( spanType:GoalSpan::Distance, criteriaType:GoalCriteria::Pace, 
+        span:param.span, maximum:param.maximum, minimum:param.minimum, sequenceNumber:param.sequenceNumber);
+  elif ( param.spanType == UIGoalSpan::Time )
+    Tracking::newGoalSpec( spanType:GoalSpan::Time, criteriaType:GoalCriteria::Pace, 
+        span:param.span, maximum:param.maximum, minimum:param.minimum, sequenceNumber:param.sequenceNumber);
+  end if;
+end if;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY

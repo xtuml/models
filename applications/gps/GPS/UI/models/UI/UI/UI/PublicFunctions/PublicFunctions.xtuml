@@ -40,27 +40,27 @@ INSERT INTO S_SYNC
 	'',
 	'select any ui from instances of UI;
 if ( not_empty ui )
-  if (param.unit == Unit::km)
+  if (param.unit == UIUnit::km)
     ui.setData(value: param.value, unit: 0);
-  elif (param.unit == Unit::meters)
+  elif (param.unit == UIUnit::meters)
     ui.setData(value: param.value, unit: 1);
-  elif (param.unit == Unit::minPerKm)
+  elif (param.unit == UIUnit::minPerKm)
     ui.setData(value: param.value, unit: 2);
-  elif (param.unit == Unit::kmPerHour)
+  elif (param.unit == UIUnit::kmPerHour)
     ui.setData(value: param.value, unit: 3);
-  elif (param.unit == Unit::miles)
+  elif (param.unit == UIUnit::miles)
     ui.setData(value: param.value, unit: 4);
-  elif (param.unit == Unit::yards)
+  elif (param.unit == UIUnit::yards)
     ui.setData(value: param.value, unit: 5);
-  elif (param.unit == Unit::feet)
+  elif (param.unit == UIUnit::feet)
     ui.setData(value: param.value, unit: 6);
-  elif (param.unit == Unit::minPerMile)
+  elif (param.unit == UIUnit::minPerMile)
     ui.setData(value: param.value, unit: 7);
-  elif (param.unit == Unit::mph)
+  elif (param.unit == UIUnit::mph)
     ui.setData(value: param.value, unit: 8);
-  elif (param.unit == Unit::bpm)
+  elif (param.unit == UIUnit::bpm)
     ui.setData(value: param.value, unit: 9);
-  elif (param.unit == Unit::laps)
+  elif (param.unit == UIUnit::laps)
     ui.setData(value: param.value, unit: 10);
   end if;
 end if;',
@@ -104,16 +104,16 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'setIndicator',
 	'',
-	'// Map values of UIDatatypes/Indicator to values defined in WatchGUI.java.
+	'// Map values of UIDatatypes/UIIndicator to values defined in WatchGUI.java.
 select any ui from instances of UI;
 if ( not_empty ui )
-  if ( param.indicator == Indicator::Blank  )
+  if ( param.indicator == UIIndicator::Blank  )
     ui.setIndicator( value: 0 );
-  elif ( param.indicator == Indicator::Down )
+  elif ( param.indicator == UIIndicator::Down )
     ui.setIndicator( value: 1 );
-  elif ( param.indicator == Indicator::Flat )
+  elif ( param.indicator == UIIndicator::Flat )
     ui.setIndicator( value: 2 );
-  elif ( param.indicator == Indicator::Up )
+  elif ( param.indicator == UIIndicator::Up )
     ui.setIndicator( value: 3 );
   end if;
 end if;',
