@@ -62,8 +62,8 @@ domain Tracking is
   end terminator;
   
   terminator UI is
-    public service setData ( unit: in Unit,
-                             value: in real );     
+    public service setData ( value: in real,
+                             unit: in Unit );     
     public service setIndicator ( indicator: in Indicator );     
     public service setTime ( time: in integer );     
   end terminator;
