@@ -2,7 +2,6 @@ domain DefaultAttValue is
 
   object Obj;
 
-  public type Colour;
   public type Colour is enum ( red, green, blue );
 
   object Obj is

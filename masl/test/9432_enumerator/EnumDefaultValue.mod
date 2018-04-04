@@ -1,8 +1,6 @@
 domain EnumDefaultValue is
   object Screen;
 
-  public type Colour;
-  public type properties;
   public type Colour is enum ( black, white );
 
   public type  properties is structure

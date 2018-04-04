@@ -1,6 +1,4 @@
 domain Issue9650 is
-	public type A;
-	public type B;
 	public type A is structure
 	  a : sequence of integer;
 	end structure;

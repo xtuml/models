@@ -1,8 +1,6 @@
 domain FindScope is
   object Object;
 
-  public type colour;
-  public type some_struct;
   public type colour is enum ( red, green, blue );
 
   public type some_struct is structure

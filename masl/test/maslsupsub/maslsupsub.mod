@@ -6,7 +6,6 @@ domain maslsupsub is
   object garden;
   object general;
 
-  private type domtyp;
   private type domtyp is integer;
   public service public_service_1 ( val: in integer );
   relationship R1 is a_class conditionally uses many b_class,
