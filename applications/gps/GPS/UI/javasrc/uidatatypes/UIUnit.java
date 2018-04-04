@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public enum Unit {
+public enum UIUnit {
     km("km", 0),
     meters("meters", 1),
     minPerKm("min/km", 2),
@@ -25,15 +25,15 @@ public enum Unit {
     
     private final int value;
     private final String name;
-    private static Map<Integer, Unit> map = new HashMap<Integer, Unit>();
+    private static Map<Integer, UIUnit> map = new HashMap<Integer, UIUnit>();
 
     static {
-        for (Unit unitEnum : Unit.values()) {
+        for (UIUnit unitEnum : UIUnit.values()) {
             map.put(unitEnum.value, unitEnum);
         }
     }
 
-    private Unit(final String name, final int value) {
+    private UIUnit(final String name, final int value) {
         this.name = name;
         this.value = value;
     }
@@ -46,7 +46,7 @@ public enum Unit {
         return value;
     }
     
-    public static Unit valueOf(int value) {
+    public static UIUnit valueOf(int value) {
         return map.get(value);
     }
 }
