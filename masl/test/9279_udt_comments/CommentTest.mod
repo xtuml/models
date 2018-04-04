@@ -1,7 +1,5 @@
 domain CommentTest is
 
-  private type commentedStruct;
-  public type Colour;
   //! A MASL struct whose members have comments
   private type commentedStruct is structure
     //! member number one is an integer

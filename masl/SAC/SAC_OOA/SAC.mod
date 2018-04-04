@@ -11,8 +11,6 @@ domain SAC is
   object User;
   object Workstation;
   
-  public type group_type;
-  public type logged_on_type;
   public type group_type is structure
     group_name: string;     
     operation_names: sequence of string;     

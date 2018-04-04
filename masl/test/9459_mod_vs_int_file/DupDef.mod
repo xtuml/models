@@ -1,7 +1,6 @@
 domain DupDef is
   object Spec;
 
-  public type Colour;
   public type Colour is enum ( red, green, blue );
 
   public service test();

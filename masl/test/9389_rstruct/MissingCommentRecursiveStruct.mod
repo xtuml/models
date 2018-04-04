@@ -8,8 +8,6 @@ domain MissingCommentRecursiveStruct is
     children : sequence of Node;
   end structure;
 
-  public type InnerContainer;
-  public type Container;
   public type InnerContainer is string;
 
   //! A container
