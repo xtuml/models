@@ -1616,7 +1616,29 @@ INSERT INTO SPR_PO
 	VALUES ("f470384e-4ac7-48c3-aec2-1b22a0396e89",
 	'setData',
 	'',
-	'UI::setData( value:param.value, unit: param.unit);',
+	'if (param.unit == Unit::km)
+  UI::setData(value: param.value, unit: UIUnit::km);
+elif (param.unit == Unit::meters)
+  UI::setData(value: param.value, unit: UIUnit::meters);
+elif (param.unit == Unit::minPerKm)
+  UI::setData(value: param.value, unit: UIUnit::minPerKm);
+elif (param.unit == Unit::kmPerHour)
+  UI::setData(value: param.value, unit: UIUnit::kmPerHour);
+elif (param.unit == Unit::miles)
+  UI::setData(value: param.value, unit: UIUnit::miles);
+elif (param.unit == Unit::yards)
+  UI::setData(value: param.value, unit: UIUnit::yards);
+elif (param.unit == Unit::feet)
+  UI::setData(value: param.value, unit: UIUnit::feet);
+elif (param.unit == Unit::minPerMile)
+  UI::setData(value: param.value, unit: UIUnit::minPerMile);
+elif (param.unit == Unit::mph)
+  UI::setData(value: param.value, unit: UIUnit::mph);
+elif (param.unit == Unit::bpm)
+  UI::setData(value: param.value, unit: UIUnit::bpm);
+elif (param.unit == Unit::laps)
+  UI::setData(value: param.value, unit: UIUnit::laps);
+end if;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -1634,7 +1656,15 @@ INSERT INTO SPR_PO
 	VALUES ("a7a600bb-f1fa-47df-bde9-20cfba7998f6",
 	'setIndicator',
 	'',
-	'UI::setIndicator( indicator:param.indicator );',
+	'if ( param.indicator == Indicator::Blank  )
+  UI::setIndicator( indicator: UIIndicator::Blank );
+elif ( param.indicator == Indicator::Down )
+  UI::setIndicator( indicator: UIIndicator::Down );
+elif ( param.indicator == Indicator::Flat )
+  UI::setIndicator( indicator: UIIndicator::Flat );
+elif ( param.indicator == Indicator::Up )
+  UI::setIndicator( indicator: UIIndicator::Up );
+end if;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
