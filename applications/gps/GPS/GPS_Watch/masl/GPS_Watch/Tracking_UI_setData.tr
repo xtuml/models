@@ -1,5 +1,27 @@
-public service Tracking::UI~>setData ( unit: in Unit,
-                                       value: in real ) is
+public service Tracking::UI~>setData ( value: in real,
+                                       unit: in Tracking::Unit ) is
 begin
-  UI::setData( value, unit );
+  if (unit = Tracking::km) then
+    UI::setData(value, UI::km);
+  elsif (unit = Tracking::meters) then
+    UI::setData(value, UI::meters);
+  elsif (unit = Tracking::minPerKm) then
+    UI::setData(value, UI::minPerKm);
+  elsif (unit = Tracking::kmPerHour) then
+    UI::setData(value, UI::kmPerHour);
+  elsif (unit = Tracking::miles) then
+    UI::setData(value, UI::miles);
+  elsif (unit = Tracking::yards) then
+    UI::setData(value, UI::yards);
+  elsif (unit = Tracking::feet) then
+    UI::setData(value, UI::feet);
+  elsif (unit = Tracking::minPerMile) then
+    UI::setData(value, UI::minPerMile);
+  elsif (unit = Tracking::mph) then
+    UI::setData(value, UI::mph);
+  elsif (unit = Tracking::bpm) then
+    UI::setData(value, UI::bpm);
+  elsif (unit = Tracking::laps) then
+    UI::setData(value, UI::laps);
+  end if;
 end service;

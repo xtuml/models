@@ -5,9 +5,9 @@ begin
   session := this->R7.indicates_current_status_of.WorkoutSession;
   distance := session.accumulatedDistance;
   if ( distance > 1000.0 ) then
-    UI~>setData(km, distance / 1000.0);
+    UI~>setData(distance / 1000.0, km);
   else 
-    UI~>setData(meters, distance);
+    UI~>setData(distance, meters);
   end if;
   UI~>setIndicator( Display.goalDispositionIndicator() );
 end state;

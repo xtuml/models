@@ -1,4 +1,12 @@
-public service Tracking::UI~>setIndicator ( indicator: in Indicator ) is
+public service Tracking::UI~>setIndicator ( indicator: in Tracking::Indicator ) is
 begin
-  UI::setIndicator( indicator );
+  if ( indicator = Tracking::Blank  ) then
+    UI::setIndicator( UI::Blank );
+  elsif ( indicator = Tracking::Down ) then
+    UI::setIndicator( UI::Down );
+  elsif ( indicator = Tracking::Flat ) then
+    UI::setIndicator( UI::Flat );
+  elsif ( indicator = Tracking::Up ) then
+    UI::setIndicator( UI::Up );
+  end if;
 end service;

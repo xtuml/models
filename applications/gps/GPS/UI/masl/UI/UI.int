@@ -8,9 +8,14 @@
 //!allow generated code to connect to the exact same animated watch.
 domain UI is
   
+  public type UIGoalCriteria is enum ( HeartRate, Pace );   
+  public type UIGoalSpan is enum ( Distance, Time );   
+  public type UIIndicator is enum ( Blank, Down, Flat, Up );   
+  public type UIUnit is enum ( km, meters, minPerKm, kmPerHour, miles, yards, feet, minPerMile, mph, bpm, laps );   
+  
   public service setData ( value: in real,
-                           unit: in Tracking::Unit );   
-  public service setIndicator ( indicator: in Tracking::Indicator );   
+                           unit: in UIUnit );   
+  public service setIndicator ( indicator: in UIIndicator );   
   public service setTime ( time: in integer );   
   public service startTest ();   
   
@@ -21,8 +26,8 @@ domain UI is
     public service lapResetPressed ();     
     public service lightPressed ();     
     public service modePressed ();     
-    public service newGoalSpec ( spanType: in Tracking::GoalSpan,
-                                 criteriaType: in Tracking::GoalCriteria,
+    public service newGoalSpec ( spanType: in UIGoalSpan,
+                                 criteriaType: in UIGoalCriteria,
                                  span: in real,
                                  maximum: in real,
                                  minimum: in real,

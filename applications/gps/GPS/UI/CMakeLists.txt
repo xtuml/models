@@ -18,7 +18,6 @@ find_package(Boost REQUIRED QUIET COMPONENTS system)
 link_libraries(Boost::boost)
 
 add_subdirectory(gen/code_generation/UI)
-add_subdirectory(gen/code_generation/Tracking)
 add_subdirectory(gen/code_generation/LOG)
 add_subdirectory(gen/code_generation/Logger)
 add_subdirectory(gen/code_generation/Format)

@@ -6,7 +6,7 @@ if [[ "" == $GEN_Location_LOG_LOC ]]; then
 fi
 GEN_Location_Logger_LOC="$HOME/git/masl/examples/utils/Logger_OOA"
 GEN_Location_Format_LOC="$HOME/git/masl/examples/utils/Format_OOA"
-$MASLMC -domainpath $CWD/masl/Location:$GEN_Location_LOG_LOC:$GEN_Location_Logger_LOC:$GEN_Location_Format_LOC -mod $CWD/masl/Location/Location.mod -output $CWD/gen/code_generation/Location
+$MASLMC -domainpath $CWD/masl/Location:$GEN_Location_LOG_LOC -mod $CWD/masl/Location/Location.mod -output $CWD/gen/code_generation/Location
 $MASLMC -domainpath $GEN_Location_LOG_LOC:$GEN_Location_Logger_LOC:$GEN_Location_Format_LOC -mod $GEN_Location_LOG_LOC/LOG.int -output $CWD/gen/code_generation/LOG
 $MASLMC -domainpath $GEN_Location_Logger_LOC -mod $GEN_Location_Logger_LOC/Logger.int -output $CWD/gen/code_generation/Logger
 $MASLMC -domainpath $GEN_Location_Format_LOC -mod $GEN_Location_Format_LOC/Format.int -output $CWD/gen/code_generation/Format

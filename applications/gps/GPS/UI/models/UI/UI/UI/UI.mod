@@ -10,14 +10,14 @@ domain UI is
   object TestCase;
   object UI;
   object UIConstants;
-    public service setData (
-        value : in real,        unit : in Tracking::Unit    );
-    public service setIndicator (
-        indicator : in Tracking::Indicator    );
-    public service setTime (
-        time : in integer    );
-    public service startTest (
-    );
+  public type UIGoalCriteria is enum (HeartRate, Pace)
+  ;
+  public type UIGoalSpan is enum (Distance, Time)
+  ;
+  public type UIIndicator is enum (Blank, Down, Flat, Up)
+  ;
+  public type UIUnit is enum (km, meters, minPerKm, kmPerHour, miles, yards, feet, minPerMile, mph, bpm, laps)
+  ;
     private service RunTestCase (
     );
     private service createGoals_1 (
@@ -35,6 +35,14 @@ pragma startup ( true );
     );
     private service sendTargetPressed (
     );
+    public service setData (
+        value : in real,        unit : in UIUnit    );
+    public service setIndicator (
+        indicator : in UIIndicator    );
+    public service setTime (
+        time : in integer    );
+    public service startTest (
+    );
   terminator TRACK is
     public service setTargetPressed (
     );
@@ -47,7 +55,7 @@ pragma startup ( true );
     public service modePressed (
     );
     public service newGoalSpec (
-        spanType : in Tracking::GoalSpan,        criteriaType : in Tracking::GoalCriteria,        span : in real,        maximum : in real,        minimum : in real,        sequenceNumber : in integer    );
+        spanType : in UIGoalSpan,        criteriaType : in UIGoalCriteria,        span : in real,        maximum : in real,        minimum : in real,        sequenceNumber : in integer    );
   end terminator;
 //!Represents a very simple automated test case.
   object TestCase is

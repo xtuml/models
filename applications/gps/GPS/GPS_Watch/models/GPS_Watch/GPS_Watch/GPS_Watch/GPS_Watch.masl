@@ -1,85 +1,127 @@
 //! ACTIVITY BEGIN. 'af5d68f3-4af1-4fc5-ad77-d4e49508cbbb' DO NOT EDIT THIS LINE.
-public service GPS_Watch::UI__TRACK~>setTargetPressed () is
+public service UI::TRACK~>setTargetPressed () is
 begin
   Tracking::setTargetPressed();
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'c734578c-d953-4852-b034-57b3259574d6' DO NOT EDIT THIS LINE.
-public service GPS_Watch::UI__TRACK~>startStopPressed () is
+public service UI::TRACK~>startStopPressed () is
 begin
   Tracking::startStopPressed();
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '3f5cd2a4-1e68-4c61-8424-88b4c5e58d0e' DO NOT EDIT THIS LINE.
-public service GPS_Watch::UI__TRACK~>lapResetPressed () is
+public service UI::TRACK~>lapResetPressed () is
 begin
   Tracking::lapResetPressed();
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'cb4d3ba8-fe12-4271-9427-a71e03eea543' DO NOT EDIT THIS LINE.
-public service GPS_Watch::UI__TRACK~>lightPressed () is
+public service UI::TRACK~>lightPressed () is
 begin
   Tracking::lightPressed();
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '548062ac-1238-40ec-8f47-1af5b05c71b5' DO NOT EDIT THIS LINE.
-public service GPS_Watch::UI__TRACK~>modePressed () is
+public service UI::TRACK~>modePressed () is
 begin
   Tracking::modePressed();
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '7d72cc27-7fdd-403a-b110-bc81352e3841' DO NOT EDIT THIS LINE.
-public service GPS_Watch::UI__TRACK~>newGoalSpec ( spanType : in Tracking::GoalSpan,
-                                                  criteriaType : in Tracking::GoalCriteria,
-                                                  span : in real,
-                                                  maximum : in real,
-                                                  minimum : in real,
-                                                  sequenceNumber : in integer ) is
+public service UI::TRACK~>newGoalSpec ( spanType : in UIGoalSpan,
+                                       criteriaType : in UIGoalCriteria,
+                                       span : in real,
+                                       maximum : in real,
+                                       minimum : in real,
+                                       sequenceNumber : in integer ) is
 begin
-  Tracking::newGoalSpec( spanType, criteriaType, span, maximum, minimum, sequenceNumber);
+  if ( criteriaType = UI::HeartRate ) then
+    if ( spanType = UI::Distance ) then
+      Tracking::newGoalSpec( Tracking::Distance, Tracking::HeartRate, span, maximum, minimum, sequenceNumber);
+    elsif ( spanType = UI::Time ) then
+      Tracking::newGoalSpec( Tracking::Time, Tracking::HeartRate, span, maximum, minimum, sequenceNumber);
+    end if;
+  elsif ( criteriaType = UI::Pace ) then
+    if ( spanType = UI::Distance ) then
+      Tracking::newGoalSpec( Tracking::Distance, Tracking::Pace, span, maximum, minimum, sequenceNumber);
+    elsif ( spanType = UI::Time ) then
+      Tracking::newGoalSpec( Tracking::Time, Tracking::Pace, span, maximum, minimum, sequenceNumber);
+    end if;
+  end if;
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '11f48a41-c6db-403d-9a5c-1e3cd53cb6d0' DO NOT EDIT THIS LINE.
-public service GPS_Watch::HeartRateMonitor__HRChange~>heartRateChanged ( heartRate : in integer ) is
+public service HeartRateMonitor::HRChange~>heartRateChanged ( heartRate : in integer ) is
 begin
   Tracking::heartRateChanged( heartRate );
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'f470384e-4ac7-48c3-aec2-1b22a0396e89' DO NOT EDIT THIS LINE.
-public service GPS_Watch::Tracking__UI~>setData ( unit : in Unit,
-                                                 value : in real ) is
+public service Tracking::UI~>setData ( value : in real,
+                                      unit : in Unit ) is
 begin
-  UI::setData( value, unit );
+  if (unit = Tracking::km) then
+    UI::setData(value, UI::km);
+  elsif (unit = Tracking::meters) then
+    UI::setData(value, UI::meters);
+  elsif (unit = Tracking::minPerKm) then
+    UI::setData(value, UI::minPerKm);
+  elsif (unit = Tracking::kmPerHour) then
+    UI::setData(value, UI::kmPerHour);
+  elsif (unit = Tracking::miles) then
+    UI::setData(value, UI::miles);
+  elsif (unit = Tracking::yards) then
+    UI::setData(value, UI::yards);
+  elsif (unit = Tracking::feet) then
+    UI::setData(value, UI::feet);
+  elsif (unit = Tracking::minPerMile) then
+    UI::setData(value, UI::minPerMile);
+  elsif (unit = Tracking::mph) then
+    UI::setData(value, UI::mph);
+  elsif (unit = Tracking::bpm) then
+    UI::setData(value, UI::bpm);
+  elsif (unit = Tracking::laps) then
+    UI::setData(value, UI::laps);
+  end if;
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'a7a600bb-f1fa-47df-bde9-20cfba7998f6' DO NOT EDIT THIS LINE.
-public service GPS_Watch::Tracking__UI~>setIndicator ( indicator : in Indicator ) is
+public service Tracking::UI~>setIndicator ( indicator : in Indicator ) is
 begin
-  UI::setIndicator( indicator );
+  if ( indicator = Tracking::Blank  ) then
+    UI::setIndicator( UI::Blank );
+  elsif ( indicator = Tracking::Down ) then
+    UI::setIndicator( UI::Down );
+  elsif ( indicator = Tracking::Flat ) then
+    UI::setIndicator( UI::Flat );
+  elsif ( indicator = Tracking::Up ) then
+    UI::setIndicator( UI::Up );
+  end if;
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '5a5af275-2ada-45a4-a310-6b89dbcc9124' DO NOT EDIT THIS LINE.
-public service GPS_Watch::Tracking__UI~>setTime ( time : in integer ) is
+public service Tracking::UI~>setTime ( time : in integer ) is
 begin
   UI::setTime( time );
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '89c1e51a-59f6-43db-82d6-81d20886f21e' DO NOT EDIT THIS LINE.
-public service GPS_Watch::Tracking__LOC~>getDistance ( result : out real,
-                                                      toLong : in real,
-                                                      toLat : in real,
-                                                      fromLong : in real,
-                                                      fromLat : in real ) is
+public service Tracking::LOC~>getDistance ( result : out real,
+                                           toLong : in real,
+                                           toLat : in real,
+                                           fromLong : in real,
+                                           fromLat : in real ) is
 distance: real;
 begin
   Location::getDistance( distance, toLong, toLat, fromLong, fromLat );
@@ -88,8 +130,8 @@ end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '2d0ef754-8f71-4aac-8273-9627169a8eba' DO NOT EDIT THIS LINE.
-public service GPS_Watch::Tracking__LOC~>getLocation ( longitude : out real,
-                                                      latitude : out real ) is
+public service Tracking::LOC~>getLocation ( longitude : out real,
+                                           latitude : out real ) is
 lat: real;
 longi: real;
 begin
@@ -102,28 +144,28 @@ end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'c58a9fcf-09dd-4f3f-9fa1-69bb40b65000' DO NOT EDIT THIS LINE.
-public service GPS_Watch::Tracking__LOC~>registerListener () is
+public service Tracking::LOC~>registerListener () is
 begin
   Location::registerListener();
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '24345e44-3a4c-4256-a8e0-58a215e0fac1' DO NOT EDIT THIS LINE.
-public service GPS_Watch::Tracking__LOC~>unregisterListener () is
+public service Tracking::LOC~>unregisterListener () is
 begin
   Location::unregisterListener();
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '72e5e320-7813-4805-b1fe-0fbe51a1b472' DO NOT EDIT THIS LINE.
-public service GPS_Watch::Tracking__HR~>registerListener () is
+public service Tracking::HR~>registerListener () is
 begin
   HeartRateMonitor::registerListener();
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '11a537cb-994a-4ae9-9081-46ee799e36b5' DO NOT EDIT THIS LINE.
-public service GPS_Watch::Tracking__HR~>unregisterListener () is
+public service Tracking::HR~>unregisterListener () is
 begin
   HeartRateMonitor::unregisterListener();
 end service;
