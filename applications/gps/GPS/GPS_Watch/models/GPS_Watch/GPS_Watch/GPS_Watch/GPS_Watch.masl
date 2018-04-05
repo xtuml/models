@@ -34,8 +34,8 @@ end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. '7d72cc27-7fdd-403a-b110-bc81352e3841' DO NOT EDIT THIS LINE.
-public service UI::TRACK~>newGoalSpec ( spanType : in UIGoalSpan,
-                                       criteriaType : in UIGoalCriteria,
+public service UI::TRACK~>newGoalSpec ( spanType : in UI::UIGoalSpan,
+                                       criteriaType : in UI::UIGoalCriteria,
                                        span : in real,
                                        maximum : in real,
                                        minimum : in real,
@@ -66,7 +66,7 @@ end service;
 
 //! ACTIVITY BEGIN. 'f470384e-4ac7-48c3-aec2-1b22a0396e89' DO NOT EDIT THIS LINE.
 public service Tracking::UI~>setData ( value : in real,
-                                      unit : in Unit ) is
+                                      unit : in Tracking::Unit ) is
 begin
   if (unit = Tracking::km) then
     UI::setData(value, UI::km);
@@ -95,7 +95,7 @@ end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
 //! ACTIVITY BEGIN. 'a7a600bb-f1fa-47df-bde9-20cfba7998f6' DO NOT EDIT THIS LINE.
-public service Tracking::UI~>setIndicator ( indicator : in Indicator ) is
+public service Tracking::UI~>setIndicator ( indicator : in Tracking::Indicator ) is
 begin
   if ( indicator = Tracking::Blank  ) then
     UI::setIndicator( UI::Blank );
