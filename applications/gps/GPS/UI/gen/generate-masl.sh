@@ -6,7 +6,7 @@ if [[ "" == $GEN_UI_LOG_LOC ]]; then
 fi
 GEN_UI_Logger_LOC="$HOME/git/masl/examples/utils/Logger_OOA"
 GEN_UI_Format_LOC="$HOME/git/masl/examples/utils/Format_OOA"
-$MASLMC -domainpath $CWD/masl/UI:$GEN_UI_LOG_LOC -mod $CWD/masl/UI/UI.mod -output $CWD/gen/code_generation/UI
+$MASLMC -domainpath $CWD/masl/UI:$GEN_UI_LOG_LOC -mod $CWD/masl/UI/UI.mod -output $CWD/gen/code_generation/UI -custombuildfile gen/custom.cmake
 $MASLMC -domainpath $GEN_UI_LOG_LOC:$GEN_UI_Logger_LOC:$GEN_UI_Format_LOC -mod $GEN_UI_LOG_LOC/LOG.int -output $CWD/gen/code_generation/LOG
 $MASLMC -domainpath $GEN_UI_Logger_LOC -mod $GEN_UI_Logger_LOC/Logger.int -output $CWD/gen/code_generation/Logger
 $MASLMC -domainpath $GEN_UI_Format_LOC -mod $GEN_UI_Format_LOC/Format.int -output $CWD/gen/code_generation/Format

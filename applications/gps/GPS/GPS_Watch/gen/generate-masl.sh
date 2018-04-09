@@ -19,7 +19,7 @@ fi
 GEN_GPS_Watch_Logger_LOC="$HOME/git/masl/examples/utils/Logger_OOA"
 GEN_GPS_Watch_Format_LOC="$HOME/git/masl/examples/utils/Format_OOA"
 $MASLMC -domainpath $GEN_GPS_Watch_UI_LOC:$GEN_GPS_Watch_Location_LOC:$GEN_GPS_Watch_HeartRateMonitor_LOC:$GEN_GPS_Watch_Tracking_LOC:$GEN_GPS_Watch_LOG_LOC -prj $CWD/masl/GPS_Watch/GPS_Watch.prj -output $CWD/gen/code_generation/GPS_Watch
-$MASLMC -domainpath $GEN_GPS_Watch_UI_LOC:$GEN_GPS_Watch_LOG_LOC -mod $GEN_GPS_Watch_UI_LOC/UI.mod -output $CWD/gen/code_generation/UI
+$MASLMC -domainpath $GEN_GPS_Watch_UI_LOC:$GEN_GPS_Watch_LOG_LOC -mod $GEN_GPS_Watch_UI_LOC/UI.mod -output $CWD/gen/code_generation/UI -custombuildfile gen/custom.cmake
 $MASLMC -domainpath $GEN_GPS_Watch_Location_LOC:$GEN_GPS_Watch_LOG_LOC -mod $GEN_GPS_Watch_Location_LOC/Location.mod -output $CWD/gen/code_generation/Location
 $MASLMC -domainpath $GEN_GPS_Watch_HeartRateMonitor_LOC:$GEN_GPS_Watch_LOG_LOC:$GEN_GPS_Watch_Format_LOC -mod $GEN_GPS_Watch_HeartRateMonitor_LOC/HeartRateMonitor.mod -output $CWD/gen/code_generation/HeartRateMonitor
 $MASLMC -domainpath $GEN_GPS_Watch_Tracking_LOC:$GEN_GPS_Watch_LOG_LOC -mod $GEN_GPS_Watch_Tracking_LOC/Tracking.mod -output $CWD/gen/code_generation/Tracking
