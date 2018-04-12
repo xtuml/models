@@ -82,7 +82,7 @@ To activate the "Goals" functionality, pause the watch as it is running then:
 **This project assumes that the MASL compiler is installed in a specific location.
 To build and install the MASL model compiler, first clone the `masl` repository
 (found at [https://github.com/xtuml/masl](https://github.com/xtuml/masl)) into
-`~/git/masl`.**
+`~/git/masl`, then follow the README to build the compiler from source.**
 
 The Watch GUI is common between the MASL and OAL implementations. Instructions
 for how to start the GUI, see [above](#to-run-the-watch-gui)
