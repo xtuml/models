@@ -36,19 +36,21 @@ executable, or run the model in xtUML eXecute.
 
 #### To run the EXE:
 
-Windows:
-  * Expand the Binaries item under the project
-  * Right-click on `GPSWatch.exe` and choose Open With > System Editor
-Linux/macOS:
-  * Expand the "Debug" folder under the project
-  * Right-click on `GPSWatch` and select Properties
-  * Under Resource > Permissions, make sure all the Execute checkboxes are 
-    checked
-  * Right-click on `GPSWatch`, select "Run As > Run Configurations"
-  * Create a new C/C++ Application Run Configuration for this `GPSWatch`
-    - Make sure the C/C++ Application field has "Debug/GPSWatch"
-    - Make sure the Build configuration: field is set to "Debug"
-  * Select Run
+* **Windows:**
+  - Expand the Binaries item under the project
+  - Right-click on `GPSWatch.exe` and choose Open With > System Editor
+* **Linux:**
+  - Expand the "Debug_Linux" folder under the project
+  - Right-click on `GPSWatch`, select "Run As > Run Configurations"
+  - Create a new C/C++ Application Run Configuration for this `GPSWatch`
+    * Make sure the C/C++ Application field has "Debug_Linux/GPSWatch"
+  - Select Run
+* **macOS:**  
+  _Note: Due to a [known bug](https://bugs.eclipse.org/bugs/show_bug.cgi?id=519886),
+  launching the `GPS_Watch` application using an Eclipse run configuration is
+  not supported for macOS._
+  - Launch a terminal instance and navigate to the workspace root.
+  - Execute `./GPS_Watch/Debug_Mac/GPS_Watch`
 * The application will connect to the GUI automatically. Click the START/STOP 
   button on the watch, you will see the watch execute on the GUI and in the
   command prompt console. The MODE button causes GUI changes as well.
