@@ -100,7 +100,7 @@ INSERT INTO GD_GE
 	"70d42327-fbe9-426d-b6a3-0c42cb911cab",
 	105,
 	0,
-	'BMU::testbench_BUI::BMU::lib::BUI::UIbus');
+	'BMU::testbench_BUI::BMU::lib::BUI::::UIbus');
 INSERT INTO GD_CON
 	VALUES ("c48679f4-f5b3-432e-952d-e55d913c5902",
 	"00000000-0000-0000-0000-000000000000");
@@ -208,7 +208,7 @@ INSERT INTO GD_GE
 	"3df26464-b234-4aa9-a87b-8eca586ccf5d",
 	106,
 	0,
-	'BMU::testbench_BUI::BMU::lib::BUI_tb::UIbus');
+	'BMU::testbench_BUI::BMU::lib::BUI_tb::Port1::UIbus');
 INSERT INTO GD_CON
 	VALUES ("d99959b6-6803-4951-af56-8856cc18b368",
 	"00000000-0000-0000-0000-000000000000");
@@ -318,10 +318,15 @@ INSERT INTO CL_IC
 	'',
 	'BMU::lib::BUI',
 	'');
+INSERT INTO CL_POR
+	VALUES ("f0b4d3b6-2040-4af8-9778-ed17e96ad43d",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"1d219210-85c1-443a-b4e1-a5ec75150d29");
 INSERT INTO CL_IIR
 	VALUES ("70d42327-fbe9-426d-b6a3-0c42cb911cab",
 	"9923902c-dcb2-4cae-ac4b-df5b5efa1947",
-	"f0b4d3b6-2040-4af8-9778-ed17e96ad43d",
+	"1d219210-85c1-443a-b4e1-a5ec75150d29",
 	"00000000-0000-0000-0000-000000000000",
 	'UIbus',
 	'');
@@ -364,10 +369,15 @@ INSERT INTO CL_IC
 	'',
 	'BMU::lib::BUI_tb',
 	'');
+INSERT INTO CL_POR
+	VALUES ("21bb56d3-c712-4739-9c39-6438ea954375",
+	"7017b5d4-1a78-4c3c-a134-bebdd5ea1772",
+	'Port1',
+	"02a5c5ba-1d06-4752-80a9-5d7078cd3168");
 INSERT INTO CL_IIR
 	VALUES ("3df26464-b234-4aa9-a87b-8eca586ccf5d",
 	"975d7f1c-ae56-4faa-9862-4ba46c8ed12f",
-	"21bb56d3-c712-4739-9c39-6438ea954375",
+	"02a5c5ba-1d06-4752-80a9-5d7078cd3168",
 	"00000000-0000-0000-0000-000000000000",
 	'UIbus',
 	'');
@@ -381,6 +391,13 @@ INSERT INTO C_IR_PROXY
 	"589c7162-b450-4fdd-b6bb-ea9cad4a19f3",
 	"00000000-0000-0000-0000-000000000000",
 	"7017b5d4-1a78-4c3c-a134-bebdd5ea1772",
+	'../lib/BUI_tb/BUI_tb.xtuml');
+INSERT INTO C_PO_PROXY
+	VALUES ("7017b5d4-1a78-4c3c-a134-bebdd5ea1772",
+	"8e72f464-7512-4c56-b6f2-304d20cbdbf7",
+	'Port1',
+	0,
+	0,
 	'../lib/BUI_tb/BUI_tb.xtuml');
 INSERT INTO PE_PE
 	VALUES ("21bb56d3-c712-4739-9c39-6438ea954375",
@@ -404,7 +421,7 @@ INSERT INTO C_SF
 	"975d7f1c-ae56-4faa-9862-4ba46c8ed12f",
 	"9923902c-dcb2-4cae-ac4b-df5b5efa1947",
 	'',
-	'BUI::client::UIbus -o)- BUI_tb::Port1::UIbus');
+	'BUI::monitor::UIbus -o)- BUI_tb::Port1::UIbus');
 INSERT INTO PE_PE
 	VALUES ("7e75f6f5-2863-49ae-aea6-60f8fe870ab6",
 	1,
@@ -423,7 +440,7 @@ INSERT INTO C_P_PROXY
 	'UIbus',
 	'Unnamed Interface',
 	'',
-	'BUI::client::UIbus',
+	'BUI::monitor::UIbus',
 	'../lib/BUI/BUI.xtuml');
 INSERT INTO PE_PE
 	VALUES ("4219e044-9cf4-46aa-a748-2704eb0218a4",

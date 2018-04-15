@@ -18,5 +18,4 @@ begin
       Operator~>report_user(the_user.user_id, the_user.login_name, 
                             the_user.user_name, the_user.is_logged_on);
    end if;
-   
 end state;

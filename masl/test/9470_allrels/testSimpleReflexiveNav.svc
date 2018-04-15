@@ -1,0 +1,38 @@
+public service Navigation::testSimpleReflexiveNav() is
+    a  : instance of SimpleReflexive_A;
+    aa : set of instance of SimpleReflexive_A;
+begin
+
+
+	// A <-> A
+
+    a := (a  -> R41.related_to_a);  
+    a := (a  -> R41.related_to_a.SimpleReflexive_A);  
+
+    a := (a  -> R41.related_to_b);  
+    a := (a  -> R41.related_to_b.SimpleReflexive_A);  
+
+    a := (aa -> R41.related_to_a)'any;  
+    a := (aa -> R41.related_to_a.SimpleReflexive_A)'any;  
+
+    a := (aa -> R41.related_to_b)'any;  
+    a := (aa -> R41.related_to_b.SimpleReflexive_A)'any;  
+
+
+
+	// A <->> A
+
+    a := (a  -> R43.related_to_a);  
+    a := (a  -> R43.related_to_a.SimpleReflexive_A);  
+
+    a := (a  -> R43.related_to_b)'any;  
+    a := (a  -> R43.related_to_b.SimpleReflexive_A)'any;  
+
+    a := (aa -> R43.related_to_a)'any;  
+    a := (aa -> R43.related_to_a.SimpleReflexive_A)'any;  
+
+    a := (aa -> R43.related_to_b)'any;  
+    a := (aa -> R43.related_to_b.SimpleReflexive_A)'any;  
+
+
+end service;

@@ -1,0 +1,16 @@
+public service RecursiveStructure::test() is
+  component  : Component;
+  device     : Device;
+  components : sequence of Component;
+  devices    : sequence of Device;
+begin
+  components := component.subComponents;
+  devices    := component.subDevices;
+  components := device.components;
+
+  components := component.subComponents[0].subComponents;
+  devices    := device.components[0].subDevices;
+  components := device.components[0].subComponents;
+//  component.subDevices := 1;
+end service;
+
