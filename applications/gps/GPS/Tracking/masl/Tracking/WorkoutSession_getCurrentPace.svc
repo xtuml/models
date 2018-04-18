@@ -1,0 +1,13 @@
+public instance service Tracking::WorkoutSession.getCurrentPace () return real is
+result: real;
+begin
+  // Calculate current pace from current speed, converting from km/hour to minutes/km.
+  result := 0.0;
+  if ( this.getCurrentSpeed() /= 0.0 ) then
+    result := 60.0 / this.getCurrentSpeed();
+  else
+    result := 0.0;
+  end if;
+  
+  return result;
+end service;

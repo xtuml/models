@@ -1,0 +1,12 @@
+//! ACTIVITY BEGIN. '5a3d77d0-6b01-4255-9e4d-56dbb9e4c299' DO NOT EDIT THIS LINE.
+public service Tracking::GoalAchievement.initialize () is
+goalachievement: instance of GoalAchievement;
+begin
+  goalachievement := find_one GoalAchievement();
+  if ( null = goalachievement ) then
+    goalachievement := create GoalAchievement( id => 1 );
+    goalachievement.evaluationPeriod := 3000000;
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

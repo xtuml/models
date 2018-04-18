@@ -1,0 +1,54 @@
+project GPS_Watch is
+domain LOG is
+end domain;
+domain Location is
+end domain;
+domain HeartRateMonitor is
+  terminator HRChange is
+    public service heartRateChanged (
+        heartRate : in integer    );
+  end terminator;
+end domain;
+domain Tracking is
+  terminator HR is
+    public service registerListener (
+    );
+    public service unregisterListener (
+    );
+  end terminator;
+  terminator LOC is
+    public service getDistance (
+        result : out real,        toLong : in real,        toLat : in real,        fromLong : in real,        fromLat : in real    );
+    public service getLocation (
+        longitude : out real,        latitude : out real    );
+    public service registerListener (
+    );
+    public service unregisterListener (
+    );
+  end terminator;
+  terminator UI is
+    public service setData (
+        value : in real,        unit : in Tracking::Unit    );
+    public service setIndicator (
+        indicator : in Tracking::Indicator    );
+    public service setTime (
+        time : in integer    );
+  end terminator;
+end domain;
+domain UI is
+  terminator TRACK is
+    public service setTargetPressed (
+    );
+    public service startStopPressed (
+    );
+    public service lapResetPressed (
+    );
+    public service lightPressed (
+    );
+    public service modePressed (
+    );
+    public service newGoalSpec (
+        spanType : in UI::UIGoalSpan,        criteriaType : in UI::UIGoalCriteria,        span : in real,        maximum : in real,        minimum : in real,        sequenceNumber : in integer    );
+  end terminator;
+end domain;
+end project;

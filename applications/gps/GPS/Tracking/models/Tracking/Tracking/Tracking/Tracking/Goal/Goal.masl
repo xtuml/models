@@ -1,0 +1,170 @@
+//! ACTIVITY BEGIN. '8ac30761-d43a-49d9-b7e4-c3ec442ea9f3' DO NOT EDIT THIS LINE.
+public service Tracking::Goal.initialize ( sequenceNumber : in integer ) is
+goalSpec: instance of GoalSpec;
+goal: instance of Goal;
+session: instance of WorkoutSession;
+goalachievement: instance of GoalAchievement;
+begin;
+  // Create and activate an instance of a goal specified by
+  //   the goal specification, if it exists, identified by 
+  //   the incoming parameter.
+  
+  // Find the goal specification for this goal, then
+  //   create and relate this goal to the specification
+  //   and to the singleton workout session.
+  goalSpec := find_one GoalSpec( sequenceNumber = sequenceNumber );
+  if ( null /= goalSpec ) then
+    goal := create Goal( session_startTime => goalSpec.session_startTime, spec_sequenceNumber => goalSpec.sequenceNumber, ID => goalSpec.last_goal_ID + 1, Current_State => Executing );
+    link goal R9.specified_by goalSpec;
+    session := find_one WorkoutSession();  // WorkoutSession is a singleton
+    link goal  R11.is_currently_executing_within session;
+    goalSpec.last_goal_ID := goal.ID;
+  
+    // Initialize this goal.
+    goal.calculateStart();
+    goal.disposition := Increase;
+  
+    // Start a timer that periodically causes evaluation of goal achievement.
+    GoalAchievement.initialize();
+    goalachievement := find_one GoalAchievement();
+    schedule goal.evaluationTimer generate Goal.Evaluate() to goal delay @PT0.000001S@ * goalachievement.evaluationPeriod delta @PT0.000001S@ * goalachievement.evaluationPeriod;
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'b3215204-3d02-48ba-9794-25ddbc40009c' DO NOT EDIT THIS LINE.
+public instance service Tracking::Goal.calculateStart () is
+goalSpec: instance of GoalSpec;
+workoutTimer: instance of WorkoutTimer;
+session: instance of WorkoutSession;
+begin
+  // Based on the span type for this goal, calculate and
+  //   store the value of the start attribute.
+  goalSpec := this->R9.specified_by.GoalSpec;
+  if ( goalSpec.spanType = Time ) then
+    workoutTimer := this->R11.is_currently_executing_within.WorkoutSession->R8.is_timed_by.WorkoutTimer;
+    this.startingPoint := real(workoutTimer.time);
+  elsif ( goalSpec.spanType = Distance ) then
+    session := this->R11.is_currently_executing_within.WorkoutSession;
+    this.startingPoint := session.accumulatedDistance;
+  else
+    LOG::LogFailure( "Goal.calculateStart: Unknown Goal Span Type." );
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '2b884ff8-637a-468b-a2fa-f96b8ef98b0a' DO NOT EDIT THIS LINE.
+public instance service Tracking::Goal.evaluateAchievement () return GoalDisposition is
+goalSpec: instance of GoalSpec;
+session: instance of WorkoutSession;
+currentValue: real;
+goalDisposition: GoalDisposition;
+begin
+  // Based on the type of goal, determine whether this one is 
+  //   currently being achieved and return a value indicating
+  //   the disposition of the this goal.    
+  
+  // Find the related goal specification and workout session for this goal.
+  goalSpec := this->R9.specified_by.GoalSpec;
+  session := this->R11.is_currently_executing_within.WorkoutSession;
+  
+  // Based on the goal criteria type, get the appropriate current value
+  //   for comparison against the criteria (minimum and maximum).
+  currentValue := 0.0;  // Explicit declaration
+  if ( goalSpec.criteriaType = HeartRate ) then
+    currentValue := real(session.getCurrentHeartRate());
+  elsif ( goalSpec.criteriaType = Pace ) then
+    currentValue := session.getCurrentPace();
+  else
+    LOG::LogFailure( "Goal.evaluateAchievement: Unknown Goal Criteria Type." );
+  end if;
+   
+  // Compare the current value against the criteria to calculate the return value.
+  goalDisposition := Achieving; 
+  if ( currentValue < goalSpec.minimum ) then
+    goalDisposition := Increase;
+  elsif ( currentValue > goalSpec.maximum ) then
+    goalDisposition := Decrease;
+  end if;
+  
+  // Invert the disposition value to produce a logical, semantic disposition for
+  //   goal types, such as pace, that require it.
+  if ( goalSpec.criteriaType = Pace ) then
+    if ( goalDisposition = Increase ) then
+      goalDisposition := Decrease;
+    elsif ( goalDisposition = Decrease ) then
+      goalDisposition := Increase;
+    end if;
+  end if;
+   
+  return( goalDisposition );
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '7090ad22-2865-4836-a89f-a46b868d3ac0' DO NOT EDIT THIS LINE.
+public instance service Tracking::Goal.evaluateCompletion () is
+goalSpec: instance of GoalSpec;
+elapsedSpan: real;
+session: instance of WorkoutSession;
+workoutTimer: instance of WorkoutTimer;
+openAchievement: instance of Achievement;
+begin
+  // Based on the span type for this goal, determine 
+  //  whether it has been completed, update achievement
+  //  records as necessary, and advance to the next goal
+  //  if appropriate.
+  
+  goalSpec := this->R9.specified_by.GoalSpec;
+  
+  // Based on the span type for the goal, get the elapsed span 
+  //   for comparison against the specified span for the goal.
+  elapsedSpan := 0.0;  // Explicit declaration
+  if ( goalSpec.spanType = Distance ) then
+    session := this->R11.is_currently_executing_within.WorkoutSession;
+    elapsedSpan := session.accumulatedDistance - this.startingPoint;
+  elsif ( goalSpec.spanType = Time ) then
+    workoutTimer := this->R11.is_currently_executing_within.WorkoutSession->R8.is_timed_by.WorkoutTimer;
+    elapsedSpan := real(workoutTimer.time) - this.startingPoint;
+  else
+    LOG::LogFailure( "Goal.evaluateCompletion: Unknown Goal Span Type." );
+  end if;
+  
+  // Compare the current value against the specified span to determine 
+  //   whether the execution of this workout goal is complete.
+  if ( elapsedSpan >= goalSpec.span ) then
+    openAchievement := this->R14.has_open.Achievement;
+    if ( null /= openAchievement ) then
+      openAchievement.close();
+    end if;
+    generate Goal.Completed() to this;
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '902f97d2-b056-4461-89c5-6454f9f253d7' DO NOT EDIT THIS LINE.
+public service Tracking::Goal.nextGoal () is
+session: instance of WorkoutSession;
+goal: instance of Goal;
+gsc: instance of GoalSpecConstants;
+begin
+  // Advance to the next goal or start the first one if one
+  //   is currently not exectuing.
+  
+  //  If there is a goal currently executing, notify it that its execution
+  //    has completed.
+  //  Otherwise, create and start a goal for the first goal specification
+  //    if one exists.
+  session := find_one WorkoutSession();  // WorkoutSession is a singleton.
+  if ( null /= session ) then
+    goal := session->R11.is_currently_executing.Goal;
+    if ( null /= goal ) then
+      generate Goal.Completed() to goal;
+    else
+      GoalSpecConstants.initialize();
+      gsc := find_one GoalSpecConstants();
+      Goal.initialize( gsc.GoalSpecOrigin );
+    end if;
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

@@ -1,0 +1,54 @@
+//! ACTIVITY BEGIN. '77ed88df-af92-4f7f-8b31-8a8618436d91' 'fe2328d4-2416-4a02-9b76-beb316347b06' DO NOT EDIT THIS LINE.
+state Location::GPS.idle () is
+begin
+  LOG::LogInfo( "Locating::GPS::Idle" );
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '77ed88df-af92-4f7f-8b31-8a8618436d91' 'f87a029a-8fa6-46e3-bfa3-e56f904d8faa' DO NOT EDIT THIS LINE.
+state Location::GPS.locating () is
+simgps: instance of simulatedGPS;
+begin
+  // Simulate movement.
+  simulatedGPS.initialize();
+  simgps := find_one simulatedGPS();
+  if ( (this.motionSegments rem 3) = 0 ) then
+    this.currentLongitude := this.currentLongitude + (simgps.longitudeIncrement * 2);
+    this.currentLatitude := this.currentLatitude + simgps.latitudeIncrement;
+  elsif ( (this.motionSegments rem 5) = 0 ) then
+    this.currentLongitude := this.currentLongitude + simgps.longitudeIncrement;
+    this.currentLatitude := this.currentLatitude + (simgps.latitudeIncrement * 3);
+  else
+    this.currentLongitude := this.currentLongitude + simgps.longitudeIncrement;
+    this.currentLatitude := this.currentLatitude + simgps.latitudeIncrement;
+  end if;
+  // Increment simulated motion segment count.
+  this.motionSegments := this.motionSegments + 1;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '77ed88df-af92-4f7f-8b31-8a8618436d91' 'e2f77137-48b0-4e0a-a3a9-8c11748430cb' DO NOT EDIT THIS LINE.
+state Location::GPS.registeringListener () is
+simgps: instance of simulatedGPS;
+begin
+  // Activate the simulated GPS (this creates the GPS instance, if needed).
+  // Establish recurring timer for periodic position updates.
+  simulatedGPS.initialize();
+  simgps := find_one simulatedGPS();
+  schedule this.timer generate GPS.tick() to this delay @PT0.000001S@ * simgps.updatePeriod delta @PT0.000001S@ * simgps.updatePeriod;
+  LOG::LogInfo( "Location listener registered.");  
+
+  generate GPS.registeringComplete() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '77ed88df-af92-4f7f-8b31-8a8618436d91' '69ab6ccf-b204-4f00-8df5-8abc7198b9ea' DO NOT EDIT THIS LINE.
+state Location::GPS.unregistering () is
+begin
+  // Deactivate the timer.
+  cancel this.timer;
+  LOG::LogInfo("Location listener unregistered.");
+  generate GPS.unregisterComplete() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

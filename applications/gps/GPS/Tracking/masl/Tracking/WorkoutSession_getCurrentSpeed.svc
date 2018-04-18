@@ -1,0 +1,41 @@
+public instance service Tracking::WorkoutSession.getCurrentSpeed () return real is
+lastPoint: instance of TrackPoint;
+speed: real;
+cursor: instance of TrackPoint;
+spd: instance of Speed;
+index: integer;
+totalDistance: real;
+elapsedTime: real;
+previousPoint: instance of TrackPoint;
+distance: real;
+begin
+  // Calculate the current speed, expressed in km per hour, by summing 
+  // the straight-line distance between each of several of the most recent 
+  // track points and then dividing that sum by the elapsed time between 
+  // the first and last point in the subset used for the calculation.
+  
+  lastPoint := this->R4.captures_path_in.TrackLog->R3.has_last.TrackPoint;
+  speed := 0.0;
+  if ( null /= lastPoint ) then
+    cursor := lastPoint;
+    Speed.initialize();
+    spd := find_one Speed();
+    index := spd.SpeedAveragingWindow;  // Number of track points to use when calculating average speed.
+    totalDistance := 0.0;
+    elapsedTime := real(lastPoint.time);
+    while ( index > 0 ) loop
+      previousPoint := cursor->R2.preceeds.TrackPoint;
+      if ( null = previousPoint ) then
+        exit;
+      end if;
+      LOC~>getDistance( distance, cursor.latitude, cursor.longitude, previousPoint.latitude, previousPoint.longitude );
+      totalDistance := totalDistance + distance;
+      index := index - 1;
+      cursor := previousPoint;
+    end loop;
+    elapsedTime := elapsedTime - real(cursor.time);
+    speed := (totalDistance / 1000) / (elapsedTime / spd.SecondsPerHour);
+  end if;
+  
+  return speed;
+end service;

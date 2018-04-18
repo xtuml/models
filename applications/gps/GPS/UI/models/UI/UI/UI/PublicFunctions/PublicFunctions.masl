@@ -1,0 +1,74 @@
+//! ACTIVITY BEGIN. '14298a5c-0acb-4b3b-9d90-f66bab9b321f' DO NOT EDIT THIS LINE.
+public service UI::setData ( value : in real,
+                            unit : in UIUnit ) is
+ui: instance of UI;
+begin
+  ui := find_one UI();
+  if ( null /= ui ) then
+    if (unit = km) then
+      ui.setData(value, 0);
+    elsif (unit = meters) then
+      ui.setData(value, 1);
+    elsif (unit = minPerKm) then
+      ui.setData(value, 2);
+    elsif (unit = kmPerHour) then
+      ui.setData(value, 3);
+    elsif (unit = miles) then
+      ui.setData(value, 4);
+    elsif (unit = yards) then
+      ui.setData(value, 5);
+    elsif (unit = feet) then
+      ui.setData(value, 6);
+    elsif (unit = minPerMile) then
+      ui.setData(value, 7);
+    elsif (unit = mph) then
+      ui.setData(value, 8);
+    elsif (unit = bpm) then
+      ui.setData(value, 9);
+    elsif (unit = laps) then
+      ui.setData(value, 10);
+    end if;
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '082d2805-3f24-47e4-be98-df8768a77df4' DO NOT EDIT THIS LINE.
+public service UI::setIndicator ( indicator : in UIIndicator ) is
+ui: instance of UI;
+begin
+  // Map values of UIDatatypes/Indicator to values defined in WatchGUI.java.
+  ui := find_one UI();
+  if ( null /= ui ) then
+    if ( indicator = Blank  ) then
+      ui.setIndicator( 0 );
+    elsif ( indicator = Down ) then
+      ui.setIndicator( 1 );
+    elsif ( indicator = Flat ) then
+      ui.setIndicator( 2 );
+    elsif ( indicator = Up ) then
+      ui.setIndicator( 3 );
+    end if;
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'e0413384-a467-4646-a8bd-47f451a175c6' DO NOT EDIT THIS LINE.
+public service UI::setTime ( time : in integer ) is
+ui: instance of UI;
+begin
+  ui := find_one UI();
+  if ( null /= ui ) then
+    ui.setTime(time);
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'bb84f833-93eb-4a28-8748-bed61180c3ba' DO NOT EDIT THIS LINE.
+public service UI::startTest () is
+tc: instance of TestCase;
+begin
+  tc := create TestCase( id => 1, Current_State => Idle );
+  generate TestCase.initialize( 2 ) to tc;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

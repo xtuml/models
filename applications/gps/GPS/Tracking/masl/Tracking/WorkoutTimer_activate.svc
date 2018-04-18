@@ -1,0 +1,19 @@
+public instance service Tracking::WorkoutTimer.activate () is
+wtc: instance of WorkoutTimerConstants;
+executingGoal: instance of Goal;
+begin
+  // Start the underlying timer that drives the workout timer.
+  WorkoutTimerConstants.initialize();
+  wtc := find_one WorkoutTimerConstants();
+  schedule this.timer generate WorkoutTimer.tick() to this delay @PT1S@ * wtc.timerPeriod delta @PT1S@ * wtc.timerPeriod;
+  
+  // Resume evaluation of the currently executing goal, if there is one.
+  executingGoal := this->R8.acts_as_the_stopwatch_for.WorkoutSession->R11.is_currently_executing.Goal;
+  if ( null /= executingGoal ) then
+    generate Goal.Evaluate() to executingGoal;
+  end if;
+  
+  // Resume listening for updates from the GPS and heart monitor.
+  LOC~>registerListener();
+  HR~>registerListener();
+end service;

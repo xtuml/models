@@ -1,0 +1,9 @@
+public service Tracking::GoalSpecConstants.initialize () is
+gsc: instance of GoalSpecConstants;
+begin
+  gsc := find_one GoalSpecConstants();
+  if ( null = gsc ) then
+    gsc := create GoalSpecConstants( id => 1 );
+    gsc.GoalSpecOrigin := 1;
+  end if;
+end service;

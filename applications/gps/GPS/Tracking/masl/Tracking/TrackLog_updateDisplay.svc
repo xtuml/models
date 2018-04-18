@@ -1,0 +1,7 @@
+public instance service Tracking::TrackLog.updateDisplay () is
+display: instance of Display;
+begin
+  // Update the display so that newly updated values will be shown.
+  display := this->R4.represents_path_for.WorkoutSession->R7.current_status_indicated_on.Display;
+  generate Display.refresh() to display;
+end service;

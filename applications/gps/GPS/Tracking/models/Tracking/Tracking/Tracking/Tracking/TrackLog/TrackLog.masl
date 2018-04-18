@@ -1,0 +1,119 @@
+//! ACTIVITY BEGIN. '0f45bbc6-da36-4b5b-a2dd-f739a6f0cbdd' DO NOT EDIT THIS LINE.
+public instance service Tracking::TrackLog.addTrackPoint () is
+workoutTimer: instance of WorkoutTimer;
+trackPoint: instance of TrackPoint;
+firstPoint: instance of TrackPoint;
+lastPoint: instance of TrackPoint;
+isFirstTrackPoint: boolean;
+lastLatitude: real;
+lastLongitude: real;
+distance: real;
+session: instance of WorkoutSession;
+begin
+  // Add a track point to this track log, update the accumulated distance
+  // and current speed, and then notify the UI.
+  
+  // Create a new track point, retrieving the current location from the GPS.
+  workoutTimer := this->R4.represents_path_for.WorkoutSession->R8.is_timed_by.WorkoutTimer;
+  trackPoint := create TrackPoint( session_startTime => this.session_startTime, time => workoutTimer.time );
+  LOC~>getLocation( trackPoint.latitude, trackPoint.longitude );
+  
+  // Add the newly created track point to the track log.
+  firstPoint := this->R1.TrackPoint;
+  lastPoint := this->R3.TrackPoint;
+  
+  // Explicit variable declarations for later use outside if-else clause.
+  isFirstTrackPoint := false;
+  lastLatitude := 0.0;
+  lastLongitude := 0.0;  
+  if (null = firstPoint) then
+    isFirstTrackPoint := true;
+    link this R1.has_first trackPoint;
+    link this R3.has_last trackPoint;
+  else 
+    // Save last location for use in updating accumulated distance.
+    lastLatitude := lastPoint.latitude;
+    lastLongitude := lastPoint.longitude;
+    unlink this R3.has_last lastPoint;
+    link this R3.has_last trackPoint;
+    link lastPoint R2.follows trackPoint;
+  end if;
+  
+  // Update accumulated distance and current speed.
+  distance := 0.0;
+  if (not isFirstTrackPoint) then
+    LOC~>getDistance( distance, lastLatitude, lastLongitude, trackPoint.latitude, trackPoint.longitude );
+  end if;
+  
+  session := this->R4.represents_path_for.WorkoutSession;
+  session.accumulatedDistance := session.accumulatedDistance + distance;
+  
+  // Notify display of of the updated values.
+  this.updateDisplay();
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '7dbac40f-6e89-4ad2-a576-0f1fcfbe2dc5' DO NOT EDIT THIS LINE.
+public instance service Tracking::TrackLog.clearTrackPoints () is
+nextPoint: instance of TrackPoint;
+lastPoint: instance of TrackPoint;
+prevPoint: instance of TrackPoint;
+begin
+  nextPoint := this->R1.TrackPoint;
+  lastPoint := this->R3.TrackPoint;
+  
+  if (null /= lastPoint) then
+    unlink this R3 lastPoint;
+  end if;
+  
+  if (null /= nextPoint) then
+    unlink this R1 nextPoint;
+  end if;
+  
+  while (null /= nextPoint) loop
+    prevPoint := nextPoint;
+    nextPoint := nextPoint->R2.follows.TrackPoint;
+    if ( null /= nextPoint ) then
+      unlink prevPoint R2.follows nextPoint;
+    end if;
+    delete prevPoint;
+  end loop;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '83ad7ae5-197c-4e8a-b9f5-b7d1c03db0b7' DO NOT EDIT THIS LINE.
+public instance service Tracking::TrackLog.addLapMarker () is
+timer: instance of WorkoutTimer;
+lapMarker: instance of LapMarker;
+begin
+  timer := this->R4.represents_path_for.WorkoutSession->R8.is_timed_by.WorkoutTimer;
+  lapMarker := create LapMarker( session_startTime => this.session_startTime, lapTime => timer.time );
+  link this R5.has_laps_defined_by lapMarker;
+  
+  // Notify display of the new value.
+  this.updateDisplay();
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '9d05da67-cf3d-4220-b15a-0f2e28652584' DO NOT EDIT THIS LINE.
+public instance service Tracking::TrackLog.clearLapMarkers () is
+lapMarkers: set of instance of LapMarker;
+begin
+  lapMarkers := this->R5.LapMarker;
+  for lapMarker in lapMarkers loop
+    unlink this R5 lapMarker;
+    delete lapMarker;
+  end loop;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '9723d50b-bb3d-4fed-86de-6413406a6a2e' DO NOT EDIT THIS LINE.
+public instance service Tracking::TrackLog.updateDisplay () is
+display: instance of Display;
+begin
+  // Update the display so that newly updated values will be shown.
+  display := this->R4.represents_path_for.WorkoutSession->R7.current_status_indicated_on.Display;
+  generate Display.refresh() to display;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

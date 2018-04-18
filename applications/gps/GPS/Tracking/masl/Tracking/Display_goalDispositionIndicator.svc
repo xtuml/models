@@ -1,0 +1,29 @@
+public service Tracking::Display.goalDispositionIndicator () return Indicator is
+session: instance of WorkoutSession;
+goal: instance of Goal;
+indicator: Indicator;
+begin
+  // Return the indicator value representing the disposition of 
+  // the currently executing goal, if one exists.  If there is
+  // no currently executing goal, return Blank.
+  
+  // Find the currently executing goal (if one exists) associated 
+  // with the singleton instance of the workout session.
+  session := find_one WorkoutSession();
+  goal := session->R11.is_currently_executing.Goal;
+  
+  // Convert the disposition of the currently executing goal
+  // (if it exists) to a UI indicator.
+  indicator := Blank;
+  if ( null /= goal ) then
+    if ( goal.disposition = Increase ) then
+      indicator := Up;
+    elsif ( goal.disposition = Decrease ) then
+      indicator := Down;
+    else
+      indicator := Flat;
+    end if;
+  end if;
+  
+  return( indicator );
+end service;

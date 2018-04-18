@@ -1,0 +1,27 @@
+public instance service Tracking::WorkoutSession.getCurrentHeartRate () return integer is
+hrc: instance of HeartRateConstants;
+workoutTimer: instance of WorkoutTimer;
+samples: set of instance of HeartRateSample;
+sample: instance of HeartRateSample;
+numberOfSamples: integer;
+sum: integer;
+result: integer;
+begin
+  // Calculate sliding average using the most recent samples.
+  HeartRateConstants.initialize();
+  hrc := find_one HeartRateConstants();
+  workoutTimer := this->R8.is_timed_by.WorkoutTimer;
+  samples := find (this->R6.tracks_heart_rate_over_time_as.HeartRateSample)( time >= ( workoutTimer.time - (hrc.HeartRateSamplingPeriod * hrc.HeartRateAveragingWindow) ) );
+  numberOfSamples := 0;
+  sum := 0;
+  result := 0;
+  for sample in samples loop
+    numberOfSamples := numberOfSamples + 1;
+    sum := sum + sample.heartRate;
+  end loop;
+  if ( numberOfSamples > 0 ) then
+    result := sum / numberOfSamples;
+  end if;
+  
+  return result;
+end service;

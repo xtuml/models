@@ -1,0 +1,9 @@
+public service Location::Distance.initialize () is
+distance: instance of Distance;
+begin
+  distance := find_one Distance();
+  if ( null = distance ) then
+    distance := create Distance( id => 1 );
+    distance.kmPerDegree := 111.32;
+  end if;
+end service;

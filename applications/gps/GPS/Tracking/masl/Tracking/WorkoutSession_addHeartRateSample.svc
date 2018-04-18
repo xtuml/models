@@ -1,0 +1,18 @@
+public instance service Tracking::WorkoutSession.addHeartRateSample ( heartRate: in integer ) is
+workoutTimer: instance of WorkoutTimer;
+sample: instance of HeartRateSample;
+display: instance of Display;
+begin
+  // Add a new heart-rate sample and notify the UI of the current heart rate.
+  
+  workoutTimer := this->R8.is_timed_by.WorkoutTimer;
+  
+  // Create and initialize a new heart-rate sample.
+  sample := create HeartRateSample( session_startTime => this.startTime, time => workoutTimer.time );
+  sample.heartRate := heartRate;
+  link this R6.tracks_heart_rate_over_time_as sample;
+  
+  // Notify UI of the new heart rate.
+  display := this->R7.current_status_indicated_on.Display;
+  generate Display.refresh() to display;
+end service;

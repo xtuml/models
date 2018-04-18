@@ -1,0 +1,21 @@
+public service UI::TRACK~>newGoalSpec ( spanType: in UI::UIGoalSpan,
+                                        criteriaType: in UI::UIGoalCriteria,
+                                        span: in real,
+                                        maximum: in real,
+                                        minimum: in real,
+                                        sequenceNumber: in integer ) is
+begin
+  if ( criteriaType = UI::HeartRate ) then
+    if ( spanType = UI::Distance ) then
+      Tracking::newGoalSpec( Tracking::Distance, Tracking::HeartRate, span, maximum, minimum, sequenceNumber);
+    elsif ( spanType = UI::Time ) then
+      Tracking::newGoalSpec( Tracking::Time, Tracking::HeartRate, span, maximum, minimum, sequenceNumber);
+    end if;
+  elsif ( criteriaType = UI::Pace ) then
+    if ( spanType = UI::Distance ) then
+      Tracking::newGoalSpec( Tracking::Distance, Tracking::Pace, span, maximum, minimum, sequenceNumber);
+    elsif ( spanType = UI::Time ) then
+      Tracking::newGoalSpec( Tracking::Time, Tracking::Pace, span, maximum, minimum, sequenceNumber);
+    end if;
+  end if;
+end service;

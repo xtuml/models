@@ -1,0 +1,46 @@
+//! ACTIVITY BEGIN. 'c5127a63-0904-48b9-80eb-4face31b6410' 'e263add1-4b2a-46e9-892b-4f92ecc15786' DO NOT EDIT THIS LINE.
+state HeartRateMonitor::HeartRateMonitor.idle () is
+begin
+  null;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'c5127a63-0904-48b9-80eb-4face31b6410' '1f619bf8-93a3-4e1d-bfd1-a90bb01119f9' DO NOT EDIT THIS LINE.
+state HeartRateMonitor::HeartRateMonitor.monitoring () is
+begin
+  HRChange~>heartRateChanged(this.recentHeartRate);
+  this.recentHeartRate := this.recentHeartRate + 1;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'c5127a63-0904-48b9-80eb-4face31b6410' '5a9d71fe-a21e-42bd-9155-ef9278102c49' DO NOT EDIT THIS LINE.
+state HeartRateMonitor::HeartRateMonitor.Registering () is
+hrc: instance of HeartRateConstants;
+begin
+  this.recentHeartRate := 50;
+
+  LOG::LogInfo("listener registered");
+
+  // start timer
+  HeartRateConstants.initialize();
+  hrc := find_one HeartRateConstants();
+  schedule this.timer generate HeartRateMonitor.timeout() to this delay @PT1S@ * hrc.HeartRateSamplingPeriod delta @PT1S@ * hrc.HeartRateSamplingPeriod;
+
+  generate HeartRateMonitor.registerComplete() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'c5127a63-0904-48b9-80eb-4face31b6410' '02e40bce-f163-42a3-8dda-d76a54a4128c' DO NOT EDIT THIS LINE.
+state HeartRateMonitor::HeartRateMonitor.Unregistering () is
+begin
+  cancel this.timer;
+  //if ( res )
+  //  LOG::LogSuccess( message: "Heart Rate Monitor: timer_cancel() succeeded." );
+  //else
+  //  LOG::LogFailure( message: "Heart Rate Monitor: timer_cancel() failed." );
+  //end if;
+
+  generate HeartRateMonitor.unregisterComplete() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

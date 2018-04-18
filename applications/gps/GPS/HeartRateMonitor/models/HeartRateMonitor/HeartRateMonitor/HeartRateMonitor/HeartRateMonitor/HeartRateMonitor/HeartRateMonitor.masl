@@ -1,0 +1,11 @@
+//! ACTIVITY BEGIN. '6a9bb342-1c87-4ebc-8aa1-e96ef000c1da' DO NOT EDIT THIS LINE.
+public service HeartRateMonitor::HeartRateMonitor.initialize () is
+monitor: instance of HeartRateMonitor;
+begin
+  monitor := find_one HeartRateMonitor();
+  if (null = monitor) then
+    monitor := create HeartRateMonitor( id => 1, Current_State => idle );
+  end if;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

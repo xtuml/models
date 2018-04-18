@@ -1,0 +1,50 @@
+//! ACTIVITY BEGIN. '1363f0df-e630-4deb-a831-ed6cbcc9a974' DO NOT EDIT THIS LINE.
+public instance service Tracking::WorkoutTimer.activate () is
+wtc: instance of WorkoutTimerConstants;
+executingGoal: instance of Goal;
+begin
+  // Start the underlying timer that drives the workout timer.
+  WorkoutTimerConstants.initialize();
+  wtc := find_one WorkoutTimerConstants();
+  schedule this.timer generate WorkoutTimer.tick() to this delay @PT1S@ * wtc.timerPeriod delta @PT1S@ * wtc.timerPeriod;
+  
+  // Resume evaluation of the currently executing goal, if there is one.
+  executingGoal := this->R8.acts_as_the_stopwatch_for.WorkoutSession->R11.is_currently_executing.Goal;
+  if ( null /= executingGoal ) then
+    generate Goal.Evaluate() to executingGoal;
+  end if;
+  
+  // Resume listening for updates from the GPS and heart monitor.
+  LOC~>registerListener();
+  HR~>registerListener();
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'e44223c1-ae4c-4d58-a2d6-8d8f3cd56581' DO NOT EDIT THIS LINE.
+public instance service Tracking::WorkoutTimer.deactivate () is
+executingGoal: instance of Goal;
+begin
+  // Cancel the timer driving the workout timer, ignoring the return code.
+  cancel this.timer;
+  
+  // Pause evaluation of the currently executing goal, if there is one.
+  executingGoal := this->R8.acts_as_the_stopwatch_for.WorkoutSession->R11.is_currently_executing.Goal;
+  if ( null /= executingGoal ) then
+    generate Goal.Pause() to executingGoal;
+  end if;
+  
+  // Stop listening for updates from the GPS and heart monitor.
+  LOC~>unregisterListener();
+  HR~>unregisterListener();
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'e8f31568-926d-492c-b21d-afc08ba9b69c' DO NOT EDIT THIS LINE.
+public instance service Tracking::WorkoutTimer.initialize () is
+begin
+  // Initialize this instance.
+  
+  this.time := 0;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

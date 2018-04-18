@@ -1,0 +1,63 @@
+//! ACTIVITY BEGIN. 'c4cafc68-b5c2-f769-2746-b4aaac0bac84' '60d86bf9-08ac-4175-a409-67bec22595c3' DO NOT EDIT THIS LINE.
+state Tracking::WorkoutTimer.stopped () is
+session: instance of WorkoutSession;
+display: instance of Display;
+begin
+  // Reset the session
+  session := this->R8.acts_as_the_stopwatch_for.WorkoutSession;
+  session.reset();
+  
+  // Update the UI.
+  UI~>setTime(this.time);
+  display := this->R8.acts_as_the_stopwatch_for.WorkoutSession->R7.current_status_indicated_on.Display;
+  generate Display.refresh() to display;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'c4cafc68-b5c2-f769-2746-b4aaac0bac84' '5eef4bed-2b88-4d47-8a15-7a7600a01f7c' DO NOT EDIT THIS LINE.
+state Tracking::WorkoutTimer.running () is
+wtc: instance of WorkoutTimerConstants;
+trackLog: instance of TrackLog;
+begin
+  // Update the stopwatch time.
+  WorkoutTimerConstants.initialize();
+  wtc := find_one WorkoutTimerConstants();
+  this.time := this.time + wtc.timerPeriod;
+  
+  // Store a new track point.
+  trackLog := this->R8.acts_as_the_stopwatch_for.WorkoutSession->R4.captures_path_in.TrackLog;
+  trackLog.addTrackPoint();
+  
+  // Refresh the user interface.
+  UI~>setTime(this.time);
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'c4cafc68-b5c2-f769-2746-b4aaac0bac84' '25fd1bf1-6ba6-43b6-8a24-6489cd571b89' DO NOT EDIT THIS LINE.
+state Tracking::WorkoutTimer.paused () is
+begin
+  this.deactivate();
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'c4cafc68-b5c2-f769-2746-b4aaac0bac84' 'beaff8d4-1945-45f5-9826-4027e865b161' DO NOT EDIT THIS LINE.
+state Tracking::WorkoutTimer.processingStart () is
+begin
+  // Start the timer.
+  this.activate();
+  generate WorkoutTimer.startTimer() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'c4cafc68-b5c2-f769-2746-b4aaac0bac84' 'd943c567-457f-4071-a0ba-35650b354eea' DO NOT EDIT THIS LINE.
+state Tracking::WorkoutTimer.resetLap () is
+trackLog: instance of TrackLog;
+begin
+  trackLog := find_one TrackLog();
+  if (null /= trackLog) then
+    trackLog.addLapMarker();
+  end if;
+  generate WorkoutTimer.lapResetComplete() to this;
+end state;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
