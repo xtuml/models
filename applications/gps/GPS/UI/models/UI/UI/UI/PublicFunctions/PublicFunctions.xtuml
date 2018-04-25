@@ -1,0 +1,219 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("9355a9c5-a9cd-4901-9d5e-81b85fba2a5b",
+	"00000000-0000-0000-0000-000000000000",
+	"c3c0038a-d5e4-404a-a5ba-60a23e7f9384",
+	'PublicFunctions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("e238fcec-5774-4f3d-9ecb-9a56852d9676",
+	112,
+	"9355a9c5-a9cd-4901-9d5e-81b85fba2a5b",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'UI::UI::UI::PublicFunctions');
+INSERT INTO DIM_DIA
+	VALUES ("e238fcec-5774-4f3d-9ecb-9a56852d9676",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("14298a5c-0acb-4b3b-9d90-f66bab9b321f",
+	"00000000-0000-0000-0000-000000000000",
+	'setData',
+	'',
+	'select any ui from instances of UI;
+if ( not_empty ui )
+  if (param.unit == UIUnit::km)
+    ui.setData(value: param.value, unit: 0);
+  elif (param.unit == UIUnit::meters)
+    ui.setData(value: param.value, unit: 1);
+  elif (param.unit == UIUnit::minPerKm)
+    ui.setData(value: param.value, unit: 2);
+  elif (param.unit == UIUnit::kmPerHour)
+    ui.setData(value: param.value, unit: 3);
+  elif (param.unit == UIUnit::miles)
+    ui.setData(value: param.value, unit: 4);
+  elif (param.unit == UIUnit::yards)
+    ui.setData(value: param.value, unit: 5);
+  elif (param.unit == UIUnit::feet)
+    ui.setData(value: param.value, unit: 6);
+  elif (param.unit == UIUnit::minPerMile)
+    ui.setData(value: param.value, unit: 7);
+  elif (param.unit == UIUnit::mph)
+    ui.setData(value: param.value, unit: 8);
+  elif (param.unit == UIUnit::bpm)
+    ui.setData(value: param.value, unit: 9);
+  elif (param.unit == UIUnit::laps)
+    ui.setData(value: param.value, unit: 10);
+  end if;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("ed5d3e7f-e9e0-433b-825d-d7b706a9c9e6",
+	"14298a5c-0acb-4b3b-9d90-f66bab9b321f",
+	'value',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("dc6531ed-fc03-43cf-97ee-231a840dc986",
+	"14298a5c-0acb-4b3b-9d90-f66bab9b321f",
+	'unit',
+	"c890843f-15b4-4f39-aa50-4b7058526cdb",
+	0,
+	'',
+	"ed5d3e7f-e9e0-433b-825d-d7b706a9c9e6",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("c890843f-15b4-4f39-aa50-4b7058526cdb",
+	"00000000-0000-0000-0000-000000000000",
+	'UIUnit',
+	'',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO PE_PE
+	VALUES ("14298a5c-0acb-4b3b-9d90-f66bab9b321f",
+	1,
+	"9355a9c5-a9cd-4901-9d5e-81b85fba2a5b",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("082d2805-3f24-47e4-be98-df8768a77df4",
+	"00000000-0000-0000-0000-000000000000",
+	'setIndicator',
+	'',
+	'// Map values of UIDatatypes/UIIndicator to values defined in WatchGUI.java.
+select any ui from instances of UI;
+if ( not_empty ui )
+  if ( param.indicator == UIIndicator::Blank  )
+    ui.setIndicator( value: 0 );
+  elif ( param.indicator == UIIndicator::Down )
+    ui.setIndicator( value: 1 );
+  elif ( param.indicator == UIIndicator::Flat )
+    ui.setIndicator( value: 2 );
+  elif ( param.indicator == UIIndicator::Up )
+    ui.setIndicator( value: 3 );
+  end if;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("c8a89bea-6107-4c48-97b5-50c18dd05173",
+	"082d2805-3f24-47e4-be98-df8768a77df4",
+	'indicator',
+	"c311e237-e7c4-402d-abc0-bb603ddb7eef",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("c311e237-e7c4-402d-abc0-bb603ddb7eef",
+	"00000000-0000-0000-0000-000000000000",
+	'UIIndicator',
+	'',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO PE_PE
+	VALUES ("082d2805-3f24-47e4-be98-df8768a77df4",
+	1,
+	"9355a9c5-a9cd-4901-9d5e-81b85fba2a5b",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("e0413384-a467-4646-a8bd-47f451a175c6",
+	"00000000-0000-0000-0000-000000000000",
+	'setTime',
+	'',
+	'select any ui from instances of UI;
+if ( not_empty ui )
+  ui.setTime(time: param.time);
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("fd36f80b-7040-4c09-9103-bec1e33e520c",
+	"e0413384-a467-4646-a8bd-47f451a175c6",
+	'time',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("e0413384-a467-4646-a8bd-47f451a175c6",
+	1,
+	"9355a9c5-a9cd-4901-9d5e-81b85fba2a5b",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("bb84f833-93eb-4a28-8748-bed61180c3ba",
+	"00000000-0000-0000-0000-000000000000",
+	'startTest',
+	'',
+	'create object instance tc of TestCase; tc.id = 1;
+generate TestCase5:initialize( iterations: 2 ) to tc;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("bb84f833-93eb-4a28-8748-bed61180c3ba",
+	1,
+	"9355a9c5-a9cd-4901-9d5e-81b85fba2a5b",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("9355a9c5-a9cd-4901-9d5e-81b85fba2a5b",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"f24e8f1c-a3b3-4005-986d-28b8ed39ea3c",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("f24e8f1c-a3b3-4005-986d-28b8ed39ea3c",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'UI',
+	'Simulates the user interface and has the ability to connect an external GUI
+representing the physical watch.
+
+Uses the BridgePoint Java API to connect to an animated version of the watch
+while the models are executing in Verifier.
+
+There is also hand-written C code that implments parts of this component to 
+allow generated code to connect to the exact same animated watch.',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../UI.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("c3c0038a-d5e4-404a-a5ba-60a23e7f9384",
+	'UI',
+	1,
+	'../../../UI.xtuml');
