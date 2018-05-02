@@ -74,6 +74,7 @@ The sample test bench provides a starting point for the function, init(),
 within your test bench.  You must modify it to:
 * initialize your test bench
 * initialize your application
+
 The final line of this function should send the signal, register, to the 
 test runner.
 
@@ -92,7 +93,7 @@ In general each test case should do the following:
 
 Keep in mind that the classes, functions, and port activities 
 copied from the sample test bench into your test bench are under your control, 
-so you should modify them as necessary to accomplish the goals of your test suite.
+so you may modify them as necessary to accomplish the goals of your test suite.
 
 Recall that your test bench communicates with the application as well as the test 
 runner.  When the latter prods the test bench to run a test case, that test case 
@@ -101,7 +102,7 @@ three steps mentioned above.
 
 Next, modify the following operations:
 * application test suite::init() - set the name and version of your test suite
-* test case::setup() - modify to reflect contents your test suite; do this every
+* test case::setup() - modify to reflect contents of your test suite; do this every
   time you modify the contents of your test suite
 
 ### Create Simulation Configuration
@@ -124,7 +125,7 @@ described in the previous section.
 ### Run Your Test Suite
 * Invoke Verifier using the debug configuration described above.
 * (Optionally) put a breakpoint on the final line of test bucket::bucket done
-  so you will know when the test suite has finished executing (or not).
+  so you will know when the test suite has finished (or not) executing.
 * Execute test runner/functions/run()
 
 ### Timed out?
