@@ -76,7 +76,10 @@ within your test bench.  You must modify it to:
 * initialize your application
 
 The final line of this function should send the signal, register, to the 
-test runner.
+test runner.  In this signal, specify the maximum duration of each test 
+case as the value of guard_timer_duration.  This duration is expressed in 
+microseconds.  If your test cases need to run longer than about 33 minutes,
+you can specify a duration of 0 to disable the guard timer entirely. 
 
 ### Build Your Test Suite
 The sample test bench provides two example test cases.  Consider deleting one
@@ -127,8 +130,3 @@ described in the previous section.
 * (Optionally) put a breakpoint on the final line of test bucket::bucket done
   so you will know when the test suite has finished (or not) executing.
 * Execute test runner/functions/run()
-
-### Timed out?
-If your test case started but timed out, you may need to modify test bucket::init
-to provide a longer timeout value.  Alternatively, you can modify 
-test bucket::running variation to eliminate the guard timer entirely.
