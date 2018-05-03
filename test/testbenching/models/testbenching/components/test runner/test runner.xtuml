@@ -169,7 +169,7 @@ INSERT INTO GD_GE
 	"500c9c8b-2362-4629-8fac-c22ee5fc4bdd",
 	108,
 	0,
-	'External Entities');
+	'testbenching::components::test runner::External Entities');
 INSERT INTO GD_SHP
 	VALUES ("1b2dac3b-0706-4f95-a7ad-eab1e6c9b78d");
 INSERT INTO GD_NCS
@@ -291,7 +291,10 @@ INSERT INTO SPR_RS
 
 select any bucket from instances of SEQ_BUCKET;
 if ( not_empty bucket )
-  generate SEQ_BUCKET1( test_suite_version:param.test_suite_version, variation_count:param.variation_count ) to bucket;
+  generate SEQ_BUCKET1( test_suite_name:param.test_suite_name, 
+                        test_suite_version:param.test_suite_version, 
+                        variation_count:param.variation_count, 
+                        guard_timer_duration:param.guard_timer_duration ) to bucket;
 end if;',
 	1,
 	0);
