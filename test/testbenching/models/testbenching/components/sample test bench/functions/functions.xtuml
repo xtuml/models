@@ -40,12 +40,20 @@ INSERT INTO S_SYNC
 	'',
 	'// Create and initialize the test suite.
 // This function will be triggered by the incoming discover signal.
-
 create object instance suite of TB_SUITE;
 suite.init();
 number_of_variations = TB_TESTCASE::setup( variation_number:0 );
 
-SEQ::register( test_suite_version:suite.version, variation_count:number_of_variations );',
+// Add initialization of your test bench and application here.
+
+// Finally, after initializing your test bench and application, 
+// send this signal to the test runner to register your test suite.
+// The guard timer duration is expressed in microseconds.  To disable
+// the guard timer, specify 0 as the duration.
+SEQ::register( test_suite_name:suite.name,
+               test_suite_version:suite.version, 
+               variation_count:number_of_variations, 
+               guard_timer_duration:3000000 );',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
