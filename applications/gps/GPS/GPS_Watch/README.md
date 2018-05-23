@@ -16,7 +16,7 @@ implementation.
 
 #### To run the Watch GUI:
 
-An execution configuration exists in order to launch the GUI. To create run the
+An execution configuration exists in order to launch the GUI. To run the
 Watch GUI:
 
 * Open the C/C++ Projects perspective (Window > Open Perspective > Other... >
@@ -32,7 +32,7 @@ between various sessions. When a new connection is detected the GUI will simply
 drop any existing connection and only service the recently detected connection.
 
 You can now run either the already generated Windows executable, Linux 
-executable, or run the model in xtUML eXecute.
+executable, macOS executable, or run the model in xtUML eXecute.
 
 #### To run the EXE:
 
@@ -54,6 +54,9 @@ executable, or run the model in xtUML eXecute.
 * The application will connect to the GUI automatically. Click the START/STOP 
   button on the watch, you will see the watch execute on the GUI and in the
   command prompt console. The MODE button causes GUI changes as well.
+* The application is not configured with dynamic memory allocation. It will crash
+  once it has ran long enough for the number of Trackpoints to accumulate and 
+  exceed the space allocated for them.
 
 #### To run the model in xtUML eXecute:
 
@@ -63,8 +66,8 @@ executable, or run the model in xtUML eXecute.
 * Expand the xtUML eXecute Application item
 * Select "GPS_Watch"
 * Click Debug
-* In Session Explorer, expand GPS_Watch > System > GPS_Watch::Library::UI >
-  GPS_Watch::Library::UI > UI (package) > UI
+* In Session Explorer, expand GPS_Watch > GPS_Watch > UI::UI::UI >
+  UI::UI::UI > UI (package) > UI
 * Right-click 'connect', select Execute
 * Now the GUI may be used to drive execution.
 
@@ -73,8 +76,8 @@ This launch does not use the interactive GUI.  Instead, it starts and automated
 test case that does its own stimulus and response.
 
 To activate the "Goals" functionality, pause the watch as it is running then:
-* In Session Explorer, expand GPS_Watch > System > GPS_Watch::Library::UI >
-  GPS_Watch::Library::UI > TestCases
+* In Session Explorer, expand GPS_Watch > GPS_Watch > UI::UI::UI >
+  UI::UI::UI > TestCases
 * Right-click 'createGoals_1', select Execute.
 * Now start the watch again and press the "SET TARGET" button on the watch. 
   Goal indicator arrows will show on the UI.
@@ -125,7 +128,7 @@ To activate the "Goals" functionality:
 
 ## BUILDING THE PROJECT
 
-The project is pre-built for Linux and Windows so it is ready to run, rebuilding
+The project is pre-built for Linux, macOS, and Windows so it is ready to run. Rebuilding
 is easy.
 
 If you want to rebuild the project after modifying the model or a marking file:
@@ -134,11 +137,11 @@ If you want to rebuild the project after modifying the model or a marking file:
   MASL Domain" on any domain component that has been modified and right-click >
   "Export MASL Project" on any MASL project package that has been modified.
 * Switch to the C/C++ perspective
-* Right-click on the project and choose 'Build Configurations > Set Active
+* Right-click on the project and choose "Build Configurations > Set Active"
   - For Windows: Choose "Debug_Windows"
   - For Linux/macOS: Choose "Debug"
   - This step is not necessary for the MASL version
-* Right-click on the project and choose 'Build Project' in the context menu
+* Right-click on the project and choose "Build Project" in the context menu
 
 There might be warnings/errors in the project resulting from an unresolved build
 path.
