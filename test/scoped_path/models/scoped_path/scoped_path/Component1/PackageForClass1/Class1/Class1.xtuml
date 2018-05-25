@@ -30,21 +30,18 @@ functionLevel = scoped_path::Functions::color::black;
 
 
 
+
 componentLevel = Component1::PackageForClass1::color::black;
 componentLevel = scoped_path::Component1::PackageForClass1::color::black;
 componentLevel = scoped_path::scoped_path::Component1::PackageForClass1::color::black;
 
 //Test to assure the tempory types in this body are assigned correctly
-// Note: content assist of assignment to the local variable is showing all the 
-//        types. I think it should know to limit it to the 1 local that is the
-//        correct one since the others are actually different. However, it does
-//        show the correcg one too, and if a incorret one is selected it does show 
-//        a parse error.
 self.ThisComponentLevelEnum = componentLevel;
 self.DatatypesLevelEnum = datatypesLevel;
 self.FunctionLevelEnum = functionLevel;
 self.SystemLevelEnum = systemLevel;
 
+// Test for error:
 // Here are some error cases to assure the types are not assignable to each 
 // other. These, when comment is removed, should each show that datatype 
 // already exists as a different type
