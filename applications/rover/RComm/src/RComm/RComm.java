@@ -28,8 +28,8 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
     private static SocketCommunicator ref = new SocketCommunicator();
 
     public static final String IP = "127.0.0.1";
-    public static final String CONFIG_FILE = "/Users/levi/scratch/Challenge problem/Settings/config.txt";
-    
+    public static final String CONFIG_FILE = "git/models/applications/rover/Settings/config.txt";
+
     public RComm( IRCommFromProvider rcomm_from_provider, ILocationDataToProvider location_data_to_provider ) {
         this.rcomm_from_provider = rcomm_from_provider;
         this.location_data_to_provider = location_data_to_provider;
@@ -91,7 +91,7 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
         int roverPort = 0;
         try{
             //------ Load config
-            java.util.List<String> conf = readFile( CONFIG_FILE );
+            java.util.List<String> conf = readFile( System.getenv( "HOME" ) + "/" + CONFIG_FILE );
             Iterator<String> conIt = conf.iterator();
             while (conIt.hasNext()) {
                 String a = conIt.next();
@@ -123,7 +123,7 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
             }
             inputStream.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace( CorePlugin.err );
+            e.printStackTrace( CorePlugin.out );
         }
         return data;
     }
@@ -156,7 +156,7 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
             try {
                 reply = in.readLine();
             }
-            catch(java.io.IOException e){ e.printStackTrace( CorePlugin.err );}
+            catch(java.io.IOException e){ e.printStackTrace( CorePlugin.out );}
             return reply;
         }
         // expecting no reply.
@@ -169,7 +169,7 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
             try {
                 socket.close();
             }
-            catch(java.io.IOException e){ e.printStackTrace( CorePlugin.err );}
+            catch(java.io.IOException e){ e.printStackTrace( CorePlugin.out );}
         }
     }
 
