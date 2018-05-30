@@ -14,7 +14,7 @@ public interface IRCommToProvider {
     public void pollRoverY( ComponentInstance_c senderReceiver );
     public void pollRoverZ( ComponentInstance_c senderReceiver );
     public void pollRoverCompass( ComponentInstance_c senderReceiver );
-    public void pollRoverDistance( ComponentInstance_c senderReceiver );
+    public void pollDistance( ComponentInstance_c senderReceiver );
     public void ready( ComponentInstance_c senderReceiver );
 
 }

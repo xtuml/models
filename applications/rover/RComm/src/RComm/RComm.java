@@ -10,6 +10,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.xtuml.bp.core.ComponentInstance_c;
 import org.xtuml.bp.core.CorePlugin;
@@ -29,6 +31,8 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
 
     public static final String IP = "127.0.0.1";
     public static final String CONFIG_FILE = "git/models/applications/rover/Settings/config.txt";
+    
+    private static final Pattern replyPattern = Pattern.compile( "Rover,([0-9]\\.[0-9]+);" );
 
     public RComm( IRCommFromProvider rcomm_from_provider, ILocationDataToProvider location_data_to_provider ) {
         this.rcomm_from_provider = rcomm_from_provider;
@@ -43,47 +47,110 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
 
     @Override
     public void incrementPower( ComponentInstance_c senderReceiver, int power ) {
+        rover.noReply( "Rover,incrementPower(" + new Integer( power ).toString() + ")" );
     }
 
     @Override
     public void setLRPower( ComponentInstance_c senderReceiver, int lpower, int rpower ) {
+        rover.noReply( "Rover,setLRPower(" + new Integer( lpower ).toString() + "," + new Integer( rpower ).toString() + ")" );
     }
 
     @Override
     public void brake( ComponentInstance_c senderReceiver, int power ) {
+        rover.noReply( "Rover,brake(" + new Integer( power ).toString() + ")" );
     }
 
     @Override
     public void pollLeaderX( ComponentInstance_c senderReceiver ) {
+        String reply = ref.send( "posx" );
+        float x = 0;
+        try {
+            x = Float.parseFloat( reply );
+        }
+        catch ( NullPointerException e ) {}
+        catch ( NumberFormatException e ) {}
+        location_data_to_provider.leaderX( null, x );
     }
 
     @Override
     public void pollLeaderZ( ComponentInstance_c senderReceiver ) {
+        String reply = ref.send( "posz" );
+        float z = 0;
+        try {
+            z = Float.parseFloat( reply );
+        }
+        catch ( NullPointerException e ) {}
+        catch ( NumberFormatException e ) {}
+        location_data_to_provider.leaderZ( null, z );
     }
 
     @Override
     public void pollRoverX( ComponentInstance_c senderReceiver ) {
+        String reply = rover.send( "Rover,GPSx()" );
+        float x = 0;
+        try {
+            Matcher matcher = replyPattern.matcher( reply );
+            if ( matcher.matches() ) x = Float.parseFloat( matcher.group( 1 ) );
+        }
+        catch ( NullPointerException e ) {}
+        catch ( NumberFormatException e ) {}
+        location_data_to_provider.roverX( null, x );
     }
 
     @Override
     public void pollRoverY( ComponentInstance_c senderReceiver ) {
+        String reply = rover.send( "Rover,GPSy()" );
+        float y = 0;
+        try {
+            Matcher matcher = replyPattern.matcher( reply );
+            if ( matcher.matches() ) y = Float.parseFloat( matcher.group( 1 ) );
+        }
+        catch ( NullPointerException e ) {}
+        catch ( NumberFormatException e ) {}
+        location_data_to_provider.roverY( null, y );
     }
 
     @Override
     public void pollRoverZ( ComponentInstance_c senderReceiver ) {
+        String reply = rover.send( "Rover,GPSz()" );
+        float z = 0;
+        try {
+            Matcher matcher = replyPattern.matcher( reply );
+            if ( matcher.matches() ) z = Float.parseFloat( matcher.group( 1 ) );
+        }
+        catch ( NullPointerException e ) {}
+        catch ( NumberFormatException e ) {}
+        location_data_to_provider.roverZ( null, z );
     }
 
     @Override
     public void pollRoverCompass( ComponentInstance_c senderReceiver ) {
+        String reply = rover.send( "Rover,getCompass()" );
+        float degrees = 0;
+        try {
+            Matcher matcher = replyPattern.matcher( reply );
+            if ( matcher.matches() ) degrees = Float.parseFloat( matcher.group( 1 ) );
+        }
+        catch ( NullPointerException e ) {}
+        catch ( NumberFormatException e ) {}
+        location_data_to_provider.roverCompass( null, degrees );
     }
 
     @Override
-    public void pollRoverDistance( ComponentInstance_c senderReceiver ) {
+    public void pollDistance( ComponentInstance_c senderReceiver ) {
+        String reply = ref.send( "dist" );
+        float dist = 0;
+        try {
+            dist = Float.parseFloat( reply );
+        }
+        catch ( NullPointerException e ) {}
+        catch ( NumberFormatException e ) {}
+        location_data_to_provider.distance( null, dist );
     }
 
     @Override
     public void ready( ComponentInstance_c senderReceiver ) {
-        ref.noReply( "ready" );
+        ref.send( "ready" ); // Ignore acknowledgement reply
     }
 
     public void setup() {
