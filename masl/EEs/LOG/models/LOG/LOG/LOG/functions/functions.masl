@@ -1,0 +1,36 @@
+//! ACTIVITY BEGIN. '1902b143-8200-4684-bd2b-ba8f35beb0e0' DO NOT EDIT THIS LINE.
+public service LOG::LogSuccess ( message : in string ) is
+begin
+  Logger::log( Logger::Information, message );
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '6a962e52-14a4-43f7-80c6-ec771d946c7d' DO NOT EDIT THIS LINE.
+public service LOG::LogFailure ( message : in string ) is
+begin
+  Logger::log( Logger::Error, message );
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'd29033c2-33d6-43c9-adb1-f7c1d72f4036' DO NOT EDIT THIS LINE.
+public service LOG::LogInfo ( message : in string ) is
+begin
+  Logger::log( Logger::Information, message );
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'e912bdbd-e10c-4005-ac42-eb73d31aac95' DO NOT EDIT THIS LINE.
+public service LOG::LogInteger ( message : in integer ) is
+begin
+  Logger::log( Logger::Information, Format::format_integer( message, false ) );
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'd68eea58-1d75-4d15-bc43-3dfa3a73d626' DO NOT EDIT THIS LINE.
+private service LOG::LogReal ( message : in string,
+                              r : in real ) is
+begin
+  Logger::log( Logger::Information, message & ": " & Format::format_number( r, false, 3 ) );
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+

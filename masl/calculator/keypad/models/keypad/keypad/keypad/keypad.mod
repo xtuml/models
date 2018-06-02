@@ -7,15 +7,27 @@ domain keypad is
   extra_data : integer;
 end structure
   ;
+//!Display an error in the Java UI.
+//!
+//!This function is realized in C++
     public service error (
         message : in string    );
+//!Display a result in the Java UI.
+//!
+//!This function is realized in C++
     public service result (
         value : in real    );
+//!Connect to the Java UI.
+//!
+//!This function is realized in C++
     private service connect (
     );
     private service init (
     );
-pragma scenario ( 1 ); 
+pragma scenario ( 1 ); pragma startup ( true ); 
+//!Poll the Java UI for a button press event.
+//!
+//!This function is realized in C++
     private service getPendingEvent (
     ) return calcevent;
   terminator keyIO is

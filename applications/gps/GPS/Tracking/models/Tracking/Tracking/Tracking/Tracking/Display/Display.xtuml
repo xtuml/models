@@ -1,0 +1,151 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("e4f33430-b3cd-4e2a-8dff-b91094d7d095",
+	'Display',
+	6,
+	'Display',
+	'Represents the display for the device, managing the sequence of screens
+and displaying the appropriate values based on the current mode of the 
+display.  
+This is a singleton instance.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("a29d7ebd-8df6-44b9-a088-55d69709c957",
+	"e4f33430-b3cd-4e2a-8dff-b91094d7d095",
+	'goalDispositionIndicator',
+	'',
+	"0c2280ac-677d-4cc7-a34f-fde18b6c9506",
+	0,
+	'// Return the indicator value representing the disposition of 
+// the currently executing goal, if one exists.  If there is
+// no currently executing goal, return Blank.
+
+// Find the currently executing goal (if one exists) associated 
+// with the singleton instance of the workout session.
+select any session from instances of WorkoutSession;
+select one goal related by session->Goal[R11.''is_currently_executing''];
+
+// Convert the disposition of the currently executing goal
+// (if it exists) to a UI indicator.
+indicator = Indicator::Blank;
+if ( not empty goal )
+  if ( goal.disposition == GoalDisposition::Increase )
+    indicator = Indicator::Up;
+  elif ( goal.disposition == GoalDisposition::Decrease )
+    indicator = Indicator::Down;
+  else
+    indicator = Indicator::Flat;
+  end if;
+end if;
+
+return( indicator );',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0);
+INSERT INTO S_DT_PROXY
+	VALUES ("0c2280ac-677d-4cc7-a34f-fde18b6c9506",
+	"00000000-0000-0000-0000-000000000000",
+	'Indicator',
+	'Graphical indicator.',
+	'',
+	'../../../Shared/Shared.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("916bb9f2-3357-4bf4-87c4-0c9f6759e965",
+	"e4f33430-b3cd-4e2a-8dff-b91094d7d095");
+INSERT INTO O_BATTR
+	VALUES ("916bb9f2-3357-4bf4-87c4-0c9f6759e965",
+	"e4f33430-b3cd-4e2a-8dff-b91094d7d095");
+INSERT INTO O_ATTR
+	VALUES ("916bb9f2-3357-4bf4-87c4-0c9f6759e965",
+	"e4f33430-b3cd-4e2a-8dff-b91094d7d095",
+	"b68a74bc-c90b-4f2b-8838-bb69dea746ec",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("e4f33430-b3cd-4e2a-8dff-b91094d7d095",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	0,
+	"7f25f45e-231c-4cfe-9481-7a86cabddbc6",
+	"624a7f7e-f307-4c75-9412-3258327be18a",
+	"443bb730-83d0-4714-bf48-28d75dea6c97",
+	"fbd6fc51-af92-459e-8801-91c949fcd221",
+	"b68a74bc-c90b-4f2b-8838-bb69dea746ec",
+	"95fb3fb9-b8de-4a97-9acc-e42bd15fdb93",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'WorkoutSession',
+	'startTime',
+	'R7.''indicates_current_status_of''');
+INSERT INTO R_RGO_PROXY
+	VALUES ("e4f33430-b3cd-4e2a-8dff-b91094d7d095",
+	"624a7f7e-f307-4c75-9412-3258327be18a",
+	"443bb730-83d0-4714-bf48-28d75dea6c97",
+	'../Tracking.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	0,
+	"624a7f7e-f307-4c75-9412-3258327be18a",
+	"fbd6fc51-af92-459e-8801-91c949fcd221",
+	'../Tracking.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("b68a74bc-c90b-4f2b-8838-bb69dea746ec",
+	"e4f33430-b3cd-4e2a-8dff-b91094d7d095",
+	"7f25f45e-231c-4cfe-9481-7a86cabddbc6",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	1,
+	'startTime');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("7f25f45e-231c-4cfe-9481-7a86cabddbc6",
+	"2522ffa2-db69-4807-ab45-06acf4cf893a",
+	'../WorkoutSession/WorkoutSession.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("b68a74bc-c90b-4f2b-8838-bb69dea746ec",
+	"e4f33430-b3cd-4e2a-8dff-b91094d7d095",
+	"00000000-0000-0000-0000-000000000000",
+	'session_startTime',
+	'',
+	'session_',
+	'startTime',
+	1,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"e4f33430-b3cd-4e2a-8dff-b91094d7d095");
+INSERT INTO O_OIDA
+	VALUES ("b68a74bc-c90b-4f2b-8838-bb69dea746ec",
+	"e4f33430-b3cd-4e2a-8dff-b91094d7d095",
+	0,
+	'session_startTime');
+INSERT INTO O_ID
+	VALUES (1,
+	"e4f33430-b3cd-4e2a-8dff-b91094d7d095");
+INSERT INTO O_ID
+	VALUES (2,
+	"e4f33430-b3cd-4e2a-8dff-b91094d7d095");
+INSERT INTO PE_PE
+	VALUES ("e4f33430-b3cd-4e2a-8dff-b91094d7d095",
+	1,
+	"a09220a4-d685-4338-83fd-0d42f7c7e308",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a09220a4-d685-4338-83fd-0d42f7c7e308",
+	"00000000-0000-0000-0000-000000000000",
+	"f6183599-e913-4960-ac9a-ad495a6db59f",
+	'Tracking',
+	'',
+	0,
+	'../Tracking.xtuml');

@@ -1,0 +1,251 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	'UI',
+	1,
+	'UI',
+	'Provides an interface between Verifier and an external user interface representing 
+the watch, in this case an animated rendition of the watch containing virtual
+buttons that can be "pushed" by clicking on them with a mouse.
+
+The system is first primed by creating, within the Verifier execution engine, an 
+instance of each event that can be received by this class-based state machine.
+This priming is done through execution of the feed*() bridge operations within 
+the GuiBridge external entity.  Each of these operations is bound to a realized
+Java function that queues the appropriate event within the Verifier execution 
+engine.
+
+Whenever a button on the animated watch is pushed, it causes the associated
+event to be generated.  The activity on the transition then queues another instance
+of the same event within the Verifier execution engine before sending the 
+corresponding interface signal out through the UI port.  That interface signal 
+can then be received by an application, such as the Tracking component, that is 
+controlled by the animated watch.',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("d5627d6f-0234-4b59-8c9c-e87eecb086f0",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	'connect',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// make sre the singleton exists
+UIConstants::initialize();
+select any uiconst from instances of UIConstants;
+select any ui from instances of UI;
+UI::initialize();
+select any ui from instances of UI;
+
+ui.socket_id = GuiBridge::connect();
+if ( uiconst.SOCKET_ERROR != ui.socket_id )
+  create event instance evt of UI9:tick() to ui; ui.timer = TIM::timer_start_recurring( event_inst: evt, microseconds: uiconst.tick_period );
+end if;',
+	1,
+	'',
+	"fef2ff86-8f1a-412c-a37b-24366ad87ccd",
+	0);
+INSERT INTO O_TFR
+	VALUES ("038bda67-585d-4c8b-8b5a-377340cbe0bc",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	'poll',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'return GuiBridge::poll();',
+	1,
+	'',
+	"d5627d6f-0234-4b59-8c9c-e87eecb086f0",
+	0);
+INSERT INTO O_TFR
+	VALUES ("031e9ce1-d60b-46cd-a99e-d51f071c30ee",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	'setData',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'GuiBridge::setData( value:param.value, unit:param.unit );',
+	1,
+	'',
+	"038bda67-585d-4c8b-8b5a-377340cbe0bc",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("26b52e4f-075e-4a56-9add-fd9c8842e941",
+	"031e9ce1-d60b-46cd-a99e-d51f071c30ee",
+	'value',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("0f52f67f-5a1e-40a5-806e-ce52c85153ef",
+	"031e9ce1-d60b-46cd-a99e-d51f071c30ee",
+	'unit',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"26b52e4f-075e-4a56-9add-fd9c8842e941",
+	'');
+INSERT INTO O_TFR
+	VALUES ("4d80669c-2aa8-4d9b-9f74-3395a3e681ef",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	'setIndicator',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'GuiBridge::setIndicator( value:param.value );',
+	1,
+	'',
+	"031e9ce1-d60b-46cd-a99e-d51f071c30ee",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("2be886b3-9be3-46f1-8f82-0391012aab9f",
+	"4d80669c-2aa8-4d9b-9f74-3395a3e681ef",
+	'value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("6545d02d-9adb-405c-9a43-3c03e015cac1",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	'setTime',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'GuiBridge::setTime( time:param.time );',
+	1,
+	'',
+	"4d80669c-2aa8-4d9b-9f74-3395a3e681ef",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("4d21db23-c46a-450e-9fad-34ec59216a35",
+	"6545d02d-9adb-405c-9a43-3c03e015cac1",
+	'time',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("fef2ff86-8f1a-412c-a37b-24366ad87ccd",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	'initialize',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'// make sre the singleton exists
+select any ui from instances of UI;
+if (empty ui)
+  UIConstants::initialize();
+  select any uiconst from instances of UIConstants;
+  create object instance ui of UI; 
+  ui.id = 1;
+  ui.socket_id = uiconst.SOCKET_ERROR;
+end if;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0);
+INSERT INTO O_NBATTR
+	VALUES ("e985b318-f34a-497e-a310-2d00da9e1e54",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_BATTR
+	VALUES ("e985b318-f34a-497e-a310-2d00da9e1e54",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_ATTR
+	VALUES ("e985b318-f34a-497e-a310-2d00da9e1e54",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	"e6e96b01-db9d-4cf6-8c31-adb20536f378",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e6e96b01-db9d-4cf6-8c31-adb20536f378",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_BATTR
+	VALUES ("e6e96b01-db9d-4cf6-8c31-adb20536f378",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_ATTR
+	VALUES ("e6e96b01-db9d-4cf6-8c31-adb20536f378",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	"00000000-0000-0000-0000-000000000000",
+	'id',
+	'',
+	'',
+	'id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("60ef65dd-3f2c-4755-a88d-539aae37f717",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_BATTR
+	VALUES ("60ef65dd-3f2c-4755-a88d-539aae37f717",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_ATTR
+	VALUES ("60ef65dd-3f2c-4755-a88d-539aae37f717",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	"e985b318-f34a-497e-a310-2d00da9e1e54",
+	'socket_id',
+	'',
+	'',
+	'socket_id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("91439944-9c5a-4d4a-ad17-f1b60af09828",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_BATTR
+	VALUES ("91439944-9c5a-4d4a-ad17-f1b60af09828",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_ATTR
+	VALUES ("91439944-9c5a-4d4a-ad17-f1b60af09828",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	"60ef65dd-3f2c-4755-a88d-539aae37f717",
+	'timer',
+	'',
+	'',
+	'timer',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000f",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_OIDA
+	VALUES ("e6e96b01-db9d-4cf6-8c31-adb20536f378",
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	0,
+	'id');
+INSERT INTO O_ID
+	VALUES (1,
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO O_ID
+	VALUES (2,
+	"d2a3342b-c420-4bf5-a3af-53ed4e3d6601");
+INSERT INTO PE_PE
+	VALUES ("d2a3342b-c420-4bf5-a3af-53ed4e3d6601",
+	1,
+	"e19163dd-5922-4bdf-947c-9707f93285ad",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("e19163dd-5922-4bdf-947c-9707f93285ad",
+	"00000000-0000-0000-0000-000000000000",
+	"c3c0038a-d5e4-404a-a5ba-60a23e7f9384",
+	'UI',
+	'',
+	0,
+	'../UI.xtuml');

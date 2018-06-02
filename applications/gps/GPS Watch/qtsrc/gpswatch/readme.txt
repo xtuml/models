@@ -1,4 +1,0 @@
-- Install Qt 5.4 (community version works).
-- Add project gpswatch.
-- Allow it to parse.
-- Press the Run button to cause a build and run.

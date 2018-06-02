@@ -1,0 +1,294 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("0104edb4-56ff-4f7f-8f85-2b6561da5b91",
+	"00000000-0000-0000-0000-000000000000",
+	"f6183599-e913-4960-ac9a-ad495a6db59f",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("c169c485-352a-4c86-9732-9d8d66ef6f53",
+	112,
+	"0104edb4-56ff-4f7f-8f85-2b6561da5b91",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'Tracking::Tracking::Tracking::functions');
+INSERT INTO DIM_DIA
+	VALUES ("c169c485-352a-4c86-9732-9d8d66ef6f53",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("6a867eb5-2ed9-4284-891f-cfd24cc9c660",
+	"00000000-0000-0000-0000-000000000000",
+	'heartRateChanged',
+	'',
+	'// Find the singleton instance of the workout session
+// and forward this signal, as an event, to it.
+// If there is no active workout session, then this 
+// sample is simply ignored and not recorded.
+
+select any session from instances of WorkoutSession;
+if (not empty session)
+  session.addHeartRateSample(heartRate: param.heartRate);
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("cbe1478c-5eea-4f54-a3ea-ad30abb12ce1",
+	"6a867eb5-2ed9-4284-891f-cfd24cc9c660",
+	'heartRate',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("6a867eb5-2ed9-4284-891f-cfd24cc9c660",
+	1,
+	"0104edb4-56ff-4f7f-8f85-2b6561da5b91",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("3057893e-40f7-4b65-ad5c-84daa26a0d7e",
+	"00000000-0000-0000-0000-000000000000",
+	'setTargetPressed',
+	'',
+	'// If a goal is currently executing, advance to the next one,
+//   otherwise start the first specified goal, if it exists.
+Goal::nextGoal();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("3057893e-40f7-4b65-ad5c-84daa26a0d7e",
+	1,
+	"0104edb4-56ff-4f7f-8f85-2b6561da5b91",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("269a9744-3613-4c08-bded-4f1db0a2c2e5",
+	"00000000-0000-0000-0000-000000000000",
+	'startStopPressed',
+	'',
+	'// If necessary, create a workout session and everything required to 
+// support it.  Then, forward this signal to the workout timer.
+
+WorkoutSession::initialize();
+
+// Forward this signal, as an event, to the singleton instance of WorkoutTimer.
+select any workoutTimer from instances of WorkoutTimer;
+generate WorkoutTimer1:startStopPressed() to workoutTimer;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("269a9744-3613-4c08-bded-4f1db0a2c2e5",
+	1,
+	"0104edb4-56ff-4f7f-8f85-2b6561da5b91",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b1ad149c-61a8-427e-b793-a7141bc6bc26",
+	"00000000-0000-0000-0000-000000000000",
+	'lapResetPressed',
+	'',
+	'// Find the singleton instance of the workout timer 
+// and forward this signal, as an event, to it.
+
+select any workoutTimer from instances of WorkoutTimer;
+if (not empty workoutTimer)
+  generate WorkoutTimer2:lapResetPressed() to workoutTimer;
+else
+  LOG::LogFailure( message:"Tracking:UI:lapResetPressed - No WorkoutTimer, so nothing to do." );
+end if;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("b1ad149c-61a8-427e-b793-a7141bc6bc26",
+	1,
+	"0104edb4-56ff-4f7f-8f85-2b6561da5b91",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ee09d978-064b-45da-a5d3-2de05dd46417",
+	"00000000-0000-0000-0000-000000000000",
+	'lightPressed',
+	'',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("ee09d978-064b-45da-a5d3-2de05dd46417",
+	1,
+	"0104edb4-56ff-4f7f-8f85-2b6561da5b91",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ad0d93b0-625f-4e5a-a8aa-11008a582f4f",
+	"00000000-0000-0000-0000-000000000000",
+	'modePressed',
+	'',
+	'// Notify the display to change modes.
+
+// Find the display related to the singleton instance of 
+//   workout session (if it exists), and notify it.
+select any session from instances of WorkoutSession;
+if ( not empty session )
+  select one display related by session->Display[R7.''current_status_indicated_on''];
+  generate Display1:modeChange to display;
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("ad0d93b0-625f-4e5a-a8aa-11008a582f4f",
+	1,
+	"0104edb4-56ff-4f7f-8f85-2b6561da5b91",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("2b5b7939-af5c-46dc-abff-7c64296919a1",
+	"00000000-0000-0000-0000-000000000000",
+	'newGoalSpec',
+	'',
+	'// Create a new goal specification and relate it to the
+//   singleton instance of workout session if it exists.
+select any session from instances of WorkoutSession;
+if ( not empty session )
+  create object instance goalSpec of GoalSpec;
+  goalSpec.sequenceNumber = param.sequenceNumber;
+  goalSpec.minimum = param.minimum;
+  goalSpec.maximum = param.maximum;
+  goalSpec.span = param.span;
+  goalSpec.criteriaType = param.criteriaType;
+  goalSpec.spanType = param.spanType;
+  relate goalSpec to session across R10.''included_in'';
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("d3402b8e-d681-45ff-9a25-138ffb6d7620",
+	"2b5b7939-af5c-46dc-abff-7c64296919a1",
+	'spanType',
+	"42487d7d-390d-48d8-a7a5-474cf2d8a900",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("42487d7d-390d-48d8-a7a5-474cf2d8a900",
+	"00000000-0000-0000-0000-000000000000",
+	'GoalSpan',
+	'',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("4e364445-ab06-4423-8402-5ca3464ff23d",
+	"2b5b7939-af5c-46dc-abff-7c64296919a1",
+	'criteriaType',
+	"cfb9aa72-125a-4d88-9ed9-1af1002d48f0",
+	0,
+	'',
+	"d3402b8e-d681-45ff-9a25-138ffb6d7620",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("cfb9aa72-125a-4d88-9ed9-1af1002d48f0",
+	"00000000-0000-0000-0000-000000000000",
+	'GoalCriteria',
+	'The criteria type for a particular workout goal.  ',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("99478b16-a37c-4bb2-926e-04410b028401",
+	"2b5b7939-af5c-46dc-abff-7c64296919a1",
+	'span',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"4e364445-ab06-4423-8402-5ca3464ff23d",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("5ccc8dd6-809f-46a3-98c9-7977fe7f00ef",
+	"2b5b7939-af5c-46dc-abff-7c64296919a1",
+	'maximum',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"99478b16-a37c-4bb2-926e-04410b028401",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("d192273e-9353-4a48-9ac0-2c67604ae3aa",
+	"2b5b7939-af5c-46dc-abff-7c64296919a1",
+	'minimum',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"5ccc8dd6-809f-46a3-98c9-7977fe7f00ef",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("cbd9721e-6108-4097-ac8b-47be316bf03d",
+	"2b5b7939-af5c-46dc-abff-7c64296919a1",
+	'sequenceNumber',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"d192273e-9353-4a48-9ac0-2c67604ae3aa",
+	'');
+INSERT INTO PE_PE
+	VALUES ("2b5b7939-af5c-46dc-abff-7c64296919a1",
+	1,
+	"0104edb4-56ff-4f7f-8f85-2b6561da5b91",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("0104edb4-56ff-4f7f-8f85-2b6561da5b91",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"7faca62d-bd68-4fa6-8c7d-c02d7890cba2",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("7faca62d-bd68-4fa6-8c7d-c02d7890cba2",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Tracking',
+	'The Tracking component encapsulates the entire application software. This is the 
+only component in the system from which code will be generated for the final 
+product.',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../Tracking.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("f6183599-e913-4960-ac9a-ad495a6db59f",
+	'Tracking',
+	1,
+	'../../../Tracking.xtuml');

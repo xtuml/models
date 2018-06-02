@@ -1,0 +1,13 @@
+public service ALU::clear () is
+begin
+  // Create the calculator instance population on the first call
+  if ( null = find_one Calculator() ) then
+    ( create unique Calculator() ).init();
+  end if;
+  // clear the memory
+  ( find_one Memory() ).reset();
+  // set the calculator to no-op
+  ( find_one Calculator() ).current_op := -1;
+  // reset the display
+  generate Display.reset() to find_one Display();
+end service;

@@ -1,0 +1,261 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("da3fda07-4196-4054-b778-71bbfa6a59c6",
+	"00000000-0000-0000-0000-000000000000",
+	"61e01c56-c824-4c5f-9ef6-43d87e721b88",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("7a6b3a11-eedd-4739-8afa-bc496efe6d6d",
+	112,
+	"da3fda07-4196-4054-b778-71bbfa6a59c6",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'Location::Location::Location::functions');
+INSERT INTO DIM_DIA
+	VALUES ("7a6b3a11-eedd-4739-8afa-bc496efe6d6d",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("dda63c94-453e-4795-a429-0953dfe153ad",
+	"00000000-0000-0000-0000-000000000000",
+	'getLocation',
+	'',
+	'// Return, via reference arguments, the current position of the singleton 
+// instance of the simulated GPS.
+
+GPS::initialize();
+select any gps from instances of GPS;
+param.latitude = gps.currentLatitude;
+param.longitude = gps.currentLongitude; ',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("a142975c-b9e6-480a-a98a-83e2ec3204a5",
+	"dda63c94-453e-4795-a429-0953dfe153ad",
+	'latitude',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("d5d543f9-fe4c-4343-8df5-8a8dca657e24",
+	"dda63c94-453e-4795-a429-0953dfe153ad",
+	'longitude',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	1,
+	'',
+	"a142975c-b9e6-480a-a98a-83e2ec3204a5",
+	'');
+INSERT INTO PE_PE
+	VALUES ("dda63c94-453e-4795-a429-0953dfe153ad",
+	1,
+	"da3fda07-4196-4054-b778-71bbfa6a59c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("adafb9d7-46a3-4dee-a66d-9707db17d79a",
+	"00000000-0000-0000-0000-000000000000",
+	'getDistance',
+	'',
+	'// Return the straight-line distance, expressed in meters, between the 
+// two points passed as parameters, expressed in decimal degrees.
+
+Distance::initialize();
+select any distance from instances of Distance;
+deltaLat = param.toLat - param.fromLat;
+deltaLong = param.toLong - param.fromLong;
+sumSquares = (deltaLat * deltaLat) + (deltaLong * deltaLong);
+sqrtSum = ::sqrt( x:sumSquares );
+result = (sqrtSum * distance.kmPerDegree * 1000 );
+param.result = result;
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("5060efa7-b254-4079-b366-a63069a6ea98",
+	"adafb9d7-46a3-4dee-a66d-9707db17d79a",
+	'fromLat',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"c36ae638-e58b-46d6-960a-406cba8a9fb0",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("dd964fee-d82d-41f3-be33-a7f261a51bb9",
+	"adafb9d7-46a3-4dee-a66d-9707db17d79a",
+	'fromLong',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"5060efa7-b254-4079-b366-a63069a6ea98",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("1824bb31-10b3-400c-b4e3-6ae5a525f6c7",
+	"adafb9d7-46a3-4dee-a66d-9707db17d79a",
+	'toLat',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"dd964fee-d82d-41f3-be33-a7f261a51bb9",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("192581bf-8c00-4b48-9ace-39cbd5e1b5ff",
+	"adafb9d7-46a3-4dee-a66d-9707db17d79a",
+	'toLong',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"1824bb31-10b3-400c-b4e3-6ae5a525f6c7",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("c36ae638-e58b-46d6-960a-406cba8a9fb0",
+	"adafb9d7-46a3-4dee-a66d-9707db17d79a",
+	'result',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("adafb9d7-46a3-4dee-a66d-9707db17d79a",
+	1,
+	"da3fda07-4196-4054-b778-71bbfa6a59c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f3cc6047-9e47-439b-b974-25e0cc8d620b",
+	"00000000-0000-0000-0000-000000000000",
+	'registerListener',
+	'',
+	'GPS::initialize();
+select any gps from instances of GPS;
+generate GPS10:registerListener() to gps;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("f3cc6047-9e47-439b-b974-25e0cc8d620b",
+	1,
+	"da3fda07-4196-4054-b778-71bbfa6a59c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("4ba09871-89f8-4672-bf62-b6be7bbeff78",
+	"00000000-0000-0000-0000-000000000000",
+	'unregisterListener',
+	'',
+	'GPS::initialize();
+select any gps from instances of GPS;
+generate GPS11:unregisterListener() to gps; 
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("4ba09871-89f8-4672-bf62-b6be7bbeff78",
+	1,
+	"da3fda07-4196-4054-b778-71bbfa6a59c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("c2ec9b94-4dfc-4749-8937-739ce002fe7d",
+	"00000000-0000-0000-0000-000000000000",
+	'sqrt',
+	'',
+	'// TODO:FIXME There is a bug in verifier in handling of realized external entities in 
+//      a multi-domain project. I am working around this by getting a sqrt approximation.
+//sqrtSum = MATH::sqrt( x: sumSquares );
+//      So, this is introduced as a workaround to give an approximation of sqrt.
+result = 0.0;
+
+inputValue = param.x;
+
+// If a negative is passed-in take the abs value
+if inputValue < 0
+  inputValue = -param.x;
+end if;
+
+if (param.x > 0) 
+
+	guess = param.x;
+	MAX_ITERATIONS = 24;
+	i = 0;
+	prev_value = -1.0;
+	while (i < MAX_ITERATIONS and prev_value != guess)
+      prev_value = guess;
+      guess = guess - (((guess*guess)-inputValue)/(2*guess));
+	  i = i + 1;
+	end while;
+    result = guess;
+end if;
+
+return result;
+',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	1,
+	'',
+	0);
+INSERT INTO S_SPARM
+	VALUES ("383d1877-3353-4a6c-b627-072c50b2bc09",
+	"c2ec9b94-4dfc-4749-8937-739ce002fe7d",
+	'x',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("c2ec9b94-4dfc-4749-8937-739ce002fe7d",
+	1,
+	"da3fda07-4196-4054-b778-71bbfa6a59c6",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("da3fda07-4196-4054-b778-71bbfa6a59c6",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"2a5126a3-4272-42f2-810c-07c57c5a58d1",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("2a5126a3-4272-42f2-810c-07c57c5a58d1",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Location',
+	'Simulates a the GPS hardware/firmware. This component is only behavioral and included for testing purposes.',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../Location.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("61e01c56-c824-4c5f-9ef6-43d87e721b88",
+	'Location',
+	1,
+	'../../../Location.xtuml');

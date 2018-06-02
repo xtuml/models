@@ -6,7 +6,7 @@
  *
  * External Entity:  Logging (LOG)
  * 
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "assoc_unformal_sys_types.h"
@@ -18,7 +18,7 @@ static char failure = 0;
  * Bridge:  LogInfo
  */
 void
-LOG_LogInfo( c_t p_message[ESCHER_SYS_MAX_STRING_LEN])
+LOG_LogInfo( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 {
   printf( "LOG::LogInfo:  %s\n", p_message );
 }
@@ -28,7 +28,7 @@ LOG_LogInfo( c_t p_message[ESCHER_SYS_MAX_STRING_LEN])
  * Bridge:  LogFailure
  */
 void
-LOG_LogFailure( c_t p_message[ESCHER_SYS_MAX_STRING_LEN])
+LOG_LogFailure( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 {
   printf( "LOG::LogFailure:  %s\n", p_message );
   failure = 1;
@@ -39,7 +39,7 @@ LOG_LogFailure( c_t p_message[ESCHER_SYS_MAX_STRING_LEN])
  * Bridge:  LogSuccess
  */
 void
-LOG_LogSuccess( c_t p_message[ESCHER_SYS_MAX_STRING_LEN])
+LOG_LogSuccess( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 {
   if ( failure ) {
     printf( "FAILED\n" );
@@ -47,5 +47,4 @@ LOG_LogSuccess( c_t p_message[ESCHER_SYS_MAX_STRING_LEN])
     printf( "PASSED - LOG::LogSuccess:  %s\n", p_message );
   }
 }
-
 
