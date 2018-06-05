@@ -63,7 +63,6 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
     @Override
     public void pollLeaderGPS( ComponentInstance_c senderReceiver ) {
         String reply = ref.send( "Leader,GPS()" );
-        CorePlugin.out.println( reply );
         float x = 0;
         float z = 0;
         try {
@@ -82,7 +81,6 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
     @Override
     public void pollLeaderDistance( ComponentInstance_c senderReceiver ) {
         String reply = ref.send( "Leader,Distance()" );
-        CorePlugin.out.println( reply );
         float dist = 0;
         try {
             Matcher matcher = replyPattern.matcher( reply );
@@ -99,7 +97,6 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
     @Override
     public void pollRoverGPS( ComponentInstance_c senderReceiver ) {
         String reply = rover.send( "Rover,GPS()" );
-        CorePlugin.out.println( reply );
         float x = 0;
         float z = 0;
         try {
@@ -118,7 +115,6 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
     @Override
     public void pollRoverCompass( ComponentInstance_c senderReceiver ) {
         String reply = rover.send( "Rover,getCompass()" );
-        CorePlugin.out.println( reply );
         float degrees = 0;
         try {
             Matcher matcher = replyPattern.matcher( reply );
