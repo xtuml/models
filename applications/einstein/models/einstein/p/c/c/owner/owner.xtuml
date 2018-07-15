@@ -7,6 +7,47 @@ INSERT INTO O_OBJ
 	'owner',
 	'',
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("5931eeba-60c8-4ce4-89f5-d59d2558a5d8",
+	"e374bacc-0181-4790-a6c7-4f897fec7a03",
+	'populate',
+	'',
+	"581fa0c9-9096-4d9b-b3f3-e32298e673aa",
+	0,
+	'select any owner from instances of owner where ( selected.nationality == param.nationality );
+if ( empty owner )
+  create object instance owner of owner;
+  owner.nationality = param.nationality;
+end if;
+return owner;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("b2bee438-7e91-48b6-b2dc-a189b4efc712",
+	"5931eeba-60c8-4ce4-89f5-d59d2558a5d8",
+	'nationality',
+	"becd1a16-4b1d-41c8-83ea-ebe6dc2b66e8",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("becd1a16-4b1d-41c8-83ea-ebe6dc2b66e8",
+	"00000000-0000-0000-0000-000000000000",
+	'nationality',
+	'',
+	'',
+	'../c.xtuml');
+INSERT INTO S_DT_PROXY
+	VALUES ("581fa0c9-9096-4d9b-b3f3-e32298e673aa",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<owner>',
+	'',
+	'',
+	'../c.xtuml');
 INSERT INTO O_NBATTR
 	VALUES ("1bc496b1-56b2-49ee-93c2-afc9b6aa5cc5",
 	"e374bacc-0181-4790-a6c7-4f897fec7a03");
@@ -22,7 +63,7 @@ INSERT INTO O_ATTR
 	'',
 	'nationality',
 	0,
-	"ba5eda7a-def5-0000-0000-000000000004",
+	"becd1a16-4b1d-41c8-83ea-ebe6dc2b66e8",
 	'',
 	'');
 INSERT INTO O_REF
@@ -73,7 +114,7 @@ INSERT INTO O_ATTR
 	'house_',
 	'color',
 	1,
-	"ba5eda7a-def5-0000-0000-000000000002",
+	"ba5eda7a-def5-0000-0000-000000000007",
 	'',
 	'');
 INSERT INTO O_REF
@@ -124,7 +165,7 @@ INSERT INTO O_ATTR
 	'pet_',
 	'breed',
 	1,
-	"ba5eda7a-def5-0000-0000-000000000002",
+	"ba5eda7a-def5-0000-0000-000000000007",
 	'',
 	'');
 INSERT INTO O_REF
@@ -175,7 +216,7 @@ INSERT INTO O_ATTR
 	'smoke_',
 	'brand',
 	1,
-	"ba5eda7a-def5-0000-0000-000000000002",
+	"ba5eda7a-def5-0000-0000-000000000007",
 	'',
 	'');
 INSERT INTO O_REF
@@ -226,7 +267,7 @@ INSERT INTO O_ATTR
 	'drink_',
 	'name',
 	1,
-	"ba5eda7a-def5-0000-0000-000000000002",
+	"ba5eda7a-def5-0000-0000-000000000007",
 	'',
 	'');
 INSERT INTO O_ID
