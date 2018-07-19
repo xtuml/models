@@ -41,7 +41,7 @@ INSERT INTO S_SYNC
 	'// start simulation
 CTL::ready();
 
-simple = simple::get_default();
+simple = simple::get_default(); 
 create event instance e of simple1:go() to simple;
 t = TIM::timer_start_recurring( event_inst:e, microseconds:3000000 ); // start three second tick',
 	"ba5eda7a-def5-0000-0000-000000000000",
@@ -50,6 +50,33 @@ t = TIM::timer_start_recurring( event_inst:e, microseconds:3000000 ); // start t
 	0);
 INSERT INTO PE_PE
 	VALUES ("cf6b351a-0e16-4a3b-a19f-fa01f8fb3bd0",
+	1,
+	"922b7aac-cefb-4a60-9289-36f02f0ca607",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("1e46d99a-3fea-4cd0-9981-2dbc7147590f",
+	"00000000-0000-0000-0000-000000000000",
+	'testSmart',
+	'',
+	'// start simulation
+CTL::ready();
+
+data = data::get_default();
+// Start the data initialization sequence.  Once the init sequence is done the poller will 
+// start moving the rover and periodically update the data.
+generate data2:''init'' to data;
+create event instance poller of data1:go() to data;
+// start 350ms tick.  The other key ticker is in the data::polling state
+t = TIM::timer_start_recurring( event_inst:poller, microseconds:350000 ); 
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("1e46d99a-3fea-4cd0-9981-2dbc7147590f",
 	1,
 	"922b7aac-cefb-4a60-9289-36f02f0ca607",
 	"00000000-0000-0000-0000-000000000000",
