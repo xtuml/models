@@ -622,8 +622,6 @@ leaderXDiff = data.curLeaderPosition.x - self.oldLeaderPosition.x;
 leaderMovingRight = false;
 leaderMovingLeft = false;
 
-//LOG::LogReal( message:"Leader X diff: ", r:leaderXDiff );
-//LOG::LogReal( message:"Leader to Rover X diff: ", r:leaderToRoverXDiff );
 if ( (data.curLeaderPosition.x > self.prevLeaderPosition.x) and (self.prevLeaderPosition.x > self.oldLeaderPosition.x) )
   leaderMovingRight = true;
   //LOG::LogInfo( message:"Leader is moving RIGHT" );
@@ -633,11 +631,20 @@ elif ( (data.curLeaderPosition.x < self.prevLeaderPosition.x) and (self.prevLead
 end if;
 
 leaderTurnPrecision = 0.2;
-if ( (leaderToRoverXDiff > leaderTurnPrecision) and leaderMovingRight ) 
+leaderTrackPrecision = 0.6;
+if ( (leaderToRoverXDiff > leaderTrackPrecision) and (data.curLeaderPosition.x > data.curRoverPosition.x) ) 
+  LOG::LogReal( message:"Leader to Rover X diff: ", r:leaderToRoverXDiff );
+  generate smart4:''turnRight'' to self;
+elif ( (leaderToRoverXDiff < -leaderTrackPrecision) and (data.curLeaderPosition.x < data.curRoverPosition.x) ) 
+  LOG::LogReal( message:"Leader to Rover X diff: ", r:leaderToRoverXDiff );
+  generate smart3:''turnLeft'' to self;
+elif ( (leaderToRoverXDiff > leaderTurnPrecision) and leaderMovingRight ) 
+  LOG::LogReal( message:"Leader X diff: ", r:leaderXDiff );
   generate smart4:''turnRight'' to self;
 elif ( (leaderToRoverXDiff < -leaderTurnPrecision) and leaderMovingRight ) 
   generate smart2:''distance'' to self;
 elif ( (leaderToRoverXDiff < -leaderTurnPrecision) and leaderMovingLeft ) 
+  LOG::LogReal( message:"Leader X diff: ", r:leaderXDiff );
   generate smart3:''turnLeft'' to self;
 elif ( (leaderToRoverXDiff > leaderTurnPrecision) and leaderMovingLeft ) 
   generate smart2:''distance'' to self;
@@ -676,7 +683,7 @@ elif ( (data.curDistance >= 14.75) and (data.curDistance < 25 ) )
   LOG::LogInfo( message:"Current distance too far. Moving forward quickly." );
   CTL::brake( power:0 );
   CTL::setLRPower( lpower:75, rpower:75 );
-elif ( data.curDistance >= 25 ) 
+elif ( data.curDistance >= 40 ) 
   LOG::LogInfo( message:"Current distance way too far. Stopping." );
   CTL::brake( power:100 );
 else
@@ -775,9 +782,11 @@ INSERT INTO SM_ACT
 	VALUES ("86be9350-eadc-48d2-af76-7c2119af3005",
 	"e714763f-7677-40f9-a5d8-3b81ca978da9",
 	1,
-	'LOG::LogInfo( message:"turningLeft" );
+	'data = data::get_default();
 
-data = data::get_default();
+LOG::LogReal( message:"Cur Leader X", r:data.curLeaderPosition.x );
+LOG::LogReal( message:"Cur Rover X", r:data.curRoverPosition.x );
+LOG::LogInfo( message:"turningLeft" );
 
 if ( data.curLeaderPosition.x < data.curRoverPosition.x )
   CTL::setLRPower( lpower:15, rpower:30 );
@@ -800,9 +809,11 @@ INSERT INTO SM_ACT
 	VALUES ("891eeb8c-f2fa-4923-aa3b-1685265baf7e",
 	"e714763f-7677-40f9-a5d8-3b81ca978da9",
 	1,
-	'LOG::LogInfo( message:"turningRight" );
+	'data = data::get_default();
 
-data = data::get_default();
+LOG::LogReal( message:"Cur Leader X", r:data.curLeaderPosition.x );
+LOG::LogReal( message:"Cur Rover X", r:data.curRoverPosition.x );
+LOG::LogInfo( message:"turningRight" );
 
 if ( data.curLeaderPosition.x > data.curRoverPosition.x )
   CTL::setLRPower( lpower:30, rpower:15 );

@@ -60,11 +60,9 @@ INSERT INTO S_SYNC
 	'testSmart',
 	'',
 	'data = data::get_default();
-// Start the data initialization sequence.  Once the init sequence is done the poller will 
-// start moving the rover and periodically update the data.
-//generate data2:''init'' to data;
-create event instance poller of data1:go() to data;
+
 // start 350ms tick.  The other key ticker is in the data::polling state
+create event instance poller of data1:go() to data;
 t = TIM::timer_start_recurring( event_inst:poller, microseconds:350000 ); 
 
 // start simulation

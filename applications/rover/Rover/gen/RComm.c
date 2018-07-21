@@ -116,7 +116,7 @@ void
 RComm_RComm_setForwardPower( const i_t p_power )
 {
 	if (!roverConnected) { RComm_rover_connect(); }
-	LOG_LogInteger("RComm_RComm_setForwardPower()", p_power);
+	//LOG_LogInteger("RComm_RComm_setForwardPower()", p_power);
     int err;
     char buf[50];
     sprintf(buf, "Rover,setForwardPower(%d)\n", p_power );
@@ -132,7 +132,7 @@ void
 RComm_RComm_incrementPower( const i_t p_power )
 {
 	if (!roverConnected) { RComm_rover_connect(); }
-	LOG_LogInteger("RComm_RComm_incrementPower()", p_power);
+	//LOG_LogInteger("RComm_RComm_incrementPower()", p_power);
     int err;
     char buf[50];
     sprintf(buf, "Rover,incrementPower(%d)\n", p_power );
@@ -148,8 +148,8 @@ void
 RComm_RComm_setLRPower( const i_t p_lpower, const i_t p_rpower )
 {
 	if (!roverConnected) { RComm_rover_connect(); }
-	LOG_LogInteger("RComm_RComm_setLRPower() lpower", p_lpower);
-	LOG_LogInteger("RComm_RComm_setLRPower() rpower", p_rpower);
+	//LOG_LogInteger("RComm_RComm_setLRPower() lpower", p_lpower);
+	//LOG_LogInteger("RComm_RComm_setLRPower() rpower", p_rpower);
     int err;
     char buf[50];
     sprintf(buf, "Rover,setLRPower(%d,%d)\n", p_lpower, p_rpower );
@@ -165,7 +165,7 @@ void
 RComm_RComm_brake( const i_t p_power )
 {
 	if (!roverConnected) { RComm_rover_connect(); }
-	LOG_LogInteger("RComm_RComm_brake()", p_power);
+	//LOG_LogInteger("RComm_RComm_brake()", p_power);
     int err;
     char buf[50];
     sprintf(buf, "Rover,brake(%d)\n", p_power );
