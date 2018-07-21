@@ -2738,66 +2738,63 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'solve_brute',
 	'',
-	'LOG::LogInfo( message:"inside solving" );
-
-i = 4;
-select any address from instances of address; a[4] = address; // scope
-select many addresss from instances of address;
-for each address in addresss
- a[i] = address;
- i = i - 1;
-end for;
-
-i = 4;
-select any beverage from instances of beverage; b[4] = beverage;
-select many beverages from instances of beverage;
-for each beverage in beverages
- b[i] = beverage;
- i = i - 1;
-end for;
-
-i = 4;
-select any house from instances of house; h[4] = house;
-select many houses from instances of house;
-for each house in houses
- h[i] = house;
- i = i - 1;
-end for;
-
-i = 4;
-select any owner from instances of owner; o[4] = owner;
-select many owners from instances of owner;
-for each owner in owners
- o[i] = owner;
- i = i - 1;
-end for;
-
-i = 4;
-select any pet from instances of pet; p[4] = pet;
-select many pets from instances of pet;
-for each pet in pets
- p[i] = pet;
- i = i - 1;
-end for;
-
-i = 4;
-select any tobacco from instances of tobacco; t[4] = tobacco;
-select many tobaccos from instances of tobacco;
-for each tobacco in tobaccos
- t[i] = tobacco;
- i = i - 1;
-end for;
-
-LOG::LogInfo( message:"starting loop" );
-
-select any permutation from instances of permutation;
+	'select any permutation from instances of permutation;
 f = permutation.factorial( n:permutation.N );
 count = 0;
 distance = 1; // ::asserts();
 
+select many addresss from instances of address;
+select many beverages from instances of beverage;
+select many houses from instances of house;
+select many owners from instances of owner;
+select many pets from instances of pet;
+select many tobaccos from instances of tobacco;
+
+n = permutation.N - 1;
+select any address from instances of address; a[4] = address; // scope
+for each address in addresss
+ a[n] = address;
+ n = n - 1;
+end for;
+//aa = a[4]; a[4] = a[0]; a[0] = aa;
+
+n = permutation.N - 1;
+select any beverage from instances of beverage; b[4] = beverage;
+for each beverage in beverages
+ b[n] = beverage;
+ n = n - 1;
+end for;
+
+n = permutation.N - 1;
+select any house from instances of house; h[4] = house;
+for each house in houses
+ h[n] = house;
+ n = n - 1;
+end for;
+
+n = permutation.N - 1;
+select any owner from instances of owner; o[4] = owner;
+for each owner in owners
+ o[n] = owner;
+ n = n - 1;
+end for;
+
+n = permutation.N - 1;
+select any pet from instances of pet; p[4] = pet;
+for each pet in pets
+ p[n] = pet;
+ n = n - 1;
+end for;
+
+n = permutation.N - 1;
+select any tobacco from instances of tobacco; t[4] = tobacco;
+for each tobacco in tobaccos
+ t[n] = tobacco;
+ n = n - 1;
+end for;
+
 ia = 0;
 while ( ( ia < f ) and ( 0 != distance ) )
-  select many addresss from instances of address;
   for each address in addresss
     select one house related by address->house[R2];
     unrelate house from address across R2;
@@ -2812,7 +2809,6 @@ while ( ( ia < f ) and ( 0 != distance ) )
 
 ib = 0;
 while ( ( ib < f ) and ( 0 != distance ) )
-  select many beverages from instances of beverage;
   for each beverage in beverages
     select one owner related by beverage->owner[R5];
     unrelate owner from beverage across R5;
@@ -2827,7 +2823,6 @@ while ( ( ib < f ) and ( 0 != distance ) )
 
 ih = 0;
 while ( ( ih < f ) and ( 0 != distance ) )
-  select many houses from instances of house;
   for each house in houses
     select one owner related by house->owner[R1];
     unrelate owner from house across R1;
@@ -2842,7 +2837,6 @@ while ( ( ih < f ) and ( 0 != distance ) )
 
 ip = 0;
 while ( ( ip < f ) and ( 0 != distance ) )
-  select many pets from instances of pet;
   for each pet in pets
     select one owner related by pet->owner[R3];
     unrelate owner from pet across R3;
@@ -2857,7 +2851,6 @@ while ( ( ip < f ) and ( 0 != distance ) )
 
 it = 0;
 while ( ( it < f ) and ( 0 != distance ) )
-  select many tobaccos from instances of tobacco;
   for each tobacco in tobaccos
     select one owner related by tobacco->owner[R4];
     unrelate owner from tobacco across R4;
