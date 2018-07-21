@@ -59,17 +59,16 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'testSmart',
 	'',
-	'// start simulation
-CTL::ready();
-
-data = data::get_default();
+	'data = data::get_default();
 // Start the data initialization sequence.  Once the init sequence is done the poller will 
 // start moving the rover and periodically update the data.
-generate data2:''init'' to data;
+//generate data2:''init'' to data;
 create event instance poller of data1:go() to data;
 // start 350ms tick.  The other key ticker is in the data::polling state
 t = TIM::timer_start_recurring( event_inst:poller, microseconds:350000 ); 
 
+// start simulation
+CTL::ready();
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,

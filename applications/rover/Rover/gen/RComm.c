@@ -30,11 +30,15 @@
 #include <unistd.h>
 #include <netdb.h>
 
-SOCKET roverSock;                       /* socket details */
-short roverConnected = 0;
+SOCKET roverSock;                        /* socket details */
+bool roverConnected = FALSE;
 SOCKET leaderSock;                       /* socket details */
-short leaderConnected = 0;
+bool leaderConnected = FALSE;
 
+// Use one or the other of the following to determine if we'll use
+// blocking or non-blocking commands to the rover.
+//int roverSendFlags = 0; // blocking
+int roverSendFlags = MSG_DONTWAIT;  // non-blocking
 
 void handle_error(char *msg);           /* Error handler routine */
 void handle_error_en(int en, char *msg);
@@ -48,7 +52,6 @@ typedef struct cbuf {
 } cbuf_t;
 
 int read_line(cbuf_t *cbuf, char *dst, unsigned int size);
-
 
 
 /*
@@ -73,7 +76,7 @@ RComm_rover_connect()
 	if ((en = connect(roverSock, (struct sockaddr *) &address, sizeof(address))) < 0)
 		handle_error_en(en, "Socket connect error ");
 
-	roverConnected = 1;
+	roverConnected = TRUE;
 	return roverSock;
 }
 
@@ -99,7 +102,7 @@ RComm_leader_connect()
 	if ((en = connect(leaderSock, (struct sockaddr *) &address, sizeof(address))) < 0)
 		handle_error_en(en, "Socket connect error ");
 
-	leaderConnected = 1;
+	leaderConnected = TRUE;
 	return leaderSock;
 }
 
@@ -116,8 +119,8 @@ RComm_RComm_setForwardPower( const i_t p_power )
 	LOG_LogInteger("RComm_RComm_setForwardPower()", p_power);
     int err;
     char buf[50];
-    sprintf(buf, "Rover,setForwardPower(%d)\r\n", p_power );
-    err = send(roverSock,buf,strlen(buf),MSG_DONTWAIT);
+    sprintf(buf, "Rover,setForwardPower(%d)\n", p_power );
+    err = send(roverSock,buf,strlen(buf),roverSendFlags);
 }
 
 /*
@@ -133,7 +136,7 @@ RComm_RComm_incrementPower( const i_t p_power )
     int err;
     char buf[50];
     sprintf(buf, "Rover,incrementPower(%d)\n", p_power );
-    err = send(roverSock,buf,strlen(buf),MSG_DONTWAIT);
+    err = send(roverSock,buf,strlen(buf),roverSendFlags);
 }
 
 /*
@@ -150,7 +153,7 @@ RComm_RComm_setLRPower( const i_t p_lpower, const i_t p_rpower )
     int err;
     char buf[50];
     sprintf(buf, "Rover,setLRPower(%d,%d)\n", p_lpower, p_rpower );
-    err = send(roverSock,buf,strlen(buf),MSG_DONTWAIT);
+    err = send(roverSock,buf,strlen(buf),roverSendFlags);
 }
 
 /*
@@ -166,7 +169,7 @@ RComm_RComm_brake( const i_t p_power )
     int err;
     char buf[50];
     sprintf(buf, "Rover,brake(%d)\n", p_power );
-    err = send(roverSock,buf,strlen(buf),MSG_DONTWAIT);
+    err = send(roverSock,buf,strlen(buf),roverSendFlags);
 }
 
 /*

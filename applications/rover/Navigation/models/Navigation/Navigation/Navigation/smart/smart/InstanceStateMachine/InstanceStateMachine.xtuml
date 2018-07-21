@@ -607,44 +607,40 @@ INSERT INTO SM_ACT
 
 data = data::get_default();
 
-LOG::LogReal( message:"Prev Leader X", r:self.prevLeaderPosition.x );
-LOG::LogReal( message:"Prev Leader Z", r:self.prevLeaderPosition.z );
-LOG::LogReal( message:"Cur Leader X", r:data.curLeaderPosition.x );
-LOG::LogReal( message:"Cur Leader Z", r:data.curLeaderPosition.z );
+//LOG::LogReal( message:"Prev Leader X", r:self.prevLeaderPosition.x );
+//LOG::LogReal( message:"Prev Leader Z", r:self.prevLeaderPosition.z );
+//LOG::LogReal( message:"Cur Leader X", r:data.curLeaderPosition.x );
+//LOG::LogReal( message:"Cur Leader Z", r:data.curLeaderPosition.z );
 LOG::LogReal( message:"Distance", r:self.prevDistance );
 //LOG::LogReal( message:"Prev Rover X", r:self.prevRoverPosition.x );
-LOG::LogReal( message:"Cur Rover X", r:data.curRoverPosition.x );
-LOG::LogReal( message:"Cur Rover Z", r:data.curRoverPosition.z );
+//LOG::LogReal( message:"Cur Rover X", r:data.curRoverPosition.x );
+//LOG::LogReal( message:"Cur Rover Z", r:data.curRoverPosition.z );
 //LOG::LogReal( message:"Rover Compass: ", r:self.prevRoverCompass );
  
-leaderToRoverXDiff = data.curLeaderPosition.x - self.prevRoverPosition.x;
-leaderXDiff = data.curLeaderPosition.x - self.prevLeaderPosition.x;
+leaderToRoverXDiff = data.curLeaderPosition.x - data.curRoverPosition.x;
+leaderXDiff = data.curLeaderPosition.x - self.oldLeaderPosition.x;
 leaderMovingRight = false;
 leaderMovingLeft = false;
 
-precision = 0.01;
-LOG::LogReal( message:"Leader X diff: ", r:leaderXDiff );
-LOG::LogReal( message:"Leader to Rover X diff: ", r:leaderToRoverXDiff );
-if ( (leaderXDiff >= 0 ) and (leaderXDiff > precision) )
+//LOG::LogReal( message:"Leader X diff: ", r:leaderXDiff );
+//LOG::LogReal( message:"Leader to Rover X diff: ", r:leaderToRoverXDiff );
+if ( (data.curLeaderPosition.x > self.prevLeaderPosition.x) and (self.prevLeaderPosition.x > self.oldLeaderPosition.x) )
   leaderMovingRight = true;
-  LOG::LogInfo( message:"Leader is moving RIGHT" );
-elif ( (leaderXDiff < 0) and (leaderXDiff < -precision) )
+  //LOG::LogInfo( message:"Leader is moving RIGHT" );
+elif ( (data.curLeaderPosition.x < self.prevLeaderPosition.x) and (self.prevLeaderPosition.x < self.oldLeaderPosition.x) )
   leaderMovingLeft = true;
-  LOG::LogInfo( message:"Leader is moving LEFT" );
+  //LOG::LogInfo( message:"Leader is moving LEFT" );
 end if;
 
-if ( (leaderToRoverXDiff > 0.1 ) and leaderMovingRight ) 
+leaderTurnPrecision = 0.2;
+if ( (leaderToRoverXDiff > leaderTurnPrecision) and leaderMovingRight ) 
   generate smart4:''turnRight'' to self;
-  self.prevLeaderPosition = data.curLeaderPosition;
-elif ( (leaderToRoverXDiff < -0.1 ) and leaderMovingRight ) 
+elif ( (leaderToRoverXDiff < -leaderTurnPrecision) and leaderMovingRight ) 
   generate smart2:''distance'' to self;
-  self.prevLeaderPosition = data.curLeaderPosition;
-elif ( (leaderToRoverXDiff < -0.1) and leaderMovingLeft ) 
+elif ( (leaderToRoverXDiff < -leaderTurnPrecision) and leaderMovingLeft ) 
   generate smart3:''turnLeft'' to self;
-  self.prevLeaderPosition = data.curLeaderPosition;
-elif ( (leaderToRoverXDiff > 0.1) and leaderMovingLeft ) 
+elif ( (leaderToRoverXDiff > leaderTurnPrecision) and leaderMovingLeft ) 
   generate smart2:''distance'' to self;
-  self.prevLeaderPosition = data.curLeaderPosition;
 else
   // Just go straight
   generate smart2:''distance'' to self;
@@ -665,43 +661,39 @@ INSERT INTO SM_ACT
 	VALUES ("24306ce5-cc49-40e7-af5f-5b489665419b",
 	"e714763f-7677-40f9-a5d8-3b81ca978da9",
 	1,
-	'LOG::LogInfo( message:"distancing" );
+	'//LOG::LogInfo( message:"distancing" );
 
 data = data::get_default();
 
-if ( data.curDistance < 10 ) 
+if ( data.curDistance < 11 ) 
   LOG::LogInfo( message:"Current distance way too close.  Stopping." );
-  CTL::setForwardPower( power:0 );
   CTL::brake( power:100 );
-elif ( (data.curDistance >= 11) and (data.curDistance < 12 ) ) 
+elif ( (data.curDistance >= 11) and (data.curDistance < 12.25 ) ) 
   LOG::LogInfo( message:"Current distance too close. Moving forward slowly." );
   CTL::brake( power:0 );
-  CTL::setForwardPower( power:15 );
-elif ( (data.curDistance >= 15) and (data.curDistance < 19 ) ) 
+  CTL::setLRPower( lpower:5, rpower:5 );
+elif ( (data.curDistance >= 14.75) and (data.curDistance < 25 ) ) 
   LOG::LogInfo( message:"Current distance too far. Moving forward quickly." );
   CTL::brake( power:0 );
-  CTL::setForwardPower( power:85 );
-elif ( data.curDistance >= 19 ) 
+  CTL::setLRPower( lpower:75, rpower:75 );
+elif ( data.curDistance >= 25 ) 
   LOG::LogInfo( message:"Current distance way too far. Stopping." );
   CTL::brake( power:100 );
-  CTL::setForwardPower( power:0 );
 else
   // Here we are in the target zone, go forward at a reasonable pace
   LOG::LogInfo( message:"In the zone, proceeding reasonably." );
   CTL::brake( power:0 );
-  CTL::setForwardPower( power:50 );
+  CTL::setLRPower( lpower:45, rpower:45 );
 end if;
 
 // Make sure we don''t pass the leader
 leaderZDiff = data.curLeaderPosition.z - self.prevLeaderPosition.z;
 if ( (leaderZDiff >= 0) and (data.curRoverPosition.z >= data.curLeaderPosition.z - 1) )
   LOG::LogInfo( message:"Stopping so we don''t pass the leader." );
-  CTL::setForwardPower( power:0 );
   CTL::brake( power:100 );
 end if; 
 if ( (leaderZDiff < 0) and (data.curRoverPosition.z <= data.curLeaderPosition.z + 1) )
   LOG::LogInfo( message:"Stopping so we don''t pass the leader." );
-  CTL::setForwardPower( power:0 );
   CTL::brake( power:100 );
 end if; 
 generate smart5:''doneMoving'' to self;
@@ -788,8 +780,7 @@ INSERT INTO SM_ACT
 data = data::get_default();
 
 if ( data.curLeaderPosition.x < data.curRoverPosition.x )
-  CTL::brake( power:0 );
-  CTL::setLRPower( lpower:15, rpower:50 );
+  CTL::setLRPower( lpower:15, rpower:30 );
 else
   LOG::LogInfo( message:"  Override, not turningLeft" );
 end if;
@@ -814,8 +805,7 @@ INSERT INTO SM_ACT
 data = data::get_default();
 
 if ( data.curLeaderPosition.x > data.curRoverPosition.x )
-  CTL::brake( power:0 );
-  CTL::setLRPower( lpower:50, rpower:15 );
+  CTL::setLRPower( lpower:30, rpower:15 );
 else
   LOG::LogInfo( message:"  Override, not turningRight" );
 end if;
@@ -863,12 +853,17 @@ INSERT INTO SM_ACT
 	VALUES ("3efad6a9-e15e-4c82-a3d7-8fbf57c848bd",
 	"e714763f-7677-40f9-a5d8-3b81ca978da9",
 	1,
-	'LOG::LogInfo( message:"finalizing movement" );
+	'//LOG::LogInfo( message:"finalizing movement" );
 
 data = data::get_default();
  
+self.oldDistance = self.prevDistance;
+self.oldLeaderPosition = self.prevLeaderPosition;
+self.oldRoverCompass = self.prevRoverCompass;
+self.oldRoverPosition = self.prevRoverPosition;
+
 self.prevDistance = data.curDistance;
-// Moved to calculating and only updated when we initiate a move - self.prevLeaderPosition = data.curLeaderPosition;
+self.prevLeaderPosition = data.curLeaderPosition;
 self.prevRoverCompass = data.curRoverCompass;
 self.prevRoverPosition = data.curRoverPosition;
 
@@ -1555,7 +1550,7 @@ INSERT INTO DIM_CON
 INSERT INTO DIM_CON
 	VALUES ("0c5b0560-6bb5-4cb2-8566-d2b61917f5ad",
 	4703.000000,
-	3395.000000,
+	3431.000000,
 	"50472410-c46e-4341-89fe-dc61f29f6904");
 INSERT INTO GD_GE
 	VALUES ("36d0a91b-a804-4607-a6d4-125dc8a3fe45",
@@ -2204,7 +2199,7 @@ INSERT INTO DIM_ND
 	"9b344239-a2d0-4043-a7be-ef59908dfc67");
 INSERT INTO DIM_GE
 	VALUES (4726.000000,
-	3368.000000,
+	3404.000000,
 	"9b344239-a2d0-4043-a7be-ef59908dfc67",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -2245,7 +2240,7 @@ INSERT INTO GD_LS
 INSERT INTO DIM_WAY
 	VALUES ("6a588f86-966f-4706-b00d-7cc20f115821",
 	4703.000000,
-	3395.000000,
+	3431.000000,
 	"ecc5a706-c7ba-4937-8376-54d7fdbf2462",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
@@ -2259,7 +2254,7 @@ INSERT INTO DIM_WAY
 INSERT INTO DIM_WAY
 	VALUES ("1f951bc4-6f75-4500-94fc-b72b38a4e4c0",
 	4852.000000,
-	3395.000000,
+	3431.000000,
 	"ecc5a706-c7ba-4937-8376-54d7fdbf2462",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
