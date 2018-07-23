@@ -41,12 +41,12 @@ INSERT INTO GD_SHP
 INSERT INTO GD_CTR
 	VALUES ("16b772f8-1677-4892-990d-ef0b1c796653");
 INSERT INTO DIM_ND
-	VALUES (1252.000000,
-	800.000000,
+	VALUES (492.000000,
+	407.000000,
 	"16b772f8-1677-4892-990d-ef0b1c796653");
 INSERT INTO DIM_GE
-	VALUES (4100.000000,
-	3100.000000,
+	VALUES (4860.000000,
+	3060.000000,
 	"16b772f8-1677-4892-990d-ef0b1c796653",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -61,7 +61,7 @@ INSERT INTO DIM_CON
 INSERT INTO DIM_CON
 	VALUES ("8f09de60-a7be-4dd5-9892-fa288ced89c1",
 	5352.000000,
-	3516.000000,
+	3462.000000,
 	"16b772f8-1677-4892-990d-ef0b1c796653");
 INSERT INTO GD_GE
 	VALUES ("49701553-1129-4b5e-b296-36396a95f9e5",
@@ -204,7 +204,7 @@ INSERT INTO DIM_ND
 	"75397c99-5656-4b2d-9a1a-ee3c28f25678");
 INSERT INTO DIM_GE
 	VALUES (5368.000000,
-	3478.000000,
+	3424.000000,
 	"75397c99-5656-4b2d-9a1a-ee3c28f25678",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -239,14 +239,14 @@ INSERT INTO GD_LS
 INSERT INTO DIM_WAY
 	VALUES ("3caa0f01-cd52-42cd-867f-e2c8796aace4",
 	5352.000000,
-	3516.000000,
+	3462.000000,
 	"f430c83c-d0fb-4276-bb79-929d57b3fd85",
 	"00000000-0000-0000-0000-000000000000",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_WAY
 	VALUES ("923a308c-fe64-42ab-ae4b-15f18a515692",
 	5480.000000,
-	3516.000000,
+	3462.000000,
 	"f430c83c-d0fb-4276-bb79-929d57b3fd85",
 	"00000000-0000-0000-0000-000000000000",
 	"3caa0f01-cd52-42cd-867f-e2c8796aace4");
@@ -312,27 +312,27 @@ INSERT INTO DIM_ELE
 	0,
 	"16b772f8-1677-4892-990d-ef0b1c796653");
 INSERT INTO GD_GE
-	VALUES ("20416a33-0506-43e2-8869-a6d8dda33941",
+	VALUES ("9b6d25b5-47f4-40a6-8852-6ad090f62082",
 	"dbb344fe-11c4-4c7a-ab25-d249f8c995e2",
-	"ba4ee203-7048-43fa-bcdb-967bc1985cbd",
+	"c07f1c15-e701-4338-b3e3-ce2130169361",
 	108,
 	0,
-	'Navigation::Navigation::Navigation::smart');
+	'Navigation::Navigation::Navigation::navigate');
 INSERT INTO GD_SHP
-	VALUES ("20416a33-0506-43e2-8869-a6d8dda33941");
+	VALUES ("9b6d25b5-47f4-40a6-8852-6ad090f62082");
 INSERT INTO GD_NCS
-	VALUES ("20416a33-0506-43e2-8869-a6d8dda33941");
+	VALUES ("9b6d25b5-47f4-40a6-8852-6ad090f62082");
 INSERT INTO DIM_ND
-	VALUES (201.000000,
-	142.000000,
-	"20416a33-0506-43e2-8869-a6d8dda33941");
+	VALUES (191.000000,
+	144.000000,
+	"9b6d25b5-47f4-40a6-8852-6ad090f62082");
 INSERT INTO DIM_GE
-	VALUES (5135.000000,
-	3274.000000,
-	"20416a33-0506-43e2-8869-a6d8dda33941",
+	VALUES (4920.000000,
+	3276.000000,
+	"9b6d25b5-47f4-40a6-8852-6ad090f62082",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
-	VALUES ("20416a33-0506-43e2-8869-a6d8dda33941",
+	VALUES ("9b6d25b5-47f4-40a6-8852-6ad090f62082",
 	0,
 	"16b772f8-1677-4892-990d-ef0b1c796653");
 INSERT INTO DIM_DIA
@@ -556,9 +556,11 @@ INSERT INTO SPR_PO
 //LOG::LogReal( message:"Caching Leader X: ", r:param.x );
 //LOG::LogReal( message:"Caching Leader Z: ", r:param.z );
 
-data = data::get_default();
-data.setLeaderGPS( x:param.x, z: param.z );
-',
+select any leader from instances of leader;
+select one leaderRover related by leader->rover[R1];
+
+leaderRover.curPosition.x = param.x; 
+leaderRover.curPosition.z = param.z;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -580,8 +582,12 @@ INSERT INTO SPR_PO
 //LOG::LogReal( message:"Caching Rover X: ", r:param.x );
 //LOG::LogReal( message:"Caching Rover Z: ", r:param.z );
 
-data = data::get_default();
-data.setRoverGPS( x: param.x, z: param.z );',
+select any follower from instances of follower;
+select one followerRover related by follower->rover[R1];
+
+followerRover.curPosition.x = param.x;
+followerRover.curPosition.z = param.z;
+',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -601,8 +607,8 @@ INSERT INTO SPR_PO
 	'Returns the degrees clockwise from North of the rover as a Real value',
 	'//LOG::LogReal( message:"Caching Rover compass: ", r:param.degrees );
 
-data = data::get_default();
-data.setRoverCompass( degrees: param.degrees );',
+select any follower from instances of follower;
+follower.bearing = param.degrees;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -622,8 +628,8 @@ INSERT INTO SPR_PO
 	'Returns the distance between follower and leader as a Real value',
 	'//LOG::LogReal( message:"Caching leaderDistance: ", r:param.dist );
 
-data = data::get_default();
-data.setLeaderDistance( dist: param.dist);',
+select any leader from instances of leader;
+leader.distance = param.dist;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY

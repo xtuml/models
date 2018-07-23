@@ -55,15 +55,24 @@ INSERT INTO PE_PE
 	"00000000-0000-0000-0000-000000000000",
 	1);
 INSERT INTO S_SYNC
-	VALUES ("1e46d99a-3fea-4cd0-9981-2dbc7147590f",
+	VALUES ("078e3318-e306-4f37-8d1c-2ca2e1e73335",
 	"00000000-0000-0000-0000-000000000000",
-	'testSmart',
+	'testNavigation',
 	'',
-	'data = data::get_default();
+	'create object instance rover1 of rover;
+create object instance leader of leader;
+relate leader to rover1 across R1;
 
-// start 350ms tick.  The other key ticker is in the data::polling state
-create event instance poller of data1:go() to data;
-t = TIM::timer_start_recurring( event_inst:poller, microseconds:350000 ); 
+leader.id = 1;
+generate leader1:''init'' to leader;
+
+// start polling tick.  The other key ticker is started in the leader::polling state
+create event instance poller of leader2:go() to leader;
+t = TIM::timer_start_recurring( event_inst:poller, microseconds:POLLING_FREQUENCY_MS * 1000 ); 
+
+create object instance rover2 of rover;
+create object instance follower of follower;
+relate follower to rover2 across R1;
 
 // start simulation
 CTL::ready();
@@ -73,7 +82,7 @@ CTL::ready();
 	'',
 	0);
 INSERT INTO PE_PE
-	VALUES ("1e46d99a-3fea-4cd0-9981-2dbc7147590f",
+	VALUES ("078e3318-e306-4f37-8d1c-2ca2e1e73335",
 	1,
 	"922b7aac-cefb-4a60-9289-36f02f0ca607",
 	"00000000-0000-0000-0000-000000000000",
