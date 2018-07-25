@@ -20,7 +20,11 @@ Can I reduce the constraints and still have only one solution?  Comment out 1 by
   'the man who smokes blend has a neighbor who drinks water'  still a single solution!
   I commented out each constraint rule one at a time and reran the exhaustive search...
   I found that I eliminate one constraint (and only one of them) and still produce a unique solution.
+  This, 'the man who smokes blend has a neighbor who drinks water', can be eliminated.  The others are required.
 Can I use constraints (relations) to reduce the search space?
   Some, yes, some, no.
   'The Brit lives in the red house.'  Yes.  4 do this easily reducing search space to 4! * 4! * 4! * 4! * 5! = 40M
   'The person who smokes Pall Mall rears birds.'  Not so easy.
+  There should be a way to explore the association and multiplicity and dynamically build the permutation.
+  This would like involve a model compiler that queried the model and instance data.
+  There is a meta-core level recursive query against the Association subsystem.
