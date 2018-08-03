@@ -1,0 +1,61 @@
+Constraint Modeling with Albert Einstein
+========================================
+
+### Ideas
+
+- solving by hand
+- model
+- assertions
+- brute force
+- The Mathematics
+- Next Steps
+- presentation/teaching drama (hats, cigars, cups, stuffed animals, house color, address numbers)
+
+
+---------------------------------
+
+### Abstract
+Einstein's Riddle is a multi-dimensional constraint satisfaction problem
+which is captivating, challenging and solvable by humans with or without
+computing machinery.  It serves as an entertaining platform for the study
+of constraint satisfaction problems and tools.  This paper presents a solver
+of Einstein's Riddle modeled in xtUML.  Constraints are modeled as links
+between instances of UML classes.
+
+### Introduction
+Albert Einstein is credited with a riddle which goes something like:
+
+There are 5 houses in five different colors.  
+In each house lives a person with a different nationality.  
+These five owners drink a certain type of beverage, smoke  
+a certain brand of cigar and keep a certain pet.  
+No owners have the same pet, smoke the same brand of cigar  
+or drink the same beverage.  
+
+...followed by a question:
+
+Who owns the fish?
+
+'Hints' follow that amount to constraints on the system. For example,
+
+- The Brit lives in the red house.
+- The Swede keeps dogs as pets.
+
+The hints constrain the problem such that there is exactly one solution.
+The riddle offers information that can be captured in a relational class
+model rich in associations and instances. Such a model has been built
+and its capabilities, advantages and disadvantages are explored.
+
+This paper reports the experience of modeling Einstein's Riddle in Executable UML (xtUML).
+The riddle has been solved in other languages specific to Satisfiability Modulo Theories (SMT).
+The general purpose UML model is compared and contrasted with SMT solvers (such as one implemented in Z3).
+The applicability of SMT tree walker/solvers to executable UML metamodels is explored.
+Observations are made and questions for future work are raised.
+
+
+### Solving by Hand
+### The Mathematics
+### xtUML Model
+#### Assertions
+#### Brute Force
+### Next Steps
