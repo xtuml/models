@@ -1,4 +1,4 @@
--- BP 7.1 content: InstanceStateMachine syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: InstanceStateMachine syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO SM_ISM
 	VALUES ("eb6a8404-5a44-4d68-bc56-70b40fb1f778",
@@ -25,7 +25,7 @@ INSERT INTO SM_EVT
 	'left',
 	0,
 	'',
-	'S1',
+	'steering1',
 	'');
 INSERT INTO SM_LEVT
 	VALUES ("9c0baea1-fbeb-452b-aece-9dfba2b05951",
@@ -43,7 +43,7 @@ INSERT INTO SM_EVT
 	'right',
 	0,
 	'',
-	'S2',
+	'steering2',
 	'');
 INSERT INTO SM_LEVT
 	VALUES ("afd27726-78f8-4e5f-9d4c-ed1b6bf22319",
@@ -61,7 +61,7 @@ INSERT INTO SM_EVT
 	'straight',
 	0,
 	'',
-	'S3',
+	'steering3',
 	'');
 INSERT INTO SM_STATE
 	VALUES ("7c923762-520d-4602-9be8-690cce0ea28f",
@@ -225,7 +225,8 @@ INSERT INTO SM_ACT
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
 	1,
 	'send IO::turn(orientation: Orientation::straight);',
-	'');
+	'',
+	0);
 INSERT INTO SM_MOAH
 	VALUES ("a95bf0f3-8a13-4ee2-90b0-71ce2e14d736",
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
@@ -238,7 +239,8 @@ INSERT INTO SM_ACT
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
 	1,
 	'send IO::turn(orientation: Orientation::left);',
-	'');
+	'',
+	0);
 INSERT INTO SM_MOAH
 	VALUES ("3001c23d-9b12-4af6-b786-9d0c2464bef0",
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
@@ -251,7 +253,8 @@ INSERT INTO SM_ACT
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
 	1,
 	'send IO::turn(orientation: Orientation::right);',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("1f3c69bf-1454-4bd7-885e-396393666548",
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
@@ -264,7 +267,8 @@ INSERT INTO SM_ACT
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("77de3f74-b49f-49a9-999d-a956f3641c1d",
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
@@ -277,7 +281,8 @@ INSERT INTO SM_ACT
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("9badf7f3-cca6-4b5c-80b6-7d9528c77299",
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
@@ -290,7 +295,8 @@ INSERT INTO SM_ACT
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("fc1ea379-83d9-470e-b515-317423e6445c",
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
@@ -303,7 +309,8 @@ INSERT INTO SM_ACT
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("f1bedb1d-7886-4899-893d-cd20516a8567",
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
@@ -316,7 +323,8 @@ INSERT INTO SM_ACT
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("4beeae0e-aca7-42f5-9386-21bb1486dce2",
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
@@ -329,7 +337,8 @@ INSERT INTO SM_ACT
 	"eb6a8404-5a44-4d68-bc56-70b40fb1f778",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO GD_MD
 	VALUES ("38e6c74b-f582-41cd-b7cd-fc3f4bd78e28",
 	8,
@@ -347,13 +356,15 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'3.1.2');
+	'3.1.2',
+	'Sumo::Library::sumo::sumo::steering::Instance State Machine');
 INSERT INTO GD_GE
 	VALUES ("a12e1406-4fc9-41c1-b8e5-97c12dee6704",
 	"38e6c74b-f582-41cd-b7cd-fc3f4bd78e28",
 	"7c923762-520d-4602-9be8-690cce0ea28f",
 	41,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::steering::Instance State Machine::maintaining');
 INSERT INTO GD_SHP
 	VALUES ("a12e1406-4fc9-41c1-b8e5-97c12dee6704");
 INSERT INTO GD_NCS
@@ -396,7 +407,8 @@ INSERT INTO GD_GE
 	"38e6c74b-f582-41cd-b7cd-fc3f4bd78e28",
 	"ef04f4d8-293d-4c55-b5f5-ab07c9937fc5",
 	41,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::steering::Instance State Machine::lefting');
 INSERT INTO GD_SHP
 	VALUES ("4ed68c2d-ec86-420d-a557-d9024c79d154");
 INSERT INTO GD_NCS
@@ -439,7 +451,8 @@ INSERT INTO GD_GE
 	"38e6c74b-f582-41cd-b7cd-fc3f4bd78e28",
 	"9da17f20-edd4-4172-bb09-fec4db4a2724",
 	41,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::steering::Instance State Machine::righting');
 INSERT INTO GD_SHP
 	VALUES ("51028a96-bf13-46aa-a929-afcfea3a97c2");
 INSERT INTO GD_NCS
@@ -482,7 +495,8 @@ INSERT INTO GD_GE
 	"38e6c74b-f582-41cd-b7cd-fc3f4bd78e28",
 	"7b127817-5685-4c83-b711-fbce017345b4",
 	42,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::steering::Instance State Machine::maintaining::steering2: right');
 INSERT INTO GD_CON
 	VALUES ("84ab70d8-3dd2-41c3-8d1c-76151de0d681",
 	"00000000-0000-0000-0000-000000000000");
@@ -581,7 +595,8 @@ INSERT INTO GD_GE
 	"38e6c74b-f582-41cd-b7cd-fc3f4bd78e28",
 	"cad0ce9f-e43e-42d7-823e-42d5c52f94a2",
 	42,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::steering::Instance State Machine::maintaining::steering1: left');
 INSERT INTO GD_CON
 	VALUES ("53c209b8-f42a-4725-a10f-53d424f6b0fb",
 	"00000000-0000-0000-0000-000000000000");
@@ -680,7 +695,8 @@ INSERT INTO GD_GE
 	"38e6c74b-f582-41cd-b7cd-fc3f4bd78e28",
 	"9ad0b78d-592c-40e1-b905-75c49c1f7ffd",
 	42,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::steering::Instance State Machine::lefting::steering3: straight');
 INSERT INTO GD_CON
 	VALUES ("214ceb16-dc3b-4f14-bb77-f11ccb23952a",
 	"00000000-0000-0000-0000-000000000000");
@@ -792,7 +808,8 @@ INSERT INTO GD_GE
 	"38e6c74b-f582-41cd-b7cd-fc3f4bd78e28",
 	"540ffa1e-96d7-4c17-9904-4612537e1956",
 	42,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::steering::Instance State Machine::righting::steering3: straight');
 INSERT INTO GD_CON
 	VALUES ("3f600363-0d2a-426e-b8a6-7598771852d1",
 	"00000000-0000-0000-0000-000000000000");
@@ -904,7 +921,8 @@ INSERT INTO GD_GE
 	"38e6c74b-f582-41cd-b7cd-fc3f4bd78e28",
 	"2949ef9f-cebb-44fe-933e-59374926273f",
 	42,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::steering::Instance State Machine::lefting::steering2: right');
 INSERT INTO GD_CON
 	VALUES ("2e19e885-2640-4b6e-a15d-7edadb27dab2",
 	"00000000-0000-0000-0000-000000000000");
@@ -1003,7 +1021,8 @@ INSERT INTO GD_GE
 	"38e6c74b-f582-41cd-b7cd-fc3f4bd78e28",
 	"ad144981-3a70-483c-bcc6-cd60b74eeeea",
 	42,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::steering::Instance State Machine::righting::steering1: left');
 INSERT INTO GD_CON
 	VALUES ("bf2bd486-2e04-490d-9f31-2c9239d2b764",
 	"00000000-0000-0000-0000-000000000000");
@@ -1108,7 +1127,7 @@ INSERT INTO O_OBJ_PROXY
 	VALUES ("f2414e10-303f-48c1-a19c-7bc2c8b09913",
 	'steering',
 	3,
-	'S',
+	'steering',
 	'',
-	"28f36638-19d6-4f5b-b724-b3060c22ef4b",
+	"00000000-0000-0000-0000-000000000000",
 	'../steering.xtuml');

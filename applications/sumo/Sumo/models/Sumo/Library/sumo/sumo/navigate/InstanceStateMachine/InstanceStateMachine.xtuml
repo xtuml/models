@@ -1,4 +1,4 @@
--- BP 7.1 content: InstanceStateMachine syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: InstanceStateMachine syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO SM_ISM
 	VALUES ("16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
@@ -318,7 +318,8 @@ INSERT INTO SM_ACT
 	0,
 	'//
 ',
-	'');
+	'',
+	0);
 INSERT INTO SM_MOAH
 	VALUES ("0ebd4a90-1e5e-4ba0-9e24-1a597da62c7e",
 	"16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
@@ -335,7 +336,8 @@ generate steering3:straight() to s;
 select one d related by self->drive[R2];
 d.forward();
 ',
-	'');
+	'',
+	0);
 INSERT INTO SM_MOAH
 	VALUES ("57484007-9b70-4b66-9876-a29dff97b57c",
 	"16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
@@ -353,7 +355,8 @@ select one d related by self->drive[R2];
 d.reverse();
 create event instance e of navigate1:pop() to self;
 t = TIM::timer_start( microseconds:self.retreat_duration * 1000000, event_inst:e );',
-	'');
+	'',
+	0);
 INSERT INTO SM_MOAH
 	VALUES ("f8537700-cd2f-4889-805c-7203cd42f159",
 	"16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
@@ -371,7 +374,8 @@ select one s related by self->steering[R1];
 generate steering1:left() to s;
 create event instance e of navigate1:pop() to self;
 t = TIM::timer_start( microseconds:self.target_duration * 1000000, event_inst:e );',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("9962f544-4a10-482f-ae33-a578eee91b6e",
 	"16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
@@ -384,7 +388,8 @@ INSERT INTO SM_ACT
 	"16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("236e7d4f-190d-4652-ab60-d1ad4e816e0b",
 	"16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
@@ -397,7 +402,8 @@ INSERT INTO SM_ACT
 	"16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("30b6ce47-36fd-41de-959b-315fe86d8a10",
 	"16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
@@ -410,7 +416,8 @@ INSERT INTO SM_ACT
 	"16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO SM_TAH
 	VALUES ("d1705d7d-f03a-4421-8d25-fd1b02465c76",
 	"16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
@@ -423,7 +430,8 @@ INSERT INTO SM_ACT
 	"16a3b4fb-9031-46ab-a722-1fc6da79d7cb",
 	1,
 	'',
-	'');
+	'',
+	0);
 INSERT INTO GD_MD
 	VALUES ("e6169144-f3c7-484b-a7f6-e0118b0bf139",
 	8,
@@ -441,13 +449,15 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'3.1.2');
+	'3.1.2',
+	'Sumo::Library::sumo::sumo::navigate::Instance State Machine');
 INSERT INTO GD_GE
 	VALUES ("efc568c3-80ce-46f1-9114-ca868c3e6044",
 	"e6169144-f3c7-484b-a7f6-e0118b0bf139",
 	"841d1817-6b12-4bb1-8005-7c94e7adad9c",
 	41,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::navigate::Instance State Machine::resting');
 INSERT INTO GD_SHP
 	VALUES ("efc568c3-80ce-46f1-9114-ca868c3e6044");
 INSERT INTO GD_NCS
@@ -480,7 +490,8 @@ INSERT INTO GD_GE
 	"e6169144-f3c7-484b-a7f6-e0118b0bf139",
 	"f780501b-67ae-4870-8f4f-30caacf0f48c",
 	41,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::navigate::Instance State Machine::attacking');
 INSERT INTO GD_SHP
 	VALUES ("aaccc0c1-0fbd-4da0-8c5e-d81f5cf09cdf");
 INSERT INTO GD_NCS
@@ -623,7 +634,8 @@ INSERT INTO GD_GE
 	"e6169144-f3c7-484b-a7f6-e0118b0bf139",
 	"dd17b836-0ecc-4712-a3a3-5a672f510a79",
 	41,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::navigate::Instance State Machine::retreating');
 INSERT INTO GD_SHP
 	VALUES ("dde33bd3-0584-4b1c-a483-e25f95f6a5fd");
 INSERT INTO GD_NCS
@@ -706,7 +718,8 @@ INSERT INTO GD_GE
 	"e6169144-f3c7-484b-a7f6-e0118b0bf139",
 	"965c9933-075d-42ec-9797-b21c09cc1955",
 	41,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::navigate::Instance State Machine::targeting');
 INSERT INTO GD_SHP
 	VALUES ("38e884d2-1f22-4ebf-b4d6-3e7efde0fae1");
 INSERT INTO GD_NCS
@@ -744,7 +757,8 @@ INSERT INTO GD_GE
 	"e6169144-f3c7-484b-a7f6-e0118b0bf139",
 	"1dc22099-7f6e-4eaf-a6e9-cc49c25fbd2f",
 	42,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::navigate::Instance State Machine::resting::navigate1: pop');
 INSERT INTO GD_CON
 	VALUES ("43739cb6-6c55-4fe5-89ca-89d7b547a293",
 	"00000000-0000-0000-0000-000000000000");
@@ -856,7 +870,8 @@ INSERT INTO GD_GE
 	"e6169144-f3c7-484b-a7f6-e0118b0bf139",
 	"ca31fd83-d361-4dbd-a4d0-27f94368ef67",
 	42,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::navigate::Instance State Machine::retreating::navigate1: pop');
 INSERT INTO GD_CON
 	VALUES ("bed20a14-f754-4360-8f7a-c42c4b1ba255",
 	"00000000-0000-0000-0000-000000000000");
@@ -968,7 +983,8 @@ INSERT INTO GD_GE
 	"e6169144-f3c7-484b-a7f6-e0118b0bf139",
 	"e4903b63-6cb4-43a0-b4dc-c7b84f3bcb44",
 	42,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::navigate::Instance State Machine::targeting::navigate1: pop');
 INSERT INTO GD_CON
 	VALUES ("2f7179da-0c1f-4330-bae6-7df5702d83a4",
 	"00000000-0000-0000-0000-000000000000");
@@ -1080,7 +1096,8 @@ INSERT INTO GD_GE
 	"e6169144-f3c7-484b-a7f6-e0118b0bf139",
 	"2dda1e62-514b-4a61-af3a-b5a39ac53079",
 	42,
-	0);
+	0,
+	'Sumo::Library::sumo::sumo::navigate::Instance State Machine::attacking::navigate2: line');
 INSERT INTO GD_CON
 	VALUES ("bda318dc-1c5d-4968-8b59-e503c5a056a7",
 	"00000000-0000-0000-0000-000000000000");
@@ -1187,5 +1204,5 @@ INSERT INTO O_OBJ_PROXY
 	1,
 	'navigate',
 	'',
-	"28f36638-19d6-4f5b-b724-b3060c22ef4b",
+	"00000000-0000-0000-0000-000000000000",
 	'../navigate.xtuml');

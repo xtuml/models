@@ -1,15 +1,17 @@
--- BP 7.1 content: FunctionPackage syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
 
-INSERT INTO S_FPK
+INSERT INTO EP_PKG
 	VALUES ("9425c889-1cdc-4b3c-8fd5-4973b8f13158",
+	"00000000-0000-0000-0000-000000000000",
+	"21bba8bf-80a0-498d-9b95-6047aabbb779",
 	'Functions',
-	"e769000d-3a6b-472b-962e-fee0ab35ccaf",
-	"00000000-0000-0000-0000-000000000000");
+	'',
+	0);
 INSERT INTO GD_MD
 	VALUES ("3b719658-acf7-42ef-a6ea-adae327f2f72",
-	101,
+	112,
 	"9425c889-1cdc-4b3c-8fd5-4973b8f13158",
-	54,
+	108,
 	0,
 	0,
 	1,
@@ -22,7 +24,8 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'');
+	'',
+	'Sumo::Library::NXT::Functions');
 INSERT INTO DIM_DIA
 	VALUES ("3b719658-acf7-42ef-a6ea-adae327f2f72",
 	'',
@@ -30,36 +33,44 @@ INSERT INTO DIM_DIA
 	4000.000000,
 	3000.000000,
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO PL_FPID
-	VALUES ("9425c889-1cdc-4b3c-8fd5-4973b8f13158",
-	"e769000d-3a6b-472b-962e-fee0ab35ccaf");
-INSERT INTO S_DOM_PROXY
-	VALUES ("e769000d-3a6b-472b-962e-fee0ab35ccaf",
-	'NXT',
-	'',
-	0,
-	"00000000-0000-0000-0000-000000000002",
-	"00000000-0000-0000-0000-000000000000",
-	'../NXT.xtuml');
-INSERT INTO S_FIP
-	VALUES ("9425c889-1cdc-4b3c-8fd5-4973b8f13158",
-	"aad258ff-2d75-4a72-8bfc-994a15ba1e12");
 INSERT INTO S_SYNC
 	VALUES ("aad258ff-2d75-4a72-8bfc-994a15ba1e12",
-	"e769000d-3a6b-472b-962e-fee0ab35ccaf",
+	"00000000-0000-0000-0000-000000000000",
 	'startWithDelay',
 	'',
 	'create object instance proxy of SumoSimulatorProxy;
 proxy.startupWaitTime = 2000000;
 create event instance startupDelay of SumoSimulatorProxy_A6:startupDelay() to SumoSimulatorProxy class;
 timer = TIM::timer_start(event_inst: startupDelay, microseconds: proxy.startupWaitTime);',
-	"2f680072-c968-4338-9318-9a5ae45303f1",
+	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
-	'');
-INSERT INTO S_DT_PROXY
-	VALUES ("2f680072-c968-4338-9318-9a5ae45303f1",
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("aad258ff-2d75-4a72-8bfc-994a15ba1e12",
+	1,
+	"9425c889-1cdc-4b3c-8fd5-4973b8f13158",
 	"00000000-0000-0000-0000-000000000000",
-	'void',
+	1);
+INSERT INTO PE_PE
+	VALUES ("9425c889-1cdc-4b3c-8fd5-4973b8f13158",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"01e133da-b257-409b-bdc7-5c83230d920a",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("01e133da-b257-409b-bdc7-5c83230d920a",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'NXT',
 	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
 	'',
-	'../../../Datatypes/Datatypes.xtuml');
+	'../NXT.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("21bba8bf-80a0-498d-9b95-6047aabbb779",
+	'Sumo',
+	1,
+	'../../../Sumo.xtuml');
