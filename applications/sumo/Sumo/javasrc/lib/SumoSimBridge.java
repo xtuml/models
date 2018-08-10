@@ -1,9 +1,3 @@
-//========================================================================
-//
-//(c) Copyright 2007 by Mentor Graphics Corp. All rights reserved.
-//
-//========================================================================
- 
 package lib;
 
 import java.io.BufferedReader;
@@ -14,10 +8,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.StringTokenizer;
 
-import com.mentor.nucleus.bp.core.ComponentInstance_c;
-import com.mentor.nucleus.bp.core.CorePlugin;
-import com.mentor.nucleus.bp.core.PendingEvent_c;
-
+import org.xtuml.bp.core.ComponentInstance_c;
+import org.xtuml.bp.core.CorePlugin;
+import org.xtuml.bp.core.PendingEvent_c;
 
 public class SumoSimBridge {
 	
