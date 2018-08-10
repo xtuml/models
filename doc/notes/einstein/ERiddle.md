@@ -12,11 +12,19 @@ Constraint Modeling with Albert Einstein
 - presentation/teaching drama (hats, cigars, cups, stuffed animals, house color, address numbers)
 
 
+### References
+
+[1](https://support.onefact.net/issues/10321) Write Einstein's Riddle  
+[2](https://en.wikipedia.org/wiki/Zebra_Puzzle) Zebra Puzzle  
+[3](https://en.wikipedia.org/wiki/Manipulative_(mathematics_education)) manipulative  
+
+
 ---------------------------------
 
 ### Abstract
-Einstein's Riddle is a multi-dimensional constraint satisfaction problem
-which is captivating, challenging and solvable by humans with or without
+_Einstein's Riddle_ (also known as the _Zebra Puzzle_ [2]) is a
+multi-dimensional constraint satisfaction problem which is captivating,
+challenging and solvable by humans with or without
 computing machinery.  It serves as an entertaining platform for the study
 of constraint satisfaction problems and tools.  This paper presents a solver
 of Einstein's Riddle modeled in xtUML.  Constraints are modeled as links
@@ -48,12 +56,22 @@ and its capabilities, advantages and disadvantages are explored.
 
 This paper reports the experience of modeling Einstein's Riddle in Executable UML (xtUML).
 The riddle has been solved in other languages specific to Satisfiability Modulo Theories (SMT).
-The general purpose UML model is compared and contrasted with SMT solvers (such as one implemented in Z3).
-The applicability of SMT tree walker/solvers to executable UML metamodels is explored.
+?? The general purpose UML model is compared and contrasted with SMT solvers (such as one implemented in Z3).
+?? The applicability of SMT tree walker/solvers to executable UML metamodels is explored.
 Observations are made and questions for future work are raised.
 
 
 ### Solving by Hand
+I was introduced to Einstein's Riddle by a friend.  He had recently learned
+about it and solved it himself.  Upon receiving it, I looked and noticed that
+it seemed solvable on the surface.  At home, I spent 20 minutes noodling with
+it using a scratch piece of paper.  This further confirmed to my mind that
+the problem was challenging but solvable by hand, but that it would take a
+methodical approach and more time.
+
+I needed _manipulatives_ 
+
+
 ### The Mathematics
 ### xtUML Model
 #### Assertions
