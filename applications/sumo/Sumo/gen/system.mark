@@ -5,9 +5,6 @@
 .// This marking file is used to indicate system wide tuning parameters 
 .// to the software architecture's translation engine.
 .//
-.// Notice:
-.// (C) Copyright 1999-2009 Mentor Graphics Corporation
-.//     All rights reserved.
 .//============================================================================
 .// Notes:
 .// (1) Marking is specified via archetype function invocation(s) in this file.
@@ -17,7 +14,6 @@
 .// (3) Comments in this file start with ".//".
 .// (4) Do not leave any blank lines in this file.
 .//============================================================================
-.//
 .//
 .//============================================================================
 .// Identify System Configuration (collection of components wired into system)
@@ -35,9 +31,7 @@
 .// Example:
 .//   .invoke MarkSystemConfigurationPackage( "system1" )
 .//============================================================================
-.//
-.invoke MarkSystemConfigurationPackage( "SumoRobot" )
-.//
+.invoke MarkSystemConfigurationPackage( "SumoRobotEV3" )
 .//============================================================================
 .// Enable Multi-tasking/threading Capability
 .//   To cause MC-3020 to generate multi-tasking/threading code invoke
@@ -62,6 +56,12 @@
 .//   .invoke EnableTasking( "Windows", "", 3 )
 .//============================================================================
 .//
+.// NXT
+.//.invoke EnableTasking("NxtOSEK","",1)
+.//.invoke SetTaskStackSize(0,512)
+.// EV3
+.invoke EnableTasking("EV3HRP","",1)
+.invoke SetTaskStackSize(0,4096)
 .//
 .//============================================================================
 .// Establish Task Priority
@@ -81,6 +81,10 @@
 .//   .invoke SetTaskPriority( 3, "high" )
 .//============================================================================
 .//
+.// NXT
+.//.invoke SetTaskPriority( 0, "15" )
+.// EV3
+.invoke SetTaskPriority( 0, "0" )
 .//
 .//============================================================================
 .// TagMaximumStringLength( max_len )
@@ -250,6 +254,13 @@
 .//   .invoke MarkPersistenceCacheDepth( 300, 220 )
 .//============================================================================
 .//
+.//============================================================================
+.// Device Configuration for MCLM
+.// 
+.//============================================================================
+.invoke TagMotorConfig("LEFT","PORT_C","L",FALSE)
+.invoke TagMotorConfig("RIGHT","PORT_B","L",FALSE)
+.invoke TagSensorConfig("COLOR","3")
 .//
 .//============================================================================
 .// Do not add anything at the end of this file!
