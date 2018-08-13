@@ -1,1 +1,1 @@
-APPL_COBJS += EV3.o EV3B_bridge.o EV3COL_bridge.o EV3GYR_bridge.o EV3M_bridge.o EV3TCH_bridge.o EV3ULS_bridge.o EV3_EV3_class.o LOG_bridge.o Sumo_sys_main.o TIM_bridge.o app.o sumo.o sumo_drive_class.o sumo_navigate_class.o sumo_steering_class.o sys_thread.o sys_user_co.o sys_xtuml.o
+APPL_COBJS += EV3.o EV3B_bridge.o EV3COL_bridge.o EV3GYR_bridge.o EV3M_bridge.o EV3TCH_bridge.o EV3TCH2_bridge.o EV3ULS_bridge.o EV3_EV3_class.o LOG_bridge.o Sumo_sys_main.o TIM_bridge.o sumo.o sumo_drive_class.o sumo_navigate_class.o sumo_steering_class.o sys_thread.o sys_user_co.o sys_xtuml.o

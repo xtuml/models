@@ -243,18 +243,8 @@ INSERT INTO SPR_PS
 	VALUES ("c9725879-2f11-4f7b-8dcf-b921744f33cf",
 	'go',
 	'',
-	'if ( Direction::backward == param.direction )
-  result = EV3M::set_power( motor:EV3Motor::LEFT, power:-100 );
-  result = EV3M::set_power( motor:EV3Motor::RIGHT, power:-100 );
-elif ( Direction::forward == param.direction )
-  result = EV3M::set_power( motor:EV3Motor::LEFT, power:100 );
-  result = EV3M::set_power( motor:EV3Motor::RIGHT, power:100 );
-elif ( Direction::stop == param.direction )
-  result = EV3M::stop( motor:EV3Motor::LEFT, brake:true );
-  result = EV3M::stop( motor:EV3Motor::RIGHT, brake:true );
-else
-  LOG::LogFailure( message:"Invalid direction" );
-end if;',
+	'select any robot from instances of EV3;
+generate EV33:go( direction:param.direction ) to robot;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -273,18 +263,8 @@ INSERT INTO SPR_PS
 	'turn',
 	'd = SumoSimulatorProxy::orientation2int(orientation: param.orientation);
 SumoSimBridge::turn(orientation: d);',
-	'if ( Orientation::left == param.orientation )
-  result = EV3M::set_power( motor:EV3Motor::LEFT, power:-100 );
-  result = EV3M::set_power( motor:EV3Motor::RIGHT, power:100 );
-elif ( Orientation::right == param.orientation )
-  result = EV3M::set_power( motor:EV3Motor::LEFT, power:100 );
-  result = EV3M::set_power( motor:EV3Motor::RIGHT, power:-100 );
-elif ( Orientation::straight == param.orientation )
-  result = EV3M::set_power( motor:EV3Motor::LEFT, power:100 );
-  result = EV3M::set_power( motor:EV3Motor::RIGHT, power:100 );
-else
-  LOG::LogFailure( message:"Invalid orientation" );
-end if;',
+	'select any robot from instances of EV3;
+generate EV34:turn( orientation:param.orientation ) to robot;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -306,9 +286,9 @@ INSERT INTO SPR_PS
 	'EV3B::lcd_set_font( font:EV3Font::MEDIUM );
 EV3B::lcd_draw_string( string:param.name, x:0, y:0 );
 select any robot from instances of EV3;
-if ( not_empty robot )
-  generate EV31:tick() to robot;
-end if;',
+generate EV35:initialized() to robot;
+create event instance tickDelay of EV31:tick() to robot;
+timer = TIM::timer_start(event_inst:tickDelay, microseconds:robot.tickTime);',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
