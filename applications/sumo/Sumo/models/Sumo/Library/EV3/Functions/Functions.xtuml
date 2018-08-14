@@ -70,9 +70,28 @@ generate button6:tick() to enter_button;
 create object instance chassis of chassis;
 relate chassis to robot across R5;
 
-// display message
-EV3B::lcd_draw_string( string:"                    ", x:0, y:0 );
-EV3B::lcd_draw_string( string:"config line", x:0, y:0 );',
+// start the configuration process
+line_threshhold_value = 0;
+field_threshhold_value = 0;
+if ( CONFIG::getIntegerProperty( name:"line", value:line_threshhold_value ) and CONFIG::getIntegerProperty( name:"field", value:field_threshhold_value ) )
+  create object instance line_threshhold of threshhold;
+  line_threshhold.type = threshhold_type::line;
+  line_threshhold.value = line_threshhold_value;
+  relate line_threshhold to light_sensor across R4;
+  LOG::LogInfo( message:"Line threshhold value:" );
+  LOG::LogInteger( message:line_threshhold.value );
+  create object instance field_threshhold of threshhold;
+  field_threshhold.type = threshhold_type::field;
+  field_threshhold.value = field_threshhold_value;
+  relate field_threshhold to light_sensor across R4;
+  LOG::LogInfo( message:"Field threshhold value:" );
+  LOG::LogInteger( message:field_threshhold.value );
+  generate robot8:configuration_complete() to robot;
+else
+  // display config message
+  EV3B::lcd_draw_string( string:"                    ", x:0, y:0 );
+  EV3B::lcd_draw_string( string:"config line", x:0, y:0 );
+end if;',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',

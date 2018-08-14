@@ -215,7 +215,11 @@ INSERT INTO SM_ACT
 	VALUES ("42da6add-bc50-4fc4-a59e-9a59a8d5d96d",
 	"748492c0-e38a-4358-9621-988d2a2b5ad1",
 	1,
-	'select one robot related by self->robot[R5];
+	'// stop motors
+result = EV3M::stop( motor:EV3Motor::LEFT, brake:true );
+result = EV3M::stop( motor:EV3Motor::RIGHT, brake:true );
+
+select one robot related by self->robot[R5];
 unrelate self from robot across R5;',
 	'',
 	0);
