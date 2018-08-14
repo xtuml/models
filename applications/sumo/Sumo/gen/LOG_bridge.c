@@ -17,7 +17,7 @@
 #include "LOG_bridge.h"
 #include "TIM_bridge.h"
 
-extern void bt_printf(const char * restrict format, ...);
+extern void sumo_log_printf(const char * restrict format, ...);
 
 /*
  * Bridge:  LogSuccess
@@ -25,7 +25,7 @@ extern void bt_printf(const char * restrict format, ...);
 void
 LOG_LogSuccess( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  bt_printf("SUCCESS: %s", p_message);
+  sumo_log_printf("SUCCESS: %s\n", p_message);
 }
 
 
@@ -35,7 +35,7 @@ LOG_LogSuccess( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 void
 LOG_LogFailure( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  bt_printf("FAILURE: %s", p_message);
+  sumo_log_printf("FAILURE: %s\n", p_message);
 }
 
 
@@ -45,7 +45,7 @@ LOG_LogFailure( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 void
 LOG_LogInfo( c_t p_message[ESCHER_SYS_MAX_STRING_LEN] )
 {
-  bt_printf("INFO: %s", p_message);
+  sumo_log_printf("INFO: %s\n", p_message);
 }
 
 
@@ -75,7 +75,7 @@ LOG_LogTime( c_t p_message[ESCHER_SYS_MAX_STRING_LEN], Escher_TimeStamp_t p_t )
 void
 LOG_LogReal( c_t p_message[ESCHER_SYS_MAX_STRING_LEN], const r_t p_r )
 {
-  bt_printf("INFO: %s: %f", p_message, p_r);
+  sumo_log_printf("INFO: %s: %f\n", p_message, p_r);
 }
 
 
@@ -85,6 +85,6 @@ LOG_LogReal( c_t p_message[ESCHER_SYS_MAX_STRING_LEN], const r_t p_r )
 void
 LOG_LogInteger( const i_t p_message )
 {
-  bt_printf("INFO: %d", p_message);
+  sumo_log_printf("INFO: %d\n", p_message);
 }
 

@@ -243,8 +243,11 @@ INSERT INTO SPR_PS
 	VALUES ("c9725879-2f11-4f7b-8dcf-b921744f33cf",
 	'go',
 	'',
-	'select any robot from instances of EV3;
-generate EV33:go( direction:param.direction ) to robot;',
+	'select any robot from instances of robot;
+select one chassis related by robot->chassis[R5];
+if ( not_empty chassis )
+  generate chassis6:go( direction:param.direction ) to chassis;
+end if;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -263,8 +266,11 @@ INSERT INTO SPR_PS
 	'turn',
 	'd = SumoSimulatorProxy::orientation2int(orientation: param.orientation);
 SumoSimBridge::turn(orientation: d);',
-	'select any robot from instances of EV3;
-generate EV34:turn( orientation:param.orientation ) to robot;',
+	'select any robot from instances of robot;
+select one chassis related by robot->chassis[R5];
+if ( not_empty chassis )
+  generate chassis7:turn( orientation:param.orientation ) to chassis;
+end if;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -283,12 +289,10 @@ INSERT INTO SPR_PS
 	VALUES ("ddf09f12-82e6-42d6-8b23-0572718e50ee",
 	'setName',
 	'',
-	'EV3B::lcd_set_font( font:EV3Font::MEDIUM );
-EV3B::lcd_draw_string( string:param.name, x:0, y:0 );
-select any robot from instances of EV3;
-generate EV35:initialized() to robot;
-create event instance tickDelay of EV31:tick() to robot;
-timer = TIM::timer_start(event_inst:tickDelay, microseconds:robot.tickTime);',
+	'select any robot from instances of robot;
+if ( not_empty robot )
+  generate robot5:setName( name:param.name ) to robot;
+end if;',
 	1,
 	0);
 INSERT INTO C_EP_PROXY

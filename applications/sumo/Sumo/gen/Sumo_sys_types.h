@@ -15,7 +15,7 @@
  * MaxSelectExtent:  0
  * MaxSelfEvents:  0
  * MaxNonSelfEvents:  0
- * MaxTimers:  19
+ * MaxTimers:  27
  * MaxInterleavedBridges:  0
  * MaxInterleavedBridgeDataSize:  8
  * CollectionsFlavor:  0
@@ -26,13 +26,13 @@
  * PersistLinkCacheDepth:  128
  *
  * Component Name:  EV3
- * MaxObjExtent:  10
- * MaxRelExtent:  0
- * MaxSelectExtent:  0
- * MaxSelfEvents:  2
- * MaxNonSelfEvents:  3
+ * MaxObjExtent:  60
+ * MaxRelExtent:  30
+ * MaxSelectExtent:  20
+ * MaxSelfEvents:  3
+ * MaxNonSelfEvents:  4
  * MaxPriorityEvents:  0
- * MaxTimers:  9
+ * MaxTimers:  13
  * InterleavedBridges:  0
  * PEIClassCount:  0
  * PersistentClassCount:  0
@@ -42,11 +42,11 @@
  * Component Name:  sumo
  * MaxObjExtent:  30
  * MaxRelExtent:  0
- * MaxSelectExtent:  0
- * MaxSelfEvents:  2
- * MaxNonSelfEvents:  3
+ * MaxSelectExtent:  20
+ * MaxSelfEvents:  3
+ * MaxNonSelfEvents:  4
  * MaxPriorityEvents:  0
- * MaxTimers:  9
+ * MaxTimers:  13
  * InterleavedBridges:  0
  * PEIClassCount:  0
  * PersistentClassCount:  0
@@ -92,13 +92,13 @@ typedef unsigned char bool;
 #define ESCHER_SYS_MAX_STRING_LEN 32
 #define ESCHER_PERSIST_INST_CACHE_DEPTH 128
 #define ESCHER_PERSIST_LINK_CACHE_DEPTH 128
-#define ESCHER_SYS_MAX_ASSOCIATION_EXTENT 0
-#define ESCHER_SYS_MAX_TRANSIENT_EXTENT 0
+#define ESCHER_SYS_MAX_ASSOCIATION_EXTENT 30
+#define ESCHER_SYS_MAX_TRANSIENT_EXTENT 40
 #define SYS_MAX_CONTAINERS ( ESCHER_SYS_MAX_ASSOCIATION_EXTENT + ESCHER_SYS_MAX_TRANSIENT_EXTENT )
-#define ESCHER_SYS_MAX_SELF_EVENTS 6
-#define ESCHER_SYS_MAX_NONSELF_EVENTS 8
+#define ESCHER_SYS_MAX_SELF_EVENTS 8
+#define ESCHER_SYS_MAX_NONSELF_EVENTS 10
 #define ESCHER_SYS_MAX_XTUML_EVENTS ( ESCHER_SYS_MAX_SELF_EVENTS + ESCHER_SYS_MAX_NONSELF_EVENTS )
-#define ESCHER_SYS_MAX_XTUML_TIMERS 19
+#define ESCHER_SYS_MAX_XTUML_TIMERS 27
 #define ESCHER_SYS_MAX_INTERLEAVED_BRIDGES 0
 #define ESCHER_SYS_MAX_INTERLEAVED_BRIDGE_DATA 8
 
@@ -393,17 +393,17 @@ typedef enum {
 /* To suppress source identification in tracing, uncomment the following macro */
 /* #define XTUML_SOURCE_PROLOGUE */
 
-extern void bt_printf(const char * restrict format, ...);
+extern void sumo_log_printf(const char * restrict format, ...);
 
 #ifndef XTUML_SOURCE_PROLOGUE
-#define XTUML_SOURCE_PROLOGUE bt_printf( "%s #%6u: ", __FILE__, __LINE__ ); XTUML_TRACE_FLUSH( 0 )
+#define XTUML_SOURCE_PROLOGUE sumo_log_printf( "%s #%6u: ", __FILE__, __LINE__ ); XTUML_TRACE_FLUSH( 0 )
 #endif
 
 /* To suppress state transition start tracing, uncomment the following macro */
 /* #define STATE_TXN_START_TRACE( obj_kl, state_num, state_name ) */
 
 #ifndef STATE_TXN_START_TRACE
-#define STATE_TXN_START_TRACE( obj_kl, state_num, state_name ) do {   XTUML_SOURCE_PROLOGUE;   bt_printf( "Transition started:  %s State [%u] %s\n", obj_kl, state_num, state_name ); } while (0)
+#define STATE_TXN_START_TRACE( obj_kl, state_num, state_name ) do {   XTUML_SOURCE_PROLOGUE;   sumo_log_printf( "Transition started:  %s State [%u] %s\n", obj_kl, state_num, state_name ); } while (0)
 #endif
 
 /*
@@ -413,7 +413,7 @@ extern void bt_printf(const char * restrict format, ...);
 /* #define STATE_TXN_END_TRACE( obj_kl, state_num, state_name ) */
 
 #ifndef STATE_TXN_END_TRACE
-#define STATE_TXN_END_TRACE( obj_kl, state_num, state_name ) do {   XTUML_SOURCE_PROLOGUE;   bt_printf( "Transition complete:  %s State [%u] %s\n", obj_kl, state_num, state_name );   XTUML_TRACE_FLUSH( 0 ); } while (0)
+#define STATE_TXN_END_TRACE( obj_kl, state_num, state_name ) do {   XTUML_SOURCE_PROLOGUE;   sumo_log_printf( "Transition complete:  %s State [%u] %s\n", obj_kl, state_num, state_name );   XTUML_TRACE_FLUSH( 0 ); } while (0)
 #endif
 
 /*
@@ -423,7 +423,7 @@ extern void bt_printf(const char * restrict format, ...);
 #define STATE_TXN_IG_TRACE( obj_kl, state_num )
 
 #ifndef STATE_TXN_IG_TRACE
-#define STATE_TXN_IG_TRACE( obj_kl, state_num ) do {   XTUML_SOURCE_PROLOGUE;   bt_printf( "Event ignored:  %s current_state = %u\n", obj_kl, state_num );   XTUML_TRACE_FLUSH( 0 ); } while (0)
+#define STATE_TXN_IG_TRACE( obj_kl, state_num ) do {   XTUML_SOURCE_PROLOGUE;   sumo_log_printf( "Event ignored:  %s current_state = %u\n", obj_kl, state_num );   XTUML_TRACE_FLUSH( 0 ); } while (0)
 #endif
 
 /*
@@ -433,7 +433,7 @@ extern void bt_printf(const char * restrict format, ...);
 /* #define STATE_TXN_CH_TRACE( obj_kl, state_num ) */
 
 #ifndef STATE_TXN_CH_TRACE
-#define STATE_TXN_CH_TRACE( obj_kl, state_num ) do {   XTUML_SOURCE_PROLOGUE;   bt_printf( "Event cannot happen:  %s current_state = %u\n", obj_kl, state_num );   XTUML_TRACE_FLUSH( 0 ); } while (0)
+#define STATE_TXN_CH_TRACE( obj_kl, state_num ) do {   XTUML_SOURCE_PROLOGUE;   sumo_log_printf( "Event cannot happen:  %s current_state = %u\n", obj_kl, state_num );   XTUML_TRACE_FLUSH( 0 ); } while (0)
 #endif
 
 /*
@@ -443,7 +443,7 @@ extern void bt_printf(const char * restrict format, ...);
 /* #define COMP_MSG_START_TRACE( arg_format, component_number, port_number, message_number, args... ) */
 
 #ifndef COMP_MSG_START_TRACE
-#define COMP_MSG_START_TRACE( arg_format, component_number, port_number, message_number, args... ) do {   XTUML_SOURCE_PROLOGUE;   bt_printf( "component %d port %d message %d " arg_format "\n", component_number, port_number, message_number, ## args );   XTUML_TRACE_FLUSH( 0 ); } while (0)
+#define COMP_MSG_START_TRACE( arg_format, component_number, port_number, message_number, args... ) do {   XTUML_SOURCE_PROLOGUE;   sumo_log_printf( "component %d port %d message %d " arg_format "\n", component_number, port_number, message_number, ## args );   XTUML_TRACE_FLUSH( 0 ); } while (0)
 #endif
 
 /*
@@ -459,7 +459,7 @@ extern void bt_printf(const char * restrict format, ...);
 /* #define XTUML_OAL_STMT_TRACE( blck_level, stmt_action ) */
 
 #ifndef XTUML_OAL_STMT_TRACE
-#define XTUML_OAL_STMT_TRACE( blck_level, stmt_action ) do {   XTUML_SOURCE_PROLOGUE;   { /* indenting */ s1_t i; for ( i = 0; i < blck_level; i++ ) bt_printf( "  " ); }   bt_printf( "%s\n", stmt_action );   XTUML_TRACE_FLUSH( 0 ); } while (0)
+#define XTUML_OAL_STMT_TRACE( blck_level, stmt_action ) do {   XTUML_SOURCE_PROLOGUE;   { /* indenting */ s1_t i; for ( i = 0; i < blck_level; i++ ) sumo_log_printf( "  " ); }   sumo_log_printf( "%s\n", stmt_action );   XTUML_TRACE_FLUSH( 0 ); } while (0)
 #endif
 
 /* To suppress empty handle detection, modify the following macro.  */

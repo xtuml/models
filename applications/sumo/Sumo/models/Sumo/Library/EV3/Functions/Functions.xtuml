@@ -38,12 +38,41 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'startWithDelay',
 	'',
-	'create object instance robot of EV3;
+	'EV3B::lcd_set_font( font:EV3Font::MEDIUM );
+
+// create robot
+create object instance robot of robot;
 robot.startupWaitTime = 2000000;  // 2 s
 robot.tickTime = 10000;           // 10 ms
-robot.darkThreshhold = 15;
-create event instance startupDelay of EV31:tick() to robot;
-timer = TIM::timer_start(event_inst:startupDelay, microseconds:robot.startupWaitTime);',
+
+// create light sensor
+create object instance light_sensor of lightsensor;
+relate light_sensor to robot across R2;
+generate lightsensor5:tick() to light_sensor;
+
+// create touch sensors
+create object instance left_touch_sensor of touchsensor;
+left_touch_sensor.port = 1;
+relate left_touch_sensor to robot across R1;
+generate touchsensor1:tick() to left_touch_sensor;
+create object instance right_touch_sensor of touchsensor;
+right_touch_sensor.port = 2;
+relate right_touch_sensor to robot across R1;
+generate touchsensor1:tick() to right_touch_sensor;
+
+// create button
+create object instance enter_button of button;
+enter_button.type = EV3Button::ENTER_BUTTON;
+relate enter_button to robot across R3;
+generate button6:tick() to enter_button;
+
+// create chassis
+create object instance chassis of chassis;
+relate chassis to robot across R5;
+
+// display message
+EV3B::lcd_draw_string( string:"                    ", x:0, y:0 );
+EV3B::lcd_draw_string( string:"config line", x:0, y:0 );',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
