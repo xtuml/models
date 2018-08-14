@@ -328,8 +328,6 @@ select any field_threshhold related by self->threshhold[R4] where ( selected.typ
 select any line_threshhold related by self->threshhold[R4] where ( selected.type == threshhold_type::line );
 if ( not_empty field_threshhold and not_empty line_threshhold )
   reflect_val = EV3COL::get_reflect();
-  LOG::LogInfo( message:"Reflect val: " );
-  LOG::LogInteger( message:reflect_val );
   if ( ( field_threshhold.value > line_threshhold.value and reflect_val < (line_threshhold.value + ((field_threshhold.value - line_threshhold.value) / 4)) ) or
        ( field_threshhold.value <= line_threshhold.value and reflect_val > (line_threshhold.value - ((line_threshhold.value - field_threshhold.value) / 4)) ) )
     generate lightsensor3:line_detected() to self;
@@ -397,8 +395,6 @@ INSERT INTO SM_ACT
 select any line_threshhold related by self->threshhold[R4] where ( selected.type == threshhold_type::line );
 if ( not_empty field_threshhold and not_empty line_threshhold )
   reflect_val = EV3COL::get_reflect();
-  LOG::LogInfo( message:"Reflect val: " );
-  LOG::LogInteger( message:reflect_val );
   if ( ( field_threshhold.value > line_threshhold.value and reflect_val > (line_threshhold.value + ((field_threshhold.value - line_threshhold.value) / 4)) ) or
        ( field_threshhold.value <= line_threshhold.value and reflect_val < (line_threshhold.value - ((line_threshhold.value - field_threshhold.value) / 4)) ) )
     generate lightsensor4:line_lost() to self;
