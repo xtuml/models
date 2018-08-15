@@ -26,7 +26,7 @@ public class SumoRing extends JFrame {
 	public static Object lock = new Object();
 
 	public static final float SCALE_FACTOR       = 4;
-	public static final float RING_RADIUS        = 40f;
+	public static final float RING_RADIUS        = 60f;
 	public static final float RING_SIDE          = 10f;
 	public static final int   RING_SIDE_PX       = (int)(RING_SIDE * SCALE_FACTOR);
 	public static final float LINE_THINKNESS     = 4f; 
@@ -51,13 +51,11 @@ public class SumoRing extends JFrame {
 	private World sumoRing;
 	private SumoRobot sumo1;
 	private SumoRobot sumo2;
-	private BufferedImage logo;
 	private JComponent testCanvas;
 	private Graphics2D g2d;
 	private String gameTitle = "";
 	private Font font;
 	private boolean gameOver = false;
-	private final Color logoColor = new Color(178, 61,81);
 	private String name = "Unknown";
 	private int sumo1Score = 0;
 	private int sumo2Score = 0;
@@ -67,7 +65,6 @@ public class SumoRing extends JFrame {
 	public SumoRing() {
 		this.proxy = new SumoSimulatorProxy(this);
 		
-		logo = loadImage("lib/img/logo.png");
 		setTitle("Sumo Simulator");
 		setSize(new Dimension(SCREEN_DIAMETER_PX + 18, SCREEN_DIAMETER_PX + 45));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,10 +113,10 @@ public class SumoRing extends JFrame {
 		
 		// swap position every second finished game
 		if (numberGames % 2 == 0) {
-			sumo1 = new SumoRobot(sumoRing, new Vector2f(RING_CENTER_X - 3, RING_CENTER_Y + 10), 0, 25, 20, null);
+			sumo1 = new SumoRobot(sumoRing, new Vector2f(RING_CENTER_X - 3, RING_CENTER_Y + 10), 0, 50, 50, null);
 			sumo2 = new SumoRobot(sumoRing, new Vector2f(RING_CENTER_X + 3, RING_CENTER_Y - 10), PI, 80, 20, proxy);
 		} else {
-			sumo1 = new SumoRobot(sumoRing, new Vector2f(RING_CENTER_X + 3, RING_CENTER_Y - 10), PI, 20, 25, null);
+			sumo1 = new SumoRobot(sumoRing, new Vector2f(RING_CENTER_X + 3, RING_CENTER_Y - 10), PI, 50, 50, null);
 			sumo2 = new SumoRobot(sumoRing, new Vector2f(RING_CENTER_X - 3, RING_CENTER_Y + 10), 0, 80, 20, proxy);
 		}
 		sumo2.setName(name);
@@ -130,6 +127,8 @@ public class SumoRing extends JFrame {
 
 	public void registerSumo(String name) {
 		this.name = name;
+		sumo2.setName(name);
+		gameTitle = "Computer vs. " + name;
 	}
 	
 	public void tick() {
@@ -165,8 +164,6 @@ public class SumoRing extends JFrame {
 
 			g2d.drawOval(RING_SIDE_PX, RING_SIDE_PX, RING_DIAMETER_PX, RING_DIAMETER_PX);
 			
-			g2d.drawImage(logo, - 110 + SCREEN_RADIUS_PX, - 40 + SCREEN_RADIUS_PX, null);
-			g2d.setColor(logoColor);
 			g2d.drawString(score, SCREEN_RADIUS_PX - (int)scoreRect.getWidth() / 2, SCREEN_RADIUS_PX + 90);
 			g2d.drawString(gameTitle, SCREEN_RADIUS_PX - (int)sumosRect.getWidth() / 2, SCREEN_RADIUS_PX + 60);
 			

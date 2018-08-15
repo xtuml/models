@@ -17,12 +17,13 @@ import net.phys2d.raw.shapes.Box;
 
 public class SumoRobot {
 	private static final float BODY_WIDTH  = 11f;
-	private static final float BODY_LENGTH = 11f;
-	private static final float BODY_WEIGHT = 0.650f;
+	private static final float BODY_LENGTH = 15f;
+	private static final float BODY_WEIGHT = 0.850f;
 	
-	private static final float CATERPILLAR_WIDTH  = 2f;
-	private static final float CATERPILLAR_LENGTH = 13f;
-	private static final float CATERPILLAR_WEIGHT  = 0.05f;
+	private static final float WHEEL_WIDTH  = 2f;
+	private static final float WHEEL_LENGTH = 15f;
+	private static final float WHEEL_WEIGHT  = 0.05f;
+	private static final float WHEEL_OFFSET  = 4f;
 	
 	private static final float BUMPER_WIDTH  = 7f;
 	private static final float BUMPER_LENGTH = 4f;
@@ -30,13 +31,13 @@ public class SumoRobot {
 	private static final float BUMPER_OFFSET = 4f;
 
 	private static final float BODY_BUMPER_DIST = 10.5f;
-	private static final float BODY_CP_DIST     = 6.5f;
+	private static final float BODY_WHEEL_DIST     = 6.5f;
 	
-	private static final float CATERPILLAR_FRICTION = 3.0f;
+	private static final float WHEEL_FRICTION = 10.0f;
 	
 	private Body body;
-	private Body leftCp;
-	private Body rightCp;
+	private Body leftWheel;
+	private Body rightWheel;
 	private Body leftBumper;
 	private Body rightBumper;
 	private int leftSpeed = SumoRing.DIRECTION_STOP;
@@ -45,7 +46,7 @@ public class SumoRobot {
 	private int cachedRightSpeed = rightSpeed;
 	
 	private static final int ATTACKING = 0;
-	private static final int RETRIETING = 1;
+	private static final int RETREATING = 1;
 	private static final int AIMING = 2;
 	private int state = ATTACKING;
 	private int timer = -1; 
@@ -78,16 +79,16 @@ public class SumoRobot {
 		this.retTime = rt;
 		this.aimTime = at;
 		
-		body    = new Body(new Box(BODY_LENGTH, BODY_WIDTH), BODY_WEIGHT);
-		leftCp  = new Body(new Box(CATERPILLAR_LENGTH, CATERPILLAR_WIDTH), CATERPILLAR_WEIGHT);
-		rightCp = new Body(new Box(CATERPILLAR_LENGTH, CATERPILLAR_WIDTH), CATERPILLAR_WEIGHT);
+		body = new Body(new Box(BODY_LENGTH, BODY_WIDTH), BODY_WEIGHT);
+		leftWheel = new Body(new Box(WHEEL_LENGTH, WHEEL_WIDTH), WHEEL_WEIGHT);
+		rightWheel = new Body(new Box(WHEEL_LENGTH, WHEEL_WIDTH), WHEEL_WEIGHT);
 		leftBumper = new Body(new Box(BUMPER_LENGTH, BUMPER_WIDTH), BUMPER_WEIGHT) {
 			@Override
 			public strictfp void collided(Body other) {
 				super.collided(other);
 				if (SumoRobot.this.proxy != null) {
 					// don't act on collisions with bodies that belong to this sumo
-					if (other != body && other != leftCp && other != rightBumper) {
+					if (other != body && other != leftWheel && other != rightBumper) {
 						leftcounter++;
 					}
 				}
@@ -99,60 +100,62 @@ public class SumoRobot {
 				super.collided(other);
 				if (SumoRobot.this.proxy != null) {
 					// don't act on collisions with bodies that belong to this sumo
-					if (other != body && other != rightCp && other != leftBumper) {
+					if (other != body && other != rightWheel && other != leftBumper) {
 						rightcounter++;
 					}
 				}
 			}
 		};
+		leftWheel.addExcludedBody(leftBumper);
+		rightWheel.addExcludedBody(rightBumper);
 		
 		// for some reason we have to rotate it 
 		BufferedImage bodyImgBuf = new BufferedImage((int)(BODY_LENGTH * SumoRing.SCALE_FACTOR), (int)(BODY_WIDTH * SumoRing.SCALE_FACTOR), BufferedImage.TYPE_INT_RGB);
-		BufferedImage leftCpImgBuf = new BufferedImage((int)(CATERPILLAR_LENGTH * SumoRing.SCALE_FACTOR), (int)(CATERPILLAR_WIDTH * SumoRing.SCALE_FACTOR), BufferedImage.TYPE_INT_RGB);
-		BufferedImage rightCpImgBuf = new BufferedImage((int)(CATERPILLAR_LENGTH * SumoRing.SCALE_FACTOR), (int)(CATERPILLAR_WIDTH * SumoRing.SCALE_FACTOR), BufferedImage.TYPE_INT_RGB);
+		BufferedImage leftWheelImgBuf = new BufferedImage((int)(WHEEL_LENGTH * SumoRing.SCALE_FACTOR), (int)(WHEEL_WIDTH * SumoRing.SCALE_FACTOR), BufferedImage.TYPE_INT_RGB);
+		BufferedImage rightWheelImgBuf = new BufferedImage((int)(WHEEL_LENGTH * SumoRing.SCALE_FACTOR), (int)(WHEEL_WIDTH * SumoRing.SCALE_FACTOR), BufferedImage.TYPE_INT_RGB);
 		BufferedImage leftBumperImgBuf = new BufferedImage((int)(BUMPER_LENGTH * SumoRing.SCALE_FACTOR), (int)(BUMPER_WIDTH * SumoRing.SCALE_FACTOR), BufferedImage.TYPE_INT_RGB);
 		BufferedImage rightBumperImgBuf = new BufferedImage((int)(BUMPER_LENGTH * SumoRing.SCALE_FACTOR), (int)(BUMPER_WIDTH * SumoRing.SCALE_FACTOR), BufferedImage.TYPE_INT_RGB);
 		
 		Graphics2D bodyImg = bodyImgBuf.createGraphics();
-		Graphics2D leftCpImg = leftCpImgBuf.createGraphics();
-		Graphics2D rightCpImg = rightCpImgBuf.createGraphics();
+		Graphics2D leftWheelImg = leftWheelImgBuf.createGraphics();
+		Graphics2D rightWheelImg = rightWheelImgBuf.createGraphics();
 		Graphics2D leftBumperImg = leftBumperImgBuf.createGraphics();
 		Graphics2D rightBumperImg = rightBumperImgBuf.createGraphics();
 		
 		bodyImg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		leftCpImg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		rightCpImg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		leftWheelImg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		rightWheelImg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		leftBumperImg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		rightBumperImg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		bodyImg.setColor(Color.GRAY);
-		leftCpImg.setColor(Color.BLACK);
-		rightCpImg.setColor(Color.BLACK);
+		leftWheelImg.setColor(Color.BLACK);
+		rightWheelImg.setColor(Color.BLACK);
 		leftBumperImg.setColor(Color.RED);
 		rightBumperImg.setColor(Color.GREEN);
 		
 		bodyImg.fillRect(0, 0, 100, 100);
-		leftCpImg.fillRect(0, 0, 100, 100);
-		rightCpImg.fillRect(0, 0, 100, 100);
+		leftWheelImg.fillRect(0, 0, 100, 100);
+		rightWheelImg.fillRect(0, 0, 100, 100);
 		leftBumperImg.fillRect(0, 0, 100, 100);
 		rightBumperImg.fillRect(0, 0, 100, 100);
 		
 		body.setUserData(new Offset(-BODY_LENGTH / 2f * SumoRing.SCALE_FACTOR, -BODY_WIDTH / 2f * SumoRing.SCALE_FACTOR, bodyImgBuf));
-		leftCp.setUserData(new Offset(-CATERPILLAR_LENGTH / 2f * SumoRing.SCALE_FACTOR, -CATERPILLAR_WIDTH / 2f * SumoRing.SCALE_FACTOR, leftCpImgBuf));
-		rightCp.setUserData(new Offset(-CATERPILLAR_LENGTH / 2f * SumoRing.SCALE_FACTOR, -CATERPILLAR_WIDTH / 2f * SumoRing.SCALE_FACTOR, rightCpImgBuf));
+		leftWheel.setUserData(new Offset(-WHEEL_LENGTH / 2f * SumoRing.SCALE_FACTOR, -WHEEL_WIDTH / 2f * SumoRing.SCALE_FACTOR, leftWheelImgBuf));
+		rightWheel.setUserData(new Offset(-WHEEL_LENGTH / 2f * SumoRing.SCALE_FACTOR, -WHEEL_WIDTH / 2f * SumoRing.SCALE_FACTOR, rightWheelImgBuf));
 		leftBumper.setUserData(new Offset(-BUMPER_LENGTH / 2f * SumoRing.SCALE_FACTOR , -BUMPER_WIDTH / 2f * SumoRing.SCALE_FACTOR, leftBumperImgBuf));
 		rightBumper.setUserData(new Offset(-BUMPER_LENGTH / 2f * SumoRing.SCALE_FACTOR , -BUMPER_WIDTH / 2f * SumoRing.SCALE_FACTOR, rightBumperImgBuf));
 		
 		body.setPosition(0, 0);
 		body.setRotation(rot);
 		
-		Vector2f vec = rotate(new Vector2f(0, BODY_CP_DIST), rot);
-		leftCp.setPosition(vec.getX(), vec.getY());
-		leftCp.setRotation(rot);
+		Vector2f vec = rotate(new Vector2f(WHEEL_OFFSET, BODY_WHEEL_DIST), rot);
+		leftWheel.setPosition(vec.getX(), vec.getY());
+		leftWheel.setRotation(rot);
 		
-		vec = rotate(new Vector2f(0, -BODY_CP_DIST), rot);
-		rightCp.setPosition(vec.getX(), vec.getY());	
-		rightCp.setRotation(rot);	
+		vec = rotate(new Vector2f(WHEEL_OFFSET, -BODY_WHEEL_DIST), rot);
+		rightWheel.setPosition(vec.getX(), vec.getY());	
+		rightWheel.setRotation(rot);	
 		
 		vec = rotate(new Vector2f(BODY_BUMPER_DIST, BUMPER_OFFSET), rot);
 		leftBumper.setPosition(vec.getX(), vec.getY());
@@ -163,38 +166,36 @@ public class SumoRobot {
 		rightBumper.setRotation(rot);
 		
 		body.adjustPosition(pos);
-		leftCp.adjustPosition(pos);
-		rightCp.adjustPosition(pos);
+		leftWheel.adjustPosition(pos);
+		rightWheel.adjustPosition(pos);
 		leftBumper.adjustPosition(pos);
 		rightBumper.adjustPosition(pos);
 		
 		body.setRotDamping(1f);
 		sumoRing.add(body);
-		sumoRing.add(leftCp);
-		sumoRing.add(rightCp);
+		sumoRing.add(leftWheel);
+		sumoRing.add(rightWheel);
 		sumoRing.add(leftBumper);
 		sumoRing.add(rightBumper);
 		
-		FixedJoint bodyLeftCpJoint  = new FixedJoint(body, leftCp);
-		FixedJoint bodyRightCpJoint  = new FixedJoint(body, rightCp);
-		FixedJoint bodyLeftBumperCpJoint = new FixedJoint(body, leftBumper);
-		FixedJoint bodyRightBumperCpJoint = new FixedJoint(body, rightBumper);
+		FixedJoint bodyLeftWheelJoint  = new FixedJoint(body, leftWheel);
+		FixedJoint bodyRightWheelJoint  = new FixedJoint(body, rightWheel);
+		FixedJoint bodyLeftBumperWheelJoint = new FixedJoint(body, leftBumper);
+		FixedJoint bodyRightBumperWheelJoint = new FixedJoint(body, rightBumper);
 		
-		sumoRing.add(bodyLeftCpJoint);
-		sumoRing.add(bodyRightCpJoint);
-		sumoRing.add(bodyLeftBumperCpJoint);
-		sumoRing.add(bodyRightBumperCpJoint);
+		sumoRing.add(bodyLeftWheelJoint);
+		sumoRing.add(bodyRightWheelJoint);
+		sumoRing.add(bodyLeftBumperWheelJoint);
+		sumoRing.add(bodyRightBumperWheelJoint);
 		
-		rightCp.setFriction(CATERPILLAR_FRICTION);
-		leftCp.setFriction(CATERPILLAR_FRICTION);
+		rightWheel.setFriction(WHEEL_FRICTION);
+		leftWheel.setFriction(WHEEL_FRICTION);
 		
-		leftCp.setDamping(0.03f);
-		rightCp.setDamping(0.03f);
+		leftWheel.setDamping(0.03f);
+		rightWheel.setDamping(0.03f);
 		
-		String imageFilePath = "lib/img/sumo.png";
-		String imageFilePath1 = "lib/img/sumo1.png";
-		bufferedImage = SumoRing.loadImage(imageFilePath);
-		bufferedImage1 = SumoRing.loadImage(imageFilePath1);
+		bufferedImage = SumoRing.loadImage("lib/img/sumo_blue.png");
+		bufferedImage1 = SumoRing.loadImage("lib/img/sumo_green.png");
 
 	}
 	private void switchState() {
@@ -206,7 +207,7 @@ public class SumoRobot {
 			leftSpeed = SumoRing.DIRECTION_FORWARD;
 			rightSpeed = SumoRing.DIRECTION_FORWARD;
 			break;
-		case RETRIETING:
+		case RETREATING:
 			timer = retTime;
 			leftSpeed = SumoRing.DIRECTION_BACKWARD;
 			rightSpeed = SumoRing.DIRECTION_BACKWARD;
@@ -228,15 +229,24 @@ public class SumoRobot {
 		}
 		if (proxy == null) { // computer behavior
 			if (timer-- == 0) {
+				if (state == AIMING) {
+                    body.adjustAngularVelocity(-1*body.getAngularVelocity());
+                    leftWheel.adjustAngularVelocity(-1*leftWheel.getAngularVelocity());
+                    rightWheel.adjustAngularVelocity(-1*rightWheel.getAngularVelocity());
+                    leftBumper.adjustAngularVelocity(-1*leftBumper.getAngularVelocity());
+                    rightBumper.adjustAngularVelocity(-1*rightBumper.getAngularVelocity());
+                    leftWheel.setForce(0, 0);
+                    rightWheel.setForce(0, 0);
+				}
 				switchState();
 			}
 			if (state == ATTACKING) {
-				if (body.getPosition().length() > SumoRing.RING_RADIUS - 1) {
+				if (body.getPosition().length() > SumoRing.RING_RADIUS - 10) {
 					switchState();
 				}
 			}
 		} else { // modeled behavior
-			if (body.getPosition().length() > SumoRing.RING_RADIUS - 1) {
+			if (body.getPosition().length() > SumoRing.RING_RADIUS - 10) {
 				if (insideRing) {
 					proxy.send(new SignalData(SignalData.SIGNAL_LINE_DETECTED));
 					insideRing = false;
@@ -267,17 +277,17 @@ public class SumoRobot {
 		}
 		
 		Vector2f forward = getDirection();
-		forward.scale(400);
+		forward.scale(200);
 		Vector2f reverse = forward.negate();
 		if (leftSpeed == SumoRing.DIRECTION_FORWARD) {
-			leftCp.addForce(forward);
+			leftWheel.addForce(forward);
 		} else if (leftSpeed == SumoRing.DIRECTION_BACKWARD) {
-			leftCp.addForce(reverse);
+			leftWheel.addForce(reverse);
 		}
 		if (rightSpeed == SumoRing.DIRECTION_FORWARD) {
-			rightCp.addForce(forward);
+			rightWheel.addForce(forward);
 		} else if (rightSpeed == SumoRing.DIRECTION_BACKWARD) {
-			rightCp.addForce(reverse);
+			rightWheel.addForce(reverse);
 		}
 	}
 	
@@ -294,6 +304,13 @@ public class SumoRobot {
 		case SumoRing.ORIENTATION_STRAIGHT:
 			leftSpeed = cachedLeftSpeed;
 			rightSpeed = cachedRightSpeed;
+            body.adjustAngularVelocity(-1*body.getAngularVelocity());
+            leftWheel.adjustAngularVelocity(-1*leftWheel.getAngularVelocity());
+            rightWheel.adjustAngularVelocity(-1*rightWheel.getAngularVelocity());
+            leftBumper.adjustAngularVelocity(-1*leftBumper.getAngularVelocity());
+            rightBumper.adjustAngularVelocity(-1*rightBumper.getAngularVelocity());
+            leftWheel.setForce(0, 0);
+            rightWheel.setForce(0, 0);
 			break;
 		default:
 			leftSpeed = SumoRing.DIRECTION_STOP;
@@ -321,6 +338,13 @@ public class SumoRobot {
 			rightSpeed = cachedRightSpeed = SumoRing.DIRECTION_STOP;
 			break;
 		}
+        body.adjustAngularVelocity(-1*body.getAngularVelocity());
+        leftWheel.adjustAngularVelocity(-1*leftWheel.getAngularVelocity());
+        rightWheel.adjustAngularVelocity(-1*rightWheel.getAngularVelocity());
+        leftBumper.adjustAngularVelocity(-1*leftBumper.getAngularVelocity());
+        rightBumper.adjustAngularVelocity(-1*rightBumper.getAngularVelocity());
+        leftWheel.setForce(0, 0);
+        rightWheel.setForce(0, 0);
 	}
 
 	public  Vector2f getDirection() {
@@ -341,12 +365,13 @@ public class SumoRobot {
 			drawBodyPart(g, body, true);
 		} else {
 			drawBodyPart(g, body, false);
-			drawBodyPart(g, leftCp, false);
-			drawBodyPart(g, rightCp, false);
+			drawBodyPart(g, leftWheel, false);
+			drawBodyPart(g, rightWheel, false);
 			drawBodyPart(g, leftBumper, false);
 			drawBodyPart(g, rightBumper, false);
 		}
 	}
+
 	private void drawBodyPart(Graphics2D g, Body b, boolean fullBody) {
 		ROVector2f s1 = b.getPosition();
 		float x = s1.getX() * SumoRing.SCALE_FACTOR;
@@ -358,7 +383,7 @@ public class SumoRobot {
 		at.translate(x + SumoRing.SCREEN_RADIUS_PX, -y + SumoRing.SCREEN_RADIUS_PX);
 		at.rotate(-r);
 		if (fullBody) {
-			at.translate(-26, -30);
+			at.translate(-46, -37);
 		  	if (proxy == null) { // computer behavior
 				g.drawRenderedImage(bufferedImage, at);
 		  	} else {
