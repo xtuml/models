@@ -273,7 +273,7 @@ INSERT INTO SPR_RO
 // Do something when the touch sensor on input one is activated.
 
 select any n from instances of navigate;
-generate navigate3:''leftBumper''() to n;
+generate navigate3:leftBumperPress() to n;
 ',
 	1,
 	0);
@@ -307,7 +307,7 @@ n.target_duration = 1;
 
 generate navigate1:pop() to n;
 
-send IO::setName(name: "Model");',
+send IO::setName(name: "Levi");',
 	1,
 	0);
 INSERT INTO C_EP_PROXY
@@ -329,7 +329,7 @@ INSERT INTO SPR_RO
 // Do something when the touch sensor on input one is activated.
 
 select any n from instances of navigate;
-generate navigate4:''rightBumper''() to n;
+generate navigate4:rightBumperPress() to n;
 ',
 	1,
 	0);
@@ -394,6 +394,50 @@ INSERT INTO C_EP_PROXY
 	"c5d57c81-98e0-47f3-80b1-963ef4cb3170",
 	-1,
 	'setName',
+	'',
+	'../../RobotInterface/platform/platform.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("ab08e65b-fbe5-4206-a935-dc6bc0995dc6",
+	"bf449641-34c1-4be8-b661-ad08cd641aec",
+	"c36e7517-2627-4bef-baa9-225754ea0823");
+INSERT INTO SPR_RO
+	VALUES ("ab08e65b-fbe5-4206-a935-dc6bc0995dc6",
+	'untouchLeft',
+	'',
+	'LOG::LogInfo( message:"IO::untouchLeft" );
+// Do something when the touch sensor on input one is activated.
+
+select any n from instances of navigate;
+generate navigate5:leftBumperRelease() to n;',
+	1,
+	0);
+INSERT INTO C_EP_PROXY
+	VALUES ("bf449641-34c1-4be8-b661-ad08cd641aec",
+	"c5d57c81-98e0-47f3-80b1-963ef4cb3170",
+	-1,
+	'untouchLeft',
+	'',
+	'../../RobotInterface/platform/platform.xtuml');
+INSERT INTO SPR_REP
+	VALUES ("d8df7488-368c-4900-ab47-e25f6c75f473",
+	"a35f2935-1903-4510-87d7-8547b4c9ce9d",
+	"c36e7517-2627-4bef-baa9-225754ea0823");
+INSERT INTO SPR_RO
+	VALUES ("d8df7488-368c-4900-ab47-e25f6c75f473",
+	'untouchRight',
+	'',
+	'LOG::LogInfo( message:"IO::untouchRight" );
+// Do something when the touch sensor on input one is activated.
+
+select any n from instances of navigate;
+generate navigate6:rightBumperRelease() to n;',
+	1,
+	0);
+INSERT INTO C_EP_PROXY
+	VALUES ("a35f2935-1903-4510-87d7-8547b4c9ce9d",
+	"c5d57c81-98e0-47f3-80b1-963ef4cb3170",
+	-1,
+	'untouchRight',
 	'',
 	'../../RobotInterface/platform/platform.xtuml');
 INSERT INTO C_I_PROXY
