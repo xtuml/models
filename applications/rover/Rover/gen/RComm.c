@@ -12,97 +12,44 @@
 #include "TIM_bridge.h"
 #include "LOG_bridge.h"
 #include "Rover.h"
-#include "ev3api.h"
-#include "EV3B_bridge.h"
-#include <string.h>
-#include <stdarg.h>
+
+#include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
-#define MAX_LINES 15
-void RComm_display_message( char * s ) {
-  static char display_block[MAX_LINES][256];
-  static int current_line;
-  // fill current line
-  memcpy(display_block[current_line], s, 256);
-  // increment line number
-  current_line = (current_line + 1) % MAX_LINES;
-  // fill display
-  int32_t font_width;
-  int32_t font_height;
-  ev3_font_get_size(EV3_FONT_SMALL, &font_width, &font_height);
-  ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
-  int k = current_line;
-  for ( int i = 0; i < MAX_LINES; i++ ) {
-    ev3_lcd_draw_string(display_block[k], 0, EV3_LCD_HEIGHT - ((i + 1) * font_height));
-    k = (k + 1) % MAX_LINES;
-  }
-}
+#define SOCKET int
 
-extern FILE * rover_bt;
-void
-bluetooth_task(intptr_t extinf) {
-  static char buf[256];
-  if (NULL == rover_bt) rover_bt = ev3_serial_open_file(EV3_SERIAL_BT);
-  while (fgets(buf, 256, rover_bt)) {
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <netdb.h>
 
-    // display reply on screen
-    char * ptr;
-    if (NULL != (ptr=strstr(buf,"\n"))) *ptr = '\0';
-    RComm_display_message(buf);
+SOCKET roverSock = -1;                        /* socket details */
+SOCKET leaderSock = -1;                       /* socket details */
 
-    // parse response
-    r_t arg1 = 0.0;
-    r_t arg2 = 0.0;
-    char * numStart;
-    numStart = strstr(buf, "Leader,");
-    if (numStart != NULL) {
-      numStart = buf + strlen("Leader,");
-      arg1 = strtod(numStart, &ptr);
-      numStart = ptr + strlen(",");
-      if (',' == *ptr) {
-        arg2 = strtod(numStart, &ptr);
-        RComm_Location_leaderGPS(arg1, arg2);
-      }
-      else {
-        RComm_Location_leaderDistance(arg1);
-      }
-    }
-    else {
-      numStart = strstr(buf, "Rover,");
-      if (numStart != NULL) {
-        numStart = buf + strlen("Rover,");
-        arg1 = strtod(numStart, &ptr);
-        numStart = ptr + strlen(",");
-        if (',' == *ptr) {
-          arg2 = strtod(numStart, &ptr);
-          RComm_Location_roverGPS(arg1, arg2);
-        }
-        else {
-          RComm_Location_roverCompass(arg1);
-        }
-      }
-    }
+void handle_error(char *msg);           /* Error handler routine */
+void handle_error_en(int en, char *msg);
 
-  }
-  assert(!ev3_bluetooth_is_connected());
-}
+#define CBSIZE 2048
 
-void
-RComm_send_bt_message( const char * restrict format, ... )
-{
-  // make sure bluetooth is connected
-  assert(EV3B_bluetooth_is_connected());
-  if (NULL == rover_bt) rover_bt = ev3_serial_open_file(EV3_SERIAL_BT);
+#define ROVER_PORT 9998
+#define OBSRV_PORT 9999
 
-  // send message
-  va_list args;
-  va_start(args, format);
-  char buf[256]; buf[0] = '\0';
-  vsnprintf(buf, 256, format, args);
-  va_end(args);
-  fprintf(rover_bt, "MSG:%s\n", buf);
-  fflush(rover_bt);
-}
+typedef struct cbuf {
+    char buf[CBSIZE];
+    int fd;
+    unsigned int rpos, wpos;
+} cbuf_t;
+
+int read_line(SOCKET sock, char * dst, size_t len);
+
+SOCKET RComm_connect(i_t);
 
 /*
  * Interface:  RComm
@@ -112,9 +59,13 @@ RComm_send_bt_message( const char * restrict format, ... )
 void
 RComm_RComm_brake( const i_t p_power )
 {
-  RComm_send_bt_message("Rover,brake(%d)", p_power);
-  EV3M_stop( TRUE, DEV_MOTOR_LEFT );
-  EV3M_stop( TRUE, DEV_MOTOR_RIGHT );
+    LOG_LogInfo("RComm_RComm_brake()");
+    if (-1 == roverSock) { roverSock = RComm_connect(ROVER_PORT); }
+    int err;
+    char buf[50];
+    sprintf(buf, "Rover,brake(%d)\n", p_power );
+    if ((err = send(roverSock,buf,strlen(buf),0)) < 0)
+        handle_error_en(err, "Send error ");
 }
 
 /*
@@ -125,11 +76,13 @@ RComm_RComm_brake( const i_t p_power )
 void
 RComm_RComm_incrementPower( const i_t p_power )
 {
-  RComm_send_bt_message("Rover,incrementPower(%d)", p_power);
-  i_t current_l_power = EV3M_get_power( DEV_MOTOR_LEFT );
-  i_t current_r_power = EV3M_get_power( DEV_MOTOR_RIGHT );
-  EV3M_set_power( DEV_MOTOR_LEFT, current_l_power + p_power > 100 ? 100 : current_l_power + p_power );
-  EV3M_set_power( DEV_MOTOR_RIGHT, current_r_power + p_power > 100 ? 100 : current_r_power + p_power );
+    LOG_LogInfo("RComm_RComm_incrementPower()");
+    if (-1 == roverSock) { roverSock = RComm_connect(ROVER_PORT); }
+    int err;
+    char buf[50];
+    sprintf(buf, "Rover,incrementPower(%d)\n", p_power );
+    if ((err = send(roverSock,buf,strlen(buf),0)) < 0)
+        handle_error_en(err, "Send error ");
 }
 
 /*
@@ -140,7 +93,32 @@ RComm_RComm_incrementPower( const i_t p_power )
 void
 RComm_RComm_pollLeaderDistance()
 {
-  RComm_send_bt_message("Leader,Distance()");
+    if (-1 == leaderSock) { leaderSock = RComm_connect(OBSRV_PORT); }
+
+    int err;
+    char buf[50];
+    sprintf(buf, "Leader,Distance()\n");
+    if ((err = send(leaderSock, buf, strlen(buf), 0)) < 0)
+        handle_error_en(err, "Send error ");
+
+    char socketBuf[CBSIZE];         // file buffer
+    read_line(leaderSock, socketBuf, sizeof(socketBuf));
+
+    r_t ret = 0.0;
+    char *numStart;
+
+    numStart = strstr(socketBuf, "Leader,");
+    if (numStart != NULL) {
+        char *ptr;
+        numStart = socketBuf + strlen("Leader,");
+        ret = strtod(numStart, &ptr);
+    }
+    else {
+      printf( "Bad response: '%s'\n", socketBuf );
+      exit(1);
+    }
+
+    RComm_Location_leaderDistance(ret);
 }
 
 /*
@@ -151,7 +129,34 @@ RComm_RComm_pollLeaderDistance()
 void
 RComm_RComm_pollLeaderGPS()
 {
-  RComm_send_bt_message("Leader,GPS()");
+    if (-1 == leaderSock) { leaderSock = RComm_connect(OBSRV_PORT); }
+    int err;
+    char buf[50];
+    sprintf(buf, "Leader,GPS()\n");
+    if ((err = send(leaderSock, buf, strlen(buf), 0)) < 0)
+        handle_error_en(err, "Send error ");
+
+    char socketBuf[CBSIZE];         // file buffer
+    read_line(leaderSock, socketBuf, sizeof(socketBuf));
+
+    r_t posx = 0.0;
+    r_t posz = 0.0;
+    char *numStart;
+
+    numStart = strstr(socketBuf, "Leader,");
+    if (numStart != NULL) {
+        char *ptr;
+        numStart = socketBuf + strlen("Leader,");
+        posx = strtod(numStart, &ptr);
+        numStart = ptr + strlen(",");
+        posz = strtod(numStart, &ptr);
+    }
+    else {
+      printf( "Bad response: '%s'\n", socketBuf );
+      exit(1);
+    }
+
+    RComm_Location_leaderGPS(posx, posz);
 }
 
 /*
@@ -162,7 +167,31 @@ RComm_RComm_pollLeaderGPS()
 void
 RComm_RComm_pollRoverCompass()
 {
-  RComm_send_bt_message("Rover,getCompass()");
+    if (-1 == roverSock) { roverSock = RComm_connect(ROVER_PORT); }
+    int err;
+    char buf[50];
+    sprintf(buf, "Rover,getCompass()\n");
+    if ((err = send(roverSock, buf, strlen(buf), 0)) < 0)
+        handle_error_en(err, "Send error ");
+
+    char socketBuf[CBSIZE];         // file buffer
+    read_line(roverSock, socketBuf, sizeof(socketBuf));
+
+    r_t ret = 0.0;
+    char *numStart;
+
+    numStart = strstr(socketBuf, "Rover,");
+    if (numStart != NULL) {
+        char *ptr;
+        numStart = socketBuf + strlen("Rover,");
+        ret = strtod(numStart, &ptr);
+    }
+    else {
+      printf( "Bad response: '%s'\n", socketBuf );
+      exit(1);
+    }
+
+    RComm_Location_roverCompass(ret);
 }
 
 /*
@@ -173,7 +202,35 @@ RComm_RComm_pollRoverCompass()
 void
 RComm_RComm_pollRoverGPS()
 {
-  RComm_send_bt_message("Rover,GPS()");
+    if (-1 == roverSock) { roverSock = RComm_connect(ROVER_PORT); }
+
+    int err;
+    char buf[50];
+    sprintf(buf, "Rover,GPS()\n");
+    if ((err = send(roverSock, buf, strlen(buf), 0)) < 0)
+        handle_error_en(err, "Send error ");
+
+    char socketBuf[CBSIZE];         // file buffer
+    read_line(roverSock, socketBuf, sizeof(socketBuf));
+
+    r_t posx = 0.0;
+    r_t posz = 0.0;
+    char *numStart;
+
+    numStart = strstr(socketBuf, "Rover,");
+    if (numStart != NULL) {
+        char *ptr;
+        numStart = socketBuf + strlen("Rover,");
+        posx = strtod(numStart, &ptr);
+        numStart = ptr + strlen(",");
+        posz = strtod(numStart, &ptr);
+    }
+    else {
+      printf( "Bad response: '%s'\n", socketBuf );
+      exit(1);
+    }
+
+    RComm_Location_roverGPS(posx, posz);
 }
 
 /*
@@ -184,7 +241,17 @@ RComm_RComm_pollRoverGPS()
 void
 RComm_RComm_ready()
 {
-  RComm_send_bt_message("ready");
+    if (-1 == leaderSock) { leaderSock = RComm_connect(OBSRV_PORT); }
+    LOG_LogInfo("RComm_RComm_ready()");
+    int err;
+    char buf[50];
+    sprintf(buf, "ready\n" );
+    if ((err = send(leaderSock,buf,strlen(buf),0)) < 0)
+        handle_error_en(err, "Send error ");
+
+    char socketBuf[CBSIZE];         // file buffer
+    read_line(leaderSock, socketBuf, sizeof(socketBuf));
+    printf( "%s", socketBuf );
 }
 
 /*
@@ -195,9 +262,14 @@ RComm_RComm_ready()
 void
 RComm_RComm_setForwardPower( const i_t p_power )
 {
-  RComm_send_bt_message("Rover,setForwardPower(%d)", p_power);
-  EV3M_set_power( DEV_MOTOR_LEFT, p_power );
-  EV3M_set_power( DEV_MOTOR_RIGHT, p_power );
+    LOG_LogInfo("RComm_RComm_setForwardPower()");
+    if (-1 == roverSock) { roverSock = RComm_connect(ROVER_PORT); }
+    int err;
+    char buf[50];
+    sprintf(buf, "Rover,setForwardPower(%d)\n", p_power );
+    printf( "%s", buf );
+    if ((err = send(roverSock,buf,strlen(buf),0)) < 0)
+        handle_error_en(err, "Send error ");
 }
 
 /*
@@ -208,9 +280,13 @@ RComm_RComm_setForwardPower( const i_t p_power )
 void
 RComm_RComm_setLRPower( const i_t p_lpower, const i_t p_rpower )
 {
-  RComm_send_bt_message("Rover,setLRPower(%d,%d)", p_lpower, p_rpower);
-  EV3M_set_power( DEV_MOTOR_LEFT, p_lpower );
-  EV3M_set_power( DEV_MOTOR_RIGHT, p_rpower );
+    LOG_LogInfo("RComm_RComm_setLRPower()");
+    if (-1 == roverSock) { roverSock = RComm_connect(ROVER_PORT); }
+    int err;
+    char buf[50];
+    sprintf(buf, "Rover,setLRPower(%d,%d)\n", p_lpower, p_rpower );
+    if ((err = send(roverSock,buf,strlen(buf),0)) < 0)
+        handle_error_en(err, "Send error ");
 }
 
 /*
@@ -257,3 +333,63 @@ RComm_Location_roverGPS( const r_t p_x, const r_t p_z )
   Rover_RComm__Location_roverGPS(  p_x, p_z );
 }
 
+void handle_error(char *msg)
+{
+    perror(msg);
+    exit(EXIT_FAILURE);
+}
+
+void handle_error_en(int en, char *msg)
+{
+   errno = en;
+   handle_error(msg);
+}
+
+int read_line( SOCKET sock, char * dst, size_t len ) {
+    int bytes_read = 0;
+    int n;
+    char * ptr;
+
+    while (bytes_read < len) {
+        n = recv(sock, dst+bytes_read, len-bytes_read, 0); // read some data
+        if (n <= 0) return n;  // error handling
+        if ((ptr = strstr(dst, "\r\n")) != 0) {
+            if ((ptr+2-dst) < len) *(ptr+2) = '\0';
+            break;
+        }
+        else if ((ptr = strstr(dst, "\r")) != 0 || (ptr = strstr(dst, "\n")) != 0) {
+            if ((ptr+1-dst) < len) *(ptr+1) = '\0';
+            break;
+        }
+        bytes_read += n;
+    }
+
+    return 0;
+}
+
+/*
+ * Establish a socket connection
+ */
+SOCKET
+RComm_connect( i_t port )
+{
+    LOG_LogInfo("RComm_connect()");
+    int en;
+    struct sockaddr_in address; /* socket address stuff */
+    char cIP[50];
+
+    SOCKET sock;
+
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+        handle_error_en(sock, "Socket creation error ");
+
+    address.sin_family = AF_INET; /* internet */
+    address.sin_port = htons(port); /* port */
+
+    strcpy(cIP, "127.0.0.1"); /* local host */
+    address.sin_addr.s_addr = inet_addr(cIP);
+    if ((en = connect(sock, (struct sockaddr *) &address, sizeof(address))) < 0)
+        handle_error_en(en, "Socket connect error ");
+
+    return sock;
+}
