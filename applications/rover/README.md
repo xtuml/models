@@ -44,3 +44,8 @@ repository in a different location, you will have to modify the `CONFIG_FILE`
 constant in `RComm.java` to point to the new location. This path is relative to
 the home directory.
 
+### EV3 version
+
+To generate the code for the LEGO Mindstorms EV3, first the reader must set up
+MCLM and install EV3RT on the EV3 brick. To generate code, copy the contents of
+`Rover/gen/ev3_gen` to `Rover/gen` and build.
