@@ -1,0 +1,126 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("8288ee3f-23fb-4b38-a85f-1c3118e97335",
+	"00000000-0000-0000-0000-000000000000",
+	"21bba8bf-80a0-498d-9b95-6047aabbb779",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("c3bbaf09-f662-4134-8e67-a421f0e390ba",
+	112,
+	"8288ee3f-23fb-4b38-a85f-1c3118e97335",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'Sumo::Library::EV3::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("c3bbaf09-f662-4134-8e67-a421f0e390ba",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("67d6d063-a5ea-4dea-bb22-42cc4f586b00",
+	"00000000-0000-0000-0000-000000000000",
+	'startWithDelay',
+	'',
+	'EV3B::lcd_set_font( font:EV3Font::MEDIUM );
+
+// create robot
+create object instance robot of robot;
+robot.startupWaitTime = 2000000;  // 2 s
+robot.tickTime = 10000;           // 10 ms
+
+// create light sensor
+create object instance light_sensor of lightsensor;
+relate light_sensor to robot across R2;
+generate lightsensor5:tick() to light_sensor;
+
+// create touch sensors
+create object instance left_touch_sensor of touchsensor;
+left_touch_sensor.port = 1;
+relate left_touch_sensor to robot across R1;
+generate touchsensor1:tick() to left_touch_sensor;
+create object instance right_touch_sensor of touchsensor;
+right_touch_sensor.port = 2;
+relate right_touch_sensor to robot across R1;
+generate touchsensor1:tick() to right_touch_sensor;
+
+// create button
+create object instance enter_button of button;
+enter_button.type = EV3Button::ENTER_BUTTON;
+relate enter_button to robot across R3;
+generate button6:tick() to enter_button;
+
+// create chassis
+create object instance chassis of chassis;
+relate chassis to robot across R5;
+
+// start the configuration process
+line_threshhold_value = 0;
+field_threshhold_value = 0;
+if ( CONFIG::getIntegerProperty( name:"line", value:line_threshhold_value ) and CONFIG::getIntegerProperty( name:"field", value:field_threshhold_value ) )
+  create object instance line_threshhold of threshhold;
+  line_threshhold.type = threshhold_type::line;
+  line_threshhold.value = line_threshhold_value;
+  relate line_threshhold to light_sensor across R4;
+  LOG::LogInfo( message:"Line threshhold value:" );
+  LOG::LogInteger( message:line_threshhold.value );
+  create object instance field_threshhold of threshhold;
+  field_threshhold.type = threshhold_type::field;
+  field_threshhold.value = field_threshhold_value;
+  relate field_threshhold to light_sensor across R4;
+  LOG::LogInfo( message:"Field threshhold value:" );
+  LOG::LogInteger( message:field_threshhold.value );
+  generate robot8:configuration_complete() to robot;
+else
+  // display config message
+  EV3B::lcd_draw_string( string:"                    ", x:0, y:0 );
+  EV3B::lcd_draw_string( string:"config line", x:0, y:0 );
+end if;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("67d6d063-a5ea-4dea-bb22-42cc4f586b00",
+	1,
+	"8288ee3f-23fb-4b38-a85f-1c3118e97335",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("8288ee3f-23fb-4b38-a85f-1c3118e97335",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"d6795436-38f5-4333-ac3d-fd39c7debddb",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("d6795436-38f5-4333-ac3d-fd39c7debddb",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'EV3',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../EV3.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("21bba8bf-80a0-498d-9b95-6047aabbb779",
+	'Sumo',
+	1,
+	'../../../Sumo.xtuml');

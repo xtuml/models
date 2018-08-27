@@ -1,0 +1,149 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("d069b151-5222-4f23-8008-4458a83b897e",
+	'SumoSimulatorProxy',
+	1,
+	'SumoSimulatorProxy',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("74cd3128-a6ef-4c93-ba22-1f2f19bc0622",
+	"d069b151-5222-4f23-8008-4458a83b897e",
+	'direction2int',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'if (param.direction == Direction::backward)
+  return 0;
+elif (param.direction == Direction::stop)
+  return 1;
+elif (param.direction == Direction::forward)
+  return 2;
+end if;
+return 0;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("28ca7667-c834-4628-8b8f-61b759bc1769",
+	"74cd3128-a6ef-4c93-ba22-1f2f19bc0622",
+	'direction',
+	"be90d8fb-c50e-4936-b748-6698f15875c2",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("be90d8fb-c50e-4936-b748-6698f15875c2",
+	"00000000-0000-0000-0000-000000000000",
+	'Direction',
+	'',
+	'',
+	'../../../../IO DTs/IO DTs.xtuml');
+INSERT INTO O_TFR
+	VALUES ("e41144f0-7379-4d98-9e81-7c14bf047bc0",
+	"d069b151-5222-4f23-8008-4458a83b897e",
+	'connect',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'SumoSimBridge::connect();
+
+create event instance evt of SumoSimulatorProxy_A1:lineDetected() to SumoSimulatorProxy class;
+SumoSimBridge::feedLineDetectedEvent(evt: evt);
+
+create event instance evt of SumoSimulatorProxy_A3:touchLeft() to SumoSimulatorProxy class;
+SumoSimBridge::feedTouchLeftEvent(evt: evt);
+
+create event instance evt of SumoSimulatorProxy_A4:touchRight() to SumoSimulatorProxy class;
+SumoSimBridge::feedTouchRightEvent(evt: evt);
+
+create event instance evt of SumoSimulatorProxy_A7:releaseLeft() to SumoSimulatorProxy class;
+SumoSimBridge::feedReleaseLeftEvent(evt: evt);
+
+create event instance evt of SumoSimulatorProxy_A8:releaseRight() to SumoSimulatorProxy class;
+SumoSimBridge::feedReleaseRightEvent(evt: evt);
+
+::startWithDelay();',
+	1,
+	'',
+	"8b8c72b3-cd14-42d6-be2d-d4cf3629647c",
+	0);
+INSERT INTO O_TFR
+	VALUES ("8b8c72b3-cd14-42d6-be2d-d4cf3629647c",
+	"d069b151-5222-4f23-8008-4458a83b897e",
+	'orientation2int',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'if (param.orientation == Orientation::left)
+  return 0;
+elif (param.orientation == Orientation::straight)
+  return 1;
+elif (param.orientation == Orientation::right)
+  return 2;
+end if;
+return 0;',
+	1,
+	'',
+	"74cd3128-a6ef-4c93-ba22-1f2f19bc0622",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("c5898b2f-1b05-4eb8-b979-a8d3f4bcf548",
+	"8b8c72b3-cd14-42d6-be2d-d4cf3629647c",
+	'orientation',
+	"dd074cdf-cf2e-43c1-96d4-546b665b3dc9",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("dd074cdf-cf2e-43c1-96d4-546b665b3dc9",
+	"00000000-0000-0000-0000-000000000000",
+	'Orientation',
+	'',
+	'',
+	'../../../../IO DTs/IO DTs.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("9e767429-fc8f-4691-b1ea-8fbecf870311",
+	"d069b151-5222-4f23-8008-4458a83b897e");
+INSERT INTO O_BATTR
+	VALUES ("9e767429-fc8f-4691-b1ea-8fbecf870311",
+	"d069b151-5222-4f23-8008-4458a83b897e");
+INSERT INTO O_ATTR
+	VALUES ("9e767429-fc8f-4691-b1ea-8fbecf870311",
+	"d069b151-5222-4f23-8008-4458a83b897e",
+	"00000000-0000-0000-0000-000000000000",
+	'startupWaitTime',
+	'',
+	'',
+	'startupWaitTime',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"d069b151-5222-4f23-8008-4458a83b897e");
+INSERT INTO O_ID
+	VALUES (1,
+	"d069b151-5222-4f23-8008-4458a83b897e");
+INSERT INTO O_ID
+	VALUES (2,
+	"d069b151-5222-4f23-8008-4458a83b897e");
+INSERT INTO PE_PE
+	VALUES ("d069b151-5222-4f23-8008-4458a83b897e",
+	1,
+	"70f3eadd-d27b-49be-a81d-c3c923223c20",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("70f3eadd-d27b-49be-a81d-c3c923223c20",
+	"00000000-0000-0000-0000-000000000000",
+	"21bba8bf-80a0-498d-9b95-6047aabbb779",
+	'Simulator',
+	'',
+	0,
+	'../Simulator.xtuml');
