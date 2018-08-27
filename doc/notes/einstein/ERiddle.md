@@ -69,7 +69,17 @@ it using a scratch piece of paper.  This further confirmed to my mind that
 the problem was challenging but solvable by hand, but that it would take a
 methodical approach and more time.
 
-I needed _manipulatives_ 
+I needed _manipulatives_ [3] to help me solve the riddle.
+So, I cut out paper houses and colored them with five different colors.
+I ordered the houses on the table in front of me from left to right to represent the address of the house.
+From business cards, I crafted labels with the identifiers of the owners, beverages, pets and tobaccos.
+Each house had a space to place the owner, beverage, pet and tobacco label.
+Sometimes, I would put a label "between" two houses to show some affinity toward a specific house or owner.
+
+![Einstein's Manipulatives](manipulatives1.jpg)
+
+![Einstein's Manipulatives Solved](manipulatives2.jpg)
+
 
 
 ### The Mathematics

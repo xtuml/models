@@ -2639,14 +2639,33 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'init',
 	'',
-	'LOG::LogInfo( message:"permuting" );
-p = permutation::populate( bigN:p::N );
+	'LOG::LogInfo( message:"starting" );
 
 distance = ::asserts();
 LOG::LogInteger( message:distance );
 
-LOG::LogInfo( message:"creating" );
-::creates();
+// 
+// Check to see if any instances are already here.
+// This would mean that we have restored from NVS
+// or that preexisting instances were defined in data.
+//
+
+select any owner from instances of owner;
+if ( empty owner )
+  i = NVS::format();
+  i = NVS::version( first:1, second:2 );
+  i = NVS::checksum( first:1, second:2 );
+
+  //
+  // Set up instances for existance test later on.
+  //
+  LOG::LogInfo( message:"permuting" );
+  p = permutation::populate( bigN:p::N );
+  LOG::LogInfo( message:"creating" );
+  ::creates();
+
+  i = PERSIST::commit();
+end if;
 
 distance = ::asserts();
 LOG::LogInteger( message:distance );
