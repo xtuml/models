@@ -40,8 +40,8 @@ On Mac, the `setup.sh` script can be used to do this automatically.
 NOTE: The verifier realized implementation assumes that the `models` repository
 is cloned in `~/git` on Mac and `c:/git` on Windows and that the configuration file
 `git/models/applications/rover/Settings/config.txt` exists. If you cloned the
-repository in a different location, you will have to modify the `CONFIG_FILE`
-constant in `RComm.java` to point to the new location. 
+repository in a different location, you will have to modify the `homedir`
+variable in `RComm.java` to point to the new location. 
 
 ### EV3 version
 
