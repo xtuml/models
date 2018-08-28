@@ -20,7 +20,7 @@ On Mac, the `setup.sh` script can be used to do this automatically.
 ### Running the simulation
 
 * Launch the simulation application:
-  - `./Mac/Challenge-Mac.app/Contents/MacOS/Challenge-Mac &`
+  - `./Mac/Challenge-Mac.app/Contents/MacOS/Challenge-Mac &` or `./Windows/Challenge-Win64.exe`
   - Select your preferred display settings and select "Play"
 * Launch the `UnityObserver` application
   - `java -jar UnityObserver.jar`
@@ -31,18 +31,17 @@ On Mac, the `setup.sh` script can be used to do this automatically.
   - Select Project > Clean. Clean and rebuild all projects.
   - Switch to the xtUML Debugging perspective and launch Debug Configurations >
     xtUML Debugging > rover
-  - Nagivatge to `test1` in the `functions` package contained in `Navigation`
-    component reference. Execute `test1`.
+  - Nagivatge to `testNavigation` in the `functions` package contained in `Navigation`
+    component reference. Execute `testNavigation`.
 
 * The simulation should begin to move and BridgePoint should print logging
   information to the console.
 
 NOTE: The verifier realized implementation assumes that the `models` repository
-is cloned in `~/git` and that the configuration file
-`~/git/models/applications/rover/Settings/config.txt` exists. If you cloned the
+is cloned in `~/git` on Mac and `c:/git` on Windows and that the configuration file
+`git/models/applications/rover/Settings/config.txt` exists. If you cloned the
 repository in a different location, you will have to modify the `CONFIG_FILE`
-constant in `RComm.java` to point to the new location. This path is relative to
-the home directory.
+constant in `RComm.java` to point to the new location. 
 
 ### EV3 version
 
