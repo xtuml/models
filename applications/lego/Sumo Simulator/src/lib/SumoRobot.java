@@ -258,19 +258,19 @@ public class SumoRobot {
 			}
 			if ( leftcounter > 0 ) {
 			if ( 1 == leftcounter ) {
-				proxy.send(new SignalData(SignalData.SIGNAL_TOUCH_LEFT));
+				DelayedSignal.getInstance().sendDelayedSignal( new SignalData(SignalData.SIGNAL_TOUCH_LEFT), 0, proxy );
 				leftcounter++;
 			} else if ( leftcounter == oldleftcounter ) {
 				leftcounter = 0;
-				proxy.send(new SignalData(SignalData.SIGNAL_RELEASE_LEFT));
+				DelayedSignal.getInstance().sendDelayedSignal( new SignalData(SignalData.SIGNAL_RELEASE_LEFT), 500, proxy );
 			} }
 			if ( rightcounter > 0 ) {
 			if ( 1 == rightcounter ) {
-				proxy.send(new SignalData(SignalData.SIGNAL_TOUCH_RIGHT));
+				DelayedSignal.getInstance().sendDelayedSignal( new SignalData(SignalData.SIGNAL_TOUCH_RIGHT), 0, proxy );
 				rightcounter++;
 			} else if ( rightcounter == oldrightcounter ) {
 				rightcounter = 0;
-				proxy.send(new SignalData(SignalData.SIGNAL_RELEASE_RIGHT));
+				DelayedSignal.getInstance().sendDelayedSignal( new SignalData(SignalData.SIGNAL_RELEASE_RIGHT), 500, proxy );
 			} }
 			oldleftcounter = leftcounter;
 			oldrightcounter = rightcounter;
@@ -413,4 +413,54 @@ public class SumoRobot {
 			this.img = img;
 		}
 	}
+  
+    public static class DelayedSignal {
+        
+        private static DelayedSignal instance = null;
+        public static DelayedSignal getInstance() {
+            if ( null == instance ) instance = new DelayedSignal();
+            return instance;
+        }
+
+        private Thread ticker;
+        private boolean leftPressed;
+        private boolean rightPressed;
+        
+        private DelayedSignal() {
+            ticker = null;
+            leftPressed = false;
+            rightPressed = false;
+        }
+        
+        public synchronized void sendDelayedSignal( SignalData sigData, long delay, SumoSimulatorProxy proxy ) {
+            if ( null != ticker ) ticker.interrupt();
+            ticker = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep( delay );
+                    } catch ( InterruptedException e ) {
+                        // cancelled. do nothing.
+                    	return;
+                    }
+                    performSend( sigData, proxy );
+                }
+            };
+            ticker.start();
+        }
+
+        private synchronized void performSend( SignalData sigData, SumoSimulatorProxy proxy ) {
+            if ( ( leftPressed && sigData.signalNo == SignalData.SIGNAL_RELEASE_LEFT ) ||
+               ( !leftPressed && sigData.signalNo == SignalData.SIGNAL_TOUCH_LEFT ) ||
+               ( rightPressed && sigData.signalNo == SignalData.SIGNAL_RELEASE_RIGHT ) ||
+               ( !rightPressed && sigData.signalNo == SignalData.SIGNAL_TOUCH_RIGHT ) ) {
+                if ( sigData.signalNo == SignalData.SIGNAL_TOUCH_LEFT ) leftPressed = true;
+                else if ( sigData.signalNo == SignalData.SIGNAL_RELEASE_LEFT ) leftPressed = false;
+                else if ( sigData.signalNo == SignalData.SIGNAL_TOUCH_RIGHT ) rightPressed = true;
+                else if ( sigData.signalNo == SignalData.SIGNAL_RELEASE_RIGHT ) rightPressed = false;
+                proxy.send( sigData );
+            }
+        }
+
+    }
 }
