@@ -714,7 +714,7 @@ else
   // Here we are in the target zone, go forward at a reasonable pace
   LOG::LogInfo( message:"In the zone, proceeding reasonably." );
   CTL::brake( power:0 );
-  CTL::setLRPower( lpower:45, rpower:45 );
+  CTL::setLRPower( lpower:45+::gain(), rpower:45+::gain() );
 end if;
 
 // Make sure we don''t pass the leader
@@ -763,7 +763,7 @@ select one leaderRover related by leader->rover[R1];
 select one followerRover related by self->rover[R1];
 
 LOG::LogInfo( message:"turningLeft" );
-CTL::setLRPower( lpower:15, rpower:30 );
+CTL::setLRPower( lpower:15+::gain(), rpower:30+::gain() );
  
 generate follower5:''doneMoving'' to self;
 ',
@@ -785,7 +785,7 @@ select one leaderRover related by leader->rover[R1];
 select one followerRover related by self->rover[R1];
 
 LOG::LogInfo( message:"turningRight" );
-CTL::setLRPower( lpower:30, rpower:15 );
+CTL::setLRPower( lpower:30+::gain(), rpower:15+::gain() );
  
 generate follower5:''doneMoving'' to self;
 ',
@@ -814,6 +814,9 @@ leaderRover.oldPosition = leaderRover.prevPosition;
 leaderRover.prevPosition = leaderRover.curPosition;
 followerRover.oldPosition = followerRover.prevPosition;
 followerRover.prevPosition = followerRover.curPosition;
+
+// cache distance history
+leader.prevDistance = leader.distance;
 
 // We don''t have to generate this event as the periodic tick generates it.',
 	'',
