@@ -596,42 +596,12 @@ INSERT INTO CNST_LSC
 	"00000000-0000-0000-0000-000000000000",
 	'40.0');
 INSERT INTO CNST_SYC
-	VALUES ("a70c4fa7-69c6-495b-aeaf-ebdc6b1931f1",
-	'LEADER_TURN_PRECISION',
-	'Defines how far the leader is allowed to deviate to the side before we consider him to be making a turn ',
-	"ba5eda7a-def5-0000-0000-000000000003",
-	"54b8950f-e656-4b53-b7ee-e0221e8d9e00",
-	"aea08194-48e9-4f93-9661-202790932c46",
-	"00000000-0000-0000-0000-000000000000");
-INSERT INTO CNST_LFSC
-	VALUES ("a70c4fa7-69c6-495b-aeaf-ebdc6b1931f1",
-	"00000000-0000-0000-0000-000000000000");
-INSERT INTO CNST_LSC
-	VALUES ("a70c4fa7-69c6-495b-aeaf-ebdc6b1931f1",
-	"00000000-0000-0000-0000-000000000000",
-	'0.2');
-INSERT INTO CNST_SYC
-	VALUES ("c1a48dc4-6034-4ead-9a4e-62218f3650e5",
-	'TRACK_PRECISION',
-	'Defines how far to the side of the leader the follower can be before we should consider initiating a turn',
-	"ba5eda7a-def5-0000-0000-000000000003",
-	"54b8950f-e656-4b53-b7ee-e0221e8d9e00",
-	"a70c4fa7-69c6-495b-aeaf-ebdc6b1931f1",
-	"00000000-0000-0000-0000-000000000000");
-INSERT INTO CNST_LFSC
-	VALUES ("c1a48dc4-6034-4ead-9a4e-62218f3650e5",
-	"00000000-0000-0000-0000-000000000000");
-INSERT INTO CNST_LSC
-	VALUES ("c1a48dc4-6034-4ead-9a4e-62218f3650e5",
-	"00000000-0000-0000-0000-000000000000",
-	'1.0');
-INSERT INTO CNST_SYC
 	VALUES ("cf657ceb-e68c-4007-8d30-05b9de4d3862",
 	'GAIN_SPEED_UP',
 	'',
 	"ba5eda7a-def5-0000-0000-000000000002",
 	"54b8950f-e656-4b53-b7ee-e0221e8d9e00",
-	"c1a48dc4-6034-4ead-9a4e-62218f3650e5",
+	"aea08194-48e9-4f93-9661-202790932c46",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO CNST_LFSC
 	VALUES ("cf657ceb-e68c-4007-8d30-05b9de4d3862",
@@ -658,7 +628,8 @@ INSERT INTO CNST_LSC
 INSERT INTO CNST_SYC
 	VALUES ("d91d3131-29c4-4385-bfc7-c1e5a1fcc07b",
 	'GAIN_WINDOW',
-	'',
+	'Used in distance comparisons.  If the new distance minus previous distance is outside the window then
+we will speed up or slow down appropriately.',
 	"ba5eda7a-def5-0000-0000-000000000003",
 	"54b8950f-e656-4b53-b7ee-e0221e8d9e00",
 	"bf4aadd8-278d-4d40-adf1-6f4b189154c7",
@@ -670,6 +641,23 @@ INSERT INTO CNST_LSC
 	VALUES ("d91d3131-29c4-4385-bfc7-c1e5a1fcc07b",
 	"00000000-0000-0000-0000-000000000000",
 	'0.1');
+INSERT INTO CNST_SYC
+	VALUES ("d44a0799-fb75-42c0-8959-631f18953cf2",
+	'BEARING_TURN_PRECISION',
+	'This value specifies a window (in degrees).  If the leader and follower bearing difference is within 
+the window, no turning is required.  If the difference of the two is outside the window, we will 
+initiate a turn.',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	"54b8950f-e656-4b53-b7ee-e0221e8d9e00",
+	"d91d3131-29c4-4385-bfc7-c1e5a1fcc07b",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO CNST_LFSC
+	VALUES ("d44a0799-fb75-42c0-8959-631f18953cf2",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO CNST_LSC
+	VALUES ("d44a0799-fb75-42c0-8959-631f18953cf2",
+	"00000000-0000-0000-0000-000000000000",
+	'2');
 INSERT INTO PE_PE
 	VALUES ("54b8950f-e656-4b53-b7ee-e0221e8d9e00",
 	1,

@@ -618,19 +618,6 @@ LOG::LogReal( message:"- leader bearing", r:leaderBearing );
 LOG::LogReal( message:"- follower bearing", r:followerBearing ); 
 LOG::LogInfo( message:"-------------------------------------------" );
 
-leaderToRoverXDiff = ( leaderRover.curPosition.x - followerRover.curPosition.x ); 
-leaderXDiff = leaderRover.curPosition.x - leaderRover.oldPosition.x ; 
-leaderMovingRight = FALSE; 
-leaderMovingLeft = FALSE; 
-
-if ( ( leaderRover.curPosition.x > leaderRover.prevPosition.x ) and ( leaderRover.prevPosition.x > leaderRover.oldPosition.x ) ) 
-    leaderMovingRight = TRUE; 
-elif ( ( leaderRover.curPosition.x < leaderRover.prevPosition.x ) and ( leaderRover.prevPosition.x < leaderRover.oldPosition.x ) ) 
-    leaderMovingLeft = TRUE; 
-end if;
-
-BEARING_TURN_PRECISION = 2;
-
 if ( ( leaderBearing > 0 ) and ( leaderBearing < 180 ) ) 
     if ( ( followerBearing < 360 ) and ( followerBearing > 180 ) ) 
        diff = leaderBearing - ( 360 - followerBearing ); 
@@ -670,7 +657,6 @@ elif ( ( leaderBearing < 360 ) and ( leaderBearing > 180 ) )
        end if;
     end if;
 else 
-    LOG::LogReal( message:"CASE G - distance:", r:leader.distance ); 
     generate follower2:distance() to self; 
 end if;
 
