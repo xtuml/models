@@ -1,0 +1,78 @@
+define scenario  RP_Scenario1
+input
+output
+
+#$DESCRIPTION
+Start Requirements Capture
+#$END_DESCRIPTION
+
+# Start testing. Call this only once for a test run. Otherwise..
+# 
+
+$INLINE
+fprintf(stderr,"Requirements capture enabled\n");
+$ENDINLINE
+
+#$ADA_INLINE
+#
+#   with Test_Suite_Text_IO;
+#
+#   Test_Suite_Text_IO.Dump_String(Value => "Requirements capture enabled");
+#
+#$END_ADAINLINE
+
+
+# There can be only one (sounds like a film...)
+Exists = find-one Test_Suite
+
+if Exists = UNDEFINED then
+
+   This_Test_Suite = create unique Test_Suite with Current_State = 'Idle'
+
+else
+
+   # In the middle of a run. Allow to continue, but without the 
+   # requirements traceability.
+
+   #Remove all links
+
+   {Requirements} = Exists ->R11.All_Requirements_In_Test_Suite
+
+   for requirement in {Requirements} do
+
+      # Go from the requirement to the test results that fulfill the requirement
+      {Tests} = requirement -> R12.Requirement_Met
+
+      for test in {Tests} do
+
+         unlink requirement R12 test
+
+         delete test
+
+      endfor
+
+
+      unlink Exists R11 requirement
+
+      delete requirement
+
+   endfor
+
+   {Domains} = Exists -> R10.Domain_Details
+
+   for domain in {Domains} do
+
+      unlink domain R10 Exists
+
+      # Don't delete the domain, let the test run finish, 
+      # but without traceability.
+
+   endfor
+
+   delete Exists
+
+   [] = RP7::Report_Run_Time_Error["Test Suite already running. Traceability Lost"]
+
+endif
+
+enddefine

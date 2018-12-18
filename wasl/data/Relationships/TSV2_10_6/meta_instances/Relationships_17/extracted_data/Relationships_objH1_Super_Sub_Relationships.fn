@@ -1,0 +1,754 @@
+define function  objH1:Super_Sub_Relationships
+input \
+	Iteration:Base_Integer_Type ,\
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------#
+#
+# Subtype/Supertype relationship
+#
+# The architecture shall implement supertype/subtype relationships
+# 1241-0000-01-0614
+#
+# The architecture shall provide a mechanism to allow creation of a 
+# supertype/subtype relationship link between two object instances
+# 1241-0000-01-0615
+#
+# The architecture shall provide a mechanism to all deletion of a 
+# supertype/subtype relationship link between two object instances
+# 1241-0000-01-0616
+# 
+# The architecture shall support a minimum of three subtype trees 
+# from any supertype object class
+# 1241-0000-01-0617
+#
+# The architecture shall tress of depth greater than 1
+# 1241-0000-01-0618
+# 
+# The architecture shall provide operations which, given a stating 
+# instance handle and a relationship specification, return a set of
+# instance handles
+# 1241-0000-01-0702
+#
+# The architecture shall support naviagations from a subtype object 
+# to a supertype object expressed in ASL
+# 1241-0000-01-0708
+#
+# The architecture shall support navigations from a supertype object
+# to a subtype object expressed in ASL
+# 1241-0000-01-0709
+#
+# The architecture shall support a translation of the ASL link 
+# statment to map to the mechanism that allows creation of a 
+# relationship link between two object instances
+# 1241-0000-01-1202
+#
+# The architecture shall support a translation of the ASL unlink
+# statement to map to the mechanism that allow the deletion of a 
+# link between two objects in a relationship
+# 1241-0000-01-1204
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+# Initialise the variables
+Has_Failed   = FALSE
+Unsupported  = FALSE
+#-------------------------------------------------------------------#
+
+# Find the desired instances Object_H
+firstH  = find-one Object_H where idH = 1
+secondH = find-one Object_H where idH = 2
+thirdH  = find-one Object_H where idH = 3
+fourthH = find-one Object_H where idH = 4
+fifthH  = find-one Object_H where idH = 5
+
+# Find the desired instances Object_L
+firstL  = find-one Object_L where idL = 1
+secondL = find-one Object_L where idL = 2
+thirdL  = find-one Object_L where idL = 3
+
+# Find the desired instances Object_I
+secondI  = find-one Object_I where IDI = 2
+thirdI   = find-one Object_I where IDI = 3
+fourthI  = find-one Object_I where IDI = 4
+fifthI   = find-one Object_I where IDI = 5
+
+# Find the desired instance of Object_K
+firstK = find-one Object_K where idK = 1
+thirdK = find-one Object_K where idK = 3
+fifthK = find-one Object_K where idK = 5
+
+# Find the desired instance of Sub_L2
+secondSL2 = find-one Sub_L2 where idSL2 = 2
+
+# Find the desired instances Sub_L3
+firstSL3  = find-one Sub_L3 where idSL3 = 1
+secondSL3 = find-one Sub_L3 where idSL3 = 2
+thirdSL3  = find-one Sub_L3 where idSL3 = 3
+
+# Find the desired instances Sub_Sub_L1
+firstSSL1 = find-one Sub_Sub_L1 where idSSL1 = 1
+
+# Find the desired instances Sub_Sub_L2
+secondSSL2 = find-one Sub_Sub_L2 where idSSL2 = 2
+
+# Find the desired instances Sub_Sub_L3
+thirdSSL3 = find-one Sub_Sub_L3 where idSSL3 = 3
+
+# Find the desired instances Sub_Sub_L4
+fourthSSL4 = find-one Sub_Sub_L4 where idSSL4 = 4
+
+# Find the desired instances Sub_Sub_L5
+fifthSSL5 = find-one Sub_Sub_L5 where idSSL5 = 5
+
+# Find the desired instances Sub_Sub_L6
+firstSSL6  = find-one Sub_Sub_L6 where idSSL6 = 1
+fourthSSL6 = find-one Sub_Sub_L6 where idSSL6 = 4
+
+# Find the desired instances Sub_Sub_L7
+secondSSL7 = find-one Sub_Sub_L7 where idSSL7 = 2
+
+# Find the desired instances Sub_Sub_L8
+thirdSSL8 = find-one Sub_Sub_L8 where idSSL8 = 3
+
+# Find the desired instances Sub_Sub_L9
+fourthSSL9 = find-one Sub_Sub_L9 where idSSL9 = 4
+
+# Find the desired instances Sub_Sub_L10
+thirdSSL10 = find-one Sub_Sub_L10 where idSSL10 = 3
+fifthSSL10 = find-one Sub_Sub_L10 where idSSL10 = 5
+
+# Find the desired instances Sub_Sub_L10
+fourthSSSL2 = find-one Sub_Sub_Sub_L2 where idSSSL2 = 4 
+
+#-------------------------------------------------------------------#
+# Test 1 - Navigate from second instance of Object H to Object L
+#-------------------------------------------------------------------#
+
+   if Iteration = 1 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0709", "Relationships", "objH", "ObjH to ObjL"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0614"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0615"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0616"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Create a relationship
+      link secondH R9 firstL
+
+      # Perform the navigation
+      InstL = secondH -> R9.Object_L
+
+      # Check the result of the navigation
+      if InstL = UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         if InstL.idL != 1 then
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      endif
+
+      # Unlink the relationship
+      unlink secondH R9 firstL
+
+   endif
+
+# End Test 1
+
+#-------------------------------------------------------------------#
+# Test 2 - Navigate from the first instance of object H to Object I
+#-------------------------------------------------------------------#
+
+   if Iteration = 2 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0709", "Relationships", "objH", "ObjH to ObjI"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0614"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0615"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0616"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+
+      # Create the relationship
+      link firstH R9 thirdI
+
+      # Perform the navigation
+      InstI = firstH -> R9.Object_I
+
+      # Check the result of the navigation
+      if InstI = UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         if InstI.IDI != 3 then
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      endif
+
+      # Unlink the relationship
+      unlink firstH R9 thirdI
+
+   endif
+
+# End Test 2
+
+#-------------------------------------------------------------------#
+# Test 3 - Navigate a chained relationship from the third instance of 
+#          Object H to the third instance of SubL3 via Object L
+#-------------------------------------------------------------------#
+
+   if Iteration = 3 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0709", "Relationships", "objH", "ObjH to SubL3 via ObjL"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0614"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0615"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0616"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0618"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+
+      # Create the relationship
+      link thirdH R9 thirdL
+      link thirdL R26 thirdSL3
+
+      # Perform the navigation
+      InstSL3 = thirdH -> R9.Object_L -> R26.Sub_L3
+
+      # Check the result of the navigation
+      if InstSL3 = UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         if InstSL3.idSL3 != 3 then
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      endif
+
+      # Unlink the relationships
+      unlink thirdH R9 thirdL
+      unlink thirdL R26 thirdSL3
+
+   endif
+
+# End Test 3
+
+#-------------------------------------------------------------------#
+# Test 4 - Navigate from the second instance of Object H again this  
+#          time to the fifth instance of Object I
+#-------------------------------------------------------------------#
+
+   if Iteration = 4 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0709", "Relationships", "objH", "ObjH to ObjI"]  
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0614"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0615"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0616"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Create the relationship
+      link secondH R9 fifthI
+
+      # Perform the navigation
+      InstI = secondH -> R9.Object_I
+
+      # Check the result of the navigation
+      if InstI = UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         if InstI.IDI != 5 then
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      endif
+
+      # Unlink the relationship
+      unlink secondH R9 fifthI
+
+   endif
+
+# End Test 4
+
+#-------------------------------------------------------------------#
+# Test 5 - Navigate from Object L to Sub L2 without linking Object L  
+#          to Object H
+#-------------------------------------------------------------------#
+
+   if Iteration = 5 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-1205", "Relationships", "objH", "ObjL to SubSL2"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Create the relationship
+      link secondL R26 secondSL2
+
+      # Perform the navigation
+      InstSL2 = secondL -> R26.Sub_L2
+      
+      # Check the results of the navigation
+      if InstSL2 = UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         if InstSL2.idSL2 != 2 then
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      endif
+
+      # Unlink the relationship
+      unlink secondL R26 secondSL2
+
+   endif
+
+# End Test 5
+
+#-------------------------------------------------------------------#
+# Test 6 - Attempt to navigate a partially defined relationship, i.e.
+#          the last sequence in the relationship has been deleted
+#-------------------------------------------------------------------#
+
+   if Iteration = 6 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-1205", "Relationships", "objH", "Partially defined relationship"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Create the relationship
+      link firstH R9 firstL
+
+      # Perform the navigation
+      InstSL1 = firstH -> R9.Object_L -> R26.Sub_L1
+
+      # Check the result of the navigation
+      if InstSL1 != UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+      # Unlink the relationship
+      unlink firstH R9 firstL
+
+   endif
+
+# End Test 6
+
+#-------------------------------------------------------------------#
+# Test 7 - Attempt to navigate to one subtype object while linked to 
+#          another
+#-------------------------------------------------------------------#
+
+   if Iteration = 7 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-1205", "Relationships", "objH", "Attempt to nav incorrect to subtype"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Define a relationship
+      link thirdH R9 firstL
+
+      # Perform the navigation
+      InstI = thirdH -> R9.Object_I
+
+      # Check the result of the navigation
+      if InstI != UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+      # Deleete the relationship
+      unlink thirdH R9 firstL
+
+   endif
+
+# End Test 7
+
+#-------------------------------------------------------------------#
+# Test 8 - Attempt to navigate undefined relationship
+#-------------------------------------------------------------------#
+
+   if Iteration = 8 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objH", "Attempt to navigate undefined relationship"]
+
+      InstI = thirdH -> R9.Object_I
+
+      # Check the reult of the navigation
+      if InstI != UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+   endif
+
+# End Test 8
+
+#-------------------------------------------------------------------#
+# Test 9 - Navigate to all subtype treesbranching off Sub_L3
+#-------------------------------------------------------------------#
+
+   if Iteration = 9 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0709", "Relationships", "objH", "Navigate to all subtypes trees off SL3"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0614"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0615"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0616"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0617"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Create the relationships
+      link firstH R9 firstL
+      link firstL R26 secondSL3
+      link secondSL3 R27 firstSSL1
+      link secondSL3 R29 secondSSL7
+      link secondSL3 R30 thirdSSL8
+      link secondSL3 R31 fifthSSL10
+
+      # Perform all of the navigations
+      InstSSL1  = firstH -> R9.Object_L -> R26.Sub_L3 -> R27.Sub_Sub_L1
+      InstSSL7  = firstH -> R9.Object_L -> R26.Sub_L3 -> R29.Sub_Sub_L7
+      InstSSL8  = firstH -> R9.Object_L -> R26.Sub_L3 -> R30.Sub_Sub_L8
+      InstSSL10 = firstH -> R9.Object_L -> R26.Sub_L3 -> R31.Sub_Sub_L10
+
+      if InstSSL1 != UNDEFINED then
+
+         if InstSSL7 != UNDEFINED then
+
+            if InstSSL8 != UNDEFINED then
+
+               if InstSSL10 != UNDEFINED then
+                  Has_Failed   = FALSE
+               else
+                  Has_Failed   = TRUE
+                  Failure_Code = -40
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = -30   
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif     
+
+
+      # Delete the relationships
+      unlink firstH R9 firstL
+      unlink firstL R26 secondSL3
+      unlink secondSL3 R27 firstSSL1
+      unlink secondSL3 R29 secondSSL7
+      unlink secondSL3 R30 thirdSSL8
+      unlink secondSL3 R31 fifthSSL10     
+
+   endif
+
+# End Test 9
+
+#-------------------------------------------------------------------#
+# Test 10 - Navigate from Object H all the way down to 
+#           Sub_Sub_Sub_L1
+#-------------------------------------------------------------------#
+
+   if Iteration = 10 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0709", "Relationships", "objH", "H to L to SL to SSl to SSSL"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0614"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0615"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0616"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0618"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Create the relationships
+      link secondH    R9 thirdL
+      link thirdL     R26 secondSL3
+      link secondSL3  R27 secondSSL2
+      link secondSSL2 R28 fourthSSSL2
+
+      # Perform the navigation
+      InstSSSL2 = secondH -> R9.Object_L -> R26.Sub_L3 -> R27.Sub_Sub_L2 -> R28.Sub_Sub_Sub_L2
+
+      if InstSSSL2 = UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+         
+         if InstSSSL2.idSSSL2 != 4 then
+            Has_Failed = TRUE
+            Failure_Code = -20
+         endif
+
+      endif
+
+      # Delete the relationships
+      unlink secondH    R9 thirdL
+      unlink thirdL     R26 secondSL3
+      unlink secondSL3  R27 secondSSL2
+      unlink secondSSL2 R28 fourthSSSL2
+
+   endif
+
+# End Test 10
+
+#-------------------------------------------------------------------#
+# Test 11 - Navigate from SSL10 to SSL6 via SL3
+#-------------------------------------------------------------------#
+
+   if Iteration = 11 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0708", "Relationships", "objH", "SSL10 to SLL6 via SL3"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0614"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0615"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0616"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0617"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Create the relationships
+      link firstSL3 R31 thirdSSL10
+      link firstSL3 R29 fourthSSL6
+
+      # Perform the navigation
+      InstSSL6 = thirdSSL10 -> R31.Sub_L3 -> R29.Sub_Sub_L6
+
+      if InstSSL6 != UNDEFINED then
+   
+         if InstSSL6.idSSL6 = 4 then
+            Has_Failed = FALSE
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+      # Delete the relationships
+      unlink firstSL3 R31 thirdSSL10
+      unlink firstSL3 R29 fourthSSL6
+      
+   endif
+
+# End Test 11
+
+#-------------------------------------------------------------------#
+# Test 12 - Navigate from Sub_Sub_Sub_L2 to Object H
+#-------------------------------------------------------------------#
+
+   if Iteration = 12 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0708", "Relationships", "objH", "SSSL2 to ObjH"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0614"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0615"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0616"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0618"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Create the relationships
+      link firstH     R9  secondL
+      link secondL    R26 secondSL3
+      link secondSL3  R27 secondSSL2
+      link secondSSL2 R28 fourthSSSL2
+
+      # Perform the navigation
+      InstH = fourthSSSL2 -> R28.Sub_Sub_L2 -> R27.Sub_L3 -> R26.Object_L -> R9.Object_H
+
+      if InstH != UNDEFINED then
+      
+         if InstH.idH = 1 then
+            Has_Failed = FALSE
+         else
+            Has_Failed = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+      # Delete the relationships
+      unlink firstH     R9  secondL
+      unlink secondL    R26 secondSL3
+      unlink secondSL3  R27 secondSSL2
+      unlink secondSSL2 R28 fourthSSSL2
+
+   endif
+
+# End Test 12
+
+#-------------------------------------------------------------------#
+# Test 13 - Navigate from Object_H to Object_K
+#-------------------------------------------------------------------#
+
+   if Iteration = 13 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0709", "Relationships", "objH", "Naviaget from objH to ObjK"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0614"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0615"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0616"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0618"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0702"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Create the relationships
+      link firstH R9 secondL
+      link secondL R26 secondSL3
+      link secondSL3 R29 firstSSL6
+      link firstSSL6 R32 firstK
+      link firstSSL6 R32 fifthK
+
+      # Perform the navigation
+      {SetK} = firstH -> R9.Object_L -> R26.Sub_L3 -> R29.Sub_Sub_L6 -> R32.Object_K
+
+      if countof {SetK} != 0 then
+      
+         Val1 = -10
+         Val2 = -20
+
+         for InstK in {SetK} do
+
+            if InstK.idK = 1 then
+               Val1 = InstK.idK
+            endif
+
+            if InstK.idK = 5 then
+               Val2 = InstK.idK
+            endif
+
+         endfor
+
+         if Val1 = 1 then
+
+            if Val2 = 5 then
+               Has_Failed = FALSE
+            else
+               Has_Failed   = TRUE
+               Failure_Code = Val2
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val1
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+   
+      # Delete the relationships
+      unlink firstH R9 secondL
+      unlink secondL R26 secondSL3
+      unlink secondSL3 R29 firstSSL6
+      unlink firstSSL6 R32 firstK
+      unlink firstSSL6 R32 fifthK
+
+   endif
+
+# End Test 13
+
+#-------------------------------------------------------------------#
+# Test complete
+#-------------------------------------------------------------------#
+
+if Unsupported = FALSE then
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objH", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objH", Test, Failure_Code]
+   endif
+
+else
+   [] = RPT4:Test_Unsupported[Test]
+endif
+#-------------------------------------------------------------------#
+
+
+enddefine

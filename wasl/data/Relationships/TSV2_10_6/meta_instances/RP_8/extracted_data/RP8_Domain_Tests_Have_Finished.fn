@@ -1,0 +1,36 @@
+define function  RP8::Domain_Tests_Have_Finished
+input \
+	Completed_Domain_Name:Base_Text_Type ,\
+	Domain_Identifer:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#Find the only domain currently in existence.
+
+The_Domain_Details = find-one Domain_Details where Domain_Number = Domain_Identifer
+
+if The_Domain_Details != UNDEFINED then
+
+   if The_Domain_Details.Domain_Name = Completed_Domain_Name then
+
+      generate DD1:Tests_Have_Finished() to The_Domain_Details
+
+   else
+
+      [] = RP7::Report_Run_Time_Error["Mismatched domains to report from"]
+
+
+   endif
+
+
+else
+
+   [] = RP7::Report_Run_Time_Error["No domain found to report from"]
+
+endif
+
+
+enddefine

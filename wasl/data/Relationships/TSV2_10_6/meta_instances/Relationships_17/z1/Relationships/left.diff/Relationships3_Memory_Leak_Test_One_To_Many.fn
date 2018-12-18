@@ -1,0 +1,38 @@
+define function  Relationships3::Memory_Leak_Test_One_To_Many
+input
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+{Set_Of_Middle} = find-all Middle
+
+for Individual_Middle in {Set_Of_Middle} do
+
+   {Set_Of_Right} = Individual_Middle ->R7.Many_Right
+
+   for Individual_Right in {Set_Of_Right} do
+
+      #Go from a right instance back through the middle to the left instance
+      Single_Left = Individual_Right -> R7.Middle -> R6.Far_Left
+
+      # Return back up the trail, from the left instance to the set of right
+      {Some_Right} = Single_Left ->R6.Middle ->R7.Many_Right
+
+      Right_Updater = countof {Some_Right}
+
+      Individual_Right.Right_Data = Right_Updater
+
+      Updater = Single_Left.Left_Data
+
+      Updater = Updater + 1
+
+      Single_Left.Left_Data = Updater
+
+   endfor
+
+endfor
+
+
+enddefine

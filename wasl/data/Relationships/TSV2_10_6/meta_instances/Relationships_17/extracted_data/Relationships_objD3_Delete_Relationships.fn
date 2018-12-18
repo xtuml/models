@@ -1,0 +1,108 @@
+define function  objD3:Delete_Relationships
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------#
+#
+# Delete all relationships
+#
+# The architectre shall provide a mechanism to allow deletion of a 
+# simple relationship link between two object instance
+# 1241-0000-01-0604
+#
+# The architecture shall provide a mechanism to allow the deletion of 
+# an associative link between an associative object and the link 
+# between two objects
+# 1241-0000-01-0612
+#
+# The architecture shall provide a mechanism to allow the deletion 
+# of a link between two objects in a associative relationship
+# 1241-0000-01-0613
+#
+# The architecture shall support a translation of the ASL unassociate
+# statment to map to the mechanism that allows the deletion of an 
+# associative link between an associative object and the link between
+# two objects
+# 1241-0000-01-1203
+#
+# The architecture shall support a translation of the ASL unlink
+# statement to map to the mechanism that allow the deletion of a 
+# link between two objects in a relationship
+# 1241-0000-01-1204
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+# Initilise the variables
+Has_Failed   = FALSE
+Failure_Code = 0
+
+[] = RPT1:Start_Test[Test, "1241-0000-01-0612", "Relationship", "objD", "Delete relationships"]
+[] = RPT8:Specify_Requid[Test,"1241-0000-01-0604"]
+[] = RPT8:Specify_Requid[Test,"1241-0000-01-0612"]
+[] = RPT8:Specify_Requid[Test,"1241-0000-01-0613"]
+[] = RPT8:Specify_Requid[Test,"1241-0000-01-1203"]
+[] = RPT8:Specify_Requid[Test,"1241-0000-01-1204"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0622"]
+
+# Find the desired instances for Object_C
+firstC  = find-one Object_C where idC = 1
+secondC = find-one Object_C where idC = 2
+thirdC  = find-one Object_C where idC = 3
+fourthC = find-one Object_C where idC = 4
+fifthC  = find-one Object_C where idC = 5
+
+# Find the desired instances for Object_D
+firstD  = find-one Object_D where idD = 1
+secondD = find-one Object_D where idD = 2
+thirdD  = find-one Object_D where idD = 3
+fourthD = find-one Object_D where idD = 4
+fifthD  = find-one Object_D where idD = 5
+
+# Find the desired instances for Object_O
+firstO  = find-one Object_O where idO = 1
+secondO = find-one Object_O where idO = 2
+thirdO  = find-one Object_O where idO = 3
+fourthO = find-one Object_O where idO = 4
+fifthO  = find-one Object_O where idO = 5
+
+# Find the desired instances for Object_DO
+firstDO  = find-one Object_DO where idDO = 1
+secondDO = find-one Object_DO where idDO = 2
+thirdDO  = find-one Object_DO where idDO = 3
+fourthDO = find-one Object_DO where idDO = 4
+fifthDO  = find-one Object_DO where idDO = 5
+
+# Delete relationships
+unlink firstD  R3 firstC
+unlink firstD  R3 thirdC
+unlink fourthD R3 fourthC
+unlink fourthD R3 fifthC
+
+unassociate firstD R19 secondO from firstDO
+unassociate firstD R19 thirdO  from fifthDO
+
+unlink firstD R19 secondO
+unlink firstD R19 thirdO
+
+#-------------------------------------------------------------------#
+
+   if Has_Failed then
+      [] = RPT3:Test_Failed["objD",Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["objD",Test, 0]
+   endif
+
+#-------------------------------------------------------------------#
+
+enddefine

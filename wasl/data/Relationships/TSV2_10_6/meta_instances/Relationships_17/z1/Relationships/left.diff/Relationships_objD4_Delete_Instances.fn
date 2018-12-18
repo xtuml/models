@@ -1,0 +1,75 @@
+define function  objD4:Delete_Instances
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+[] = RPT1:Start_Test[Test, "1241-0000-01-0612", "Relationship", "objD", "Delete relationships"]
+
+# Delete set of instances
+
+#InstRedD = find-one Object_D where Colour_Of_D = 'Red'
+#delete InstRedD
+
+#InstBlackD = find-one Object_D where Colour_Of_D = 'Black'
+#delete InstBlackD
+
+{SetC}  = find-all Object_C
+{SetD}  = find-all Object_D
+{SetDO} = find-all Object_DO
+{SetO}  = find-all Object_O
+
+delete {SetC}
+delete {SetD}
+delete {SetDO}
+delete {SetO}
+
+{SetC}  = find-all Object_C
+{SetD}  = find-all Object_D
+{SetDO} = find-all Object_DO
+{SetO}  = find-all Object_O
+
+# Test to ensure that all instances have been deleted
+if countof {SetC} = 0 then
+
+   if countof {SetD} = 0 then
+
+      if countof {SetDO} = 0 then
+
+         if countof {SetO} = 0 then
+            Has_Failed   = FALSE
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -10
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -30
+   endif
+
+else
+   Has_Failed   = TRUE
+   Failure_Code = -40
+endif
+
+
+#-------------------------------------------------------------------#
+
+   if Has_Failed then
+      [] = RPT3:Test_Failed["objD",Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["objD",Test, 0]
+   endif
+
+#-------------------------------------------------------------------#
+
+enddefine

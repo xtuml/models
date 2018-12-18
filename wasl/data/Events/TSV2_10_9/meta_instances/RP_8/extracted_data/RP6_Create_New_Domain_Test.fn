@@ -1,0 +1,54 @@
+define function  RP6::Create_New_Domain_Test
+input \
+	Invoker_Domain_Name:Base_Text_Type 
+output \
+	Domain_Unique_Identifier:Base_Integer_Type 
+
+#$DESCRIPTION
+This service shall create a unique object for reporting a test pass or fail.
+It shall report its' own unique identifer to the invoking domain, returned via the bridge. This is so that the reporting domain can specify which object to report into. There can be more than one object in existance at any one time. THis is due to the way the event queue is asynchronous, and service invocations are sysnchronous.
+
+
+#$END_DESCRIPTION
+
+
+
+# Create new domain test
+
+new_domain_test = create unique Domain_Details with \
+   Domain_Name               = Invoker_Domain_Name &\
+   Last_Reported_Test_Number = 0 &\
+   Current_State             = 'Idle'
+
+new_pass = create A_Test_That_Passed with \
+    Passed_Counter = 0
+
+new_fail = create A_Test_That_Failed with \
+   Failed_Counter = 0
+
+new_unsupported = create A_Test_That_Is_Unsupported with \
+   Unsupported_Counter = 0
+
+new_duplicated = create Duplicated_Result with \ 
+   Duplicated_Test_Count = 0
+
+
+# if the Test Suite object has been created, link it to this domain details
+The_Test_Suite = find-one Test_Suite
+
+if The_Test_Suite != UNDEFINED then
+   link new_domain_test R10 The_Test_Suite 
+endif
+
+link new_domain_test R1 new_pass
+link new_domain_test R2 new_fail
+link new_domain_test R3 new_unsupported
+link new_domain_test R4 new_duplicated
+
+
+Unique_ID = new_domain_test.Domain_Number
+
+
+Domain_Unique_Identifier = Unique_ID
+
+enddefine

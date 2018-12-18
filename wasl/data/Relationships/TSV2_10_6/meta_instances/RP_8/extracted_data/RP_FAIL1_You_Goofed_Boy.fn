@@ -1,0 +1,27 @@
+define function  FAIL1:You_Goofed_Boy
+input \
+	Invoker_Domain_IH:Domain_Details_IH 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+The_Failed_Instance = Invoker_Domain_IH -> R2.A_Test_That_Failed
+
+if The_Failed_Instance != UNDEFINED then
+
+   local_increment = The_Failed_Instance.Failed_Counter
+
+   local_increment = local_increment + 1
+
+   The_Failed_Instance.Failed_Counter = local_increment
+
+else
+
+   [] = RP7::Report_Run_Time_Error["Can not find a failed instance associated with this domain"]
+ 
+endif
+
+
+enddefine
