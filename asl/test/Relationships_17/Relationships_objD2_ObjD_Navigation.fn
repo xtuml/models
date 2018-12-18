@@ -1,0 +1,1258 @@
+define function  objD2:ObjD_Navigation
+input \
+	Iteration:Base_Integer_Type ,\
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------#
+#
+# Normal navigation
+# 
+# The architecture shall implement simple 1:M relationships
+# 1241-0000-01-0602
+#
+# The architecture shall implement associative 1-1:M relationships
+# 1241-0000-01-0609
+#
+# The architecture shall provide a mechanismto allow the creation of
+# associative relationship link between two object instances and an
+# associative instance
+# 1241-0000-01-0611
+#
+# The architecture shall provide a mechanismto allow the deletion of
+# an associative link between an associative object and the link 
+# between two objects
+# 1241-0000-01-0612
+#
+# The architecture shall provide a mechanism to allow the deletion of
+# a link between two objects in an associative relationship
+# 1241-0000-01-0613
+#
+# The architecture shall provide operations which, given a starting 
+# instance handle and a relationshipspecification, return a single 
+# handle of the related instance
+# 1241-0000-01-0701
+#
+# The architecture shall provide operations which, given a starting 
+# instance handle and a relationship specification , return a set of
+# handles of the related instances
+# 1241-0000-01-0703
+#
+# The architecture shall support chains of navigations expressed in 
+# ASL
+# 1241-0000-01-0704
+#
+# The architecture shall support navigations to associative objects
+# expressed in ASL
+# 1241-0000-01-0706
+#
+# The architecture shall support navigations from singly associative
+# objects expressed in ASL
+# 1241-0000-01-0707
+#
+# The architecture shall support a translation of the ASL link 
+# statment to map to the mechanism that allows creation of a 
+# relationship link between two object instances
+# 1241-0000-01-1202
+#
+# The architecture shall support a translation of the ASL unassociate
+# statment to map to the mechanism that allows the deletion of an 
+# associative link between an associative object and the link between
+# two objects
+# 1241-0000-01-1203
+#
+# The architecture shall support a translation of the ASL unlink
+# statement to map to the mechanism that allow the deletion of a 
+# link between two objects in a relationship
+# 1241-0000-01-1204
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+# Initialise the variables
+Has_Failed       = FALSE
+Supported        = TRUE
+Failure_Code     = 0
+Testing_For_What = "UNDEFINED"
+
+[Host] = WAW1:What_Env[]
+
+#-------------------------------------------------------------------#
+
+# Find the desired instances for Object_C
+firstC  = find-one Object_C where idC = 1
+secondC = find-one Object_C where idC = 2
+thirdC  = find-one Object_C where idC = 3
+fourthC = find-one Object_C where idC = 4
+fifthC  = find-one Object_C where idC = 5
+
+# Find the desired instances for Object_D
+firstD  = find-one Object_D where idD = 1 & Colour_Of_D = 'Red'
+secondD = find-one Object_D where idD = 2 & Colour_Of_D = 'Red'
+thirdD  = find-one Object_D where idD = 3 & Colour_Of_D = 'Red'
+fourthD = find-one Object_D where idD = 4 & Colour_Of_D = 'Red'
+
+# Find the desired instances for Object_O
+secondO = find-one Object_O where idO = 2
+thirdO  = find-one Object_O where idO = 3
+fifthO  = find-one Object_O where idO = 5
+
+# Find the desired instances for Object_DO
+firstDO = find-one Object_DO where idDO = 1
+thirdDO = find-one Object_DO where idDO = 3
+fifthDO = find-one Object_DO where idDO = 5
+
+
+#-------------------------------------------------------------------#
+# Test 1 - Navigate from a single instance in Object_D to a set in 
+#          Object_C
+#-------------------------------------------------------------------#
+
+   if Iteration = 1 then
+
+      [] = RPT1:Start_Test [Test, "1241-0000-01-0602", "Relationships", "objD", "Simple navigation to set IH"]
+      [] = RPT8:Specify_Requid [Test,"1241-0000-01-0702"]
+      [] = RPT8:Specify_Requid [Test,"1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      # Perform the navigation
+      {SetC} = firstD -> R3.Object_C
+
+      # Check the results of the navigation
+      if countof {SetC} != 2 then
+
+         Failure_Code = -10
+         Has_Failed   = TRUE
+
+      else
+
+         # Check the contents of the set
+         Val1  = -20
+         Val2  = -30
+
+         for InstC in {SetC} do
+         
+            if InstC.idC = 1 then
+               Val1  = InstC.idC
+            endif
+
+            if InstC.idC = 3 then
+               Val2  = InstC.idC
+            endif
+ 
+         endfor
+
+         # Check found values
+         if Val1 = 1 then
+
+            if Val2 = 3 then
+               Has_Failed = FALSE
+            else
+               Has_Failed   = TRUE
+               Failure_Code = Val2
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val1
+         endif
+
+      endif
+
+   endif
+
+# End Test 1
+
+#-------------------------------------------------------------------#
+# Test 2 - Relationship role, set of instance handles returned
+#-------------------------------------------------------------------#
+
+   if Iteration = 2 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objD", "Navigate to a set using role"]
+      # Target object must be specified for WACA
+
+      # Perform the navigation
+      # Relationship Role is unsupported by the WACA so the set
+      # returned should be empty. 
+   
+#      if Host = "WACA" then
+         Supported = FALSE
+#      else      
+#         {SetC} = fourthD -> R3."Has_many".Object_C
+#         CountC = countof {SetC}
+
+         # Check the results of the navigation
+#         if CountC != 0 then
+#            Failure_Code = -10
+#            Has_Failed   = TRUE
+#         endif
+
+#      endif
+   
+   endif
+
+# End Test 2
+
+#-------------------------------------------------------------------#
+# Test 3 - Navigate from an instance of Object_D to a set of Object_O
+#          ignoring the assocciative object DO
+#-------------------------------------------------------------------#
+
+   if Iteration = 3 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0702", "Relationships", "objD", "Navigate from ObjD to a set in ObjO"]
+      [] = RPT8:Specify_Requid[Test,"1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test,"1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      # Perform the navigation
+      {SetO} = firstD -> R19.Object_O
+
+      # Check the results of the navigation
+      if countof {SetO} != 2 then
+         Failure_Code = -10
+         Has_Failed   = TRUE
+
+      else
+
+         # Check the contents of the set
+         Val1  = -20
+         Val2  = -30
+
+         for InstO in {SetO} do
+
+            if InstO.idO = 2 then
+               Val1  = InstO.idO
+            endif  
+
+            if InstO.idO = 3 then
+               Val2  = InstO.idO
+            endif  
+
+         endfor
+
+         # Check the values
+         if Val1 = 2 then
+
+            if Val2 = 3 then
+               Has_Failed = FALSE
+            else
+               Has_Failed   = TRUE
+               Failure_Code = Val2
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val1
+         endif
+
+      endif
+
+   endif
+
+# End Test 3
+
+#-------------------------------------------------------------------#
+# Test 4 - Navigate from a single instance of a set within Object_C
+#          to an instance within Object_D
+#-------------------------------------------------------------------#
+
+   if Iteration = 4 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "objD", "Navigate from Object C to Object D"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstD = thirdC -> R3.Object_D
+
+      # Check the results of the navigation
+      if InstD != UNDEFINED then
+
+         if InstD.idD = 1 then
+
+            if InstD.Colour_Of_D = 'Red' then
+               Has_Failed = FALSE
+            else
+               Failure_Code = -10
+               Has_Failed   = TRUE
+            endif
+
+         else
+            Failure_Code = InstD.idD
+            Has_Failed   = TRUE
+         endif
+
+      else
+         Failure_Code = -20
+         Has_Failed   = TRUE
+      endif
+
+   endif
+
+# End Test 4
+
+#-------------------------------------------------------------------#
+# Test 5 - Navigate from a single instance of a set within Object_O
+#          to an instance within Object_D
+#-------------------------------------------------------------------#
+
+   if Iteration = 5 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "objD", "Navigate from Object O to Object D"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstD = thirdO -> R19.Object_D
+
+      # Check the results of the navigation
+      if InstD != UNDEFINED then
+
+         if InstD.idD = 1 then
+            Has_Failed = FALSE
+         else
+            Failure_Code = InstD.idD
+            Has_Failed   = TRUE
+         endif
+
+      else
+         Failure_Code = -10
+         Has_Failed   = TRUE       
+      endif
+
+   endif
+
+# End Test 5
+
+#-------------------------------------------------------------------#
+# Test 6 -  Navigate from an instance of the associated object DO to 
+#           an instance within object D
+#-------------------------------------------------------------------#
+
+   if Iteration = 6 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0707", "Relationships", "objD", "Nav from assoc object to ObjD"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstD = fifthDO -> R19.Object_D
+
+      # Check the results of the navigation
+      if InstD != UNDEFINED then
+
+         if InstD.idD = 1 then
+            Has_Failed = FALSE
+         else
+            Has_Failed   = TRUE
+            Failure_Code = InstD.idD
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -10   
+      endif
+
+   endif
+
+# End Test 6
+
+#-------------------------------------------------------------------#
+# Test 7 - Navigate from a set of one instance to a set of one 
+#          instance
+#-------------------------------------------------------------------#
+
+   if Iteration = 7 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0703", "Relationships", "objD", "Navigate from set C to D"]
+
+      link secondC R3 secondD
+
+      {SetC} = find Object_C where idC = 2
+
+      if countof {SetC} = 1 then
+
+         {SetD} = {SetC} -> R3.Object_D
+
+         if countof {SetD} != 1 then
+            Has_Failed = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed = TRUE
+         Failure_Code = -10
+      endif
+
+     unlink secondC R3 secondD
+
+   endif
+
+# End Test 7
+
+#-------------------------------------------------------------------#
+# Test 8 - Navigate from a set on the MANY side of the relationship
+#-------------------------------------------------------------------#
+
+   if Iteration = 8 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0703", "Relationships", "objD", "Navigate from set C to D"]
+
+      Val1 = 0
+      Val2 = 0
+
+      {SetC} = firstD -> R3.Object_C
+
+      if countof {SetC} = 2 then
+
+         {SetD} = {SetC} -> R3.Object_D
+
+         if countof {SetD} != 2 then
+            Has_Failed = TRUE
+            Failure_Code = -10
+         else
+
+            for tmpInst in {SetD} do
+
+               if Val1 = 0 then
+                  Val1 = tmpInst.idD
+               else
+                  Val2 = tmpInst.idD
+               endif
+
+            endfor
+
+            if Val1 = 1 then
+               if Val2 != 1 then
+                  Has_Failed = TRUE
+                  Failure_Code = -20
+               endif
+            else
+               Has_Failed = TRUE
+               Failure_Code = -30
+            endif
+
+         endif
+
+      else
+
+         Has_Failed = TRUE
+         Failure_Code = -30
+      endif
+
+   endif
+
+# End Test 8
+
+#-------------------------------------------------------------------#
+# Test 9 - Navigate from a set on the MANY side of the relationship
+#-------------------------------------------------------------------#
+
+   if Iteration = 9 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0703", "Relationships", "objD", "Navigate from set C to D"]
+
+      Val1 = 0
+      Val2 = 0
+      Val3 = 0
+
+      link secondC R3 secondD
+
+      {SetC} = find Object_C where idC = 1 or idC = 2 or idC = 3
+
+      if countof {SetC} = 3 then
+
+         {SetD} = {SetC} -> R3.Object_D
+
+         if countof {SetD} != 3 then
+            Has_Failed = TRUE
+            Failure_Code = countof {SetD}
+         else
+
+            for tmpInst in {SetD} do
+
+               if Val1 = 0 then
+                  Val1 = tmpInst.idD
+               else
+                  if Val2 = 0 then
+                     Val2 = tmpInst.idD
+                  else
+                     Val3 = tmpInst.idD
+                  endif
+               endif
+
+            endfor
+
+            if Val1 = 1 & Val2 = 1 & Val3 = 2 then
+               Has_Failed = FALSE
+            else
+
+               if Val1 = 1 & Val2 = 2 & Val3 = 1 then
+                  Has_Failed = FALSE 
+               else
+
+                  if Val1 = 2 & Val2 = 1 & Val3 = 1 then
+                     Has_Failed = FALSE
+                  else
+                     Has_Failed = TRUE
+                     Failure_Code = -20
+                  endif
+
+               endif
+
+            endif
+
+         endif
+
+      else
+
+         Has_Failed = TRUE
+         Failure_Code = -30
+      endif
+
+      unlink secondC R3 secondD
+
+   endif
+
+# End Test 9
+
+#-------------------------------------------------------------------#
+# Test 10 - Navigate from a set to a set in a one to many assoc 
+#           relationship
+#-------------------------------------------------------------------#
+
+   if Iteration = 10 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objD", "Nav from set O to D"]
+
+      Val1 = 0
+      Val2 = 0
+
+      {SetO} = firstD -> R19.Object_O
+
+      if countof {SetO} = 2 then
+
+         {SetD} = {SetO} -> R19.Object_D
+
+         if countof {SetD} = 2 then
+
+            for InstD in {SetD} do
+
+               if Val1 = 0 then
+                  Val1 = InstD.idD
+               else
+                  Val2 = InstD.idD
+               endif
+
+            endfor
+
+            if Val1 != 1 | Val2 != 1 then
+               Has_Failed = TRUE
+               Failure_Code = -10
+            endif
+
+         else
+            Has_Failed = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed = TRUE
+         Failure_Code = -30
+      endif
+
+   endif
+
+# End Test 10
+
+#-------------------------------------------------------------------#
+# Test 11 - Navigate from a set to a set in a one to many assoc 
+#           relationship
+#-------------------------------------------------------------------#
+
+   if Iteration = 11 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objD", "Nav from set O to DO"]
+
+      Val1 = 0
+      Val2 = 0
+
+      {SetO} = firstD -> R19.Object_O
+
+      if countof {SetO} = 2 then
+
+         {SetDO} = {SetO} -> R19.Object_DO
+
+         if countof {SetDO} = 2 then
+
+            for InstDO in {SetDO} do
+
+               if Val1 = 0 then
+                  Val1 = InstDO.idDO
+               else
+                  Val2 = InstDO.idDO
+               endif
+
+            endfor
+
+            if Val1 = 1 & Val2 = 5 then
+               Has_Failed = FALSE
+            else
+               if Val1 = 5 & Val2 = 1 then
+                  Has_Failed = FALSE
+               else
+                  Has_Failed = TRUE
+                  Failure_Code = -10
+               endif
+
+            endif
+
+         else
+            Has_Failed = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed = TRUE
+         Failure_Code = -30
+      endif
+
+   endif
+
+# End Test 11
+
+#-------------------------------------------------------------------#
+# Test 12 - Attempt to navigate from an instance that does not form 
+#          any part of a relationship
+#-------------------------------------------------------------------#
+
+   if Iteration = 12 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objD", "Nav from D to O while not linked"]
+
+      # Perform the navigation
+      {SetO} = fourthD -> R19.Object_O
+
+      # Check the results of the navigation
+      if countof {SetO} != 0 then
+         Failure_Code = -10
+         Has_Failed   = TRUE
+      endif
+
+   endif
+
+# End Test 12
+
+#-------------------------------------------------------------------#
+# Test 13 - Attempt to navigate from an instance that does not form 
+#          any part of a relationship
+#-------------------------------------------------------------------#
+
+   if Iteration = 13 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objD", "Nav from D to C while not linked"]
+
+      # Perform the navigation
+      {SetC} = thirdD -> R3.Object_C
+
+      # Check the results of the navigation
+      if countof {SetC} != 0 then
+         Failure_Code = -10
+         Has_Failed   = TRUE
+      endif
+
+   endif
+
+# End Test 13
+
+#-------------------------------------------------------------------#
+# Test 14 - Attempt to navigate from an instance that does not form 
+#           any part of a relationship
+#-------------------------------------------------------------------#
+
+   if Iteration = 14 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objD", "Nav from C to D while not linked"]
+
+      # Perform the navigation      
+      InstD = secondC -> R3.Object_D
+
+      # Check the results of the navigation
+      if InstD != UNDEFINED then
+         Failure_Code = -10
+         Has_Failed   = TRUE
+      endif
+
+   endif
+
+# End Test 14
+
+#-------------------------------------------------------------------#
+# Test 15 - Attempt to navigate to the associative from an instance 
+#           that does not form any part of a relationship  
+#-------------------------------------------------------------------#
+
+   if Iteration = 15 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objD", "Nav from D to DO while not linked"]
+
+      # Perform the navigation
+      {SetDO} = fourthD -> R19.Object_DO
+
+      # Check the results of the navigation
+      if countof {SetDO} != 0 then
+         Failure_Code = -10
+         Has_Failed   = TRUE
+      endif
+
+   endif
+
+# End Test 15
+
+#-------------------------------------------------------------------#
+# Test 16 - Navigate to the associative object from Object D
+#-------------------------------------------------------------------#
+
+   if Iteration = 16 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0706", "Relationships", "objD", "Navigate from ObjD to assoc object DO"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      # Perform The Navigation
+      {SetDO} = firstD -> R19.Object_DO
+
+      if countof {SetDO} != 2 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         Val1  = -20
+         Val2  = -30         
+
+         for InstDO in {SetDO} do
+
+            if InstDO.idDO = 1 then
+               Val1  = InstDO.idDO
+            endif
+
+            if InstDO.idDO = 5 then
+               Val2  = InstDO.idDO
+            endif
+
+         endfor
+
+      endif
+
+      if Val1 = 1 then
+
+         if Val2 = 5 then
+            Has_Failed = FALSE
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val2
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = Val1
+      endif
+
+   endif
+
+# End Test 16
+
+#-------------------------------------------------------------------#
+# Test 17 - Navigate from associative object to Object D
+#-------------------------------------------------------------------#
+
+   if Iteration = 17 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0707", "Relationships", "objD", "Navigate from the assoc to Object D"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+      # Perform The Navigation
+      InstD = fifthDO -> R19.Object_D
+
+      if InstD.idD != 1  then
+         Has_Failed   = TRUE
+         Failure_Code = InstD.idD
+      endif
+
+   endif
+
+# End Test 17
+
+#-------------------------------------------------------------------#
+# Test 18 - Navigate from associative object to Object O
+#-------------------------------------------------------------------#
+
+   if Iteration = 18 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0707", "Relationships", "objD", "Nav from the assoc to Obj O"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform The Navigation
+      InstO = firstDO -> R19.Object_O
+
+      if InstO.idO != 2 then
+         Has_Failed   = TRUE
+         Failure_Code = InstO.idO
+      endif
+
+   endif
+
+# End Test 18
+
+#-------------------------------------------------------------------#
+# Test 19 - Navigate from Object O to the asociative object
+#-------------------------------------------------------------------#
+
+   if Iteration = 19 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0706", "Relationships", "objD", "Nav from Obj O to Obj DO"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+      # Perform The Navigation
+      InstDO = secondO -> R19.Object_DO
+
+      if InstDO.idDO != 1 then
+         Has_Failed   = TRUE
+         Failure_Code = InstDO.idDO
+      endif
+
+   endif
+
+# End Test 19
+
+#-------------------------------------------------------------------#
+# Test 20 - Attempt to navigate an unlinked relationship 
+#-------------------------------------------------------------------#
+
+   if Iteration = 20 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-1205", "Relationships", "objD", "Nav from O to D which isn't linked"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      BigD = create Object_D with idD = 1000
+      BigO = create Object_O with idO = 1001
+
+      # Perform The Navigation
+      InstD = BigO -> R19.Object_D
+
+      if InstD != UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+      delete BigD
+      delete BigO
+   endif
+
+# End Test 20
+
+#-------------------------------------------------------------------#
+# Test 21 - Create some new instances and link them and then attempt
+#           to navigate them
+#-------------------------------------------------------------------#
+
+   if Iteration = 21 then
+       
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0609", "Relationships", "objD", "Nav from O to D"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0611"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0612"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0613"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0701"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1203"]      
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      NewInstD  = create Object_D  with idD  = 101
+      NewInstO  = create Object_O  with idO  = 202
+      NewInstDO = create Object_DO with idDO = 303 
+
+      link NewInstD R19 NewInstO using NewInstDO
+
+      #Perform The Navigation
+      InstD = NewInstO -> R19.Object_D
+
+      if InstD != UNDEFINED then
+
+         if InstD.idD != 101 then
+            Has_Failed   = TRUE
+            Failure_Code = InstD.idD
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+      unassociate NewInstD R19 NewInstO from NewInstDO
+
+      unlink NewInstD R19 NewInstO
+
+      delete NewInstD
+      delete NewInstO
+      delete NewInstDO
+     
+   endif
+
+# End Test 21
+
+#-------------------------------------------------------------------#
+# Test 22 - Chained navigation from a single instance in Object C
+#           through Object D to Object O
+#-------------------------------------------------------------------#
+
+   if Iteration = 22 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objD", "ObjC to ObjD to ObjO"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      # Perform the navigation
+      InstD = thirdC -> R3.Object_D
+
+      if InstD != UNDEFINED then
+
+         {SetO} = thirdC -> R3.Object_D -> R19.Object_O
+
+         if countof {SetO} != 2 then
+            Has_Failed   = TRUE
+            Failure_Code = -10
+         else
+
+            Val1  = -20
+            Val2  = -30
+
+            for InstO in {SetO} do
+
+               if InstO.idO = 2 then
+                  Val1  = InstO.idO
+               endif
+
+               if InstO.idO = 3 then
+                  Val2  = InstO.idO
+               endif
+
+            endfor
+
+            if Val1 = 2 then
+  
+               if Val2 = 3 then
+                  Has_Failed = FALSE
+               else
+                  Has_Failed   = TRUE
+                  Failure_Code = Val2
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = Val1
+            endif
+
+         endif
+
+      else
+         Failure_Code = -100
+      endif
+
+   endif
+
+# End Test 22
+
+#-------------------------------------------------------------------#
+# Test 23 - Chained navigation from a single instance in Object O
+#           through Object D to Object C
+#-------------------------------------------------------------------#
+
+   if Iteration = 23 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objD", "ObjO to ObjD to ObjC"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      # Perform the navigation
+      {SetC} = secondO -> R19.Object_D -> R3.Object_C
+
+      if countof {SetC} != 2 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         Val1  = -20
+         Val2  = -30
+
+         for InstC in {SetC} do
+
+            if InstC.idC = 1 then
+               Val1  = InstC.idC
+            endif
+
+            if InstC.idC = 3 then
+               Val2  = InstC.idC
+            endif
+
+         endfor
+
+         if Val1 = 1 then
+
+            if Val2 = 3 then
+               Has_Failed = FALSE
+            else
+               Has_Failed   = TRUE
+               Failure_Code = Val2
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val1
+         endif
+
+      endif
+
+   endif
+
+# End Test 23
+
+#-------------------------------------------------------------------#
+# Test 24 - Chained navigation from a single instance in Object O
+#           to Object D via an instance of Object DO
+#-------------------------------------------------------------------#
+
+   if Iteration = 24 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0706", "Relationships", "objD", "ObjO to ObjD via ObjDO"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0704"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstD = secondO -> R19.Object_DO -> R19.Object_D
+
+      if InstD.idD != 1 then
+         Has_Failed   = TRUE
+         Failure_Code = InstD.idD
+      endif
+
+   endif
+
+# End Test 24
+
+#-------------------------------------------------------------------#
+# Test 25 - Chained navigation from a single instance in Object C to
+#           Object DO via Object D
+#-------------------------------------------------------------------#
+
+   if Iteration = 25 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0706", "Relationships", "objD", "ObjC to ObjDO via ObjD"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0704"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+     
+      # Perform the navigation
+      {SetDO} = thirdC -> R3.Object_D -> R19.Object_DO
+
+      if countof{SetDO} != 2 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         Val1  = -20
+         Val2  = -30
+
+         for InstDO in {SetDO} do
+ 
+           if InstDO.idDO = 1 then
+              Val1  = InstDO.idDO
+           endif
+
+           if InstDO.idDO = 5 then
+              Val2  = InstDO.idDO
+           endif
+
+
+         endfor
+
+      endif
+
+      if Val1 = 1 then
+
+         if Val2 = 5 then
+            Has_Failed = FALSE
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val2
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = Val1
+      endif
+
+   endif
+
+# End Test 25
+
+#-------------------------------------------------------------------#
+# Test 26 - Chained navigation from a single instance in Object O to
+#           Object C via Objects DO and D
+#-------------------------------------------------------------------#
+
+   if Iteration = 26 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0706", "Relationships", "objD", "ObjO to ObjC via ObjD and ObjDO"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0704"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      # Perform the navigation
+      {SetC} = secondO -> R19.Object_DO -> R19.Object_D -> R3.Object_C
+
+      if countof{SetC} != 2 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         Val1  = -20
+         Val2  = -30
+
+         for InstC in {SetC} do
+
+            if InstC.idC = 1 then
+               Val1  = InstC.idC
+            endif
+ 
+            if InstC.idC = 3 then
+               Val2  = InstC.idC
+            endif
+
+         endfor
+
+      endif
+
+      if Val1 = 1 then
+
+         if Val2 = 3 then
+            Has_Failed = FALSE
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val2
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = Val1
+      endif
+
+   endif
+
+# End Test 26
+
+#-------------------------------------------------------------------#
+# Test 27 - Attempt to navigate an unlinked relationship 
+#-------------------------------------------------------------------#
+
+   if Iteration = 27 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objD", "Nav ObjDO to ObjO while unlinked"]
+
+      # Perform The Navigation
+      InstO = thirdDO -> R19.Object_O
+
+      if InstO != UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+   endif
+
+# End Test 27
+
+#-------------------------------------------------------------------#
+# Test 28 - Attempt to navigate an unlinked relationship 
+#-------------------------------------------------------------------#
+
+   if Iteration = 28 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objD", "Nav ObjDO to ObjO while unlinked"]
+
+      # Perform The Navigation
+      InstD = thirdDO -> R19.Object_D
+
+      if InstD != UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+   endif
+
+# End Test 28
+
+#-------------------------------------------------------------------#
+# Test 29 - Attempt to navigate an unlinked relationship 
+#-------------------------------------------------------------------#
+
+   if Iteration = 29 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objD", "Nav ObjO to ObjD while unlinked"]
+
+      # Perform The Navigation
+      InstD = fifthO -> R19.Object_D
+
+      if InstD != UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+   endif
+
+# End Test 29
+
+#-------------------------------------------------------------------#
+# Tests complete
+#-------------------------------------------------------------------#
+
+if Supported = TRUE then
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objD", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objD", Test, Failure_Code]
+   endif
+
+else
+   [] = RPT4:Test_Unsupported[Test]
+endif
+
+enddefine

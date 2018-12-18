@@ -1,0 +1,209 @@
+define function  MO3:Delete_Relationships
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------#
+#
+# Delete all relationships
+#
+# The architecture shall provide a mapping from the ASL delete 
+# instance statment to the deletion mechanism
+# 1241-0000-01-0121
+#
+# The architecture shall provide a mechanism to allow deletion of a 
+# simple relationship link between two object instances
+# 1241-0000-01-0604
+#
+# The architecture shall provide a mechanism to allow the deletion of 
+# an associative link between an associative object and the link an
+# between two objects
+# 1241-0000-01-0612
+#
+# The architecture shall provide a mechanism to allow the deletion of 
+# a link between two objects in an associative relationship
+# 1241-0000-01-0613
+#
+# The architecture shall support a translation of the ASL unassociate
+# statment to map to the mechanism that allows the deletion of an 
+# associative link between an associative object and the link between
+# two objects
+# 1241-0000-01-1203
+#
+# The architecture shall support a translation of the ASL unlink
+# statement to map to the mechanism that allow the deletion of a 
+# link between two objects in a relationship
+# 1241-0000-01-1204
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+Has_Failed = FALSE
+
+[] = RPT1:Start_Test[Test, "1241-0000-01-0604", "Relationships", "MO", "Delete all relationships"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0612"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0613"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-1203"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-1204"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0622"]
+# Find the desired instances 
+
+# Find the desired instances Left_Object
+firstLeft  = find-one Left_Object where idLO = 1
+secondLeft = find-one Left_Object where idLO = 2
+thirdLeft  = find-one Left_Object where idLO = 3
+
+# Find the desired instances Middle_Object
+firstMiddle  = find-one Middle_Object where idMO = 1
+thirdMiddle  = find-one Middle_Object where idMO = 3
+fourthMiddle = find-one Middle_Object where idMO = 4
+fifthMiddle  = find-one Middle_Object where idMO = 5
+bigMiddle    = find-one Middle_Object where idMO = 1975
+
+# Find the desired instances Right_Object
+secondRight = find-one Right_Object where idRO = 2
+fourthRight = find-one Right_Object where idRO = 4
+fifthRight  = find-one Right_Object where idRO = 5
+bigRight    = find-one Right_Object where idRO = 2001
+
+# Find the desired instances Associative_Object
+firstMR  = find-one MR_Assoc where idMR = 1
+secondMR = find-one MR_Assoc where idMR = 2
+thirdMR  = find-one MR_Assoc where idMR = 3
+fifthMR  = find-one MR_Assoc where idMR = 5
+   
+# Delete all relationships
+unlink firstLeft  R12 firstMiddle
+unlink firstLeft  R12 thirdMiddle
+
+# unlink secondLeft R12 firstMiddle
+unlink secondLeft R12 fifthMiddle
+unlink thirdLeft  R12 fourthMiddle
+
+unassociate firstMiddle  R14 secondRight from firstMR
+unassociate thirdMiddle  R14 fourthRight from fifthMR
+unassociate fifthMiddle  R14 fourthRight from thirdMR
+unassociate fourthMiddle R14 fifthRight from secondMR
+
+unlink firstMiddle  R14 secondRight
+unlink thirdMiddle  R14 fourthRight
+unlink fifthMiddle  R14 fourthRight
+unlink fourthMiddle R14 fifthRight
+
+# Explicitly check that all instances have been unlinked
+# correctly.
+
+{Set1M}    = firstLeft  -> R12.Middle_Object
+{Set2M}    = secondLeft -> R12.Middle_Object
+{Set3M}    = thirdLeft  -> R12.Middle_Object
+
+Inst1MRa = firstMiddle  -> R14.MR_Assoc
+Inst1MRb = fourthMiddle -> R14.MR_Assoc
+Inst5MRa = thirdMiddle  -> R14.MR_Assoc
+Inst5MRb = fifthMiddle  -> R14.MR_Assoc  
+
+Inst2R = firstMR -> R14.Right_Object
+Inst4R = fifthMR -> R14.Right_Object
+
+No_In_Set_1M = countof {Set1M}
+
+# Attempt to perform some illegal navigations
+
+if countof {Set1M}  = 0 then
+
+   if Inst1MRa = UNDEFINED then
+
+      if Inst4R != UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -20
+   endif
+
+else
+   Has_Failed   = TRUE
+   Failure_Code = -10
+endif
+
+if not Has_Failed then
+   {SetLO}  = find-all Left_Object
+   {SetMO}  = find-all Middle_Object
+   {SetRO}  = find-all Right_Object
+   {SetMRA} = find-all MR_Assoc
+
+   for InstLO in {SetLO} do
+      delete InstLO
+   endfor
+
+   for InstMO in {SetMO} do
+      delete InstMO
+   endfor
+
+
+   for InstRO in {SetRO} do
+      delete InstRO
+   endfor
+
+
+   for InstMRA in {SetMRA} do
+      delete InstMRA
+   endfor
+
+   {SetLO}  = find-all Left_Object
+   {SetMO}  = find-all Middle_Object
+   {SetRO}  = find-all Right_Object
+   {SetMRA} = find-all MR_Assoc
+
+   if countof {SetLO} = 0 then
+
+      if countof {SetMO} = 0 then
+
+         if countof {SetRO} = 0 then
+
+            if countof {SetMRA} != 0 then
+               Has_Failed   = TRUE
+               Failure_Code = -40
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -50
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -60
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -70
+   endif
+
+endif
+
+#-------------------------------------------------------------------#
+# Test complete
+#-------------------------------------------------------------------#
+
+   if Has_Failed then
+      [] = RPT3:Test_Failed["MO", Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["MO", Test, 0]
+   endif
+
+#-------------------------------------------------------------------#
+
+enddefine
