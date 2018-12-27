@@ -603,71 +603,63 @@ INSERT INTO SM_ACT
 	VALUES ("5d8b8088-25f7-49dd-90e7-8ccbbd0d0bdd",
 	"21ca00a1-b235-4f22-a57b-bbaa39b64ef3",
 	1,
-	'//LOG::LogInfo( message:"calculatingMovement" );
-
-select any leader from instances of leader;
+	'select any leader from instances of leader;
 select one leaderRover related by leader->rover[R1];
-select one followerRover related by self->rover[R1];
+select one followerRover related by self->rover[R1]; 
 
-LOG::LogInfo( message:"-------------------------------------------");
-LOG::LogReal( message:"X Leader", r:leaderRover.curPosition.x );
-LOG::LogReal( message:"Z", r:leaderRover.curPosition.z );
-LOG::LogReal( message:"X Follower", r:followerRover.curPosition.x );
-LOG::LogReal( message:"Z", r:followerRover.curPosition.z );
-LOG::LogReal( message:"Distance", r:leader.distance );
-LOG::LogInfo( message:"-------------------------------------------");
+LOG::LogInfo( message:"-------------------------------------------" );
+LOG::LogReal( message:"- Distance", r:leader.distance ); 
+LOG::LogInfo( message:"-------------------------------------------" );
 
-//
-// Perform calculations we''ll use later for decision making
-//
-leaderToRoverXDiff = leaderRover.curPosition.x - followerRover.curPosition.x;
-leaderXDiff = leaderRover.curPosition.x - leaderRover.oldPosition.x;
-leaderMovingRight = false;
-leaderMovingLeft = false;
+leaderBearing = MATH::bearing(x1:leaderRover.oldPosition.x, x2:leaderRover.curPosition.x, y1:leaderRover.oldPosition.z, y2:leaderRover.curPosition.z); 
+followerBearing = self.bearing; 
 
-//
-// Look at the X track data of the leader to decide if he''s moving left or right
-//
-if ( (leaderRover.curPosition.x > leaderRover.prevPosition.x) and (leaderRover.prevPosition.x > leaderRover.oldPosition.x) )
-  leaderMovingRight = true;
-  //LOG::LogInfo( message:"Leader is moving RIGHT" );
-elif ( (leaderRover.curPosition.x < leaderRover.prevPosition.x) and (leaderRover.prevPosition.x < leaderRover.oldPosition.x) )
-  leaderMovingLeft = true;
-  //LOG::LogInfo( message:"Leader is moving LEFT" );
+LOG::LogReal( message:"- leader bearing", r:leaderBearing ); 
+LOG::LogReal( message:"- follower bearing", r:followerBearing ); 
+LOG::LogInfo( message:"-------------------------------------------" );
+
+if ( ( leaderBearing > 0 ) and ( leaderBearing < 180 ) ) 
+    if ( ( followerBearing < 360 ) and ( followerBearing > 180 ) ) 
+       diff = leaderBearing - ( 360 - followerBearing ); 
+       if ( diff > BEARING_TURN_PRECISION ) 
+           generate follower4:turnRight() to self;
+       else 
+           generate follower2:distance() to self; 
+       end if; 
+    else 
+       if ( MATH::abs(a: leaderBearing - followerBearing) > BEARING_TURN_PRECISION ) 
+           if ( leaderBearing > followerBearing ) 
+               generate follower4:turnRight() to self; 
+           else 
+               generate follower3:turnLeft() to self; 
+           end if;
+       else 
+           generate follower2:distance() to self; 
+       end if;
+    end if;
+elif ( ( leaderBearing < 360 ) and ( leaderBearing > 180 ) ) 
+    if ( ( followerBearing > 0 ) and ( followerBearing < 180 ) ) 
+       diff = ( 360 + followerBearing ) - leaderBearing; 
+       if ( diff > BEARING_TURN_PRECISION ) 
+           generate follower3:turnLeft() to self; 
+       else 
+           generate follower2:distance() to self;
+       end if; 
+    else 
+       if ( MATH::abs(a: leaderBearing - followerBearing) > BEARING_TURN_PRECISION ) 
+           if ( leaderBearing > followerBearing ) 
+               generate follower4:turnRight() to self; 
+           else 
+               generate follower3:turnLeft() to self; 
+           end if;
+       else 
+           generate follower2:distance() to self; 
+       end if;
+    end if;
+else 
+    generate follower2:distance() to self; 
 end if;
 
-//
-// Decide if we should turn or continue forward
-//
-if ( (leaderToRoverXDiff > TRACK_PRECISION) and (leaderRover.curPosition.x > followerRover.curPosition.x) ) 
-  LOG::LogReal( message:"CASE A - Leader to Rover X diff: ", r:leaderToRoverXDiff );
-  generate follower4:''turnRight'' to self;
-
-elif ( (leaderToRoverXDiff < -TRACK_PRECISION) and (leaderRover.curPosition.x < followerRover.curPosition.x) ) 
-  LOG::LogReal( message:"CASE B - Leader to Rover X diff: ", r:leaderToRoverXDiff );
-  generate follower3:''turnLeft'' to self;
-
-elif ( (leaderXDiff > LEADER_TURN_PRECISION) and leaderMovingRight ) 
-  LOG::LogReal( message:"CASE C - Leader X diff: ", r:leaderXDiff );
-  generate follower4:''turnRight'' to self;
-
-elif ( (leaderXDiff < -LEADER_TURN_PRECISION) and leaderMovingRight ) 
-  LOG::LogReal( message:"CASE D - distance: ", r:leader.distance );
-  generate follower2:''distance'' to self;
-
-elif ( (leaderXDiff < -LEADER_TURN_PRECISION) and leaderMovingLeft ) 
-  LOG::LogReal( message:"CASE E - Leader X diff: ", r:leaderXDiff );
-  generate follower3:''turnLeft'' to self;
-
-elif ( (leaderXDiff > LEADER_TURN_PRECISION) and leaderMovingLeft ) 
-  LOG::LogReal( message:"CASE F - distance: ", r:leader.distance );
-  generate follower2:''distance'' to self;
-
-else
-  // Just go straight
-  LOG::LogReal( message:"CASE G - distance: ", r:leader.distance );
-  generate follower2:''distance'' to self;
-end if;
 ',
 	'',
 	0);
@@ -708,7 +700,7 @@ else
   // Here we are in the target zone, go forward at a reasonable pace
   LOG::LogInfo( message:"In the zone, proceeding reasonably." );
   CTL::brake( power:0 );
-  CTL::setLRPower( lpower:45, rpower:45 );
+  CTL::setLRPower( lpower:45+::gain(), rpower:45+::gain() );
 end if;
 
 // Make sure we don''t pass the leader
@@ -756,13 +748,8 @@ INSERT INTO SM_ACT
 select one leaderRover related by leader->rover[R1];
 select one followerRover related by self->rover[R1];
 
-if ( leaderRover.curPosition.x < followerRover.curPosition.x )
-  LOG::LogInfo( message:"turningLeft" );
-  CTL::setLRPower( lpower:15, rpower:30 );
-else
-  LOG::LogInfo( message:"  Override, not turningLeft" );
-  CTL::setLRPower( lpower:30, rpower:30 );
-end if;
+LOG::LogInfo( message:"turningLeft" );
+CTL::setLRPower( lpower:15+::gain(), rpower:30+::gain() );
  
 generate follower5:''doneMoving'' to self;
 ',
@@ -783,13 +770,8 @@ INSERT INTO SM_ACT
 select one leaderRover related by leader->rover[R1];
 select one followerRover related by self->rover[R1];
 
-if ( leaderRover.curPosition.x > followerRover.curPosition.x )
-  LOG::LogInfo( message:"turningRight" );
-  CTL::setLRPower( lpower:30, rpower:15 );
-else
-  LOG::LogInfo( message:"  Override, not turningRight" );
-  CTL::setLRPower( lpower:30, rpower:30 );
-end if;
+LOG::LogInfo( message:"turningRight" );
+CTL::setLRPower( lpower:30+::gain(), rpower:15+::gain() );
  
 generate follower5:''doneMoving'' to self;
 ',
@@ -818,6 +800,9 @@ leaderRover.oldPosition = leaderRover.prevPosition;
 leaderRover.prevPosition = leaderRover.curPosition;
 followerRover.oldPosition = followerRover.prevPosition;
 followerRover.prevPosition = followerRover.curPosition;
+
+// cache distance history
+leader.prevDistance = leader.distance;
 
 // We don''t have to generate this event as the periodic tick generates it.',
 	'',

@@ -138,7 +138,12 @@ public class RComm implements IRCommToProvider, ILocationDataFromProvider {
         int roverPort = 0;
         try{
             //------ Load config
-            java.util.List<String> conf = readFile( System.getenv( "HOME" ) + "/" + CONFIG_FILE );
+            String homedir = System.getenv("HOME");
+            if( System.getProperty("os.name").startsWith("Windows") ){
+        		homedir = "c:";
+        	}
+        	
+            java.util.List<String> conf = readFile( homedir + "/" + CONFIG_FILE );
             Iterator<String> conIt = conf.iterator();
             while (conIt.hasNext()) {
                 String a = conIt.next();

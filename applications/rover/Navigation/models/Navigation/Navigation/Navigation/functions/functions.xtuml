@@ -66,6 +66,31 @@ INSERT INTO PE_PE
 	"922b7aac-cefb-4a60-9289-36f02f0ca607",
 	"00000000-0000-0000-0000-000000000000",
 	1);
+INSERT INTO S_SYNC
+	VALUES ("e55ee3f4-57c5-4c93-aa27-328809b20833",
+	"00000000-0000-0000-0000-000000000000",
+	'gain',
+	'',
+	'select any leader from instances of leader;
+gain = 0;
+if ( leader.distance < leader.prevDistance - GAIN_WINDOW )
+  LOG::LogInfo( message:"Speed adjustment - slowing down" );
+  gain = GAIN_SLOW_DOWN;
+elif ( leader.distance > leader.prevDistance + GAIN_WINDOW)
+  LOG::LogInfo( message:"Speed adjustment - speeding up" );
+  gain = GAIN_SPEED_UP;
+end if;
+return gain;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("e55ee3f4-57c5-4c93-aa27-328809b20833",
+	1,
+	"922b7aac-cefb-4a60-9289-36f02f0ca607",
+	"00000000-0000-0000-0000-000000000000",
+	1);
 INSERT INTO PE_PE
 	VALUES ("922b7aac-cefb-4a60-9289-36f02f0ca607",
 	1,

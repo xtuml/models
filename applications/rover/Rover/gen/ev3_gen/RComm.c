@@ -257,3 +257,6 @@ RComm_Location_roverGPS( const r_t p_x, const r_t p_z )
   Rover_RComm__Location_roverGPS(  p_x, p_z );
 }
 
+void RComm_execute_initialization()
+{
+}

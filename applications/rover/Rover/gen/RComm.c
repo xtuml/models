@@ -393,3 +393,9 @@ RComm_connect( i_t port )
 
     return sock;
 }
+
+void
+RComm_execute_initialization()
+{
+
+}
