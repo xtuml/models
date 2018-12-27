@@ -21,7 +21,9 @@ abort () {
 trap abort SIGINT SIGTERM
 
 # input variables
-BPINSTALL="/build/buildmt/roundtrip/BridgePoint"
+if [[ "" == "$BPINSTALL" ]]; then
+    BPINSTALL="/build/buildmt/roundtrip/BridgePoint"
+fi
 OUT_DIR=
 RELAUNCH=
 
