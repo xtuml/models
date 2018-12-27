@@ -7,6 +7,47 @@ INSERT INTO O_OBJ
 	'house',
 	'',
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("a8bda3a8-c587-4e1d-9e01-ba2467632c86",
+	"38a615a0-18ef-47d0-a75a-d89a289151ed",
+	'populate',
+	'',
+	"5784d38b-b34c-4366-a24e-017022d97aeb",
+	0,
+	'select any house from instances of house where ( selected.color == param.color );
+if ( empty house )
+  create object instance house of house;
+  house.color = param.color;
+end if;
+return house;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("60f6c670-06cf-46be-a1c0-5ce07fb83eb1",
+	"a8bda3a8-c587-4e1d-9e01-ba2467632c86",
+	'color',
+	"90a625d7-60a1-48bc-bd9e-ecf5b8220a35",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("90a625d7-60a1-48bc-bd9e-ecf5b8220a35",
+	"00000000-0000-0000-0000-000000000000",
+	'color',
+	'',
+	'',
+	'../c.xtuml');
+INSERT INTO S_DT_PROXY
+	VALUES ("5784d38b-b34c-4366-a24e-017022d97aeb",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<house>',
+	'',
+	'',
+	'../c.xtuml');
 INSERT INTO O_NBATTR
 	VALUES ("22f98caa-16e2-4d43-83a0-e7af6b0ddf6c",
 	"38a615a0-18ef-47d0-a75a-d89a289151ed");
@@ -25,21 +66,47 @@ INSERT INTO O_ATTR
 	"90a625d7-60a1-48bc-bd9e-ecf5b8220a35",
 	'',
 	'');
-INSERT INTO S_DT_PROXY
-	VALUES ("90a625d7-60a1-48bc-bd9e-ecf5b8220a35",
+INSERT INTO O_REF
+	VALUES ("38a615a0-18ef-47d0-a75a-d89a289151ed",
+	"ce8f9e3d-5695-4656-aebf-46584881805b",
+	0,
+	"c4a2c611-f053-4312-b81b-4824513f3140",
+	"afcc8d32-28b2-49a5-8c54-ed0eb60e034c",
+	"4ab3b864-d4f5-46ba-9fd1-13df80289915",
+	"380ec77c-4700-4bb5-8131-8a392b9c7adc",
+	"020c5412-1b92-47f4-ad1a-dbd6c29a20a5",
+	"b6c23e0b-1cd6-4947-bf86-14e21368f060",
 	"00000000-0000-0000-0000-000000000000",
-	'color',
+	0,
 	'',
-	'',
+	'address',
+	'number',
+	'R6.''occupies''');
+INSERT INTO R_RGO_PROXY
+	VALUES ("38a615a0-18ef-47d0-a75a-d89a289151ed",
+	"afcc8d32-28b2-49a5-8c54-ed0eb60e034c",
+	"4ab3b864-d4f5-46ba-9fd1-13df80289915",
 	'../c.xtuml');
-INSERT INTO O_NBATTR
-	VALUES ("d70b5d96-6cb1-4ef3-89a0-09d31b14bdb8",
-	"38a615a0-18ef-47d0-a75a-d89a289151ed");
-INSERT INTO O_BATTR
-	VALUES ("d70b5d96-6cb1-4ef3-89a0-09d31b14bdb8",
-	"38a615a0-18ef-47d0-a75a-d89a289151ed");
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("c4a2c611-f053-4312-b81b-4824513f3140",
+	"ce8f9e3d-5695-4656-aebf-46584881805b",
+	0,
+	"afcc8d32-28b2-49a5-8c54-ed0eb60e034c",
+	"380ec77c-4700-4bb5-8131-8a392b9c7adc",
+	'../c.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("020c5412-1b92-47f4-ad1a-dbd6c29a20a5",
+	"38a615a0-18ef-47d0-a75a-d89a289151ed",
+	"c4a2c611-f053-4312-b81b-4824513f3140",
+	"ce8f9e3d-5695-4656-aebf-46584881805b",
+	1,
+	'number');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("c4a2c611-f053-4312-b81b-4824513f3140",
+	"ce8f9e3d-5695-4656-aebf-46584881805b",
+	'../address/address.xtuml');
 INSERT INTO O_ATTR
-	VALUES ("d70b5d96-6cb1-4ef3-89a0-09d31b14bdb8",
+	VALUES ("020c5412-1b92-47f4-ad1a-dbd6c29a20a5",
 	"38a615a0-18ef-47d0-a75a-d89a289151ed",
 	"22f98caa-16e2-4d43-83a0-e7af6b0ddf6c",
 	'number',
@@ -62,7 +129,7 @@ INSERT INTO O_ID
 	VALUES (1,
 	"38a615a0-18ef-47d0-a75a-d89a289151ed");
 INSERT INTO O_OIDA
-	VALUES ("d70b5d96-6cb1-4ef3-89a0-09d31b14bdb8",
+	VALUES ("020c5412-1b92-47f4-ad1a-dbd6c29a20a5",
 	"38a615a0-18ef-47d0-a75a-d89a289151ed",
 	1,
 	'number');
