@@ -1,0 +1,266 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35",
+	'permutation',
+	7,
+	'permutation',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("2d2cfe7f-377b-423c-891f-199cd8754fe0",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35",
+	'permute',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'// Copy previous row forward.
+i = 0;
+while ( i < self.N )
+  u = self.p[self.index-1][i];
+  self.p[self.index][i] = u;
+  i = i + 1;
+end while;
+
+i = self.index;
+j = self.N - 1;
+k = self.N;
+
+while ( self.p[i][j-1] >= self.p[i][j] )
+  j = j - 1;
+end while;
+
+while ( self.p[i][k-1] <= self.p[i][j-1] )
+  k = k - 1;
+end while;
+
+// swap
+t = self.p[i][j-1]; u = self.p[i][k-1]; self.p[i][j-1] = u; self.p[i][k-1] = t;
+
+j = j + 1; k = self.N;
+while ( j < k )
+  // swap
+  t = self.p[i][j-1]; u = self.p[i][k-1]; self.p[i][j-1] = u; self.p[i][k-1] = t;
+  j = j + 1; k = k - 1;
+end while;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0);
+INSERT INTO O_TFR
+	VALUES ("acf945d6-8e95-4790-b3cd-b22e6629128d",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35",
+	'populate',
+	'',
+	"95f83939-c44b-4867-86af-c240f866da1e",
+	0,
+	'create object instance permutation of permutation;
+permutation.N = param.bigN;
+
+// array init
+permutation.p[119][4] = 0;
+
+// Get factorial to understand length of map.
+f = permutation.factorial( n:param.bigN );
+
+i = 0;
+while ( i < permutation.N )
+  permutation.p[0][i] = i;
+  i = i + 1;
+end while;
+
+// Permute N! to populate the map.
+permutation.index = 1;
+while ( permutation.index < f )
+  permutation.permute();
+  permutation.index = permutation.index + 1;
+end while;
+
+return permutation;',
+	1,
+	'',
+	"2d2cfe7f-377b-423c-891f-199cd8754fe0",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("4a070f30-567c-46a8-af26-49b351d26375",
+	"acf945d6-8e95-4790-b3cd-b22e6629128d",
+	'bigN',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("95f83939-c44b-4867-86af-c240f866da1e",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<permutation>',
+	'',
+	'',
+	'../c.xtuml');
+INSERT INTO O_TFR
+	VALUES ("371db435-ede0-4274-b3f6-37e9518b2e75",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35",
+	'factorial',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'// Compute factorial of input argument.
+if ( param.n <= 1 )
+  return 1;
+end if;
+return ( param.n * self.factorial( n:param.n-1 ) );
+',
+	1,
+	'',
+	"acf945d6-8e95-4790-b3cd-b22e6629128d",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("9c770211-4b28-4af1-98c6-a0fcf19b22c3",
+	"371db435-ede0-4274-b3f6-37e9518b2e75",
+	'n',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("d024d45b-cd17-40f9-a7ca-0078d5c2b4b6",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35",
+	'print',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'LOG::LogInfo( message:"printing" );
+LOG::LogInteger( message:self.N );
+LOG::LogInfo( message:"loop" );
+f = self.factorial( n:self.N );
+i = 0;
+while ( i < f )
+  j = 0;
+  while ( j < self.N )
+    LOG::LogInteger( message:self.p[i][j] );
+    j = j + 1;
+  end while;
+  i = i + 1;
+end while;
+LOG::LogInfo( message:"done" );',
+	1,
+	'',
+	"371db435-ede0-4274-b3f6-37e9518b2e75",
+	0);
+INSERT INTO O_NBATTR
+	VALUES ("663ca2e8-5a07-4c7b-b122-94b92123e9a2",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35");
+INSERT INTO O_BATTR
+	VALUES ("663ca2e8-5a07-4c7b-b122-94b92123e9a2",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35");
+INSERT INTO S_DIM
+	VALUES (120,
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35",
+	"663ca2e8-5a07-4c7b-b122-94b92123e9a2",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"449b6a64-0997-49df-a9e2-76ba6412ac3b",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_DIM
+	VALUES (120,
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35",
+	"663ca2e8-5a07-4c7b-b122-94b92123e9a2",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	"b5f06612-3ec3-447d-b2ab-43234ce6f69c",
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_ATTR
+	VALUES ("663ca2e8-5a07-4c7b-b122-94b92123e9a2",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35",
+	"e5b0ef65-0003-41bc-b6e2-06edba2729f4",
+	'p',
+	'',
+	'',
+	'p',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'[120][120]',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("115bbb8c-983c-486f-9843-737c56ca2f0a",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35");
+INSERT INTO O_BATTR
+	VALUES ("115bbb8c-983c-486f-9843-737c56ca2f0a",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35");
+INSERT INTO O_ATTR
+	VALUES ("115bbb8c-983c-486f-9843-737c56ca2f0a",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35",
+	"00000000-0000-0000-0000-000000000000",
+	'N',
+	'',
+	'',
+	'N',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e5b0ef65-0003-41bc-b6e2-06edba2729f4",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35");
+INSERT INTO O_BATTR
+	VALUES ("e5b0ef65-0003-41bc-b6e2-06edba2729f4",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35");
+INSERT INTO O_ATTR
+	VALUES ("e5b0ef65-0003-41bc-b6e2-06edba2729f4",
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35",
+	"115bbb8c-983c-486f-9843-737c56ca2f0a",
+	'index',
+	'',
+	'',
+	'index',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35");
+INSERT INTO O_ID
+	VALUES (1,
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35");
+INSERT INTO O_ID
+	VALUES (2,
+	"eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35");
+INSERT INTO PE_PE
+	VALUES ("eeb2bc3e-ab1c-41a0-8f44-1618a7d79a35",
+	1,
+	"66472cbd-85b1-4f1d-bc2b-1591be435f4a",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("66472cbd-85b1-4f1d-bc2b-1591be435f4a",
+	"00000000-0000-0000-0000-000000000000",
+	"380b4840-39ac-4c7b-b012-a7b61407bef7",
+	'c',
+	'',
+	0,
+	'../c.xtuml');
