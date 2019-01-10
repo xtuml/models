@@ -1,39 +1,39 @@
-//! ACTIVITY BEGIN. 'af5d68f3-4af1-4fc5-ad77-d4e49508cbbb' DO NOT EDIT THIS LINE.
+//! ACTIVITY BEGIN. 'fba7f0fa-0b84-4230-bfd3-5da9fd43c586' DO NOT EDIT THIS LINE.
 public service UI::TRACK~>setTargetPressed () is
 begin
   Tracking::setTargetPressed();
-end service;
+end;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
-//! ACTIVITY BEGIN. 'c734578c-d953-4852-b034-57b3259574d6' DO NOT EDIT THIS LINE.
+//! ACTIVITY BEGIN. 'd5a72803-c3eb-4b7d-b124-9cfefe848fd0' DO NOT EDIT THIS LINE.
 public service UI::TRACK~>startStopPressed () is
 begin
   Tracking::startStopPressed();
-end service;
+end;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
-//! ACTIVITY BEGIN. '3f5cd2a4-1e68-4c61-8424-88b4c5e58d0e' DO NOT EDIT THIS LINE.
+//! ACTIVITY BEGIN. 'c53ddc42-3306-4fc8-8a09-e84908d3376f' DO NOT EDIT THIS LINE.
 public service UI::TRACK~>lapResetPressed () is
 begin
   Tracking::lapResetPressed();
-end service;
+end;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
-//! ACTIVITY BEGIN. 'cb4d3ba8-fe12-4271-9427-a71e03eea543' DO NOT EDIT THIS LINE.
+//! ACTIVITY BEGIN. '9297ecd3-07db-41d6-b3bf-2b4f9d6ee05b' DO NOT EDIT THIS LINE.
 public service UI::TRACK~>lightPressed () is
 begin
   Tracking::lightPressed();
-end service;
+end;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
-//! ACTIVITY BEGIN. '548062ac-1238-40ec-8f47-1af5b05c71b5' DO NOT EDIT THIS LINE.
+//! ACTIVITY BEGIN. 'ec3d7bd4-33e2-4c70-96df-a1b5e7a76a3a' DO NOT EDIT THIS LINE.
 public service UI::TRACK~>modePressed () is
 begin
   Tracking::modePressed();
-end service;
+end;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
-//! ACTIVITY BEGIN. '7d72cc27-7fdd-403a-b110-bc81352e3841' DO NOT EDIT THIS LINE.
+//! ACTIVITY BEGIN. '733e3acf-3f91-4f59-ac46-fa16a07b6ae4' DO NOT EDIT THIS LINE.
 public service UI::TRACK~>newGoalSpec ( spanType : in UI::UIGoalSpan,
                                        criteriaType : in UI::UIGoalCriteria,
                                        span : in real,
@@ -57,14 +57,62 @@ begin
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
-//! ACTIVITY BEGIN. '11f48a41-c6db-403d-9a5c-1e3cd53cb6d0' DO NOT EDIT THIS LINE.
-public service HeartRateMonitor::HRChange~>heartRateChanged ( heartRate : in integer ) is
+//! ACTIVITY BEGIN. 'c54392d2-6d58-4709-8e8c-cd44f1517301' DO NOT EDIT THIS LINE.
+public service Tracking::HR~>registerListener () is
 begin
-  Tracking::heartRateChanged( heartRate );
+  HeartRateMonitor::registerListener();
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
-//! ACTIVITY BEGIN. 'f470384e-4ac7-48c3-aec2-1b22a0396e89' DO NOT EDIT THIS LINE.
+//! ACTIVITY BEGIN. 'bc715af1-ec2d-4762-9348-4f27d5c8fdeb' DO NOT EDIT THIS LINE.
+public service Tracking::HR~>unregisterListener () is
+begin
+  HeartRateMonitor::unregisterListener();
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. 'ec92abe2-9e26-4b0a-bc98-d9620b3c8375' DO NOT EDIT THIS LINE.
+public service Tracking::LOC~>getDistance ( result : out real,
+                                           toLong : in real,
+                                           toLat : in real,
+                                           fromLong : in real,
+                                           fromLat : in real ) is
+distance: real;
+begin
+  Location::getDistance( distance, toLong, toLat, fromLong, fromLat );
+  result := distance;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '4bb3dd15-ae84-45b4-bc10-97a441e9dd9e' DO NOT EDIT THIS LINE.
+public service Tracking::LOC~>getLocation ( longitude : out real,
+                                           latitude : out real ) is
+lat: real;
+longi: real;
+begin
+  lat := latitude;
+  longi := longitude;
+  Location::getLocation( longi, lat );
+  latitude := lat;
+  longitude := longi;
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '51fc04d0-e831-4169-b7ad-6916a87548dc' DO NOT EDIT THIS LINE.
+public service Tracking::LOC~>registerListener () is
+begin
+  Location::registerListener();
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '33fe09d0-97eb-4f64-9049-49e9b1f78148' DO NOT EDIT THIS LINE.
+public service Tracking::LOC~>unregisterListener () is
+begin
+  Location::unregisterListener();
+end service;
+//! ACTIVITY END. DO NOT EDIT THIS LINE.
+
+//! ACTIVITY BEGIN. '2ab593b9-a17a-459b-a6b8-44985cdb4396' DO NOT EDIT THIS LINE.
 public service Tracking::UI~>setData ( value : in real,
                                       unit : in Tracking::Unit ) is
 begin
@@ -94,7 +142,7 @@ begin
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
-//! ACTIVITY BEGIN. 'a7a600bb-f1fa-47df-bde9-20cfba7998f6' DO NOT EDIT THIS LINE.
+//! ACTIVITY BEGIN. 'aec6dff9-d750-4b65-a4de-5a453831d924' DO NOT EDIT THIS LINE.
 public service Tracking::UI~>setIndicator ( indicator : in Tracking::Indicator ) is
 begin
   if ( indicator = Tracking::Blank  ) then
@@ -109,65 +157,17 @@ begin
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
-//! ACTIVITY BEGIN. '5a5af275-2ada-45a4-a310-6b89dbcc9124' DO NOT EDIT THIS LINE.
+//! ACTIVITY BEGIN. '32bc8043-cac1-439a-a382-112fd8c69f2b' DO NOT EDIT THIS LINE.
 public service Tracking::UI~>setTime ( time : in integer ) is
 begin
   UI::setTime( time );
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
-//! ACTIVITY BEGIN. '89c1e51a-59f6-43db-82d6-81d20886f21e' DO NOT EDIT THIS LINE.
-public service Tracking::LOC~>getDistance ( result : out real,
-                                           toLong : in real,
-                                           toLat : in real,
-                                           fromLong : in real,
-                                           fromLat : in real ) is
-distance: real;
+//! ACTIVITY BEGIN. '5f8e6ef1-aa6e-4ccf-85de-e59e6e3d3d2e' DO NOT EDIT THIS LINE.
+public service HeartRateMonitor::HRChange~>heartRateChanged ( heartRate : in integer ) is
 begin
-  Location::getDistance( distance, toLong, toLat, fromLong, fromLat );
-  result := distance;
-end service;
-//! ACTIVITY END. DO NOT EDIT THIS LINE.
-
-//! ACTIVITY BEGIN. '2d0ef754-8f71-4aac-8273-9627169a8eba' DO NOT EDIT THIS LINE.
-public service Tracking::LOC~>getLocation ( longitude : out real,
-                                           latitude : out real ) is
-lat: real;
-longi: real;
-begin
-  lat := latitude;
-  longi := longitude;
-  Location::getLocation( longi, lat );
-  latitude := lat;
-  longitude := longi;
-end service;
-//! ACTIVITY END. DO NOT EDIT THIS LINE.
-
-//! ACTIVITY BEGIN. 'c58a9fcf-09dd-4f3f-9fa1-69bb40b65000' DO NOT EDIT THIS LINE.
-public service Tracking::LOC~>registerListener () is
-begin
-  Location::registerListener();
-end service;
-//! ACTIVITY END. DO NOT EDIT THIS LINE.
-
-//! ACTIVITY BEGIN. '24345e44-3a4c-4256-a8e0-58a215e0fac1' DO NOT EDIT THIS LINE.
-public service Tracking::LOC~>unregisterListener () is
-begin
-  Location::unregisterListener();
-end service;
-//! ACTIVITY END. DO NOT EDIT THIS LINE.
-
-//! ACTIVITY BEGIN. '72e5e320-7813-4805-b1fe-0fbe51a1b472' DO NOT EDIT THIS LINE.
-public service Tracking::HR~>registerListener () is
-begin
-  HeartRateMonitor::registerListener();
-end service;
-//! ACTIVITY END. DO NOT EDIT THIS LINE.
-
-//! ACTIVITY BEGIN. '11a537cb-994a-4ae9-9081-46ee799e36b5' DO NOT EDIT THIS LINE.
-public service Tracking::HR~>unregisterListener () is
-begin
-  HeartRateMonitor::unregisterListener();
+  Tracking::heartRateChanged( heartRate );
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
