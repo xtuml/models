@@ -1,0 +1,16 @@
+define function  Events3::Generate_From_Service
+input \
+	Test_No:Base_Integer_Type ,\
+	The_IH:Object_X_IH 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+[] = RPT1:Start_Test[Test_No, "1241-0000-01-0301", "Events", "Bridge", "Event from Bridge Function"]
+[] = RPT8:Specify_Requid[Test_No, "1103-0000-01-0711"]
+
+generate objX1:Check_ASL(Test_No, "Sync Service") to The_IH
+
+enddefine
