@@ -133,9 +133,6 @@ is easy.
 
 If you want to rebuild the project after modifying the model or a marking file:
 
-* If you are building the MASL version, be sure to run right-click > "Export
-  MASL Domain" on any domain component that has been modified and right-click >
-  "Export MASL Project" on any MASL project package that has been modified.
 * Switch to the C/C++ perspective
 * Right-click on the project and choose "Build Configurations > Set Active"
   - For Windows: Choose "Debug_Windows"
