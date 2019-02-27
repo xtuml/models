@@ -1,0 +1,194 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("7bdd0e07-a1e9-48ab-baca-815a07234727",
+	"00000000-0000-0000-0000-000000000000",
+	"a1fabb38-ec96-4f31-a1ca-31ab403a315e",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("b378d132-30ec-467b-9bf7-23849a121942",
+	112,
+	"7bdd0e07-a1e9-48ab-baca-815a07234727",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'mail::mail::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("b378d132-30ec-467b-9bf7-23849a121942",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("5ddb05c8-9094-4ec5-904c-e5379f3960dc",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'// 
+// Check to see if any instances are already here.
+// This would mean that we have restored from NVS
+// or that preexisting instances were defined in data.
+//
+select many pmrdfs from instances of PMRDF;
+if( empty pmrdfs )
+  LOG::LogInfo( message:"Did not find any PEI data, initializing NVS" );
+  i = NVS::format();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error formatting the NVS." );
+  end if;
+  i = NVS::version( first:1, second:2 );
+  i = NVS::checksum( first:1, second:2 );
+
+  create object instance pmrdf1 of PMRDF;
+  pmrdf1.ID = 1;
+  create object instance ds of DSRC;
+  ds.name = "sorter";
+  relate pmrdf1 to ds across R22;
+
+  create object instance pfile of PFILE;
+  pfile.URL = "http://postbackoffice.com/customer1.dat";
+
+  relate ds to pfile across R21;
+
+  i = PERSIST::commit();
+  if( i != 0 )
+    LOG::LogFailure( message:"Error commiting persistence information. Error code is " );
+    LOG::LogInteger( message:i );
+  end if;
+else
+  LOG::LogInfo( message:"Found PEI data." );
+end if;
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("5ddb05c8-9094-4ec5-904c-e5379f3960dc",
+	1,
+	"7bdd0e07-a1e9-48ab-baca-815a07234727",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("436c992d-e23b-46f6-8b0c-da6ef133945d",
+	"00000000-0000-0000-0000-000000000000",
+	'test',
+	'',
+	'//  Check to make sure the PEI was created.
+select many pmrdfs from instances of PMRDF;
+if( empty pmrdfs )
+  LOG::LogFailure( message:"Failed to select an instance of PMRDF" );
+end if;
+
+select any ds from instances of DSRC;
+if( empty ds )
+  LOG::LogFailure( message:"Failed to select an instance of PMRDF" );
+end if;
+
+select any pfile from instances of PFILE;
+if( empty pfile )
+  LOG::LogFailure( message:"Failed to select an instance of PFILE" );
+end if;
+relate ds to pfile across R21;
+
+// There is no testing to do, so exit right away.
+::xit();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("436c992d-e23b-46f6-8b0c-da6ef133945d",
+	1,
+	"7bdd0e07-a1e9-48ab-baca-815a07234727",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("15afdc0e-3fd2-46a9-bf00-436c9d11b12d",
+	"00000000-0000-0000-0000-000000000000",
+	'xit',
+	'',
+	'// Unrelate everything and delete all instance data.
+
+select many pmrdfs from instances of PMRDF;
+for each pmrdf in pmrdfs
+  select one ds related by pmrdf->DSRC[R22];
+  if( empty ds )
+    unrelate pmrdf from ds across R22;
+  end if;
+end for;
+
+select many pmrdfs from instances of PMRDF;
+for each pmrdf in pmrdfs
+  select one ds related by pmrdf->DSRC[R22];
+  if( empty ds )
+    unrelate pmrdf from ds across R22;
+  end if;
+end for;
+
+select many pfiles from instances of PFILE;
+for each pfile in pfiles
+  select one ds related by pfile->DSRC[R21];
+  if( empty ds )
+    unrelate pfile from ds across R21;
+  end if;
+end for;
+
+select many dss from instances of DSRC;
+for each ds in dss
+  delete object instance ds;
+end for;
+
+for each pmrdf in pmrdfs
+  delete object instance pmrdf;
+end for;
+
+for each pfile in pfiles
+  delete object instance pfile;
+end for;
+
+// Shut down.
+ARCH::shutdown();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("15afdc0e-3fd2-46a9-bf00-436c9d11b12d",
+	1,
+	"7bdd0e07-a1e9-48ab-baca-815a07234727",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("7bdd0e07-a1e9-48ab-baca-815a07234727",
+	1,
+	"ceeca8ae-f059-4a13-a988-9b657409d1f9",
+	"00000000-0000-0000-0000-000000000000",
+	7);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("ceeca8ae-f059-4a13-a988-9b657409d1f9",
+	"a1fabb38-ec96-4f31-a1ca-31ab403a315e",
+	"a1fabb38-ec96-4f31-a1ca-31ab403a315e",
+	'mail',
+	'',
+	0,
+	'../mail.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("a1fabb38-ec96-4f31-a1ca-31ab403a315e",
+	'mail',
+	1,
+	'../../mail.xtuml');
