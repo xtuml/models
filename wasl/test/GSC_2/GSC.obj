@@ -1,0 +1,58 @@
+2,DELIVERY,DEL,active
+ObjectumArchitecture,MaxInstancePop,10
+*Time,Time_of_Day,(),#Time fuel delivery commenced.#
+*Pump_Number,Base_Integer_Type,(R3.Pump_Number),#Pump used for the delivery#
+*Volume_Delivered,Base_Float_Type,(),#The amount of fuel currently delivered in litres.#
+*Cost,currency_type,(),##
+.Current_State,Object_State_Type,(),## 
+
+9,EVADED_TRANSACTION,EVD,passive
+*Transaction_Number,Base_Integer_Type,(R4),#Link to supertype#
+.Observations,Base_Text_Type,(),#Vehicle registration number etc which identifies customer#
+.Current_State,Object_State_Type,(),## 
+
+5,FUEL_GRADE,FGR,passive
+*Grade_Name,Base_Text_Type,(),#The type of petrol and identifier.#
+.Unit_Price,currency_type,(),#Price per litre in pounds sterling.#
+.Current_State,Object_State_Type,(),## 
+
+8,PAID_TRANSACTION,PDT,passive
+*Transaction_Number,Base_Integer_Type,(R4),#Link to supertype#
+.Current_State,Object_State_Type,(),## 
+
+7,PENDING_TRANSACTION,PND,passive
+*Transaction_Number,Base_Integer_Type,(R4),#Link to supertype#
+.Pump_Number,Base_Integer_Type,(R9.Pump_Number),##
+.Current_State,Object_State_Type,(),## 
+
+3,PUMP,PMP,active
+*Pump_Number,Base_Integer_Type,(),#Pump identifier, as written on the pump. This shall be used by the customer when he/she has to pay.#
+.Tank_Number,Base_Integer_Type,(R1.Tank_Number),#Link to connected tank#
+.Tank_Type,TankType,(R1.Tank_Type),##
+.Current_State,Object_State_Type,(),## 
+
+4,TANK,TNK,active
+*Tank_Number,Base_Integer_Type,(),#Tank identifier, this shall be the number on the inlet valve to the tank. The Tanker operator shall use this when re-filling the tanks.#
+.Grade_Name,Base_Text_Type,(R2.Grade_Name),#Referential attribute to Fuel Grade#
+.Tank_Empty_Flag,Boolean,(),#Set to true when tank level goes below 4% of its capacity.#
+.Tank_Level,Base_Float_Type,(),#Litres of petrol in tank. This level is calculated by the system during normal operation. It shall be possible for the operator to update this value when measuring the tank levels using a dip stick.#
+.Empty_Threshold,Base_Float_Type,(),##
+*Tank_Type,TankType,(R5),##
+.Tank_Capacity,Base_Float_Type,(),##
+.Current_State,Object_State_Type,(),## 
+
+6,TRANSACTION,TRN,active
+EJB Architecture,Persistence,Bean Managed
+*Transaction_Number,Base_Integer_Type,(),#Transaction identifier this is an abitary number.#
+.Pump_Number,Base_Integer_Type,(R10.Pump_Number),##
+.Transaction_Type,Transaction_Subtype,(),#Indicates the Related Sub-Type of this transaction.#
+.Cost,Base_Float_Type,(),#The cost of the fuel delivered in this transaction.#
+.Transaction_Process_Time,Time_of_Day,(),#The time at which the attendent processed this transaction.#
+.Delivery_Start_Time,Time_of_Day,(),#The time the delivery commenced, this shall be copied from the DELIVERY Object.#
+.Current_State,Object_State_Type,(),## 
+
+10,TYPE_OF_TANK,TTYPE,passive
+*Tank_Type,TankType,(),##
+.Tank_Capacity,Base_Float_Type,(),##
+.Current_State,Object_State_Type,(),## 
+
