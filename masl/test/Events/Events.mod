@@ -78,20 +78,26 @@ domain Events is
   private type Specific_Classes_JTT is enum (Undef_Element);
 
   public service Create_Report_Data ();
+  pragma domain_operation_number (1);
 
   public service Delete_Report_Data ();
+  pragma domain_operation_number (2);
 
   public service Generate_From_Service (Test_No : in  integer,
                                         The_IH  : in  instance of Object_X);
+  pragma domain_operation_number (3);
 
   public service Verify_Priority (Ref_No   : in  integer,
                                   Event_No : in  integer,
                                   Test_No  : in  integer);
+  pragma domain_operation_number (4);
 
   public service Dump_Text (The_Text : in  string);
+  pragma domain_operation_number (5);
 
   public service Add_One (Input_Value  : in  integer,
                           Output_Value : out integer);
+  pragma domain_operation_number (6);
 
   terminator Report is
     public service Start_Test (Test_Number     : in  integer,
@@ -99,28 +105,37 @@ domain Events is
                                Invoking_Domain : in  string,
                                Invoking_Object : in  string,
                                Purpose         : in  string);
+    pragma terminator_operation_number(1);
 
     public service Test_Passed (Test_Object_Domain : in  string,
                                 Test_Number        : in  integer,
                                 Test_Value         : in  integer);
+    pragma terminator_operation_number(2);
 
     public service Test_Failed (Failed_Domain_Object : in  string,
                                 Failed_Test_Number   : in  integer,
                                 Failed_Test_Value    : in  integer);
+    pragma terminator_operation_number(3);
 
     public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+    pragma terminator_operation_number(4);
 
     public service Test_Text (Test_Number : in  integer,
                               Free_Text   : in  string);
+    pragma terminator_operation_number(5);
 
     public service Domain_Test_Start (This_Domain_Name : in  string);
+    pragma terminator_operation_number(6);
 
     public service Domain_Test_Finished (This_Domain_Name : in  string);
+    pragma terminator_operation_number(7);
 
     public service Specify_Requid (Requid_Test_Number : in  integer,
                                    The_Requid_Itself  : in  string);
+    pragma terminator_operation_number(8);
 
     public service Perform_Req_Anal ();
+    pragma terminator_operation_number(9);
 
   end terminator;
   pragma key_letter ("RPT");
@@ -129,6 +144,7 @@ domain Events is
   terminator Generate_From_Bridge is
     public service Generate_Event (Test_No : in  integer,
                                    The_IH  : in  instance of Object_X);
+    pragma terminator_operation_number(1);
 
   end terminator;
   pragma key_letter ("GFB");
@@ -136,6 +152,7 @@ domain Events is
 
   terminator Where_Are_We is
     public service What_Env (Local_Env_Text : out string);
+    pragma terminator_operation_number(1);
 
   end terminator;
   pragma key_letter ("WAW");
@@ -229,12 +246,15 @@ domain Events is
 
     //! Description for ObjL, State 2 Idle
     state Idle ();
+    pragma state_number (2);
 
     //! Description for ObjL, State 3 Sub_sub_state
     state Sub_sub_state ();
+    pragma state_number (3);
 
     //! Description for ObjL, Signal objL1
     event Finished ();
+    pragma event_number (1);
 
     transition is
       Non_Existent ( Finished => Cannot_Happen);
@@ -256,16 +276,20 @@ domain Events is
 
 
     state Idle (Test_Number : in  integer);
+    pragma state_number (1);
 
     //! State machine only in supertype object. 
     //! Update result if called correctly.
     state Supertype_Object (Test        : in  integer,
                             Test_Number : in  integer);
+    pragma state_number (2);
 
     event StartA (Test        : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (1);
 
     event Finished (Test_Number : in  integer);
+    pragma event_number (2);
 
     transition is
       Non_Existent (    StartA   => Cannot_Happen,
@@ -332,21 +356,27 @@ domain Events is
 
     //! Idle state.
     state Idle (Test_Number : in  integer);
+    pragma state_number (1);
 
     //! This state receives the external event that, also sent to
     //! the subtype object.
     state Supertype_Object (Test        : in  integer,
                             Test_Number : in  integer);
+    pragma state_number (3);
 
     event Finished (Test_Number : in  integer);
+    pragma event_number (1);
 
     event StartA (Test        : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (2);
 
     event StartC (Test        : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (3);
 
     event Fault ();
+    pragma event_number (4);
 
     transition is
       Non_Existent (    Finished => Cannot_Happen,
@@ -384,17 +414,21 @@ domain Events is
 
     //! Idle state.
     state Idle (Test_Number : in  integer);
+    pragma state_number (1);
 
     //! This state receives the external event that is also sent to
     //! the supertype
     //! object.
     state Subtype_object (Test        : in  integer,
                           Test_Number : in  integer);
+    pragma state_number (3);
 
     event Finished (Test_Number : in  integer);
+    pragma event_number (1);
 
     event StartB (Test        : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (6);
 
     transition is
       Non_Existent (  Object_D.Finished => Cannot_Happen,
@@ -435,11 +469,13 @@ domain Events is
     //! Specific Class is created. Only the action ASL is editable.
     public service GO_Creation_Service (Specific_Type          : in  Specific_Classes_JTT,
                                         Created_Generic_Object : out instance of Object_N);
+    pragma operation_number(1);
 
     //! This Service is automatically created for a Generic Class.
     //! It is invoked to delete the counterpart Generic Class when a
     //! Specific Class is deleted. Only the action ASL is editable.
     public instance service GO_Deletion_Service ();
+    pragma operation_number(2);
 
   end object;
   pragma id (12);
@@ -465,9 +501,11 @@ domain Events is
     public service verify_polymorphic (Object         : in  string,
                                        Test_Reference : in  integer,
                                        Test_Number    : in  integer);
+    pragma operation_number(1);
 
     //! Idle state.
     state Idle ();
+    pragma state_number (1);
 
     //! This state verifies that the event was received or not
     //! received in the 
@@ -519,15 +557,20 @@ domain Events is
     //!                 Verify_Object to indicate that the required operation was
     //!                 success for the 'SUBtype' object.
     state Verify_Event_Received (Test : in  integer);
+    pragma state_number (2);
 
     //! Fail state.
     state Fail ();
+    pragma state_number (3);
 
     event Finished ();
+    pragma event_number (1);
 
     event Fault ();
+    pragma event_number (2);
 
     event Verify (Test : in  integer);
+    pragma event_number (3);
 
     transition is
       Non_Existent (         Finished => Cannot_Happen,
@@ -578,15 +621,19 @@ domain Events is
 
     //! Idle state.
     state Idle (Test_Number : in  integer);
+    pragma state_number (3);
 
     //! This state receives an external event that is passed onto
     //! its related
     //! subtype object.
     state Supertype_state (Test_Number : in  integer);
+    pragma state_number (4);
 
     event StartA (Test_Number : in  integer);
+    pragma event_number (1);
 
     event Finished (Test_Number : in  integer);
+    pragma event_number (2);
 
     transition is
       Non_Existent (   StartA   => Cannot_Happen,
@@ -614,20 +661,23 @@ domain Events is
 
 
 
-    identifier is (dave);
+//!    identifier is (dave);
 
 
-    identifier is (ReferenceJ);
+//!    identifier is (ReferenceJ);
 
     //! Idle state.
     state Idle (Test_Number : in  integer);
+    pragma state_number (1);
 
     //! This state receives an event from its related supertype
     //! object, and also
     //! passes the event onto its related subtype object.
     state Sub_Super_state (Test_Number : in  integer);
+    pragma state_number (2);
 
     event Finished (Test_Number : in  integer);
+    pragma event_number (1);
 
     transition is
       Non_Existent (   Finished          => Cannot_Happen,
@@ -659,15 +709,19 @@ domain Events is
 
 
 
-    identifier is (dave);
+//!    identifier is (dave);
 
     state Idle (Test : in  integer);
+    pragma state_number (2);
 
     state Supertype_State (Test : in  integer);
+    pragma state_number (3);
 
     event StartP (Test : in  integer);
+    pragma event_number (1);
 
     event Finished (Test : in  integer);
+    pragma event_number (2);
 
     transition is
       Non_Existent (   StartP   => Cannot_Happen,
@@ -698,6 +752,7 @@ domain Events is
     //! # supertype to the subtype even when there is no state 
     //! # model in the supertype.
     state Idle ();
+    pragma state_number (1);
 
     //! 
     //! # This state shall add the value specified to the ResultQ 
@@ -709,8 +764,10 @@ domain Events is
     //! # This shall only happen if the supertype has delivered the
     //! # event to this subtype.
     state Subtype_State (Test : in  integer);
+    pragma state_number (2);
 
     event FinishedQ ();
+    pragma event_number (1);
 
     transition is
       Non_Existent ( Object_P.StartP   => Cannot_Happen,
@@ -740,10 +797,13 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     state Subtype_State (Test : in  integer);
+    pragma state_number (2);
 
     event FinishedR ();
+    pragma event_number (1);
 
     transition is
       Non_Existent ( Object_P.StartP   => Cannot_Happen,
@@ -773,10 +833,13 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     state Subtype_State (Test : in  integer);
+    pragma state_number (2);
 
     event FinishedS ();
+    pragma event_number (1);
 
     transition is
       Non_Existent ( Object_P.StartP   => Cannot_Happen,
@@ -802,6 +865,7 @@ domain Events is
 
 
     event StartT (Test_Number : in  integer);
+    pragma event_number (1);
 
   end object;
   pragma id (23);
@@ -817,12 +881,16 @@ domain Events is
 
 
     state Idle (Test_Number : in  integer);
+    pragma state_number (1);
 
     state Subtype_State (Test_Number : in  integer);
+    pragma state_number (2);
 
     event StartU (Test_Number : in  integer);
+    pragma event_number (1);
 
     event Finished (Test_Number : in  integer);
+    pragma event_number (2);
 
     transition is
       Non_Existent ( StartU          => Cannot_Happen,
@@ -850,6 +918,7 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     //! This state verifies that an instance of a reflexive object 
     //! can send an event to its self and to other instances of 
@@ -871,16 +940,21 @@ domain Events is
     state Test_state (Test        : in  integer,
                       Counter     : in  integer,
                       Test_Number : in  integer);
+    pragma state_number (2);
 
     state Fail ();
+    pragma state_number (3);
 
     event Finished ();
+    pragma event_number (1);
 
     event Fault ();
+    pragma event_number (2);
 
     event StartA (Test        : in  integer,
                   Counter     : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (3);
 
     transition is
       Non_Existent (Finished => Cannot_Happen,
@@ -909,9 +983,11 @@ domain Events is
 
     creation state Creation_State (Test        : in  integer,
                                    Test_Number : in  integer);
+    pragma state_number (1);
 
     creation event StartA (Test        : in  integer,
                            Test_Number : in  integer);
+    pragma event_number (1);
 
     transition is
       Non_Existent (  StartA => Creation_State);
@@ -933,14 +1009,17 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     //! This state shall delete it's own instance, but only 
     //! after reporting itself as available for deletion.
     terminal state Terminal_State (Test        : in  integer,
                                    Test_Number : in  integer);
+    pragma state_number (2);
 
     event StartA (Test        : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (1);
 
     transition is
       Non_Existent (  StartA => Cannot_Happen);
@@ -962,6 +1041,7 @@ domain Events is
 
     //! Idle state.
     state Idle ();
+    pragma state_number (1);
 
     //! This state verifies that the tests performed within the
     //! objects
@@ -988,13 +1068,17 @@ domain Events is
     //!            if the test was successful.
     state Verify_State (Test        : in  integer,
                         Test_Number : in  integer);
+    pragma state_number (2);
 
     event Finished ();
+    pragma event_number (1);
 
     event Verify (Test        : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (2);
 
     event Fault ();
+    pragma event_number (3);
 
     transition is
       Non_Existent (Finished => Cannot_Happen,
@@ -1027,6 +1111,7 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     state Verification_State_One (A           : in  integer,
                                   B           : in  integer,
@@ -1035,17 +1120,22 @@ domain Events is
                                   F           : in  integer,
                                   Test        : in  integer,
                                   Test_Number : in  integer);
+    pragma state_number (2);
 
     state Fail ();
+    pragma state_number (3);
 
     state Verification_State_TWO (A           : in  integer,
                                   B           : in  integer,
                                   Test        : in  integer,
                                   Test_Number : in  integer);
+    pragma state_number (4);
 
     event Fault ();
+    pragma event_number (1);
 
     event Finished ();
+    pragma event_number (2);
 
     event EventA (A           : in  integer,
                   B           : in  integer,
@@ -1054,6 +1144,7 @@ domain Events is
                   F           : in  integer,
                   Test        : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (3);
 
     event EventB (A           : in  integer,
                   B           : in  integer,
@@ -1062,6 +1153,7 @@ domain Events is
                   F           : in  integer,
                   Test        : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (4);
 
     event EventC (A           : in  integer,
                   B           : in  integer,
@@ -1070,11 +1162,13 @@ domain Events is
                   F           : in  integer,
                   Test        : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (5);
 
     event EventD (A           : in  integer,
                   B           : in  integer,
                   Test        : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (7);
 
     transition is
       Non_Existent (          Fault    => Cannot_Happen,
@@ -1128,10 +1222,12 @@ domain Events is
 
     //! Idle state.
     state Wait_Here (Test : in  integer);
+    pragma state_number (1);
 
     //! An instance current state is changed to fail
     //! if the test failed.
     state Fail ();
+    pragma state_number (2);
 
     //! This state verifies the following:
     //! 
@@ -1140,23 +1236,32 @@ domain Events is
     //!     sub-type families are possible.
     //! [3] Subtype Migration is possible.
     state Verify_Migration (Test : in  integer);
+    pragma state_number (3);
 
     //! Migrate the sub types.
     state Migrate (Test : in  integer);
+    pragma state_number (5);
 
     state Idle ();
+    pragma state_number (7);
 
     event StartA (Test : in  integer);
+    pragma event_number (1);
 
     event Verify_Test (Test : in  integer);
+    pragma event_number (2);
 
     event Fault ();
+    pragma event_number (3);
 
     event Finished (Test : in  integer);
+    pragma event_number (4);
 
     event Creation_Event (Test : in  integer);
+    pragma event_number (5);
 
     event Polymorphic (Test : in  integer);
+    pragma event_number (6);
 
     transition is
       Non_Existent (    StartA         => Cannot_Happen,
@@ -1220,9 +1325,11 @@ domain Events is
     //! The instance gets created in this state
     //! by the supertype.
     state Idle ();
+    pragma state_number (1);
 
     //! Idle state.
     state Update (Test : in  integer);
+    pragma state_number (2);
 
     transition is
       Non_Existent (SuperA.StartA         => Cannot_Happen,
@@ -1258,9 +1365,11 @@ domain Events is
 
     //! The instance gets created in this state by the supertype.
     state Idle ();
+    pragma state_number (1);
 
     //! Idle state.
     state Update (Test : in  integer);
+    pragma state_number (2);
 
     transition is
       Non_Existent (SuperA.StartA         => Cannot_Happen,
@@ -1295,12 +1404,16 @@ domain Events is
 
 
     state Check ();
+    pragma state_number (1);
 
     state Finish (Test_No : in  integer);
+    pragma state_number (2);
 
     event Go ();
+    pragma event_number (1);
 
     event Finish (Test_No : in  integer);
+    pragma event_number (2);
 
     transition is
       Non_Existent (Go     => Cannot_Happen,
@@ -1341,16 +1454,19 @@ domain Events is
     //! [1] That it is possible to create an instance
     //!     of an object.
     state Creation_stateA ();
+    pragma state_number (1);
 
     //! This state verifies the following:
     //! 
     //! [1] That it is possible to create an instance
     //!     of an object.
     state Creation_stateB ();
+    pragma state_number (2);
 
     //! Idle state.
     //! No action taken.
     state Idle (Test : in  integer);
+    pragma state_number (3);
 
     //! This state verifies the following:
     //! 
@@ -1358,23 +1474,31 @@ domain Events is
     //!     created correctly.
     state Verify_Tests (Test        : in  integer,
                         Test_Number : in  integer);
+    pragma state_number (4);
 
     //! An instance current state is changed to fail
     //! if the test failed.
     state Fail ();
+    pragma state_number (5);
 
     event CreateA (Test : in  integer);
+    pragma event_number (1);
 
     event CreateB (Test : in  integer);
+    pragma event_number (2);
 
     event Creation_Complete (Test : in  integer);
+    pragma event_number (3);
 
     event Perform_Verification (Test        : in  integer,
                                 Test_Number : in  integer);
+    pragma event_number (4);
 
     event Fault ();
+    pragma event_number (5);
 
     event Finished (Test : in  integer);
+    pragma event_number (6);
 
     transition is
       Non_Existent (   CreateA              => Cannot_Happen,
@@ -1438,6 +1562,7 @@ domain Events is
     //! Idle state.
     //! No action taken.
     state Idle ();
+    pragma state_number (1);
 
     //! This state verifies the following:
     //! 
@@ -1446,6 +1571,7 @@ domain Events is
     //!     event queue and acted upon before any other
     //!     events to the same instance.
     state State_One (Test : in  integer);
+    pragma state_number (2);
 
     //! This state verifies the following:
     //! 
@@ -1453,6 +1579,7 @@ domain Events is
     //!     other events to the same instance are in the
     //!     event queue.
     state State_Two (Test : in  integer);
+    pragma state_number (3);
 
     //! This state verifies the following:
     //! 
@@ -1460,21 +1587,28 @@ domain Events is
     //!     any other events where handled.
     state Verify_event_to_self (Test        : in  integer,
                                 Test_Number : in  integer);
+    pragma state_number (4);
 
     //! An instance current state is changed to fail
     //! if the test failed.
     state Fail ();
+    pragma state_number (5);
 
     event Fault ();
+    pragma event_number (1);
 
     event Finished ();
+    pragma event_number (2);
 
     event StartA (Test : in  integer);
+    pragma event_number (3);
 
     event EventToOwnInstance (Test : in  integer);
+    pragma event_number (4);
 
     event VerifyEventToSelf (Test        : in  integer,
                              Test_Number : in  integer);
+    pragma event_number (5);
 
     transition is
       Non_Existent (        Fault              => Cannot_Happen,
@@ -1528,22 +1662,26 @@ domain Events is
     //! deletion
     public service Into_Creation (Test        : in  integer,
                                   Test_Number : in  integer);
+    pragma operation_number(1);
 
     //! This state verifies the following:
     //! 
     //! 
     //! [1] The creation of an instance.
     state Creation_state ();
+    pragma state_number (1);
 
     //! This state verifies the following:
     //! 
     //! 	[1]	The deletion of self.
     terminal state Termination_state (Test        : in  integer,
                                       Test_Number : in  integer);
+    pragma state_number (2);
 
     //! Idle state.
     //! No action taken.
     state Idle ();
+    pragma state_number (3);
 
     //! This state verifies the following:
     //! 
@@ -1551,20 +1689,26 @@ domain Events is
     //!     a born-to-die life cycle.
     state Verify_Tests (Test        : in  integer,
                         Test_Number : in  integer);
+    pragma state_number (4);
 
     //! An instance current state is changed to fail
     //! if the test failed.
     state Fail ();
+    pragma state_number (5);
 
     event Fault ();
+    pragma event_number (1);
 
     event Finished ();
+    pragma event_number (2);
 
     event VerifyBornToDie (Test        : in  integer,
                            Test_Number : in  integer);
+    pragma event_number (3);
 
     event DeleteInstance (Test        : in  integer,
                           Test_Number : in  integer);
+    pragma event_number (5);
 
     transition is
       Non_Existent (     Fault           => Cannot_Happen,
@@ -1603,6 +1747,7 @@ domain Events is
 
 
     event Wake_Up ();
+    pragma event_number (1);
 
   end object;
   pragma id (39);
@@ -1632,6 +1777,7 @@ domain Events is
 
 
     event Go_Two ();
+    pragma event_number (1);
 
   end object;
   pragma id (42);
@@ -1652,6 +1798,7 @@ domain Events is
 
 
     event Go_Three ();
+    pragma event_number (1);
 
   end object;
   pragma id (44);
@@ -1682,6 +1829,7 @@ domain Events is
 
 
     event Go_Three ();
+    pragma event_number (1);
 
   end object;
   pragma id (47);
@@ -1720,6 +1868,7 @@ domain Events is
 
 
     event Go_Bottom ();
+    pragma event_number (1);
 
   end object;
   pragma id (51);
@@ -1744,6 +1893,7 @@ domain Events is
 
 
     event Go_Bottom ();
+    pragma event_number (1);
 
   end object;
   pragma id (53);
@@ -1757,6 +1907,7 @@ domain Events is
 
 
     event Go_Bottom ();
+    pragma event_number (1);
 
   end object;
   pragma id (54);
@@ -1770,6 +1921,7 @@ domain Events is
 
 
     event Go_Bottom ();
+    pragma event_number (1);
 
   end object;
   pragma id (55);
@@ -1783,6 +1935,7 @@ domain Events is
 
 
     event Go_Bottom ();
+    pragma event_number (1);
 
   end object;
   pragma id (56);
@@ -1796,6 +1949,7 @@ domain Events is
 
 
     event Go_Bottom ();
+    pragma event_number (1);
 
   end object;
   pragma id (57);
@@ -1809,6 +1963,7 @@ domain Events is
 
 
     event Go_Bottom ();
+    pragma event_number (1);
 
   end object;
   pragma id (58);
@@ -1824,12 +1979,16 @@ domain Events is
 
 
     state Idle (Test_No : in  integer);
+    pragma state_number (1);
 
     state Check_State (Test_No : in  integer);
+    pragma state_number (2);
 
     event Check_The_State (Test_No : in  integer);
+    pragma event_number (1);
 
     event Finished (Test_No : in  integer);
+    pragma event_number (2);
 
     transition is
       Non_Existent (Check_The_State => Cannot_Happen,
@@ -1862,17 +2021,22 @@ domain Events is
     state Idle (Test_No      : in  integer,
                 The_Test     : in  string,
                 Returning_No : in  integer);
+    pragma state_number (1);
 
     state Check_ASL (Test_No  : in  integer,
                      ASL_Type : in  string);
+    pragma state_number (2);
 
     state Generate_From_State (Test_No : in  integer);
+    pragma state_number (3);
 
     state Check_Attributes (Test_No    : in  integer,
                             Which_Test : in  string);
+    pragma state_number (4);
 
     state Check_ASL_In_State (Test_No     : in  integer,
                               Input_Param : in  integer);
+    pragma state_number (6);
 
     state Lots_Of_Parameters (Test_No : in  integer,
                               Param_A : in  integer,
@@ -1901,21 +2065,27 @@ domain Events is
                               Param_X : in  integer,
                               Param_Y : in  integer,
                               Param_Z : in  integer);
+    pragma state_number (7);
 
     event Check_ASL (Test_No  : in  integer,
                      ASL_Type : in  string);
+    pragma event_number (1);
 
     event Finished (Test_No      : in  integer,
                     The_Test     : in  string,
                     Returning_No : in  integer);
+    pragma event_number (2);
 
     event From_State (Test_No : in  integer);
+    pragma event_number (3);
 
     event Check_Attributes (Test_No    : in  integer,
                             Which_Test : in  string);
+    pragma event_number (4);
 
     event Check_ASL_In_State (Test_No     : in  integer,
                               Input_Param : in  integer);
+    pragma event_number (5);
 
     event Check_Lots_Of_Params (Test_No : in  integer,
                                 Param_A : in  integer,
@@ -1944,6 +2114,7 @@ domain Events is
                                 Param_X : in  integer,
                                 Param_Y : in  integer,
                                 Param_Z : in  integer);
+    pragma event_number (6);
 
     transition is
       Non_Existent (       Check_ASL            => Cannot_Happen,
@@ -2006,18 +2177,25 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     state Add ();
+    pragma state_number (2);
 
     state Check ();
+    pragma state_number (3);
 
     event Start ();
+    pragma event_number (1);
 
     event Finish ();
+    pragma event_number (2);
 
     event Check_Total ();
+    pragma event_number (3);
 
     event Part1 ();
+    pragma event_number (4);
 
     transition is
       Non_Existent (Start       => Cannot_Happen,
@@ -2046,87 +2224,115 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     state State_A (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (2);
 
     state State_B (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (3);
 
     state State_C (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (4);
 
     state State_D (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (5);
 
     state State_E (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (6);
 
     state State_F (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (7);
 
     state State_G (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (8);
 
     state State_H (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (9);
 
     state State_I (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (10);
 
     state State_J (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (11);
 
     state State_K (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (12);
 
     state State_L (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (13);
 
     state State_M (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (14);
 
     state State_N (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (15);
 
     state State_O (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (16);
 
     state State_P (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (17);
 
     state State_Q (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (18);
 
     state State_R (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (19);
 
     state StateS (Test_No : in  integer,
                   Count   : in  integer);
+    pragma state_number (20);
 
     state State_T (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (21);
 
     state State_U (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (22);
 
     state State_V (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (23);
 
     state State_W (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (24);
 
     state State_X (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (25);
 
     state State_Y (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (26);
 
     state State_Z (Test_No : in  integer,
                    Count   : in  integer);
+    pragma state_number (27);
 
     event Increment (Test_No : in  integer,
                      Count   : in  integer);
+    pragma event_number (1);
 
     transition is
       Non_Existent (Increment => Cannot_Happen);
@@ -2172,13 +2378,17 @@ domain Events is
 
     state Idle (Start_Val  : in  integer,
                 Got_To_End : in  boolean);
+    pragma state_number (1);
 
     state StartA (Start_Val : in  integer);
+    pragma state_number (2);
 
     event Start (Start_Val : in  integer);
+    pragma event_number (1);
 
     event Finish (Start_Val  : in  integer,
                   Got_To_End : in  boolean);
+    pragma event_number (2);
 
     transition is
       Non_Existent (Start  => Cannot_Happen,
@@ -2209,17 +2419,22 @@ domain Events is
 
 
     state Idle (Test_No : in  integer);
+    pragma state_number (1);
 
     state Check_Priority (Test_No : in  integer,
                           Index   : in  integer);
+    pragma state_number (2);
 
     event Start (Test_No : in  integer,
                  Index   : in  integer);
+    pragma event_number (1);
 
     event Finish (Test_No : in  integer);
+    pragma event_number (2);
 
     event StartB (Test_No : in  integer,
                   Index   : in  integer);
+    pragma event_number (3);
 
     transition is
       Non_Existent (  Start  => Cannot_Happen,
@@ -2243,14 +2458,18 @@ domain Events is
 
 
     state Idle (Test_No : in  integer);
+    pragma state_number (1);
 
     state Check (Test_No : in  integer,
                  Index   : in  integer);
+    pragma state_number (2);
 
     event Finished (Test_No : in  integer);
+    pragma event_number (1);
 
     event Start (Test_No : in  integer,
                  Index   : in  integer);
+    pragma event_number (2);
 
     transition is
       Non_Existent (Priority_A.Start  => Cannot_Happen,
@@ -2283,15 +2502,19 @@ domain Events is
 
     state Idle (Test_No : in  integer,
                 Deleted : in  boolean);
+    pragma state_number (1);
 
     state Check (Test_No : in  integer,
                  Deleted : in  boolean);
+    pragma state_number (2);
 
     event Check (Test_No : in  integer,
                  Deleted : in  boolean);
+    pragma event_number (1);
 
     event Finished (Test_No : in  integer,
                     Deleted : in  boolean);
+    pragma event_number (2);
 
     transition is
       Non_Existent (Check    => Cannot_Happen,
@@ -2312,31 +2535,41 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     state Stage_A (Test_No : in  integer,
                    A_Val   : in  integer);
+    pragma state_number (2);
 
     state Test_Real (Test_No  : in  integer,
                      Real_Val : in  real);
+    pragma state_number (4);
 
     state Test_Text (Test_No    : in  integer,
                      Text_Input : in  string);
+    pragma state_number (5);
 
     event Start_A (Test_No : in  integer,
                    A_Val   : in  integer);
+    pragma event_number (1);
 
     event Start_B (Test_No : in  integer);
+    pragma event_number (2);
 
     event Finished ();
+    pragma event_number (3);
 
     event Pass_Real (Test_No  : in  integer,
                      Real_Val : in  real);
+    pragma event_number (4);
 
     event Pass_IH (Test_No    : in  integer,
                    Pass_Input : in  instance of Test_Persistence);
+    pragma event_number (5);
 
     event Pass_Text (Test_No    : in  integer,
                      Text_Input : in  string);
+    pragma event_number (6);
 
     transition is
       Non_Existent (Start_A   => Cannot_Happen,
@@ -2384,40 +2617,55 @@ domain Events is
 
     state Idle (Test_No     : in  integer,
                 Effect_Type : in  string);
+    pragma state_number (1);
 
     state Gen_Ignore_Event (Test_No : in  integer);
+    pragma state_number (2);
 
     state Update_Result (Test_No     : in  integer,
                          Effect_Type : in  string);
+    pragma state_number (3);
 
     state Check_Ignore_State (Test_No : in  integer);
+    pragma state_number (4);
 
     state Gen_Cannot_Happen_Event (Test_No : in  integer);
+    pragma state_number (5);
 
     state Check_Cannot_Happen_State (Test_No : in  integer);
+    pragma state_number (6);
 
     state Unsupported (Test_No     : in  integer,
                        The_Reqid   : in  string,
                        Effect_Type : in  string);
+    pragma state_number (7);
 
     state Gen_Indefined_Event (Test_No : in  integer);
+    pragma state_number (8);
 
     event Gen_Ignore (Test_No : in  integer);
+    pragma event_number (1);
 
     event Check_Ignore_State (Test_No : in  integer);
+    pragma event_number (2);
 
     event Finish (Test_No     : in  integer,
                   Effect_Type : in  string);
+    pragma event_number (3);
 
     event Gen_Cannot_Happen (Test_No : in  integer);
+    pragma event_number (4);
 
     event Check_CH_State (Test_No : in  integer);
+    pragma event_number (5);
 
     event Gen_To_Unsupported (Test_No     : in  integer,
                               The_Reqid   : in  string,
                               Effect_Type : in  string);
+    pragma event_number (6);
 
     event Gen_To_Undefined (Test_No : in  integer);
+    pragma event_number (7);
 
     transition is
       Non_Existent (             Gen_Ignore         => Cannot_Happen,
@@ -2494,9 +2742,11 @@ domain Events is
 
     state Check (Test_No    : in  integer,
                  Which_Test : in  string);
+    pragma state_number (2);
 
     event Start (Test_No    : in  integer,
                  Which_Test : in  string);
+    pragma event_number (1);
 
     transition is
       Non_Existent (Start => Cannot_Happen);
@@ -2519,6 +2769,7 @@ domain Events is
 
 
     state Idle (Test_Number : in  integer);
+    pragma state_number (1);
 
     //! 
     //! Proves that an event received by the supertype is
@@ -2526,11 +2777,14 @@ domain Events is
     //! delivered to the second subtype.
     state Subtype_object (Test        : in  integer,
                           Test_Number : in  integer);
+    pragma state_number (2);
 
     event Finished (Test_Number : in  integer);
+    pragma event_number (1);
 
     event StartB (Test        : in  integer,
                   Test_Number : in  integer);
+    pragma event_number (2);
 
     transition is
       Non_Existent (  Object_D.Finished => Cannot_Happen,
@@ -2565,10 +2819,12 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     //! Add the value specified in the attribute to the supertype
     //! ResultA attribute.
     state Update (Test : in  integer);
+    pragma state_number (2);
 
     transition is
       Non_Existent (SuperA.StartA         => Cannot_Happen,
@@ -2603,10 +2859,12 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     //! Add the value specified in the attribute to the supertype
     //! attribute ResultA.
     state Update (Test : in  integer);
+    pragma state_number (2);
 
     transition is
       Non_Existent (SuperA.StartA         => Cannot_Happen,
@@ -2641,8 +2899,10 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     state Update (Test : in  integer);
+    pragma state_number (2);
 
     transition is
       Non_Existent (SuperA.StartA         => Cannot_Happen,
@@ -2677,8 +2937,10 @@ domain Events is
 
 
     state Idle ();
+    pragma state_number (1);
 
     state Update (Test : in  integer);
+    pragma state_number (2);
 
     transition is
       Non_Existent (SuperA.StartA         => Cannot_Happen,
