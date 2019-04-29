@@ -1,0 +1,90 @@
+define scenario  Events_Scenario3
+input
+output
+
+#$DESCRIPTION
+Polymorphism
+#$END_DESCRIPTION
+
+
+my_test = find-one Test_Data
+
+if my_test = UNDEFINED then
+   The_Test_Number = 200
+else
+   The_Test_Number = my_test.Current_Test_Number
+endif
+
+
+#---------------------------------------------------------------------------
+
+D_TL   = create Top_Level      with TL_id          = 1 & Result = 0 & Current_State = 'Check'
+D_SL1B = create Sub_Level_1_B  with SL1B_id        = 1
+D_SL2D = create Sub_Level_2_D  with SL2D_id        = 1
+D_SL3D = create Sub_Level_3_D  with SL3D_id        = 1
+D_BLJ  = create Bottom_Level_J with BLJ_id         = 1 
+
+# Now link them
+
+link D_TL   R9  D_SL1B
+link D_SL1B R11 D_SL2D
+link D_SL2D R17 D_SL3D
+link D_SL3D R16 D_BLJ
+
+
+#---------------------------------------------------------------------------
+# Before we try anything complicated, let's just prove that Navigation is possible
+# top to bottom of this creation.
+#---------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "Null Requid", "Events", "Multi level super sub", "Navigate bottom to top"]
+
+   View_Of_Top_From_Bottom = D_BLJ -> R16.Sub_Level_3_D -> R17.Sub_Level_2_D -> R11.Sub_Level_1_B -> R9.Top_Level
+
+   if View_Of_Top_From_Bottom.TL_id = D_TL.TL_id then
+      [] = RPT2:Test_Passed["View of top", The_Test_Number,View_Of_Top_From_Bottom.TL_id ]
+   else
+      [] = RPT3:Test_Failed["View of top", The_Test_Number, View_Of_Top_From_Bottom.TL_id]
+   endif
+
+#---------------------------------------------------------------------------
+# Test 39 - Bottom to top
+#---------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   [] = RPT1:Start_Test[The_Test_Number, "Null Requid", "Events", "Multi level super sub", "Navigate top to bottom"]
+
+   View_Of_Bottom_From_Top = D_TL -> R9.Sub_Level_1_B -> R11.Sub_Level_2_D -> R17.Sub_Level_3_D -> R16.Bottom_Level_J
+
+   if View_Of_Bottom_From_Top.BLJ_id = D_BLJ.BLJ_id then
+      [] = RPT2:Test_Passed["View of bottom", The_Test_Number, View_Of_Bottom_From_Top.BLJ_id]
+   else
+      [] = RPT3:Test_Failed["View of bottom", The_Test_Number, View_Of_Bottom_From_Top.BLJ_id]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+#---------------------------------------------------------------------------
+# Test 40 - Polymorphically deleviver events from the top level to sub level
+#           1, sub level 2 and the bottom level, missing out sub level 3
+#           N.B. Currently polymorphic event delivery to sub types is
+#           restricted to just one sub level. Attempting to deliver events 
+#           to levels below the first sub type will cause the generated code
+#           to report errors.
+#---------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0404", "Events", "Multi level super sub", "Polymorphic Event Delivery"]
+   [] = RPT4:Test_Unsupported [The_Test_Number]
+
+   [] = RPT5:Test_Text[The_Test_Number, "Only for level"]
+
+#   generate TL1:Go() to D_TL
+#   generate TL2:Finish(The_Test_Number) to D_TL
+
+   The_Test_Number = The_Test_Number + 1
+
+#---------------------------------------------------------------------------
+
+my_test.Current_Test_Number = The_Test_Number
+enddefine

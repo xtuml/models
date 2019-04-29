@@ -1,0 +1,500 @@
+define function  objB2:ObjB_Navigation
+input \
+	Iteration:Base_Integer_Type ,\
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------#
+#
+# Normal navigation
+#
+# The architecture shall implement simple 1:1 relationships
+# 1241-0000-01-0601
+# 
+# Given a starting instance handle and a relationship specification
+# return a single handle of the related instance
+# 1241-0000-01-0701
+#
+# The architecture shall support chains of navigations
+# 1241-0000-10-0704
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+# Initialise the all variables
+
+Supported        = TRUE
+Has_Failed       = FALSE
+The_Result       = 0
+
+#-------------------------------------------------------------------#
+
+#Find the desired instances for Object_A
+firstA = find-one Object_A where idA = 1
+thirdA = find-one Object_A where idA = 3
+
+#Find the desired instances for Object_B
+firstB  = find-one Object_B where idB = 1
+fourthB = find-one Object_B where idB = 4
+fifthB  = find-one Object_B where idB = 5
+
+#Find the desired instances for Object_M
+secondM = find-one Object_M where idM = 2
+thirdM  = find-one Object_M where idM = 3
+
+[Host] = WAW1:What_Env[]
+
+#-------------------------------------------------------------------#
+# Test 1 - Navigate from first instance of Object_B to Object_A using 
+#          relationship number
+#-------------------------------------------------------------------#
+
+   if Iteration = 1 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "objB", "Navigate from Obj B to Obj A"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstA = firstB -> R1.Object_A
+
+      # Check the result of the navigation
+      if InstA = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstA.idA != 1 then
+            Has_Failed = TRUE
+            The_Result = InstA.idA
+         else
+            The_Result = InstA.idA
+         endif
+
+      endif
+
+   endif
+
+# End Test 1
+
+#-------------------------------------------------------------------#
+# Test 2 - Navigate from fourh instance of Object_B to Object_M using 
+#          relationship number
+#-------------------------------------------------------------------#
+
+   if Iteration = 2 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "objB", "Navigate from Obj B to Obj M"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstM = fourthB -> R18.Object_M
+
+      # Check the result of the navigation
+      if InstM = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstM.idM != 3 then
+            Has_Failed = TRUE
+            The_Result = InstM.idM
+         else
+            The_Result = InstM.idM
+         endif
+
+      endif
+
+   endif
+
+# End Test 2
+
+#-------------------------------------------------------------------#
+# Test 3 - Navigate from third instance of Object_A to Object_B using 
+#          relationship number
+#-------------------------------------------------------------------#
+
+   if Iteration = 3 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "objB", "Navigate from Obj A to Obj B"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstB = thirdA -> R1.Object_B
+
+      #Check the result of the navigation
+      if InstB = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstB.idB != 4 then
+            Has_Failed = TRUE
+            The_Result = InstB.idB
+         else
+            The_Result = InstB.idB
+         endif
+
+      endif
+
+   endif
+
+# End Test 3
+
+#-------------------------------------------------------------------#
+# Test 4 - Navigate from third instance of Object_M to Object_B using 
+#          relationship number
+#-------------------------------------------------------------------#
+
+   if Iteration = 4 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "objB", "Navigate from Obj M to Obj B"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstB = thirdM -> R18.Object_B
+
+      # Check the result of the navigation
+      if InstB = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstB.idB != 4 then
+            Has_Failed = TRUE
+            The_Result = InstB.idB
+         else
+            The_Result = InstB.idB
+         endif
+
+      endif
+
+   endif
+
+# End Test 4
+
+#-------------------------------------------------------------------#
+# Test 5 - Navigate from fourth instance of Object_B to Object_A 
+#          using relationship role. 
+#          This is not currently supported by the WACA
+#-------------------------------------------------------------------#
+
+   if Iteration = 5 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objB", "Relationship navigation with role"]
+
+      # Perform the navigation
+      InstA = fourthB -> R1."May_have_a".Object_A
+
+      # Check the result of the navigation. Role navigation is only
+      # supported with reflexive navigations. So should return an 
+      # undefined instance.
+
+      if Host = "ISIM" then
+         Supported = FALSE
+      else
+
+         if InstA = UNDEFINED then
+            Has_Failed = FALSE
+         else
+            Has_Failed = TRUE
+            The_Result = InstA.idA
+         endif
+
+      endif
+
+   endif
+
+# End Test 5
+
+#-------------------------------------------------------------------#
+# Test 6 - Attempt to perform a navigation on instance that is not 
+#          linked to another instance
+#-------------------------------------------------------------------#
+
+   if Iteration = 6 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objB", "Navigate non-linked relationship"]
+
+      # Fifth B is not currently linked to any instances of Object A.
+      # Perform the navigation
+      InstA = fifthB -> R1.Object_A
+
+      #Check the result of the navigation
+      if InstA != UNDEFINED then
+         Has_Failed = TRUE
+         The_Result = InstA.idA
+      endif
+ 
+   endif
+
+# End Test 6
+
+#-------------------------------------------------------------------#
+# Test 7 - Perform a chained navigation from the third instance of
+#          Object_A through Object_B and finish at Object_M
+#-------------------------------------------------------------------#
+
+   if Iteration = 7 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from A to B to M"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstM = thirdA -> R1.Object_B -> R18.Object_M  
+
+      # Check the result of the navigation
+      if InstM = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstM.idM != 3 then
+            Has_Failed = TRUE
+            The_Result = InstM.idM
+         else
+            The_Result = InstM.idM
+         endif
+
+      endif
+
+   endif
+
+# End Test 7
+
+#-------------------------------------------------------------------#
+# Test 8 - Perform a chained navigation starting at the first 
+#          instance of Object_A and returning back to Object_A via
+#          Object_B
+#-------------------------------------------------------------------#
+
+   if Iteration = 8 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from A to B to A"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstA = firstA -> R1.Object_B -> R1.Object_A
+
+      # Check the result of the navigation
+      if InstA = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstA.idA != 1 then
+            Has_Failed = TRUE
+            The_Result = InstA.idA
+         else
+            The_Result = InstA.idA
+         endif
+
+      endif
+
+   endif  
+
+# End Test 8 
+
+
+#-------------------------------------------------------------------#
+# Test 9 - Perform a chained navigation starting at the third 
+#          instance of Object_M and navigating to Object_A via
+#          Object_B
+#-------------------------------------------------------------------#
+   if Iteration = 9 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from M to B to A"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstA = thirdM -> R18.Object_B -> R1.Object_A
+
+      # Check the result of the navigation
+      if InstA = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstA.idA != 3 then
+            Has_Failed = TRUE
+            The_Result = InstA.idA
+         else
+            The_Result = InstA.idA
+         endif
+
+      endif
+
+   endif  
+
+# End Test 9
+
+#-------------------------------------------------------------------#
+# Test 10 - Perform a chained navigation starting at the third 
+#           instance of Object_M and returning back to Object_M via
+#           Object_B
+#-------------------------------------------------------------------#
+
+   if Iteration = 10 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from M to B to M"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstM = thirdM -> R18.Object_B -> R18.Object_M
+
+      # Check the result of the navigation
+      if InstM = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstM.idM != 3 then
+            Has_Failed = TRUE
+            The_Result = InstM.idM
+         else
+            The_Result = InstM.idM
+         endif
+
+      endif
+
+   endif  
+
+# End Test 10
+
+#-------------------------------------------------------------------#
+# Test 11 - Perform a chained navigation starting at the fourth 
+#           instance of Object_B and returning back to Object_B via
+#           Object_M
+#-------------------------------------------------------------------#
+
+   if Iteration = 11 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from B to M to B"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstB = fourthB -> R18.Object_M -> R18.Object_B
+
+      # Check the result of the navigation
+      if InstB = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstB.idB != 4 then
+            Has_Failed = TRUE
+            The_Result = InstB.idB
+         else
+            The_Result = InstB.idB
+         endif
+
+      endif
+
+   endif  
+
+# End Test 11
+
+#-------------------------------------------------------------------#
+# Test 12 - Perform a chained navigation starting at the fourth 
+#           instance of Object_B and returning back to Object_B via
+#           Object_A
+#-------------------------------------------------------------------#
+
+   if Iteration = 12 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from B to A to B"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstB = fourthB -> R1.Object_A -> R1.Object_B
+
+      # Check the result of the navigation
+      if InstB = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstB.idB != 4 then
+            Has_Failed = TRUE
+            The_Result = InstB.idB
+         else
+            The_Result = InstB.idB
+         endif
+
+      endif
+
+   endif  
+
+# End Test 12
+
+#-------------------------------------------------------------------#
+# Test 13 - Attempt to navigate to Object_M from Object_B through a 
+#           link thats not yet been established
+#-------------------------------------------------------------------#
+
+   if Iteration = 13 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objB", "Navigate to M when not linked to B"]
+
+      InstM = firstB -> R18.Object_M
+
+      if InstM != UNDEFINED then
+         Has_Failed = TRUE
+         The_Result = InstM.idM
+      endif
+
+   endif
+
+# End Test 13
+
+#-------------------------------------------------------------------#
+# Test 14 - Attempt to navigate from Object_M to Object_B via a link
+#           that has not been established
+#-------------------------------------------------------------------#
+
+   if Iteration = 14 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objB", "B to M while not linked"]
+
+      InstB = secondM -> R18.Object_B
+
+      if InstB != UNDEFINED then
+         Has_Failed = TRUE
+         The_Result = InstB.idB
+      endif
+
+   endif
+
+# End Test 14
+
+#-------------------------------------------------------------------#
+# Tests complete
+#-------------------------------------------------------------------#
+
+# If the test is supported
+if Supported = TRUE then
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objB", Test, The_Result]
+   else
+      [] = RPT3:Test_Failed["objB", Test, The_Result]
+   endif
+
+else
+   [] = RPT4:Test_Unsupported[Test]
+endif
+
+#-------------------------------------------------------------------#
+
+enddefine

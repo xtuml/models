@@ -1,0 +1,33 @@
+define function  Events4::Verify_Priority
+input \
+	Ref_No:Base_Integer_Type ,\
+	Event_No:Base_Integer_Type ,\
+	Test_No:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+if Event_No = 6 then
+
+   if Ref_No = 60 then
+      [] = RPT2:Test_Passed["Event Priority", Test_No, 0]
+   else
+      [] = RPT3:Test_Failed["Event Priority", Test_No, Ref_No]
+   endif
+
+   my_test = find-one Test_Data
+   The_Test_Number = my_test.Current_Test_Number
+
+   [] = Events2::Delete_Report_Data[]
+
+   my_test = find-one Test_Data
+
+   if my_test != UNDEFINED then
+      delete my_test
+   endif
+
+endif
+
+enddefine
