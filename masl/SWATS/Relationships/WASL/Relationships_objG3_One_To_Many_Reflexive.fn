@@ -1,0 +1,1609 @@
+define function  objG3:One_To_Many_Reflexive
+input \
+	Iteration:Base_Integer_Type ,\
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------#
+#Reflexive navigations 1c:Mc
+#-------------------------------------------------------------------#
+
+# Initialise the fault flag
+Has_Failed   = FALSE
+Inst_Failed  = FALSE
+Unsupported  = FALSE
+
+# Tests 11 to 15 are copies of tests 6 to 10, using a reflexive navigation with the A and B
+# conditional roles reversed.
+
+#-------------------------------------------------------------------#
+
+# Find the desired instances for Object_G
+firstG   = find-one Object_G where idG = 1
+secondG  = find-one Object_G where idG = 2
+thirdG   = find-one Object_G where idG = 3
+fourthG  = find-one Object_G where idG = 4
+fifthG   = find-one Object_G where idG = 5
+sixthG   = find-one Object_G where idG = 6
+seventhG = find-one Object_G where idG = 7
+eigthG   = find-one Object_G where idG = 8
+ninthG   = find-one Object_G where idG = 9
+
+#-------------------------------------------------------------------#
+
+# Formalise some relationships
+# This section initialise relationships depending upon which test
+# is being performed.
+
+if Iteration >= 2 & Iteration <= 5 then
+
+   # Formalise some relationships
+   link firstG R13."Has_many" thirdG
+   link firstG R13."Has_many" fourthG
+   link fifthG R13."Has_a"    secondG
+
+endif
+
+#-------------------------------------------------------------------#
+# Test 1 - Navigate an undefined relationship
+#-------------------------------------------------------------------#
+
+   if Iteration = 1 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objG", "1c to Mc reflexive navigations"]
+
+      # Perform the navigation
+      InstG = sixthG -> R13."Has_a".Object_G
+
+      # Check the result of the navigation
+      if InstG != UNDEFINED then
+         Has_Failed = TRUE
+      endif
+  
+   endif
+
+# End Test 1
+
+#-------------------------------------------------------------------#
+# Test 2 - Navigate to the MANY side of the relationship
+#          Relationship role, single instance handle as the source
+#-------------------------------------------------------------------#
+
+   if Iteration = 2 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0705", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0606"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      # Perform the navigation
+      {SetG} = firstG -> R13."Has_many".Object_G
+
+      # Check the result of the navigation
+      if countof {SetG} != 2 then
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      else
+         # Check the contents of the set
+         Val1 = -10
+         Val2 = -20
+
+         for InstG in {SetG} do
+
+            if InstG.idG = 3 then
+               Val1 = InstG.idG
+            endif
+
+            if InstG.idG = 4 then
+               Val2 = InstG.idG
+            endif
+
+         endfor
+
+         # Check counter values
+         if Val1 = 3 then
+
+            if Val2 != 4 then
+               Has_Failed   = TRUE
+               Failure_Code = Val2
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val1
+         endif
+
+      endif
+
+   endif
+
+#End Test 2
+
+#-------------------------------------------------------------------#
+# Test 3 - Navigate to the MANY side of the relationship
+#          Qualified role, set of instance handles as the source
+#-------------------------------------------------------------------#
+
+   if Iteration = 3 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0703"]
+      [] = RPT5:Test_Text [Test, "Navigation from sets unsupported"]
+
+      Unsupported = TRUE
+
+   endif
+
+# End Test 3
+
+#-------------------------------------------------------------------#
+# Test 4 -Navigate to the SINGLE side of the relationship
+#         Relationship role, single instance handle as the source
+#-------------------------------------------------------------------#
+
+   if Iteration = 4 then
+ 
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0705", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0606"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstG = fifthG -> R13."Has_a".Object_G
+
+      # Check the result of the navigation
+      if InstG != UNDEFINED then
+
+         if InstG.idG != 2 then
+            Has_Failed   = TRUE
+            Failure_Code = -10
+         endif
+   
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      endif
+
+   endif
+
+# End Test 4
+
+#-------------------------------------------------------------------#
+# Test 5 - Navigate to the SINGLE side of the relationship
+#          Qualified role, set of instance handles as the source
+#-------------------------------------------------------------------#
+
+   if Iteration = 5 then
+
+      [] = RPT1:Start_Test[Test,  "Null Requid", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0703"]
+
+      [] = RPT5:Test_Text [Test, "Navigation from set unsupported"]
+
+      Unsupported = TRUE
+ 
+   endif
+
+#End Test 5
+
+#-------------------------------------------------------------------#
+# Test 6 - Attempt to navigate a deleted relationship
+#-------------------------------------------------------------------#
+
+   if Iteration = 6 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0705", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0606"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0607"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0608"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      # Formalise some relationships
+      link firstG R13."Has_many" thirdG
+      link firstG R13."Has_many" fourthG
+      link fifthG R13."Has_a"    secondG
+
+      # Delete the formalised relationships
+      unlink firstG R13."Has_many" thirdG
+      unlink firstG R13."Has_many" fourthG
+      unlink fifthG R13."Has_a"    secondG
+
+      # Navigate to the MANY side
+      {SetG} = firstG -> R13."Has_many".Object_G
+
+      # Check the result of the navigation
+      if countof {SetG} != 0 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+         # Navigate to the SINGLE side
+         InstG = fifthG -> R13."Has_a".Object_G
+
+         # Check the result of the navigation
+         if InstG != UNDEFINED then
+            Has_Failed   = TRUE
+            Failure_Code = -2
+         endif
+
+      endif
+
+   endif
+
+# End Test 6
+
+#-------------------------------------------------------------------#
+# Test 7 - Attempt to link one to many and navigate to the end of 
+#          each link
+#-------------------------------------------------------------------#
+
+   if Iteration = 7 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0705", "Relationships", "objG", "Navigate to the end of each link"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0606"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0607"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0608"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      # Formalise some relationships
+      link firstG R13."Has_many" secondG
+      link firstG R13."Has_many" thirdG
+      link firstG R13."Has_many" fourthG
+
+      link secondG R13."Has_many" fifthG
+      link secondG R13."Has_many" sixthG
+
+      link thirdG R13."Has_many" seventhG
+ 
+      link fourthG R13."Has_many" eigthG
+      link fourthG R13."Has_many" ninthG
+
+      # Prove that we can navigate from first to fifth and sixth
+      {SetG} = firstG -> R13."Has_many".Object_G
+
+      # Count of number of instances in this little empire.
+      # Include the instance that we are navigating from.
+
+      Local_Counter = 1
+
+      if countof {SetG} = 3 then
+
+         for InstG in {SetG} do
+
+            if InstG = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -10
+            else
+               Local_Counter = Local_Counter + 1
+               {Next_SetG} = InstG -> R13."Has_many".Object_G
+
+               for Sub_InstG in {Next_SetG} do
+
+                  if Sub_InstG = UNDEFINED then
+                     Inst_Failed  = TRUE
+                     Failure_Code = -20
+                  else
+                     Local_Counter = Local_Counter + 1
+                  endif
+
+               endfor         
+
+            endif
+
+         endfor
+
+      else
+         Inst_Failed = TRUE
+         Failure_Code = countof {SetG}
+      endif
+
+      if Inst_Failed = FALSE then
+
+         if Local_Counter = 9 then
+            Has_Failed = FALSE
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Local_Counter
+         endif
+ 
+      else
+         Has_Failed   = TRUE
+         Failure_Code = Local_Counter
+      endif
+
+      unlink firstG R13."Has_many" secondG
+      unlink firstG R13."Has_many" thirdG
+      unlink firstG R13."Has_many" fourthG
+
+      unlink secondG R13."Has_many" fifthG
+      unlink secondG R13."Has_many" sixthG
+ 
+      unlink thirdG R13."Has_many" seventhG
+ 
+      unlink fourthG R13."Has_many" eigthG
+      unlink fourthG R13."Has_many" ninthG
+
+   endif
+
+# End Test 7
+
+
+#-------------------------------------------------------------------#
+# Test 8 - Attempt to link one to many and navigate to the end of 
+#          each link
+#          Add in a new instance as a last instance in a chain.
+#-------------------------------------------------------------------#
+
+   if Iteration = 8 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0705", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0606"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0607"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0608"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      Local_Counter = 0
+
+      # Formalise some relationships
+      link firstG R13."Has_many" secondG
+      link firstG R13."Has_many" thirdG
+      link firstG R13."Has_many" fourthG
+
+      link secondG R13."Has_many" fifthG
+      link secondG R13."Has_many" sixthG
+
+      link thirdG R13."Has_many" seventhG
+ 
+      link fourthG R13."Has_many" eigthG
+      link fourthG R13."Has_many" ninthG
+
+      tenthG = find-one Object_G where idG = 10
+
+      {SetG} = firstG -> R13."Has_many".Object_G
+
+      # Count of number of instances in this little empire.
+      # Include the instance that we are navigating from.
+      Local_Counter = 1
+
+      if countof {SetG} = 3 then
+
+         for InstG in {SetG} do
+
+            if InstG = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -10
+            else
+               Local_Counter = Local_Counter + 1
+               {Next_SetG} = InstG -> R13."Has_many".Object_G
+
+               for Sub_InstG in {Next_SetG} do
+ 
+                  if Sub_InstG = UNDEFINED then
+                     Inst_Failed  = TRUE
+                     Failure_Code = -20
+                  else
+                     Local_Counter = Local_Counter + 1
+                     Inst_Failed   = FALSE
+                  endif
+
+               endfor         
+
+            endif
+
+         endfor
+
+      else
+         Inst_Failed  = TRUE
+         Failure_Code = countof {SetG} 
+      endif
+
+      if Inst_Failed = FALSE then
+
+         if Local_Counter = 9 then
+            # Link in new element
+            link thirdG R13."Has_many" tenthG
+                  
+            #Can we navigate back from tenthG to thirdG
+            newThird = tenthG -> R13."Has_a".Object_G
+
+            if newThird = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -30
+            else
+
+               # New instance is not undefined
+               Inst_Failed = FALSE
+               Local_Counter = 1
+               {SetG} = firstG -> R13."Has_many".Object_G
+
+               for InstG in {SetG} do
+
+                  if InstG = UNDEFINED then
+                     Inst_Failed  = TRUE
+                     Failure_Code = -40
+                  else
+                     Local_Counter = Local_Counter + 1
+                     {Next_SetG} = InstG -> R13."Has_many".Object_G
+  
+                     for Sub_InstG in {Next_SetG} do
+
+                        if Sub_InstG = UNDEFINED then
+                           Inst_Failed  = TRUE
+                           Failure_Code = -50
+                        else
+                           Local_Counter = Local_Counter + 1
+                        endif
+  
+                     endfor         
+
+                  endif
+
+               endfor
+ 
+            endif
+
+            if Inst_Failed = FALSE then
+
+               if Local_Counter = 10 then
+                  Failure_Code = 0
+                  Has_Failed   = FALSE
+               else
+                  Failure_Code = -100 - Local_Counter
+                  Has_Failed   = TRUE
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = -60
+            endif
+
+         else
+            Failure_Code = -200 - Local_Counter
+            Has_Failed   = TRUE
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -70
+      endif
+
+      unlink firstG R13."Has_many" secondG
+      unlink firstG R13."Has_many" thirdG
+      unlink firstG R13."Has_many" fourthG
+
+      unlink secondG R13."Has_many" fifthG
+      unlink secondG R13."Has_many" sixthG
+
+      unlink thirdG R13."Has_many" seventhG
+      unlink thirdG R13."Has_many" tenthG
+   
+      unlink fourthG R13."Has_many" eigthG
+      unlink fourthG R13."Has_many" ninthG
+
+   endif
+
+# End Test 8
+
+#-------------------------------------------------------------------#
+# Test 9 - Attempt to link one to many and navigate to the end of
+#          each link
+#          Add in a new instance in the middle of a chain with one 
+#          end object.
+#-------------------------------------------------------------------#
+
+   if Iteration = 9 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0705", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0606"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0607"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0608"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      Local_Counter = 0
+      No_Instances  = 0
+
+      # Formalise some relationships
+      link firstG R13."Has_many" secondG
+      link firstG R13."Has_many" thirdG
+      link firstG R13."Has_many" fourthG
+
+      link secondG R13."Has_many" fifthG
+      link secondG R13."Has_many" sixthG
+
+      link thirdG R13."Has_many" seventhG
+ 
+      link fourthG R13."Has_many" eigthG
+      link fourthG R13."Has_many" ninthG
+
+      tenthG = find-one Object_G where idG = 10
+
+      {SetG} = firstG -> R13."Has_many".Object_G
+
+      # Count of number of instances in this little empire.
+      # Include the instance that we are navigating from.
+      Local_Counter = 1
+
+      if countof {SetG} = 3 then
+
+         for InstG in {SetG} do
+
+            if InstG = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -10
+            else
+               Local_Counter = Local_Counter + 1
+               {Next_SetG} = InstG -> R13."Has_many".Object_G
+
+               for Sub_InstG in {Next_SetG} do
+
+                  if Sub_InstG = UNDEFINED then
+                     Inst_Failed  = TRUE
+                     Failure_Code = -20
+                  else
+                     Local_Counter = Local_Counter + 1
+                  endif
+
+               endfor         
+
+            endif
+  
+         endfor
+
+      else
+         Inst_Failed  = TRUE
+         Failure_Code = countof {SetG} 
+      endif
+
+      if Inst_Failed = FALSE then
+
+         if Local_Counter = 9 then
+            # Unlink old element and splice in a new element, making sure that the links are
+            # still correct.
+            unlink firstG R13."Has_many" thirdG
+
+            # Link in new element
+            link firstG R13."Has_many" tenthG
+
+            # Relink new element to old element
+            link tenthG R13."Has_many" thirdG 
+                  
+            # Can we navigate back from thirdG to tenthG
+            new_tenth = thirdG -> R13."Has_a".Object_G
+
+            # And while we're at it, can we navigate from last back to first,
+            # taking into account the newly added link
+            new_first = seventhG -> R13."Has_a".Object_G -> R13."Has_a".Object_G -> R13."Has_a".Object_G
+
+            if new_tenth = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -30
+            else
+
+               if new_first = UNDEFINED then
+                  Inst_Failed  = TRUE
+                  Failure_Code = -40
+               else
+                  # New instance is not undefined
+                  Inst_Failed = FALSE
+                  Failure_Code = 0
+
+                  Local_Counter = 1
+
+                  {SetG} = firstG -> R13."Has_many".Object_G
+
+                  for InstG in {SetG} do
+
+                     if InstG = UNDEFINED then
+                        Inst_Failed  = TRUE
+                        Failure_Code = -50
+                     else
+                        Local_Counter = Local_Counter + 1
+                        {Next_SetG} = InstG -> R13."Has_many".Object_G
+                        for Sub_InstG in {Next_SetG} do
+
+                           if Sub_InstG = UNDEFINED then
+                              Inst_Failed  = TRUE
+                              Failure_Code = -60
+                           else
+                              Local_Counter = Local_Counter + 1
+                              {Next_Next_SetG} = Sub_InstG -> R13."Has_many".Object_G
+
+                              for Sub_Sub_InstG in {Next_Next_SetG} do
+ 
+                                 if Sub_Sub_InstG = UNDEFINED then
+                                    Inst_Failed  = TRUE
+                                    Failure_Code = -70
+                                 else 
+                                    Local_Counter = Local_Counter + 1
+                                 endif
+
+                              endfor
+
+                           endif
+
+                        endfor         
+
+                     endif
+
+                  endfor
+
+               endif
+
+            endif
+
+            if Inst_Failed = FALSE then
+
+               if Local_Counter = 10 then
+                  Failure_Code = 0
+                  Has_Failed   = FALSE
+               else
+                  Has_Failed   = TRUE
+                  Failure_Code = -100 - Local_Counter
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = -80
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -200 - Local_Counter
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -90
+      endif
+
+      unlink firstG R13."Has_many" secondG
+      unlink firstG R13."Has_many" tenthG
+      unlink firstG R13."Has_many" fourthG
+
+      unlink tenthG R13."Has_many" thirdG
+
+      unlink secondG R13."Has_many" fifthG
+      unlink secondG R13."Has_many" sixthG
+
+      unlink thirdG R13."Has_many" seventhG
+   
+      unlink fourthG R13."Has_many" eigthG
+      unlink fourthG R13."Has_many" ninthG
+
+   endif
+
+# End Test 9
+
+#-------------------------------------------------------------------#
+# Test 10 - Attempt to link one to many and navigate to the end of 
+#           each link
+#           Add in a new instance in the middle of a chain with two 
+#           end objects.
+#-------------------------------------------------------------------#
+
+   if Iteration = 10 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0705", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0606"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0607"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0608"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      Local_Counter = 0
+      Has_Failed    = TRUE
+      Inst_Failed   = FALSE
+ 
+      # Formalise some relationships
+      link firstG R13."Has_many" secondG
+      link firstG R13."Has_many" thirdG
+      link firstG R13."Has_many" fourthG
+
+      link secondG R13."Has_many" fifthG
+      link secondG R13."Has_many" sixthG
+
+      link thirdG R13."Has_many" seventhG
+ 
+      link fourthG R13."Has_many" eigthG
+      link fourthG R13."Has_many" ninthG
+
+      tenthG = find-one Object_G where idG = 10
+
+      {SetG} = firstG -> R13."Has_many".Object_G
+
+      # Count of number of instances in this little empire.
+      # Include the instance that we are navigating from.
+      Local_Counter = 1
+
+      No_Instances = countof {SetG}
+      if No_Instances = 3 then
+
+         for InstG in {SetG} do
+
+            if InstG = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -10
+            else
+               Local_Counter = Local_Counter + 1
+               {Next_SetG} = InstG -> R13."Has_many".Object_G
+
+               for Sub_InstG in {Next_SetG} do
+
+                  if Sub_InstG = UNDEFINED then
+                     Inst_Failed  = TRUE
+                     Failure_Code = -3
+                  else
+                     Local_Counter = Local_Counter + 1
+                  endif
+
+               endfor         
+
+            endif
+
+         endfor
+
+      else
+         Inst_Failed  = TRUE
+         Failure_Code = No_Instances 
+      endif
+
+      if Inst_Failed = FALSE & Local_Counter = 9 then
+         # Unlink old element and splice in a new element, making sure that the links are
+         # still correct.
+         unlink firstG R13."Has_many" fourthG
+
+         # Link in new element
+         link firstG R13."Has_many" tenthG
+
+         # Relink new element to old element
+         link tenthG R13."Has_many" fourthG 
+                  
+         # Can we navigate back from thirdG to tenthG
+         new_tenth = fourthG -> R13."Has_a".Object_G
+
+         # And while we're at it, can we navigate from last back to first,
+         # taking into account the newly added link
+         new_first = eigthG -> R13."Has_a".Object_G -> R13."Has_a".Object_G -> R13."Has_a".Object_G
+
+         if new_tenth = UNDEFINED then
+            Inst_Failed  = TRUE
+            Failure_Code = -30
+         else
+
+            if new_first = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -40
+            else
+               # New instance is not undefined
+               Inst_Failed   = FALSE
+               Failure_Code  = 0
+               Local_Counter = 1
+               {SetG} = firstG -> R13."Has_many".Object_G
+
+               for InstG in {SetG} do
+
+                  if InstG = UNDEFINED then
+                     Inst_Failed  = TRUE
+                     Failure_Code = -50
+                  else
+                     Local_Counter = Local_Counter + 1
+                     {Next_SetG} = InstG -> R13."Has_many".Object_G
+
+                     for Sub_InstG in {Next_SetG} do
+
+                        if Sub_InstG = UNDEFINED then
+                           Inst_Failed  = TRUE
+                           Failure_Code = -60
+                        else
+                           Local_Counter = Local_Counter + 1
+                           {Next_Next_SetG} = Sub_InstG -> R13."Has_many".Object_G
+
+                           for Sub_Sub_InstG in {Next_Next_SetG} do
+
+                              if Sub_Sub_InstG = UNDEFINED then
+                                 Inst_Failed  = TRUE
+                                 Failure_Code = -8
+                               else
+                                 Local_Counter = Local_Counter + 1
+                               endif
+
+                            endfor         
+  
+                         endif
+   
+                      endfor         
+
+                   endif
+
+                endfor
+
+             endif
+
+          endif
+
+          if Inst_Failed = FALSE & Local_Counter = 10 then
+             Failure_Code = 0
+             Has_Failed   = FALSE
+
+             unlink firstG R13."Has_many" secondG
+             unlink firstG R13."Has_many" thirdG
+             unlink firstG R13."Has_many" tenthG
+
+             unlink tenthG R13."Has_many" fourthG
+ 
+             unlink secondG R13."Has_many" fifthG
+             unlink secondG R13."Has_many" sixthG
+
+             unlink thirdG R13."Has_many" seventhG
+
+             unlink fourthG R13."Has_many" eigthG
+             unlink fourthG R13."Has_many" ninthG
+
+          else
+             Has_Failed   = TRUE
+             Failure_Code = Local_Counter
+          endif
+
+       else
+          Has_Failed = TRUE
+          Failure_Code = Local_Counter
+       endif
+
+   endif
+
+# End Test 10
+
+#-------------------------------------------------------------------#
+# Test 11 - Attempt to navigate a deleted relationship
+#-------------------------------------------------------------------#
+
+   if Iteration = 11 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objG", "Attempt to navigate a deleted relationship"]
+
+      # Formalise some relationships
+      link firstG R4."Has_many" thirdG
+      link firstG R4."Has_many" fourthG
+      link fifthG R4."Has_a"    secondG
+
+      # Delete the formalised relationships
+      unlink firstG R4."Has_many" thirdG
+      unlink firstG R4."Has_many" fourthG
+      unlink fifthG R4."Has_a"    secondG
+
+      # Navigate to the MANY side
+      {SetG} = firstG -> R4."Has_many".Object_G
+
+      # Check the result of the navigation
+      if countof {SetG} != 0 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+         # Navigate to the SINGLE side
+         InstG = fifthG -> R4."Has_a".Object_G
+
+         # Check the result of the navigation
+         if InstG != UNDEFINED then
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      endif
+
+   endif
+
+# End Test 11
+
+#-------------------------------------------------------------------#
+# Test 12 - Attempt to link one to many and navigate to the end of 
+#           each link
+#-------------------------------------------------------------------#
+
+   if Iteration = 12 then
+ 
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0705", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0606"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0607"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0608"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      #Navigate to the MANY side
+      {SetG} = firstG -> R4."Has_many".Object_G
+
+      # Check the result of the navigation
+      what = countof {SetG} 
+
+      #Formalise some relationships
+      link firstG R4."Has_many" secondG
+      link firstG R4."Has_many" thirdG
+      link firstG R4."Has_many" fourthG
+
+      link secondG R4."Has_many" fifthG
+      link secondG R4."Has_many" sixthG
+
+      link thirdG R4."Has_many" seventhG
+ 
+      link fourthG R4."Has_many" eigthG
+      link fourthG R4."Has_many" ninthG
+
+      # Prove that we can navigate from first to fifth and sixth
+
+      {SetG} = firstG -> R4."Has_many".Object_G
+
+      # Count of number of instances in this little empire.
+      # Include the instance that we are navigating from.
+      Local_Counter = 1
+
+      if countof {SetG} = 3 then
+
+         for InstG in {SetG} do
+
+            if InstG = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -10
+            else
+               Local_Counter = Local_Counter + 1
+               {Next_SetG} = InstG -> R4."Has_many".Object_G
+
+               for Sub_InstG in {Next_SetG} do
+
+                  if Sub_InstG = UNDEFINED then
+                     Inst_Failed  = TRUE
+                     Failure_Code = -3
+                  else
+                     Local_Counter = Local_Counter + 1
+                  endif
+
+               endfor         
+
+            endif
+
+         endfor
+
+      else
+         Inst_Failed  = TRUE
+         Failure_Code = countof {SetG} 
+      endif
+
+      if Inst_Failed = FALSE & Local_Counter = 9 then
+         Has_Failed   = FALSE
+         Failure_Code = 0
+      else
+         Has_Failed   = TRUE
+         Failure_Code = Local_Counter
+      endif
+
+      unlink firstG R4."Has_many" secondG
+      unlink firstG R4."Has_many" thirdG
+      unlink firstG R4."Has_many" fourthG
+
+      unlink secondG R4."Has_many" fifthG
+      unlink secondG R4."Has_many" sixthG
+
+      unlink thirdG R4."Has_many" seventhG
+ 
+      unlink fourthG R4."Has_many" eigthG
+      unlink fourthG R4."Has_many" ninthG
+
+   endif
+
+# End Test 12
+
+#-------------------------------------------------------------------#
+# Test 13 - Attempt to link one to many and navigate to the end of 
+#           each link
+#           Add in a new instance as a last instance in a chain.
+#-------------------------------------------------------------------#
+
+   if Iteration = 13 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0705", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0606"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0607"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0608"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      Local_Counter = 0
+      Has_Failed    = TRUE
+      Inst_Failed   = TRUE
+
+      # Formalise some relationships
+      link firstG R4."Has_many" secondG
+      link firstG R4."Has_many" thirdG
+      link firstG R4."Has_many" fourthG
+
+      link secondG R4."Has_many" fifthG
+      link secondG R4."Has_many" sixthG
+
+      link thirdG R4."Has_many" seventhG
+ 
+      link fourthG R4."Has_many" eigthG
+      link fourthG R4."Has_many" ninthG
+
+      tenthG = find-one Object_G where idG = 10
+
+      {SetG} = firstG -> R4."Has_many".Object_G
+
+      # Count of number of instances in this little empire.
+      # Include the instance that we are navigating from.
+      Local_Counter = 1
+
+      No_Instances = countof {SetG}
+      if No_Instances = 3 then
+
+         for InstG in {SetG} do
+
+            if InstG = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -10
+            else
+               Local_Counter = Local_Counter + 1
+               {Next_SetG} = InstG -> R4."Has_many".Object_G
+
+               for Sub_InstG in {Next_SetG} do
+
+                  if Sub_InstG = UNDEFINED then
+                     Inst_Failed = TRUE
+                     Failure_Code = -20
+                  else
+                     Local_Counter = Local_Counter + 1
+                     Inst_Failed = FALSE
+                  endif
+
+               endfor         
+
+            endif
+
+         endfor
+
+      else
+         Inst_Failed = TRUE
+         Failure_Code = No_Instances 
+      endif
+
+      if Inst_Failed = FALSE & Local_Counter = 9 then
+         # Link in new element
+         link thirdG R4."Has_many" tenthG
+                  
+         # Can we navigate back from tenthG to thirdG
+         new_third = tenthG -> R4."Has_a".Object_G
+
+         if new_third = UNDEFINED then
+            Inst_Failed  = TRUE
+            Failure_Code = -30
+         else
+            # New instance is not undefined
+            Inst_Failed  = FALSE
+            Failure_Code = 0
+
+            Local_Counter = 1
+
+            {SetG} = firstG -> R4."Has_many".Object_G
+
+            for InstG in {SetG} do
+
+               if InstG = UNDEFINED then
+                  Inst_Failed  = TRUE
+                  Failure_Code = -40
+               else
+                  Local_Counter = Local_Counter + 1
+                  {Next_SetG} = InstG -> R4."Has_many".Object_G
+
+                  for Sub_InstG in {Next_SetG} do
+
+                     if Sub_InstG = UNDEFINED then
+                        Inst_Failed  = TRUE
+                        Failure_Code = -50
+                     else
+                        Local_Counter = Local_Counter + 1
+                     endif
+
+                  endfor         
+
+               endif
+
+            endfor
+
+         endif
+
+         if Inst_Failed = FALSE & Local_Counter = 10 then
+            Failure_Code = 0
+            Has_Failed   = FALSE
+
+            unlink firstG R4."Has_many" secondG
+            unlink firstG R4."Has_many" thirdG
+            unlink firstG R4."Has_many" fourthG
+
+            unlink secondG R4."Has_many" fifthG
+            unlink secondG R4."Has_many" sixthG
+
+            unlink thirdG R4."Has_many" seventhG
+            unlink thirdG R4."Has_many" tenthG
+   
+            unlink fourthG R4."Has_many" eigthG
+            unlink fourthG R4."Has_many" ninthG
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Local_Counter
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = Local_Counter
+      endif
+
+   endif
+
+# End Test 13
+
+#-------------------------------------------------------------------#
+# Test 14 - Attempt to link one to many and navigate to the end of 
+#           each link
+#           Add in a new instance in the missle of a chain with one 
+#           end object.
+#-------------------------------------------------------------------#
+
+   if Iteration = 14 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0705", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid[Test,"1241-0000-01-0606"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0607"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0608"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      Local_Counter = 0
+      Inst_Failed = FALSE
+      Unsupported = FALSE
+      No_Instances = 0
+
+      {SetG} = firstG -> R4."Has_many".Object_G
+
+      No_Instances = countof {SetG}
+
+      # Formalise some relationships
+      link firstG R4."Has_many" secondG
+      link firstG R4."Has_many" thirdG
+      link firstG R4."Has_many" fourthG
+
+      link secondG R4."Has_many" fifthG
+      link secondG R4."Has_many" sixthG
+
+      link thirdG R4."Has_many" seventhG
+ 
+      link fourthG R4."Has_many" eigthG
+      link fourthG R4."Has_many" ninthG
+
+      tenthG = find-one Object_G where idG = 10
+
+      {SetG} = firstG -> R4."Has_many".Object_G
+
+      # Count of number of instances in this little empire.
+      # Include the instance that we are navigating from.
+      Local_Counter = 1
+
+      if countof {SetG} = 3 then
+
+         for InstG in {SetG} do
+
+            if InstG = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -10
+            else
+               Local_Counter = Local_Counter + 1
+               {Next_SetG} = InstG -> R4."Has_many".Object_G
+
+               for Sub_InstG in {Next_SetG} do
+
+                  if Sub_InstG = UNDEFINED then
+                     Inst_Failed  = TRUE
+                     Failure_Code = -20
+                  else
+                     Local_Counter = Local_Counter + 1
+                  endif
+
+               endfor         
+
+            endif
+
+         endfor
+
+      else
+         Inst_Failed  = TRUE
+         Failure_Code = countof {SetG}
+      endif
+
+      if Inst_Failed = FALSE then
+
+         if Local_Counter = 9 then
+            # Unlink old element and splice in a new element, making sure that the links are
+            # still correct.
+            unlink firstG R4."Has_many" thirdG
+
+            # Link in new element
+            link firstG R4."Has_many" tenthG
+
+            # Relink new element to old element
+            link tenthG R4."Has_many" thirdG 
+                  
+            # Can we navigate back from thirdG to tenthG
+            new_tenth = thirdG -> R4."Has_a".Object_G
+
+            # And while we're at it, can we navigate from last back to first,
+            # taking into account the newly added link
+            new_first = seventhG -> R4."Has_a".Object_G -> R4."Has_a".Object_G -> R4."Has_a".Object_G
+  
+            if new_tenth = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -30
+            else
+
+               if new_first = UNDEFINED then
+                  Inst_Failed  = TRUE
+                  Failure_Code = -40
+               else
+                  # New instance is not undefined
+                  Inst_Failed  = FALSE
+                  Failure_Code = 0
+                  Local_Counter = 1
+
+                  {SetG} = firstG -> R4."Has_many".Object_G
+                  No_Instances = countof {SetG}
+
+                  for InstG in {SetG} do
+
+                     if InstG = UNDEFINED then
+                        Inst_Failed  = TRUE
+                        Failure_Code = -50
+                     else
+                        Local_Counter = Local_Counter + 1
+                        {Next_SetG} = InstG -> R4."Has_many".Object_G
+
+                        for Sub_InstG in {Next_SetG} do
+
+                           if Sub_InstG = UNDEFINED then
+                              Inst_Failed  = TRUE
+                              Failure_Code = -60
+                           else
+                              Local_Counter = Local_Counter + 1
+                              {Next_Next_SetG} = Sub_InstG -> R4."Has_many".Object_G
+                              No_Next_Next_Set = countof {Next_Next_SetG}
+
+                              for Sub_Sub_InstG in {Next_Next_SetG} do
+
+                                 if Sub_Sub_InstG = UNDEFINED then
+                                    Inst_Failed  = TRUE
+                                    Failure_Code = -70
+                                 else 
+                                    Local_Counter = Local_Counter + 1
+                                 endif
+
+                              endfor
+
+                           endif
+
+                        endfor         
+
+                     endif
+
+                  endfor
+
+               endif
+
+            endif
+
+            if Inst_Failed = FALSE then
+
+               if Local_Counter = 10 then
+                  Failure_Code = 0
+                  Has_Failed   = FALSE
+               else
+                  Has_Failed   = TRUE
+                  Failure_Code = -100 - Local_Counter
+               endif
+
+            else
+               Failure_Code = -80
+               Has_Failed   = TRUE
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -200 - Local_Counter      
+         endif
+
+      else
+         Has_Failed = TRUE
+         Failure_Code = Local_Counter
+      endif
+
+      unlink firstG R4."Has_many" secondG
+      unlink firstG R4."Has_many" tenthG
+      unlink firstG R4."Has_many" fourthG
+
+      unlink tenthG R4."Has_many" thirdG
+
+      unlink secondG R4."Has_many" fifthG
+      unlink secondG R4."Has_many" sixthG
+
+      unlink thirdG R4."Has_many" seventhG
+   
+      unlink fourthG R4."Has_many" eigthG
+      unlink fourthG R4."Has_many" ninthG
+
+   endif
+
+# End Test 14
+
+#-------------------------------------------------------------------#
+# Test 15 - Attempt to link one to many and navigate to the end of 
+#           each link
+#           Add in a new instance in the middle of a chain with two 
+#           end objects.
+#-------------------------------------------------------------------#
+
+   if Iteration = 15 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0705", "Relationships", "objG", "1c to Mc reflexive navigations"]
+      [] = RPT8:Specify_Requid[Test,"1241-0000-01-0606"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0607"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0608"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      Local_Counter = 0
+      Inst_Failed   = FALSE
+      Unsupported   = FALSE
+
+      # Formalise some relationships
+      link firstG R4."Has_many" secondG
+      link firstG R4."Has_many" thirdG
+      link firstG R4."Has_many" fourthG
+
+      link secondG R4."Has_many" fifthG
+      link secondG R4."Has_many" sixthG
+
+      link thirdG R4."Has_many" seventhG
+ 
+      link fourthG R4."Has_many" eigthG
+      link fourthG R4."Has_many" ninthG
+
+      tenthG = find-one Object_G where idG = 10
+
+      {SetG} = firstG -> R4."Has_many".Object_G
+
+      Local_Counter = 1
+
+      if countof {SetG} = 3 then
+
+         for InstG in {SetG} do
+
+            if InstG = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -10
+            else
+               Local_Counter = Local_Counter + 1
+
+               {Next_SetG} = InstG -> R4."Has_many".Object_G
+
+               for Sub_InstG in {Next_SetG} do
+ 
+                  if Sub_InstG = UNDEFINED then
+                     Inst_Failed  = TRUE
+                     Failure_Code = -20
+                  else
+                     Local_Counter = Local_Counter + 1
+                  endif
+
+               endfor         
+
+            endif
+
+         endfor
+
+      else
+         Inst_Failed  = TRUE
+         Failure_Code = countof {SetG}
+      endif
+
+      if Inst_Failed = FALSE then 
+
+         if Local_Counter = 9 then
+            # Unlink old element and splice in a new element, making sure that the links are
+            # still correct.
+            unlink firstG R4."Has_many" fourthG
+
+            # Link in new element
+            link firstG R4."Has_many" tenthG
+
+            # Relink new element to old element
+            link tenthG R4."Has_many" fourthG 
+                    
+            # Can we navigate back from thirdG to tenthG
+            new_tenth = fourthG -> R4."Has_a".Object_G
+
+            # And while we're at it, can we navigate from last back to first,
+            # taking into account the newly added link
+            new_first = eigthG -> R4."Has_a".Object_G -> R4."Has_a".Object_G -> R4."Has_a".Object_G
+
+            if new_tenth = UNDEFINED then
+               Inst_Failed  = TRUE
+               Failure_Code = -30
+            else
+
+               if new_first = UNDEFINED then
+                  Inst_Failed  = TRUE
+                  Failure_Code = -40
+               else
+                  # New instance is not undefined
+                  Inst_Failed  = FALSE
+                  Failure_Code = 0
+
+                  Local_Counter = 1
+
+                  {SetG} = firstG -> R4."Has_many".Object_G
+
+                  for InstG in {SetG} do
+
+                     if InstG = UNDEFINED then
+                        Inst_Failed  = TRUE
+                        Failure_Code = -50
+                     else
+                        Local_Counter = Local_Counter + 1
+                        {Next_SetG} = InstG -> R4."Has_many".Object_G
+
+                        for Sub_InstG in {Next_SetG} do
+     
+                           if Sub_InstG = UNDEFINED then
+                              Inst_Failed  = TRUE
+                              Failure_Code = -60
+                           else
+                              Local_Counter = Local_Counter + 1
+                              {Next_Next_SetG} = Sub_InstG -> R4."Has_many".Object_G
+     
+                              for Sub_Sub_InstG in {Next_Next_SetG} do
+      
+                                 if Sub_Sub_InstG = UNDEFINED then
+                                    Inst_Failed  = TRUE
+                                    Failure_Code = -70
+                                 else
+                                    Local_Counter = Local_Counter + 1
+                                 endif
+
+                              endfor         
+
+                           endif
+
+                        endfor         
+
+                     endif
+
+                  endfor
+
+               endif
+
+            endif
+
+            if Inst_Failed = FALSE then
+
+               if Local_Counter = 10 then
+                  Failure_Code = 0
+                  Has_Failed = FALSE
+               else
+                  Has_Failed   =TRUE
+                  Failure_Code = -100 - Local_Counter
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = -80
+            endif
+
+         else
+            Has_Failed = TRUE
+            Failure_Code = -200 - Local_Counter
+         endif
+
+      else
+         Has_Failed = TRUE
+         Failure_Code = -90
+      endif
+
+      unlink firstG R4."Has_many" secondG
+      unlink firstG R4."Has_many" thirdG
+      unlink firstG R4."Has_many" tenthG
+
+      unlink tenthG R4."Has_many" fourthG
+ 
+      unlink secondG R4."Has_many" fifthG
+      unlink secondG R4."Has_many" sixthG
+
+      unlink thirdG R4."Has_many" seventhG
+
+      unlink fourthG R4."Has_many" eigthG
+      unlink fourthG R4."Has_many" ninthG
+
+   endif
+
+# End Test 15
+
+#-------------------------------------------------------------------#
+# Delete some relationships
+# This section deletes relationships depending upon which test
+# has been performed.
+#-------------------------------------------------------------------#
+
+   if Iteration >= 2 & Iteration <= 5 then
+
+      # Delete the formalised relationships
+      unlink firstG R13."Has_many" thirdG
+      unlink firstG R13."Has_many" fourthG
+      unlink fifthG R13."Has_a"    secondG
+
+   endif
+
+#-------------------------------------------------------------------#
+# Tests complete
+#-------------------------------------------------------------------#
+
+   if Unsupported = FALSE then
+
+      if Has_Failed = FALSE then
+         [] = RPT2:Test_Passed["objG", Test, 0]
+      else
+         [] = RPT3:Test_Failed["objG", Test, Failure_Code]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+#-------------------------------------------------------------------#
+
+
+enddefine

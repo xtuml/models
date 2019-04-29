@@ -1,0 +1,105 @@
+define function  M1:Create_Relationships
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#--------------------------------------------------------------------------------------------#
+#
+# Create the relationships
+#
+# The architectureshall support a translation of the ASL link 
+# statement to map to the mechanism that allows creation of a 
+# relationship link between two object instances
+# 1241-0000-01-1202
+#
+#--------------------------------------------------------------------------------------------#
+
+Has_Failed = FALSE
+
+One_Left    = find-one Far_Left   where Left_Identifier   = 1
+One_Middle  = find-one Middle     where Middle_Identifier = 1
+One_Right   = find-one Many_Right where Right_Identifier  = 1
+Two_Right   = find-one Many_Right where Right_Identifier  = 2
+Three_Right = find-one Many_Right where Right_Identifier  = 3
+
+One_MRA = find-one Many_Right_Assoc where MRA_Identifier  = 1
+Two_MRA = find-one Many_Right_Assoc where MRA_Identifier  = 2
+
+One_MFR = find-one Many_Far_Right where MFR_Identifier = 1
+Two_MFR = find-one Many_Far_Right where MFR_Identifier = 2
+
+link One_Left   R6 One_Middle
+link One_Middle R7 One_Right
+link One_Middle R7 Two_Right
+link One_Middle R7 Three_Right
+
+link One_Right R8 One_MFR using One_MRA
+link One_Right R8 Two_MFR using Two_MRA
+link Two_Right R8 Two_MFR using Two_MRA
+
+#--------------------------------------------------------------------------------------------#
+# Check that the relationships have been correctly established
+#--------------------------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0602", "Relationships", "Set Navigation", "Create objects and relationships"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0603"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1202"] 
+   [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+   [] = RPT8:Specify_Requid [Test, "1103-0000-01-0612"]
+
+   {SetMR} = One_Middle -> R7.Many_Right
+
+   if countof {SetMR} != 3 then
+      Has_Failed = TRUE
+      Failure_Code = -10
+   else
+   
+      for InstMR in {SetMR} do
+
+         if InstMR.Right_Identifier = 1 then
+            Val1 = 1
+         endif
+
+         if InstMR.Right_Identifier = 2 then
+            Val2 = 2
+         endif
+
+         if InstMR.Right_Identifier = 3 then
+            Val3 = 3
+         endif
+
+      endfor
+
+      if Val1 = 1 then
+
+         if Val2 = 2 then
+
+            if Val3 != 3 then
+               Has_Failed   = TRUE
+               Failure_Code = Val3
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val2
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = Val1
+      endif
+
+   endif
+
+   if not Has_Failed then
+      [] = RPT2:Test_Passed ["Objects created and linked", Test, 0]
+   else
+      [] = RPT3:Test_Failed ["Error in creation of objects or linking", Test, Failure_Code]
+   endif
+
+
+enddefine
