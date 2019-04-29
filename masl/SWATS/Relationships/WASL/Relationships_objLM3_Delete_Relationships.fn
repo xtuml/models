@@ -1,0 +1,218 @@
+define function  objLM3:Delete_Relationships
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------#
+#
+# Delete all relationships
+#
+# The architecture shall provide a mapping from the ASL delete
+# instance statement to the deletion mechanism
+# 1241-0000-01-0121
+#
+# The architecture shall provide a mechanism to allow deletion of a 
+# simple relational link between two object instances
+# 1241-0000-01-0604
+#
+# The architecture shall provide a mechanism to allow the deletion of
+# an associative object and the link between two objects
+# 1241-0000-01-0612
+#
+# The architecture shall provide a mechanism to allow the deletion of
+# a link between two objects in an associative relationship
+# 1241-0000-01-0613
+#
+# The architecture shall support a translation of the ASL unassociate
+# statment to map to the mechanism that allows the deletion of an 
+# associative link between an associative object and the link between
+# two objects
+# 1241-0000-01-1203
+#
+# The architecture shall support a translation of the ASL unlink
+# statement to map to the mechanism that allow the deletion of a 
+# link between two objects in a relationship
+# 1241-0000-01-1204
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+# Initialise the variables
+Has_Failed   = FALSE
+Failure_Code = 0
+
+[] = RPT1:Start_Test[Test, "1241-0000-01-0604", "Relationships", "objLM", "Delete all relationships"]
+
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0612"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0613"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-1203"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-1204"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0622"]
+
+# Find the desired instances for Left Many Object
+firstLM    = find-one Left_Many where idLM = 1
+secondLM   = find-one Left_Many where idLM = 2
+thirdLM    = find-one Left_Many where idLM = 3
+tenthLM    = find-one Left_Many where idLM = 10
+eleventhLM = find-one Left_Many where idLM = 11
+twelthLM   = find-one Left_Many where idLM = 12
+
+# Find the desired instances for Right Many Object
+firstRM     = find-one Right_Many where idRM = 1
+secondRM    = find-one Right_Many where idRM = 2
+thirdRM     = find-one Right_Many where idRM = 3
+tenthRM     = find-one Right_Many where idRM = 10
+eleventhRM  = find-one Right_Many where idRM = 11
+twelthRM    = find-one Right_Many where idRM = 12
+
+# Find the desired instances for Bottom Many Object
+firstBM  = find-one Bottom_Many where idBM = 1
+thirdBM  = find-one Bottom_Many where idBM = 3
+fourthBM = find-one Bottom_Many where idBM = 4
+fifthBM  = find-one Bottom_Many where idBM = 5
+tenthBM  = find-one Bottom_Many where idBM = 10
+
+# Find the desired instances for Associative Object
+secondAssoc   = find-one LMRM_Assoc where idLMRM = 2
+thirdAssoc    = find-one LMRM_Assoc where idLMRM = 3
+fourthAssoc   = find-one LMRM_Assoc where idLMRM = 4
+fifthAssoc    = find-one LMRM_Assoc where idLMRM = 5
+eighthAssoc   = find-one LMRM_Assoc where idLMRM = 8
+ninthAssoc    = find-one LMRM_Assoc where idLMRM = 9
+tenthAssoc    = find-one LMRM_Assoc where idLMRM = 10
+eleventhAssoc = find-one LMRM_Assoc where idLMRM = 11
+twelthAssoc   = find-one LMRM_Assoc where idLMRM = 12
+
+# Delete all relationships
+unassociate firstLM  R15 firstRM  from secondAssoc
+unassociate firstLM  R15 thirdRM  from thirdAssoc
+unassociate secondLM R15 secondRM from fifthAssoc
+unassociate thirdLM  R15 firstRM  from fourthAssoc
+
+unassociate tenthLM    R15 tenthRM    from tenthAssoc
+unassociate tenthLM    R15 eleventhRM from eleventhAssoc
+unassociate tenthLM    R15 twelthRM   from twelthAssoc
+unassociate eleventhLM R15 eleventhRM from eighthAssoc
+unassociate twelthLM   R15 eleventhRM from ninthAssoc
+
+unlink tenthAssoc R16 tenthBM
+
+unlink secondAssoc R16 firstBM
+unlink thirdAssoc  R16 firstBM
+unlink thirdAssoc  R16 fifthBM
+unlink fourthAssoc R16 firstBM
+unlink fourthAssoc R16 thirdBM
+unlink fifthAssoc  R16 fourthBM
+
+unlink firstLM    R15 firstRM
+unlink firstLM    R15 thirdRM
+unlink secondLM   R15 secondRM
+unlink thirdLM    R15 firstRM
+unlink tenthLM    R15 tenthRM    
+unlink tenthLM    R15 eleventhRM 
+unlink tenthLM    R15 twelthRM
+unlink eleventhLM R15 eleventhRM 
+unlink twelthLM   R15 eleventhRM 
+# Test that the unlinking has been performed
+
+{SetAssoc} = firstLM -> R15.LMRM_Assoc
+{SetBM}    = thirdAssoc -> R16.Bottom_Many
+InstRM     = fifthAssoc -> R15.Right_Many
+
+if countof {SetAssoc} = 0 then
+   
+   if countof {SetBM} = 0 then
+
+      if InstRM != UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -20
+   endif
+
+else
+   Has_Failed = TRUE
+   Failure_Code = -30
+endif
+
+if not Has_Failed then
+
+   {SetLM}    = find-all Left_Many
+   {SetRM}    = find-all Right_Many
+   {SetAssoc} = find-all LMRM_Assoc
+   {SetBM}    = find-all Bottom_Many
+
+   for InstLM in {SetLM} do
+      delete InstLM
+   endfor
+
+   for InstRM in {SetRM} do
+      delete InstRM
+   endfor
+
+   for InstAssoc in {SetAssoc} do
+      delete InstAssoc
+   endfor
+
+   for InstBM in {SetBM} do
+      delete InstBM
+   endfor
+
+   {SetLM}    = find-all Left_Many
+   {SetRM}    = find-all Right_Many
+   {SetAssoc} = find-all LMRM_Assoc
+   {SetBM}    = find-all Bottom_Many
+
+   if countof {SetLM} = 0 then
+
+      if countof {SetRM} = 0 then
+
+         if countof {SetAssoc} = 0 then
+
+            if countof {SetBM} != 0 then
+               Has_Failed   = TRUE
+               Failure_Code = -40
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -50
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -60
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -70
+   endif
+
+endif
+
+#-------------------------------------------------------------------#
+# Test complete
+#-------------------------------------------------------------------#
+
+if Has_Failed then
+   [] = RPT3:Test_Failed["objLM", Test, Failure_Code]
+else
+   [] = RPT2:Test_Passed["objLM", Test, 0]
+endif
+
+#-------------------------------------------------------------------#
+
+enddefine
