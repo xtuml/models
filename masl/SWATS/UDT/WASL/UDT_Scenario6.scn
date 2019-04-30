@@ -1,0 +1,95 @@
+define scenario  UDT_Scenario6
+input
+output
+
+#$DESCRIPTION
+Terminator_Type_Scenario
+#$END_DESCRIPTION
+
+
+#--------------------------------------------------------------------------
+# This scenario shall prove that a data object instance handle passed into
+# a terminator shall have its' attribute types passed in correctly.
+#
+# The locally defined data objects in the terminator should not have any 
+# defined type assinged to them by the code generator, ie. they should be 
+# base types. 
+#
+# A secondary test has been defined where the data attributes of the object
+# are passed in directly. This too should prove that locally defined 
+# objects do not inherit the type of the attribute or object that they are 
+# being assigned. 
+#
+# Given the difference in the way I-SIM and WACA deal with UDT's, the tests
+# will always pass in I-SIM, and cause a run-time error in WACA if ranges 
+# are exceeded.
+#
+# The thrust of the tests will be to force a range overflow in the UDT 
+# defined object in the terminator. If there are no UDT types associated 
+# with the local object in the terminator, then the test will pass, if the
+# object has inherited the type, then the test will crash spectacularly.
+#--------------------------------------------------------------------------
+
+my_test = find-one Final_Test_Data
+
+the_test_number = my_test.Final_Test_Number
+
+the_result = FALSE
+
+#--------------------------------------------------------------------------
+# Test 1 
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[the_test_number, "1103-0000-01-0311", "UDT", "Terminator typing", "Pass in object IH, decode types"]
+
+   the_IH = create unique Object_Into_Bridge with Current_State = 'Idle'
+
+   the_IH.A_Number = 10
+   the_IH.Some_Enumeration = 'Four'
+
+   # with 101, 'Four'
+
+   [the_result, result_value] = BTF1:I_H_Type_Across[the_IH]
+
+   if the_result = TRUE then 
+      [] = RPT2:Test_Passed["Decode IH", the_test_number, result_value]
+   else
+      [] = RPT3:Test_Failed["Decode IH", the_test_number, result_value]
+   endif
+
+   the_test_number = the_test_number + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[the_test_number, "1103-0000-01-0311", "UDT", "Terminator typing", "Pass in UDT data, decode types"]
+
+   [the_result, result_value, result_subtype] = BTF2:User_Defined_Types_Across[the_IH.A_Number, the_IH.Some_Enumeration]
+
+   if the_result = TRUE then
+      [] = RPT2:Test_Passed["Decode object", the_test_number, result_value]
+   else
+      [] = RPT3:Test_Failed["Decode object", the_test_number, result_value]
+   endif
+
+   the_test_number = the_test_number + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   generate OIB1:Start_To_Test(the_test_number) to the_IH
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+
+   the_test_number = the_test_number + 1
+
+   my_test.Final_Test_Number = the_test_number
+enddefine

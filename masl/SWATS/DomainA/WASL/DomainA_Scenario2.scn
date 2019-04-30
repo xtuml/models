@@ -1,0 +1,117 @@
+define scenario  DomainA_Scenario2
+input
+output
+
+#$DESCRIPTION
+Sync to sync
+#$END_DESCRIPTION
+
+#-------------------------------------------------------------------
+#Sync service invocation to sync service
+#-------------------------------------------------------------------
+
+   my_test = find-one Test_Data
+
+   # Initiate the test
+   Test = my_test.This_Test_Number
+
+   has_failed = FALSE
+
+   inputA = 3
+   inputB = 4
+
+#-------------------------------------------------------------------
+# Test 1
+#-------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-1110", "DomainA", "Domain A to B", "synch 3 service call"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1101"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1104"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1105"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0810"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1103"]
+
+   [outputA, outputB] = termA3:Sync3A[inputA, inputB, Test]
+
+   if outputA = 5 and outputB = 6 then
+      [] = RPT2:Test_Passed["DomainA", Test, outputB]
+   else
+      [] = RPT3:Test_Failed["DomainA", Test, outputA]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#-------------------------------------------------------------------
+# Test 2
+#-------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-1110", "DomainA", "Domain A to B", "synch 2 service call"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1101"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1104"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1105"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0810"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1103"]
+
+   [outputA, outputB] = termA2:Sync2A[inputA, inputB, Test]
+
+   if outputA = 5 and outputB = 6 then
+      [] = RPT2:Test_Passed["DomainA", Test, outputB]
+   else
+      [] = RPT3:Test_Failed["DomainA", Test, outputA]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#-------------------------------------------------------------------
+# Test 3
+#-------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-1110", "DomainA", "Domain A to B", "synch 1 service call"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1104"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1104"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1105"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0810"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1103"]
+
+   inputA = 1
+   inputB = 2
+
+   [outputA, outputB] = termA1:Sync1A[inputA, inputB, Test]
+
+   if outputA = 3 and outputB = 4 then
+      [] = RPT2:Test_Passed["DomainA", Test, outputB]
+   else
+      [] = RPT3:Test_Failed["DomainA", Test, outputA]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#-------------------------------------------------------------------
+# Test 4
+#-------------------------------------------------------------------
+
+   an_instanceA = find-one Object_A where idA = 1
+ 
+   if an_instanceA != NULL then
+      generate objA3:StartA(Test) to an_instanceA
+   else
+      # Null instance detected.
+      [] = RPT5:Test_Text[Test, "Can not find object A domainA scenario2"]
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#-------------------------------------------------------------------
+
+   my_test.This_Test_Number = Test
+
+enddefine

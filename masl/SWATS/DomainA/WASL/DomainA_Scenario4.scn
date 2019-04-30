@@ -1,0 +1,22 @@
+define scenario  DomainA_Scenario4
+input
+output
+
+#$DESCRIPTION
+single bridge test
+#$END_DESCRIPTION
+
+#------------------------------------------------------------------------#
+# Call bridge service that will perform navigation in domain B
+#------------------------------------------------------------------------#
+
+my_test = find-one Test_Data
+Test    = my_test.This_Test_Number
+
+[] = NAV1:Single_Bridge_Navigate[Test]
+
+Test = Test + 1
+
+my_test.This_Test_Number = Test
+
+enddefine

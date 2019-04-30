@@ -1,0 +1,249 @@
+define scenario  Struct_Scenario11
+input
+output
+
+#$DESCRIPTION
+Structures_are_Cleared
+#$END_DESCRIPTION
+
+#--------------------------------------------------------------------------
+# These series of tests ensure that although there is no way of deleting a 
+# structure once it is in existance, we can at least reduce the structure 
+# back to being empty when necessary.
+#--------------------------------------------------------------------------
+
+my_test = find-one Test_Data
+
+Test_Number = my_test.The_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1 - Create a Structure and append to it.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test_Number, "1241-0000-01-1212", "Structures", "Structures cleared", "Structures memory usage test"]
+
+   {Simple_Destructive_Structure} is Simple_Structure_Type
+
+   # Blunder round a loop ten thousand times, adding fifty structures into 
+   # the set of structure. This should give an indication of whether WACA 
+   # returns the freed space back to the heap after the structure is 
+   # redeclared.
+
+   # NB. Use the Performance Meter in the Windows NT task manager
+   #     to monitor memory usage.
+
+   Number_Of_Iterations = 10000
+   Number_Of_Appends = 50
+
+   # Test data section
+   The_Integer = Test_Number
+   The_Real    = 0.99
+   The_Text    = "How big?"
+   The_Boolean = FALSE
+
+   The_Colour of Colour_Type = 'Blue'
+
+   Little_Bean_Counter = 0
+   Big_Bean_Counter    = 0
+
+   Test_Has_Failed = FALSE
+
+   loop
+      Little_Bean_Counter = 0
+
+      loop
+         append [The_Integer, The_Real, The_Text, The_Boolean, The_Colour] to {Simple_Destructive_Structure}
+
+         breakif Little_Bean_Counter = Number_Of_Appends
+  
+         Little_Bean_Counter = Little_Bean_Counter + 1
+      endloop
+
+      # Redeclare the structure, effectively removing the fully defined
+      # structure and resetting it to zero size.
+      {Simple_Destructive_Structure} is Simple_Structure_Type
+
+      # If the structure has not been cleaned up, bail out. There is
+      # no point continuing.
+
+      How_Many_Now = countof {Simple_Destructive_Structure}
+      if How_Many_Now != 0 then
+         Test_Has_Failed = TRUE
+         break
+      endif
+
+      breakif Big_Bean_Counter = Number_Of_Iterations
+
+      Big_Bean_Counter = Big_Bean_Counter + 1
+
+   endloop
+
+   if Test_Has_Failed then
+      [] = RPT3:Test_Failed["Structures not cleared up", Test_Number, Big_Bean_Counter]
+   else
+      Result_Value = Little_Bean_Counter * Big_Bean_Counter
+      [] = RPT2:Test_Passed["Structures cleared", Test_Number, Result_Value]
+   endif
+
+   Test_Number = Test_Number + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test_Number, "1241-0000-01-1212", "Structures", "Structures cleared", "Reuse Structure name with different type"]
+
+   Little_Bean_Counter = 0
+   Big_Bean_Counter    = 1
+
+   {Simple_Destructive_Structure} is Simple_Structure_Type
+
+   # Blunder round a loop two times, adding two hundred and fifty thousand
+   # structures into the set of structure. This should give an indication of 
+   # whether WACA returns the freed space back to the heap after the structure 
+   # is redeclared.
+
+   # NB. Use the Performance Meter in the Windows NT task manager
+   #     to monitor memory usage.
+
+   Number_Of_Iterations = 2
+   Number_Of_Appends = 250000
+
+   # Test data section
+   The_Integer = Test_Number
+   The_Real    = 0.99
+   The_Text    = "Different structure type"
+   The_Boolean = FALSE
+
+   The_Colour of Colour_Type = 'Blue'
+
+   Test_Has_Failed = FALSE
+
+   loop
+      Little_Bean_Counter = 0
+
+      loop
+         append [The_Integer, The_Real, The_Text, The_Boolean, The_Colour] to {Simple_Destructive_Structure}
+    
+         breakif Little_Bean_Counter = Number_Of_Appends
+
+         Little_Bean_Counter = Little_Bean_Counter + 1
+      endloop
+
+      # Redeclare the structure, effectively removing the fully defined
+      # structure and resetting it to zero size. This test differs from 
+      # the previous in that the type of the structure has changed, and 
+      # the number of appends and iterations have swapped values!
+      # Due to a WACA limitation (and ADA95 if we are honest) the reuse
+      # of a named definition for a different type is precluded.
+
+      {Simple_Destructive_Structure} is Simple_Structure_Type
+
+      # If the structure has not been cleaned up, bail out. There is
+      # no point continuing.
+
+      How_Many_Now = countof {Simple_Destructive_Structure}
+      if How_Many_Now != 0 then
+         Test_Has_Failed = TRUE
+         break
+      endif
+
+      breakif Big_Bean_Counter = Number_Of_Iterations
+
+      Big_Bean_Counter = Big_Bean_Counter + 1
+
+   endloop
+
+   if Test_Has_Failed then
+      [] = RPT3:Test_Failed["Structures not cleared up", Test_Number, Big_Bean_Counter]
+   else
+      Result_Value = Little_Bean_Counter * Big_Bean_Counter
+      [] = RPT2:Test_Passed["Structures cleared", Test_Number, Result_Value]
+   endif
+
+   Test_Number = Test_Number + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Now try a similar test on a structure containing an instance 
+#          handle.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test_Number, "1241-0000-01-1216", "Structures", "Structures cleared", "Structures with IH memory usage test"]
+
+   {Structure_And_IH_Destructive_Structure} is Structure_and_IH_Type
+
+   # Blunder round a loop ten thousand times, adding fifty
+   # structures into the set of structure. This should give an 
+   # indication of whether WACA returns the freed space back
+   # to the heap after the structure is redeclared.
+
+   # NB. Use the Performance Meter in the Windows NT task manager
+   #     to monitor memory usage.
+
+   Number_Of_Iterations = 10000
+   Number_Of_Appends = 50
+
+   A_Structured_Object_IH = create unique Structured_Object with An_Integer    = Test_Number &\
+                                                                 A_Real        = 99.99       &\
+                                                                 Some_Text     = "Some Text" &\
+                                                                 A_Boolean     = FALSE       &\
+                                                                 A_Colour      = 'Green'     &\
+                                                                 Current_State ='Idle'
+
+   # Test data section
+
+   Little_Bean_Counter = 0
+   Big_Bean_Counter    = 0
+
+   Test_Has_Failed = FALSE
+
+   loop
+      Little_Bean_Counter = 0
+
+      loop
+         append [A_Structured_Object_IH] to {Structure_And_IH_Destructive_Structure}
+
+         breakif Little_Bean_Counter = Number_Of_Appends
+
+         Little_Bean_Counter = Little_Bean_Counter + 1
+      endloop
+
+      # Redeclare the structure, effectively removing the fully defined
+      # structure and resetting it to zero size.
+
+      {Structure_And_IH_Destructive_Structure} is Structure_and_IH_Type
+
+      # If the structure has not been cleaned up, bail out. There is
+      # no point continuing.
+      How_Many_Now = countof {Structure_And_IH_Destructive_Structure}
+
+      if How_Many_Now != 0 then
+         Test_Has_Failed = TRUE
+         break
+      endif
+
+      breakif Big_Bean_Counter = Number_Of_Iterations
+
+      Big_Bean_Counter = Big_Bean_Counter + 1
+
+   endloop
+
+   if Test_Has_Failed then
+      [] = RPT3:Test_Failed["Structures not cleared up", Test_Number, Big_Bean_Counter]
+   else
+      Result_Value = Little_Bean_Counter * Big_Bean_Counter
+      [] = RPT2:Test_Passed["Structures cleared", Test_Number, Result_Value]
+   endif
+
+   Test_Number = Test_Number + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+
+my_test.The_Test_Number = Test_Number
+enddefine

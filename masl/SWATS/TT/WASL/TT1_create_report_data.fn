@@ -1,0 +1,19 @@
+define function  TT1::create_report_data
+input
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+the_old_report_data = find-one Report_Data
+
+if (the_old_report_data != UNDEFINED) then
+   delete the_old_report_data
+endif
+
+the_new_report_data = create unique Report_Data with Reported_Domain_Number = 0
+
+[] = RPT6:Domain_Test_Start["Test Timers"]
+
+enddefine

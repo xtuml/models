@@ -1,0 +1,21 @@
+define function  objA1:FunctionA
+input \
+	InputA:Base_Integer_Type 
+output \
+	OutputA:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+   an_instance_A = find-one Object_A where ReferenceA = 1
+   if InputA != 0 then
+      generate objA1:Fault() to an_instance_A
+   else
+      temp = an_instance_A.ResultA + 10
+      an_instance_A.ResultA = temp
+   endif
+   OutputA = InputA + 10
+
+
+enddefine

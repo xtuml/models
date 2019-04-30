@@ -1,0 +1,612 @@
+define function  UDT1::Check_The_Integers
+input \
+	Test:Base_Integer_Type ,\
+	Testing_For:Base_Text_Type ,\
+	The_Requid:Base_Text_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+# type subset_1_of_integer is          integer range      1 .. 10
+# type subset_minus_1_of_integer is    integer range    -10 .. -1
+# type subset_zero_of_integer is       integer range    -10 .. 10
+# type one_to_maximum_integer is       integer range      1 .. 32767
+# type zero_to_maximum_integer is      integer range      0 .. 32767
+# type minus_one_to_maximum_integer is integer range     -1 .. 32767
+# type minimum_to_minus_one_integer is integer range -32768 .. -1
+# type minimum_to_zero_integer is      integer range -32768 .. 0
+# type minimum_to_maximum_integer is   integer range -32768 .. 32767
+
+
+#First_Integer  is Subset_1_of_Integer
+#Second_Integer is Subset_minus_1_Of_Integer
+#Third_Integer  is Subset_Zero_of_Integer
+#Fourth_Integer is one_to_maximum_integer
+#Fifth_Integer  is minimum_to_minus_one_integer
+#Sixth_Integer  is minimum_to_maximum_integer
+
+   [] = RPT1:Start_Test[Test, The_Requid, "User Defined Types", "Integer assignment", Testing_For]
+
+   # Set up some negative numbers. I-SIM doesn't like assigning a magic 
+   # negative number to an attribute. 
+
+   # These are defined by I-SIM as of base type.
+   Minus_Ten    = -10
+   Minus_Max    = -32768
+   Minus_One    = -1
+   Plus_One     =  1
+   Plus_Ten     =  10
+   Plus_Max     =  32767
+   Big_Fat_Zero =  0
+
+   Test_Has_Passed  = FALSE
+   Failure_Code = Big_Fat_Zero
+
+#--------------------------------------------------------------------------
+# Test 1 - This test shall prove that assignment using magic numbers is 
+#          handled correctly. 
+#          Note that these magic numbers are base type, and assinging them 
+#          to an attribute of UDT is what we are really looking at here.
+#--------------------------------------------------------------------------
+
+   if Test = 1 then
+
+      [] = RPT9:Specify_A_Requid[Test, "1103-0000-01-0311"]
+
+      The_Object = create Object_With_Integers with Unique_Identifier = Test
+
+      The_Object.First_Integer  = 1
+      The_Object.Second_Integer = Minus_Ten 
+      The_Object.Third_Integer  = 10
+      The_Object.Fourth_Integer = 1
+      The_Object.Fifth_Integer  = Minus_Max
+      The_Object.Sixth_Integer  = 0
+
+      if The_Object.First_Integer  = Plus_One   then
+      
+         if The_Object.Second_Integer = Minus_Ten  then
+
+            if The_Object.Third_Integer  = Plus_Ten   then
+
+               if The_Object.Fourth_Integer = Plus_One   then
+
+                  if The_Object.Fifth_Integer  = Minus_Max  then
+
+                     if The_Object.Sixth_Integer  = Big_Fat_Zero then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-60)
+                     endif
+
+                  else
+                     Failure_Code = (-50)
+                  endif
+
+               else
+                  Failure_Code = (-40)
+               endif
+
+            else
+               Failure_Code = (-30)
+            endif
+
+         else
+            Failure_Code = (-20)
+         endif
+
+      else
+          Failure_Code = (-10)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 - This test shall prove that assignment using magic numbers is 
+#          handled correctly. 
+#          Note that these magic numbers are base type, and assinging them 
+#          to an attribute of UDT is what we are really looking at here.
+#--------------------------------------------------------------------------
+
+   if Test = 2 then
+
+      [] = RPT9:Specify_A_Requid[Test, "1103-0000-01-0311"]
+
+      The_Object = create Object_With_Integers with Unique_Identifier = Test
+
+      The_Object.First_Integer  = Plus_One
+      The_Object.Second_Integer = Minus_Ten
+      The_Object.Third_Integer  = Plus_Ten
+      The_Object.Fourth_Integer = Plus_One
+      The_Object.Fifth_Integer  = Minus_Max
+      The_Object.Sixth_Integer  = Big_Fat_Zero
+
+      if (The_Object.First_Integer  = Plus_One) then
+
+         if (The_Object.Second_Integer = Minus_Ten) then
+
+            if (The_Object.Third_Integer  = Plus_Ten) then
+
+               if (The_Object.Fourth_Integer = Plus_One) then
+
+                  if (The_Object.Fifth_Integer  = Minus_Max) then
+
+                     if (The_Object.Sixth_Integer  = Big_Fat_Zero) then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-60)
+                     endif
+
+                  else
+                     Failure_Code = (-50)
+                  endif
+
+               else
+                  Failure_Code = (-40)
+               endif
+
+            else
+               Failure_Code = (-30)
+            endif
+
+         else
+            Failure_Code = (-20)
+         endif
+
+      else
+         Failure_Code = (-10)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - This test shall prove that assignment using data objects is 
+#          handled correctly.  Values set to minimum allowable for range.
+#--------------------------------------------------------------------------
+
+   if Test = 3 then
+
+      [] = RPT9:Specify_A_Requid[Test, "1103-0000-01-0311"]
+
+      The_Object = create Object_With_Integers with Unique_Identifier = Test
+
+      The_Object.First_Integer  = Plus_Ten
+      The_Object.Second_Integer = Minus_One
+      The_Object.Third_Integer  = Plus_Ten
+      The_Object.Fourth_Integer = Plus_Max
+      The_Object.Fifth_Integer  = Minus_One
+      The_Object.Sixth_Integer  = Plus_Max
+
+      if (The_Object.First_Integer  = Plus_Ten) then
+
+         if (The_Object.Second_Integer = Minus_One) then
+
+            if (The_Object.Third_Integer  = Plus_Ten) then
+
+               if (The_Object.Fourth_Integer = Plus_Max) then
+
+                  if (The_Object.Fifth_Integer  = Minus_One) then
+
+                     if (The_Object.Sixth_Integer  = Plus_Max) then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-60)
+                     endif
+
+                  else
+                     Failure_Code = (-50)
+                  endif
+
+               else
+                  Failure_Code = (-40)
+               endif
+
+            else
+               Failure_Code = (-30)
+            endif
+
+         else
+            Failure_Code = (-20)
+         endif
+
+      else
+          Failure_Code = (-10)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4 - This test shall prove that assignment using data objects is 
+#          handled correctly.  Values set to maximum allowable for range.
+#--------------------------------------------------------------------------
+
+   if Test = 4 then
+
+      [] = RPT9:Specify_A_Requid[Test, "1103-0000-01-0311"]
+
+      The_Object = create Object_With_Integers with Unique_Identifier = Test
+
+      The_Object.First_Integer  = Plus_One
+      The_Object.Second_Integer = Minus_Ten
+      The_Object.Third_Integer  = Minus_Ten
+      The_Object.Fourth_Integer = Plus_One
+      The_Object.Fifth_Integer  = Minus_Max
+      The_Object.Sixth_Integer  = Minus_Max
+
+      if (The_Object.First_Integer = Plus_One) then
+
+         if (The_Object.Second_Integer = Minus_Ten) then
+
+            if (The_Object.Third_Integer = Minus_Ten) then
+
+               if (The_Object.Fourth_Integer = Plus_One) then
+
+                  if (The_Object.Fifth_Integer = Minus_Max) then
+
+                     if (The_Object.Sixth_Integer = Minus_Max)  then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-60)
+                     endif
+
+                  else
+                     Failure_Code = (-50)
+                  endif
+
+               else
+                  Failure_Code = (-40)
+               endif
+
+            else
+               Failure_Code = (-30)
+            endif
+
+         else
+            Failure_Code = (-20)
+         endif
+
+      else
+         Failure_Code = (-10)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5 - This test shall prove that I_SIM allows root data types to be 
+#          used for User Defined Types, and in fact totally ignores data
+#          typing.
+#          Also note that the local data objects are UDT type, and reused 
+#          by each assingment. This will cause problems for WACA as first 
+#          use for a local object should defined it as being the same type 
+#          as the attribute that is being copied into it. Subsequent copies 
+#          should cause grief.
+#          This test has been modified to use unique local data and results 
+#          identifiers. Non-unique data (ie. reused local objects) has been 
+#          shown to cause a constraint error exception to be generated in 
+#          ADA. This is not a surprise.
+#--------------------------------------------------------------------------
+
+   if Test = 5 then
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Plus_One
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_Max
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+ 
+      The_Object2.First_Integer  = Plus_One
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Minus_Ten
+      The_Object2.Fourth_Integer = Plus_One
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # 1 + 1 in range 1..10 result 2 in range
+      Local_Integer1 = The_Object1.First_Integer  
+      Local_Integer2 = The_Object2.First_Integer
+      Result_Integer12 = Local_Integer1 + Local_Integer2
+      Result_Object.First_Integer  =  Result_Integer12
+
+      # -10 - -1 in range -10 .. -1 result -9 inside range
+      Local_Integer3 = The_Object1.Second_Integer  
+      Local_Integer4 = The_Object2.Second_Integer
+      Result_Integer34 = Local_Integer3 - Local_Integer4
+      Result_Object.Second_Integer  =  Result_Integer34
+
+      # -10 - -10 in range -10 .. 10 result 0 inside range
+      Local_Integer5 = The_Object1.Third_Integer  
+      Local_Integer6 = The_Object2.Third_Integer
+      Result_Integer56 = Local_Integer5 - Local_Integer6
+      Result_Object.Third_Integer  =  Result_Integer56
+  
+      # 32767 - 1 in range 1..32767 result 32766 inside range
+      Local_Integer7 = The_Object1.Fourth_Integer  
+      Local_Integer8 = The_Object2.Fourth_Integer
+      Result_Integer78 = Local_Integer7 - Local_Integer8
+      Result_Object.Fourth_Integer  =  Result_Integer78
+
+      # -32768 - -1 in range -32768 .. -1 result -32767 inside range
+      Local_Integer9 = The_Object1.Fifth_Integer  
+      Local_Integer10 = The_Object2.Fifth_Integer
+      Result_Integer910 = Local_Integer9 - Local_Integer10
+      Result_Object.Fifth_Integer  =  Result_Integer910
+ 
+      # -32768 + 32767 in range -32768 .. 32767 result -1 inside range
+      Local_Integer11 = The_Object1.Sixth_Integer  
+      Local_Integer12 = The_Object2.Sixth_Integer
+      Result_Integer1112 = Local_Integer11 + Local_Integer12
+      Result_Object.Sixth_Integer  =  Result_Integer1112
+  
+      # Non unique binary operands
+      if Result_Integer12 = Result_Object.First_Integer  &\
+         Result_Integer34 = Result_Object.Second_Integer &\
+         Result_Integer56 = Result_Object.Third_Integer  &\
+         Result_Integer78 = Result_Object.Fourth_Integer &\
+         Result_Integer910 = Result_Object.Fifth_Integer  &\
+         Result_Integer1112 = Result_Object.Sixth_Integer then
+
+         Test_Has_Passed = TRUE
+         Failure_Code    = 0
+      else
+         Failure_Code = -10
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+# Test 6 - This test proves that individual local data objects must be used 
+#          for different data types.
+#          This test is the same as test 5, with one important difference. 
+#          The local data objects are not reused, thus first use should  
+#          specify them as of the attribute's type, and no conflict should 
+#          arise.
+#--------------------------------------------------------------------------
+
+   if Test = 6 then
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Plus_One
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_Max
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+
+      The_Object2.First_Integer  = Plus_One
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Minus_Ten
+      The_Object2.Fourth_Integer = Plus_One
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # 1 + 1 in range 1..10 result 2 in range
+      Local_Integer61 = The_Object1.First_Integer  
+      Local_Integer62 = The_Object2.First_Integer
+      Result_Integer612 = Local_Integer61 + Local_Integer62
+      Result_Object.First_Integer = Result_Integer612
+
+      # -10 - -1 in range -10 .. -1 result -9 inside range
+      Local_Integer64 = The_Object1.Second_Integer  
+      Local_Integer65 = The_Object2.Second_Integer
+      Result_Integer645 = Local_Integer64 - Local_Integer65
+      Result_Object.Second_Integer = Result_Integer645
+
+      # -10 - -10 in range -10 .. 10 result 0 inside range
+      Local_Integer67 = The_Object1.Third_Integer  
+      Local_Integer68 = The_Object2.Third_Integer
+      Result_Integer678 = Local_Integer67 - Local_Integer68
+      Result_Object.Third_Integer  =  Result_Integer678
+
+      # 32767 - 1 in range 1..32767 result 32766 inside range
+      Local_Integer610 = The_Object1.Fourth_Integer  
+      Local_Integer611 = The_Object2.Fourth_Integer
+      Result_Integer61011 = Local_Integer610 - Local_Integer611
+      Result_Object.Fourth_Integer  =  Result_Integer61011
+
+      # -32768 - -1 in range -32768 .. -1 result -32767 inside range
+      Local_Integer613 = The_Object1.Fifth_Integer  
+      Local_Integer614= The_Object2.Fifth_Integer
+      Result_Integer61314 = Local_Integer613 - Local_Integer614
+      Result_Object.Fifth_Integer  =  Result_Integer61314
+
+      # -32768 + 32767 in range -32768 .. 32767 result -1 inside range
+      Local_Integer616 = The_Object1.Sixth_Integer  
+      Local_Integer617 = The_Object2.Sixth_Integer
+      Result_Integer61617 = Local_Integer616 + Local_Integer617
+      Result_Object.Sixth_Integer  =  Result_Integer61617
+
+      # Unique result_integer's and binary operands
+      if Result_Integer612 = Result_Object.First_Integer  &\
+         Result_Integer645 = Result_Object.Second_Integer &\
+         Result_Integer678 = Result_Object.Third_Integer  &\
+         Result_Integer61011 = Result_Object.Fourth_Integer &\
+         Result_Integer61314 = Result_Object.Fifth_Integer  &\
+         Result_Integer61617 = Result_Object.Sixth_Integer then
+
+         Test_Has_Passed = TRUE
+         Failure_Code    = 0
+      else
+         Failure_Code = -10
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 6
+
+#--------------------------------------------------------------------------
+# Test 7 - This test proves that individual local data objects must be used 
+#          for different datatypes.
+#
+#          Add max values to minimum values.
+#
+#          This test shall cause some attributes to go out of range on
+#          assignment to the results object attributes.
+#
+#          It is unclear what is to happen about this. 
+#
+#          It highlights an important distinction between I-SIM and WACA. 
+#          UDT ARE TOTALLY UNSUPPORTED IN I-SIM, and trying to test for 
+#          them here will give erroneous results.
+#
+#          ADA will not allow this test to procede without exceptions being
+#          generated. Therefore these tests have been commented out for the
+#          moment.
+#--------------------------------------------------------------------------
+
+   if Test = 7 then
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Plus_One
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_One
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+
+      The_Object2.First_Integer  = Plus_Ten
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Plus_Ten
+      The_Object2.Fourth_Integer = Plus_Max
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # REUSE local_integer1 and 2 with different types. Should cause the Code Gen to 
+      # issue a warning.
+  
+      # 1 + 10 in range 1 .. 10 result 11 outside range
+      #   Local_Integer1 = The_Object1.First_Integer  
+      #   Local_Integer2 = The_Object2.First_Integer
+      #   Result_Integer3 = Local_Integer1 + Local_Integer2
+      #   Result_Object.First_Integer  =  Result_Integer3
+
+      # -10 - 1 in rnage -10 .. -1 result -11 outide range
+      #   Local_Integer1 = The_Object1.Second_Integer  
+      #   Local_Integer2 = The_Object2.Second_Integer
+      #   Result_Integer3 = Local_Integer1 - Local_Integer2
+      #   Result_Object.Second_Integer  =  Result_Integer3
+
+      # -10 - 1 in rnage -10 .. -1 result -11 outide range
+      #   Local_Integer4 = The_Object1.Second_Integer  
+      #   Local_Integer5 = The_Object2.Second_Integer
+      #   Result_Integer6 = Local_Integer4 - Local_Integer5
+      #   Result_Object.Second_Integer  =  Result_Integer6
+
+      # -10 - 10 in range -10 .. 10 result -20 outside range
+      #   Local_Integer7 = The_Object1.Third_Integer  
+      #   Local_Integer8 = The_Object2.Third_Integer
+      #   Result_Integer9 = Local_Integer7 - Local_Integer8
+      #   Result_Object.Third_Integer  =  Result_Integer9
+
+      # 1 + 32767 in range 1 .. 32767 result 32768 outside range
+      #   Local_Integer10 = The_Object1.Fourth_Integer  
+      #   Local_Integer11 = The_Object2.Fourth_Integer
+      #   Result_Integer12 = Local_Integer10 + Local_Integer11
+      #   Result_Object.Fourth_Integer  =  Result_Integer12
+
+      # -32768 + -1 in range -32768 .. 0 result  -32769 outside range
+      #   Local_Integer13 = The_Object1.Fifth_Integer  
+      #   Local_Integer14= The_Object2.Fifth_Integer
+      #   Result_Integer15 = Local_Integer13 + Local_Integer14
+      #   Result_Object.Fifth_Integer  =  Result_Integer15
+
+      # -32768 - 32767 in range -32768 .. 32767 result 65535 outside range
+      #   Local_Integer16 = The_Object1.Sixth_Integer  
+      #   Local_Integer17 = The_Object2.Sixth_Integer
+      #   Result_Integer18 = Local_Integer16 + Local_Integer17
+      #   Result_Object.Sixth_Integer  =  Result_Integer18
+   
+      # Unique result_integer's and binary operands
+
+      #   if Result_Integer3 = Result_Object.First_Integer  then 
+      # &\
+      #      Result_Integer6 = Result_Object.Second_Integer &\
+      #      Result_Integer9 = Result_Object.Third_Integer  &\
+      #      Result_Integer12 = Result_Object.Fourth_Integer &\
+      #      Result_Integer15 = Result_Object.Fifth_Integer  &\
+      #      Result_Integer18 = Result_Object.Sixth_Integer then
+
+      #      Test_Has_Passed = TRUE
+
+      #  else
+
+      #      Failure_Code = -1
+
+      #   endif
+
+
+    Failure_Code = 0
+
+       delete The_Object1
+       delete The_Object2
+
+    endif
+
+# End Test 7
+
+#--------------------------------------------------------------------------
+# End of tests
+#--------------------------------------------------------------------------
+
+   if Test_Has_Passed then
+      [] = RPT2:Test_Passed[Testing_For, Test, Failure_Code]
+   else
+
+      if Failure_Code = Big_Fat_Zero then
+         [] = RPT4:Test_Unsupported[Test]
+      else
+         [] = RPT3:Test_Failed[Testing_For, Test, Failure_Code]
+      endif
+
+   endif
+
+   if Result_Object != UNDEFINED then
+      delete Result_Object
+   endif
+
+
+enddefine

@@ -1,0 +1,31 @@
+define function  OBJONE1:Get_From_Bridge
+input \
+	Test:Base_Integer_Type ,\
+	Text_Input:Base_Text_Type ,\
+	Integer_Input:Base_Integer_Type ,\
+	Real_Input:Base_Float_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+if Text_Input = "From Bridge" then
+
+   if Integer_Input = 100 then
+
+      if Real_Input = 99.9 then
+         [] = RPT2:Test_Passed["Object Sync from bridge", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Object Sync from bridge", Test, -10]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Object Sync from bridge", Test, -20]
+   endif
+
+else
+   [] = RPT3:Test_Failed["Object Sync from bridge", Test, -30]
+endif
+
+enddefine

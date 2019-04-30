@@ -105,7 +105,7 @@ this.no_of_received_events = temp
    endif
 
 #-------------------------------------------------------------------------
-   generate objD1:Finished(Test_Number) to this
+   generate objD1:ST_Finished(Test_Number) to this
 #-------------------------------------------------------------------------
 
 

@@ -1,0 +1,144 @@
+define scenario  TAGS_Scenario3
+input
+output
+
+#$DESCRIPTION
+Perform_Active_Object_Tests
+#$END_DESCRIPTION
+
+#--------------------------------------------------------------------------
+# This scenario should always be called last, and the Test value be updated 
+# with the next available test number.
+#--------------------------------------------------------------------------
+
+my_test = find-one Test_Data
+
+Test = my_test.Number
+
+Restart_Check_Object = TRUE
+Finish_Check_Object  = FALSE
+
+Find_It = TRUE
+Lose_It = FALSE
+
+# Create object for checking the results of the actions on the active object
+How_Was_It_For_You = create Check_On_Active_Object with Current_State = 'Idle'
+
+#--------------------------------------------------------------------------
+# Test 1 - Create an active object tagged as singleton.
+#--------------------------------------------------------------------------
+
+   Create_And_Delete_Active_Object = create unique An_Active_Object with Current_State = 'Idle'
+
+   delete Create_And_Delete_Active_Object
+
+   Expected_Result = 0
+
+   # Make sure that the active object has indeed gone.
+   generate CHECK1:Start(Test,                            \
+                         Create_And_Delete_Active_Object, \
+                         "Create and Delete active",      \
+                         Expected_Result,                 \
+                         Lose_It,                         \
+                         Restart_Check_Object) to How_Was_It_For_You   
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 - This test shall cause the active object to transition from Idle
+#          to Act and then back to Idle.
+#--------------------------------------------------------------------------
+
+   Base_Value_To_Start_With = 1
+   Expected_Result          = 101
+
+   First_Active_Object = create unique An_Active_Object with Result        = 0 &\ 
+                                                             Current_State = 'Idle'
+
+   generate AAO1:Start_Your_Engines(Base_Value_To_Start_With) to First_Active_Object
+
+   generate AAO2:Switch_Off() to First_Active_Object
+
+   generate CHECK1:Start(Test,                       \
+                         First_Active_Object,        \
+                         "Create and Delete active", \
+                         Expected_Result,            \
+                         Find_It,                    \
+                         Restart_Check_Object) to How_Was_It_For_You
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - This test shall cause the previously defined active object to
+#          transition from Idle to Act and then back to Idle.
+#--------------------------------------------------------------------------
+
+   Base_Value_To_Start_With = 2
+   Expected_Result          = 203
+
+   generate AAO1:Start_Your_Engines(Base_Value_To_Start_With) to First_Active_Object
+ 
+   generate AAO2:Switch_Off() to First_Active_Object
+
+   generate CHECK1:Start(Test,                             \
+                         First_Active_Object,              \
+                         "Create and Delete active again", \
+                         Expected_Result,                  \
+                         Find_It,                          \
+                         Restart_Check_Object) to How_Was_It_For_You
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4 - This test shall cause the previously defined active object to
+#          transition from Idle to Act and then to Terminate.
+#--------------------------------------------------------------------------
+
+   Base_Value_To_Start_With = 3
+   Expected_Result          = 216
+
+   generate AAO1:Start_Your_Engines(Base_Value_To_Start_With) to First_Active_Object
+
+   generate AAO3:Floor_It() to First_Active_Object
+
+   generate CHECK1:Start(Test,                             \
+                         First_Active_Object,              \
+                         "Create and Delete to Terminate", \
+                         Expected_Result,                  \
+                         Find_It,                          \
+                         Restart_Check_Object) to How_Was_It_For_You
+
+   Test = Test + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5
+#--------------------------------------------------------------------------
+
+   Expected_Result = 0
+
+   generate AAO4:Crash_It() to First_Active_Object
+
+   generate CHECK1:Start(Test,                  \
+                         First_Active_Object,   \
+                         "Terminate to Expire", \
+                         Expected_Result,       \
+                         Lose_It,               \
+                         Restart_Check_Object) to How_Was_It_For_You
+
+   Test = Test + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+
+my_test.Number = Test
+
+enddefine

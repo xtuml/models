@@ -1,0 +1,43 @@
+define scenario  DomainA_Scenario9
+input
+output
+
+#$DESCRIPTION
+invoke misc calls
+#$END_DESCRIPTION
+
+
+my_test = find-one Test_Data
+Test    = my_test.This_Test_Number
+
+#------------------------------------------------------------------------#
+
+   [] = NAV6:Misc_Calls[Test]
+
+   Test        = Test + 1
+   local_fail  = FALSE
+   local_value = 0
+
+   my_test.This_Test_Number = Test
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "DomainA", "Misc calls", "Common objects"]
+
+   # Domain B should have executed seven tests by now, so the next test shown in the TEST_DATA
+   # object should be 8, that is is this is an ISIM environment. However, if this is WACA then
+   # domain B will only have executed four tests so far.
+
+   [local_fail, local_value] = termA5:Common_Named_Object_Usage [Test]
+
+   if local_fail = TRUE then
+      [] = RPT3:Test_Failed["DomainA", Test, local_value]
+   else
+      [] = RPT2:Test_Passed["DomainA", Test, local_value]
+   endif
+
+#------------------------------------------------------------------------#
+
+Test = Test + 1
+my_test.This_Test_Number = Test
+
+
+enddefine

@@ -1,0 +1,27 @@
+define function  Struct5::Test_The_Structure
+input \
+	Test:Base_Integer_Type ,\
+	Structure_Input:My_Simple_Structure 
+output \
+	The_Return_Structure:My_Simple_Structure 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+for [the_integer, the_color] in {Structure_Input} do
+
+   local_integer = the_integer
+   local_color  = the_color
+
+   if local_color = 'Red' then
+      local_integer = 200
+      local_color   of Colour_Type = 'Blue'
+   endif   
+
+endfor
+
+append [local_integer, local_color] to {The_Return_Structure}
+
+
+enddefine
