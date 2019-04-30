@@ -1,0 +1,27 @@
+define scenario  DomainA_Scenario14
+input
+output
+
+#$DESCRIPTION
+Passing IH
+#$END_DESCRIPTION
+
+#------------------------------------------------------------------------#
+# Pass an instance handle through a bridge to see if it gets correctly
+# picked up
+#------------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.This_Test_Number
+
+   IH_To_Be_Passed = create Object_A with idA           = 100 &\
+                                          ResultA       = 100 &\ 
+                                          Current_State = 'Sync_service_invocation_to_event' 
+
+   [] = NAV9:Pass_IH[Test, IH_To_Be_Passed]
+
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+   my_test.This_Test_Number = Test
+enddefine

@@ -1,0 +1,24 @@
+define function  Function_Calls6::Receive_Enumeration
+input \
+	Test_Number:Base_Integer_Type ,\
+	The_Colour:Colour_Type ,\
+	Testing_For:Base_Text_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+   [] = RPT1:Start_Test[Test_Number, "1241-0000-01-0804", "Function Calls", "Receive enumeration", Testing_For]
+   [] = RPT8:Specify_Requid[Test_Number, "1103-0000-01-1011"]
+
+   Target_Colour of Colour_Type = 'Red'
+
+   if The_Colour = Target_Colour then
+      [] = RPT2:Test_Passed[Testing_For, Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed[Testing_For, Test_Number, -1]
+   endif
+
+
+enddefine

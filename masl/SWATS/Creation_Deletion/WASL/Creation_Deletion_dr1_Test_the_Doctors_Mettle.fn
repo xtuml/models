@@ -1,0 +1,682 @@
+define function  dr1:Test_the_Doctors_Mettle
+input \
+	Test_Number:Base_Integer_Type 
+output \
+	Returned_Test_Number:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#------------------------------------------------------------------------#
+# Test The Doctors Metal Object Sync Service
+#------------------------------------------------------------------------#
+
+   Test = Test_Number
+
+#------------------------------------------------------------------------#
+# Test 1 - Test the creation and deletion of one to many associated 
+#          relationships
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0511", "Creation Deletion", "Doctor", "1 to Many associative"]
+
+   # Define the doctor.
+   the_doctor_ih = create Doctor with Actor = 'Tom_Baker'   and length_of_scarf = 20
+   the_doctor_ih = create Doctor with Actor = 'Jon_Pertwee' and length_of_scarf = 10
+
+   # Define some bad guys to test him
+   cybermen_ih   = create Enemy with Humanoid = TRUE  & can_climb_stairs = TRUE
+   daleks_ih     = create Enemy with Humanoid = FALSE & can_climb_stairs = FALSE
+   the_master_ih = create Enemy with Humanoid = TRUE  & can_climb_stairs = TRUE
+
+   # Define the associated instance which captures the spirit of the battle 
+   cybermen_vs_the_doctor_ih     = create Doctors_Enemy with battlefield_arena = 'Earth' 
+   daleks_vs_the_doctor_ih       = create Doctors_Enemy with battlefield_arena = 'Skarros' 
+   the_master_vs_the_doctor_ih   = create Doctors_Enemy with battlefield_arena = 'Gallifrey' 
+
+   tom_as_the_doctor = find-one Doctor where Actor = 'Tom_Baker'
+   jon_as_the_doctor = find-one Doctor where Actor = 'Jon_Pertwee'
+
+   # link using specific ih of tom as the doctor.
+   link tom_as_the_doctor R2 cybermen_ih   using cybermen_vs_the_doctor_ih
+   link tom_as_the_doctor R2 daleks_ih     using daleks_vs_the_doctor_ih
+   link tom_as_the_doctor R2 the_master_ih using the_master_vs_the_doctor_ih
+
+   # Find out how many enemies the doctor has
+   {toms_enemies} = tom_as_the_doctor -> R2.Enemy
+   {jons_enemies} = jon_as_the_doctor -> R2.Enemy
+
+   number_of_toms_enemies = countof{toms_enemies}
+   number_of_jons_enemies = countof{jons_enemies}
+
+   if number_of_toms_enemies = 3 then
+
+      if number_of_jons_enemies = 0 then
+         [] = RPT2:Test_Passed["Doctor", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Doctor", Test, number_of_jons_enemies]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Doctor", Test, number_of_jons_enemies]
+   endif 
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - Do it again, this time using the doctor ih to link, and see 
+#          which one it uses.
+#
+#          This can not be checked for WACA version 5.0.0 as referential 
+#          attributes are no longer supported.
+#          check that assoc.Actor = the_doctor_ih.Actor
+# 
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0511", "Creation Deletion", "Doctor", "Create assoc not specifying attributes"]
+
+   sea_devils_ih = create Enemy with Humanoid = FALSE & can_climb_stairs = FALSE
+   davros_ih     = create Enemy with Humanoid = TRUE  & can_climb_stairs = FALSE
+   silurians_ih  = create Enemy with Humanoid = FALSE & can_climb_stairs = TRUE
+
+   sea_devils_vs_the_doctor_ih = create Doctors_Enemy with battlefield_arena = 'Underwater' 
+   davros_vs_the_doctor_ih     = create Doctors_Enemy with battlefield_arena = 'Wheelchair' 
+   silurians_vs_the_doctor_ih  = create Doctors_Enemy with battlefield_arena = 'Venus' 
+
+   # link using doctor ih of the doctor. This should have picked up
+   # Jon Pertwee as the doctor, since this was the most recent creation.
+   link the_doctor_ih R2 sea_devils_ih using sea_devils_vs_the_doctor_ih
+   link the_doctor_ih R2 davros_ih     using davros_vs_the_doctor_ih
+   link the_doctor_ih R2 silurians_ih  using silurians_vs_the_doctor_ih
+
+   # However, the Actor attribute set in the assoc creation will be different
+   # from that of the Actor attribute set up with Jon Pertwee's version
+   # of the doctor. The Humanoid attribute will be different, too.
+
+   # Let's see what happens.
+
+   Has_Failed = FALSE
+
+   Failure_Code = 0
+
+   # Hijack this test to prove that we can still get to the attributes that were referential
+   # for the associative object, via the R2 relationship. So in real terms, this information
+   # is still accessable, just a little more awkward.
+   {enemies_vs_jon_the_doctor} = find Doctors_Enemy where battlefield_arena != 'Underwater'
+
+for enemy_of_jon in {enemies_vs_jon_the_doctor} do
+
+if enemy_of_jon != UNDEFINED then
+
+   which_doctor = enemy_of_jon -> R2.Doctor
+   which_enemy  = enemy_of_jon -> R2.Enemy
+
+   if which_doctor != UNDEFINED &\
+      which_enemy  != UNDEFINED then
+
+      if which_doctor.Actor   = 'Jon_Pertwee' & \
+         which_enemy.Humanoid = TRUE then 
+
+         # This should only find one instance relationship where the doctor is Jon Pertwee
+         # the enemy is Davros and the battlefield upon which they fought was not underwater.
+
+         Failure_Code = Failure_Code + 1
+
+      endif
+
+   endif
+
+
+endif
+
+endfor
+
+
+   if Failure_Code = 1 then
+      [] = RPT2:Test_Passed["Doctor", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Doctor", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+
+
+#------------------------------------------------------------------------#
+# Test 4 - Create assoc specifying attributes
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Doctor", "Create assoc specifying attributes"]
+
+   # Continuing on using the previous theme, let's see if the many side of R2
+   # can be found.
+
+   [] = RPT5:Test_Text[Test, "create assoc specifying attributes"]
+
+   {bad_guys} = find-all Enemy
+
+   # Using the criteria that only davros, cybermen and the master are humanoid as 
+   # defined at creation of the enemy instance. The definition of the associated 
+   # instance is the opposite, ie davros, cybermen and the master are NOT humanoid.
+   # This should prove that the associated instance does not take-on the 'many'
+   # definition of the attribute. Basically, it is the same as the previous test,
+   # only more complicated.
+
+   # The_Test_Has_Passed = TRUE
+   # Failure_Code = 0
+   # for bad_guy in {bad_guys} do
+      # Navigate from bad guy to associated doctors enemy
+      # the_doctors_enemy = bad_guy -> R2.Doctors_Enemy
+      #   if bad_guy.Humanoid = TRUE then 
+      #      The_Test_Has_Passed = FALSE
+      #      Failure_Code = Failure_Code - 1
+      #      switch the_doctors_enemy.battlefield_arena
+      #      case 'Earth'
+#         [] = RPT5:Test_Text[Test, "ERROR  cybermen are masquerading as non humanoid"]
+#      case 'Underwater'
+#         [] = RPT5:Test_Text[Test, "ERROR  sea devils is masquerading as humanoid"]
+#      case 'Wheelchair'
+#         [] = RPT5:Test_Text[Test, "ERROR  Davros is masquerading as non humanoid"]
+#      case 'Skarros'
+#         [] = RPT5:Test_Text[Test, "ERROR  Daleks are masquerading as humanoid"]
+#      case 'Venus'
+#         [] = RPT5:Test_Text[Test, "ERROR  Silurians are masquerading as humanoid"]
+#      case 'Gallifrey'
+#         [] = RPT5:Test_Text[Test, "ERROR  The Master is masquerading as non humanoid"]
+#      default
+#         [] = RPT5:Test_Text[Test, "ERROR  something else is masquerading as an unknown instance"]
+#      endswitch
+#   endif
+#endfor
+#if The_Test_Has_Passed = TRUE then
+#   [] = RPT2:Test_Passed["Doctor", Test, 0]
+#else
+#   [] = RPT3:Test_Failed["Doctor", Test, Failure_Code]
+#endif
+
+[] = RPT4:Test_Unsupported[Test]
+
+Test = Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5 - 
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Doctor", "1 to Many associative "]
+
+   # create some more associative instances, but this time, don't attempt to
+   # specify any attributes.
+ 
+   [] = RPT5:Test_Text[Test, "create assoc but do not specify attributes"]
+
+   # create a new doctor
+   patrick_the_doctor = create Doctor with Actor           = 'Patrick_Troughton' &\
+                                           length_of_scarf = 1
+
+   # The Brigadier wasn't really an enemy, but I've run out of bad guys
+   skeksis       = create Enemy with Humanoid = TRUE & can_climb_stairs = FALSE
+   the_brigadier = create Enemy with Humanoid = TRUE & can_climb_stairs = TRUE
+   # and the Skeksis were in The Dark Crystal, but hey, it's only a model.
+
+   skeksis_vs_the_doctor       = create Doctors_Enemy with battlefield_arena = 'Gallifrey' 
+   the_brigadier_vs_the_doctor = create Doctors_Enemy with battlefield_arena = 'Earth'
+
+   The_Test_Has_Passed = TRUE
+   Failure_Code = -36
+
+   link patrick_the_doctor R2 skeksis       using skeksis_vs_the_doctor
+   link patrick_the_doctor R2 the_brigadier using the_brigadier_vs_the_doctor
+
+   # Navigating from the doctor to the doctors_enemy
+   {the_doctors_enemies} = patrick_the_doctor -> R2.Doctors_Enemy
+
+   # Navigating from a set of enemies to the doctor_enemy
+   skeksis_are_the_enemies_of_the_doctor    = skeksis -> R2.Doctors_Enemy
+   the_brigadier_is_the_enemy_of_the_doctor = the_brigadier -> R2.Doctors_Enemy
+
+   if skeksis_are_the_enemies_of_the_doctor != UNDEFINED & \
+      the_brigadier_is_the_enemy_of_the_doctor != UNDEFINED then
+
+      if skeksis_are_the_enemies_of_the_doctor.battlefield_arena != \
+         the_brigadier_is_the_enemy_of_the_doctor.battlefield_arena then
+
+         if countof{the_doctors_enemies} = 2 then
+
+            for the_doctors_enemy in {the_doctors_enemies} do
+               this_doctor = the_doctors_enemy -> R2.Doctor
+   
+               if this_doctor.Actor = 'Patrick_Troughton' then
+                  The_Test_Has_Passed = TRUE
+                  Failure_Code = 0
+               else
+                  The_Test_Has_Passed = FALSE
+                  Failure_Code = -4
+               endif
+
+            endfor
+      
+         else
+            The_Test_Has_Passed = FALSE
+            Failure_Code = -3
+         endif
+
+      else
+         The_Test_Has_Passed = FALSE
+         Failure_Code = -2
+      endif
+
+   else
+      The_Test_Has_Passed = FALSE
+      Failure_Code = -1
+   endif
+
+
+#for the_doctors_enemy in {the_doctors_enemies} do
+#   if the_doctors_enemy.Actor = patrick_the_doctor.Actor then
+      # The associated attributes have been set by the architecture, illegally.
+#      Failure_Code =  Failure_Code + 1
+#      The_Test_Has_Passed = FALSE
+#   endif
+#endfor
+
+# ###############################################################################
+#
+# The following statements were an attempt to show that a referential attribute
+# had been set by the architecture. This can neither be proven or not.
+# Referential attributes can not read from or written to. So..... we can't tell!
+#
+# ###############################################################################
+
+
+# Humanoid attribute has been written into the associated object attribute
+#if skeksis_are_the_enemies_of_the_doctor.Humanoid = skeksis.Humanoid then
+#   Failure_Code = Failure_Code + 10
+#   The_Test_Has_Passed = FALSE
+#endif
+
+# Humanoid attribute has been written into the associated object attribute
+#if the_brigadier_is_the_enemy_of_the_doctor.Humanoid = the_brigadier.Humanoid then 
+#   Failure_Code = Failure_Code + 20
+#   The_Test_Has_Passed = FALSE
+#endif
+
+
+if The_Test_Has_Passed = TRUE then
+   [] = RPT2:Test_Passed["Doctor", Test, 0]
+else
+   [] = RPT3:Test_Failed["Doctor", Test, Failure_Code]
+endif
+
+
+Test = Test + 1
+
+# End Test 5
+
+#------------------------------------------------------------------------#
+# Test 6 - 
+#------------------------------------------------------------------------#
+  
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Doctor", "Delete assoc instances"]
+   [] = RPT5:Test_Text[Test,"Delete last enemy leaving first one"]
+
+   The_Test_Has_Passed = TRUE
+
+{patricks_enemies} = patrick_the_doctor -> R2.Enemy
+
+number_of_enemies_before = countof{patricks_enemies}
+
+unassociate patrick_the_doctor R2 the_brigadier from the_brigadier_vs_the_doctor
+
+unlink patrick_the_doctor R2 the_brigadier
+
+delete the_brigadier
+
+delete the_brigadier_vs_the_doctor
+
+# There should only be one enemy for patrick the doctor now.
+
+{patricks_enemies} = patrick_the_doctor -> R2.Enemy
+
+number_of_enemies_after = countof{patricks_enemies}
+
+if number_of_enemies_after = number_of_enemies_before then
+
+   The_Test_Has_Passed = FALSE
+   Failure_Code = number_of_enemies_after 
+
+endif
+
+if The_Test_Has_Passed = TRUE then
+   [] = RPT2:Test_Passed["Doctor", Test, 0]
+else
+   [] = RPT3:Test_Failed["Doctor", Test, Failure_Code]
+endif
+
+
+# ##############################################################################
+
+Test = Test + 1
+[] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Doctor", "Delete assoc instances"]
+
+[] = RPT5:Test_Text[Test,"Prove that delete worked"]
+
+The_Test_Has_Passed = TRUE
+Failure_Code = -15
+
+# The brigadier should have been demoted.
+if the_brigadier != UNDEFINED then
+
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 1
+
+endif
+
+# The associated instance of the brigadier vs the doctor should be no more.
+if the_brigadier_vs_the_doctor != UNDEFINED then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 2
+
+endif
+
+# Skeksis should still be around causing the doctor some problems.
+if skeksis = UNDEFINED then 
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 3
+
+endif
+
+# Get rid of the remaining bad guys, the assoc instance and Patrick Troughton
+
+unassociate patrick_the_doctor R2 skeksis from skeksis_vs_the_doctor
+
+unlink patrick_the_doctor R2 skeksis
+
+delete skeksis_vs_the_doctor
+delete skeksis
+delete patrick_the_doctor
+
+if skeksis               != UNDEFINED &\
+   skeksis_vs_the_doctor != UNDEFINED &\
+   patrick_the_doctor    != UNDEFINED then 
+
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 7
+
+endif
+
+if The_Test_Has_Passed = TRUE then
+   [] = RPT2:Test_Passed["Doctor", Test, 0]
+else
+   [] = RPT3:Test_Failed["Doctor", Test, Failure_Code]
+endif
+
+
+
+# ##############################################################################
+
+Test = Test + 1
+
+[] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Doctor", "Delete assoc instances"]
+
+[] = RPT5:Test_Text[Test,"delete first element from a list of three"]
+
+The_Test_Has_Passed = TRUE
+Failure_Code = -4
+
+#Tom Baker's enemies numbered three. Cybermen, Daleks and The Master
+
+{toms_enemies_before} = tom_as_the_doctor -> R2.Enemy
+
+number_of_toms_enemies_before = countof {toms_enemies_before}
+
+unassociate tom_as_the_doctor R2 cybermen_ih from cybermen_vs_the_doctor_ih
+
+unlink tom_as_the_doctor R2 cybermen_ih
+
+delete cybermen_vs_the_doctor_ih
+
+delete cybermen_ih
+
+# They now number two, Daleks and the Master
+
+{toms_enemies_after} = tom_as_the_doctor -> R2.Enemy
+
+number_of_toms_enemies_after = countof {toms_enemies_after}
+
+if number_of_toms_enemies_after = number_of_toms_enemies_before then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 1
+endif
+
+# Attempt to navigate from the doctor to the second (daleks) enemy
+
+daleks = find-one Enemy where Humanoid = FALSE & can_climb_stairs = FALSE
+if daleks = UNDEFINED then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 2
+endif
+
+if The_Test_Has_Passed = TRUE then
+   [] = RPT2:Test_Passed["Doctor", Test, 0]
+else
+   [] = RPT3:Test_Failed["Doctor", Test, Failure_Code]
+endif
+
+
+# ##############################################################################
+
+Test = Test + 1
+[] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Doctor", "Delete assoc instances"]
+
+[] = RPT5:Test_Text[Test,"delete middle element from a list"]
+
+The_Test_Has_Passed = TRUE
+Failure_Code = -15
+
+#Tom Baker's enemies numbered two. Daleks and The Master
+
+{toms_enemies_before} = tom_as_the_doctor -> R2.Enemy
+
+number_of_toms_enemies_before = countof {toms_enemies_before}
+
+unassociate tom_as_the_doctor R2 daleks_ih from daleks_vs_the_doctor_ih
+
+unlink tom_as_the_doctor R2 daleks_ih
+
+delete daleks_vs_the_doctor_ih
+
+delete daleks_ih
+
+# They now number one.
+
+{toms_enemies_after} = tom_as_the_doctor -> R2.Enemy
+
+number_of_toms_enemies_after = countof {toms_enemies_after}
+
+if number_of_toms_enemies_after = number_of_toms_enemies_before then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 1
+endif
+
+if daleks_ih != UNDEFINED then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 2
+endif
+
+if the_master_ih = UNDEFINED then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 4
+endif
+
+if tom_as_the_doctor = UNDEFINED then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 8
+endif
+
+if The_Test_Has_Passed = TRUE then
+   [] = RPT2:Test_Passed["Doctor", Test, 0]
+else
+   [] = RPT3:Test_Failed["Doctor", Test, Failure_Code]
+endif
+
+
+# ##############################################################################
+
+Test = Test + 1
+
+[] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Doctor", "Delete assoc instances"]
+
+[] = RPT5:Test_Text[Test,"delete final element in list"]
+
+The_Test_Has_Passed = TRUE
+Failure_Code = -4
+
+unassociate tom_as_the_doctor R2 the_master_ih from the_master_vs_the_doctor_ih
+
+unlink tom_as_the_doctor R2 the_master_ih
+
+delete the_master_vs_the_doctor_ih
+delete the_master_ih
+
+if the_master_ih != UNDEFINED then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 1
+endif
+
+if tom_as_the_doctor = UNDEFINED then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 2
+endif
+
+if The_Test_Has_Passed = TRUE then
+   [] = RPT2:Test_Passed["Doctor", Test, 0]
+else
+   [] = RPT3:Test_Failed["Doctor", Test, Failure_Code]
+endif
+
+
+
+# ##############################################################################
+
+Test = Test + 1
+[] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Doctor", "Delete assoc instances"]
+
+[] = RPT5:Test_Text[Test,"delete 1 of many instance"]
+
+Failure_Code = -2
+
+delete tom_as_the_doctor
+
+if tom_as_the_doctor != UNDEFINED then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 1
+endif
+
+if The_Test_Has_Passed = TRUE then
+   [] = RPT2:Test_Passed["Doctor", Test, 0]
+else
+   [] = RPT3:Test_Failed["Doctor", Test, Failure_Code]
+endif
+
+
+
+# ##############################################################################
+
+Test = Test + 1
+
+# Delete all of Jon Pertwee's enemies, leaving the universe free of bad guys
+
+The_Test_Has_Passed = TRUE
+Failure_Code = -4
+
+[] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Doctor", "Delete assoc instances"]
+
+[] = RPT5:Test_Text[Test,"delete remaining instances in a set"]
+
+{remaining_enemies}         = find-all Enemy
+{remaining_doctors_enemies} = find-all Doctors_Enemy
+{remaining_doctors}         = find-all Doctor
+
+# Need to unassociate each associated instance from the 1 to M relationship
+# Can't do it in a set
+
+for remaining_doctors_enemy in {remaining_doctors_enemies} do
+
+   an_enemy   = remaining_doctors_enemy -> R2.Enemy
+   the_doctor = remaining_doctors_enemy -> R2.Doctor
+
+   unassociate the_doctor R2 an_enemy from remaining_doctors_enemy
+
+   unlink the_doctor R2 an_enemy
+
+   delete remaining_doctors_enemy
+   delete an_enemy
+ 
+   #if the doctor has no more enemies, it is safe to delete him
+   {any_more_enemies} = the_doctor -> R2.Enemy
+
+   number_of_more_enemies = countof{any_more_enemies}
+
+   # Kill off the doctor finally. There should be no more doctors to worry about
+   # Regeneration is not something this doctor can do!
+
+   if number_of_more_enemies = 0 then
+      delete the_doctor
+   endif
+
+endfor
+
+# delete the set of doctors (should be 1),
+# the set of enemies (should be 3)
+# and the set of associated enemies (should be 3)
+
+# This is unsupported at issue 2.0.1
+
+# delete {remaining_doctors_enemies}
+# delete {remaining_enemies}
+# delete {remaining_doctors}
+
+empty_enemy       = find-one Enemy
+empty_doctor      = find-one Doctor
+empty_assoc_enemy = find-one Doctors_Enemy
+
+
+if empty_enemy != UNDEFINED then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 1
+endif
+
+
+if empty_assoc_enemy != UNDEFINED then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 2
+endif
+
+if empty_doctor != UNDEFINED then
+   The_Test_Has_Passed = FALSE
+   Failure_Code = Failure_Code + 4
+endif
+
+
+if The_Test_Has_Passed = TRUE then
+   [] = RPT2:Test_Passed["Doctor", Test, 0]
+else
+   [] = RPT3:Test_Failed["Doctor", Test, Failure_Code]
+endif
+
+
+
+# ##############################################################################
+
+
+
+Returned_Test_Number = Test
+
+enddefine

@@ -1,0 +1,221 @@
+define function  TAGS8::Perform_Passive_Array_of_1_Object_Tests
+input \
+	Start_Test_Number:Base_Integer_Type ,\
+	Supported:Boolean 
+output \
+	Final_Test_Number:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+Test_Has_Passed  = FALSE
+Failure_Code = -1
+
+Test = Start_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1 - Create one passive data object
+#--------------------------------------------------------------------------
+
+   Obj = create unique A_Passive_Array_Of_One_Object
+ 
+   [] = RPT1:Start_Test[Test, "Null Requid", "TAGGING", "Passive Array 1 UNIQUE object", "Create one"]
+
+   # Return count of A_Passive_Array_Of_One_Object
+   {set_of_objects} = find-all A_Passive_Array_Of_One_Object
+   total_count = countof {set_of_objects}
+
+   if total_count = 1 then
+      Test_Has_Passed  = TRUE
+      Failure_Code = 0
+   else
+      Test_Has_Passed  = FALSE
+      Failure_Code = -1
+   endif
+
+   [] = TAGS5::Report_Now[Test, "Create one", Failure_Code, Supported]
+
+   Test = Test + 1
+
+# Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "TAGGING", "Passive Array 1 UNIQUE object", "Delete one"]
+
+   # Delete 1 of passive objects
+   Any_Object = find-one A_Passive_Array_Of_One_Object
+   delete Any_Object
+
+   {set_of_objects} = find-all A_Passive_Array_Of_One_Object
+   total_count = countof {set_of_objects}
+
+   if total_count = 0 then
+      Test_Has_Passed  = TRUE
+      Failure_Code = 0
+   else
+      Test_Has_Passed  = FALSE
+      Failure_Code = -1
+   endif
+
+   [] = TAGS5::Report_Now[Test, "Delete one", Failure_Code, Supported]
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Create extra passive object, total of one
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "TAGGING", "Passive Array 1 UNIQUE object", "Create one more"]
+
+   replacement_object = create unique A_Passive_Array_Of_One_Object
+
+   # Return count of A_Passive_Array_Of_One_Object
+
+   {set_of_objects} = find-all A_Passive_Array_Of_One_Object
+   total_count = countof {set_of_objects}
+
+   if total_count = 1 then
+      Test_Has_Passed  = TRUE
+      Failure_Code = 0
+   else
+      Test_Has_Passed  = FALSE
+      Failure_Code = -1
+   endif
+
+   [] = TAGS5::Report_Now[Test, "Create one more",  Failure_Code, Supported]
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4 - Attempt to create second object
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "TAGGING", "Passive Array 1 UNIQUE object", "Create illegal object"]
+
+   # illegal_object = create unique A_Passive_Array_Of_One_Object
+   # Return count of A_Passive_Array_Of_One_Object
+   # {set_of_objects} = find-all A_Passive_Array_Of_One_Object
+   # total_count = countof {set_of_objects}
+   # Check for null
+   # if illegal_object = UNDEFINED then 
+   #   if total_count = 1 then
+   #      Test_Has_Passed  = TRUE
+   #      Failure_Code = 0
+   #   else
+   #      Test_Has_Passed  = FALSE
+   #      Failure_Code = -1
+   #   endif
+   # else
+   #   Test_Has_Passed = FALSE
+   #   Failure_Code = -2
+   # endif
+   # [] = TAGS5::Report_Now[Test, "Create illegal object", Failure_Code, Supported]
+
+   [] = RPT4:Test_Unsupported[Test]
+ 
+   Test = Test + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "TAGGING", "Passive Array 1 UNIQUE object", "Delete all objects"]
+
+   # Return count of A_Passive_Array_Of_One_Object
+
+   {set_of_objects} = find-all A_Passive_Array_Of_One_Object
+   total_count = countof {set_of_objects}
+
+   if total_count = 1 then
+
+      for each_object in {set_of_objects} do
+         delete each_object
+      endfor
+
+      {set_of_objects} = find-all A_Passive_Array_Of_One_Object
+      total_count = countof {set_of_objects}
+
+      if total_count = 0 then
+         new_object = create unique A_Passive_Array_Of_One_Object
+
+         # Check that it is defined
+         if new_object != UNDEFINED then
+            {set_of_objects} = find-all A_Passive_Array_Of_One_Object
+            total_count = countof {set_of_objects}
+
+            # and only one now exists
+            if total_count = 1 then 
+               Test_Has_Passed = TRUE
+               Failure_Code = 0
+            else
+               Test_Has_Passed = FALSE
+               Failure_Code = -4
+            endif
+
+         else
+            Test_Has_Passed = FALSE
+            Failure_Code = -3
+         endif
+
+      else
+         Test_Has_Passed = FALSE
+         Failure_Code = -2
+      endif
+
+   else
+      Test_Has_Passed  = FALSE
+      Failure_Code = -1
+   endif
+
+   [] = TAGS5::Report_Now[Test, "Delete all objects", Failure_Code, Supported]
+
+   Test = Test + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+# Test 6
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "TAGGING", "Passive Array 1 UNIQUE object", "Delete final object"]
+
+   # This won't exist if the previous test failed due to it being unsupported.
+   if Supported and Test_Has_Passed then
+      delete new_object
+
+      {set_of_objects} = find-all A_Passive_Array_Of_One_Object
+      total_count = countof {set_of_objects}
+
+      if total_count = 0 then 
+         Test_Has_Passed = TRUE
+         Failure_Code = 0
+      else
+         Test_Has_Passed = FALSE
+         Failure_Code = -2
+      endif
+
+   else
+      Test_Has_Passed = FALSE
+      Failure_Code = -1
+   endif
+
+   [] = TAGS5::Report_Now[Test, "Delete final object", Failure_Code, Supported]
+
+# End Test 6
+
+#--------------------------------------------------------------------------
+
+Final_Test_Number = Test
+
+
+enddefine

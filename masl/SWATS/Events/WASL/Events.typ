@@ -66,3 +66,4 @@ Test_Effects_IH,Root_Object.Object_Access
 Check_Current_States_IH,Root_Object.Object_Access
 Check_Delete_IH,Root_Object.Object_Access
 Test_Persistence_IH,Root_Object.Object_Access
+Specific_Classes_JTT,Enumeration,{Undef_Element}

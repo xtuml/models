@@ -1,0 +1,279 @@
+define scenario  Struct_Scenario8
+input
+output
+
+#$DESCRIPTION
+Multiple_Structures_In_A_Structure_Scenario
+#$END_DESCRIPTION
+
+#--------------------------------------------------------------------------
+# This scenario contains tests that are unsupported by WACA at version 3.0.1
+# Introduced for version 4.0.0 and onwards.
+#--------------------------------------------------------------------------
+
+my_test = find-one Test_Data
+Test    = my_test.The_Test_Number
+Zero     = 0
+
+#--------------------------------------------------------------------------
+# Test 1 - 
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Multiple Structures Scenario", "Two populated structures in one"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0121"]
+
+   # Append populated simple structures to a multiple structure.
+   {Two_Structures}               is Two_Structures_Type
+   {Two_Simple_Structure}         is Simple_Structure_Type
+   {Two_Another_Simple_Structure} is Third_Nested_Structure_Type
+
+   this_int     = 100
+   this_real    = 200.0
+   this_text    = "Bag of bytes"
+   this_boolean = TRUE
+
+   this_colour of Colour_Type = 'Blue'
+
+   append [this_int, this_real, this_text, this_boolean, this_colour] to {Two_Simple_Structure}
+   append [this_int, this_colour]                                     to {Two_Another_Simple_Structure}
+   append [{Two_Simple_Structure}, {Two_Another_Simple_Structure}]    to {Two_Structures}
+
+   Number_In_Two_Structures   = countof {Two_Structures}
+   Number_In_First_Structure  = countof {Two_Simple_Structure}
+   Number_In_Second_Structure = countof {Two_Another_Simple_Structure}
+
+   if Number_In_Two_Structures   = 1      &\
+      Number_In_First_Structure  = 1      &\
+      Number_In_Second_Structure = 1 then
+
+      [] = RPT2:Test_Passed["Two populated sets in 1 structure", Test, Number_In_Two_Structures]
+   else
+      [] = RPT3:Test_Failed["Two populated sets in 1 structure", Test, Number_In_Two_Structures]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Multiple Structures Scenario", "Another two populated structures in one"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0121"]
+
+   # Append populated simple structures to a multiple structure.
+   append [this_int, this_real, this_text, this_boolean, this_colour] to {Two_Simple_Structure}
+   append [this_int, this_colour]                                     to {Two_Another_Simple_Structure}
+   append [{Two_Simple_Structure}, {Two_Another_Simple_Structure}]    to {Two_Structures}
+
+   Number_In_Two_Structures   = countof {Two_Structures}
+   Number_In_First_Structure  = countof {Two_Simple_Structure}
+   Number_In_Second_Structure = countof {Two_Another_Simple_Structure}
+
+
+   if Number_In_Two_Structures = 2 & Number_In_First_Structure = 2 & Number_In_Second_Structure = 2 then
+      [] = RPT2:Test_Passed["Another two populated sets in 1 structure", Test, Number_In_Two_Structures]
+   else
+      [] = RPT3:Test_Failed["Another two populated sets in 1 structure", Test, Number_In_Two_Structures]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Multiple Structures Scenario", "Third two populated structures in one"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0121"]
+
+   # Append populated simple structures to a multiple structure.
+   append [this_int, this_real, this_text, this_boolean, this_colour] to {Two_Simple_Structure}
+   append [this_int, this_colour]                                     to {Two_Another_Simple_Structure}
+   append [{Two_Simple_Structure}, {Two_Another_Simple_Structure}]    to {Two_Structures}
+
+   Number_In_Two_Structures   = countof {Two_Structures}
+   Number_In_First_Structure  = countof {Two_Simple_Structure}
+   Number_In_Second_Structure = countof {Two_Another_Simple_Structure}
+
+   if Number_In_Two_Structures   = 3 &\
+      Number_In_First_Structure  = 3  &\
+      Number_In_Second_Structure = 3 then
+
+      [] = RPT2:Test_Passed["Third two populated sets in 1 structure", Test, Number_In_Two_Structures]
+   else
+      [] = RPT3:Test_Failed["Third two populated sets in 1 structure", Test, Number_In_Two_Structures]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4 - Decode appended populated simple structures from multiple structure.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Multiple Structures Scenario", "Decode Two structures in one"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0121"]
+
+   Final_Result                 = 0
+   First_Countof                = 0
+   Second_Countof               = 0
+   How_Many_In_First_Structure  = 0
+   How_Many_In_Second_Structure = 0
+
+   for [{Decode_First}, {Decode_Second}] in {Two_Structures} do
+      How_Many_In_First_Structure  = countof {Decode_First}
+      How_Many_In_Second_Structure = countof {Decode_Second}
+
+      First_Countof  = First_Countof  + How_Many_In_First_Structure
+      Second_Countof = Second_Countof + How_Many_In_Second_Structure
+   endfor
+
+   Number_In_Overall_Structure   = countof {Two_Structures}
+
+   Final_Result = First_Countof + Second_Countof + Number_In_Overall_Structure
+
+   if First_Countof = 6 & Second_Countof = 6 & Number_In_Overall_Structure = 3 then
+      [] = RPT2:Test_Passed["Decode Two structures in one", Test, Final_Result]
+   else
+      [] = RPT3:Test_Failed["Decode Two structures in one", Test, Final_Result]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5 - Complex multiple structure
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Multiple Structures Scenario", "Multiple populated sets in 2nd structure"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0121"]
+
+   an_integer = 1
+
+   alternative_colour of Alternative_Colour_Type = 'Red'
+   normal_colour of Colour_Type = 'Red'
+
+   {multiple_structure}       is Multiple_Structures_Type
+   {local_first_structure}    is First_Nested_Structure_Type
+   {local_second_structure}   is Second_Nested_Structure_Type
+   {local_third_structure}    is Third_Nested_Structure_Type
+   {different_colours}        is Different_Structure_Type
+
+   append [alternative_colour, Zero]                                                                 to {different_colours}
+   append [an_integer, normal_colour]                                                                to {local_third_structure}
+   append [{local_third_structure}, an_integer]                                                      to {local_second_structure}
+   append [{local_second_structure}, an_integer]                                                     to {local_first_structure}
+   append [ {local_first_structure}, {local_second_structure}, {local_third_structure}, an_integer ] to {multiple_structure}
+
+
+   Number_In_Multiple_Structure = countof {multiple_structure}
+   Number_In_First_Structure    = countof {local_first_structure}
+   Number_In_Second_Structure   = countof {local_second_structure}
+   Number_In_Third_Structure    = countof {local_third_structure}
+
+
+   if Number_In_Multiple_Structure = 1 &\
+      Number_In_First_Structure    = 1 &\
+      Number_In_Third_Structure    = 1 &\
+      Number_In_Second_Structure   = 1 then
+ 
+      [] = RPT2:Test_Passed["Multiple populated sets in 2nd structure", Test, Number_In_Multiple_Structure]
+
+   else
+      [] = RPT3:Test_Failed["Multiple populated sets in 2nd structure", Test, Number_In_Multiple_Structure]
+      [] = RPT5:Test_Text[Number_In_First_Structure, "First"]
+      [] = RPT5:Test_Text[Number_In_Second_Structure, "Second"]
+      [] = RPT5:Test_Text[Number_In_Third_Structure, "Third"]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+# Test 6 - Complex multiple structure
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Multiple Structures Scenario", "2nd Multiple populated sets in 2nd structure"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0121"]
+
+   an_integer = 2
+
+   append [alternative_colour, Zero]             to {different_colours}
+   append [an_integer, normal_colour]            to {local_third_structure}
+   append [{local_third_structure}, an_integer]  to {local_second_structure}
+   append [{local_second_structure}, an_integer] to {local_first_structure}
+
+   append [ {local_first_structure}, {local_second_structure}, {local_third_structure}, an_integer ] to {multiple_structure}
+
+   Number_In_Multiple_Structure = countof {multiple_structure}
+   Number_In_First_Structure    = countof {local_first_structure}
+   Number_In_Second_Structure   = countof {local_second_structure}
+   Number_In_Third_Structure    = countof {local_third_structure}
+
+   if Number_In_Multiple_Structure = 2 &\ 
+      Number_In_First_Structure    = 2 &\
+      Number_In_Third_Structure    = 2 &\
+      Number_In_Second_Structure   = 2 then
+ 
+      [] = RPT2:Test_Passed["2nd Multiple populated sets in 2nd structure", Test, Number_In_Multiple_Structure]
+   else
+      [] = RPT3:Test_Failed["2nd Multiple populated sets in 2nd structure", Test, Number_In_Multiple_Structure]
+      [] = RPT5:Test_Text[Number_In_First_Structure, "First"]
+      [] = RPT5:Test_Text[Number_In_Second_Structure, "Second"]
+      [] = RPT5:Test_Text[Number_In_Third_Structure, "Third"]
+   endif
+
+   Test = Test + 1
+
+# End Test 6
+
+#--------------------------------------------------------------------------
+# Test 7 - Complex multiple structure
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Multiple Structures Scenario", "3rd Multiple populated sets in 2nd structure"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0121"]
+
+   an_integer = 3
+
+   append [alternative_colour, Zero]             to {different_colours}
+   append [an_integer, normal_colour]            to {local_third_structure}
+   append [{local_third_structure}, an_integer]  to {local_second_structure}
+   append [{local_second_structure}, an_integer] to {local_first_structure}
+
+   append [ {local_first_structure}, {local_second_structure}, {local_third_structure}, an_integer ] to {multiple_structure}
+
+
+   Number_In_Multiple_Structure = countof {multiple_structure}
+   Number_In_First_Structure    = countof {local_first_structure}
+   Number_In_Second_Structure   = countof {local_second_structure}
+   Number_In_Third_Structure    = countof {local_third_structure}
+
+   if Number_In_Multiple_Structure = 3 &\
+      Number_In_First_Structure    = 3 &\
+      Number_In_Third_Structure    = 3 &\
+      Number_In_Second_Structure   = 3 then
+ 
+      [] = RPT2:Test_Passed["3rd Multiple populated sets in 2nd structure", Test, Number_In_Multiple_Structure]
+   else
+      [] = RPT3:Test_Failed["3rd Multiple populated sets in 2nd structure", Test, Number_In_Multiple_Structure]
+
+      [] = RPT5:Test_Text[Number_In_First_Structure, "First"]
+      [] = RPT5:Test_Text[Number_In_Second_Structure, "Second"]
+      [] = RPT5:Test_Text[Number_In_Third_Structure, "Third"]
+   endif
+
+   Test = Test + 1
+
+# End Test 7
+
+#--------------------------------------------------------------------------
+
+my_test.The_Test_Number = Test
+enddefine

@@ -1,0 +1,25 @@
+define function  DomainA1::Create_Report_Object
+input
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+# Find out of there already is one of these.
+# It is not inconceivable that a report object still exists from a previous run.
+# Report objects are not deleted at the end of a run, as certain events may
+# still be en-queued.
+
+old_report = find-one Report_Data
+
+if old_report != UNDEFINED then
+   delete old_report
+endif
+
+My_Report = create unique Report_Data with Reported_Domain_Number = 0
+
+[] = RPT6:Domain_Test_Start["Multi Domain A"]
+
+
+enddefine

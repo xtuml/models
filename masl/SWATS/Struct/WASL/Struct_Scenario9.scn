@@ -1,0 +1,105 @@
+define scenario  Struct_Scenario9
+input
+output
+
+#$DESCRIPTION
+Empty_Structures_Test
+#$END_DESCRIPTION
+
+my_test = find-one Test_Data
+
+Test = my_test.The_Test_Number
+
+[Environment] = ET1:Env_String[]
+
+#--------------------------------------------------------------------------
+# Test 1 
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Empty Sets Scenario", "Append one empty structures in one"]
+
+   # Append one empty simple structure to a parent structure.
+   {Parent_Structure} is Complex_UDT_Structure_Type
+   {Child_Structure} is UDT_Structure_Type
+
+   one   = 1
+   two   = 2.0
+   three = 3
+
+   This_Blue of Colour_Type = 'Blue'
+
+   append [ one, two,  {Child_Structure}, three, This_Blue ] to {Parent_Structure}
+   
+   Number_In_Child_Structure   = countof {Child_Structure}
+   Number_In_Parent_Structure  = countof {Parent_Structure}
+
+   if Number_In_Parent_Structure = 1 & Number_In_Child_Structure  = 0 then
+      [] = RPT2:Test_Passed["One empty sets in 1 structure", Test, Number_In_Parent_Structure]
+   else
+      [] = RPT3:Test_Failed["One empty sets in 1 structure", Test, Number_In_Parent_Structure]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Empty Sets Scenario", "Two empty structures in one"]
+
+   # Append two empty simple structures to a multiple structure.
+   {Two_Structures}               is Two_Structures_Type
+   {Two_Simple_Structure}         is Simple_Structure_Type
+   {Two_Another_Simple_Structure} is Third_Nested_Structure_Type
+   
+   append [{Two_Simple_Structure}, {Two_Another_Simple_Structure}] to {Two_Structures}
+
+   Number_In_Two_Structures   = countof {Two_Structures}
+   Number_In_First_Structure  = countof {Two_Simple_Structure}
+   Number_In_Second_Structure = countof {Two_Another_Simple_Structure}
+
+   if Number_In_Two_Structures   = 1 &\
+      Number_In_First_Structure  = 0 &\
+      Number_In_Second_Structure = 0 then
+
+      [] = RPT2:Test_Passed["Two empty sets in 1 structure", Test, Number_In_Two_Structures]
+   else
+      [] = RPT3:Test_Failed["Two empty sets in 1 structure", Test, Number_In_Two_Structures]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Complex multiple structure
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Empty Sets Scenario", "Multiple empty sets in 1 structure"]
+
+   {multiple_structure}     is Multiple_Structures_Type
+   {local_first_structure}  is First_Nested_Structure_Type
+   {local_second_structure} is Second_Nested_Structure_Type
+   {local_third_structure}  is Third_Nested_Structure_Type
+   {different_colours}      is Different_Structure_Type
+
+   append [ {local_first_structure}, {local_second_structure}, {local_third_structure} ] to {multiple_structure}
+
+   Number_in_Multiple_Structure = countof {multiple_structure}
+
+   if Number_in_Multiple_Structure = 1 then
+      [] = RPT2:Test_Passed["Multiple empty sets in 1 structure", Test, Number_in_Multiple_Structure]
+   else
+      [] = RPT3:Test_Failed["Multiple empty sets in 1 structure", Test, Number_in_Multiple_Structure]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+
+my_test.The_Test_Number = Test
+enddefine

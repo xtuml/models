@@ -1,0 +1,321 @@
+define scenario  Function_Calls_Scenario4
+input
+output
+
+#$DESCRIPTION
+Multiple_IH_Parameters_Scenario
+#$END_DESCRIPTION
+
+#------------------------------------------------------------------------#
+# Test 1
+#------------------------------------------------------------------------#
+
+   {Set_Of_ObjectA} = find-all Object_A
+
+   {A_Structure} is Structure_For_IH
+
+   for individual_IH in {Set_Of_ObjectA} do
+      append [individual_IH] to {A_Structure}
+   endfor
+
+   [] = Function_Calls5::Test_Set_Of_IH[{A_Structure}, FALSE, "Testing multi IH in service param"]
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2
+#------------------------------------------------------------------------#
+
+   newA = create Object_A with ReferenceA    = 999   &\
+                               ResultA       = 0     &\
+                               Current_State = 'Idle'
+
+   {Another_Structure} is Structure_For_IH
+
+   append [newA] to {Another_Structure}
+
+   [] = Function_Calls5::Test_Set_Of_IH[{Another_Structure}, TRUE, "Testing single IH in service param"]
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.The_Test_Number
+
+   # Pass up to eight instance handles into an object based synchronous service
+   One   = create Object_One   with Attribute_One   = 1
+   Two   = create Object_Two   with Attribute_Two   = 2
+   Three = create Object_Three with Attribute_Three = 3
+   Four  = create Object_Four  with Attribute_Four  = 4
+   Five  = create Object_Five  with Attribute_Five  = 5
+   Six   = create Object_Six   with Attribute_Six   = 6
+   Seven = create Object_Seven with Attribute_Seven = 7
+   Eight = create Object_Eight with Attribute_Eight = 8
+   Nine  = create Object_Nine  with Attribute_Nine  = 9
+   Ten   = create Object_Ten   with Attribute_Ten   = 10
+
+   One_A = create Object_One with Attribute_One = 1
+   One_B = create Object_One with Attribute_One = 2
+   One_C = create Object_One with Attribute_One = 3
+   One_D = create Object_One with Attribute_One = 4
+   One_E = create Object_One with Attribute_One = 5
+   One_F = create Object_One with Attribute_One = 6
+   One_G = create Object_One with Attribute_One = 7
+   One_H = create Object_One with Attribute_One = 8
+
+   Pass_Them_In = create Big_Object with Big_Attribute = Test
+
+#------------------------------------------------------------------------#
+# Test 3
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0805", "Functions_Calls", "Multiple IH", "Pass in SIX same IH parameters"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0138"]
+
+   [Result, Result_Value] = BO8:Have_SIX_Same_IH_Parameters [One_A, One_B, One_C, One_D, One_E, One_F]
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1101-0000-01-0138", "Functions_Calls", "Multiple IH", "Pass in SEVEN same IH parameters"]
+
+   [Result, Result_Value] = BO11:Have_SEVEN_Same_IH_Parameters [One_A, One_B, One_C, One_D, One_E, One_F, One_G]
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5 
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1101-0000-01-0138", "Functions_Calls", "Multiple IH", "Pass in EIGHT same IH parameters"]
+
+   [Result, Result_Value] = BO12:Have_EIGHT_Same_IH_Parameters [One_A, One_B, One_C, One_D, One_E, One_F, One_G, One_H]
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+ 
+   Test = Test + 1
+
+# End Test 5
+
+#------------------------------------------------------------------------#
+# Test 6 - Different Parameters...
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0805", "Functions_Calls", "Multiple IH", "Pass in two IH parameters"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0138"]
+
+   [Result, Result_Value] = BO1:Have_Two_IH_Parameters[One, Two] 
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+
+   Test = Test + 1
+
+# End Test 6
+
+#------------------------------------------------------------------------#
+# Test 7
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-0805", "Functions_Calls", "Multiple IH", "Pass in three IH parameters"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0138"]
+
+   [Result, Result_Value] = BO2:Have_Three_IH_Parameters[One, Two, Three] 
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+
+   Test = Test + 1
+
+# End Test 7
+
+#------------------------------------------------------------------------#
+# Test 8
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-0805", "Functions_Calls", "Multiple IH", "Pass in four IH parameters"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0138"]
+
+   [Result, Result_Value] = BO3:Have_Four_IH_Parameters[One, Two, Three, Four] 
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+
+   Test = Test + 1
+
+# End Test 8
+
+#------------------------------------------------------------------------#
+# Test 9
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-0805", "Functions_Calls", "Multiple IH", "Pass in five IH parameters"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0138"]
+
+   [Result, Result_Value] = BO4:Have_Five_IH_Parameters[One, Two, Three, Four, Five] 
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+
+   Test = Test + 1
+
+# End Test 9
+
+#------------------------------------------------------------------------#
+# Test 10
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-0805", "Functions_Calls", "Multiple IH", "Pass in six IH parameters"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0138"]
+
+   [Result, Result_Value] = BO5:Have_Six_IH_Parameters[One, Two, Three, Four, Five, Six] 
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+
+   Test = Test + 1
+
+# End Test 10
+
+#------------------------------------------------------------------------#
+# Test 11
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0805", "Functions_Calls", "Multiple IH", "Pass in seven IH parameters"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0138"]
+
+   [Result, Result_Value] = BO6:Have_Seven_IH_Parameters[One, Two, Three, Four, Five, Six, Seven] 
+   
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+
+   Test = Test + 1
+
+# End Test 11
+
+#------------------------------------------------------------------------#
+# Test 12
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0805", "Functions_Calls", "Multiple IH", "Pass in eight IH parameters"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0138"]
+
+   [Result, Result_Value] = BO7:Have_Eight_IH_Parameters[One, Two, Three, Four, Five, Six, Seven, Eight] 
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+
+   Test = Test + 1
+
+# End Test 12
+
+#------------------------------------------------------------------------#
+# Test 13
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0805", "Functions_Calls", "Multiple IH", "Pass in 10 IH parameters"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0138"]
+
+   [Result, Result_Value] = BO9:Have_Ten_IH_Parameters[One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten] 
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+
+   Test = Test + 1
+
+# End Test 13
+
+#------------------------------------------------------------------------#
+# Test 14
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0805", "Functions_Calls", "Multiple IH", "Pass in 20 IH parameters"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0138"]
+
+   [Result, Result_Value] = BO10:Have_Twenty_IH_Parameters[One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, \
+                                                           One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten] 
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Pass in lots of IH parameters", Test, Result_Value]
+   else
+      [] = RPT3:Test_Failed["Pass in lots of IH parameters", Test, Result_Value]
+   endif
+
+   Test = Test + 1
+
+# End Test 14
+
+#------------------------------------------------------------------------#
+
+   my_test.The_Test_Number = Test
+
+
+enddefine

@@ -1,0 +1,31 @@
+define function  Function_Calls4::Perform_Service_In_Tight_Loop
+input \
+	A_Tight_Input_Parameter:A_Tight_Object_IH ,\
+	This_Test_Number:Base_Integer_Type ,\
+	Testing_For_What:Base_Text_Type 
+output \
+	A_Tight_Return_Parameter:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+# ---------------------------------------------------------------------------
+# Start the test here, produce the pass/fail back in the scenario.
+# ---------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1241-0000-01-0805", "Function_Calls", "Perform Services in tight loop", Testing_For_What]
+   [] = RPT8:Specify_Requid[This_Test_Number, "1241-0000-01-1215"]
+   [] = RPT8:Specify_Requid[This_Test_Number, "1103-0000-01-1011"]
+
+   if A_Tight_Input_Parameter = UNDEFINED then
+      A_Tight_Return_Parameter = -1
+   else
+      A_Tight_Return_Parameter = A_Tight_Input_Parameter.Start_Value + A_Tight_Input_Parameter.Increment_Value
+   endif
+
+
+   
+
+
+enddefine

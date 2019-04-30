@@ -1,0 +1,106 @@
+define function  SBTWO1::Receive_The_Structure
+input \
+	Test:Base_Integer_Type ,\
+	The_Structure:Source_Structure_Type ,\
+	Control_Integer:Base_Integer_Type ,\
+	Control_Real:Base_Float_Type ,\
+	Control_String:Base_Text_Type ,\
+	Control_Enum:Colour_Type ,\
+	Control_Boolean:Boolean ,\
+	Number_Of_Structures_In_Set:Base_Integer_Type 
+output \
+	Result:Boolean 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#--------------------------------------------------------------------------
+# Receive a structure and the control data from the other domain.
+#--------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "Destination Structure Bridge", "DBSS Receive_The_Structure", "Decode received structure"]
+
+Has_Passed = FALSE
+Failure_Code = 0
+
+How_Many_Sets = countof{The_Structure}
+
+
+if How_Many_Sets = Number_Of_Structures_In_Set then
+
+   Count = 1
+
+   for [local_integer, local_real, local_string, local_boolean, local_colour] in {The_Structure} do
+
+      # Look at the last entry only.
+      if Count = How_Many_Sets then 
+
+         if local_integer = Control_Integer then
+
+            if local_real = Control_Real then
+
+               if local_string = Control_String then
+
+                  if local_colour = Control_Enum then
+
+                     if local_boolean = Control_Boolean then
+
+                        Has_Passed = TRUE
+                        [] = RPT2:Test_Passed ["Destination Structure correctly received", Test, 0]
+
+                     else
+                        # Boolean incorrectly decoded
+                        Has_Passed = TRUE
+                        Failure_Code = -6
+                     endif
+
+                  else
+                     # Enumeration incorrectly decoded
+                     Has_Passed = FALSE
+                     Failure_Code = -5
+                  endif
+
+               else
+                  # String incorrectly decoded
+                  Has_Passed = FALSE
+                  Failure_Code = -4
+               endif
+
+            else
+               # Real incorrectly decoded
+               Has_Passed = FALSE
+               Failure_Code = -3
+            endif
+
+         else
+            # Integer incorrectly decoded
+            Has_Passed = FALSE
+            Failure_Code = -2
+         endif
+
+      else
+         # Not interested in this entry. Control data will only match up with the 
+         # last entry in the set.
+         Count        = Count + 1
+         Has_Passed   = FALSE
+         Failure_Code = 0
+      endif
+
+   # Loop around the entries in the set of structures.
+   endfor
+
+else
+   # Conflict in the number of sets found and the number
+   # specified by the source domain.
+   Has_Passed = FALSE
+   Failure_Code = -1
+endif
+
+if Has_Passed = FALSE then
+   [] = RPT3:Test_Failed["Destination Structure corrupted", Test, Failure_Code]
+endif
+
+Result = Has_Passed
+
+enddefine

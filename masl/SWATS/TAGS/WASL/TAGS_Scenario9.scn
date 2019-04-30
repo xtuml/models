@@ -1,0 +1,302 @@
+define scenario  TAGS_Scenario9
+input
+output
+
+#$DESCRIPTION
+Perform_Glitch_Recovery_Tests
+#$END_DESCRIPTION
+
+My_Test = find-one Test_Data
+
+The_Test_Number = My_Test.Number
+
+Failure_Code = 0
+
+Test_Integer = 55
+Test_Boolean = TRUE
+Test_Real    = 1234.56
+Test_Environment = My_Test.Environment
+
+#--------------------------------------------------------------------------
+# Test 1 - Glitch Recovery Object must be tagged either Singleton or 
+#          Multiplicity.
+#          If it isn't, the new object will not be created at the same
+#          memory location.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0129", "Glitch Recovery", "Singleton", "Recreate at same location"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0130"]
+
+   First_Object = create Singleton_Glitch_Recovery with An_Integer  = Test_Integer &\
+                                                        A_Boolean   = Test_Boolean &\
+                                                        A_Real      = Test_Real    &\
+                                                        Environment = Test_Environment
+
+   if First_Object = UNDEFINED then
+      # Test has fallen at the first hurdle
+      Failure_Code = -1
+   else
+      delete First_Object
+
+      if Test_Environment = 'WACA' then
+         # For Ada runs on host or Target, only create this object without
+         # specifying the attributes.
+         Second_Object = create Singleton_Glitch_Recovery
+      else
+         # This is for a ISIM run, obviously it should always pass.
+         Second_Object = create Singleton_Glitch_Recovery with An_Integer  = Test_Integer &\
+                                                               A_Boolean   = Test_Boolean &\
+                                                               A_Real      = Test_Real    &\
+                                                               Environment = Test_Environment
+      endif
+
+      if Second_Object.An_Integer = Test_Integer then
+
+         if Second_Object.A_Boolean = Test_Boolean then
+
+            if Second_Object.A_Real = Test_Real then
+
+               if Second_Object.Environment = Test_Environment then
+                  Failure_Code = 0
+               else
+                  Failure_Code = -2
+               endif
+
+            else
+               Failure_Code = -3
+            endif
+
+         else
+            Failure_Code = -4
+         endif
+
+      else
+         Failure_Code = -5
+      endif
+
+      delete Second_Object
+
+   endif
+
+   if Failure_Code = 0 then
+      [] = RPT2:Test_Passed["Singleton glitch",The_Test_Number, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["Singleton glitch",The_Test_Number, Failure_Code]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   int_one = 10
+   int_two = 20
+   int_three = 30
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0129", "Glitch Recovery", "Multiplicity", "Recreate different name at same location"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0130"]
+
+   # Create three objects tagged MULTIPLICITY.
+
+   Multi_First_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
+   Multi_Second_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
+   Multi_Third_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+
+   if Multi_First_Object = UNDEFINED then
+      # Test has fallen at the first hurdle
+      Failure_Code = -1
+   else
+      delete Multi_First_Object
+      delete Multi_Second_Object
+      delete Multi_Third_Object
+
+      # This is an attempt to simulate what will happen when the system restarts and glitch recovery
+      # is invoked. Since a system restart can not be simulated here without an enourmous
+      # amount of buggering around, the created objects are deleted, and three more created in their
+      # place. Naming is not important at this stage, though, for completeness the same name could 
+      # be used. For the purposes of this test, a different set of names shall be used.
+
+      if Test_Environment = 'WACA' then
+         # For Ada runs on host or Target, only create this object without
+         # specifying the attributes.
+         Fourth_Object = create Multiplicity_Glitch_Recovery
+         Fifth_Object  = create Multiplicity_Glitch_Recovery
+         Sixth_Object  = create Multiplicity_Glitch_Recovery
+      else
+         Fourth_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
+         Fifth_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
+         Sixth_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+      endif
+
+      if Fourth_Object.An_Integer = int_one then
+
+         if Fifth_Object.An_Integer = int_two then
+
+            if Sixth_Object.An_Integer = int_three then
+               Failure_Code = 0
+            else
+               Failure_Code = -2
+            endif
+
+         else
+            Failure_Code = -3
+         endif
+
+      else
+         Failure_Code = -4
+      endif
+
+      delete Fourth_Object
+      delete Fifth_Object
+      delete Sixth_Object
+
+   endif
+
+   if Failure_Code = 0 then
+      [] = RPT2:Test_Passed["Multiplicity glitch",The_Test_Number, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["Multiplicity glitch",The_Test_Number, Failure_Code]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   int_one = 10
+   int_two = 20
+   int_three = 30
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0129", "Glitch Recovery", "Multiplicity", "Recreate same name at same location"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0130"]
+
+   # Create three objects tagged MULTIPLICITY.
+   Reuse_First_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
+   Reuse_Second_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
+   Reuse_Third_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+
+   if Reuse_First_Object = UNDEFINED then
+      # Test has fallen at the first hurdle
+      Failure_Code = -1
+   else
+      delete Reuse_First_Object
+      delete Reuse_Second_Object
+      delete Reuse_Third_Object
+
+      # Naming is not important at this stage, though, for completeness the same name could 
+      # be used. For the purposes of this test, the same set of names shall be used.
+      if Test_Environment = 'WACA' then
+         # For Ada runs on host or Target, only create this object without
+         # specifying the attributes.
+         Reuse_First_Object = create Multiplicity_Glitch_Recovery
+         Reuse_Second_Object  = create Multiplicity_Glitch_Recovery
+         Reuse_Third_Object  = create Multiplicity_Glitch_Recovery
+      else
+         Reuse_First_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
+         Reuse_Second_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
+         Reuse_Third_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+      endif
+
+      if Reuse_First_Object.An_Integer = int_one then
+
+         if Reuse_Second_Object.An_Integer = int_two then
+
+            if Reuse_Third_Object.An_Integer = int_three then
+               Failure_Code = 0
+            else
+               Failure_Code = -2
+            endif
+
+         else
+            Failure_Code = -3
+         endif
+
+      else
+         Failure_Code = -4
+      endif
+
+      delete Reuse_First_Object
+      delete Reuse_Second_Object
+      delete Reuse_Third_Object
+
+   endif
+
+   if Failure_Code = 0 then
+      [] = RPT2:Test_Passed["Multiplicity glitch",The_Test_Number, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["Multiplicity glitch",The_Test_Number, Failure_Code]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4
+#--------------------------------------------------------------------------
+
+   int_one = 10
+   int_two = 20
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0129", "Glitch Recovery", "Multiplicity", "Single multiplicity object"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0130"]
+
+   # Create three objects tagged MULTIPLICITY.
+   Multi_Single_First_Object  = create Multiplicity_Single_Glitch_Recovery_Object with Attribute_One  = int_one & Attribute_Two = int_two
+
+   if Multi_Single_First_Object = UNDEFINED then
+      # Test has fallen at the first hurdle
+      Failure_Code = -1
+   else
+      delete Multi_Single_First_Object
+
+      # This is an attempt to simulate what will happen when the system restarts and glitch recovery
+      # is invoked. Since a system restart can not be simulated here without an enormous
+      # amount of buggering around, the created objects are deleted, and another created in its
+      # place. Naming is not important at this stage, though, for completeness the same name could 
+      # be used. For the purposes of this test, a different set of names shall be used.
+
+      if Test_Environment = 'WACA' then
+         # For Ada runs on host or Target, only create this object without
+         # specifying the attributes.
+         Multi_Single_Second_Object = create Multiplicity_Single_Glitch_Recovery_Object
+      else
+         Multi_Single_Second_Object = create Multiplicity_Single_Glitch_Recovery_Object with Attribute_One  = int_one & Attribute_Two = int_two
+      endif
+
+      if Multi_Single_Second_Object.Attribute_One = int_one then
+
+         if Multi_Single_Second_Object.Attribute_Two = int_two then
+            Failure_Code = 0
+         else
+            Failure_Code = -2
+         endif
+
+      else
+         Failure_Code = -3
+      endif
+
+      delete Multi_Single_Second_Object
+
+   endif
+
+   if Failure_Code = 0 then
+      [] = RPT2:Test_Passed["Multiplicity single glitch",The_Test_Number, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["Multiplicity single glitch",The_Test_Number, Failure_Code]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+
+My_Test.Number = The_Test_Number
+enddefine

@@ -1,0 +1,445 @@
+define scenario  Struct_Scenario1
+input
+output
+
+#$DESCRIPTION
+Simple Structure Scenario
+#$END_DESCRIPTION
+
+# Set up scenario test data.
+Test_Has_Passed = FALSE
+
+My_Test_Data = find-one Test_Data
+Test = My_Test_Data.The_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1 - Report the number of User Defined Types used
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Reported No UDTs", "Obtain No of UDTs Used"]
+
+   Reported_No_UDT = 0
+   Expected_No_UDT = 0
+
+   $INLINE
+      Reported_No_UDT = 20;
+      fprintf(stderr,"Checking number of UDTs. Hardcoded to %d\n", Reported_No_UDT);
+   $ENDINLINE
+
+   #$ADA_INLINE
+      #with Ada.Text_IO;
+      #
+      #with Struct_Domain_Types;
+      #Reported_No_UDT := Struct_Domain_Types.Types_And_Subtypes_Count;
+   #$END_ADAINLINE
+
+   # This is the hardcoded expected number of user defined types constant.
+   # If any more UDT's are defined for this domain, this counter MUST be set accordingly.
+   # Failure to do this will cause this test to fail in an ADA run.
+
+   Expected_No_UDT = 20
+
+   if Reported_No_UDT = Expected_No_UDT then
+      [] = RPT2:Test_Passed["Report No UDTs", Test, Reported_No_UDT]
+   else 
+      [] = RPT3:Test_Failed["Report No UDTs", Test, Expected_No_UDT]
+   endif
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 -  Setup Test Data
+#           Basic 'APPEND' operation tests 
+#           This test shall prove that a set is created empty.
+#--------------------------------------------------------------------------
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Simple Scenario", "Create empty structure"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0117"]
+
+   {Empty_Set} is Simple_Structure_Type
+
+   Naught = countof {Empty_Set}
+
+   if Naught = 0 then 
+      [] = RPT2:Test_Passed["Scenario", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Scenario", Test, Naught]
+   endif
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Add some data into the set.
+#--------------------------------------------------------------------------
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Simple Scenario", "Add first structure to set"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0117"]
+
+   A_First_Local_Colour  of Colour_Type = 'Red'
+   A_Second_Local_Colour of Colour_Type = 'Blue'
+
+   A_First_Local_Number  = 100
+   A_First_Local_Real    = 100.0
+   A_First_Local_String  = "Hello Good Evening and Welcome"
+   A_First_Local_Boolean = TRUE
+
+   append [A_First_Local_Number, A_First_Local_Real, A_First_Local_String, A_First_Local_Boolean, A_First_Local_Colour] to {Empty_Set}
+
+   One = countof {Empty_Set}
+
+   if One = 1 then
+      [] = RPT2:Test_Passed["Scenario", Test, One]
+   else
+      [] = RPT3:Test_Failed["Scenario", Test, One]
+   endif
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4 - Add some more data into the set.
+#--------------------------------------------------------------------------
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Simple Scenario", "Add second structure to set"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0117"]
+
+   A_Second_Local_Number  = 200
+   A_Second_Local_Real    = 200.0
+   A_Second_Local_String  = "Thankyou and Goodnight"
+   A_Second_Local_Boolean = FALSE
+
+   append [A_Second_Local_Number, A_Second_Local_Real, A_Second_Local_String, A_Second_Local_Boolean, A_Second_Local_Colour] to {Empty_Set}
+
+   Two = countof {Empty_Set}
+
+   if Two = 2 then
+      [] = RPT2:Test_Passed["Scenario", Test, Two]
+   else
+      [] = RPT3:Test_Failed["Scenario", Test, Two]
+   endif
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5 -  Read the data back
+#           The Queue is implemented as a FIFO, so read it back as such.
+#           This test will need to change should this implementation ever
+#           change. This test will fail if this happens.
+#--------------------------------------------------------------------------
+
+   Test = Test + 1
+   
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Simple Scenario", "Read back structure from set"]
+   Local_Test_Passed = FALSE
+
+   How_Many = countof {Empty_Set}
+   if How_Many = 2 then
+      Counter = 1
+
+      for [A_Read_Number, A_Read_Real, A_Read_String, A_Read_Boolean, A_Read_Colour] in {Empty_Set} do
+
+         if Counter = 1 and A_Read_Number  = A_First_Local_Number  and \
+                            A_Read_Real    = A_First_Local_Real    and \
+                            A_Read_String  = A_First_Local_String  and \
+                            A_Read_Boolean = A_First_Local_Boolean and \
+                            A_Read_Colour  = A_First_Local_Colour  then
+
+            Local_Test_Passed = TRUE
+         else 
+
+            if Counter = 2 and A_Read_Number     = A_Second_Local_Number  and \
+                               A_Read_Real       = A_Second_Local_Real    and \
+                               A_Read_String     = A_Second_Local_String  and \
+                               A_Read_Boolean    = A_Second_Local_Boolean and \
+                               A_Read_Colour     = A_Second_Local_Colour  and \
+                               Local_Test_Passed = TRUE  then
+
+               [] = RPT2:Test_Passed["Simple Scenario", Test, A_Read_Number]
+            else
+               [] = RPT3:Test_Failed["Simple Scenario", Test, A_Read_Number]
+            endif
+
+         endif
+
+         Counter = Counter + 1
+
+      endfor
+
+   else
+      [] = RPT3:Test_Failed["Scenario", Test, How_Many]
+   endif
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+# Test 6 - Read the data back again
+#          Prove that reading a set of structures does not change it
+#--------------------------------------------------------------------------
+
+   Test = Test + 1
+      
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Simple Scenario", "Prove non-destructive read"]
+
+   Local_Test_Passed = FALSE
+
+   How_Many = countof {Empty_Set}
+
+   if How_Many = 2 then
+      Counter = 1
+
+      for [A_Read_Number, A_Read_Real, A_Read_String, A_Read_Boolean, A_Read_Colour] in {Empty_Set} do
+
+         if Counter = 1 and A_Read_Number  = A_First_Local_Number  and \
+                            A_Read_Real    = A_First_Local_Real    and \
+                            A_Read_String  = A_First_Local_String  and \
+                            A_Read_Boolean = A_First_Local_Boolean and \
+                            A_Read_Colour  = A_First_Local_Colour  then
+ 
+            Local_Test_Passed = TRUE
+
+         else 
+
+            if Counter = 2 and A_Read_Number     = A_Second_Local_Number  and \
+                               A_Read_Real       = A_Second_Local_Real    and \
+                               A_Read_String     = A_Second_Local_String  and \
+                               A_Read_Boolean    = A_Second_Local_Boolean and \
+                               A_Read_Colour     = A_Second_Local_Colour  and \
+                               Local_Test_Passed = TRUE  then
+
+               [] = RPT2:Test_Passed["Scenario", Test, A_Read_Number]
+            else
+               [] = RPT3:Test_Failed["Scenario", Test, A_Read_Number]
+            endif
+
+         endif
+
+         Counter = Counter + 1
+
+      endfor
+
+   else
+      [] = RPT3:Test_Failed["Scenario", Test, How_Many]
+   endif
+
+# End Test 6
+
+#--------------------------------------------------------------------------
+# Test 7 - Call object based synch service to create a data structure, 
+#          return it and then confirm that it was created correctly.
+#          This test creates a new return list for each test, so the 
+#          structure is always empty when we start.
+#--------------------------------------------------------------------------
+
+   Test = Test + 1
+   Termination_Condition = Test + 5
+
+   A_Real_Number = 1.0
+   
+   # Create a new structure object.
+   {Returned_Simple_Structure_1} is Simple_Structure_Type
+
+   struct_1 = create Structured_Object with Reference_SO  = Test                    & \
+                                            Some_Text     = "Construct a structure" & \
+                                            An_Integer    = Test                    & \
+                                            A_Real        = A_Real_Number           &\
+                                            A_Boolean     = TRUE                    &\
+                                            A_Colour      = 'Green'                 &\
+                                            Current_State = 'Idle'
+
+
+
+   [{Returned_Simple_Structure_1}] = SO1:Create_Simple_Structure[Test, struct_1]
+
+# End Test 7
+
+#--------------------------------------------------------------------------
+# Test 8
+#--------------------------------------------------------------------------
+
+   Test = Test + 1
+
+   [] = SO2:Decode_Simple_Structure[Test, {Returned_Simple_Structure_1}, struct_1, FALSE]
+
+   delete struct_1
+
+# End Test 8
+
+#--------------------------------------------------------------------------
+# Test 9 - Call object based synch service to create a data structure, 
+#          return it and then confirm that it was created correctly.
+#          This test uses the same return parameter for all tests, so the 
+#          results are appended on to the old return structure.
+#
+#          This test will examine what happens when an emptied set is 
+#          reused.
+#          The set will be emptied by the Decode_Simple_Structure service, 
+#          and then written to again by the next iteration of the 
+#          Create_Simple_Structure.
+#
+#          It is understood that for WACA 3.0.0 reading the final entry 
+#          from a set will cause that set to be deleted. Subsequent appends
+#          to that set will cause a fatal crash.
+#
+#          This is no longer the case for subsequent issues. However,  the
+#          test still has some relevance, as it proves that structures can 
+#          be partially read from, and then appended to again.
+#--------------------------------------------------------------------------
+
+   Test = Test + 1
+
+   Termination_Condition = Test + 10
+
+   A_Real_Number = 1.0
+
+   {Returned_Simple_Structure_2} is Simple_Structure_Type
+
+   loop
+      # Create a couple of structured objects
+      struct_2 = create Structured_Object with Reference_SO  = Test                    &\
+                                               Some_Text     = "Construct a structure" &\
+                                               An_Integer    = Test                    &\
+                                               A_Real        = A_Real_Number           &\
+                                               A_Boolean     = FALSE                   &\
+                                               A_Colour      = 'Green'                 &\
+                                               Current_State = 'Idle'
+
+      a_structured_instance_2 = find-one Structured_Object where Reference_SO = Test
+
+      # Create a new structure object each time, otherwise the same
+      # structure will be appended to each iteration.
+      [{Returned_Simple_Structure_2}] = SO1:Create_Simple_Structure[Test, a_structured_instance_2]
+
+      Test = Test + 1
+
+      [] = SO2:Decode_Simple_Structure[Test, {Returned_Simple_Structure_2}, a_structured_instance_2, TRUE]
+
+      # Delete the object now we've done with it.
+      delete a_structured_instance_2
+
+      Test = Test + 1
+
+      breakif Test = Termination_Condition
+
+   endloop
+
+# End Test 9
+
+#--------------------------------------------------------------------------
+# Test 10 - Define a test which passes a single structure to an instance 
+#           through a generated event.
+#--------------------------------------------------------------------------
+
+   A_Real_Number = 1.0
+
+   struct_3 = create Structured_Object with Reference_SO  = Test                        &\
+                                            Some_Text     = "generate simple structure" &\
+                                            An_Integer    = Test                        &\
+                                            A_Real        = A_Real_Number               &\
+                                            A_Boolean     = FALSE                       &\ 
+                                            A_Colour      = 'Green'                     &\
+                                            Current_State = 'Idle'
+
+   # Create a simple structure and pass it in to the instance Simple_F1
+   {Simple_Object_Structure_3} is Simple_Structure_Type
+
+   append [struct_3.Reference_SO, \
+          struct_3.A_Real,        \
+          struct_3.Some_Text,     \
+          struct_3.A_Boolean,     \
+          struct_3.A_Colour ] to {Simple_Object_Structure_3}
+
+   generate SO1:Start_Simple(Test, {Simple_Object_Structure_3} ) to struct_3
+
+# End Test 10
+
+#--------------------------------------------------------------------------
+# Test 11 - Perform the same test again, except this time use a set of 
+#           structures with more than one set in it.
+#--------------------------------------------------------------------------
+
+   Test = Test + 1
+
+   A_Real_Number = 1.0
+
+   struct_4 = create Structured_Object with Reference_SO  = Test                        &\
+                                            Some_Text     = "generate simple structure" &\
+                                            An_Integer    = Test                        &\
+                                            A_Real        = A_Real_Number               &\
+                                            A_Boolean     = FALSE                       &\
+                                            A_Colour      = 'Green'                     &\
+                                            Current_State = 'Idle'
+
+   {Simple_Object_Structure_4} is Simple_Structure_Type
+
+   Termination_Condition = 10
+   Counter = 0
+
+   loop
+      append [struct_4.An_Integer, \
+              struct_4.A_Real,     \
+              struct_4.Some_Text,  \
+              struct_4.A_Boolean,  \
+              struct_4.A_Colour] to {Simple_Object_Structure_4}
+
+      Counter = Counter + 1
+
+      breakif Counter = Termination_Condition
+
+   endloop
+
+   generate SO1:Start_Simple(Test, {Simple_Object_Structure_4} ) to struct_4
+
+# End Test 11
+
+#--------------------------------------------------------------------------
+# Test 12 - Pass in the simple structure into a domain based synchronous 
+#           service.
+#--------------------------------------------------------------------------
+
+   Test = Test + 1
+
+   struct_5 = create Structured_Object with Reference_SO  = Test                         &\
+                                            Some_Text     = "Domain based synch service" &\
+                                            An_Integer    = Test                         &\
+                                            A_Real        = 2.0                          &\
+                                            A_Boolean     = TRUE                         &\
+                                            A_Colour      = 'Green'                      &\
+                                            Current_State = 'Idle'
+
+   {Simple_Object_Structure_5} is Simple_Structure_Type
+
+   Termination_Condition = 10
+   Counter = 1
+
+   loop
+      append [struct_5.An_Integer, \
+              struct_5.A_Real,     \
+              struct_5.Some_Text,  \
+              struct_5.A_Boolean,  \
+              struct_5.A_Colour] to {Simple_Object_Structure_5}
+
+      Counter = Counter + 1
+
+      breakif Termination_Condition = Counter
+
+   endloop
+
+   # Invoke domain based synch. service
+   [] = Struct2::Decode_Simple_Structure[Test, {Simple_Object_Structure_5}, struct_5]
+
+   delete struct_5
+
+# End Test 12
+
+#--------------------------------------------------------------------------
+
+Test = Test + 1
+
+My_Test_Data.The_Test_Number = Test
+
+enddefine

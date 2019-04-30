@@ -1,0 +1,71 @@
+define function  UDT11::Check_Constraint
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+# --------------------------------------------------------------------------------------
+# Check that when a switch statment uses a contrained type default is not required as
+# all elements of the constrained type should be accounted for
+# --------------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "User Defined Types", "Check Constraint", "Check Constraint in Switch"]
+
+Has_Failed   = TRUE
+Failure_Code = -10
+Count = 0
+
+
+   The_Object = create Object_With_Integers with Unique_Identifier = Test
+
+   The_Object.First_Integer = 4
+
+switch The_Object.First_Integer
+
+   case 1
+      Count = 1
+
+   case 2
+      Count = 2
+
+   case 3
+      Count = 3
+
+   case 4
+      Count = 4
+      Has_Failed = FALSE
+
+   case 5
+      Count = 5
+
+   case 6
+      Count = 6
+
+   case 7
+      Count = 7
+
+   case 8
+      Count = 8
+
+   case 9
+      Count = 9
+
+   case 10
+      Count = 10
+
+endswitch
+
+delete The_Object
+
+if not Has_Failed then
+   [] = RPT2:Test_Passed["Check Constraint in Switch", Test, Count]
+else
+   [] = RPT3:Test_Failed["Check Constraint in Switch", Test, Count]
+endif
+
+
+
+enddefine

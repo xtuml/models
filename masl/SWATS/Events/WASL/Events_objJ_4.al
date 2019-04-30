@@ -23,7 +23,7 @@ subtype object.
 
 #-----------------------------------------------------------
 
-generate objJ2:Finished(Test_Number) to this
+generate objJ2:ST_Finished(Test_Number) to this
 
 
 enddefine

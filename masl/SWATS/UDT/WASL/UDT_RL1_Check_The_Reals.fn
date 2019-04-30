@@ -1,0 +1,609 @@
+define function  RL1:Check_The_Reals
+input \
+	Test:Base_Integer_Type ,\
+	Testing_For:Base_Text_Type ,\
+	The_Requid:Base_Text_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+# type subset_1_of_real is          real range      1.0.. 10.0
+# type subset_minus_1_of_real is    real range    -10.0 .. -1.0
+# type subset_zero_of_real is       real range    -10.0 .. 10.0
+# type one_to_maximum_real is       real range      1.0 .. 32767.0
+# type zero_to_maximum_real is      real range      0.0 .. 32767.0
+# type minus_one_to_maximum_real is real range     -1.0 .. 32767.0
+# type minimum_to_minus_one_real is real range -32768.0 .. -1.0
+# type minimum_to_zero_real is      real range -32768.0 .. 0.0
+# type minimum_to_maximum_real is   real range -32768.0 .. 32767.0
+
+
+#First_Real  is Subset_1_of_Real
+#Second_Real is Subset_minus_1_Of_Real
+#Third_Real  is Subset_Zero_of_Real
+#Fourth_Real is one_to_maximum_real
+#Fifth_Real  is minimum_to_minus_one_real
+#Sixth_Real  is minimum_to_maximum_real
+
+[] = RPT1:Start_Test[Test, The_Requid, "User Defined Types", "Real assignment", Testing_For]
+
+# Set up some negative numbers. I-SIM doesn't like assigning a magic 
+# negative number to an attribute. 
+
+# These are defined by I-SIM as of base type.
+
+Minus_Ten    = -10.0
+Minus_Max    = -32768.0
+Minus_One    = -1.0
+Plus_One     =  1.0
+Plus_Ten     =  10.0
+Plus_Max     =  32767.0
+Big_Fat_Real_Zero =  0.0
+
+Test_Has_Passed  = FALSE
+Failure_Code = 0
+
+#--------------------------------------------------------------------------
+# Test 8
+#--------------------------------------------------------------------------
+
+   if Test = 8 then
+
+      # This test shall prove that assignment using magic numbers is 
+      # handled correctly. 
+
+      # Note that these magic numbers are base type, and assinging them to 
+      # an attribute of UDT is what we are really looking at here.
+
+      The_Object = create Object_With_Reals with Unique_Identifier = Test
+
+      The_Object.First_Real  = 1.0
+      The_Object.Second_Real = Minus_Ten 
+      The_Object.Third_Real  = 10.0
+      The_Object.Fourth_Real = 1.0
+      The_Object.Fifth_Real  = Minus_Max
+      The_Object.Sixth_Real  = 0.0
+
+      if The_Object.First_Real  = Plus_One   then
+
+         if The_Object.Second_Real = Minus_Ten  then
+
+            if The_Object.Third_Real  = Plus_Ten   then
+
+               if The_Object.Fourth_Real = Plus_One   then
+
+                  if The_Object.Fifth_Real  = Minus_Max  then
+
+                     if The_Object.Sixth_Real  = Big_Fat_Real_Zero then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-6)
+                     endif
+
+                  else
+                     Failure_Code = (-5)
+                  endif
+
+               else
+                  Failure_Code = (-4)
+               endif
+   
+            else
+               Failure_Code = (-3)
+            endif
+
+         else
+            Failure_Code = (-2)
+         endif
+
+      else
+         Failure_Code = (-1)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 8
+
+#--------------------------------------------------------------------------
+# Test 9
+#--------------------------------------------------------------------------
+
+   if Test = 9 then
+  
+      # This test shall prove that assignment using data objects is 
+      # handled correctly. 
+
+      # Note that these data objects are base type, and assinging them to 
+      # an attribute of UDT is what we are really looking at here.
+
+      The_Object = create Object_With_Reals with Unique_Identifier = Test
+
+      The_Object.First_Real  = Plus_One
+      The_Object.Second_Real = Minus_Ten
+      The_Object.Third_Real  = Plus_Ten
+      The_Object.Fourth_Real = Plus_One
+      The_Object.Fifth_Real  = Minus_Max
+      The_Object.Sixth_Real  = Big_Fat_Real_Zero
+
+      if (The_Object.First_Real  = Plus_One  ) then
+
+         if (The_Object.Second_Real = Minus_Ten ) then
+
+            if (The_Object.Third_Real  = Plus_Ten  ) then
+
+               if (The_Object.Fourth_Real = Plus_One  ) then
+
+                  if (The_Object.Fifth_Real  = Minus_Max ) then
+
+                     if (The_Object.Sixth_Real  = Big_Fat_Real_Zero) then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-6)
+                     endif
+
+                  else
+                     Failure_Code = (-5)
+                  endif
+
+               else
+                  Failure_Code = (-4)
+               endif
+
+            else
+               Failure_Code = (-3)
+            endif
+
+         else
+            Failure_Code = (-2)
+         endif
+
+      else
+         Failure_Code = (-1)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 9
+
+#--------------------------------------------------------------------------
+# Test 10
+#--------------------------------------------------------------------------
+
+   if Test = 10 then
+
+      # This test shall prove that assignment using data objects is 
+      # handled correctly.  Values set to minimum allowable for range.
+
+      The_Object = create Object_With_Reals with Unique_Identifier = Test
+
+      The_Object.First_Real  = Plus_Ten
+      The_Object.Second_Real = Minus_One
+      The_Object.Third_Real  = Plus_Ten
+      The_Object.Fourth_Real = Plus_Max
+      The_Object.Fifth_Real  = Minus_One
+      The_Object.Sixth_Real  = Plus_Max
+
+      if (The_Object.First_Real  = Plus_Ten  ) then
+
+         if (The_Object.Second_Real = Minus_One ) then
+
+            if (The_Object.Third_Real  = Plus_Ten  ) then
+
+               if (The_Object.Fourth_Real = Plus_Max  ) then
+
+                  if (The_Object.Fifth_Real  = Minus_One ) then
+
+                     if (The_Object.Sixth_Real  = Plus_Max ) then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-6)
+                     endif
+
+                  else
+                     Failure_Code = (-5)
+                  endif
+   
+               else
+                  Failure_Code = (-4)
+               endif
+
+            else
+               Failure_Code = (-3)
+            endif
+
+         else
+            Failure_Code = (-2)
+         endif
+
+      else
+         Failure_Code = (-1)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 10
+
+#--------------------------------------------------------------------------
+# Test 11
+#--------------------------------------------------------------------------
+
+   if Test = 11 then
+
+      # This test shall prove that assignment using data objects is 
+      # handled correctly.  Values set to maximum allowable for range.
+
+      The_Object = create Object_With_Reals with Unique_Identifier = Test
+
+      The_Object.First_Real  = Plus_One
+      The_Object.Second_Real = Minus_Ten
+      The_Object.Third_Real  = Minus_Ten
+      The_Object.Fourth_Real = Plus_One
+      The_Object.Fifth_Real  = Minus_Max
+      The_Object.Sixth_Real  = Minus_Max
+
+      if (The_Object.First_Real  = Plus_One  ) then
+
+         if (The_Object.Second_Real = Minus_Ten ) then
+
+            if (The_Object.Third_Real  = Minus_Ten  ) then
+
+               if (The_Object.Fourth_Real = Plus_One  ) then
+
+                  if (The_Object.Fifth_Real  = Minus_Max ) then
+
+                     if (The_Object.Sixth_Real  = Minus_Max ) then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-6)
+                     endif
+
+                  else
+                     Failure_Code = (-5)
+                  endif
+
+               else
+                  Failure_Code = (-4)
+               endif
+
+            else
+               Failure_Code = (-3)
+            endif
+
+         else
+            Failure_Code = (-2)
+         endif
+
+      else
+         Failure_Code = (-1)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 11
+
+#--------------------------------------------------------------------------
+# Test 12
+#--------------------------------------------------------------------------
+
+   if Test = 12 then
+
+      # This test shall prove that I_SIM allows root data types to be used for
+      # User Defined Types, and in fact totally ignores data typing.
+
+      # Also note that the local data objects are UDT type, and reused by each
+      # assingment. This will cause problems for WACA as first use for a local
+      # object should defined it as being the same type as the attribute that
+      # is being copied into it. Subsequent copies should cause grief.
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Reals with Unique_Identifier = Test
+      The_Object2 = create Object_With_Reals with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Reals with Unique_Identifier = Other_Id
+
+      The_Object1.First_Real  = Plus_One
+      The_Object1.Second_Real = Minus_Ten
+      The_Object1.Third_Real  = Minus_Ten
+      The_Object1.Fourth_Real = Plus_Max
+      The_Object1.Fifth_Real  = Minus_Max
+      The_Object1.Sixth_Real  = Minus_Max
+
+      The_Object2.First_Real  = Plus_One
+      The_Object2.Second_Real = Minus_One
+      The_Object2.Third_Real  = Minus_Ten
+      The_Object2.Fourth_Real = Plus_One
+      The_Object2.Fifth_Real  = Minus_One
+      The_Object2.Sixth_Real  = Plus_Max
+
+      # 1.0 + 1.0 in range 1.0..10.0 result 2.0 inside range
+      Local_Real1 = The_Object1.First_Real  
+      Local_Real2 = The_Object2.First_Real
+      Result_Real3 = Local_Real1 + Local_Real2
+      Result_Object.First_Real  =  Result_Real3
+
+      # -10.0 - -1.0 in range -10.0 .. -1.0 result = -9.0 inside of range
+      Local_Real4 = The_Object1.Second_Real  
+      Local_Real5 = The_Object2.Second_Real
+      Result_Real6 = Local_Real4 - Local_Real5
+      Result_Object.Second_Real  =  Result_Real6
+
+      # -10.0 - -10.0 in range -10.0 .. +10.0 result = 0.0 inside range
+      Local_Real7 = The_Object1.Third_Real  
+      Local_Real8 = The_Object2.Third_Real
+      Result_Real9 = Local_Real7 - Local_Real8
+      Result_Object.Third_Real  =  Result_Real9
+
+      # 32767.0 - 1.0 in range 1.0 .. 32767.0 result 32766.0 inside of range
+      Local_Real10 = The_Object1.Fourth_Real  
+      Local_Real11 = The_Object2.Fourth_Real
+      Result_Real12 = Local_Real10 - Local_Real11
+      Result_Object.Fourth_Real  =  Result_Real12
+
+      # -32768.0 - -1.0 in range -32768.0 .. -1.0 result -32767.0 inside of range
+      Local_Real13 = The_Object1.Fifth_Real  
+      Local_Real14 = The_Object2.Fifth_Real
+      Result_Real15 = Local_Real13 - Local_Real14
+      Result_Object.Fifth_Real  =  Result_Real15
+
+      # -32768.0 + 32767.0 in range -32768.0 .. 32767.0 result -1.0 inside range
+      Local_Real16 = The_Object1.Sixth_Real  
+      Local_Real17 = The_Object2.Sixth_Real
+      Result_Real18 = Local_Real16 + Local_Real17
+      Result_Object.Sixth_Real  =  Result_Real18
+
+      # Non unique binary operands
+      if Result_Real3  = Result_Object.First_Real  &\
+         Result_Real6  = Result_Object.Second_Real &\
+         Result_Real9  = Result_Object.Third_Real  &\
+         Result_Real12 = Result_Object.Fourth_Real &\
+         Result_Real15 = Result_Object.Fifth_Real  &\
+         Result_Real18 = Result_Object.Sixth_Real then
+
+         Test_Has_Passed = TRUE
+      else
+         Failure_Code = -1
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 12
+
+#--------------------------------------------------------------------------
+# Test 13
+#--------------------------------------------------------------------------
+
+   if Test = 13 then
+
+      # This test proves that individual local data objects must be used for different data
+      # types.
+
+      # This test is the same as test 12, with one important difference. The local
+      # data objects are not reused, thus first use should specify them as 
+      # of the attribute's type, and no conflict should arise.
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Reals with Unique_Identifier = Test
+      The_Object2 = create Object_With_Reals with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Reals with Unique_Identifier = Other_Id
+
+      The_Object1.First_Real  = Plus_One
+      The_Object1.Second_Real = Minus_Ten
+      The_Object1.Third_Real  = Minus_Ten
+      The_Object1.Fourth_Real = Plus_Max
+      The_Object1.Fifth_Real  = Minus_Max
+      The_Object1.Sixth_Real  = Minus_Max
+
+      The_Object2.First_Real  = Plus_One
+      The_Object2.Second_Real = Minus_One
+      The_Object2.Third_Real  = Minus_Ten
+      The_Object2.Fourth_Real = Plus_One
+      The_Object2.Fifth_Real  = Minus_One
+      The_Object2.Sixth_Real  = Plus_Max
+  
+      # 1.0 + 1.0 in range 1.0..10.0 result 2.0 inside range
+      Local_Real1 = The_Object1.First_Real  
+      Local_Real2 = The_Object2.First_Real
+      Result_Real3 = Local_Real1 + Local_Real2
+      Result_Object.First_Real  =  Result_Real3
+
+      # -10.0 - -1.0 in range -10.0 .. -1.0 result = -9.0 inside of range
+      Local_Real4 = The_Object1.Second_Real  
+      Local_Real5 = The_Object2.Second_Real
+      Result_Real6 = Local_Real4 - Local_Real5
+      Result_Object.Second_Real  =  Result_Real6
+
+      # -10.0 - -10.0 in range -10.0 .. +10.0 result = 0.0 inside range
+      Local_Real7 = The_Object1.Third_Real  
+      Local_Real8 = The_Object2.Third_Real
+      Result_Real9 = Local_Real7 - Local_Real8
+      Result_Object.Third_Real  =  Result_Real9
+
+      # 32767.0 - 1.0 in range 1.0 .. 32767.0 result 32766.0 inside of range
+      Local_Real10 = The_Object1.Fourth_Real  
+      Local_Real11 = The_Object2.Fourth_Real
+      Result_Real12 = Local_Real10 - Local_Real11
+      Result_Object.Fourth_Real  =  Result_Real12
+
+      # -32768.0 - -1.0 in range -32768.0 .. -1.0 result -32767.0 inside of range
+      Local_Real13 = The_Object1.Fifth_Real  
+      Local_Real14 = The_Object2.Fifth_Real
+      Result_Real15 = Local_Real13 - Local_Real14
+      Result_Object.Fifth_Real  =  Result_Real15
+
+      # -32768.0 + 32767.0 in range -32768.0 .. 32767.0 result -1.0 inside range
+      Local_Real16 = The_Object1.Sixth_Real  
+      Local_Real17 = The_Object2.Sixth_Real
+      Result_Real18 = Local_Real16 + Local_Real17
+      Result_Object.Sixth_Real  =  Result_Real18
+
+      # Unique result_real's and binary operands
+      if Result_Real3 = Result_Object.First_Real  &\
+         Result_Real6 = Result_Object.Second_Real &\
+         Result_Real9 = Result_Object.Third_Real  &\
+         Result_Real12 = Result_Object.Fourth_Real &\
+         Result_Real15 = Result_Object.Fifth_Real  &\
+         Result_Real18 = Result_Object.Sixth_Real then
+
+         Test_Has_Passed = TRUE
+      else
+         Failure_Code = -1
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 13
+
+#--------------------------------------------------------------------------
+# Test 14
+#--------------------------------------------------------------------------
+
+   if Test = 14 then
+
+      # This test proves that individual local data objects must be used for different data
+      # types.
+
+      # Add max values to minimum values.
+
+      # This test shall cause some attributes to go out of range on assignment
+      # to the results object attributes.
+
+      # It is unclear what is to happen about this. 
+
+      # It highlights an important distinction between I-SIM and WACA. 
+      # UDT's ARE TOTALLY UNSUPPORTED IN I-SIM, and trying to test for them here
+      # will give erroneous results.
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Reals with Unique_Identifier = Test
+      The_Object2 = create Object_With_Reals with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Reals with Unique_Identifier = Other_Id
+
+   #   The_Object1.First_Real  = Plus_One
+   #   The_Object1.Second_Real = Minus_Ten
+   #   The_Object1.Third_Real  = Minus_Ten
+   #   The_Object1.Fourth_Real = Plus_One
+   #   The_Object1.Fifth_Real  = Minus_Max
+   #   The_Object1.Sixth_Real  = Minus_Max
+
+   #   The_Object2.First_Real  = Plus_Ten
+   #   The_Object2.Second_Real = Plus_One
+   #   The_Object2.Third_Real  = Plus_Ten
+   #   The_Object2.Fourth_Real = Plus_Max
+   #   The_Object2.Fifth_Real  = Minus_One
+   #   The_Object2.Sixth_Real  = Plus_Max
+
+   # 1.0 + 10.0  in range 1.0 .. 10.0 result 11.0 outside of range
+   #   Local_Real1 = The_Object1.First_Real  
+   #   Local_Real2 = The_Object2.First_Real
+   #   Result_Real3 = Local_Real1 + Local_Real2
+   #   Result_Object.First_Real  =  Result_Real3
+
+   # -10.0 - 1.0 in range -10.0 .. -1.0 result = -11.0 outside of range
+   #   Local_Real4 = The_Object1.Second_Real  
+   #   Local_Real5 = The_Object2.Second_Real
+   #   Result_Real6 = Local_Real4 - Local_Real5
+   #   Result_Object.Second_Real  =  Result_Real6
+
+   # -10.0 - 10.0 in range -10.0 .. 10.0 result  -20.0 outside of range
+   #   Local_Real7 = The_Object1.Third_Real  
+   #   Local_Real8 = The_Object2.Third_Real
+   #   Result_Real9 = Local_Real7 - Local_Real8
+   #   Result_Object.Third_Real  =  Result_Real9
+
+   # 1.0 + 32767.0 in range 1.0 .. 32767.0 result 32768.0 outside of range
+   #   Local_Real10 = The_Object1.Fourth_Real  
+   #   Local_Real11 = The_Object2.Fourth_Real
+   #   Result_Real12 = Local_Real10 + Local_Real11
+   #   Result_Object.Fourth_Real  =  Result_Real12
+
+   # -32768.00 + -1.0 in range -32768.0 .. 0.0 result -32769.0 outside of range
+   #   Local_Real13 = The_Object1.Fifth_Real  
+   #   Local_Real14= The_Object2.Fifth_Real
+   #   Result_Real15 = Local_Real13 + Local_Real14
+   #   Result_Object.Fifth_Real  =  Result_Real15
+
+   # -32768.0 - 32767.0  in range -32768.0 .. 32767.0 result -65535.0 outside range
+   #   Local_Real16 = The_Object1.Sixth_Real  
+   #   Local_Real17 = The_Object2.Sixth_Real
+   #   Result_Real18 = Local_Real16 - Local_Real17
+   #   Result_Object.Sixth_Real  =  Result_Real18
+
+   # Unique result_real's and binary operands
+
+   #   if Result_Real3  = Result_Object.First_Real  &\
+   #      Result_Real6  = Result_Object.Second_Real &\
+   #      Result_Real9  = Result_Object.Third_Real  &\
+   #      Result_Real12 = Result_Object.Fourth_Real &\
+   #      Result_Real15 = Result_Object.Fifth_Real  &\
+   #      Result_Real18 = Result_Object.Sixth_Real then
+
+   #      Test_Has_Passed = TRUE
+   #   else
+   #      Failure_Code = -1
+   #   endif
+
+      Failure_Code = 0
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 14
+
+#--------------------------------------------------------------------------
+# Report the results.
+#--------------------------------------------------------------------------
+
+if Test_Has_Passed then
+  
+   if Result_Object = UNDEFINED then
+      [] = RPT2:Test_Passed[Testing_For, Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed[Testing_For, Test, Failure_Code]
+
+      [] = RPT8:Test_Real_Passed[Testing_For, Test, Result_Object.First_Real]
+      [] = RPT8:Test_Real_Passed[Testing_For, Test, Result_Object.Second_Real]
+      [] = RPT8:Test_Real_Passed[Testing_For, Test, Result_Object.Third_Real]
+      [] = RPT8:Test_Real_Passed[Testing_For, Test, Result_Object.Fourth_Real]
+      [] = RPT8:Test_Real_Passed[Testing_For, Test, Result_Object.Fifth_Real]
+      [] = RPT8:Test_Real_Passed[Testing_For, Test, Result_Object.Sixth_Real]
+   endif
+
+else
+
+   if Failure_Code = 0 then
+      [] = RPT4:Test_Unsupported[Test]
+   else
+      [] = RPT3:Test_Failed[Testing_For, Test, Failure_Code]
+   endif
+
+endif
+
+if Result_Object != UNDEFINED then
+   delete Result_Object
+endif
+
+
+enddefine

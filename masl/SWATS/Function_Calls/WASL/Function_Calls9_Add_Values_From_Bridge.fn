@@ -1,0 +1,21 @@
+define function  Function_Calls9::Add_Values_From_Bridge
+input \
+	Test:Base_Integer_Type ,\
+	Input1:Base_Integer_Type ,\
+	Input2:Base_Integer_Type ,\
+	Input3:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+   The_Total = Input1 + Input2 + Input3
+   
+   if The_Total = 6 then
+      [] = RPT2:Test_Passed["Domain sync called from bridge", Test, The_Total]
+   else
+      [] = RPT3:Test_Failed["Domain sync called from bridge", Test, The_Total]
+   endif
+
+enddefine

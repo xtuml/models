@@ -1,0 +1,23 @@
+define function  objA2:FunctionB
+input \
+	InputA:Base_Integer_Type ,\
+	InputB:Base_Integer_Type ,\
+	InputC:Base_Integer_Type 
+output \
+	OutputA:Boolean 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+   an_instance_A = find-one Object_A where ReferenceA = 2
+   if ((InputA != 10)|(InputB != 20)|(InputC != 30)) then
+      generate objA1:Fault() to an_instance_A
+   else
+      temp = an_instance_A.ResultA + 10
+      an_instance_A.ResultA = temp
+   endif
+   OutputA = TRUE
+
+
+enddefine

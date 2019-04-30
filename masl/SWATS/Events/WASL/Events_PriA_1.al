@@ -52,9 +52,6 @@ if this.Event_Count = 3 then
    if my_test != UNDEFINED then
       delete my_test
    endif
-
-
-
 endif
 
 

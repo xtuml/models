@@ -1,0 +1,254 @@
+define function  objFS1:do_find_set
+input \
+	Test_Number:Base_Integer_Type ,\
+	an_instanceFS:Find_Set_IH 
+output \
+	Returned_Number:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+Test = Test_Number
+
+#------------------------------------------------------------------------#
+# Find on sets of instance handles
+#------------------------------------------------------------------------#
+
+# Create an initial set to perform the tests upon
+
+{setA} = find Object_A where idA > 5
+
+#------------------------------------------------------------------------#
+# Test 1 - find-one
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Find and Sets", "objFS", "find one on set"]
+
+has_failed = FALSE
+
+#Perform the test
+
+# an_instanceA = find-one {setA}
+
+#Check the an instance is returned
+
+# if an_instanceA = UNDEFINED then
+
+   [] = RPT4:Test_Unsupported[Test]
+
+# else
+
+
+#   if an_instanceA.idA < 6 then
+
+#      [] = RPT3:Test_Failed["objFS", Test,-1]
+#      has_failed = TRUE
+#   else
+#      temp = an_instanceFS.ResultFS + 10
+#      an_instanceFS.ResultFS = temp
+#      [] = RPT2:Test_Passed["objFS", Test,temp]
+
+#   endif
+
+# endif
+
+#------------------------------------------------------------------------#
+# Test 2 - find-one where
+#------------------------------------------------------------------------#
+
+   [Test] = Find_and_Sets1::Increment[Test]
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Find and Sets", "objFS", "find one  on set where"]
+
+   has_failed = FALSE
+
+   # Perform the test
+
+   # an_instanceA = find-one {setA} where idA > 8
+
+   # Check the an instance is returned
+   # if an_instanceA = UNDEFINED then
+        [] = RPT4:Test_Unsupported[Test]
+   # else
+
+   #   if an_instanceA.idA < 9 then
+   #      [] = RPT3:Test_Failed["objFS", Test,-2]
+   #      has_failed = TRUE
+   #   else
+   #      temp = an_instanceFS.ResultFS + 10
+   #      an_instanceFS.ResultFS = temp
+   #      [] = RPT2:Test_Passed["objFS", Test,temp]
+   #   endif
+
+   # endif
+#------------------------------------------------------------------------#
+# Test 3 - find-only
+#------------------------------------------------------------------------#
+
+   [Test] = Find_and_Sets1::Increment[Test]
+ 
+   [] = RPT1:Start_Test[Test, "Null Requid", "Find and Sets", "objFS", "find  on set only"]
+
+   has_failed = FALSE
+
+   # Perform the test
+
+   # an_instanceA = find-only {setA} where idA = 6
+
+   # Check the an instance is returned
+   # if an_instanceA = UNDEFINED then
+      [] = RPT4:Test_Unsupported[Test]
+   # else
+
+   #   if an_instanceA.idA != 6 then
+   #      [] = RPT3:Test_Failed["objFS", Test,-3]
+   #      has_failed = TRUE
+   #   else
+   #      temp = an_instanceFS.ResultFS + 10
+   #      an_instanceFS.ResultFS = temp
+   #      [] = RPT2:Test_Passed["objFS", Test,temp]
+   #   endif
+
+   # endif
+
+#------------------------------------------------------------------------#
+# Test 4 - find where, using a single condition
+#------------------------------------------------------------------------#
+
+   [Test] = Find_and_Sets1::Increment[Test]
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Find and Sets", "objFS","find on set where single condition"]
+
+   has_failed = FALSE
+
+   # Perform the test
+
+   # {subsetA} = find {setA} where idA > 7
+
+   # Check that the set contains some instances and that it contains the
+   # correct instances
+
+   # if countof {subsetA} = 0 then
+      [] = RPT4:Test_Unsupported[Test]
+   # else
+
+   #   if countof {subsetA} != 3 then
+   #      [] = RPT3:Test_Failed["objFS", Test,-4]
+   #      has_failed = TRUE
+   #   else
+
+          # Check each instance that is returned
+          # countA = 0
+          #      countB = 0
+          #      countC = 0
+
+          #      for each_instanceA in {subsetA} do
+#         if each_instanceA.idA = 8 then
+#            countA = countA + 1
+#         else
+#            if each_instanceA.idA = 9 then
+#               countB = countB + 1
+#            else
+#               if each_instanceA.idA = 10 then
+#                  countC = countC + 1
+#               else
+
+#                  [] = RPT3:Test_Failed["objFS", Test,-5]
+#                  has_failed = TRUE
+
+#               endif
+#            endif
+#         endif
+#      endfor
+
+      #Check counter values
+#      if (countA != 1)|(countB != 1)|(countC != 1) then
+#         [] = RPT3:Test_Failed["objFS", Test,-6]
+#         has_failed = TRUE
+#      else
+#         temp = an_instanceFS.ResultFS + 10
+#         an_instanceFS.ResultFS = temp
+#      endif
+
+#      if !has_failed then
+#         [] = RPT2:Test_Passed["objFS", Test,0]
+#      endif
+#
+#   endif
+
+#endif
+
+#------------------------------------------------------------------------#
+#Test 5
+#find where, using multiple conditions
+#------------------------------------------------------------------------#
+
+[Test] = Find_and_Sets1::Increment[Test]
+[] = RPT1:Start_Test[Test, "Null Requid", "Find and Sets", "objFS","find on set where multiple conditions"]
+
+has_failed = FALSE
+
+#Perform the test
+# {subsetA} = find {setA} where idA > 8 | idA = 4 | idA = 6
+
+# if countof {subsetA} = 0 then
+
+   [] = RPT4:Test_Unsupported[Test]
+
+# else
+
+
+   #Check that the set contains some instances and that it contains the
+   #correct instances
+#   if countof {subsetA} != 3 then
+#      [] = RPT3:Test_Failed["objFS", Test,-7]
+#      has_failed = TRUE
+#   else
+
+      #Check each instance that is returned
+#      countA = 0
+#      countB = 0
+#      countC = 0
+#      for each_instanceA in {subsetA} do
+#         if each_instanceA.idA = 6 then
+#            countA = countA + 1
+#         else
+#            if each_instanceA.idA = 9 then
+#               countB = countB + 1
+#            else
+#               if each_instanceA.idA = 10 then
+#                  countC = countC + 1
+#               else
+#                  [] = RPT3:Test_Failed["objFS", Test,-8]
+#                  has_failed = TRUE
+#               endif
+#            endif
+#         endif
+#      endfor
+
+      #Check counter values
+#      if (countA != 1)|(countB != 1)|(countC != 1) then
+#         [] = RPT3:Test_Failed["objFS", Test,-9]
+#         has_failed = TRUE
+#      else
+#         temp = an_instanceFS.ResultFS + 10
+#         an_instanceFS.ResultFS = temp
+#      endif
+
+#      if !has_failed then
+#         [] = RPT2:Test_Passed["objFS", Test,0]
+#      endif
+
+#   endif
+
+# endif
+
+
+#------------------------------------------------------------------------#
+
+
+
+Returned_Test = Test
+
+enddefine

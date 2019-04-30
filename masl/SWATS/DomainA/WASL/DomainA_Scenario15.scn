@@ -1,0 +1,31 @@
+define scenario  DomainA_Scenario15
+input
+output
+
+#$DESCRIPTION
+Pass_Params
+#$END_DESCRIPTION
+
+   my_test = find-one Test_Data
+   Test    = my_test.This_Test_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1106", "DomainA", "Misc calls", "Param Passed through bridge"]
+
+   Local_Int = 999
+   Local_Real = 99.9
+   Local_Text = "Passed From Domain A"
+   Local_Bool = TRUE
+
+   [The_Result] = DomainA4::Check_Service_Params[Local_Int, Local_Real, Local_Text, Local_Bool]
+
+   if The_Result = 10 then
+      [] = RPT2:Test_Passed["Param Passed through bridge", Test, The_Result]
+   else
+      [] = RPT3:Test_Failed["Param Passed through bridge", Test, The_Result]
+   endif
+
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+   my_test.This_Test_Number = Test
+enddefine

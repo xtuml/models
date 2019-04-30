@@ -1,0 +1,58 @@
+define function  Struct3::Receive_Empty_Structure_IH
+input \
+	Test_Number:Base_Integer_Type ,\
+	Empty_Structure:Structure_and_IH_Type ,\
+	Inserted_IH:Structured_Object_IH ,\
+	Testing_For:Base_Text_Type 
+output \
+	Filled_Structure:Structure_and_IH_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+[] = RPT1:Start_Test[Test_Number, "1241-0000-01-1216", "Structures", "Receive Empty Structure", Testing_For]
+
+How_Many_In_Structure = countof{Empty_Structure}
+
+Bean_Counter = 0
+
+for [An_IH] in {Empty_Structure} do
+
+   Bean_Counter = Bean_Counter + 1
+
+endfor
+
+if Bean_Counter = 0 & \
+   How_Many_In_Structure = 0 then
+
+   Structure_Is_Empty = TRUE
+
+else
+
+   Structure_Is_Empty = FALSE
+
+endif
+
+if Inserted_IH != UNDEFINED then
+
+   append [Inserted_IH] to {Filled_Structure}
+
+   if Structure_Is_Empty then
+
+      [] = RPT2:Test_Passed[Testing_For, Test_Number, Bean_Counter]
+
+   else
+
+      [] = RPT3:Test_Failed["Structure was not empty", Test_Number, Bean_Counter]
+
+   endif
+
+else
+
+   [] = RPT3:Test_Failed["IH does not exist", Test_Number, -1]
+
+endif
+
+
+enddefine
