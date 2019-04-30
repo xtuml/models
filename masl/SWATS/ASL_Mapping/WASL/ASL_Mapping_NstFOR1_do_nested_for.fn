@@ -1,0 +1,102 @@
+define function  NstFOR1:do_nested_for
+input \
+	Test_Start:Base_Integer_Type 
+output \
+	Final_Test:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#------------------------------------------------------------------------#
+# Nested FOR statements
+#------------------------------------------------------------------------#
+
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+# Test 1 - Nested FOR statements
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objNESTEDFOR", "Nested FOR statements"]
+
+   Has_Failed = FALSE
+
+   # Create a set of instances to loop over
+   {all_instances} = find-all Nested_FOR
+   {all_instancesA} = find-all Nested_FOR
+   {all_instancesB} = find-all Nested_FOR
+   {all_instancesC} = find-all Nested_FOR
+   {all_instancesD} = find-all Nested_FOR
+   {all_instancesE} = find-all Nested_FOR
+   {all_instancesF} = find-all Nested_FOR
+
+   passA = 0
+   passB = 0
+   passC = 0
+   passD = 0
+   passE = 0
+   passF = 0
+  
+   # Perform the test
+   for each_instanceA in {all_instancesA} do
+      passA = passA + 1
+ 
+      for each_instanceB in {all_instancesB} do
+         passB = passB + 1
+
+         for each_instanceC in {all_instancesC} do
+            passC = passC + 1
+
+            for each_instanceD in {all_instancesD} do
+               passD = passD + 1
+
+               for each_instanceE in {all_instancesE} do
+                  passE = passE + 1
+
+                  for each_instanceF in {all_instancesF} do
+                     tempF = each_instanceF.ResultA + 1
+                     each_instanceF.ResultA = tempF
+                     passF = passF + 1
+                  endfor
+
+               endfor
+
+            endfor
+
+         endfor
+   
+      endfor
+
+   endfor
+
+
+   # Check that the attribute 'ResultA' contains the correct value
+   for each_instance in {all_instances} do
+
+      if each_instance.ResultA != 3125 then
+         [] = RPT3:Test_Failed["objNESTEDFOR", Test,-1]
+         Has_Failed = TRUE
+      endif
+
+   endfor
+
+   # Check that the loop variables are still valid
+   if (each_instanceA = UNDEFINED)|(each_instanceB = UNDEFINED)|\
+      (each_instanceC = UNDEFINED)|(each_instanceD = UNDEFINED)|\
+      (each_instanceE = UNDEFINED)|(each_instanceF = UNDEFINED) then
+
+      [] = RPT3:Test_Failed["objNESTEDFOR", Test,-2]
+      Has_Failed = TRUE
+   endif
+
+   # Test complete
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDFOR", Test,0]
+   endif
+
+   Test = Test + 1
+
+   Final_Test = Test
+
+enddefine

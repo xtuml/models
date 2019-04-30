@@ -1,0 +1,22 @@
+define scenario  DomainA_Scenario12
+input
+output
+
+#$DESCRIPTION
+Enumeration Across Bridge Check
+#$END_DESCRIPTION
+
+#------------------------------------------------------------------------#
+# Pass an enumerated type through a bridge to see if it gets correctly
+# picked up
+#------------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.This_Test_Number
+
+   [] = NAV7:Enum_Test[Test, 'Sly']
+
+   Test = Test + 1
+   my_test.This_Test_Number = Test
+
+enddefine

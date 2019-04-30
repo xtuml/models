@@ -1,0 +1,23 @@
+define function  TAGS6::Set_Environment
+input \
+	Input_Test_Data:Test_Data_IH 
+output \
+	Output_Test_Data:Test_Data_IH 
+
+#$DESCRIPTION
+C insert to set attribute for I-SIM
+operation
+#$END_DESCRIPTION
+
+
+Local_Input = Input_Test_Data
+
+# Call terminator bridge
+[Environment_Variable] = ET2:Env_Number[]
+
+Local_Input.Number = Environment_Variable
+
+Output_Test_Data = Local_Input
+
+
+enddefine

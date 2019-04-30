@@ -1,0 +1,81 @@
+define function  TAGS15::Perform_Static_Tests
+input
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+my_test = find-one Test_Data
+
+this_test = my_test.Number
+
+supported = TRUE
+
+#--------------------------------------------------------------------------
+# Test 1 - Create a static object. By inspection check that there is no
+#          delete option generated for this object
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[this_test, "1241-0000-01-0132", "Tagged", "TAGGING", "Create a STATIC object"]
+   [] = RPT8:Specify_Requid[this_test, "1241-0000-01-0127"]
+   [] = RPT5:Test_Text [this_test, "Must be tested by inspection"]
+
+   firstStatic = create A_Static_Object with Unique_ID = 1
+
+   if firstStatic != UNDEFINED and firstStatic.Unique_ID = 1 then
+      [] = RPT2:Test_Passed["Create STATIC oject", this_test, 0]
+   else
+      [] = RPT3:Test_Failed["Create STATIC oject", this_test, -1]
+   endif
+
+   this_test = this_test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 - Create a single static object. By inspection check that there is
+#          no delete option generated for this object
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[this_test, "1241-0000-01-0132", "Tagged", "TAGGING", "Create a SINGLE STATIC object"] 
+   [] = RPT8:Specify_Requid[this_test, "1241-0000-01-0127"]
+   [] = RPT5:Test_Text [this_test, "Can only be tested by inspection"]
+
+   firstSingleStatic = create A_Single_Static_Object with Unique_ID = 1
+
+   if firstSingleStatic != UNDEFINED and firstSingleStatic.Unique_ID = 1 then
+      [] = RPT2:Test_Passed["Create SINGLE STATIC oject", this_test, 0]
+   else
+      [] = RPT3:Test_Failed["Create SINGLE STATIC oject", this_test, -1]
+   endif
+
+   this_test = this_test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[this_test, "1241-0000-01-0132", "Tagged", "TAGGING", "Create a MULTIPLE STATIC objects"]
+   [] = RPT8:Specify_Requid[this_test, "1241-0000-01-0127"]
+   [] = RPT5:Test_Text [this_test, "Can only be tested by inspection"]
+
+   firstMultiStatic = create A_Multiple_Static_Object with Unique_ID = 1
+
+   if firstMultiStatic != UNDEFINED and firstMultiStatic.Unique_ID = 1 then
+      [] = RPT2:Test_Passed["Create MULTIPLE STATIC oject", this_test, 0]
+   else
+      [] = RPT3:Test_Failed["Create MULTIPLE STATIC oject", this_test, -1]
+   endif
+
+   this_test = this_test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+
+my_test.Number = this_test
+
+enddefine

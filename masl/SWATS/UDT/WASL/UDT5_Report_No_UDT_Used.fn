@@ -1,0 +1,49 @@
+define function  UDT5::Report_No_UDT_Used
+input \
+	Test:Base_Integer_Type ,\
+	Testing_For:Base_Text_Type 
+output
+
+#$DESCRIPTION
+Returns the number of user defined types used and confims that the reported number is actually the number used.
+#$END_DESCRIPTION
+
+
+Reported_No_UDT = 0
+Expected_No_UDT = 0
+Test_Has_Passed = FALSE
+
+[] = RPT1:Start_Test[Test, "Null Requid", "User Defined Types", "Reported No UDTs", Testing_For]
+
+if Test = 15 then
+   [env] = BTF3:Get_Environment_Type[]
+
+   if env = 1 then
+      [] = RPT4:Test_Unsupported[Test]   
+   else
+
+      #$ADA_INLINE
+         #with Ada.Text_IO;
+         #
+         #with UDT_Domain_Types;
+         #Reported_No_UDT := UDT_Domain_Types.Types_And_Subtypes_Count;
+         #Ada.Text_IO.Put_Line("No UDTs in User_Defined_Types = " & integer'image(integer(Reported_No_UDT)));
+      #$END_ADAINLINE
+
+      $INLINE
+         fprintf(stderr,"Checking number of UDTs \n");
+      $ENDINLINE
+
+      Expected_No_UDT = 16
+
+      if Reported_No_UDT = Expected_No_UDT then
+         [] = RPT2:Test_Passed[Testing_For, Test, Reported_No_UDT]
+      else 
+         [] = RPT3:Test_Failed[Testing_For, Test, Expected_No_UDT]
+      endif
+
+   endif
+
+endif
+
+enddefine

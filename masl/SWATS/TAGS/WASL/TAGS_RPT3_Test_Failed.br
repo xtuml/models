@@ -1,0 +1,27 @@
+define bridge  TAGS:RPT3:Test_Failed
+input \
+	Failed_Domain_Object:Base_Text_Type ,\
+	Failed_Test_Number:Base_Integer_Type ,\
+	Failed_Test_Value:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+the_test = Failed_Test_Number
+domain   = Failed_Domain_Object
+fail_value = Failed_Test_Value
+
+$INLINE
+fprintf(stderr, "Test Number %d has FAILED with %d\n", the_test, fail_value);
+fprintf(stderr, "Testing for %s\n", domain);
+$ENDINLINE
+
+
+
+
+
+
+enddefine

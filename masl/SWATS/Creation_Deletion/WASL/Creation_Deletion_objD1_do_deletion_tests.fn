@@ -1,0 +1,730 @@
+define function  objD1:do_deletion_tests
+input \
+	Test_Number:Base_Integer_Type 
+output \
+	Returned_Test_Number:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#------------------------------------------------------------------------#
+# do deletion tests
+#------------------------------------------------------------------------#
+
+   Test = Test_Number
+
+   # Preparation for instance deletion
+
+   count = 8
+
+   loop
+      find_and_delete_D = create Object_D with ReferenceD = count &\
+                                               IntegerA   = count
+      count = count - 1
+      breakif count = 0
+   endloop
+
+#------------------------------------------------------------------------#
+# Test 1 - Attempt to delete an instance of Object_D where the condition 
+#          is unfulfilled, NO INSTANCE DELETED
+#
+#          FOR THE PURPOSES OF THIS TEST, ONLY A SINGLE INSTANCE DELETION 
+#          IS REQUIRED.
+#
+# Note : The ISIM seems to have a problem attempting to delete an instance
+#        that isn't there. So there must be a check performed for the
+#        existance of an instance before squashing it.
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "objD find and delete", "A is False"]
+   has_failed = FALSE
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   an_instanceD = find-one Object_D where ReferenceD > 100
+
+   if an_instanceD != UNDEFINED then
+      delete an_instanceD
+      has_failed = TRUE
+   endif
+
+   # Check that no instance have been deleted
+   {after_setD} = find-all Object_D
+
+   if countof {before_setD} != countof {after_setD} then
+     has_failed = TRUE
+   endif
+
+   if !has_failed then
+      [] = RPT2:Test_Passed["objD", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objD", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - Attempt to delete an instance of Object_D where only one of the
+#          conditions are fulfilled, NO INSTANCE DELETED
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "objD find and delete", "A and B is False"]
+
+   has_failed = FALSE
+
+   Failure_Code = (-2)
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   # Perform a find where before deleting the instance of Object_D (TB)
+   an_instanceD = find-one Object_D where ReferenceD = 1 & IntegerA = 30
+
+   # There must be a check to prevent attempted deletion of
+   # an instance that doesn't exist.
+
+   if an_instanceD != UNDEFINED then
+      delete an_instanceD
+      Failure_Code = Failure_Code + 1
+   endif
+
+   # Check that no instance have been deleted
+   {after_setD} = find-all Object_D
+
+   if countof {before_setD} != countof {after_setD} then
+      [] = RPT3:Test_Failed["objD", Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["objD", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3  - Attempt to delete an instance of Object_D where only one of 
+#           the 'and' conditions are fulfilled, NO INSTANCE DELETED
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid",  "Creation Deletion", "objD find and delete", "A and  BorC is False"]
+
+   has_failed = FALSE
+   Failure_Code = (-2)
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   # Perform test
+   an_instanceD = find-one Object_D where IntegerA = 30 & (ReferenceD = 1 | ReferenceD = 2)
+
+   if an_instanceD != UNDEFINED then
+      # Try and delete the instance. This is a failure, as the find should 
+      # not have actually found an instance.
+      delete an_instanceD
+      Failure_Code = Failure_Code + 1
+   endif
+
+   # Check that no instance have been deleted
+   {after_setD} = find-all Object_D
+
+   if countof{before_setD} != countof{after_setD} then
+      [] = RPT3:Test_Failed["objD", Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["objD", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+ 
+#------------------------------------------------------------------------#
+# Test 4 - Delete single instance
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0531", "Creation Deletion", "ObjD find and delete", "Delete single instance"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+
+   Failure_Code = (-5)
+
+   # Find the instance using only one attribute.
+   an_instanceD = find-one Object_D where ReferenceD = 1
+
+   # Find all instances in the set before any deletions take place.
+   {Before_Deletion} = find-all Object_D
+
+   if an_instanceD = UNDEFINED then
+      Failure_Code = Failure_Code + 1
+   else
+      # Delete the instance found, which does exist.
+      delete an_instanceD
+
+      # Check that it has been deleted, by checking first against the
+      # used attribute; ReferenceD, and then by the unused attribute; IntegerA.
+      an_instanceD = find-one Object_D where ReferenceD = 1
+
+      if an_instanceD = UNDEFINED then
+         an_instanceAD = find-one Object_D where IntegerA = 1
+
+         if an_instanceAD = UNDEFINED then
+            # Use the find operation on the set to prove that the instance has gone
+            # from within the set.
+
+            {After_Deletion} = find-all Object_D
+
+            if countof {Before_Deletion} != countof {After_Deletion} then
+               Failure_Code = 0
+            else
+               Failure_Code = Failure_Code + 2
+            endif
+
+         else
+            Failure_Code = Failure_Code + 3
+         endif
+
+      else
+         Failure_Code = Failure_Code + 4
+      endif
+
+   endif
+
+   if Failure_Code = 0 then
+      [] = RPT2:Test_Passed["objD", Test, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["objD", Test, Failure_Code]
+   endif
+
+   Test=Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5 -Delete instance of Object_D where multiple condition are
+#         fulfilled
+#         ONE INSTANCE IS DELETED
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0121", "Creation Deletion", "ObjD find and delete", "single instance multiple conditions met"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0531"]
+
+   has_failed = FALSE
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   #Find an instanceD using find where before attempting to delete. (TB)
+   an_instanceD = find-one Object_D where ReferenceD = 2 & IntegerA = 2
+
+   if an_instanceD != UNDEFINED then
+      delete an_instanceD
+   endif
+
+   # We are more concerened that the instance in question has actually been deleted, rather
+   # than an instance has been deleted from the set. To this end, we shall check that
+   # the specific instance in question really has bitten the dust.
+   Should_Be_Deleted = find-one Object_D where ReferenceD = 2 & IntegerA = 2
+
+   if Should_Be_Deleted != UNDEFINED then
+      [] = RPT3:Test_Failed["objD", Test, -8]
+      has_failed = TRUE
+   endif
+	
+   {after_setD} = find-all Object_D
+
+   if countof {before_setD} = countof {after_setD} then
+      [] = RPT3:Test_Failed["objD", Test, -9]
+      has_failed = TRUE
+   endif
+
+   #Ensure that the correct instance was deleted
+   for each_instanceD in {after_setD} do
+      if each_instanceD.ReferenceD = 2 then
+		         	    
+         [] = RPT3:Test_Failed["objD", Test, -10]
+         has_failed = TRUE
+
+      endif
+
+   endfor
+
+   if !has_failed then
+      [] = RPT2:Test_Passed["objD", Test,0]
+   endif
+
+   Test=Test + 1
+
+#End Test 5
+
+#------------------------------------------------------------------------#
+# Test 6 - Delete instance of Object_D where multiple condition are 
+#          fulfilled
+#          ONE INSTANCE IS DELETED
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0532", "Creation Deletion", "objD find and delete","delete 1 instance where multiple conditions fulfilled"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+
+   has_failed = FALSE
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   # Not currently supported by code gen.
+   #   delete Object_D where ReferenceD = 7 & (IntegerA = 30 | IntegerA = 7)
+   # Neither is this
+   delete Object_D where ReferenceD = 7 & IntegerA = 30
+   delete Object_D where ReferenceD = 7 & IntegerA = 7
+
+   # Check that no instance have been deleted
+   {after_setD} = find-all Object_D
+   size_after = (countof {after_setD}) + 1
+
+   if countof {before_setD} = countof {after_setD} then
+       [] = RPT3:Test_Failed["objD", Test, -13]
+       has_failed = TRUE
+   endif
+
+   #Ensure that the correct instance was deleted
+   for each_instanceD in {after_setD} do
+
+      if each_instanceD.ReferenceD = 7 then
+          [] = RPT3:Test_Failed["objD", Test, -14]
+          has_failed = TRUE
+      endif
+
+   endfor
+
+   if !has_failed then
+      [] = RPT2:Test_Passed["objD", Test,0]
+   endif
+
+   Test = Test + 1
+
+# End Test 6
+
+#------------------------------------------------------------------------#
+# Test 7 - Delete an instance of Object_D
+#          ONE INSTANCE IS DELETED
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "objD find and delete", "Deletion of one instance"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+
+   has_failed = FALSE
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   # Find an instance to delete
+   an_instanceD = find-one Object_D where ReferenceD = 8
+
+   # Perform test
+   if an_instanceD !=UNDEFINED then
+      delete an_instanceD
+   endif
+
+   # Check that no instance have been deleted
+   {after_setD} = find-all Object_D
+   size_after = (countof {after_setD}) + 1
+
+   if countof {before_setD} != size_after then
+
+      [] = RPT3:Test_Failed["objD", Test,-15]
+      has_failed = TRUE
+
+   endif
+
+   # Ensure that the correct instance was deleted
+   for each_instanceD in {after_setD} do
+
+      if each_instanceD.ReferenceD = 8 then
+         [] = RPT3:Test_Failed["objD", Test, -16]
+         has_failed = TRUE
+      endif
+
+   endfor
+
+   if !has_failed then
+      [] = RPT2:Test_Passed["objD", Test, 0]
+   endif
+
+# End Test 7
+
+#------------------------------------------------------------------------#
+# Preparation for instance deletion
+#------------------------------------------------------------------------#
+
+count = 8
+loop
+   find_and_delete_D = create Object_D with ReferenceD = count &\
+                               IntegerA = count
+   count = count - 1
+   breakif count = 0
+endloop
+
+#------------------------------------------------------------------------#
+# Test 8
+# Attempt to delete an instance of Object_D where the condition is
+# unfulfilled, NO INSTANCE DELETED
+#
+# FOR THE PURPOSES OF THIS TEST, ONLY A SINGLE INSTANCE DELETION IS 
+# REQUIRED.
+#
+# Note : The ISIM seems to have a problem attempting to delete an instance
+#        that isn't there. So there must be a check performed for the
+#        existance of an instance before squashing it.
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0532", "Creation Deletion", "delete where", "A is False"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+
+   has_failed = FALSE
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   # Perform test
+   delete Object_D where ReferenceD > 100
+
+   # Check that no instance have been deleted
+   {after_setD} = find-all Object_D
+   if countof {before_setD} != countof {after_setD} then
+     [] = RPT3:Test_Failed["objD", Test, -1]
+     has_failed = TRUE
+   endif
+
+   if !has_failed then
+      [] = RPT2:Test_Passed["objD", Test, 0]
+   endif
+
+#End Test 8
+
+#------------------------------------------------------------------------#
+# Test 9 - Attempt to delete an instance of Object_D where only one of the
+#          conditions are fulfilled, NO INSTANCE DELETED
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "objD delete where", "A and B is False"]
+
+   has_failed = FALSE
+
+   Failure_Code = (-2)
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   # Perform test
+   delete Object_D where ReferenceD = 1 & IntegerA = 30
+
+   # Check that no instance have been deleted
+   {after_setD} = find-all Object_D
+
+   if countof {before_setD} != countof {after_setD} then
+      [] = RPT3:Test_Failed["objD", Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["objD", Test, 0]
+   endif
+
+#End Test 9
+
+#------------------------------------------------------------------------#
+# Test 10 - Attempt to delete an instance of Object_D where only one of 
+#          the 'and' conditions are fulfilled, NO INSTANCE DELETED
+#------------------------------------------------------------------------#
+
+   Test= Test + 1
+
+   [] = RPT1:Start_Test[Test, "Null Requid",  "Creation Deletion", "delete where", "A and BorC is False"]
+
+   has_failed = FALSE
+   Failure_Code = (-2)
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   # Perform test
+   delete Object_D where IntegerA = 30 & (ReferenceD = 1 | ReferenceD = 2)
+
+   # Check that no instance have been deleted
+   {after_setD} = find-all Object_D
+
+   # Also this will prove that the function count-of can be used like this
+   # without having recourse to a local temp variable or two. It is the only
+   # function so far that can be used like this.
+
+   if countof{before_setD} != countof{after_setD} then
+      [] = RPT3:Test_Failed["objD", Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["objD", Test, 0]
+   endif
+
+# End Test 10
+ 
+#------------------------------------------------------------------------#
+# Test 11
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0532", "Creation Deletion", "ObjD delete where", "delete single instance"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+
+   Failure_Code = (-5)
+
+   # Find all instances in the set before any deletions take place.
+   {Before_Deletion} = find-all Object_D
+
+   # Delete the instance found, which does exist.
+   delete Object_D where ReferenceD = 1
+
+   # Check that it has been deleted, by checking first against the
+   # used attribute; ReferenceD, and then by the unused attribute; IntegerA.
+   an_instanceD = find-one Object_D where ReferenceD = 1
+
+   if an_instanceD = UNDEFINED then
+      an_instanceAD = find-one Object_D where IntegerA = 1
+
+      if an_instanceAD = UNDEFINED then
+         # Use the find operation on the set to prove that the instance has gone
+         # from within the set.
+         {After_Deletion} = find-all Object_D
+
+         if countof {Before_Deletion} != countof {After_Deletion} then
+            Failure_Code = 0
+         else
+            Failure_Code = Failure_Code + 2
+         endif
+
+      else
+         Failure_Code = Failure_Code + 3
+      endif
+
+   else
+      Failure_Code = Failure_Code + 4
+   endif
+
+   if Failure_Code = 0 then
+      [] = RPT2:Test_Passed["objD", Test, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["objD", Test, Failure_Code]
+   endif
+
+# End Test 11
+#------------------------------------------------------------------------#
+# Test 12 - Delete instance of Object_D where multiple condition are 
+#           fulfilled
+#           ONE INSTANCE IS DELETED
+#------------------------------------------------------------------------#
+
+   Test=Test + 1
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0532", "Creation Deletion", "ObjD delete where", "single instance multiple conditions met"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+
+   has_failed = FALSE
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   # Perform test
+   # Find an instanceD using find where before attempting to delete. (TB)
+   delete Object_D where ReferenceD = 2 & IntegerA = 2
+
+   # We are more concerened that the instance in question has actually been deleted, rather
+   # than an instance has been deleted from the set. To this end, we shall check that
+   # the specific instance in question really has bitten the dust.
+
+   Should_Be_Deleted = find-one Object_D where ReferenceD = 2 & IntegerA = 2
+
+   if Should_Be_Deleted != UNDEFINED then
+      [] = RPT3:Test_Failed["objD", Test, -8]
+      has_failed = TRUE
+   endif
+	
+   {after_setD} = find-all Object_D
+
+   if countof {before_setD} = countof {after_setD} then
+      [] = RPT3:Test_Failed["objD", Test, -9]
+      has_failed = TRUE
+   endif
+
+   #Ensure that the correct instance was deleted
+   for each_instanceD in {after_setD} do
+
+      if each_instanceD.ReferenceD = 2 then
+         [] = RPT3:Test_Failed["objD", Test, -10]
+         has_failed = TRUE
+      endif
+
+   endfor
+
+   if !has_failed then
+      [] = RPT2:Test_Passed["objD", Test,0]
+   endif
+
+# End Test 12
+
+#------------------------------------------------------------------------#
+# Test 13 - Delete instance of Object_D where multiple condition are 
+#           fulfilled
+#           ONE INSTANCE IS DELETED
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0532", "Creation Deletion", "objD delete where ","single instance deleted"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+
+   has_failed = FALSE
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   #Perform test
+   delete Object_D where ReferenceD = 7 & (IntegerA = 30 | IntegerA = 7)
+
+   # Check that no instance have been deleted
+   {after_setD} = find-all Object_D
+
+   if countof {before_setD} = countof {after_setD} then
+       [] = RPT3:Test_Failed["objD", Test, -13]
+       has_failed = TRUE
+   endif
+
+   #Ensure that the correct instance was deleted
+   for each_instanceD in {after_setD} do
+
+      if each_instanceD.ReferenceD = 7 then
+          [] = RPT3:Test_Failed["objD", Test, -14]
+          has_failed = TRUE
+      endif
+
+   endfor
+
+   if !has_failed then
+      [] = RPT2:Test_Passed["objD", Test,0]
+   endif
+
+# End Test 13
+
+#------------------------------------------------------------------------#
+# Test 14 - Delete an instance of Object_D
+#           ONE INSTANCE IS DELETED
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0532", "Creation Deletion", "objD delete where", "Deletion of one instance"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+
+   has_failed = FALSE
+
+   # Establish how many instances already exist
+   {before_setD} = find-all Object_D
+
+   # Find an instance to delete
+   delete Object_D where ReferenceD = 8
+
+   # Check that no instance have been deleted
+   {after_setD} = find-all Object_D
+
+   if countof {before_setD} = countof {after_setD} then
+      [] = RPT3:Test_Failed["objD", Test,-15]
+      has_failed = TRUE
+   endif
+
+   # Ensure that the correct instance was deleted
+   for each_instanceD in {after_setD} do
+
+      if each_instanceD.ReferenceD = 8 then
+         [] = RPT3:Test_Failed["objD", Test, -16]
+         has_failed = TRUE
+      endif
+
+   endfor
+
+   if !has_failed then
+      [] = RPT2:Test_Passed["objD", Test, 0]
+   endif
+
+# End Test 14
+
+#------------------------------------------------------------------------#
+# Test 15 - Deletion of all remaining instances.
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+   
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0532", "Creation Deletion", "objD delete", "All remaining instance handles"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+
+   {before_operation} = find-all Object_D
+
+   # Use for making sure that all remaining instances have actually been deleted.
+   what_we_want = 0
+
+   has_failed = FALSE
+
+   Failure_Code = 0
+
+   # Delete all remaining instances. Or at least all thise whose ReferencD
+   # attribute is less than 100. This should be all of them.
+   delete Object_D where ReferenceD < 100
+
+   {after_operation} = find-all Object_D
+
+   # None have been deleted
+   if countof {before_operation} = countof {after_operation} then
+      has_failed = TRUE
+      Failure_Code = (-1)
+   else
+      # Try and find any instance, doesn't matter what it's attributes are.
+      any_instance = find-one Object_D
+
+      # The instance is still defined.
+      if any_instance != UNDEFINED then
+         Failure_Code = (-2)
+         has_failed = TRUE
+      else
+         # An instance has been found.
+         if what_we_want != countof {after_operation} then
+            Failure_Code = (-3)
+            has_failed = TRUE
+         endif
+
+      endif
+
+   endif
+
+   if has_failed = TRUE then
+      [] = RPT3:Test_Failed["ObjD", Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["ObjD", Test, Failure_Code]
+   endif
+
+# End Test 15
+
+#------------------------------------------------------------------------#
+# Test 16 - Deallocation of instance handles
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0120", "Creation Deletion", "objD delete", "Deallocation of instance handles"]
+   [] = RPT5:Test_Text[Test, "Deallocation of instance handles is unsupported"]
+   [] = RPT4:Test_Unsupported[Test]
+
+#------------------------------------------------------------------------#
+
+Returned_Test_Number = Test 
+
+#Tests Complete
+
+
+
+enddefine

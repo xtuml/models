@@ -1,0 +1,106 @@
+define scenario  Find_and_Sets_Scenario1
+input
+output
+
+#$DESCRIPTION
+Find_And_Sets_Main
+#$END_DESCRIPTION
+
+#------------------------------------------------------------------------#
+# Setup Test Data
+#------------------------------------------------------------------------#
+
+# Create several instances of each control object
+
+count = 10
+loop
+   #Find Single
+   newFSI = create Find_Single with idFSI     = count &\
+                                    ResultFSI = 0
+
+   #Find Many
+   newFM  = create Find_Many with idFM     = count &\
+                                  ResultFM = 0
+
+   #Find Set
+   newFS  = create Find_Set with idFS     = count &\
+                                 ResultFS = 0 
+
+   count = count - 1
+   breakif count = 0
+endloop
+
+
+#Create several instances of Object_A
+
+count = 10
+
+loop
+   newA = create Object_A with idA = count &\
+                               IntegerA = count
+   count = count - 1
+   breakif count = 0
+endloop
+
+#Create several instances of Object_E
+
+newE = create Object_E with idE = 1  & IntegerA = 5 & IntegerB = 2
+newE = create Object_E with idE = 2  & IntegerA = 4 & IntegerB = 5
+newE = create Object_E with idE = 3  & IntegerA = 1 & IntegerB = 1
+newE = create Object_E with idE = 4  & IntegerA = 1 & IntegerB = 1
+newE = create Object_E with idE = 5  & IntegerA = 2 & IntegerB = 3
+newE = create Object_E with idE = 6  & IntegerA = 5 & IntegerB = 1
+newE = create Object_E with idE = 7  & IntegerA = 1 & IntegerB = 3
+newE = create Object_E with idE = 8  & IntegerA = 2 & IntegerB = 3
+newE = create Object_E with idE = 9  & IntegerA = 1 & IntegerB = 2
+newE = create Object_E with idE = 10 & IntegerA = 3 & IntegerB = 3
+
+# #########################################################################
+
+
+Test = 1
+
+#------------------------------------------------------------------------#
+# Find One
+#------------------------------------------------------------------------#
+
+   an_instanceFSI = find-one Find_Single where idFSI     = 1 & \
+                                               ResultFSI = 0
+
+   if an_instanceFSI != UNDEFINED then
+      # Start the test
+      [Returned_Test_Number] = objFSI1:do_find_one[Test, an_instanceFSI ] 
+   endif
+
+#------------------------------------------------------------------------#
+# Find Single
+#------------------------------------------------------------------------#
+
+   an_instanceFSI = find-one Find_Single where idFSI = 2
+   [Test] = Find_and_Sets1::Increment[Returned_Test_Number]
+
+   # Start the test
+   [Returned_Test_Number] = objFSI2:do_find_only[Test, an_instanceFSI]
+
+#------------------------------------------------------------------------#
+# Find Many
+#------------------------------------------------------------------------#
+
+   an_instanceFM = find-one Find_Many where idFM = 1
+   [Test] = Find_and_Sets1::Increment[Returned_Test_Number]
+
+   # Start the test
+   [Returned_Test_Number] = objFM1:do_find_many[Test, an_instanceFM ]
+
+#------------------------------------------------------------------------#
+# Find Set
+#------------------------------------------------------------------------#
+
+   an_instanceFS = find-one Find_Set where idFS = 1
+   [Test] = Find_and_Sets1::Increment[Returned_Test_Number]
+
+   # Start the test
+   [Returned_Test_Number] = objFS1:do_find_set[Test, an_instanceFS]
+
+
+enddefine

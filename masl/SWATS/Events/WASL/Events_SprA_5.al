@@ -49,12 +49,14 @@ endif
 if this.Reference_ID = 1 then
 
    #Create an instance of the subtype, changing value to add attribute.
-   newSubB = create SubB with Value_To_Add = 10 &\
-                           Current_State = 'Idle'
+   newSubB = create SubB with idA = this.idA &\
+                              Value_To_Add = 10 &\
+                              Current_State = 'Idle'
 
    #Create an instance of the subtype
-   newSubC = create SubC with Value_To_Add = 11 &\
-                           Current_State = 'Idle'
+   newSubC = create SubC with idA = this.idA &\
+                              Value_To_Add = 11 &\
+                              Current_State = 'Idle'
 
    link newSubB R13 this
    link newSubC R14 this
@@ -104,12 +106,14 @@ if this.Reference_ID = 2 then
    endif
 
    #Create an instance of the subtype, changing value to add attribute.
-   newSubA = create SubA with Value_To_Add = 2 &\
-                           Current_State = 'Idle'
+   newSubA = create SubA with idA = this.idA &\
+                              Value_To_Add = 2 &\
+                              Current_State = 'Idle'
 
    #Create an instance of the subtype
-   newSubD = create SubD with Value_To_Add = 3 &\
-                           Current_State = 'Idle'
+   newSubD = create SubD with idA = this.idA &\
+                              Value_To_Add = 3 &\
+                              Current_State = 'Idle'
 
    # Create the link to the other subtype in the family.
 

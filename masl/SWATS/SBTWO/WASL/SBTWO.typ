@@ -1,0 +1,4 @@
+Source_Structure_Type,Structure,{Source_Integer,Base_Integer_Type;Source_Real,Base_Float_Type;Source_String,Base_Text_Type;Source_Boolean,Boolean;Source_Colour,Colour_Type}
+Colour_Type,Enumeration,{Red,Green,Blue}
+Very_Simple_Source_Structure_Type,Structure,{Source_Simple_Integer,Base_Integer_Type;Source_Simple_Real,Base_Float_Type}
+Report_Data_IH,Root_Object.Object_Access

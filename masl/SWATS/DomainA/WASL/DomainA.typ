@@ -1,0 +1,14 @@
+Object_A_IH,Root_Object.Object_Access
+One_To_One_Left_Side_IH,Root_Object.Object_Access
+One_To_One_Right_Side_IH,Root_Object.Object_Access
+One_To_Many_Left_Side_IH,Root_Object.Object_Access
+One_To_Many_Right_Side_IH,Root_Object.Object_Access
+Many_To_Many_Left_Side_IH,Root_Object.Object_Access
+Many_To_Many_Right_Side_IH,Root_Object.Object_Access
+Many_To_Many_Associative_IH,Root_Object.Object_Access
+Domain_A_Object_Super_IH,Root_Object.Object_Access
+Domain_A_Object_SubA_IH,Root_Object.Object_Access
+Domain_A_Object_SubB_IH,Root_Object.Object_Access
+Report_Data_IH,Root_Object.Object_Access
+Test_Data_IH,Root_Object.Object_Access
+Test_Enum_Type,Enumeration,{Sly,Sandy,Wes}

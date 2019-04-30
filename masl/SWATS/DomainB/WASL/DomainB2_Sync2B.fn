@@ -1,0 +1,49 @@
+define function  DomainB2::Sync2B
+input \
+	inputA:Base_Integer_Type ,\
+	inputB:Base_Integer_Type ,\
+	Test:Base_Integer_Type 
+output \
+	outputA:Base_Integer_Type ,\
+	outputB:Base_Integer_Type 
+
+#$DESCRIPTION
+This synchronous service is invoked by an event being sent to a terminator in DomainA, thus an 'Event invokes a Sync service in another domain'.
+#$END_DESCRIPTION
+
+
+
+my_test = find-one Test_Data
+
+local_test = my_test.This_Test_Number
+
+[] = RPT1:Start_Test[local_test, "1241-0000-01-1110", "DomainB", "DSS 2", "sync service sync2B called "]
+
+#Check the input parameters
+if (inputA != 3)|(inputB != 4) then
+
+   #Return incorrect parameters and don't affect the attribute 'ResultB'
+   outputA = 1
+   outputB = 2
+
+   [] = RPT3:Test_Failed["DSS 2", local_test, -1]
+
+else
+
+   #Return correct parameters and affect the attribute 'ResultB'
+   an_instanceB = find-one Object_B where idB = 4
+   temp = an_instanceB.ResultB + 20
+   an_instanceB.ResultB = temp
+   outputA = 5
+   outputB = 6
+
+   [] = RPT2:Test_Passed["DSS 2", local_test, an_instanceB.ResultB]
+
+endif
+
+local_test = local_test + 1
+
+my_test.This_Test_Number = local_test
+
+
+enddefine

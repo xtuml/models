@@ -1,0 +1,21 @@
+define scenario  DomainA_Scenario13
+input
+output
+
+#$DESCRIPTION
+Enumeration_Across_Lots_Of_Bridges
+#$END_DESCRIPTION
+
+# Call bridge service that will perform navigation in domain B
+
+my_test = find-one Test_Data
+
+Test = my_test.This_Test_Number
+
+[] = NAV8:Big_Bridge_Navigation[Test, 'Sandy']
+
+Test = Test + 1
+
+my_test.This_Test_Number = Test
+
+enddefine

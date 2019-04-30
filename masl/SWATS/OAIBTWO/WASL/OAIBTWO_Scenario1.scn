@@ -1,0 +1,37 @@
+define scenario  OAIBTWO_Scenario1
+input
+output
+
+#$DESCRIPTION
+Local scenario for OAIBTWO standalone test
+#$END_DESCRIPTION
+
+#--------------------------------------------------------------------------
+# In the abscence of the calling OAIBONE domain in a multi domain build,
+# this scenario mat be run in stand-alone mode.
+#--------------------------------------------------------------------------
+
+   Result = FALSE
+
+   {Received_Structure} is Source_Structure_Type
+
+   Test       = 1
+   An_Integer = 0
+   A_Real     = 0.0
+   Some_Text  = "Fred"
+   A_Boolean  = FALSE
+
+   A_Colour of Colour_Type = 'Red'
+
+   append [An_Integer, A_Real, Some_Text, A_Boolean, A_Colour] to {Received_Structure}
+
+   [Result] = OAIBTWO1::Receive_The_Structure[Test, {Received_Structure}, An_Integer, A_Real, Some_Text, A_Colour, A_Boolean, 1]
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["OAIBTWO local call", Test, 0]
+   else
+      [] = RPT3:Test_Failed ["OAIBTWO local call", Test, -1]
+   endif
+
+
+enddefine

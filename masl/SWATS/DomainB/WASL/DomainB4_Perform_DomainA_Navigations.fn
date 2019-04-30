@@ -1,0 +1,49 @@
+define function  DomainB4::Perform_DomainA_Navigations
+input
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#------------------------------------------------------------------------#
+# Call the bridge directly for navigation of relationships in
+# DomainA.
+#------------------------------------------------------------------------#
+
+my_test = find-one Test_Data
+
+#------------------------------------------------------------------------#
+
+Local_Test = my_test.This_Test_Number
+
+[] = NAV1:Navigate_One_to_One[Local_Test]
+
+#------------------------------------------------------------------------#
+
+Local_Test = Local_Test + 1
+
+[] = NAV2:Navigate_One_to_Many[Local_Test]
+
+#------------------------------------------------------------------------#
+
+Local_Test = Local_Test + 1
+
+[] = NAV3:Navigate_Many_to_Many[Local_Test]
+
+#------------------------------------------------------------------------#
+
+Local_Test = Local_Test + 1
+
+[] = NAV4:Misc_Calls[Local_Test]
+
+#------------------------------------------------------------------------#
+
+Local_Test = Local_Test + 1
+
+my_test.This_Test_Number = Local_Test
+
+
+
+
+enddefine
