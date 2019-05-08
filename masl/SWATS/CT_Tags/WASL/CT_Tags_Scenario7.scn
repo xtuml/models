@@ -1,0 +1,295 @@
+define scenario  CT_Tags_Scenario7
+input
+output
+
+#$DESCRIPTION
+CCA_Events
+#$END_DESCRIPTION
+
+my_test = find-one Test_Data
+
+Test = my_test.Current_Test_Number
+
+LocalCount = 0
+
+instResult = find-one Results where idRes = 1
+
+firstCCAA = create CCA_A with idCA          = 1     &\
+                              CARef         = 0     &\
+                              CAPassed      = FALSE &\
+                              CALinked      = FALSE &\
+                              Current_State = 'Idle'
+
+firstCCASuper = create CCA_Super with idCS          = 1     &\
+                                      CSRef         = 0     &\
+                                      CCAFlag       = FALSE &\
+                                      GlobalFlag    = FALSE &\
+                                      Current_State = 'Idle'
+
+firstCCASubB = create CCA_SubB with idCSB         = 1 &\
+                                    Current_State = 'Idle'
+
+firstCCASubE = create CCA_SubE with idCSE         = 1     &\
+                                    CSERef        = 0     &\
+                                    CSELinked     = TRUE  &\
+                                    CSEPassed     = FALSE &\
+                                    Current_State = 'Idle'
+
+firstCCASubH = create CCA_SubH with idCSH         = 1     &\
+                                    Current_State = 'Idle'
+
+firstGlobalSubI = create Global_SubI with idGSI         = 1     &\
+                                          GlobalFlag    = FALSE &\
+                                          Current_State = 'Idle'
+
+firstCCAB = create CCA_B with idCB = 1 and Current_State = 'Idle'
+
+if instResult.TCAFlag then
+   firstGlobalSuper = find-one Global_Super where idGS  = 1
+   firstGlobalSubC  = find-one Global_SubC  where idGSC = 1
+
+else
+   firstGlobalSuper = create Global_Super with idGS           = 1     &\
+                                                GSRef         = 0     &\
+                                                CCAFlag       = FALSE &\
+                                                TCAFlag       = FALSE &\
+                                                GlobalFlag    = FALSE &\
+                                                Current_State = 'Idle'
+
+   firstGlobalSubC = create Global_SubC with idGSC         = 1     &\ 
+                                             Current_State = 'Idle'
+endif
+
+#-----------------------------------------------------------------------------------
+# Test 24 - Generate event to CCA_A object
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen event to CCA object"]
+
+   generate CCAA2:Fired (Test) to firstCCAA
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 24
+
+#-----------------------------------------------------------------------------------
+# Test 25 - Link Global supertype to CCA subtype
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Link Global super to CCA sub"]
+
+   generate CCAA1:Link_SuperSub (Test) to firstCCAA
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 25
+
+#-----------------------------------------------------------------------------------
+# Test 26 - Test polymorphic event delivery between Global super and CCA sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen event to Global super"]
+
+   generate GS1:Poly_Fired (Test) to firstGlobalSuper
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 26
+
+#-----------------------------------------------------------------------------------
+# Test 27 - Unlink Global super type from CCA sub type
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Unlink Global Super CCA sub"]
+
+   generate CSB1:Unlink_SuperSub (Test) to firstCCASubB
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 27
+
+#-----------------------------------------------------------------------------------
+# Test 28 - Link Global super to Global sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Link Global Super Global Sub"]
+
+   generate GSC4:Link_SuperSub (Test) to firstGlobalSubC
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 28
+
+#-----------------------------------------------------------------------------------
+# Test 29 - Test polymorphic event delivery between Global super and Global sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen event to Global super"]
+
+   generate GS1:Poly_Fired (Test) to firstGlobalSuper
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 29
+
+#-----------------------------------------------------------------------------------
+# Test 30 - Test polymorphic event delivery between Global super and Global sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Unlink Global Super Global Sub"]
+
+   generate GSC1:Unlink_SuperSub (Test) to firstGlobalSubC
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 30
+
+#-----------------------------------------------------------------------------------
+# Test 31 - Gen event to CCA Sub E
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen event to CCA Sub E"]
+
+   generate CSE2:Start(Test) to firstCCASubE
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 31
+
+#-----------------------------------------------------------------------------------
+# Test 32 - Link CCA Super type to CCA sub type
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Link CCA Super to CCA Sub"]
+
+   generate CSE1:Link_SuperSub(Test) to firstCCASubE
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 32
+
+#-----------------------------------------------------------------------------------
+# Test 33 - Polymorphically deliver event to CCA sub via CCA super
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen poly event to CCA sub"]
+
+   generate CS1:C_Fired(Test) to firstCCASuper
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 33
+
+#-----------------------------------------------------------------------------------
+# Test 34 - Unlink CCA Super from CCA Sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Unlink CCA Super from CCA Sub"]
+
+   generate CSH1:Unlink_SuperSub (Test) to firstCCASubH
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 34
+
+#-----------------------------------------------------------------------------------
+# Test 35 - Link CCA Super to Global Sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Link CCA Super to Global Sub"]
+
+   generate CCAB1:Link_To_Global (Test) to firstCCAB
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 35
+
+#-----------------------------------------------------------------------------------
+# Test 36 - Polymorphically deliver event to Global sub via CCA super
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen poly event to Global sub"]
+
+   generate CS1:C_Fired (Test) to firstCCASuper
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 36
+
+#-----------------------------------------------------------------------------------
+# Test 37 - Unlink CCA Super from Global Sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Unlink CCA Super from Glob Sub"]
+
+   generate CCAB2:Unlink_From_Global (Test) to firstCCAB
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 37
+
+#-----------------------------------------------------------------------------------
+# Test 38 - Delete all CCA instances
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Delete all CCA instances"]
+
+   generate CSB2:Delete_Instances (Test) to firstCCASubB
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 38
+
+#-----------------------------------------------------------------------------------
+# Test 39 - Delete all Global instances
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Delete all Global instances"]
+
+   generate GSC2:Delete_Instances (Test) to firstGlobalSubC
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 39
+
+#-----------------------------------------------------------------------------------
+
+
+temp = instResult.CCATotal
+temp = temp + LocalCount
+instResult.CCATotal = temp
+
+my_test.Current_Test_Number = Test
+enddefine
