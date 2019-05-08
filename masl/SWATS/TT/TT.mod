@@ -136,9 +136,6 @@ domain TT is
     next_test_id : referential (R4.follows.Test.id) integer;
 
 
-
-    identifier is ();
-
     event execute_test ();
     pragma event_number (1);
 

@@ -857,9 +857,6 @@ domain Relationships is
     idL     : integer;
 
 
-
-    identifier is ();
-
     event Fault ();
     pragma event_number (1);
 
