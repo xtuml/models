@@ -160,10 +160,6 @@ domain DomainB is
     a_number : integer;
 
 
-    transition is
-      Non_Existent ();
-    end transition;
-
   end object;
   pragma id (2);
   pragma key_letter ("objC");
@@ -174,10 +170,6 @@ domain DomainB is
 
     D_Number : integer;
 
-
-    transition is
-      Non_Existent ();
-    end transition;
 
   end object;
   pragma id (3);
