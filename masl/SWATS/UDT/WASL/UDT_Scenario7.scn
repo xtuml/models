@@ -1,0 +1,39 @@
+define scenario  UDT_Scenario7
+input
+output
+
+#$DESCRIPTION
+Events_UDT_Scenario
+#$END_DESCRIPTION
+
+my_test = find-one Final_Test_Data
+
+This_Test_Number = my_test.Final_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   this_object = create An_Active_Object with The_Test_Number = This_Test_Number & Why = 'Not_Tested' & Current_State = 'Idle'
+
+   generate AAO1:Go('One') to this_object
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = BTF4:Local_Bridge[This_Test_Number]
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+
+my_test.Final_Test_Number = This_Test_Number
+
+enddefine

@@ -1,0 +1,516 @@
+define function  objVERPOL1:verify_polymorphic
+input \
+	Object:Base_Text_Type ,\
+	Test_Reference:Base_Integer_Type ,\
+	Test_Number:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+This function will verify the polymorphic event tests
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------------
+# Verify that the event was received
+#-------------------------------------------------------------------------
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------------
+#Test 1 - This test verifies that the event was received in the supertype 
+#         and then in the subtype object.
+#-------------------------------------------------------------------------
+
+   if Test_Reference = 1 then
+      [] = RPT5:Test_Text[Test_Number, "Verify Poly"]
+      super_instanceD = find-one Object_D where ReferenceD = Test_Reference
+
+      if super_instanceD = UNDEFINED then
+         [] = RPT3:Test_Failed["Object D",  Test_Number, super_instanceD.ResultA]
+      else
+
+         if super_instanceD.ResultA != 9999 then
+            [] = RPT3:Test_Failed["Object D",  Test_Number, super_instanceD.ResultA]
+         else
+            [] = RPT2:Test_Passed["Object D",  Test_Number, super_instanceD.ResultA]
+         endif
+
+      endif
+
+      sub_instanceE = find-one Object_E where ReferenceE = Test_Reference
+
+      if sub_instanceE.ResultA != 999 then
+         [] = RPT3:Test_Failed[Object,  sub_instanceE.Report_Test_No, sub_instanceE.ResultA]
+      else
+         [] = RPT2:Test_Passed[Object,  sub_instanceE.Report_Test_No, sub_instanceE.ResultA]
+      endif
+
+   endif
+
+# End Test 1
+
+#-------------------------------------------------------------------------
+# Test 2 - This test verifies that the event was received in the subtype 
+#          but it is not passed onto the supertype.
+#-------------------------------------------------------------------------
+
+   if Test_Reference = 2 then
+      [] = RPT5:Test_Text[Test_Number, "Verify Poly"]
+      super_instanceD = find-one Object_D where ReferenceD = Test_Reference
+
+      if super_instanceD.ResultA != 0 then
+         [] = RPT3:Test_Failed["Object D",  Test_Number, super_instanceD.ResultA]
+  #   else
+  #      [] = RPT2:Test_Passed["Object D",  Test_Number, super_instanceD.ResultA]
+      endif
+
+      sub_instanceE = find-one Object_E where ReferenceE = 2
+
+      if sub_instanceE.ResultA != 20 then
+         [] = RPT3:Test_Failed[Object,  sub_instanceE.Report_Test_No, sub_instanceE.ResultA]
+      else
+         [] = RPT2:Test_Passed[Object,  sub_instanceE.Report_Test_No, sub_instanceE.ResultA]
+      endif
+
+   endif
+
+# End Test 2
+
+#-------------------------------------------------------------------------
+# Test 3 - This test verifies that the event was received in the supertype 
+#          but it is not received in the subtype since the relationship 
+#          has not been formalised.
+#-------------------------------------------------------------------------
+
+   # This test is not valid as every supertype must have at least one
+   # subtype object linked to it. Or least that is the decision taken
+   # by the code-gen team. J. Mann, A Field & D Beatty 15 Dec 1999.
+
+   if Test_Reference = 3 then
+
+      super_instanceD = find-one Object_D where ReferenceD = Test_Reference
+
+      if super_instanceD.ResultA != 30 then
+         [] = RPT3:Test_Failed["Object D",  Test_Number, super_instanceD.ResultA]
+      else
+         [] = RPT2:Test_Passed["Object D",  Test_Number, super_instanceD.ResultA]
+      endif
+
+      sub_instanceE = find-one Object_E where ReferenceE = 3
+
+      if sub_instanceE.ResultA != 30 then
+         [] = RPT3:Test_Failed[Object,  sub_instanceE.Report_Test_No, sub_instanceE.ResultA]
+      else
+         [] = RPT2:Test_Passed[Object,  sub_instanceE.Report_Test_No, sub_instanceE.ResultA]
+      endif
+
+   endif
+
+# End Test 3
+
+#-------------------------------------------------------------------------
+# Test 4 - This test verifies that the event was received in the supertype 
+#          but it was not received in the subtype since the subtype object 
+#          may not receive the event.
+#-------------------------------------------------------------------------
+
+   if Test_Reference = 4 then
+
+      super_instanceD = find-one Object_D where ReferenceD = Test_Reference
+      sub_instanceE   = find-one Object_E where ReferenceE = 4
+
+      if super_instanceD.ResultA = 40 then
+
+         if sub_instanceE.ResultA = 0 then
+            [] = RPT2:Test_Passed["Object D",  Test_Number, super_instanceD.ResultA]
+
+         else
+            [] = RPT3:Test_Failed[Object,  sub_instanceE.Report_Test_No, sub_instanceE.ResultA]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Object D",  Test_Number, super_instanceD.ResultA]
+      endif
+
+   endif
+
+# End Test 4
+
+#-------------------------------------------------------------------------
+# Test 5 - 
+#-------------------------------------------------------------------------
+
+   if Test_Reference = 5 then
+
+      super_instanceD = find-one Object_D where ReferenceD = Test_Reference
+
+      if super_instanceD = UNDEFINED then
+         [] = RPT3:Test_Failed["Object D",  Test_Number, super_instanceD.ResultA]
+      else
+         [] = RPT2:Test_Passed["Object D",  Test_Number, super_instanceD.ResultA]
+      endif
+
+      sub_instanceF = find-one Object_F where ReferenceF = Test_Reference
+
+      if sub_instanceF.ResultA != 10 then
+         [] = RPT3:Test_Failed[Object,  sub_instanceF.Report_Test_No, sub_instanceF.ResultA]
+      else
+         [] = RPT2:Test_Passed[Object,  sub_instanceF.Report_Test_No, sub_instanceF.ResultA]
+      endif
+
+   endif
+
+# End Test 5
+
+#-------------------------------------------------------------------------
+# Test 6 - This test verifies that the event was received in the subtype 
+#          but it is not passed onto the supertype.
+#-------------------------------------------------------------------------
+
+   if Test_Reference = 6 then
+
+      super_instanceD = find-one Object_D where ReferenceD = Test_Reference
+      sub_instanceF   = find-one Object_F where ReferenceF = Test_Reference
+
+      if super_instanceD.ResultA = 0 then
+
+         if sub_instanceF.ResultA   != 20 then
+            [] = RPT3:Test_Failed[Object,  sub_instanceF.Report_Test_No, sub_instanceF.ResultA]
+         else
+            [] = RPT2:Test_Passed[Object,  sub_instanceF.Report_Test_No, sub_instanceF.ResultA]
+         endif
+
+      else
+         [] = RPT3:Test_Failed[Object,  sub_instanceF.Report_Test_No, super_instanceD.ResultA]
+      endif
+  
+   endif
+
+# End Test 6
+
+#-------------------------------------------------------------------------
+# Test 7 - This test verifies that the event was received in the supertype 
+#          but it is not received in the subtype since the relationship 
+#          has not been formalised.
+#-------------------------------------------------------------------------
+
+   # The supertype MUST contain a subtype, otherwise the code-gen will 
+   # fail at run-time. This is a grey area. I-SIM allows solitary 
+   # supertypes although Shlaer-Mellor is ambiguous.
+
+   if Test_Reference = 7 then
+
+      super_instanceD = find-one Object_D where ReferenceD = Test_Reference
+
+      if super_instanceD.ResultA != 30 then
+         [] = RPT3:Test_Failed["Object D",  Test_Number, super_instanceD.ResultA]
+      else
+         [] = RPT2:Test_Passed["Object D",  Test_Number, super_instanceD.ResultA]
+      endif
+
+      sub_instanceF = find-one Object_F where ReferenceF = Test_Reference
+
+      if sub_instanceF.ResultA != 30 then
+         [] = RPT3:Test_Failed[Object,  sub_instanceF.Report_Test_No, sub_instanceF.ResultA]
+      else
+         [] = RPT2:Test_Passed[Object,  sub_instanceF.Report_Test_No, sub_instanceF.ResultA]
+      endif
+
+   endif
+
+# End Test 7
+
+#-------------------------------------------------------------------------
+# Test 8 - This test verifies that the event was received in the supertype 
+#          but it was not received in the subtype since the subtype object 
+#          may not receive the event.
+#-------------------------------------------------------------------------
+
+   if Test_Reference = 8 then
+
+      super_instanceD = find-one Object_D where ReferenceD = Test_Reference
+      sub_instanceF   = find-one Object_F where ReferenceF = Test_Reference
+
+      if super_instanceD.ResultA = 40 then
+
+         if sub_instanceF.ResultA != 0 then
+            [] = RPT3:Test_Failed["Object D",  Test_Number, sub_instanceF.ResultA]
+         else
+            [] = RPT2:Test_Passed["Object D",  Test_Number, sub_instanceF.ResultA]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Object D",  Test_Number, super_instanceD.ResultA]
+      endif
+
+   endif
+
+# End Test 8
+
+#-------------------------------------------------------------------------
+# Test 9 - This test verifies that if only the supertype object contains a 
+#          state machine then the polymorphic event does not get passed 
+#          onto the subtype object
+#-------------------------------------------------------------------------
+
+   # Reinstated for issue 2.0.2
+   # Test ref 9 is a throwback, remove it later.
+   if Test_Reference = 9 then
+#   if Test_Reference = 13 then
+
+      # UNSUPPORTED TEST
+      super_instanceA = find-one Object_A where ReferenceA = Test_Reference
+
+      # Prove that navigation for super active object to sub passive objects
+      sub_B_inst = super_instanceA -> R1.Object_B
+
+      if super_instanceA.ResultA = 50 then
+
+         if sub_B_inst.ResultB != 0 then
+            [] = RPT3:Test_Failed[Object,  Test_Number, sub_B_inst.ResultB]
+         else
+            [] = RPT2:Test_Passed[Object,  Test_Number, sub_B_inst.ResultB]
+         endif
+
+      else
+         [] = RPT3:Test_Failed[Object,  Test_Number, super_instanceA.ResultA]
+      endif
+ 
+   endif
+
+# End Test 9
+
+#-------------------------------------------------------------------------
+# Test 10 - This test verifies that if only the supertype object contains 
+#           a state machine then the polymorphic event does not get passed 
+#           onto the subtype object
+#-------------------------------------------------------------------------
+
+   # Reinstated for issue 2.0.2
+
+   if Test_Reference = 10 then
+#   if Test_Reference = 14 then
+
+      # UNSUPPORTED TEST
+      super_instanceA = find-one Object_A where ReferenceA = Test_Reference
+
+      # Prove that navigation for super active object to sub passive objects
+      sub_C_inst = super_instanceA -> R1.Object_C
+
+      if super_instanceA.ResultA = 50 then
+
+         if sub_C_inst.ResultC != 0 then
+            [] = RPT3:Test_Failed[Object,  Test_Number, sub_C_inst.ResultC]
+         else
+            [] = RPT2:Test_Passed[Object,  Test_Number, sub_C_inst.ResultC]
+         endif
+
+      else
+         [] = RPT3:Test_Failed[Object,  Test_Number, super_instanceA.ResultA]
+      endif
+
+   endif
+
+# End Test 10
+
+#-------------------------------------------------------------------------
+
+
+# Proof that an event from an empty supertype is delivered to the subtype
+# containing a state machine is polymorphically delivered.
+
+if Test_Reference = 11 or Test_Reference = 12 then
+#if Test_Number = 15 or Test_Number = 16 then
+
+#  No referential attributes read from here, thankyou very much.
+
+   subU = find-one Object_U where latest_test  = Test_Number
+
+   superT = subU -> R8.Object_T
+
+   if subU.Result_U = 555 &\
+      superT.Reference_T = Test_Reference then
+
+      [] = RPT2:Test_Passed[Object, Test_Number, subU.Result_U]
+   else
+      [] = RPT3:Test_Failed[Object, Test_Number, subU.Result_U]
+   endif
+
+endif
+
+#-------------------------------------------------------------------------
+# Test 17 - This test verifies nested supertype/subtype relationships.
+#-------------------------------------------------------------------------
+
+if Test_Reference = 17 then
+
+   sub_instanceJ = find-one Object_J where ReferenceJ = Test_Reference
+
+   if sub_instanceJ.ResultJ = 70 then
+      sub_instanceK = sub_instanceJ -> R7.Object_K
+
+      if sub_instanceK.ResultK = 70 then
+
+         [] = RPT2:Test_Passed[Object,  Test_Number, 70]
+
+      else
+         [] = RPT3:Test_Failed[Object,  Test_Number, -12]
+      endif
+
+   else
+      [] = RPT3:Test_Failed[Object,  Test_Number, -13]
+   endif
+
+endif
+
+
+#-------------------------------------------------------------------------
+# Test 18 - This test verifies nested supertype/subtype relationships.
+#-------------------------------------------------------------------------
+
+if Test_Reference = 18 then
+
+   # if this is test 18, then look for an object J with referenceJ 17
+   find_value = Test_Reference - 1
+
+   sub_instanceJ = find-one Object_J where ReferenceJ = find_value
+
+   if sub_instanceJ.ResultJ = 70 then
+      sub_instanceK = sub_instanceJ -> R7.Object_K
+
+      if sub_instanceK.ResultK = 70 then
+
+         [] = RPT2:Test_Passed[Object,  Test_Number, 70]
+
+      else
+         [] = RPT3:Test_Failed[Object,  Test_Number, -12]
+      endif
+
+   else
+      [] = RPT3:Test_Failed[Object,  Test_Number, -13]
+   endif
+
+endif
+
+#-------------------------------------------------------------------------
+# Test 28 - This test verifies nested supertype/subtype relationships.
+#-------------------------------------------------------------------------
+
+if Test_Reference = 19 then
+
+   SuperinstanceP = find-one Object_P where Reference_P = 19
+
+   if SuperinstanceP != UNDEFINED then
+
+      SubinstanceQ = find-one Object_Q where latest_test = Test_Number
+
+      if SubinstanceQ != UNDEFINED then
+
+         if SuperinstanceP.Result_P = 11 and \
+            SubinstanceQ.Result_Q = 1 then
+ 
+            [] = RPT2:Test_Passed[Object, Test_Number, SuperinstanceP.Result_P]
+
+         else
+
+            [] = RPT3:Test_Failed[Object, Test_Number, SuperinstanceP.Result_P]
+
+         endif
+
+      else
+
+         [] = RPT3:Test_Failed["Object Q", Test_Number, -2]
+
+      endif
+
+
+   else
+
+      [] = RPT3:Test_Failed["Object Q", Test_Number, -1]
+
+   endif
+
+endif
+
+#-------------------------------------------------------------------------
+# Test 29 - This test verifies nested supertype/subtype relationships.
+#-------------------------------------------------------------------------
+
+if Test_Reference = 20 then
+
+   SuperinstanceP = find-one Object_P where Reference_P = 20
+
+   if SuperinstanceP != UNDEFINED then
+
+      SubinstanceR = find-one Object_R where latest_test = Test_Number
+
+      if SubinstanceR != UNDEFINED then
+
+         if SuperinstanceP.Result_P = 12 and \
+            SubinstanceR.Result_R = 2   then
+ 
+            [] = RPT2:Test_Passed[Object, Test_Number, SuperinstanceP.Result_P]
+
+         else
+
+            [] = RPT3:Test_Failed[Object, Test_Number, SuperinstanceP.Result_P]
+
+         endif
+
+      else
+
+         [] = RPT3:Test_Failed[Object, Test_Number, -2]
+
+      endif
+
+
+   else
+
+      [] = RPT3:Test_Failed[Object, Test_Number, -1]
+
+   endif
+
+endif
+
+#-------------------------------------------------------------------------
+# Test 35 - This test verifies nested supertype/subtype relationships.
+#-------------------------------------------------------------------------
+
+if Test_Reference = 21 then
+
+   SuperinstanceP = find-one Object_P where Reference_P = 21
+
+   if SuperinstanceP != UNDEFINED then
+
+      SubinstanceS = find-one Object_S where latest_test = Test_Number
+
+      if SubinstanceS != UNDEFINED then
+
+         if SuperinstanceP.Result_P = 13 and \
+            SubinstanceS.Result_S = 3   then
+ 
+            [] = RPT2:Test_Passed[Object, Test_Number, SuperinstanceP.Result_P]
+
+         else
+
+            [] = RPT3:Test_Failed[Object, Test_Number, SuperinstanceP.Result_P]
+
+         endif
+
+      else
+
+         [] = RPT3:Test_Failed[Object, Test_Number, -2]
+
+      endif
+
+
+   else
+
+      [] = RPT3:Test_Failed[Object, Test_Number, -1]
+
+   endif
+
+endif
+
+
+enddefine

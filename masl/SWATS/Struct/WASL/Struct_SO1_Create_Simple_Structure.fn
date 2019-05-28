@@ -1,0 +1,52 @@
+define function  SO1:Create_Simple_Structure
+input \
+	Test:Base_Integer_Type ,\
+	Object_Instance_Handle:Structured_Object_IH 
+output \
+	Returned_Simple_Structure:Simple_Structure_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+[] = RPT1:Start_Test[Test,"1241-0000-01-1212", "Structures", "objSO", "Construct simple structure"]
+
+How_Many = countof {Returned_Simple_Structure}
+
+loop_counter = How_Many + 1
+
+Failure_Value = 0
+
+Termination_Condition = loop_counter + 5
+
+# Add five elements into the set
+
+loop
+
+   # This is supposed to be a set, therefore, stuff several
+   # version of the input data into it.
+   # This will be determined by the test number at the time.
+   append [Object_Instance_Handle.An_Integer, \
+           Object_Instance_Handle.A_Real,   \
+           Object_Instance_Handle.Some_Text, \ 
+           Object_Instance_Handle.A_Boolean, \
+           Object_Instance_Handle.A_Colour]   \
+   to {Returned_Simple_Structure}
+
+   loop_counter = loop_counter + 1
+
+   breakif loop_counter = Termination_Condition
+
+endloop
+
+How_Many_Now = countof {Returned_Simple_Structure}   
+
+
+# All tests
+
+ 
+[] = RPT2:Test_Passed[Object_Instance_Handle.Some_Text, Test, How_Many_Now]
+
+
+
+enddefine

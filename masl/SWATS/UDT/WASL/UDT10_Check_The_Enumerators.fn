@@ -1,0 +1,65 @@
+define function  UDT10::Check_The_Enumerators
+input \
+	Test:Base_Integer_Type ,\
+	First_Enum_Input:Simple_Enumeration_Type ,\
+	Second_Enum_Input:Colour_Type ,\
+	Third_Enum_Input:Temp_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#----------------------------------------------------------------------
+# Test 1 - Check to ensure that attributes for an object can accept
+#          enumerated user defined types
+#----------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0113", "User Defined Types", "Enumerator assignment", "Sub ranges of enumerators"]
+   [] = RPT9:Specify_A_Requid[Test, "1241-0000-01-1214"]
+
+   Defunct_Boy_Band = First_Enum_Input
+   Bad_Boy_Band     = Second_Enum_Input
+   Zero_Degrees     = Third_Enum_Input
+   
+   InstEnum = create Object_With_Enumerators with theID       = Test             &\
+                                                  First_Enum  = Defunct_Boy_Band &\
+                                                  Second_Enum = Bad_Boy_Band     &\
+                                                  Third_Enum  = Zero_Degrees
+
+   Has_Failed   = TRUE
+   Failure_Code = 0
+
+   if InstEnum.First_Enum = 'Five' then
+
+      if InstEnum.Second_Enum = 'Blue' then
+
+         if InstEnum.Third_Enum = 'Freezing' then
+            Has_Failed = FALSE
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -10
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -30
+   endif
+
+   delete InstEnum
+
+   # Report the results.
+  
+   if not Has_Failed then
+      [] = RPT2:Test_Passed["Check Enumerators", Test, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["Check Enumerators", Test, Failure_Code]
+   endif
+
+
+enddefine

@@ -1,0 +1,54 @@
+define function  UDT6::Create_New_Test_Data_Object_And_Link_It
+input \
+	New_Set:Boolean ,\
+	Previous_IH:Test_Data_IH ,\
+	This_Test_Number:Base_Integer_Type ,\
+	Testing_For:Base_Text_Type ,\
+	Final_Entry:Boolean 
+output \
+	Returned_IH:Test_Data_IH ,\
+	Returned_Test_Number:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+if New_Set = TRUE then
+
+   Returned_IH = create Test_Data with The_Test_Number = This_Test_Number & Testing_For_What = Testing_For
+
+   Returned_Test_Number = This_Test_Number + 1
+
+else
+
+   # Add new Test_Data object onto Previous_IH
+
+   local_Test_Data_IH = create Test_Data with The_Test_Number = This_Test_Number & \
+      Testing_For_What = Testing_For
+
+   link Previous_IH R1."Has_a" local_Test_Data_IH
+
+   if Final_Entry = TRUE then
+
+      # Final entry shall cause the return of the first set in the sequence.
+
+      loop
+
+         # Bail out of the operation will return an undefined IH
+         Local_Previous_IH = local_Test_Data_IH -> R1."Has_one".Test_Data
+
+         breakif Local_Previous_IH = UNDEFINED
+
+         local_Test_Data_IH = local_Test_Data_IH -> R1."Has_one".Test_Data
+
+      endloop
+
+   endif
+
+   Returned_IH = local_Test_Data_IH
+   Returned_Test_Number = This_Test_Number + 1
+
+endif
+
+
+enddefine

@@ -1,5 +1,8 @@
 This model tests relating and selecting across all of the different
-relationship types.
+relationship types.  In 2018 persistence testing was added/refreshed.
+Turn on persistence by marking (all) classes as persistent in class.mark.
+When testing persistence, run the test twice, once to create the nvs.fil and
+once to use it for initialization.  Verifier does not simulate persistence.
 
 To run in Verifier, launch assoc_unformal1.
 assoc_unformal::Port1:start_test is marked to execute.

@@ -1,0 +1,74 @@
+define function  ASL_Mapping14::Check_Continuation
+input \
+	Test_No:Base_Integer_Type 
+output \
+	Returning_No:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------#
+#
+# Line Continuation character check
+#
+# The use of the line continuation '\' character placed at the end
+# of a line to indicate that a following line is to be included as
+# part of the same ASL statement shall be supported
+# 1103-0000-01-0313
+#
+#-------------------------------------------------------------------#
+
+   Test = Test_No
+
+#-------------------------------------------------------------------#
+# Test 1 - Check multi line statments
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0313", "ASL Mapping", "Comment Checks", "Check multi line statement"]
+
+   Val1 = 10
+   Val2 = 20
+   
+   Val1 = Val1 + \
+          Val2
+
+   if Val1 = 30 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#-------------------------------------------------------------------#
+# Test 2 - Check multi line statments
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0313", "ASL Mapping", "Comment Checks", "Check multi line statement"]
+
+   Val1 = 10
+   Val2 = 20
+   Val3 = 30
+
+   Val1 = \
+          Val1 +\ 
+          Val2 + \
+          Val3
+
+   if Val1 = 60 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+   
+# End Test 2
+
+Returning_No = Test
+
+
+enddefine

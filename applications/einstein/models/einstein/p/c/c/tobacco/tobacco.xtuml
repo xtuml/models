@@ -7,6 +7,47 @@ INSERT INTO O_OBJ
 	'tobacco',
 	'',
 	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("8537789f-3730-4da8-a42b-fc643a819db6",
+	"fc855fd7-77d7-4d1c-9763-44792f31d337",
+	'populate',
+	'',
+	"c64fc699-68b7-4c31-b082-ba84a208420e",
+	0,
+	'select any tobacco from instances of tobacco where ( selected.brand == param.brand );
+if ( empty tobacco )
+  create object instance tobacco of tobacco;
+  tobacco.brand = param.brand;
+end if;
+return tobacco;
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0);
+INSERT INTO O_TPARM
+	VALUES ("5e08dd33-a116-4aba-a85d-251ad39967e6",
+	"8537789f-3730-4da8-a42b-fc643a819db6",
+	'brand',
+	"57ab5261-965d-451e-9cc6-712a4d7eb497",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("57ab5261-965d-451e-9cc6-712a4d7eb497",
+	"00000000-0000-0000-0000-000000000000",
+	'brand',
+	'',
+	'',
+	'../c.xtuml');
+INSERT INTO S_DT_PROXY
+	VALUES ("c64fc699-68b7-4c31-b082-ba84a208420e",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<tobacco>',
+	'',
+	'',
+	'../c.xtuml');
 INSERT INTO O_NBATTR
 	VALUES ("137df87f-7c41-47a4-a4c4-a193ad98d9f1",
 	"fc855fd7-77d7-4d1c-9763-44792f31d337");
@@ -22,7 +63,7 @@ INSERT INTO O_ATTR
 	'',
 	'brand',
 	0,
-	"ba5eda7a-def5-0000-0000-000000000004",
+	"57ab5261-965d-451e-9cc6-712a4d7eb497",
 	'',
 	'');
 INSERT INTO O_ID

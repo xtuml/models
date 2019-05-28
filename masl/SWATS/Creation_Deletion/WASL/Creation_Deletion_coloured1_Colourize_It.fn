@@ -1,0 +1,777 @@
+define function  coloured1:Colourize_It
+input \
+	Test_Number:Base_Integer_Type 
+output \
+	Returned_Number:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#------------------------------------------------------------------------#
+# Colouize_It Object Sync Service
+#------------------------------------------------------------------------#
+
+   Test = Test_Number
+
+#------------------------------------------------------------------------#
+# Test 1 - Create MtoM assoc specify attributes
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0511", "Creation Deletion", "Coloured_Object", "Create MtoM assoc specify attributes"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0521"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0522"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0101"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0116"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0117"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0122"]
+
+   a_chicken_flavour = create Flavoured_Object   with Flavoured   = 'chicken'
+   a_red_colour      = create Coloured_Object    with Coloured    = 'red'
+   a_red_chicken     = create Flavour_and_Colour with Dish_Number = 201
+
+   # Set attribute using instance handle
+   a_chicken_flavour.How_Spicy = 2
+
+   # Set attribute using object specification
+   # Unsupported.
+   # Coloured_Object.Intensity = 2 where Coloured = red
+
+   a_red_colour.Intensity = 2
+
+   # Check that attributes have been set correctly
+   Has_Failed = FALSE
+
+   if a_red_chicken.Dish_Number = 201 then
+
+      if a_chicken_flavour.How_Spicy = 2 then
+ 
+         if a_red_colour.Intensity != 2 then
+            Has_Failed   = TRUE  
+            Failure_Code = -10
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -30
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["Coloured", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Coloured", Test, Failure_Code]
+   endif
+
+   delete a_chicken_flavour
+   delete a_red_colour
+   delete a_red_chicken
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - 
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0511", "Creation Deletion", "Coloured_Object", "Setup and link m to m"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0521"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0522"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0122"]
+
+   coffee_flavour  = create Flavoured_Object with Flavoured = 'coffee'
+   fish_flavour    = create Flavoured_Object with Flavoured = 'fish'
+   chicken_flavour = create Flavoured_Object with Flavoured = 'chicken' & How_Spicy = 1 
+   coffee_flavour  = create Flavoured_Object with Flavoured = 'coffee'  & How_Spicy = 2 
+   fish_flavour    = create Flavoured_Object with Flavoured = 'fish'    & How_Spicy = 3 
+
+   blue_colour  = create Coloured_Object with Coloured = 'blue'  & Intensity = 1
+   red_colour   = create Coloured_Object with Coloured = 'red'   & Intensity = 2
+   green_colour = create Coloured_Object with Coloured = 'green' & Intensity = 3
+
+   the_blue_chicken_dish = 101
+   the_blue_coffee_dish  = 102
+   the_blue_fish_dish    = 103
+
+   the_red_chicken_dish = 201
+   the_red_coffee_dish  = 202 
+   the_red_fish_dish    = 203
+
+   the_green_chicken_dish = 301
+   the_green_coffee_dish  = 302
+   the_green_fish_dish    = 303
+
+
+   # Create associative objects to use when linking flavoured and coloured objects
+   blue_chicken   = create Flavour_and_Colour with Dish_Number = the_blue_chicken_dish
+   red_chicken    = create Flavour_and_Colour with Dish_Number = the_red_chicken_dish
+   green_chicken  = create Flavour_and_Colour with Dish_Number = the_green_chicken_dish
+   blue_coffee    = create Flavour_and_Colour with Dish_Number = the_blue_coffee_dish
+   red_coffee     = create Flavour_and_Colour with Dish_Number = the_red_coffee_dish
+   green_coffee   = create Flavour_and_Colour with Dish_Number = the_green_coffee_dish
+   blue_fish      = create Flavour_and_Colour with Dish_Number = the_blue_fish_dish
+   red_fish       = create Flavour_and_Colour with Dish_Number = the_red_fish_dish
+   green_fish     = create Flavour_and_Colour with Dish_Number = the_green_fish_dish
+
+   # many to many
+   link chicken_flavour R1 blue_colour  using blue_chicken
+   link chicken_flavour R1 red_colour   using red_chicken
+   link chicken_flavour R1 green_colour using green_chicken
+
+   link coffee_flavour R1 blue_colour  using blue_coffee
+   link coffee_flavour R1 red_colour   using red_coffee
+   link coffee_flavour R1 green_colour using green_coffee
+
+   link fish_flavour R1 blue_colour  using blue_fish
+   link fish_flavour R1 red_colour   using red_fish
+   link fish_flavour R1 green_colour using green_fish
+ 
+   {set_of_associated_instances} = find-all Flavour_and_Colour 
+   {red_things}          = find Coloured_Object where Coloured = 'red'
+   {blue_things}         = find Coloured_Object where Coloured = 'blue'
+   {green_things}        = find Coloured_Object where Coloured = 'green'
+   {coloured_things}     = find-all Coloured_Object
+
+   {chicken_things}      = find Flavoured_Object where Flavoured = 'chicken'
+   {coffee_things}       = find Flavoured_Object where Flavoured = 'coffee'
+   {fish_things}         = find Flavoured_Object where Flavoured = 'fish'
+   {flavoured_things}    = find-all Flavoured_Object
+
+   # Coloured things in all their glory
+   number_of_red_things      = countof {red_things}
+   number_of_blue_things     = countof {blue_things}
+   number_of_green_things    = countof {green_things}
+   number_of_coloured_things = countof{coloured_things}
+
+   # Flavoured things in their entirety.
+   number_of_chicken_things = countof {chicken_things}
+   number_of_fish_things = countof {fish_things}
+   number_of_coffee_things = countof {coffee_things}
+   number_of_flavoured_things = countof{flavoured_things}
+
+   number_of_associated_instances = countof {set_of_associated_instances}
+
+   The_Test_Has_Passed = FALSE
+
+   if number_of_associated_instances = 9 then
+      
+      if number_of_flavoured_things = 5 then
+
+         if number_of_coloured_things = 3 then
+            # Test has passed
+            The_Test_Has_Passed = TRUE
+         endif
+
+      endif
+ 
+   endif
+
+   if The_Test_Has_Passed = TRUE then
+      [] = RPT2:Test_Passed["coloured", Test, number_of_associated_instances]
+   else
+      [] = RPT3:Test_Failed["coloured", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - Navigate from coloured object to associated object
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Coloured_Object", "Navigate from coloured object to assoc"]
+
+   Test_Passed_Counter = 0
+
+   for coloured_thing in {coloured_things} do
+
+      The_Test_Has_Passed = FALSE
+
+      # Debug start
+      my_colour = coloured_thing.Coloured
+
+      if my_colour = 'red' then
+         colour_string = "Red"
+      endif
+
+      if my_colour = 'green' then
+         colour_string = "Green"
+      endif
+
+      if my_colour = 'blue' then
+         colour_string = "Blue"
+      endif
+
+      # debug end
+
+      {associated_instances} = coloured_thing -> R1.Flavour_and_Colour
+      number_of_assoc_instances = countof{associated_instances}
+
+      The_Test_Has_Passed = FALSE
+
+      for assoc_instance in {associated_instances} do
+         the_dish = assoc_instance.Dish_Number
+
+         # Use of referential attributes is not permitted.
+         # the_assoc_flavour = assoc_instance.Flavoured
+         this_flavoured_object = assoc_instance -> R1.Flavoured_Object
+         the_assoc_flavour = this_flavoured_object.Flavoured
+
+         the_colour = coloured_thing.Coloured
+      
+         switch the_colour
+
+         case 'red'
+
+            switch the_assoc_flavour
+
+            case 'chicken'
+               if the_dish = the_red_chicken_dish then
+                  The_Test_Has_Passed = TRUE
+               endif
+
+            case 'fish'
+               if the_dish = the_red_fish_dish then
+                  The_Test_Has_Passed = TRUE
+               endif
+
+             case 'coffee'
+                if the_dish = the_red_coffee_dish then
+                   The_Test_Has_Passed = TRUE
+                endif
+
+             default
+                The_Test_Has_Passed = FALSE
+             endswitch
+ 
+         case 'blue'
+
+            switch the_assoc_flavour
+
+            case 'chicken'
+               if the_dish = the_blue_chicken_dish then
+                  The_Test_Has_Passed = TRUE
+               endif
+
+            case 'fish'
+               if the_dish = the_blue_fish_dish then
+                  The_Test_Has_Passed = TRUE
+               endif
+
+             case 'coffee'
+                if the_dish = the_blue_coffee_dish then
+                   The_Test_Has_Passed = TRUE
+                endif
+
+             default
+                The_Test_Has_Passed = FALSE
+             endswitch
+ 
+
+         case 'green'
+            switch the_assoc_flavour
+
+            case 'chicken'
+               if the_dish = the_green_chicken_dish then
+                  The_Test_Has_Passed = TRUE
+               endif
+
+            case 'fish'
+               if the_dish = the_green_fish_dish then
+                  The_Test_Has_Passed = TRUE
+               endif
+
+             case 'coffee'
+                if the_dish = the_green_coffee_dish then
+                   The_Test_Has_Passed = TRUE
+                endif
+
+             default
+                The_Test_Has_Passed = FALSE
+             endswitch
+ 
+
+         default
+
+            The_Test_Has_Passed = FALSE
+
+         endswitch
+
+         if The_Test_Has_Passed = TRUE then
+            Test_Passed_Counter = Test_Passed_Counter + 1
+         else
+            Test_Passed_Counter = Test_Passed_Counter - 1
+         endif
+
+      endfor
+
+   endfor
+
+   if Test_Passed_Counter = 9 then
+      [] = RPT2:Test_Passed["coloured", Test, Test_Passed_Counter]
+   else
+      [] = RPT3:Test_Failed["coloured", Test, Test_Passed_Counter]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4 - Navigate from flavoured object to associated object
+#------------------------------------------------------------------------#
+   
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Coloured_Object", "Navigate from flavoured object to assoc"]
+
+   Test_Passed_Counter = 0
+
+   for flavoured_thing in {flavoured_things} do
+
+      The_Test_Has_Passed = FALSE
+
+      {associated_instances} = flavoured_thing -> R1.Flavour_and_Colour
+      number_of_assoc_instances = countof{associated_instances}
+
+      if number_of_associated_instances = 0 then
+         [] = RPT3:Test_Failed["coloured", Test, -2]
+      else
+
+         for assoc_instance in {associated_instances} do
+
+            the_dish = assoc_instance.Dish_Number
+
+            # Navigate to the coloured object from the assoc object.
+
+            this_colour = assoc_instance -> R1.Coloured_Object
+
+            if this_colour != UNDEFINED then
+               the_assoc_colour = this_colour.Coloured
+            endif
+
+            the_flavour = flavoured_thing.Flavoured
+      
+            switch the_flavour
+
+            case 'chicken'
+
+               switch the_assoc_colour
+
+               case 'green'
+                  if the_dish = the_green_chicken_dish then
+                     The_Test_Has_Passed = TRUE
+                  endif
+
+               case 'blue'
+                  if the_dish = the_blue_chicken_dish then
+                     The_Test_Has_Passed = TRUE
+                  endif
+
+                case 'red'
+                   if the_dish = the_red_chicken_dish then
+                      The_Test_Has_Passed = TRUE
+                   endif
+
+                default
+                   The_Test_Has_Passed = FALSE
+                endswitch
+ 
+            case 'fish'
+
+               switch the_assoc_colour
+
+               case 'green'
+                  if the_dish = the_green_fish_dish then
+                     The_Test_Has_Passed = TRUE
+                  endif
+
+               case 'blue'
+                  if the_dish = the_blue_fish_dish then
+                     The_Test_Has_Passed = TRUE
+                  endif
+
+               case 'red'
+                  if the_dish = the_red_fish_dish then
+                     The_Test_Has_Passed = TRUE
+                   endif
+
+               default
+                  The_Test_Has_Passed = FALSE
+               endswitch
+ 
+            case 'coffee'
+
+               switch the_assoc_colour
+
+               case 'green'
+                  if the_dish = the_green_coffee_dish then
+                     The_Test_Has_Passed = TRUE
+                  endif
+
+               case 'blue'
+                  if the_dish = the_blue_coffee_dish then
+                     The_Test_Has_Passed = TRUE
+                  endif
+
+               case 'red'
+                  if the_dish = the_red_coffee_dish then
+                     The_Test_Has_Passed = TRUE
+                  endif
+
+               default
+                  The_Test_Has_Passed = FALSE
+               endswitch
+       
+            default 
+  
+               The_Test_Has_Passed = FALSE
+
+            endswitch
+      
+
+            if The_Test_Has_Passed = TRUE then
+               Test_Passed_Counter = Test_Passed_Counter + 1
+            else
+               Test_Passed_Counter = Test_Passed_Counter - 1
+            endif
+
+         endfor
+
+      endif
+
+   endfor
+
+   if Test_Passed_Counter = 9 then
+      [] = RPT2:Test_Passed["flavoured", Test, Test_Passed_Counter]
+   else
+      [] = RPT3:Test_Failed["flavoured", Test, Test_Passed_Counter]
+   endif 
+
+   Test = Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5 - Navigate from flavoured object to associated object
+#------------------------------------------------------------------------#
+
+   chicken_count = 0
+   fish_count    = 0
+   coffee_count  = 0
+
+   # Navigate from flavoured object to associated object
+
+   The_Test_Has_Passed = FALSE
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Coloured_Object", "Navigate from assoc object to flavoured"]
+
+   for assoc_thing in {set_of_associated_instances} do
+
+      flavoured_instance = assoc_thing -> R1.Flavoured_Object
+
+      the_flavour = flavoured_instance.Flavoured
+
+      if the_flavour = 'chicken' then
+         chicken_count = chicken_count + 1
+      else
+
+         if the_flavour = 'fish' then
+            fish_count = fish_count + 1
+         else
+
+            if the_flavour = 'coffee' then
+               coffee_count = coffee_count + 1
+            else
+               The_Test_Has_Passed = FALSE
+            endif
+
+         endif
+
+      endif
+
+   endfor
+
+   if coffee_count = 3 & \
+      chicken_count = 3 & \
+      fish_count = 3 then
+      The_Test_Has_Passed = TRUE
+   endif
+
+   if The_Test_Has_Passed = TRUE then
+      [] = RPT2:Test_Passed["coloured", Test, 0]
+   else
+      [] = RPT3:Test_Failed["coloured", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#------------------------------------------------------------------------#
+# Test 6 - Navigate from assoc object to coloured
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Coloured_Object", "Navigate from assoc object to coloured"]
+
+   red_count   = 0
+   blue_count  = 0
+   green_count = 0
+
+   The_Test_Has_Passed = FALSE
+
+   # Navigate from assoc object to coloured object
+   for assoc_thing in {set_of_associated_instances} do
+
+      coloured_instance = assoc_thing -> R1.Coloured_Object
+
+      the_colour = coloured_instance.Coloured
+
+      if the_colour = 'red' then
+         red_count = red_count + 1
+      else
+
+         if the_colour = 'blue' then
+            blue_count = blue_count + 1
+         else
+
+            if the_colour = 'green' then
+               green_count = green_count + 1
+            else
+               The_Test_Has_Passed = FALSE
+            endif
+
+         endif
+
+      endif
+  
+   endfor
+
+   if red_count = 3 & \
+      blue_count = 3 & \
+      green_count = 3 then
+      The_Test_Has_Passed = TRUE
+   endif
+
+   if The_Test_Has_Passed = TRUE then
+      [] = RPT2:Test_Passed["coloured", Test, 0]
+   else
+      [] = RPT3:Test_Failed["coloured", Test, -1]
+   endif
+
+   Test = Test + 1
+
+# End Test 6
+
+#------------------------------------------------------------------------#
+# Test 7 - Unnassociate assoc object
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Coloured_Object", "Unnassociate assoc object"]
+
+   Failure_Code = -3
+
+   # Attempt deletion of assoc object and others 
+   red_chicken = find-one Flavour_and_Colour where Dish_Number = 201
+
+   # Found exactly one red chicken with a dish number of 201
+   # Find the colour and flavour, it should be red and chicken flavoured.
+   a_chicken = red_chicken -> R1.Flavoured_Object
+   a_red     = red_chicken -> R1.Coloured_Object
+
+   # Stash this value, it's used in the next test, but unlink and unassociate
+   # are inextricably linked and testing them separately can cause differences
+   # between WACA and ISIM.
+   {before_red_chickens} = a_red -> R1.Flavoured_Object
+
+   # Unassociate the assoc object from the m to m relationship
+   unassociate a_chicken R1 a_red from red_chicken 
+
+   # Attempt the navigation again
+   an_illegal_chicken = red_chicken -> R1.Flavoured_Object
+
+   if an_illegal_chicken = UNDEFINED then 
+      The_Test_Has_Passed = TRUE
+      Failure_Code = Failure_Code + 1
+   endif
+
+   an_illegal_red = red_chicken -> R1.Coloured_Object
+
+   if an_illegal_red = UNDEFINED then 
+      The_Test_Has_Passed = TRUE
+      Failure_Code = Failure_Code + 2
+   endif
+
+   if The_Test_Has_Passed = TRUE then
+      [] = RPT2:Test_Passed["coloured", Test, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["coloured", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+# End Test 7
+
+#------------------------------------------------------------------------#
+# Test 8 - Unlink assoc object
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "Coloured_Object", "Unlink assoc object"]
+
+   Failure_Code = -1
+
+   The_Test_Has_Passed = FALSE
+
+   number_of_red_chickens_before = countof{before_red_chickens}
+
+   # Unlink two instances
+   unlink a_chicken R1 a_red
+
+   # Attempt to navigate down remaining links
+   {after_red_chickens} = a_red -> R1.Flavoured_Object
+
+   number_of_red_chickens_after = countof{after_red_chickens}
+
+   if number_of_red_chickens_before != number_of_red_chickens_after then 
+      The_Test_Has_Passed = TRUE
+      Failure_Code = Failure_Code + 1
+   endif
+
+   if The_Test_Has_Passed = TRUE then
+      [] = RPT2:Test_Passed["coloured", Test, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["coloured", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+# End Test 8
+
+#------------------------------------------------------------------------#
+# Test 9 - Delete assoc object
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0121", "Creation Deletion", "Coloured_Object", "Delete assoc object"]
+   [] = RPT8:Specify_Requid [Test, "1103-0000-01-0531"]
+
+   # a_chicken is still associated with some other coloured_objects
+   # also a_red is still associated with some other flavoured_objects
+   # but red_chicken isn't
+
+   delete red_chicken
+
+   # Now try and re-aquire them
+   assoc_object = find-one Flavour_and_Colour where Dish_Number = 201
+
+   # Left and right objects are still linked and associated with other instances
+   left_object  = find-one Flavoured_Object   where Flavoured = 'chicken'
+   right_object = find-one Coloured_Object    where Coloured = 'red'
+
+   The_Test_Has_Passed = FALSE
+
+   if left_object != UNDEFINED then
+
+      if right_object != UNDEFINED then
+
+         if assoc_object = UNDEFINED then
+            The_Test_Has_Passed = TRUE
+         endif
+
+      endif
+   
+   endif
+
+   if The_Test_Has_Passed = TRUE then
+      [] = RPT2:Test_Passed["coloured", Test, 0]
+   else
+      [] = RPT3:Test_Failed["coloured", Test, -1]
+   endif 
+
+   Test = Test + 1
+
+# End Test 9
+
+#------------------------------------------------------------------------#
+# Test 10 - Tidy up and delete all instances.
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0121", "Creation Deletion", "Coloured_Object", "Delete everything"]
+   [] = RPT8:Specify_Requid [Test, "1103-0000-01-0531"]
+
+   {set_of_assoc} = find-all Flavour_and_Colour
+
+   for each_assoc in {set_of_assoc} do
+
+      # Navigate up the relationship to the two instances
+      a_colour  = each_assoc -> R1.Coloured_Object
+      a_flavour = each_assoc -> R1.Flavoured_Object
+
+      unassociate a_flavour R1 a_colour from each_assoc
+
+      unlink a_colour R1 a_flavour
+
+      # Get rid of the assoc instance as it is no longer linked to anything.
+      delete each_assoc
+
+   endfor
+
+   {set_of_colour} = find-all Coloured_Object
+
+   for each_colour in {set_of_colour} do
+      # Navigate up the relationship to the two instances
+      {some_flavours} = each_colour -> R1.Flavoured_Object
+
+      for a_flavour in {some_flavours} do
+         unlink each_colour R1 a_flavour
+      endfor
+
+      # Get rid of the colour instance as it is no longer linked to anything.
+      delete each_colour
+
+   endfor
+
+   {set_of_flavour} = find-all Flavoured_Object
+
+   for each_flavour in {set_of_flavour} do
+      # Navigate up the relationship to the two instances
+      #   a_colour = each_flavour -> R1.Coloured_Object
+      #   unlink each_flavour R1 a_colour
+
+      # Get rid of the flavour instance as it is no longer linked to anything.
+      delete each_flavour
+   endfor
+
+   a_flavour = find-one Flavoured_Object
+   a_colour  = find-one Coloured_Object
+   assoc     = find-one Flavour_and_Colour
+
+   if a_flavour = UNDEFINED then 
+
+      if a_colour  = UNDEFINED then 
+
+         if assoc     = UNDEFINED then
+            [] = RPT2:Test_Passed["coloured ", Test, 0]
+         else
+            [] = RPT3:Test_Failed["coloured assoc", Test, -1]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["coloured a_colour", Test, -2]  
+      endif
+
+   else
+      [] = RPT3:Test_Failed["coloured a_flavour", Test, -3]
+   endif
+
+# End Test 10
+
+#------------------------------------------------------------------------#
+
+Returned_Number = Test + 1
+
+enddefine

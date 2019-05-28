@@ -52,23 +52,6 @@ To build the MASL model compiler, first clone the `masl` repository (found at
 [https://github.com/xtuml/masl](https://github.com/xtuml/masl)). This project
 assumes that the repository will be cloned into `~/git/masl`.
 
-> _IMPORTANT:_  
-> This project requires a version of the MASL compiler that is more recent than
-> the one committed in "xtuml/masl". Use the following instructions to check out
-> the most recent development version of the compiler.  
-> 1. Add "leviathan747/masl" as a remote repository.  
->    ```
->    git remote add leviathan747 https://github.com/leviathan747/masl.git
->    ```
-> 2. Fetch "leviathan747".  
->    ```
->    git fetch leviathan747
->    ```
-> 3. Checkout the development branch.  
->    ```
->    git checkout leviathan747/development
->    ```
-
 Follow the instructions in the `README.md` file to build MASL. This will take
 about 10 minutes (rough estimate).
 

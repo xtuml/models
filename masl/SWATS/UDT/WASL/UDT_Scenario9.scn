@@ -1,0 +1,27 @@
+define scenario  UDT_Scenario9
+input
+output
+
+#$DESCRIPTION
+Enum_Scenario
+#$END_DESCRIPTION
+
+my_final_test = find-one Final_Test_Data
+
+Test = my_final_test.Final_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = UDT10::Check_The_Enumerators[Test, 'Five', 'Blue', 'Freezing']
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+
+my_final_test.Final_Test_Number = Test 
+
+enddefine

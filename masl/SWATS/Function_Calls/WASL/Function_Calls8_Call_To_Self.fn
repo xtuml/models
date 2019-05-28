@@ -1,0 +1,33 @@
+define function  Function_Calls8::Call_To_Self
+input \
+	The_Input_Value:Base_Integer_Type 
+output \
+	The_Output_Value:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+[Host] = WAW1:What_Env[]
+
+temp = The_Input_Value
+temp = temp + 1
+
+if Host = "ISIM" then
+   Total = 5
+else
+   Total = 700
+endif
+
+if temp = Total then
+   The_Output_Value = temp
+else
+   The_Output_Value = temp
+   [The_Output_Value] = Function_Calls8::Call_To_Self[temp]
+endif
+
+
+
+
+
+enddefine

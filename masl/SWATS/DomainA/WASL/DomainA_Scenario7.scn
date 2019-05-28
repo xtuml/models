@@ -1,0 +1,59 @@
+define scenario  DomainA_Scenario7
+input
+output
+
+#$DESCRIPTION
+one_to_many_navigation
+#$END_DESCRIPTION
+
+my_test = find-one Test_Data
+
+#------------------------------------------------------------------------#
+# Create five instances of left part of the one to many relationship.
+#------------------------------------------------------------------------#
+
+   number_of_instances = 5
+
+   Test = my_test.This_Test_Number
+
+   loop_counter = Test
+
+   terminate_condition = number_of_instances + Test + 1
+
+   loop
+      left  = create One_To_Many_Left_Side with otmls_id = loop_counter
+
+      inner_loop_counter = loop_counter
+      break_condition    = loop_counter + 3
+
+      # Make three instances of the right side of the naviagtion to link to
+      # a single instance of the left
+      loop
+         right = create One_To_Many_Right_Side with otmrs_id = inner_loop_counter
+
+         link left R2 right
+
+         inner_loop_counter = inner_loop_counter + 1
+
+         breakif inner_loop_counter = break_condition
+ 
+      endloop
+
+      loop_counter = loop_counter + 1
+
+      breakif loop_counter = terminate_condition
+
+   endloop
+
+   # Call bridge service to see if we can navigate from one side to the other
+   loop 
+      [] = NAV4:One_to_Many_Navigate[Test]
+      Test = Test + 1
+      breakif Test = terminate_condition
+   endloop
+
+#------------------------------------------------------------------------#
+
+my_test.This_Test_Number = Test
+
+enddefine

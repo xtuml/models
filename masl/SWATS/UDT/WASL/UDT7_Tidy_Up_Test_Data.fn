@@ -1,0 +1,59 @@
+define function  UDT7::Tidy_Up_Test_Data
+input
+output
+
+#$DESCRIPTION
+Remove a set of reflexive objects.
+
+#$END_DESCRIPTION
+
+
+Final_Test = find-one Final_Test_Data
+
+Last_Test = 0
+
+loop
+
+   {All_Test_Data} = find-all Test_Data
+
+   number_in_set = countof {All_Test_Data}
+
+   breakif number_in_set = 0
+
+   for Single_Instance in {All_Test_Data} do
+
+      Next_Instance = Single_Instance -> R1."Has_a".Test_Data
+
+      if Next_Instance = UNDEFINED then
+
+         # we have reached the last entry, check to see if it is the first also
+
+         if number_in_set > 1 then
+            Previous_Entry = Single_Instance -> R1."Has_one".Test_Data
+#            unlink Previous_Entry R1."Has_a" Single_Instance
+            unlink Single_Instance R1."Has_one" Previous_Entry 
+         endif
+
+         if Last_Test <= Single_Instance.The_Test_Number then
+
+            Last_Test = Single_Instance.The_Test_Number
+
+         endif
+
+         delete Single_Instance
+
+     endif
+
+   endfor
+
+endloop
+
+if Final_Test.Final_Test_Number <= Last_Test then
+
+   Last_Test = Last_Test + 1
+
+   Final_Test.Final_Test_Number = Last_Test
+
+endif
+
+enddefine

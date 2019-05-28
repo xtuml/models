@@ -1,0 +1,36 @@
+define bridge  DomainA:termA2:Sync2A
+input \
+	inputA:Base_Integer_Type ,\
+	inputB:Base_Integer_Type ,\
+	Test:Base_Integer_Type 
+output \
+	outputA:Base_Integer_Type ,\
+	outputB:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+   #In a single domain build just verify the synchronous service invocation
+   if (inputA != 1)|(inputB != 2) then
+
+      #Input values are incorrect
+      outputA = 1
+      outputB = 2
+
+      [] = RPT5:Test_Text[Test, "Term2A STUB with incorrect IO values"]
+
+
+   else
+
+      #Input values are correct
+      outputA = 3
+      outputB = 4
+
+      [] = RPT5:Test_Text[Test, "Term2A STUB with correct IO values"]
+
+
+   endif
+
+
+enddefine

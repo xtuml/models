@@ -1,0 +1,71 @@
+define scenario  CT_Tags_Scenario6
+input
+output
+
+#$DESCRIPTION
+Get_Totals
+#$END_DESCRIPTION
+
+my_test = find-one Test_Data
+
+Test = my_test.Current_Test_Number
+
+ExpectedCCACount = 39
+ExpectedTCACount = 39
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Total No of tests"]
+
+   instResult = find-one Results where idRes = 1
+
+   if instResult.CCAFlag and instResult.TCAFlag then
+
+      if instResult.CCATotal = ExpectedCCACount and instResult.TCATotal = ExpectedTCACount then
+         [] = RPT2:Test_Passed["All tests ran", Test, 0]
+      else
+
+         if instResult.CCATotal != ExpectedCCACount and instResult.TCATotal = ExpectedTCACount then
+            [] = RPT3:Test_Failed["Missing CCA tests in Glob build", Test, instResult.CCATotal]
+         else
+
+            if instResult.CCATotal = ExpectedCCACount and instResult.TCATotal != ExpectedTCACount then
+               [] = RPT3:Test_Failed["Missing TCA tests in Glob build", Test, instResult.TCATotal]
+            else
+               [] = RPT3:Test_Failed["Missing TCA CCA tests in Global", Test, instResult.TCATotal]
+            endif
+
+         endif
+
+      endif
+            
+   else
+
+      if instResult.CCAFlag and !instResult.TCAFlag then
+
+         if instResult.CCATotal = ExpectedCCACount then
+            [] = RPT2:Test_Passed["All CCA tests ran in CCA build", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Missing CCA tests in CCA build", Test, instResult.CCATotal]
+         endif
+
+      else
+
+         if !instResult.CCAFlag and instResult.TCAFlag then
+
+            if instResult.TCATotal = ExpectedTCACount then
+               [] = RPT2:Test_Passed["All TCA tests ran in TCA build", Test, 0]
+            else
+               [] = RPT3:Test_Failed["Missing TCA tests in TCA build", Test, instResult.TCATotal]
+            endif
+
+         else
+            [] = RPT3:Test_Failed["Something very wrong has happend", Test, -10]
+         endif
+
+      endif
+
+   endif
+
+Test = Test + 1
+
+my_test.Current_Test_Number = Test
+enddefine

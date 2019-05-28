@@ -1,0 +1,102 @@
+define function  TAGS12::Perform_Passive_Super_Sub_Tests
+input
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+my_test = find-one Test_Data
+
+this_test = my_test.Number
+
+supported = TRUE
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[this_test, "1241-0000-01-0128", "Tagged", "Passive Super Sub types", "One Super Sub relationship"]
+
+   # Create one of one super type objects
+   Super1 = create unique Tagged_Many_Supertype with Supertype_Data = this_test
+
+   #create one of two sub type 1 objects
+   Sub1_1 = create Subtype_1 with Subtype_1_Data = this_test 
+
+   link Super1 R4 Sub1_1
+
+   # Navigate from the super to the sub, and compare the data attribute
+   view_of_sub1 = Super1 -> R4.Subtype_1
+
+   failure_value = view_of_sub1.Subtype_1_Data - Super1.Supertype_Data
+
+   [] = TAGS5::Report_Now[this_test, "One Super Sub relationship", failure_value, supported]
+
+   this_test = this_test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[this_test, "1241-0000-01-0128", "Tagged", "Passive Super Sub types", "Other Super Sub relationship"]
+
+   # Create second of two sub type 1 objects
+   Sub1_2 = create Subtype_1 with Subtype_1_Data = this_test
+
+   # unlink first sub type from super type
+   unlink Super1 R4 Sub1_1
+
+   # Update super 1 data
+   Super1.Supertype_Data = this_test
+
+   #link second subtype to supertype
+   link Super1 R4 Sub1_2
+
+   # Navigate from the super to the sub, and compare the data attribute
+   view_of_sub1 = Super1 -> R4.Subtype_1
+
+   failure_value = view_of_sub1.Subtype_1_Data - Super1.Supertype_Data
+
+   [] = TAGS5::Report_Now[this_test, "Other Super Sub relationship", failure_value, supported]
+
+   this_test = this_test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[this_test, "1241-0000-01-0128", "Tagged", "Passive Super Sub types", "Migrate Super Sub relationship"]
+
+   # Create sub type 2 object
+   Sub2 = create Subtype_2 with Subtype_2_Data = this_test
+
+   # unlink first sub type from super type
+   unlink Super1 R4 Sub1_2
+
+   # Update super 1 data
+   Super1.Supertype_Data = this_test
+
+   #link second subtype to supertype
+   link Super1 R4 Sub2
+
+   # Navigate from the super to the sub, and compare the data attribute
+   view_of_sub2 = Super1 -> R4.Subtype_2
+
+   failure_value = view_of_sub2.Subtype_2_Data - Super1.Supertype_Data
+
+   [] = TAGS5::Report_Now[this_test, "Migrate Super Sub relationship", failure_value, supported]
+
+   this_test = this_test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+
+my_test.Number = this_test
+
+enddefine

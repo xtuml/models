@@ -1,0 +1,106 @@
+define function  SO6:Decode_Simple_TL_Structure
+input \
+	Test:Base_Integer_Type ,\
+	A_Structure:Type_Linked_Simple_Structure_Type ,\
+	Instance_Handle:Structured_Object_IH ,\
+	Final_Entry_Only:Boolean 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+ 
+[] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Structured Object Synch Service", "Decode simple TL data structures"]
+
+# How many in the set
+How_Many = countof {A_Structure}
+
+Count = 1
+
+# Look at the final entry in the list only.
+if Final_Entry_Only = TRUE then
+
+   for [the_integer, the_real, the_text, the_boolean] in {A_Structure} do
+
+      local_integer = the_integer
+      local_real    = the_real
+      local_text    = the_text
+      local_boolean = the_boolean
+
+      # Force a look at the penultimate entry in the set.
+      Termination_Condition = How_Many - 1
+
+      # Only look at the final entry
+      if Count = Termination_Condition then 
+
+         if local_integer = Instance_Handle.An_Integer and \
+            local_real    = Instance_Handle.A_Real     and \
+            local_text    = Instance_Handle.Some_Text  and \
+            local_boolean = Instance_Handle.A_Boolean  then
+
+            [] = RPT2:Test_Passed[Instance_Handle.Some_Text, Test, Count]
+
+         else
+  
+            [] = RPT3:Test_Failed[Instance_Handle.Some_Text, Test, Count]
+
+         endif
+
+      endif
+
+      Count = Count + 1
+
+      # Don't want to read all the entries, just all but one of them.
+      # This so that we can append into the set again on the next iteration.
+
+      breakif Count = How_Many
+
+   endfor
+
+# Look at all entries
+else
+
+   Passed_Count = 0
+
+   Local_Test_Passed = TRUE
+
+   for [the_integer, the_real, the_text, the_boolean] in {A_Structure} do
+
+      local_integer = the_integer
+      local_real    = the_real
+      local_text    = the_text
+      local_boolean = the_boolean
+
+      if local_integer = Instance_Handle.An_Integer and \
+         local_real    = Instance_Handle.A_Real     and \
+         local_text    = Instance_Handle.Some_Text  and \
+         local_boolean = Instance_Handle.A_Boolean  then
+
+         Passed_Count = Passed_Count + 1
+
+      else
+
+         Passed_Count = Passed_Count - 1
+         Local_Test_Passed = FALSE 
+ 
+       endif
+
+      Count = Count + 1
+
+   endfor
+
+   if Local_Test_Passed = TRUE then
+
+      [] = RPT2:Test_Passed[Instance_Handle.Some_Text, Test, Passed_Count]
+
+   else
+
+      [] = RPT3:Test_Failed[Instance_Handle.Some_Text, Test, Passed_Count]
+
+   endif
+
+endif
+
+
+enddefine

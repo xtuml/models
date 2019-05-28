@@ -1,0 +1,245 @@
+define function  NstIF1:do_nested_if
+input \
+	an_instanceNESTED_IF:Nested_IF_IH ,\
+	Test_Start:Base_Integer_Type 
+output \
+	Final_Test:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#------------------------------------------------------------------------#
+#
+# Nested IF statements, WITHOUT LOGICAL CONDITIONS
+#
+# The ASL <if ... else> statement shall be supported
+# 1103-0000-01-0422
+#
+# Logical conditions returning a Boolean data type of true or false shall
+# be supported
+# 1103-0000-01-0911
+#
+#------------------------------------------------------------------------#
+
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+# Test 1 - Nested IFs that don't contain logic.
+#------------------------------------------------------------------------#
+
+  [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objNESTEDIF", "Do not contain logic"]
+
+   Has_Failed = FALSE
+
+   # Initialise temporary variables
+   tempA = 1
+   tempB = 2
+   tempC = 3
+   tempD = 4
+   tempE = 5
+
+   # Perform the test, 12 Nested IF statements
+   if tempA = 1 then 
+
+      if tempB > 1 then 
+
+         if tempC < 4 then 
+
+            if tempD <= 4 then 
+
+               if tempE >= 5 then 
+
+                  if tempA != 2 then 
+
+                     if tempB <= 3 then 
+
+                        if tempC >= 2 then 
+ 
+                           if tempD != 3 then 
+
+                              if tempE < 6 then 
+
+                                 if tempA > 0 then 
+
+                                    if tempB = 2 then 
+                                       an_instanceNESTED_IF.ResultA = 10
+                                    else
+                                       [] = RPT3:Test_Failed["objNESTEDIF", Test,-10]
+                                       Has_Failed = TRUE
+                                    endif
+                                 else
+                                    [] = RPT3:Test_Failed["objNESTEDIF", Test,-20]
+                                    Has_Failed = TRUE
+                                 endif
+                              else
+                                 [] = RPT3:Test_Failed["objNESTEDIF", Test,-30]
+                                 Has_Failed = TRUE
+                              endif
+                           else
+                              [] = RPT3:Test_Failed["objNESTEDIF", Test,-40]
+                              Has_Failed = TRUE
+                           endif
+                        else
+                           [] = RPT3:Test_Failed["objNESTEDIF", Test,-50]
+                           Has_Failed = TRUE
+                        endif
+                     else
+                        [] = RPT3:Test_Failed["objNESTEDIF", Test,-60]
+                        Has_Failed = TRUE
+                     endif
+                  else
+                     [] = RPT3:Test_Failed["objNESTEDIF", Test,-70]
+                     Has_Failed = TRUE
+                  endif
+               else
+                  [] = RPT3:Test_Failed["objNESTEDIF", Test,-80]
+                  Has_Failed = TRUE
+               endif
+            else
+               [] = RPT3:Test_Failed["objNESTEDIF", Test,-90]
+               Has_Failed = TRUE
+            endif
+         else
+            [] = RPT3:Test_Failed["objNESTEDIF", Test,-100]
+            Has_Failed = TRUE
+         endif
+      else
+         [] = RPT3:Test_Failed["objNESTEDIF", Test,-110]
+         Has_Failed = TRUE
+      endif
+   else
+      [] = RPT3:Test_Failed["objNESTEDIF", Test,-120]
+      Has_Failed = TRUE
+   endif
+
+   # Test complete
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDIF", Test,0]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - Nested IF statements, WITH LOGICAL CONDITIONS
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objNESTEDIF", "Contain logical and"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0913"]
+
+   Has_Failed = FALSE
+
+   # Initialise temporary variables
+   tempA = 1
+   tempB = 2
+   tempC = 3
+   tempD = 4
+   tempE = 5
+
+   # Perform the test
+   if ((tempA = 1) & (tempB != 1) & (tempC < 4) & (tempD > 3) & \
+      (tempE <= 5) & (tempA >= 1) & (tempB <= 3) & (tempC >= 1)) then 
+
+      if ((tempA = 1) & (tempB != 1) & (tempC < 4) & (tempD > 3) & \
+          (tempE <= 5) & (tempA >= 1) & (tempB <= 3) & (tempC >= 1)) then 
+      
+         an_instanceNESTED_IF.ResultA = 20
+      else
+         Has_Failed = TRUE
+         [] = RPT3:Test_Failed["objNESTEDIF", Test, -10]
+      endif
+
+   else
+      Has_Failed = TRUE
+      [] = RPT3:Test_Failed["objNESTEDIF", Test, -20]
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDIF", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - Nested IFs that contain logic, using |
+#------------------------------------------------------------------------#
+  
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objNESTEDIF", "Contain logical or"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0913"]
+
+   Has_Failed = FALSE
+
+   # Perform the test, 12 Nested IF statements
+   if ((tempA = 2) | (tempB != 2) | (tempC < 12) | (tempD > 3) | \
+      (tempE <= 5) | (tempA >= 7) | (tempB <= 1) | (tempC >= 2)) then 
+
+      if ((tempA = 1) | (tempB != 1) | (tempC < 4) | (tempD > 4) | \
+         (tempE <= 5) | (tempA >= 1) | (tempB <= 1) | (tempC >= 2)) then 
+
+         an_instanceNESTED_IF.ResultA = 30
+      else
+         [] = RPT3:Test_Failed["objNESTEDIF", Test,-10]
+         Has_Failed = TRUE
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objNESTEDIF", Test,-20]
+      Has_Failed = TRUE
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDIF", Test,0]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4 - Nested IFs that contain logic, mixed
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objNESTEDIF", "Contain logical mixed"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0913"]
+
+   Has_Failed = FALSE
+
+   # Perform the test, 12 Nested IF statements
+   if (((tempA = 1) & (tempB != 1)) | (tempC < 4) | (tempD > 3) | \
+      (tempE <= 5) | (tempA >= 1) | (tempB <= 1) | (tempC >= 2)) then 
+
+      if ((tempA = 1) | (((tempB != 1) & (tempC < 4)) | (tempD > 3)) | \
+         (tempE <= 5) | ((tempA >= 1) & (tempB <= 1) & (tempC >= 2))) then 
+
+         an_instanceNESTED_IF.ResultA = 40
+      else
+         [] = RPT3:Test_Failed["objNESTEDIF", Test,-10]
+         Has_Failed = TRUE
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objNESTEDIF", Test,-20]
+      Has_Failed = TRUE
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDIF", Test,0]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+
+Final_Test = Test
+
+
+enddefine

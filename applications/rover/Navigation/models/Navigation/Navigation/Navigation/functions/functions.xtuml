@@ -1,0 +1,115 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("922b7aac-cefb-4a60-9289-36f02f0ca607",
+	"00000000-0000-0000-0000-000000000000",
+	"19a8fa08-8af3-45aa-a70d-8aa62f222032",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("f14241aa-d6ca-41c8-be16-f03d2befb4ba",
+	112,
+	"922b7aac-cefb-4a60-9289-36f02f0ca607",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'Navigation::Navigation::Navigation::functions');
+INSERT INTO DIM_DIA
+	VALUES ("f14241aa-d6ca-41c8-be16-f03d2befb4ba",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("078e3318-e306-4f37-8d1c-2ca2e1e73335",
+	"00000000-0000-0000-0000-000000000000",
+	'testNavigation',
+	'',
+	'create object instance rover1 of rover;
+create object instance leader of leader;
+relate leader to rover1 across R1;
+leader.id = 1;
+
+create object instance rover2 of rover;
+create object instance follower of follower;
+relate follower to rover2 across R1;
+
+generate leader1:''init'' to leader;
+
+// start polling tick.  The other key ticker is started in the leader::polling state
+create event instance poller of leader2:go() to leader;
+t = TIM::timer_start_recurring( event_inst:poller, microseconds:POLLING_FREQUENCY_MS * 1000 ); 
+
+// start simulation
+CTL::ready();
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("078e3318-e306-4f37-8d1c-2ca2e1e73335",
+	1,
+	"922b7aac-cefb-4a60-9289-36f02f0ca607",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("e55ee3f4-57c5-4c93-aa27-328809b20833",
+	"00000000-0000-0000-0000-000000000000",
+	'gain',
+	'',
+	'select any leader from instances of leader;
+gain = 0;
+if ( leader.distance < leader.prevDistance - GAIN_WINDOW )
+  LOG::LogInfo( message:"Speed adjustment - slowing down" );
+  gain = GAIN_SLOW_DOWN;
+elif ( leader.distance > leader.prevDistance + GAIN_WINDOW)
+  LOG::LogInfo( message:"Speed adjustment - speeding up" );
+  gain = GAIN_SPEED_UP;
+end if;
+return gain;',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("e55ee3f4-57c5-4c93-aa27-328809b20833",
+	1,
+	"922b7aac-cefb-4a60-9289-36f02f0ca607",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("922b7aac-cefb-4a60-9289-36f02f0ca607",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"955bdc05-ae2a-4ff0-8010-6c0327bae0f8",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("955bdc05-ae2a-4ff0-8010-6c0327bae0f8",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Navigation',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../Navigation.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("19a8fa08-8af3-45aa-a70d-8aa62f222032",
+	'Navigation',
+	1,
+	'../../../Navigation.xtuml');

@@ -1,0 +1,47 @@
+define scenario  Events_Scenario6
+input
+output
+
+#$DESCRIPTION
+Event Priorities
+#$END_DESCRIPTION
+
+   my_test = find-one Test_Data
+
+   if my_test = UNDEFINED then
+      # Start in safe mode
+      The_Test_Number = 100
+   else
+      The_Test_Number = my_test.Current_Test_Number
+   endif
+
+#-------------------------------------------------------------------------
+# Test 1 - Test that the priority of events is executed correctly
+#          N.B. This test MUST be the LAST to be executed
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0406", "Events", "Scenario", "Priority of events"]
+
+   InstPA = create Priority_A with A_ID          = 1     &\
+                                   RefA          = 0     &\
+                                   Event_Count   = 0     &\
+                                   Done_It       = FALSE &\
+                                   Poly_A        = FALSE &\
+                                   Poly_B        = FALSE &\
+                                   Current_State = 'Idle'
+
+   InstPB = create Priority_B with B_ID          = 1     &\
+                                   Current_State = 'Idle'
+
+   link InstPA R20 InstPB
+
+   generate PriA1:ST_Start(The_Test_Number, 3) to InstPA
+
+# End Test 1
+
+#-------------------------------------------------------------------------
+
+   if my_test != UNDEFINED then
+      my_test.Current_Test_Number = The_Test_Number
+   endif
+enddefine

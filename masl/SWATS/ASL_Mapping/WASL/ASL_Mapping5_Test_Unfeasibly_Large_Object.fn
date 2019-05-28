@@ -1,0 +1,929 @@
+define function  ASL_Mapping5::Test_Unfeasibly_Large_Object
+input \
+	Start_Test_Number:Base_Integer_Type 
+output \
+	Finish_Test_Number:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+# -----------------------------------------------------------------------------------
+# These series of test are to exmaine what happens when an object is larger than 
+# would reasonably be expected is created. Further test show what happens when 
+# said object is manipulated in various forms.
+# These tests could be spread into a variety of domains, eg. find-and-sets, 
+# function-calls and others. But since creating such a big object is a pain, all 
+# these tests shall reside here for the big object.
+# -----------------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------------
+# Test 1 - Create the unfeasibly large object and see what may be done with it.
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Start_Test_Number, "1103-0000-01-0511", "ASL Mapping", "BIG Object", "Create big object"]
+
+   Unfeasibly_Large_Object = create BIG_Object with One          = Start_Test_Number &\
+                                                    Two          = Start_Test_Number &\
+                                                    Three        = Start_Test_Number &\
+                                                    Four         = Start_Test_Number &\
+                                                    Five         = Start_Test_Number &\
+                                                    Six          = Start_Test_Number &\
+                                                    Seven        = Start_Test_Number &\
+                                                    Eight        = Start_Test_Number &\
+                                                    Nine         = Start_Test_Number &\
+                                                    Ten          = Start_Test_Number &\
+                                                    Eleven       = Start_Test_Number &\
+                                                    Twelve       = Start_Test_Number &\
+                                                    Thirteen     = Start_Test_Number &\
+                                                    Fourteen     = Start_Test_Number &\
+                                                    Fifteen      = Start_Test_Number &\
+                                                    Sixteen      = Start_Test_Number &\
+                                                    Eighteen     = Start_Test_Number &\
+                                                    Nineteen     = Start_Test_Number &\
+                                                    Twenty       = Start_Test_Number &\
+                                                    Twentyone    = Start_Test_Number &\
+                                                    Twentytwo    = Start_Test_Number &\
+                                                    Twentythree  = Start_Test_Number &\
+                                                    Twentyfour   = Start_Test_Number &\
+                                                    Twentyfive   = Start_Test_Number &\
+                                                    Twentysix    = Start_Test_Number &\
+                                                    Twentyseven  = Start_Test_Number &\
+                                                    Twentyeight  = Start_Test_Number &\
+                                                    Twentynine   = Start_Test_Number &\
+                                                    Thirty       = Start_Test_Number &\
+                                                    Thirtyone    = Start_Test_Number &\
+                                                    Thirtytwo    = Start_Test_Number &\
+                                                    Thirtythree  = Start_Test_Number &\
+                                                    Thirtyfour   = Start_Test_Number &\
+                                                    Thirtyfive   = Start_Test_Number &\
+                                                    Thirtysix    = Start_Test_Number &\
+                                                    Thirtyseven  = Start_Test_Number &\
+                                                    Thirtyeight  = Start_Test_Number &\
+                                                    Thirtynine   = Start_Test_Number &\
+                                                    Forty        = Start_Test_Number &\
+                                                    Fortyone     = Start_Test_Number &\
+                                                    Fortytwo     = Start_Test_Number &\
+                                                    Fortythree   = Start_Test_Number &\
+                                                    Fortyfour    = Start_Test_Number &\
+                                                    Fortyfive    = Start_Test_Number &\
+                                                    Fortysix     = Start_Test_Number &\
+                                                    Fortyseven   = Start_Test_Number &\
+                                                    Fortyeight   = Start_Test_Number &\
+                                                    Fortynine    = Start_Test_Number &\
+                                                    Fifty        = Start_Test_Number &\
+                                                    Fiftyone     = Start_Test_Number &\
+                                                    Fiftytwo     = Start_Test_Number &\
+                                                    Fiftythree   = Start_Test_Number &\
+                                                    Fiftyfour    = Start_Test_Number &\
+                                                    Fiftyfive    = Start_Test_Number &\
+                                                    Fiftysix     = Start_Test_Number &\
+                                                    Fiftyseven   = Start_Test_Number &\
+                                                    Fiftyeight   = Start_Test_Number &\
+                                                    Fiftynine    = Start_Test_Number &\
+                                                    Sixty        = Start_Test_Number &\
+                                                    Sixtyone     = Start_Test_Number &\
+                                                    Sixtytwo     = Start_Test_Number &\
+                                                    Sixtythree   = Start_Test_Number &\
+                                                    Sixtyfour    = Start_Test_Number &\
+                                                    Sixtyfive    = Start_Test_Number &\
+                                                    Sixtysix     = Start_Test_Number &\
+                                                    Sixtyseven   = Start_Test_Number &\
+                                                    Sixtyeight   = Start_Test_Number &\
+                                                    Sixtynine    = Start_Test_Number &\
+                                                    Seventy      = Start_Test_Number &\
+                                                    Seventyone   = Start_Test_Number &\
+                                                    Seventytwo   = Start_Test_Number &\
+                                                    Seventythree = Start_Test_Number &\
+                                                    Seventyfour  = Start_Test_Number &\
+                                                    Seventyfive  = Start_Test_Number &\
+                                                    Seventysix   = Start_Test_Number &\
+                                                    Seventyseven = Start_Test_Number &\
+                                                    Seventyeight = Start_Test_Number &\
+                                                    Seventynine  = Start_Test_Number &\
+                                                    Eighty       = Start_Test_Number &\
+                                                    Eightyone    = Start_Test_Number &\
+                                                    Eightytwo    = Start_Test_Number &\
+                                                    Eightythree  = Start_Test_Number &\
+                                                    Eightyfour   = Start_Test_Number &\
+                                                    Current_State = 'Idle_State'
+
+   if Unfeasibly_Large_Object != UNDEFINED then
+      [] = RPT2:Test_Passed["Create Big Object", Start_Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed["Create Big Object", Start_Test_Number, -10]
+   endif
+
+   This_Test_Number = Start_Test_Number + 1
+
+# End Test 1
+
+# -----------------------------------------------------------------------------------
+# Test 2 - Check to see that the attributes can be read from
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0522", "ASL Mapping", "BIG Object", "Examine big object"]
+
+   if Unfeasibly_Large_Object != UNDEFINED then
+
+      if Unfeasibly_Large_Object.One        = Start_Test_Number &\
+         Unfeasibly_Large_Object.Fortytwo   = Start_Test_Number &\
+         Unfeasibly_Large_Object.Eightyfour = Start_Test_Number then
+
+         [] = RPT2:Test_Passed["Examine Big Object", This_Test_Number, 0]
+      else
+         [] = RPT3:Test_Failed["Examine Big Object", This_Test_Number, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Examine Big Object", This_Test_Number, -10]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 2
+
+# -----------------------------------------------------------------------------------
+# Test 3 - Perform find-one on large object
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0544", "ASL Mapping", "BIG Object", "Find-one big object"]
+
+   found_one_large_object = find-one BIG_Object
+
+   if found_one_large_object != UNDEFINED then
+      [] = RPT2:Test_Passed["Find-One Big Object", This_Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed["Find-One Big Object", This_Test_Number, -10]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 3
+
+# -----------------------------------------------------------------------------------
+# Test 4 - Check to see that the attributes can be read from
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0522", "ASL Mapping", "BIG Object", "Examine found-one object"]
+
+   if found_one_large_object != UNDEFINED then
+
+      if found_one_large_object.One        = Start_Test_Number &\
+         found_one_large_object.Fortytwo   = Start_Test_Number &\
+         found_one_large_object.Eightyfour = Start_Test_Number then
+
+         [] = RPT2:Test_Passed["Examine Big Object", This_Test_Number, 0]
+      else
+         [] = RPT3:Test_Failed["Examine Big Object", This_Test_Number, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Examine Big Object", This_Test_Number, -10]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 4
+
+# -----------------------------------------------------------------------------------
+# Test 5 - Perform find-one <object> where <boolean condition> on large object
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0545", "ASL Mapping", "BIG Object", "Find-one where fully specifying big object"]
+
+   found_one_where_large_object = find-one BIG_Object where One          = Start_Test_Number &\
+                                                            Two          = Start_Test_Number &\
+                                                            Three        = Start_Test_Number &\
+                                                            Four         = Start_Test_Number &\
+                                                            Five         = Start_Test_Number &\
+                                                            Six          = Start_Test_Number &\
+                                                            Seven        = Start_Test_Number &\
+                                                            Eight        = Start_Test_Number &\
+                                                            Nine         = Start_Test_Number &\
+                                                            Ten          = Start_Test_Number &\
+                                                            Eleven       = Start_Test_Number &\
+                                                            Twelve       = Start_Test_Number &\
+                                                            Thirteen     = Start_Test_Number &\
+                                                            Fourteen     = Start_Test_Number &\
+                                                            Fifteen      = Start_Test_Number &\
+                                                            Sixteen      = Start_Test_Number &\
+                                                            Eighteen     = Start_Test_Number &\
+                                                            Nineteen     = Start_Test_Number &\
+                                                            Twenty       = Start_Test_Number &\
+                                                            Twentyone    = Start_Test_Number &\
+                                                            Twentytwo    = Start_Test_Number &\
+                                                            Twentythree  = Start_Test_Number &\
+                                                            Twentyfour   = Start_Test_Number &\
+                                                            Twentyfive   = Start_Test_Number &\
+                                                            Twentysix    = Start_Test_Number &\
+                                                            Twentyseven  = Start_Test_Number &\
+                                                            Twentyeight  = Start_Test_Number &\
+                                                            Twentynine   = Start_Test_Number &\
+                                                            Thirty       = Start_Test_Number &\
+                                                            Thirtyone    = Start_Test_Number &\
+                                                            Thirtytwo    = Start_Test_Number &\
+                                                            Thirtythree  = Start_Test_Number &\
+                                                            Thirtyfour   = Start_Test_Number &\
+                                                            Thirtyfive   = Start_Test_Number &\
+                                                            Thirtysix    = Start_Test_Number &\
+                                                            Thirtyseven  = Start_Test_Number &\
+                                                            Thirtyeight  = Start_Test_Number &\
+                                                            Thirtynine   = Start_Test_Number &\
+                                                            Forty        = Start_Test_Number 
+    
+                                                            #Fortyone     = Start_Test_Number &\
+                                                            #Fortytwo     = Start_Test_Number &\
+                                                            #Fortythree   = Start_Test_Number &\
+                                                            #Fortyfour    = Start_Test_Number &\
+                                                            #Fortyfive    = Start_Test_Number &\
+                                                            #Fortysix     = Start_Test_Number &\
+                                                            #Fortyseven   = Start_Test_Number &\
+                                                            #Fortyeight   = Start_Test_Number &\
+                                                            #Fortynine    = Start_Test_Number &\
+                                                            #Fifty        = Start_Test_Number &\ 
+                                                            #Fiftyone     = Start_Test_Number &\
+                                                            #Fiftytwo     = Start_Test_Number &\
+                                                            #Fiftythree   = Start_Test_Number &\
+                                                            #Fiftyfour    = Start_Test_Number &\
+                                                            #Fiftyfive    = Start_Test_Number &\
+                                                            #Fiftysix     = Start_Test_Number &\
+                                                            #Fiftyseven   = Start_Test_Number &\
+                                                            #Fiftyeight   = Start_Test_Number &\
+                                                            #Fiftynine    = Start_Test_Number &\
+                                                            #Sixty        = Start_Test_Number &\
+                                                            #Sixtyone     = Start_Test_Number &\
+                                                            #Sixtytwo     = Start_Test_Number &\
+                                                            #Sixtythree   = Start_Test_Number &\
+                                                            #Sixtyfour    = Start_Test_Number &\
+                                                            #Sixtyfive    = Start_Test_Number &\
+                                                            #Sixtysix     = Start_Test_Number &\
+                                                            #Sixtyseven   = Start_Test_Number &\
+                                                            #Sixtyeight   = Start_Test_Number &\
+                                                            #Sixtynine    = Start_Test_Number &\
+                                                            #Seventy      = Start_Test_Number &\
+                                                            #Seventyone   = Start_Test_Number &\
+                                                            #Seventytwo   = Start_Test_Number &\
+                                                            #Seventythree = Start_Test_Number &\
+                                                            #Seventyfour  = Start_Test_Number &\
+                                                            #Seventyfive  = Start_Test_Number &\ 
+                                                            #Seventysix   = Start_Test_Number &\
+                                                            #Seventyseven = Start_Test_Number &\
+                                                            #Seventyeight = Start_Test_Number &\
+                                                            #Seventynine  = Start_Test_Number &\
+                                                            #Eighty       = Start_Test_Number &\
+                                                            #Eightyone    = Start_Test_Number &\
+                                                            #Eightytwo    = Start_Test_Number &\
+                                                            #Eightythree  = Start_Test_Number &\
+                                                            #Eightyfour   = Start_Test_Number
+   
+   if found_one_where_large_object != UNDEFINED then
+      [] = RPT2:Test_Passed["Find One Where Object", This_Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed["Find One Where Object", This_Test_Number, -10]
+  endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 5
+
+# -----------------------------------------------------------------------------------
+# Test 6 - Check to see that the attributes can be read from
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0522", "ASL Mapping", "BIG Object", "Examine found-one where object"]
+
+   if found_one_where_large_object != UNDEFINED then
+
+      if found_one_where_large_object.One        = Start_Test_Number &\
+         found_one_where_large_object.Fortytwo   = Start_Test_Number &\
+         found_one_where_large_object.Eightyfour = Start_Test_Number then
+
+         [] = RPT2:Test_Passed["Examine Found One Where Object", This_Test_Number, 0]
+      else
+         [] = RPT3:Test_Failed["Examine found one where object", This_Test_Number, -20]
+      endif
+ 
+   else
+      [] = RPT3:Test_Failed["Examine found one where object", This_Test_Number, -10]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 6
+
+# -----------------------------------------------------------------------------------
+# Test 7 - Perform find-only on large object
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0545", "ASL Mapping", "BIG object", "Find-only big object"]
+
+   found_only_large_object = find-only BIG_Object
+
+   if found_only_large_object != UNDEFINED then
+      [] = RPT2:Test_Passed["find-only big object", This_Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed["find-only big object", This_Test_Number, -1]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 7
+
+# -----------------------------------------------------------------------------------
+# Test 8 - Check to see that the attributes can be read from
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0522", "ASL Mapping", "BIG Object", "Examine found-only object"]
+
+   if found_only_large_object != UNDEFINED then
+
+      if found_only_large_object.One        = Start_Test_Number &\
+         found_only_large_object.Fortytwo   = Start_Test_Number &\
+         found_only_large_object.Eightyfour = Start_Test_Number then
+
+         [] = RPT2:Test_Passed["Examine Find-Only Object", This_Test_Number, 0]
+      else
+         [] = RPT3:Test_Failed["Examine Find-Only Object", This_Test_Number, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Examine Find-Only Object", This_Test_Number, -10]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 8
+
+# -----------------------------------------------------------------------------------
+# Test 9 - Perform find-only <object> where <boolean condition> on large object
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0547", "ASL Mapping", "BIG object", "Find-only where fully specifying big object"]
+
+   #One = Start_Test_Number &\
+   #Two = Start_Test_Number &\
+   #Three = Start_Test_Number &\
+   #Four = Start_Test_Number &\
+   #Five = Start_Test_Number &\
+   #Six = Start_Test_Number &\
+   #Seven = Start_Test_Number &\
+   #Eight = Start_Test_Number &\
+   #Nine = Start_Test_Number &\
+   #Ten = Start_Test_Number &\
+   #Eleven = Start_Test_Number &\
+   #Twelve = Start_Test_Number &\
+   #Thirteen = Start_Test_Number &\
+   #Fourteen = Start_Test_Number &\
+   #Fifteen = Start_Test_Number &\
+   #Sixteen = Start_Test_Number &\
+   #Eighteen = Start_Test_Number &\
+   #Nineteen = Start_Test_Number &\
+   #Twenty = Start_Test_Number &\
+   #Twentyone = Start_Test_Number &\
+   #Twentytwo = Start_Test_Number &\
+   #Twentythree = Start_Test_Number &\
+   #Twentyfour = Start_Test_Number &\
+   #Twentyfive = Start_Test_Number &\
+   #Twentysix = Start_Test_Number &\
+   #Twentyseven = Start_Test_Number &\
+   #Twentyeight = Start_Test_Number &\
+   #Twentynine = Start_Test_Number &\
+   #Thirty = Start_Test_Number &\
+   #Thirtyone = Start_Test_Number &\
+   #Thirtytwo = Start_Test_Number &\
+   #Thirtythree = Start_Test_Number &\
+   #Thirtyfour = Start_Test_Number &\
+   #Thirtyfive = Start_Test_Number &\
+   #Thirtysix = Start_Test_Number &\
+   #Thirtyseven = Start_Test_Number &\
+   #Thirtyeight = Start_Test_Number &\
+   #Thirtynine = Start_Test_Number &\
+
+   found_only_where_large_object = find-only BIG_Object where Forty        = Start_Test_Number &\
+                                                              Fortyone     = Start_Test_Number &\
+                                                              Fortytwo     = Start_Test_Number &\
+                                                              Fortythree   = Start_Test_Number &\
+                                                              Fortyfour    = Start_Test_Number &\
+                                                              Fortyfive    = Start_Test_Number &\
+                                                              Fortysix     = Start_Test_Number &\
+                                                              Fortyseven   = Start_Test_Number &\ 
+                                                              Fortyeight   = Start_Test_Number &\
+                                                              Fortynine    = Start_Test_Number &\
+                                                              Fifty        = Start_Test_Number &\
+                                                              Fiftyone     = Start_Test_Number &\
+                                                              Fiftytwo     = Start_Test_Number &\
+                                                              Fiftythree   = Start_Test_Number &\
+                                                              Fiftyfour    = Start_Test_Number &\
+                                                              Fiftyfive    = Start_Test_Number &\
+                                                              Fiftysix     = Start_Test_Number &\
+                                                              Fiftyseven   = Start_Test_Number &\
+                                                              Fiftyeight   = Start_Test_Number &\
+                                                              Fiftynine    = Start_Test_Number &\ 
+                                                              Sixty        = Start_Test_Number &\ 
+                                                              Sixtyone     = Start_Test_Number &\
+                                                              Sixtytwo     = Start_Test_Number &\ 
+                                                              Sixtythree   = Start_Test_Number &\
+                                                              Sixtyfour    = Start_Test_Number &\
+                                                              Sixtyfive    = Start_Test_Number &\
+                                                              Sixtysix     = Start_Test_Number &\
+                                                              Sixtyseven   = Start_Test_Number &\
+                                                              Sixtyeight   = Start_Test_Number &\
+                                                              Sixtynine    = Start_Test_Number &\
+                                                              Seventy      = Start_Test_Number &\
+                                                              Seventyone   = Start_Test_Number &\
+                                                              Seventytwo   = Start_Test_Number &\
+                                                              Seventythree = Start_Test_Number &\
+                                                              Seventyfour  = Start_Test_Number &\
+                                                              Seventyfive  = Start_Test_Number &\
+                                                              Seventysix   = Start_Test_Number &\
+                                                              Seventyseven = Start_Test_Number &\
+                                                              Seventyeight = Start_Test_Number &\
+                                                              Seventynine  = Start_Test_Number &\
+                                                              Eighty       = Start_Test_Number &\  
+                                                              Eightyone    = Start_Test_Number &\
+                                                              Eightytwo    = Start_Test_Number &\
+                                                              Eightythree  = Start_Test_Number &\
+                                                              Eightyfour   = Start_Test_Number
+  
+   if found_only_where_large_object != UNDEFINED then
+      [] = RPT2:Test_Passed["Find Only Where Object", This_Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed["Find Only Where Object", This_Test_Number, -10]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+#  End Test 9
+
+# -----------------------------------------------------------------------------------
+# Test 10 - Check to see that the attributes can be read from
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0522", "ASL Mapping", "BIG Object", "Examine found-only where object"]
+
+   if found_only_where_large_object != UNDEFINED then
+
+      if found_only_where_large_object.One        = Start_Test_Number &\
+         found_only_where_large_object.Fortytwo   = Start_Test_Number &\
+         found_only_where_large_object.Eightyfour = Start_Test_Number then
+
+         [] = RPT2:Test_Passed["Examine Found Only Where Object", This_Test_Number, 0]
+      else
+         [] = RPT3:Test_Failed["Examine found only where object", This_Test_Number, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Examine found only where object", This_Test_Number, -10]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 10
+
+# -----------------------------------------------------------------------------------
+# Test 11 - {set} = find <object> where <boolean condition>
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0541", "ASL Mapping", "BIG Object", "Find set where object"]
+
+   {big_set} = find BIG_Object where One          = Start_Test_Number &\
+                                     Two          = Start_Test_Number &\
+                                     Three        = Start_Test_Number &\
+                                     Four         = Start_Test_Number &\
+                                     Five         = Start_Test_Number &\
+                                     Six          = Start_Test_Number &\
+                                     Seven        = Start_Test_Number &\
+                                     Eight        = Start_Test_Number &\
+                                     Nine         = Start_Test_Number &\
+                                     Ten          = Start_Test_Number &\
+                                     Eleven       = Start_Test_Number &\
+                                     Twelve       = Start_Test_Number &\
+                                     Thirteen     = Start_Test_Number &\
+                                     Fourteen     = Start_Test_Number &\ 
+                                     Fifteen      = Start_Test_Number &\
+                                     Sixteen      = Start_Test_Number &\
+                                     Eighteen     = Start_Test_Number &\
+                                     Nineteen     = Start_Test_Number &\
+                                     Twenty       = Start_Test_Number &\
+                                     Forty        = Start_Test_Number &\
+                                     Fortyone     = Start_Test_Number &\
+                                     Fortytwo     = Start_Test_Number &\
+                                     Fortythree   = Start_Test_Number &\
+                                     Fortyfour    = Start_Test_Number &\
+                                     Fortyfive    = Start_Test_Number &\
+                                     Fortysix     = Start_Test_Number &\
+                                     Fortyseven   = Start_Test_Number &\
+                                     Fortyeight   = Start_Test_Number &\
+                                     Fortynine    = Start_Test_Number &\
+                                     Fifty        = Start_Test_Number &\
+                                     Fiftyone     = Start_Test_Number &\
+                                     Fiftytwo     = Start_Test_Number &\
+                                     Fiftythree   = Start_Test_Number &\
+                                     Fiftyfour    = Start_Test_Number &\
+                                     Fiftyfive    = Start_Test_Number &\
+                                     Fiftysix     = Start_Test_Number &\
+                                     Fiftyseven   = Start_Test_Number &\
+                                     Fiftyeight   = Start_Test_Number &\
+                                     Fiftynine    = Start_Test_Number &\ 
+                                     Eighty       = Start_Test_Number &\
+                                     Eightyone    = Start_Test_Number &\
+                                     Eightytwo    = Start_Test_Number &\
+                                     Eightythree  = Start_Test_Number &\
+                                     Eightyfour   = Start_Test_Number
+  
+                                     #Twentyone    = Start_Test_Number &\
+                                     #Twentytwo    = Start_Test_Number &\
+                                     #Twentythree  = Start_Test_Number &\
+                                     #Twentyfour   = Start_Test_Number &\
+                                     #Twentyfive   = Start_Test_Number &\
+                                     #Twentysix    = Start_Test_Number &\
+                                     #Twentyseven  = Start_Test_Number &\
+                                     #Twentyeight  = Start_Test_Number &\
+                                     #Twentynine   = Start_Test_Number &\
+                                     #Thirty       = Start_Test_Number &\
+                                     #Thirtyone    = Start_Test_Number &\
+                                     #Thirtytwo    = Start_Test_Number &\
+                                     #Thirtythree  = Start_Test_Number &\
+                                     #Thirtyfour   = Start_Test_Number &\
+                                     #Thirtyfive   = Start_Test_Number &\
+                                     #Thirtysix    = Start_Test_Number &\
+                                     #Thirtyseven  = Start_Test_Number &\
+                                     #Thirtyeight  = Start_Test_Number &\
+                                     #Thirtynine   = Start_Test_Number &\
+
+                                     #Sixty        = Start_Test_Number &\
+                                     #Sixtyone     = Start_Test_Number &\
+                                     #Sixtytwo     = Start_Test_Number &\
+                                     #Sixtythree   = Start_Test_Number &\
+                                     #Sixtyfour    = Start_Test_Number &\
+                                     #Sixtyfive    = Start_Test_Number &\
+                                     #Sixtysix     = Start_Test_Number &\
+                                     #Sixtyseven   = Start_Test_Number &\
+                                     #Sixtyeight   = Start_Test_Number &\
+                                     #Sixtynine    = Start_Test_Number &\
+                                     #Seventy      = Start_Test_Number &\
+                                     #Seventyone   = Start_Test_Number &\
+                                     #Seventytwo   = Start_Test_Number &\
+                                     #Seventythree = Start_Test_Number &\
+                                     #Seventyfour  = Start_Test_Number &\
+                                     #Seventyfive  = Start_Test_Number &\
+                                     #Seventysix   = Start_Test_Number &\
+                                     #Seventyseven = Start_Test_Number &\
+                                     #Seventyeight = Start_Test_Number &\
+                                     #Seventynine  = Start_Test_Number &\
+ 
+   if countof {big_set} = 1 then
+      [] = RPT2:Test_Passed["Find Set Of Big Object", This_Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed["Find Set Of Big Object", This_Test_Number, -10]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 11
+
+# -----------------------------------------------------------------------------------
+# Test 12 - Check to see that the attributes can be read from each in the set
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0522", "ASL Mapping", "BIG Object", "Examine found-only where object"]
+
+   for found_only_where_set_large_object in {big_set} do
+
+      if found_only_where_set_large_object != UNDEFINED then
+
+         if found_only_where_set_large_object.One        = Start_Test_Number &\
+            found_only_where_set_large_object.Fortytwo   = Start_Test_Number &\
+            found_only_where_set_large_object.Eightyfour = Start_Test_Number then
+
+            [] = RPT2:Test_Passed["Examine Found Only Where Object", This_Test_Number, 0]
+         else
+            [] = RPT3:Test_Failed["Examine Found Only Where Object", This_Test_Number, -20]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Examine Found Only Where Object", This_Test_Number, -10]
+      endif
+ 
+   endfor
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 12
+
+# -----------------------------------------------------------------------------------
+# Test 13 - find-all <object>
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0543", "ASL Mapping", "BIG Object", "Find-all set where object"]
+
+   {all_big_set} = find-all BIG_Object 
+
+   if countof {all_big_set} = 1 then
+      [] = RPT2:Test_Passed["Find-All Set Of Big Object", This_Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed["Find-All Set Of Big Object", This_Test_Number, -10]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 13
+
+# -----------------------------------------------------------------------------------
+# Test 14 - Check to see that the attributes can be read from each in the set
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0522", "ASL Mapping", "BIG Object", "Examine found-all object"]
+
+   for found_all_set_large_object in {all_big_set} do
+
+      if found_all_set_large_object != UNDEFINED then
+
+         if found_all_set_large_object.One        = Start_Test_Number &\
+            found_all_set_large_object.Fortytwo   = Start_Test_Number &\
+            found_all_set_large_object.Eightyfour = Start_Test_Number then
+
+            [] = RPT2:Test_Passed["Examine Found All Object", This_Test_Number, 0]
+         else
+            [] = RPT3:Test_Failed["Examine Found All Object", This_Test_Number, -20]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Examine Found All Object", This_Test_Number, -10]
+      endif
+ 
+    endfor
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 14
+
+# -----------------------------------------------------------------------------------
+# Test 15 - Check to see that the large object may be passed as a parameter into a 
+#           domain based synch service
+# -----------------------------------------------------------------------------------
+
+   [] = objBIG1:Receive_Unfeasonableness[Unfeasibly_Large_Object, This_Test_Number, Start_Test_Number]
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 15
+
+# -----------------------------------------------------------------------------------
+# Test 16 - Create the unfeasibly large object and see what may be done with it
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0511", "ASL Mapping", "BIG Object", "Create big active object"]
+
+   # Stash this number for later use when this object is decoded.
+   Expected_Number = This_Test_Number
+
+   Active_Unfeasibly_Large_Object = create BIG_Object with One          = This_Test_Number &\
+                                                           Two          = This_Test_Number &\
+                                                           Three        = This_Test_Number &\
+                                                           Four         = This_Test_Number &\
+                                                           Five         = This_Test_Number &\
+                                                           Six          = This_Test_Number &\
+                                                           Seven        = This_Test_Number &\ 
+                                                           Eight        = This_Test_Number &\
+                                                           Nine         = This_Test_Number &\
+                                                           Ten          = This_Test_Number &\ 
+                                                           Eleven       = This_Test_Number &\
+                                                           Twelve       = This_Test_Number &\
+                                                           Thirteen     = This_Test_Number &\
+                                                           Fourteen     = This_Test_Number &\
+                                                           Fifteen      = This_Test_Number &\
+                                                           Sixteen      = This_Test_Number &\
+                                                           Eighteen     = This_Test_Number &\
+                                                           Nineteen     = This_Test_Number &\
+                                                           Twenty       = This_Test_Number &\
+                                                           Twentyone    = This_Test_Number &\
+                                                           Twentytwo    = This_Test_Number &\
+                                                           Twentythree  = This_Test_Number &\
+                                                           Twentyfour   = This_Test_Number &\
+                                                           Twentyfive   = This_Test_Number &\
+                                                           Twentysix    = This_Test_Number &\ 
+                                                           Twentyseven  = This_Test_Number &\
+                                                           Twentyeight  = This_Test_Number &\
+                                                           Twentynine   = This_Test_Number &\
+                                                           Thirty       = This_Test_Number &\
+                                                           Thirtyone    = This_Test_Number &\
+                                                           Thirtytwo    = This_Test_Number &\
+                                                           Thirtythree  = This_Test_Number &\
+                                                           Thirtyfour   = This_Test_Number &\
+                                                           Thirtyfive   = This_Test_Number &\
+                                                           Thirtysix    = This_Test_Number &\
+                                                           Thirtyseven  = This_Test_Number &\
+                                                           Thirtyeight  = This_Test_Number &\
+                                                           Thirtynine   = This_Test_Number &\
+                                                           Forty        = This_Test_Number &\
+                                                           Fortyone     = This_Test_Number &\
+                                                           Fortytwo     = This_Test_Number &\
+                                                           Fortythree   = This_Test_Number &\
+                                                           Fortyfour    = This_Test_Number &\
+                                                           Fortyfive    = This_Test_Number &\
+                                                           Fortysix     = This_Test_Number &\
+                                                           Fortyseven   = This_Test_Number &\
+                                                           Fortyeight   = This_Test_Number &\
+                                                           Fortynine    = This_Test_Number &\
+                                                           Fifty        = This_Test_Number &\
+                                                           Fiftyone     = This_Test_Number &\
+                                                           Fiftytwo     = This_Test_Number &\
+                                                           Fiftythree   = This_Test_Number &\
+                                                           Fiftyfour    = This_Test_Number &\
+                                                           Fiftyfive    = This_Test_Number &\
+                                                           Fiftysix     = This_Test_Number &\
+                                                           Fiftyseven   = This_Test_Number &\
+                                                           Fiftyeight   = This_Test_Number &\
+                                                           Fiftynine    = This_Test_Number &\
+                                                           Sixty        = This_Test_Number &\
+                                                           Sixtyone     = This_Test_Number &\
+                                                           Sixtytwo     = This_Test_Number &\
+                                                           Sixtythree   = This_Test_Number &\
+                                                           Sixtyfour    = This_Test_Number &\
+                                                           Sixtyfive    = This_Test_Number &\
+                                                           Sixtysix     = This_Test_Number &\
+                                                           Sixtyseven   = This_Test_Number &\
+                                                           Sixtyeight   = This_Test_Number &\
+                                                           Sixtynine    = This_Test_Number &\
+                                                           Seventy      = This_Test_Number &\
+                                                           Seventyone   = This_Test_Number &\
+                                                           Seventytwo   = This_Test_Number &\
+                                                           Seventythree = This_Test_Number &\
+                                                           Seventyfour  = This_Test_Number &\
+                                                           Seventyfive  = This_Test_Number &\
+                                                           Seventysix   = This_Test_Number &\
+                                                           Seventyseven = This_Test_Number &\
+                                                           Seventyeight = This_Test_Number &\
+                                                           Seventynine  = This_Test_Number &\
+                                                           Eighty       = This_Test_Number &\
+                                                           Eightyone    = This_Test_Number &\
+                                                           Eightytwo    = This_Test_Number &\
+                                                           Eightythree  = This_Test_Number &\
+                                                           Eightyfour   = This_Test_Number &\
+                                                           Current_State = 'Idle_State'
+
+   if Active_Unfeasibly_Large_Object != UNDEFINED then
+      [] = RPT2:Test_Passed["create Big Active Object", This_Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed["create Big Active Object", This_Test_Number, -10]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 16
+
+# -----------------------------------------------------------------------------------
+# Test 17 - There are two separate tests performed by that last generate statement, 
+#           so increment the counter accordingly
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1103-0000-01-0511", "ASL Mapping", "BIG object", "Delete big active object"]
+   [] = RPT8:Specify_Requid[This_Test_Number, "1103-0000-01-0531"]
+
+   Doomed_Unfeasibly_Large_Object = create BIG_Object with One          = This_Test_Number &\
+                                                           Two          = This_Test_Number &\
+                                                           Three        = This_Test_Number &\
+                                                           Four         = This_Test_Number &\
+                                                           Five         = This_Test_Number &\
+                                                           Six          = This_Test_Number &\
+                                                           Seven        = This_Test_Number &\
+                                                           Eight        = This_Test_Number &\
+                                                           Nine         = This_Test_Number &\
+                                                           Ten          = This_Test_Number &\
+                                                           Eleven       = This_Test_Number &\
+                                                           Twelve       = This_Test_Number &\
+                                                           Thirteen     = This_Test_Number &\
+                                                           Fourteen     = This_Test_Number &\
+                                                           Fifteen      = This_Test_Number &\
+                                                           Sixteen      = This_Test_Number &\
+                                                           Eighteen     = This_Test_Number &\
+                                                           Nineteen     = This_Test_Number &\
+                                                           Twenty       = This_Test_Number &\
+                                                           Twentyone    = This_Test_Number &\
+                                                           Twentytwo    = This_Test_Number &\
+                                                           Twentythree  = This_Test_Number &\
+                                                           Twentyfour   = This_Test_Number &\
+                                                           Twentyfive   = This_Test_Number &\
+                                                           Twentysix    = This_Test_Number &\
+                                                           Twentyseven  = This_Test_Number &\
+                                                           Twentyeight  = This_Test_Number &\
+                                                           Twentynine   = This_Test_Number &\
+                                                           Thirty       = This_Test_Number &\
+                                                           Thirtyone    = This_Test_Number &\
+                                                           Thirtytwo    = This_Test_Number &\
+                                                           Thirtythree  = This_Test_Number &\
+                                                           Thirtyfour   = This_Test_Number &\
+                                                           Thirtyfive   = This_Test_Number &\
+                                                           Thirtysix    = This_Test_Number &\
+                                                           Thirtyseven  = This_Test_Number &\
+                                                           Thirtyeight  = This_Test_Number &\
+                                                           Thirtynine   = This_Test_Number &\
+                                                           Forty        = This_Test_Number &\
+                                                           Fortyone     = This_Test_Number &\
+                                                           Fortytwo     = This_Test_Number &\
+                                                           Fortythree   = This_Test_Number &\
+                                                           Fortyfour    = This_Test_Number &\
+                                                           Fortyfive    = This_Test_Number &\
+                                                           Fortysix     = This_Test_Number &\
+                                                           Fortyseven   = This_Test_Number &\
+                                                           Fortyeight   = This_Test_Number &\
+                                                           Fortynine    = This_Test_Number &\
+                                                           Fifty        = This_Test_Number &\
+                                                           Fiftyone     = This_Test_Number &\
+                                                           Fiftytwo     = This_Test_Number &\
+                                                           Fiftythree   = This_Test_Number &\
+                                                           Fiftyfour    = This_Test_Number &\
+                                                           Fiftyfive    = This_Test_Number &\
+                                                           Fiftysix     = This_Test_Number &\
+                                                           Fiftyseven   = This_Test_Number &\
+                                                           Fiftyeight   = This_Test_Number &\
+                                                           Fiftynine    = This_Test_Number &\
+                                                           Sixty        = This_Test_Number &\
+                                                           Sixtyone     = This_Test_Number &\
+                                                           Sixtytwo     = This_Test_Number &\
+                                                           Sixtythree   = This_Test_Number &\
+                                                           Sixtyfour    = This_Test_Number &\
+                                                           Sixtyfive    = This_Test_Number &\
+                                                           Sixtysix     = This_Test_Number &\
+                                                           Sixtyseven   = This_Test_Number &\
+                                                           Sixtyeight   = This_Test_Number &\
+                                                           Sixtynine    = This_Test_Number &\
+                                                           Seventy      = This_Test_Number &\
+                                                           Seventyone   = This_Test_Number &\
+                                                           Seventytwo   = This_Test_Number &\
+                                                           Seventythree = This_Test_Number &\
+                                                           Seventyfour  = This_Test_Number &\
+                                                           Seventyfive  = This_Test_Number &\
+                                                           Seventysix   = This_Test_Number &\
+                                                           Seventyseven = This_Test_Number &\
+                                                           Seventyeight = This_Test_Number &\
+                                                           Seventynine  = This_Test_Number &\
+                                                           Eighty       = This_Test_Number &\
+                                                           Eightyone    = This_Test_Number &\
+                                                           Eightytwo    = This_Test_Number &\
+                                                           Eightythree  = This_Test_Number &\
+                                                           Eightyfour   = This_Test_Number &\
+                                                           Current_State = 'Idle_State'
+  
+   delete Doomed_Unfeasibly_Large_Object
+
+   if Doomed_Unfeasibly_Large_Object = UNDEFINED then
+      [] = RPT2:Test_Passed["Delete Big Active Object", This_Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed["Delete Big Active Object", This_Test_Number, -10]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 17
+
+# -----------------------------------------------------------------------------------
+# Test 18 - 
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "Null Requid", "ASL Mapping", "BIG object", "NULL"]
+   [] = RPT2:Test_Passed["NULL", This_Test_Number, 0]
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 18
+
+# -----------------------------------------------------------------------------------
+# Test 19 - 
+# -----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "Null Requid", "ASL Mapping", "BIG object", "NULL2"]
+   [] = RPT2:Test_Passed["NULL2", This_Test_Number  , 0]
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 19
+
+# -----------------------------------------------------------------------------------
+# Test 20 -
+# -----------------------------------------------------------------------------------
+
+   generate objBIG1:Have_A_Biggie (Unfeasibly_Large_Object, This_Test_Number, Expected_Number) to Active_Unfeasibly_Large_Object
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 20
+
+# -----------------------------------------------------------------------------------
+# Test 21 -
+# -----------------------------------------------------------------------------------
+
+   # generate to send the object into termination state.
+   # This will only work if the events generated following the transition out of 'IDLE_STATE' have been processed first.
+
+   # generate objBIG2:To_Complete() to Active_Unfeasibly_Large_Object
+
+# -----------------------------------------------------------------------------------
+
+Finish_Test_Number = This_Test_Number
+
+
+
+enddefine
