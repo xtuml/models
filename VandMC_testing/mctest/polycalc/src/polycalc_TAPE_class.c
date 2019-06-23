@@ -4,7 +4,7 @@
  * Class:       tape drive  (TAPE)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -46,7 +46,6 @@ polycalc_TAPE_R100_Unlink( polycalc_LOCATION * supertype, polycalc_TAPE * subtyp
   supertype->R100_object_id = 0;
 }
 
-
 /*
  * Statically allocate space for the instance population for this class.
  * Allocate space for the class instance and its attribute values.
@@ -74,14 +73,13 @@ static void polycalc_TAPE_act1( polycalc_TAPE *, const Escher_xtUMLEvent_t * con
 static void
 polycalc_TAPE_act1( polycalc_TAPE * self, const Escher_xtUMLEvent_t * const event )
 {
-  /* LOG::LogInfo( message:'tape drive spinning up' ) */
+  /* LOG::LogInfo( message:tape drive spinning up ) */
   LOG_LogInfo( "tape drive spinning up" );
 }
 
 const Escher_xtUMLEventConstant_t polycalc_TAPEevent_LOCATION_PE3c = {
   polycalc_DOMAIN_ID, polycalc_TAPE_CLASS_NUMBER, POLYCALC_TAPEEVENT_LOCATION_PE3NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 
 
 /*
@@ -116,7 +114,6 @@ polycalc_TAPE_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 1 ) {
@@ -125,14 +122,13 @@ polycalc_TAPE_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_TAPE_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 1 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_TAPE_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_TAPE_acts[ next_state ] )( instance, event );
       } else {
         /* empty else */
       }
     }
   }
 }
-
 

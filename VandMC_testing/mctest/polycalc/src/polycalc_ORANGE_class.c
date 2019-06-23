@@ -4,7 +4,7 @@
  * Class:       orange  (ORANGE)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -29,7 +29,6 @@ polycalc_ORANGE_R3_Link( polycalc_FRUIT * supertype, polycalc_ORANGE * subtype )
   supertype->R3_subtype = subtype;
   supertype->R3_object_id = polycalc_ORANGE_CLASS_NUMBER;
 }
-
 
 /*
  * Statically allocate space for the instance population for this class.
@@ -58,10 +57,9 @@ static void polycalc_ORANGE_act1( polycalc_ORANGE *, const Escher_xtUMLEvent_t *
 static void
 polycalc_ORANGE_act1( polycalc_ORANGE * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_FRUIT * fruit = 0; /* fruit (FRUIT) */
- 
+  polycalc_FRUIT * fruit=0;
   /* SELECT one fruit RELATED BY self->FRUIT[R3] */
-  fruit = self->FRUIT_R3;
+  fruit = ( 0 != self ) ? self->FRUIT_R3 : 0;
   /* GENERATE FRUIT2:juiced(percentage:100) TO fruit */
   { polycalc_FRUITevent2 * e = (polycalc_FRUITevent2 *) Escher_NewxtUMLEvent( fruit, &polycalc_FRUITevent2c );
     e->p_percentage = 100;
@@ -72,7 +70,6 @@ polycalc_ORANGE_act1( polycalc_ORANGE * self, const Escher_xtUMLEvent_t * const 
 const Escher_xtUMLEventConstant_t polycalc_ORANGEevent_FRUIT_PE1c = {
   polycalc_DOMAIN_ID, polycalc_ORANGE_CLASS_NUMBER, POLYCALC_ORANGEEVENT_FRUIT_PE1NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 
 
 /*
@@ -107,7 +104,6 @@ polycalc_ORANGE_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 1 ) {
@@ -116,14 +112,13 @@ polycalc_ORANGE_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_ORANGE_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 1 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_ORANGE_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_ORANGE_acts[ next_state ] )( instance, event );
       } else {
         /* empty else */
       }
     }
   }
 }
-
 

@@ -4,7 +4,7 @@
  * Class:       vegetable  (VEGETABLE)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef POLYCALC_VEGETABLE_CLASS_H
@@ -22,7 +22,6 @@ struct polycalc_VEGETABLE {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
   bool peelable;  /* - peelable */
-
   /* relationship storage */
   void * R4_subtype;
   Escher_ClassNumber_t R4_object_id;
@@ -38,7 +37,6 @@ struct polycalc_VEGETABLE {
      ((polycalc_CARROT *)((VEGETABLE)->R4_subtype)) : (0) )
 
 
-
 #define polycalc_VEGETABLE_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_polycalc_VEGETABLE_extent;
 
@@ -50,7 +48,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_VEGETABLEevent1;
 extern const Escher_xtUMLEventConstant_t polycalc_VEGETABLEevent1c;
-
 /*
  * instance event:  VEGETABLE2:'grown'
  */
@@ -59,15 +56,13 @@ typedef struct {
   i_t p_height; /* height */
 } polycalc_VEGETABLEevent2;
 extern const Escher_xtUMLEventConstant_t polycalc_VEGETABLEevent2c;
-
 /*
  * union of events targeted towards 'VEGETABLE' state machine
  */
 typedef union {
-  polycalc_VEGETABLEevent1 vegetable11;  /* polymorphic event - not consumed by VEGETABLE */
-  polycalc_VEGETABLEevent2 vegetable22;  
+  polycalc_VEGETABLEevent1 vegetable1_1;  /* polymorphic event - not consumed by VEGETABLE */
+  polycalc_VEGETABLEevent2 vegetable2_2;  
 } polycalc_VEGETABLE_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -89,5 +84,3 @@ extern void polycalc_VEGETABLE_R4PolymorphicEvent( const polycalc_VEGETABLE * co
 #endif
 
 #endif  /* POLYCALC_VEGETABLE_CLASS_H */
-
-

@@ -4,7 +4,7 @@
  * Class:       carrot  (CARROT)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -29,7 +29,6 @@ polycalc_CARROT_R4_Link( polycalc_VEGETABLE * supertype, polycalc_CARROT * subty
   supertype->R4_subtype = subtype;
   supertype->R4_object_id = polycalc_CARROT_CLASS_NUMBER;
 }
-
 
 /*
  * Statically allocate space for the instance population for this class.
@@ -58,10 +57,9 @@ static void polycalc_CARROT_act1( polycalc_CARROT *, const Escher_xtUMLEvent_t *
 static void
 polycalc_CARROT_act1( polycalc_CARROT * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_VEGETABLE * vegetable = 0; /* vegetable (VEGETABLE) */
- 
+  polycalc_VEGETABLE * vegetable=0;
   /* SELECT one vegetable RELATED BY self->VEGETABLE[R4] */
-  vegetable = self->VEGETABLE_R4;
+  vegetable = ( 0 != self ) ? self->VEGETABLE_R4 : 0;
   /* GENERATE VEGETABLE2:grown(height:17) TO vegetable */
   { polycalc_VEGETABLEevent2 * e = (polycalc_VEGETABLEevent2 *) Escher_NewxtUMLEvent( vegetable, &polycalc_VEGETABLEevent2c );
     e->p_height = 17;
@@ -72,7 +70,6 @@ polycalc_CARROT_act1( polycalc_CARROT * self, const Escher_xtUMLEvent_t * const 
 const Escher_xtUMLEventConstant_t polycalc_CARROTevent_VEGETABLE_PE1c = {
   polycalc_DOMAIN_ID, polycalc_CARROT_CLASS_NUMBER, POLYCALC_CARROTEVENT_VEGETABLE_PE1NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 
 
 /*
@@ -107,7 +104,6 @@ polycalc_CARROT_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 1 ) {
@@ -116,14 +112,13 @@ polycalc_CARROT_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_CARROT_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 1 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_CARROT_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_CARROT_acts[ next_state ] )( instance, event );
       } else {
         /* empty else */
       }
     }
   }
 }
-
 

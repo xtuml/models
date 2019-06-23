@@ -4,7 +4,7 @@
  * Class:       fruit  (FRUIT)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef POLYCALC_FRUIT_CLASS_H
@@ -22,7 +22,6 @@ struct polycalc_FRUIT {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
   i_t level_of_vitC;  /* - level_of_vitC */
-
   /* relationship storage */
   void * R3_subtype;
   Escher_ClassNumber_t R3_object_id;
@@ -38,7 +37,6 @@ struct polycalc_FRUIT {
      ((polycalc_TOMATO *)((FRUIT)->R3_subtype)) : (0) )
 
 
-
 #define polycalc_FRUIT_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_polycalc_FRUIT_extent;
 
@@ -50,7 +48,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_FRUITevent1;
 extern const Escher_xtUMLEventConstant_t polycalc_FRUITevent1c;
-
 /*
  * instance event:  FRUIT2:'juiced'
  */
@@ -59,20 +56,17 @@ typedef struct {
   i_t p_percentage; /* percentage */
 } polycalc_FRUITevent2;
 extern const Escher_xtUMLEventConstant_t polycalc_FRUITevent2c;
-
 /*
  * instance event:  FRUIT3:'localdummy'
  * warning:  Event is not used in application - no code generated.
  */
-
 /*
  * union of events targeted towards 'FRUIT' state machine
  */
 typedef union {
-  polycalc_FRUITevent1 fruit11;  /* polymorphic event - not consumed by FRUIT */
-  polycalc_FRUITevent2 fruit22;  
+  polycalc_FRUITevent1 fruit1_1;  /* polymorphic event - not consumed by FRUIT */
+  polycalc_FRUITevent2 fruit2_2;  
 } polycalc_FRUIT_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -94,5 +88,3 @@ extern void polycalc_FRUIT_R3PolymorphicEvent( const polycalc_FRUIT * const, Esc
 #endif
 
 #endif  /* POLYCALC_FRUIT_CLASS_H */
-
-

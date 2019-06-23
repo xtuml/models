@@ -4,7 +4,7 @@
  * Class:       puzzle  (PUZZLE)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef POLYCALC_PUZZLE_CLASS_H
@@ -21,7 +21,6 @@ extern	"C"	{
 struct polycalc_PUZZLE {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
-
   /* relationship storage */
   void * R2_subtype;
   Escher_ClassNumber_t R2_object_id;
@@ -37,7 +36,6 @@ struct polycalc_PUZZLE {
      ((polycalc_GARDEN *)((PUZZLE)->R2_subtype)) : (0) )
 
 
-
 #define polycalc_PUZZLE_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_polycalc_PUZZLE_extent;
 
@@ -49,7 +47,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_PUZZLE_CBevent1;
 extern const Escher_xtUMLEventConstant_t polycalc_PUZZLE_CBevent1c;
-
 /*
  * class-based event:  PUZZLE_A2:'passed'
  */
@@ -58,15 +55,13 @@ typedef struct {
   i_t p_number; /* number */
 } polycalc_PUZZLE_CBevent2;
 extern const Escher_xtUMLEventConstant_t polycalc_PUZZLE_CBevent2c;
-
 /*
  * union of events targeted towards 'PUZZLE' state machine
  */
 typedef union {
-  polycalc_PUZZLE_CBevent1 puzzle11;  
-  polycalc_PUZZLE_CBevent2 puzzle22;  
+  polycalc_PUZZLE_CBevent1 puzzle1_1;  
+  polycalc_PUZZLE_CBevent2 puzzle2_2;  
 } polycalc_PUZZLE_CB_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -77,15 +72,12 @@ typedef union {
 #define polycalc_PUZZLE_CB_STATE_5 5  /* state [5]:  (gardening1) */
 #define polycalc_PUZZLE_CB_STATE_6 6  /* state [6]:  (gardening2) */
 #define polycalc_PUZZLE_CB_STATE_7 7  /* state [7]:  (done with test2) */
-
 /*
  * enumeration of state model event numbers
  */
 #define POLYCALC_PUZZLE_CBEVENT1NUM 0  /* PUZZLE_A1:'start' */
 #define POLYCALC_PUZZLE_CBEVENT2NUM 1  /* PUZZLE_A2:'passed' */
-
 extern void polycalc_PUZZLE_CBDispatch( Escher_xtUMLEvent_t * );
-
 
 /*
  * instance event:  PUZZLE1:'solve'
@@ -95,7 +87,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_PUZZLEevent1;
 extern const Escher_xtUMLEventConstant_t polycalc_PUZZLEevent1c;
-
 /*
  * instance event:  PUZZLE2:'done'
  */
@@ -104,20 +95,17 @@ typedef struct {
   i_t p_value; /* value */
 } polycalc_PUZZLEevent2;
 extern const Escher_xtUMLEventConstant_t polycalc_PUZZLEevent2c;
-
 /*
  * instance event:  PUZZLE3:'finished'
  * warning:  Event is not used in application - no code generated.
  */
-
 /*
  * union of events targeted towards 'PUZZLE' state machine
  */
 typedef union {
-  polycalc_PUZZLEevent1 puzzle11;  /* polymorphic event - not consumed by PUZZLE */
-  polycalc_PUZZLEevent2 puzzle22;  /* polymorphic event - not consumed by PUZZLE */
+  polycalc_PUZZLEevent1 puzzle1_1;  /* polymorphic event - not consumed by PUZZLE */
+  polycalc_PUZZLEevent2 puzzle2_2;  /* polymorphic event - not consumed by PUZZLE */
 } polycalc_PUZZLE_Events_u;
-
 /* WARNING! No states defined for state model */
 /*
  * enumeration of state model event numbers
@@ -136,5 +124,3 @@ extern void polycalc_PUZZLE_R2PolymorphicEvent( const polycalc_PUZZLE * const, E
 #endif
 
 #endif  /* POLYCALC_PUZZLE_CLASS_H */
-
-

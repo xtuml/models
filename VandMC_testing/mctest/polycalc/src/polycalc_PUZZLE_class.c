@@ -4,7 +4,7 @@
  * Class:       puzzle  (PUZZLE)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -14,7 +14,6 @@
 
 
 /* Accessors to PUZZLE[R2] subtypes */
-
 
 /*
  * Statically allocate space for the instance population for this class.
@@ -43,35 +42,35 @@ static void polycalc_PUZZLE_CB_act1( polycalc_PUZZLE *, const Escher_xtUMLEvent_
 static void
 polycalc_PUZZLE_CB_act1( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_OP * op; polycalc_ADD * add; polycalc_SUB * sub; polycalc_MUL * mul; polycalc_DIV * div; polycalc_PUZZLE * puzzle; polycalc_GENERAL * general; 
+  polycalc_GENERAL * general;polycalc_PUZZLE * puzzle;polycalc_DIV * div;polycalc_MUL * mul;polycalc_SUB * sub;polycalc_ADD * add;polycalc_OP * op;
   /* CREATE OBJECT INSTANCE op OF OP */
   op = (polycalc_OP *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_OP_CLASS_NUMBER );
-  /* ASSIGN op.operatorr = '+' */
-  Escher_strcpy( op->operatorr, "+" );
+  /* ASSIGN op.operatorr = + */
+  Escher_strcpy( ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.operatorr" ))->operatorr, "+" );
   /* CREATE OBJECT INSTANCE add OF ADD */
   add = (polycalc_ADD *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_ADD_CLASS_NUMBER );
   /* RELATE add TO op ACROSS R1 */
   polycalc_ADD_R1_Link( op, add );
   /* CREATE OBJECT INSTANCE op OF OP */
   op = (polycalc_OP *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_OP_CLASS_NUMBER );
-  /* ASSIGN op.operatorr = '-' */
-  Escher_strcpy( op->operatorr, "-" );
+  /* ASSIGN op.operatorr = - */
+  Escher_strcpy( ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.operatorr" ))->operatorr, "-" );
   /* CREATE OBJECT INSTANCE sub OF SUB */
   sub = (polycalc_SUB *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_SUB_CLASS_NUMBER );
   /* RELATE sub TO op ACROSS R1 */
   polycalc_SUB_R1_Link( op, sub );
   /* CREATE OBJECT INSTANCE op OF OP */
   op = (polycalc_OP *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_OP_CLASS_NUMBER );
-  /* ASSIGN op.operatorr = '*' */
-  Escher_strcpy( op->operatorr, "*" );
+  /* ASSIGN op.operatorr = * */
+  Escher_strcpy( ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.operatorr" ))->operatorr, "*" );
   /* CREATE OBJECT INSTANCE mul OF MUL */
   mul = (polycalc_MUL *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_MUL_CLASS_NUMBER );
   /* RELATE mul TO op ACROSS R1 */
   polycalc_MUL_R1_Link( op, mul );
   /* CREATE OBJECT INSTANCE op OF OP */
   op = (polycalc_OP *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_OP_CLASS_NUMBER );
-  /* ASSIGN op.operatorr = '/' */
-  Escher_strcpy( op->operatorr, "/" );
+  /* ASSIGN op.operatorr = / */
+  Escher_strcpy( ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.operatorr" ))->operatorr, "/" );
   /* CREATE OBJECT INSTANCE div OF DIV */
   div = (polycalc_DIV *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_DIV_CLASS_NUMBER );
   /* RELATE div TO op ACROSS R1 */
@@ -96,15 +95,14 @@ static void
 polycalc_PUZZLE_CB_act2( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * const event )
 {
   polycalc_PUZZLE_CBevent2 * rcvd_evt = (polycalc_PUZZLE_CBevent2 *) event;
-  polycalc_PUZZLE * puzzle=0; polycalc_GENERAL * general = 0; /* general (GENERAL) */
- 
-  /* LOG::LogSuccess( message:'done with test 1' ) */
+  polycalc_PUZZLE * puzzle=0;polycalc_GENERAL * general=0;
+  /* LOG::LogSuccess( message:done with test 1 ) */
   LOG_LogSuccess( "done with test 1" );
   /* SELECT any puzzle FROM INSTANCES OF PUZZLE */
   puzzle = (polycalc_PUZZLE *) Escher_SetGetAny( &pG_polycalc_PUZZLE_extent.active );
   /* SELECT one general RELATED BY puzzle->GENERAL[R2] */
   general = 0;
-  if ( polycalc_GENERAL_CLASS_NUMBER == puzzle->R2_object_id )  general = (polycalc_GENERAL *) puzzle->R2_subtype;
+  if ( ( 0 != puzzle ) && ( polycalc_GENERAL_CLASS_NUMBER == puzzle->R2_object_id ) )  general = ( 0 != puzzle ) ? (polycalc_GENERAL *) puzzle->R2_subtype : 0;
   /* UNRELATE general FROM puzzle ACROSS R2 */
   polycalc_GENERAL_R2_Unlink( puzzle, general );
   /* DELETE OBJECT INSTANCE general */
@@ -118,10 +116,9 @@ polycalc_PUZZLE_CB_act2( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * con
   }
   Escher_DeleteInstance( (Escher_iHandle_t) puzzle, polycalc_DOMAIN_ID, polycalc_PUZZLE_CLASS_NUMBER );
   /* GENERATE PUZZLE_A1:start() TO PUZZLE CLASS */
-  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( (void *) 0, &polycalc_PUZZLE_CBevent1c );
+  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( 0, &polycalc_PUZZLE_CBevent1c );
     Escher_SendEvent( e );
   }
-
 }
 
 /*
@@ -132,9 +129,9 @@ static void
 polycalc_PUZZLE_CB_act3( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * const event )
 {
   polycalc_PUZZLE_CBevent2 * rcvd_evt = (polycalc_PUZZLE_CBevent2 *) event;
-  /* IF ( ( 1 == PARAM.number ) ) */
-  if ( ( 1 == rcvd_evt->p_number ) ) {
-    polycalc_PUZZLE * puzzle=0; 
+  /* IF ( 1 == PARAM.number ) */
+  if ( 1 == rcvd_evt->p_number ) {
+    polycalc_PUZZLE * puzzle=0;
     /* SELECT any puzzle FROM INSTANCES OF PUZZLE */
     puzzle = (polycalc_PUZZLE *) Escher_SetGetAny( &pG_polycalc_PUZZLE_extent.active );
     /* GENERATE PUZZLE1:solve() TO puzzle */
@@ -143,7 +140,7 @@ polycalc_PUZZLE_CB_act3( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * con
     }
   }
   else {
-    /* LOG::LogFailure( message:'failed with incorrect puzzle number' ) */
+    /* LOG::LogFailure( message:failed with incorrect puzzle number ) */
     LOG_LogFailure( "failed with incorrect puzzle number" );
   }
 }
@@ -155,11 +152,11 @@ static void polycalc_PUZZLE_CB_act4( polycalc_PUZZLE *, const Escher_xtUMLEvent_
 static void
 polycalc_PUZZLE_CB_act4( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_FRUIT * fruit; polycalc_ORANGE * orange; polycalc_TOMATO * tomato; polycalc_VEGETABLE * vegetable; polycalc_CARROT * carrot; polycalc_PUZZLE * puzzle; polycalc_GARDEN * garden; 
+  polycalc_GARDEN * garden;polycalc_PUZZLE * puzzle;polycalc_CARROT * carrot;polycalc_VEGETABLE * vegetable;polycalc_TOMATO * tomato;polycalc_ORANGE * orange;polycalc_FRUIT * fruit;
   /* CREATE OBJECT INSTANCE fruit OF FRUIT */
   fruit = (polycalc_FRUIT *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_FRUIT_CLASS_NUMBER );
   /* ASSIGN fruit.level_of_vitC = 89 */
-  fruit->level_of_vitC = 89;
+  ((polycalc_FRUIT *)xtUML_detect_empty_handle( fruit, "FRUIT", "fruit.level_of_vitC" ))->level_of_vitC = 89;
   /* CREATE OBJECT INSTANCE orange OF ORANGE */
   orange = (polycalc_ORANGE *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_ORANGE_CLASS_NUMBER );
   /* RELATE orange TO fruit ACROSS R3 */
@@ -167,7 +164,7 @@ polycalc_PUZZLE_CB_act4( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * con
   /* CREATE OBJECT INSTANCE fruit OF FRUIT */
   fruit = (polycalc_FRUIT *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_FRUIT_CLASS_NUMBER );
   /* ASSIGN fruit.level_of_vitC = 28 */
-  fruit->level_of_vitC = 28;
+  ((polycalc_FRUIT *)xtUML_detect_empty_handle( fruit, "FRUIT", "fruit.level_of_vitC" ))->level_of_vitC = 28;
   /* CREATE OBJECT INSTANCE tomato OF TOMATO */
   tomato = (polycalc_TOMATO *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_TOMATO_CLASS_NUMBER );
   /* RELATE tomato TO fruit ACROSS R3 */
@@ -175,13 +172,13 @@ polycalc_PUZZLE_CB_act4( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * con
   /* CREATE OBJECT INSTANCE vegetable OF VEGETABLE */
   vegetable = (polycalc_VEGETABLE *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_VEGETABLE_CLASS_NUMBER );
   /* ASSIGN vegetable.peelable = TRUE */
-  vegetable->peelable = TRUE;
+  ((polycalc_VEGETABLE *)xtUML_detect_empty_handle( vegetable, "VEGETABLE", "vegetable.peelable" ))->peelable = TRUE;
   /* RELATE tomato TO vegetable ACROSS R4 */
   polycalc_TOMATO_R4_Link( vegetable, tomato );
   /* CREATE OBJECT INSTANCE vegetable OF VEGETABLE */
   vegetable = (polycalc_VEGETABLE *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_VEGETABLE_CLASS_NUMBER );
   /* ASSIGN vegetable.peelable = TRUE */
-  vegetable->peelable = TRUE;
+  ((polycalc_VEGETABLE *)xtUML_detect_empty_handle( vegetable, "VEGETABLE", "vegetable.peelable" ))->peelable = TRUE;
   /* CREATE OBJECT INSTANCE carrot OF CARROT */
   carrot = (polycalc_CARROT *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_CARROT_CLASS_NUMBER );
   /* RELATE carrot TO vegetable ACROSS R4 */
@@ -206,9 +203,9 @@ static void
 polycalc_PUZZLE_CB_act5( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * const event )
 {
   polycalc_PUZZLE_CBevent2 * rcvd_evt = (polycalc_PUZZLE_CBevent2 *) event;
-  /* IF ( ( 2 == PARAM.number ) ) */
-  if ( ( 2 == rcvd_evt->p_number ) ) {
-    polycalc_PUZZLE * puzzle=0; 
+  /* IF ( 2 == PARAM.number ) */
+  if ( 2 == rcvd_evt->p_number ) {
+    polycalc_PUZZLE * puzzle=0;
     /* SELECT any puzzle FROM INSTANCES OF PUZZLE */
     puzzle = (polycalc_PUZZLE *) Escher_SetGetAny( &pG_polycalc_PUZZLE_extent.active );
     /* GENERATE PUZZLE1:solve() TO puzzle */
@@ -217,7 +214,7 @@ polycalc_PUZZLE_CB_act5( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * con
     }
   }
   else {
-    /* LOG::LogFailure( message:'failed with incorrect puzzle number' ) */
+    /* LOG::LogFailure( message:failed with incorrect puzzle number ) */
     LOG_LogFailure( "failed with incorrect puzzle number" );
   }
 }
@@ -230,9 +227,9 @@ static void
 polycalc_PUZZLE_CB_act6( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * const event )
 {
   polycalc_PUZZLE_CBevent2 * rcvd_evt = (polycalc_PUZZLE_CBevent2 *) event;
-  /* IF ( ( 2 == PARAM.number ) ) */
-  if ( ( 2 == rcvd_evt->p_number ) ) {
-    polycalc_PUZZLE * puzzle=0; 
+  /* IF ( 2 == PARAM.number ) */
+  if ( 2 == rcvd_evt->p_number ) {
+    polycalc_PUZZLE * puzzle=0;
     /* SELECT any puzzle FROM INSTANCES OF PUZZLE */
     puzzle = (polycalc_PUZZLE *) Escher_SetGetAny( &pG_polycalc_PUZZLE_extent.active );
     /* GENERATE PUZZLE1:solve() TO puzzle */
@@ -241,7 +238,7 @@ polycalc_PUZZLE_CB_act6( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * con
     }
   }
   else {
-    /* LOG::LogFailure( message:'failed with incorrect puzzle number' ) */
+    /* LOG::LogFailure( message:failed with incorrect puzzle number ) */
     LOG_LogFailure( "failed with incorrect puzzle number" );
   }
 }
@@ -254,13 +251,12 @@ static void
 polycalc_PUZZLE_CB_act7( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * const event )
 {
   polycalc_PUZZLE_CBevent2 * rcvd_evt = (polycalc_PUZZLE_CBevent2 *) event;
-  polycalc_PUZZLE * puzzle=0; polycalc_GARDEN * garden = 0; /* garden (GARDEN) */
- 
+  polycalc_PUZZLE * puzzle=0;polycalc_GARDEN * garden=0;
   /* SELECT any puzzle FROM INSTANCES OF PUZZLE */
   puzzle = (polycalc_PUZZLE *) Escher_SetGetAny( &pG_polycalc_PUZZLE_extent.active );
   /* SELECT one garden RELATED BY puzzle->GARDEN[R2] */
   garden = 0;
-  if ( polycalc_GARDEN_CLASS_NUMBER == puzzle->R2_object_id )  garden = (polycalc_GARDEN *) puzzle->R2_subtype;
+  if ( ( 0 != puzzle ) && ( polycalc_GARDEN_CLASS_NUMBER == puzzle->R2_object_id ) )  garden = ( 0 != puzzle ) ? (polycalc_GARDEN *) puzzle->R2_subtype : 0;
   /* UNRELATE garden FROM puzzle ACROSS R2 */
   polycalc_GARDEN_R2_Unlink( puzzle, garden );
   /* DELETE OBJECT INSTANCE garden */
@@ -273,9 +269,9 @@ polycalc_PUZZLE_CB_act7( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * con
     XTUML_EMPTY_HANDLE_TRACE( "PUZZLE", "Escher_DeleteInstance" );
   }
   Escher_DeleteInstance( (Escher_iHandle_t) puzzle, polycalc_DOMAIN_ID, polycalc_PUZZLE_CLASS_NUMBER );
-  /* LOG::LogSuccess( message:'done with test 2' ) */
+  /* LOG::LogSuccess( message:done with test 2 ) */
   LOG_LogSuccess( "done with test 2" );
-  /* LOG::LogSuccess( message:'finished with all tests' ) */
+  /* LOG::LogSuccess( message:finished with all tests ) */
   LOG_LogSuccess( "finished with all tests" );
   /* ARCH::shutdown(  ) */
   ARCH_shutdown();
@@ -284,11 +280,9 @@ polycalc_PUZZLE_CB_act7( polycalc_PUZZLE * self, const Escher_xtUMLEvent_t * con
 const Escher_xtUMLEventConstant_t polycalc_PUZZLE_CBevent1c = {
   polycalc_DOMAIN_ID, polycalc_PUZZLE_CLASS_NUMBER_CB, POLYCALC_PUZZLE_CBEVENT1NUM,
   ESCHER_IS_ASSIGNER_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_PUZZLE_CBevent2c = {
   polycalc_DOMAIN_ID, polycalc_PUZZLE_CLASS_NUMBER_CB, POLYCALC_PUZZLE_CBEVENT2NUM,
   ESCHER_IS_ASSIGNER_EVENT };
-
 
 
 /*
@@ -343,9 +337,9 @@ polycalc_PUZZLE_CBDispatch( Escher_xtUMLEvent_t * event )
   Escher_StateNumber_t next_state = polycalc_PUZZLE_CB_StateEventMatrix[ current_state ][ event_number ];
 
   if ( next_state <= 7 ) {
-    /* Execute the state action and update the current state.  */
-    ( *polycalc_PUZZLE_CB_acts[ next_state ] )( &class_based_singleton, event );
+    /* Update the current state and execute the state action.  */
     class_based_singleton.current_state = next_state;
+    ( *polycalc_PUZZLE_CB_acts[ next_state ] )( &class_based_singleton, event );
   } else {
     if ( EVENT_CANT_HAPPEN == next_state ) {
       /* Event cannot happen.  */
@@ -361,11 +355,9 @@ polycalc_PUZZLE_CBDispatch( Escher_xtUMLEvent_t * event )
 const Escher_xtUMLEventConstant_t polycalc_PUZZLEevent1c = {
   polycalc_DOMAIN_ID, polycalc_PUZZLE_CLASS_NUMBER, POLYCALC_PUZZLEEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_POLYMORPHIC_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_PUZZLEevent2c = {
   polycalc_DOMAIN_ID, polycalc_PUZZLE_CLASS_NUMBER, POLYCALC_PUZZLEEVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_POLYMORPHIC_EVENT };
-
 
 
 
@@ -424,7 +416,8 @@ polycalc_PUZZLE_R2PolymorphicEvent( const polycalc_PUZZLE * const p_puzzle, Esch
           break; /* after transition */
       }
       break;
+    default:
+      UserEventCantHappenCallout( 0, 0, event_number );
   }
 }
-
 

@@ -4,7 +4,7 @@
  * Class:       mul  (MUL)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef POLYCALC_MUL_CLASS_H
@@ -21,14 +21,12 @@ extern	"C"	{
 struct polycalc_MUL {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
-
   /* relationship storage */
   polycalc_OP * OP_R1;
 };
 
 void polycalc_MUL_R1_Link( polycalc_OP *, polycalc_MUL * );
 /* Note:  No OP<-R1->MUL unrelate accessor needed.  */
-
 
 #define polycalc_MUL_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_polycalc_MUL_extent;
@@ -41,14 +39,12 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_MULevent_OP_PE2;
 extern const Escher_xtUMLEventConstant_t polycalc_MULevent_OP_PE2c;
-
 /*
  * union of events targeted towards 'MUL' state machine
  */
 typedef union {
-  polycalc_MULevent_OP_PE2 mul21;  
+  polycalc_MULevent_OP_PE2 mul2_1;  
 } polycalc_MUL_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -64,5 +60,3 @@ extern void polycalc_MUL_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* POLYCALC_MUL_CLASS_H */
-
-

@@ -4,7 +4,7 @@
  * Class:       general  (GENERAL)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -46,7 +46,6 @@ polycalc_GENERAL_R2_Unlink( polycalc_PUZZLE * supertype, polycalc_GENERAL * subt
   supertype->R2_object_id = 0;
 }
 
-
 /*
  * Statically allocate space for the instance population for this class.
  * Allocate space for the class instance and its attribute values.
@@ -74,27 +73,27 @@ static void polycalc_GENERAL_act1( polycalc_GENERAL *, const Escher_xtUMLEvent_t
 static void
 polycalc_GENERAL_act1( polycalc_GENERAL * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_OP * op=0; 
+  polycalc_OP * op=0;
   /* ASSIGN self.accumulator = 0 */
-  self->accumulator = 0;
-  /* SELECT any op FROM INSTANCES OF OP WHERE ( SELECTED.operatorr == '+' ) */
+  ((polycalc_GENERAL *)xtUML_detect_empty_handle( self, "GENERAL", "self.accumulator" ))->accumulator = 0;
+  /* SELECT any op FROM INSTANCES OF OP WHERE SELECTED.operatorr == + */
   op = 0;
   { polycalc_OP * selected;
     Escher_Iterator_s iteroppolycalc_OP;
     Escher_IteratorReset( &iteroppolycalc_OP, &pG_polycalc_OP_extent.active );
     while ( (selected = (polycalc_OP *) Escher_IteratorNext( &iteroppolycalc_OP )) != 0 ) {
-      if ( ( Escher_strcmp( selected->operatorr, "+" ) == 0 ) ) {
+      if ( Escher_strcmp( ((polycalc_OP *)xtUML_detect_empty_handle( selected, "OP", "SELECTED.operatorr" ))->operatorr, "+" ) == 0 ) {
         op = selected;
         break;
       }
     }
   }
   /* ASSIGN op.left = 11 */
-  op->left = 11;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.left" ))->left = 11;
   /* ASSIGN op.right = 22 */
-  op->right = 22;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.right" ))->right = 22;
   /* ASSIGN op.result = 0 */
-  op->result = 0;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.result" ))->result = 0;
   /* GENERATE OP2:combine() TO op */
   { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( op, &polycalc_OPevent2c );
     Escher_SendEvent( e );
@@ -109,27 +108,27 @@ static void
 polycalc_GENERAL_act2( polycalc_GENERAL * self, const Escher_xtUMLEvent_t * const event )
 {
   polycalc_PUZZLEevent2 * rcvd_evt = (polycalc_PUZZLEevent2 *) event;
-  polycalc_OP * op=0; 
+  polycalc_OP * op=0;
   /* ASSIGN self.accumulator = PARAM.value */
-  self->accumulator = rcvd_evt->p_value;
-  /* SELECT any op FROM INSTANCES OF OP WHERE ( SELECTED.operatorr == '-' ) */
+  ((polycalc_GENERAL *)xtUML_detect_empty_handle( self, "GENERAL", "self.accumulator" ))->accumulator = rcvd_evt->p_value;
+  /* SELECT any op FROM INSTANCES OF OP WHERE SELECTED.operatorr == - */
   op = 0;
   { polycalc_OP * selected;
     Escher_Iterator_s iteroppolycalc_OP;
     Escher_IteratorReset( &iteroppolycalc_OP, &pG_polycalc_OP_extent.active );
     while ( (selected = (polycalc_OP *) Escher_IteratorNext( &iteroppolycalc_OP )) != 0 ) {
-      if ( ( Escher_strcmp( selected->operatorr, "-" ) == 0 ) ) {
+      if ( Escher_strcmp( ((polycalc_OP *)xtUML_detect_empty_handle( selected, "OP", "SELECTED.operatorr" ))->operatorr, "-" ) == 0 ) {
         op = selected;
         break;
       }
     }
   }
   /* ASSIGN op.result = 0 */
-  op->result = 0;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.result" ))->result = 0;
   /* ASSIGN op.left = self.accumulator */
-  op->left = self->accumulator;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.left" ))->left = ((polycalc_GENERAL *)xtUML_detect_empty_handle( self, "GENERAL", "self.accumulator" ))->accumulator;
   /* ASSIGN op.right = 30 */
-  op->right = 30;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.right" ))->right = 30;
   /* GENERATE OP2:combine() TO op */
   { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( op, &polycalc_OPevent2c );
     Escher_SendEvent( e );
@@ -144,27 +143,27 @@ static void
 polycalc_GENERAL_act3( polycalc_GENERAL * self, const Escher_xtUMLEvent_t * const event )
 {
   polycalc_PUZZLEevent2 * rcvd_evt = (polycalc_PUZZLEevent2 *) event;
-  polycalc_OP * op=0; 
+  polycalc_OP * op=0;
   /* ASSIGN self.accumulator = PARAM.value */
-  self->accumulator = rcvd_evt->p_value;
-  /* SELECT any op FROM INSTANCES OF OP WHERE ( SELECTED.operatorr == '*' ) */
+  ((polycalc_GENERAL *)xtUML_detect_empty_handle( self, "GENERAL", "self.accumulator" ))->accumulator = rcvd_evt->p_value;
+  /* SELECT any op FROM INSTANCES OF OP WHERE SELECTED.operatorr == * */
   op = 0;
   { polycalc_OP * selected;
     Escher_Iterator_s iteroppolycalc_OP;
     Escher_IteratorReset( &iteroppolycalc_OP, &pG_polycalc_OP_extent.active );
     while ( (selected = (polycalc_OP *) Escher_IteratorNext( &iteroppolycalc_OP )) != 0 ) {
-      if ( ( Escher_strcmp( selected->operatorr, "*" ) == 0 ) ) {
+      if ( Escher_strcmp( ((polycalc_OP *)xtUML_detect_empty_handle( selected, "OP", "SELECTED.operatorr" ))->operatorr, "*" ) == 0 ) {
         op = selected;
         break;
       }
     }
   }
   /* ASSIGN op.result = 0 */
-  op->result = 0;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.result" ))->result = 0;
   /* ASSIGN op.left = self.accumulator */
-  op->left = self->accumulator;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.left" ))->left = ((polycalc_GENERAL *)xtUML_detect_empty_handle( self, "GENERAL", "self.accumulator" ))->accumulator;
   /* ASSIGN op.right = 4 */
-  op->right = 4;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.right" ))->right = 4;
   /* GENERATE OP2:combine() TO op */
   { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( op, &polycalc_OPevent2c );
     Escher_SendEvent( e );
@@ -179,27 +178,27 @@ static void
 polycalc_GENERAL_act4( polycalc_GENERAL * self, const Escher_xtUMLEvent_t * const event )
 {
   polycalc_PUZZLEevent2 * rcvd_evt = (polycalc_PUZZLEevent2 *) event;
-  polycalc_OP * op=0; 
+  polycalc_OP * op=0;
   /* ASSIGN self.accumulator = PARAM.value */
-  self->accumulator = rcvd_evt->p_value;
-  /* SELECT any op FROM INSTANCES OF OP WHERE ( SELECTED.operatorr == '/' ) */
+  ((polycalc_GENERAL *)xtUML_detect_empty_handle( self, "GENERAL", "self.accumulator" ))->accumulator = rcvd_evt->p_value;
+  /* SELECT any op FROM INSTANCES OF OP WHERE SELECTED.operatorr == / */
   op = 0;
   { polycalc_OP * selected;
     Escher_Iterator_s iteroppolycalc_OP;
     Escher_IteratorReset( &iteroppolycalc_OP, &pG_polycalc_OP_extent.active );
     while ( (selected = (polycalc_OP *) Escher_IteratorNext( &iteroppolycalc_OP )) != 0 ) {
-      if ( ( Escher_strcmp( selected->operatorr, "/" ) == 0 ) ) {
+      if ( Escher_strcmp( ((polycalc_OP *)xtUML_detect_empty_handle( selected, "OP", "SELECTED.operatorr" ))->operatorr, "/" ) == 0 ) {
         op = selected;
         break;
       }
     }
   }
   /* ASSIGN op.result = 0 */
-  op->result = 0;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.result" ))->result = 0;
   /* ASSIGN op.left = self.accumulator */
-  op->left = self->accumulator;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.left" ))->left = ((polycalc_GENERAL *)xtUML_detect_empty_handle( self, "GENERAL", "self.accumulator" ))->accumulator;
   /* ASSIGN op.right = 2 */
-  op->right = 2;
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.right" ))->right = 2;
   /* GENERATE OP2:combine() TO op */
   { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( op, &polycalc_OPevent2c );
     Escher_SendEvent( e );
@@ -215,18 +214,18 @@ polycalc_GENERAL_act5( polycalc_GENERAL * self, const Escher_xtUMLEvent_t * cons
 {
   polycalc_PUZZLEevent2 * rcvd_evt = (polycalc_PUZZLEevent2 *) event;
   /* ASSIGN self.accumulator = PARAM.value */
-  self->accumulator = rcvd_evt->p_value;
+  ((polycalc_GENERAL *)xtUML_detect_empty_handle( self, "GENERAL", "self.accumulator" ))->accumulator = rcvd_evt->p_value;
   /* LOG::LogInteger( message:self.accumulator ) */
-  LOG_LogInteger( self->accumulator );
-  /* IF ( ( 6 == self.accumulator ) ) */
-  if ( ( 6 == self->accumulator ) ) {
+  LOG_LogInteger( ((polycalc_GENERAL *)xtUML_detect_empty_handle( self, "GENERAL", "self.accumulator" ))->accumulator );
+  /* IF ( 6 == self.accumulator ) */
+  if ( 6 == ((polycalc_GENERAL *)xtUML_detect_empty_handle( self, "GENERAL", "self.accumulator" ))->accumulator ) {
     /* GENERATE GENERAL2:go() TO self */
     { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( self, &polycalc_GENERALevent2c );
       Escher_SendSelfEvent( e );
     }
   }
   else {
-    /* LOG::LogFailure( message:'test failed' ) */
+    /* LOG::LogFailure( message:test failed ) */
     LOG_LogFailure( "test failed" );
   }
 }
@@ -238,28 +237,24 @@ static void polycalc_GENERAL_act6( polycalc_GENERAL *, const Escher_xtUMLEvent_t
 static void
 polycalc_GENERAL_act6( polycalc_GENERAL * self, const Escher_xtUMLEvent_t * const event )
 {
-  /* LOG::LogSuccess( message:'test passed' ) */
+  /* LOG::LogSuccess( message:test passed ) */
   LOG_LogSuccess( "test passed" );
   /* GENERATE PUZZLE_A2:passed(number:1) TO PUZZLE CLASS */
-  { polycalc_PUZZLE_CBevent2 * e = (polycalc_PUZZLE_CBevent2 *) Escher_NewxtUMLEvent( (void *) 0, &polycalc_PUZZLE_CBevent2c );
+  { polycalc_PUZZLE_CBevent2 * e = (polycalc_PUZZLE_CBevent2 *) Escher_NewxtUMLEvent( 0, &polycalc_PUZZLE_CBevent2c );
     e->p_number = 1;
     Escher_SendEvent( (Escher_xtUMLEvent_t *) e );
   }
-
 }
 
 const Escher_xtUMLEventConstant_t polycalc_GENERALevent_PUZZLE_PE1c = {
   polycalc_DOMAIN_ID, polycalc_GENERAL_CLASS_NUMBER, POLYCALC_GENERALEVENT_PUZZLE_PE1NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_GENERALevent2c = {
   polycalc_DOMAIN_ID, polycalc_GENERAL_CLASS_NUMBER, POLYCALC_GENERALEVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_GENERALevent_PUZZLE_PE2c = {
   polycalc_DOMAIN_ID, polycalc_GENERAL_CLASS_NUMBER, POLYCALC_GENERALEVENT_PUZZLE_PE2NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 
 
 /*
@@ -272,17 +267,17 @@ static const Escher_SEMcell_t polycalc_GENERAL_StateEventMatrix[ 6 + 1 ][ 3 ] = 
   /* row 0:  uninitialized state (for creation events) */
   { EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN },
   /* row 1:  polycalc_GENERAL_STATE_1 (adding) */
-  { EVENT_CANT_HAPPEN, polycalc_GENERAL_STATE_1, polycalc_GENERAL_STATE_2 },
+  { EVENT_CANT_HAPPEN, polycalc_GENERAL_STATE_2, polycalc_GENERAL_STATE_1 },
   /* row 2:  polycalc_GENERAL_STATE_2 (subtracting) */
-  { EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN, polycalc_GENERAL_STATE_3 },
+  { EVENT_CANT_HAPPEN, polycalc_GENERAL_STATE_3, EVENT_CANT_HAPPEN },
   /* row 3:  polycalc_GENERAL_STATE_3 (multiplying) */
-  { EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN, polycalc_GENERAL_STATE_4 },
+  { EVENT_CANT_HAPPEN, polycalc_GENERAL_STATE_4, EVENT_CANT_HAPPEN },
   /* row 4:  polycalc_GENERAL_STATE_4 (dividing) */
-  { EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN, polycalc_GENERAL_STATE_5 },
+  { EVENT_CANT_HAPPEN, polycalc_GENERAL_STATE_5, EVENT_CANT_HAPPEN },
   /* row 5:  polycalc_GENERAL_STATE_5 (logging result) */
   { polycalc_GENERAL_STATE_6, EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN },
   /* row 6:  polycalc_GENERAL_STATE_6 (finished) */
-  { EVENT_CANT_HAPPEN, polycalc_GENERAL_STATE_1, EVENT_CANT_HAPPEN }
+  { EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN, polycalc_GENERAL_STATE_1 }
 };
 
   /*
@@ -309,7 +304,6 @@ polycalc_GENERAL_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 6 ) {
@@ -318,9 +312,9 @@ polycalc_GENERAL_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_GENERAL_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 6 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_GENERAL_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_GENERAL_acts[ next_state ] )( instance, event );
       } else if ( next_state == EVENT_CANT_HAPPEN ) {
           /* event cant happen */
           UserEventCantHappenCallout( current_state, next_state, event_number );
@@ -330,5 +324,4 @@ polycalc_GENERAL_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

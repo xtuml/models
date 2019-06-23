@@ -4,7 +4,7 @@
  * Class:       op  (OP)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -14,7 +14,6 @@
 
 
 /* Accessors to OP[R1] subtypes */
-
 
 /*
  * Statically allocate space for the instance population for this class.
@@ -43,25 +42,23 @@ static void polycalc_OP_act1( polycalc_OP *, const Escher_xtUMLEvent_t * const )
 static void
 polycalc_OP_act1( polycalc_OP * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_PUZZLE * puzzle=0; 
+  polycalc_PUZZLE * puzzle=0;
   /* SELECT any puzzle FROM INSTANCES OF PUZZLE */
   puzzle = (polycalc_PUZZLE *) Escher_SetGetAny( &pG_polycalc_PUZZLE_extent.active );
   /* GENERATE PUZZLE2:done(value:self.result) TO puzzle */
   { polycalc_PUZZLEevent2 * e = (polycalc_PUZZLEevent2 *) Escher_NewxtUMLEvent( puzzle, &polycalc_PUZZLEevent2c );
-    e->p_value = self->result;
+    e->p_value = ((polycalc_OP *)xtUML_detect_empty_handle( self, "OP", "self.result" ))->result;
     Escher_SendEvent( (Escher_xtUMLEvent_t *) e );
   }
 }
 
+
 const Escher_xtUMLEventConstant_t polycalc_OPevent2c = {
   polycalc_DOMAIN_ID, polycalc_OP_CLASS_NUMBER, POLYCALC_OPEVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_POLYMORPHIC_EVENT };
-
-
 const Escher_xtUMLEventConstant_t polycalc_OPevent3c = {
   polycalc_DOMAIN_ID, polycalc_OP_CLASS_NUMBER, POLYCALC_OPEVENT3NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -96,7 +93,6 @@ polycalc_OP_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   /* If event is polymorphic, forward to the dispatcher in the responding
      subtype below us in the generalization hierarchy.  */
   if ( 0 != GetIsPolymorphicEvent( event ) ) {
@@ -109,9 +105,9 @@ polycalc_OP_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_OP_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 1 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_OP_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_OP_acts[ next_state ] )( instance, event );
       } else if ( next_state == EVENT_CANT_HAPPEN ) {
           /* event cant happen */
           UserEventCantHappenCallout( current_state, next_state, event_number );
@@ -173,7 +169,8 @@ polycalc_OP_R1PolymorphicEvent( const polycalc_OP * const p_op, Escher_xtUMLEven
           break; /* after transition */
       }
       break;
+    default:
+      UserEventCantHappenCallout( 0, 0, event_number );
   }
 }
-
 
