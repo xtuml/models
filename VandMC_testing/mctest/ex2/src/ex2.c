@@ -10,11 +10,11 @@
 #include "ex2_sys_types.h"
 #include "ex2.h"
 #include "ex2_BR_bridge.h"
-#include "ARCH_bridge.h"
-#include "NVS_bridge.h"
-#include "PERSIST_bridge.h"
-#include "LOG_bridge.h"
 #include "TIM_bridge.h"
+#include "LOG_bridge.h"
+#include "PERSIST_bridge.h"
+#include "NVS_bridge.h"
+#include "ARCH_bridge.h"
 #include "ex2_classes.h"
 
 /*
@@ -30,7 +30,6 @@ ex2_instrumentation_start_test()
   /* ::test(  ) */
   ex2_test();
 }
-
 /*
  * UML Domain Functions (Synchronous Services)
  */
@@ -51,8 +50,8 @@ ex2_setup()
     LOG_LogInfo( "Did not find any PEI data, initializing NVS" );
     /* ASSIGN i = NVS::format() */
     i = NVS_format();
-    /* IF ( ( i != 0 ) ) */
-    if ( ( i != 0 ) ) {
+    /* IF ( i != 0 ) */
+    if ( i != 0 ) {
       /* LOG::LogFailure( message:Error formatting the NVS. ) */
       LOG_LogFailure( "Error formatting the NVS." );
     }
@@ -62,11 +61,11 @@ ex2_setup()
     i = NVS_checksum( 1, 2 );
     /* CREATE OBJECT INSTANCE dr OF DR */
     dr = (ex2_DR *) Escher_CreateInstance( ex2_DOMAIN_ID, ex2_DR_CLASS_NUMBER );
-    dr->dr_id = (Escher_UniqueID_t) dr;
+    dr->dr_id = Escher_ID_factory();
     /* ASSIGN i = PERSIST::commit() */
     i = PERSIST_commit();
-    /* IF ( ( i != 0 ) ) */
-    if ( ( i != 0 ) ) {
+    /* IF ( i != 0 ) */
+    if ( i != 0 ) {
       /* LOG::LogFailure( message:Error commiting persistence information. Error code is  ) */
       LOG_LogFailure( "Error commiting persistence information. Error code is " );
       /* LOG::LogInteger( message:i ) */
@@ -78,7 +77,6 @@ ex2_setup()
     LOG_LogInfo( "Found PEI data." );
   }
   Escher_ClearSet( trans );
-
 }
 
 /*
@@ -107,7 +105,6 @@ ex2_test()
     }
   }}}
   Escher_ClearSet( drs );
-
 }
 
 /*
@@ -116,7 +113,7 @@ ex2_test()
 void
 ex2_xit()
 {
-  ex2_TRAN * tran=0;ex2_A * a=0;ex2_NOI * noi=0;Escher_ObjectSet_s trans_space={0}; Escher_ObjectSet_s * trans = &trans_space;Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space;Escher_ObjectSet_s nois_space={0}; Escher_ObjectSet_s * nois = &nois_space;
+  ex2_NOI * noi=0;ex2_A * a=0;ex2_TRAN * tran=0;Escher_ObjectSet_s nois_space={0}; Escher_ObjectSet_s * nois = &nois_space;Escher_ObjectSet_s as_space={0}; Escher_ObjectSet_s * as = &as_space;Escher_ObjectSet_s trans_space={0}; Escher_ObjectSet_s * trans = &trans_space;
   /* SELECT many trans FROM INSTANCES OF TRAN */
   Escher_CopySet( trans, &pG_ex2_TRAN_extent.active );
   /* FOR EACH tran IN trans */
@@ -161,10 +158,8 @@ ex2_xit()
   }}}
   /* ARCH::shutdown(  ) */
   ARCH_shutdown();
-  Escher_ClearSet( trans );Escher_ClearSet( as );Escher_ClearSet( nois );
-
+  Escher_ClearSet( nois );Escher_ClearSet( as );Escher_ClearSet( trans );
 }
-
 /* xtUML class info (collections, sizes, etc.) */
 Escher_Extent_t * const ex2_class_info[ ex2_MAX_CLASS_NUMBERS ] = {
   &pG_ex2_DR_extent,

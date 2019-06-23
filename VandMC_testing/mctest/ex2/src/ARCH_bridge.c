@@ -1,8 +1,5 @@
 /*----------------------------------------------------------------------------
- * File:  ARCH_bridge.c
- *
- * Description:
- * Methods for bridging to an external entity.
+ * Description:   Methods for bridging to an external entity.
  *
  * External Entity:  Architecture (ARCH)
  * 
@@ -15,8 +12,6 @@
 #include "NVS_bridge.h"
 #include "PERSIST_bridge.h"
 #include "TIM_bridge.h"
-#include "ARCH_bridge.h"
-#include "ex2_sys_types.h"
 extern bool Escher_run_flag; /* Turn this false to stop the event queues.  */
 
 /*
@@ -29,5 +24,4 @@ ARCH_shutdown()
   return;
   /* Replace/Insert your implementation code here... */
 }
-
 

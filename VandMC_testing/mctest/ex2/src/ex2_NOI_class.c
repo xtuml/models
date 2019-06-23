@@ -31,4 +31,3 @@ Escher_Extent_t pG_ex2_NOI_extent = {
   sizeof( ex2_NOI ), 0, ex2_NOI_MAX_EXTENT_SIZE
   };
 
-

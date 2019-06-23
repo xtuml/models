@@ -22,7 +22,6 @@ struct ex2_NOI {
 
   /* application analysis class attributes */
   Escher_UniqueID_t noi_id;  /* * noi_id */
-
 };
 
 
@@ -35,5 +34,3 @@ extern Escher_Extent_t pG_ex2_NOI_extent;
 #endif
 
 #endif  /* EX2_NOI_CLASS_H */
-
-

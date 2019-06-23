@@ -16,7 +16,6 @@ extern	"C"	{
 #endif
 
 #include "ex2_sys_types.h"
-
 bool ex2_BR_ret_bool( const bool );
 i_t ex2_BR_ret_int( const i_t );
 r_t ex2_BR_ret_real( const r_t );

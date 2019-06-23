@@ -25,7 +25,6 @@ ex2_TRAN_op_ret_int( const i_t p_i )
   /* RETURN PARAM.i */
   {i_t xtumlOALrv = p_i;
   return xtumlOALrv;}
-
 }
 
 /*
@@ -37,9 +36,9 @@ ex2_TRAN_op_ret_string( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], c_t p_s[ESCH
   i_t i;
   /* ASSIGN i = 9 */
   i = 9;
-  /* WHILE ( ( i > 0 ) ) */
-  while ( ( i > 0 ) ) {
-    c_t vtrv6ex2_TRAN_op_ret_string215[ESCHER_SYS_MAX_STRING_LEN];c_t localstring[ESCHER_SYS_MAX_STRING_LEN];c_t str[ESCHER_SYS_MAX_STRING_LEN];
+  /* WHILE ( i > 0 ) */
+  while ( i > 0 ) {
+    c_t vtrv6ex2_TRAN_op_ret_string215[ESCHER_SYS_MAX_STRING_LEN];c_t str[ESCHER_SYS_MAX_STRING_LEN];c_t localstring[ESCHER_SYS_MAX_STRING_LEN];
     /* ASSIGN localstring = abc */
     Escher_strcpy( localstring, "abc" );
     /* ASSIGN str = TRAN::ret_string2(s:localstring) */
@@ -50,7 +49,6 @@ ex2_TRAN_op_ret_string( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], c_t p_s[ESCH
   /* RETURN PARAM.s */
   {c_t * xtumlOALrv = p_s;
   return Escher_strcpy( A0xtumlsret, xtumlOALrv );}
-
 }
 
 /*
@@ -62,7 +60,6 @@ ex2_TRAN_op_ret_bool( const bool p_b )
   /* RETURN PARAM.b */
   {bool xtumlOALrv = p_b;
   return xtumlOALrv;}
-
 }
 
 /*
@@ -74,7 +71,6 @@ ex2_TRAN_op_ret_real( const r_t p_r )
   /* RETURN PARAM.r */
   {r_t xtumlOALrv = p_r;
   return xtumlOALrv;}
-
 }
 
 /*
@@ -85,11 +81,10 @@ ex2_TRAN_op_ret_string2( c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], c_t p_s[ESC
 {
   c_t s[ESCHER_SYS_MAX_STRING_LEN];
   /* ASSIGN s = ( PARAM.s + xyz ) */
-  Escher_strcpy( s, Escher_stradd( p_s, "xyz" ) );
+  Escher_strcpy( s, ( Escher_stradd( p_s, "xyz" ) ) );
   /* RETURN s */
   {c_t * xtumlOALrv = s;
   return Escher_strcpy( A0xtumlsret, xtumlOALrv );}
-
 }
 
 /*
@@ -99,12 +94,11 @@ c_t *
 ex2_TRAN_op_ret_string3( ex2_TRAN * self, c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN], c_t p_s[ESCHER_SYS_MAX_STRING_LEN] )
 {
   c_t vtrv1ex2_TRAN_op_ret_string33[ESCHER_SYS_MAX_STRING_LEN];c_t vtrv1ex2_TRAN_op_ret_string211[ESCHER_SYS_MAX_STRING_LEN];c_t s[ESCHER_SYS_MAX_STRING_LEN];
-  /* ASSIGN s = TRAN::ret_string2(s:) */
+  /* ASSIGN s = TRAN::ret_string2(TRAN::ret_string(s:PARAM.s)) */
   Escher_strcpy( s, ex2_TRAN_op_ret_string2(vtrv1ex2_TRAN_op_ret_string211, ex2_TRAN_op_ret_string(vtrv1ex2_TRAN_op_ret_string33, p_s)) );
   /* RETURN s */
   {c_t * xtumlOALrv = s;
   return Escher_strcpy( A0xtumlsret, xtumlOALrv );}
-
 }
 
 /*
@@ -116,9 +110,7 @@ ex2_TRAN_op_ret_int_from_real( const r_t p_r )
   /* RETURN PARAM.r */
   {i_t xtumlOALrv = (i_t)(p_r);
   return xtumlOALrv;}
-
 }
-
 
 
 /*----------------------------------------------------------------------------
@@ -140,5 +132,4 @@ Escher_Extent_t pG_ex2_TRAN_extent = {
   (Escher_iHandle_t) &ex2_TRAN_instances,
   sizeof( ex2_TRAN ), 0, ex2_TRAN_MAX_EXTENT_SIZE
   };
-
 

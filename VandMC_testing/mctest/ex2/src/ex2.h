@@ -15,7 +15,6 @@ extern	"C"	{
 #include "ex2_sys_types.h"
 void ex2_instrumentation_start_test( void );
 
-
 #ifdef	__cplusplus
 }
 #endif

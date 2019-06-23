@@ -56,13 +56,12 @@ void ex2_setup( void );
 void ex2_test( void );
 void ex2_xit( void );
 
-
 #include "ex2_BR_bridge.h"
-#include "ARCH_bridge.h"
-#include "NVS_bridge.h"
-#include "PERSIST_bridge.h"
-#include "LOG_bridge.h"
 #include "TIM_bridge.h"
+#include "LOG_bridge.h"
+#include "PERSIST_bridge.h"
+#include "NVS_bridge.h"
+#include "ARCH_bridge.h"
 #include "ex2.h"
 #include "ex2_DR_class.h"
 #include "ex2_TCE_class.h"
@@ -81,4 +80,3 @@ typedef union {
 }
 #endif
 #endif  /* EX2_CLASSES_H */
-

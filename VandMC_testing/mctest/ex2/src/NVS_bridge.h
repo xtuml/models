@@ -16,7 +16,6 @@ extern	"C"	{
 #endif
 
 #include "ex2_sys_types.h"
-
 i_t NVS_insert( const i_t, const i_t, c_t[ESCHER_SYS_MAX_STRING_LEN], const i_t );
 i_t NVS_update( const i_t, const i_t, c_t[ESCHER_SYS_MAX_STRING_LEN], const i_t );
 i_t NVS_select( const i_t, const i_t, c_t[ESCHER_SYS_MAX_STRING_LEN], const i_t );

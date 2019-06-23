@@ -121,19 +121,19 @@ ex2_DR_act1( ex2_DR * self, const Escher_xtUMLEvent_t * const event )
   ex2_TCE * tce;
   /* CREATE OBJECT INSTANCE tce OF TCE */
   tce = (ex2_TCE *) Escher_CreateInstance( ex2_DOMAIN_ID, ex2_TCE_CLASS_NUMBER );
-  tce->tce_id = (Escher_UniqueID_t) tce;
+  tce->tce_id = Escher_ID_factory();
   /* ASSIGN tce.b1 = TRUE */
-  tce->b1 = TRUE;
+  ((ex2_TCE *)xtUML_detect_empty_handle( tce, "TCE", "tce.b1" ))->b1 = TRUE;
   /* ASSIGN tce.b2 = FALSE */
-  tce->b2 = FALSE;
+  ((ex2_TCE *)xtUML_detect_empty_handle( tce, "TCE", "tce.b2" ))->b2 = FALSE;
   /* ASSIGN tce.i1 = 1 */
-  tce->i1 = 1;
+  ((ex2_TCE *)xtUML_detect_empty_handle( tce, "TCE", "tce.i1" ))->i1 = 1;
   /* ASSIGN tce.i2 = 2 */
-  tce->i2 = 2;
+  ((ex2_TCE *)xtUML_detect_empty_handle( tce, "TCE", "tce.i2" ))->i2 = 2;
   /* ASSIGN tce.r1 = 1.0 */
-  tce->r1 = 1.0;
+  ((ex2_TCE *)xtUML_detect_empty_handle( tce, "TCE", "tce.r1" ))->r1 = 1.0;
   /* ASSIGN tce.r2 = 2.0 */
-  tce->r2 = 2.0;
+  ((ex2_TCE *)xtUML_detect_empty_handle( tce, "TCE", "tce.r2" ))->r2 = 2.0;
   /* GENERATE TCE1:start test() TO tce */
   { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( tce, &ex2_TCEevent1c );
     Escher_SendEvent( e );
@@ -147,23 +147,18 @@ ex2_DR_act1( ex2_DR * self, const Escher_xtUMLEvent_t * const event )
 const Escher_xtUMLEventConstant_t ex2_DRevent1c = {
   ex2_DOMAIN_ID, ex2_DR_CLASS_NUMBER, EX2_DREVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t ex2_DRevent2c = {
   ex2_DOMAIN_ID, ex2_DR_CLASS_NUMBER, EX2_DREVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t ex2_DRevent3c = {
   ex2_DOMAIN_ID, ex2_DR_CLASS_NUMBER, EX2_DREVENT3NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t ex2_DRevent4c = {
   ex2_DOMAIN_ID, ex2_DR_CLASS_NUMBER, EX2_DREVENT4NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t ex2_DRevent5c = {
   ex2_DOMAIN_ID, ex2_DR_CLASS_NUMBER, EX2_DREVENT5NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -223,7 +218,6 @@ ex2_DR_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 5 ) {
@@ -233,14 +227,13 @@ ex2_DR_Dispatch( Escher_xtUMLEvent_t * event )
       next_state = ex2_DR_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 5 ) {
         STATE_TXN_START_TRACE( "DR", current_state, state_name_strings[ current_state ] );
-        /* Execute the state action and update the current state.  */
+        /* Update the current state and execute the state action.  */
+        instance->current_state = next_state;
         ( *ex2_DR_acts[ next_state ] )( instance, event );
         STATE_TXN_END_TRACE( "DR", next_state, state_name_strings[ next_state ] );
 
         /* Self deletion state transition? */
         if ( next_state == ex2_DR_STATE_5 ) {          Escher_DeleteInstance( instance, ex2_DOMAIN_ID, ex2_DR_CLASS_NUMBER );
-        } else {
-          instance->current_state = next_state;
         }
       } else if ( next_state == EVENT_IS_IGNORED ) {
           /* event ignored */
@@ -251,5 +244,4 @@ ex2_DR_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

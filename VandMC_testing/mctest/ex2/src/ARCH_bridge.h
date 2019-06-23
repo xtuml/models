@@ -16,7 +16,6 @@ extern	"C"	{
 #endif
 
 #include "ex2_sys_types.h"
-
 void ARCH_shutdown( void );
 
 #ifdef	__cplusplus
