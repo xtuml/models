@@ -4,7 +4,7 @@
  * Class:       tests  (TEST)
  * Component:   keypad
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef KEYPAD_TEST_CLASS_H
@@ -22,7 +22,6 @@ struct keypad_TEST {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
   i_t i;  /* - i */
-
 };
 
 
@@ -43,5 +42,3 @@ extern void keypad_TEST_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* KEYPAD_TEST_CLASS_H */
-
-

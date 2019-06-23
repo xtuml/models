@@ -4,7 +4,7 @@
  * Class:       tests  (TEST)
  * Component:   keypad
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "calculator_sys_types.h"
@@ -66,5 +66,4 @@ keypad_TEST_Dispatch( Escher_xtUMLEvent_t * event )
    * ignore this and assume that it is an incomplete model.
    */
 }
-
 

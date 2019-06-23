@@ -2,12 +2,12 @@
  * File:  calculator_sys_main.c
  *
  * Description:  main, system initialization (and idle loop)
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "calculator_sys_types.h"
-#include "calc_classes.h"
 #include "keypad_classes.h"
+#include "calc_classes.h"
 
 /*
  * Run application level initialization by initializing the
@@ -19,8 +19,7 @@ static void ApplicationLevelInitialization( void )
 {
   Escher_DomainNumber_t d;
   Escher_ClassNumber_t c;
-
-  static const Escher_ClassNumber_t domain_class_count[ SYSTEM_DOMAIN_COUNT ] = {
+  const Escher_ClassNumber_t domain_class_count[ SYSTEM_DOMAIN_COUNT ] = {
     calc_MAX_CLASS_NUMBERS,
     keypad_MAX_CLASS_NUMBERS
   };
@@ -46,10 +45,14 @@ main( int argc, char ** argv )
   UserInitializationCallout();
   Escher_SetFactoryInit( SYS_MAX_CONTAINERS );
   InitializeOoaEventPool();
+  /* Initialize TIM.  To change this, copy TIM_bridge.c to the gen folder.  */
+  #if ESCHER_SYS_MAX_XTUML_TIMERS > 0
+  TIM_init();
+  #endif
   ApplicationLevelInitialization();
   UserPreOoaInitializationCallout();
-  calc_execute_initialization();
   keypad_execute_initialization();
+  calc_execute_initialization();
   UserPostOoaInitializationCallout();
   Escher_xtUML_run(); /* This is the primary event dispatch loop.  */
   UserPreShutdownCallout();

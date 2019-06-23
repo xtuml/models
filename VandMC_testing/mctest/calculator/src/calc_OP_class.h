@@ -4,7 +4,7 @@
  * Class:       op  (OP)
  * Component:   calc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef CALC_OP_CLASS_H
@@ -22,19 +22,14 @@ struct calc_OP {
 
   /* application analysis class attributes */
   i_t op;  /* - op */
-
   /* relationship storage */
   /* Note:  No storage needed for OP->EXPR[R1] */
-  calc_VAL * VAL_R2;
-  calc_VAL * VAL_R3;
+  calc_VAL * VAL_R2_has_left;
+  calc_VAL * VAL_R3_has_right;
 };
 void calc_OP_op_combine( calc_OP * );
-
-void calc_OP_R2_Link( calc_VAL *, calc_OP * );
-/* Note:  VAL<-R2->OP unrelate accessor not needed */
-void calc_OP_R3_Link( calc_VAL *, calc_OP * );
-void calc_OP_R3_Unlink( calc_VAL *, calc_OP * );
-
+void calc_OP_R1_Link_is_combined_by( calc_EXPR *, calc_OP * );
+/* Note:  EXPR<-R1->OP unrelate accessor not needed */
 
 #define calc_OP_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_calc_OP_extent;
@@ -44,5 +39,3 @@ extern Escher_Extent_t pG_calc_OP_extent;
 #endif
 
 #endif  /* CALC_OP_CLASS_H */
-
-

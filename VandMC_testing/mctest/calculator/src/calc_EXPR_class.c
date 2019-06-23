@@ -4,7 +4,7 @@
  * Class:       expression  (EXPR)
  * Component:   calc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "calculator_sys_types.h"
@@ -18,19 +18,19 @@
 i_t
 calc_EXPR_op_getkey( calc_EXPR * self)
 {
-  i_t key; 
+  i_t key;
   /* ASSIGN key = - 1 */
   key = -1;
-  /* IF ( ( self.outdex < self.index ) ) */
-  if ( ( self->outdex < self->index ) ) {
-    /* ASSIGN key = self.raw[self->outdex] */
-    key = self->raw[self->outdex];
+  /* IF ( self.outdex < self.index ) */
+  if ( ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.outdex" ))->outdex < ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.index" ))->index ) {
+    /* ASSIGN key = self.raw[((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.outdex" ))->outdex] */
+    key = ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.raw" ))->raw[((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.outdex" ))->outdex];
     /* ASSIGN self.outdex = ( self.outdex + 1 ) */
-    self->outdex = ( self->outdex + 1 );
+    ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.outdex" ))->outdex = ( ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.outdex" ))->outdex + 1 );
   }
   /* RETURN key */
-  return key;
-
+  {i_t xtumlOALrv = key;
+  return xtumlOALrv;}
 }
 
 /*
@@ -40,97 +40,76 @@ void
 calc_EXPR_op_init( calc_EXPR * self)
 {
   /* ASSIGN self.evaluation = 0 */
-  self->evaluation = 0;
+  ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.evaluation" ))->evaluation = 0;
   /* ASSIGN self.index = 0 */
-  self->index = 0;
+  ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.index" ))->index = 0;
   /* ASSIGN self.outdex = 0 */
-  self->outdex = 0;
-
+  ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.outdex" ))->outdex = 0;
 }
 
 /*
  * instance operation:  addkey
  */
 void
-calc_EXPR_op_addkey( calc_EXPR * self, i_t p_code)
+calc_EXPR_op_addkey( calc_EXPR * self, const i_t p_code )
 {
-  /* IF ( ( self.index == self.outdex ) ) */
-  if ( ( self->index == self->outdex ) ) {
+  /* IF ( self.index == self.outdex ) */
+  if ( ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.index" ))->index == ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.outdex" ))->outdex ) {
     /* GENERATE EXPR4:symbol(code:PARAM.code) TO self */
     { calc_EXPRevent4 * e = (calc_EXPRevent4 *) Escher_NewxtUMLEvent( self, &calc_EXPRevent4c );
       e->p_code = p_code;
       Escher_SendSelfEvent( (Escher_xtUMLEvent_t *) e );
     }
   }
-  /* ASSIGN self.raw[self->index] = PARAM.code */
-  self->raw[self->index] = p_code;
+  /* ASSIGN self.raw[((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.index" ))->index] = PARAM.code */
+  ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.raw" ))->raw[((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.index" ))->index] = p_code;
   /* ASSIGN self.index = ( self.index + 1 ) */
-  self->index = ( self->index + 1 );
-
+  ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.index" ))->index = ( ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.index" ))->index + 1 );
 }
 
 /*
  * instance operation:  combine
  */
 void
-calc_EXPR_op_combine( calc_EXPR * self, i_t p_code)
+calc_EXPR_op_combine( calc_EXPR * self, const i_t p_code )
 {
-  calc_OP * op = 0; /* op (OP) */
- calc_VAL * operand1 = 0; /* operand1 (VAL) */
- calc_VAL * operand2 = 0; /* operand2 (VAL) */
- 
+  calc_VAL * operand2=0;calc_VAL * operand1=0;calc_OP * op=0;
   /* SELECT one op RELATED BY self->OP[R1] */
-  op = self->OP_R1;
+  op = ( 0 != self ) ? self->OP_R1_is_combined_by : 0;
   /* SELECT one operand1 RELATED BY op->VAL[R2] */
-  operand1 = op->VAL_R2;
+  operand1 = ( 0 != op ) ? op->VAL_R2_has_left : 0;
   /* SELECT one operand2 RELATED BY op->VAL[R3] */
-  operand2 = op->VAL_R3;
-  /* IF ( ( 10 == op.op ) ) */
-  if ( ( 10 == op->op ) ) {
+  operand2 = ( 0 != op ) ? op->VAL_R3_has_right : 0;
+  /* IF ( 10 == op.op ) */
+  if ( 10 == ((calc_OP *)xtUML_detect_empty_handle( op, "OP", "op.op" ))->op ) {
     /* ASSIGN self.evaluation = ( operand1.value + operand2.value ) */
-    self->evaluation = ( operand1->value + operand2->value );
+    ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.evaluation" ))->evaluation = ( ((calc_VAL *)xtUML_detect_empty_handle( operand1, "VAL", "operand1.value" ))->value + ((calc_VAL *)xtUML_detect_empty_handle( operand2, "VAL", "operand2.value" ))->value );
   }
-  else if ( ( 11 == op->op ) ) {
+  else if ( 11 == ((calc_OP *)xtUML_detect_empty_handle( op, "OP", "op.op" ))->op ) {
     /* ASSIGN self.evaluation = ( operand1.value - operand2.value ) */
-    self->evaluation = ( operand1->value - operand2->value );
+    ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.evaluation" ))->evaluation = ( ((calc_VAL *)xtUML_detect_empty_handle( operand1, "VAL", "operand1.value" ))->value - ((calc_VAL *)xtUML_detect_empty_handle( operand2, "VAL", "operand2.value" ))->value );
   }
-  else if ( ( 12 == op->op ) ) {
+  else if ( 12 == ((calc_OP *)xtUML_detect_empty_handle( op, "OP", "op.op" ))->op ) {
     /* ASSIGN self.evaluation = ( operand1.value * operand2.value ) */
-    self->evaluation = ( operand1->value * operand2->value );
+    ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.evaluation" ))->evaluation = ( ((calc_VAL *)xtUML_detect_empty_handle( operand1, "VAL", "operand1.value" ))->value * ((calc_VAL *)xtUML_detect_empty_handle( operand2, "VAL", "operand2.value" ))->value );
   }
-  else if ( ( 13 == op->op ) ) {
+  else if ( 13 == ((calc_OP *)xtUML_detect_empty_handle( op, "OP", "op.op" ))->op ) {
     /* ASSIGN self.evaluation = ( operand1.value / operand2.value ) */
-    self->evaluation = ( operand1->value / operand2->value );
+    ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.evaluation" ))->evaluation = ( ((calc_VAL *)xtUML_detect_empty_handle( operand1, "VAL", "operand1.value" ))->value / ((calc_VAL *)xtUML_detect_empty_handle( operand2, "VAL", "operand2.value" ))->value );
   }
   else {
   }
   /* ASSIGN operand1.value = self.evaluation */
-  operand1->value = self->evaluation;
+  ((calc_VAL *)xtUML_detect_empty_handle( operand1, "VAL", "operand1.value" ))->value = ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.evaluation" ))->evaluation;
   /* ASSIGN op.op = PARAM.code */
-  op->op = p_code;
+  ((calc_OP *)xtUML_detect_empty_handle( op, "OP", "op.op" ))->op = p_code;
   /* UNRELATE op FROM operand2 ACROSS R3 */
-  calc_OP_R3_Unlink( operand2, op );
+  calc_VAL_R3_Unlink_has_right( op, operand2 );
   /* DELETE OBJECT INSTANCE operand2 */
   if ( 0 == operand2 ) {
     XTUML_EMPTY_HANDLE_TRACE( "VAL", "Escher_DeleteInstance" );
   }
   Escher_DeleteInstance( (Escher_iHandle_t) operand2, calc_DOMAIN_ID, calc_VAL_CLASS_NUMBER );
-
-}
-
-
-/*
- * RELATE OP TO EXPR ACROSS R1
- */
-void
-calc_EXPR_R1_Link( calc_OP * part, calc_EXPR * form )
-{
-  if ( (part == 0) || (form == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "EXPR", "calc_EXPR_R1_Link" );
-    return;
-  }
-  form->OP_R1 = part;
-  /* Note:  OP->EXPR[R1] not navigated */
 }
 
 
@@ -168,16 +147,15 @@ static void
 calc_EXPR_act1( calc_EXPR * self, const Escher_xtUMLEvent_t * const event )
 {
   calc_EXPRevent4 * rcvd_evt = (calc_EXPRevent4 *) event;
-  i_t key; calc_VAL * operand1 = 0; /* operand1 (VAL) */
- 
+  i_t key;calc_VAL * operand1=0;
   /* ASSIGN key = self.getkey() */
   key = calc_EXPR_op_getkey(self);
   /* SELECT one operand1 RELATED BY self->OP[R1]->VAL[R2] */
   operand1 = 0;
   {  if ( 0 != self ) {
-  calc_OP * OP_R1 = self->OP_R1;
-  if ( 0 != OP_R1 ) {
-  operand1 = OP_R1->VAL_R2;
+  calc_OP * OP_R1_is_combined_by = self->OP_R1_is_combined_by;
+  if ( 0 != OP_R1_is_combined_by ) {
+  operand1 = OP_R1_is_combined_by->VAL_R2_has_left;
 }}}
   /* GENERATE VAL2:symbol(code:key) TO operand1 */
   { calc_VALevent2 * e = (calc_VALevent2 *) Escher_NewxtUMLEvent( operand1, &calc_VALevent2c );
@@ -194,22 +172,21 @@ static void
 calc_EXPR_act2( calc_EXPR * self, const Escher_xtUMLEvent_t * const event )
 {
   calc_EXPRevent2 * rcvd_evt = (calc_EXPRevent2 *) event;
-  calc_OP * op = 0; /* op (OP) */
- calc_VAL * operand2; i_t key; 
+  i_t key;calc_VAL * operand2;calc_OP * op=0;
   /* SELECT one op RELATED BY self->OP[R1] */
-  op = self->OP_R1;
+  op = ( 0 != self ) ? self->OP_R1_is_combined_by : 0;
   /* ASSIGN op.op = PARAM.code */
-  op->op = rcvd_evt->p_code;
+  ((calc_OP *)xtUML_detect_empty_handle( op, "OP", "op.op" ))->op = rcvd_evt->p_code;
   /* CREATE OBJECT INSTANCE operand2 OF VAL */
   operand2 = (calc_VAL *) Escher_CreateInstance( calc_DOMAIN_ID, calc_VAL_CLASS_NUMBER );
   /* operand2.init() */
   calc_VAL_op_init( operand2 );
   /* RELATE operand2 TO op ACROSS R3 */
-  calc_OP_R3_Link( operand2, op );
+  calc_VAL_R3_Link_has_right( op, operand2 );
   /* ASSIGN key = self.getkey() */
   key = calc_EXPR_op_getkey(self);
-  /* IF ( ( key > 0 ) ) */
-  if ( ( key > 0 ) ) {
+  /* IF ( key > 0 ) */
+  if ( key > 0 ) {
     /* GENERATE EXPR4:symbol(code:key) TO self */
     { calc_EXPRevent4 * e = (calc_EXPRevent4 *) Escher_NewxtUMLEvent( self, &calc_EXPRevent4c );
       e->p_code = key;
@@ -226,14 +203,13 @@ static void
 calc_EXPR_act3( calc_EXPR * self, const Escher_xtUMLEvent_t * const event )
 {
   calc_EXPRevent4 * rcvd_evt = (calc_EXPRevent4 *) event;
-  calc_VAL * operand2 = 0; /* operand2 (VAL) */
- 
+  calc_VAL * operand2=0;
   /* SELECT one operand2 RELATED BY self->OP[R1]->VAL[R3] */
   operand2 = 0;
   {  if ( 0 != self ) {
-  calc_OP * OP_R1 = self->OP_R1;
-  if ( 0 != OP_R1 ) {
-  operand2 = OP_R1->VAL_R3;
+  calc_OP * OP_R1_is_combined_by = self->OP_R1_is_combined_by;
+  if ( 0 != OP_R1_is_combined_by ) {
+  operand2 = OP_R1_is_combined_by->VAL_R3_has_right;
 }}}
   /* GENERATE VAL2:symbol(code:PARAM.code) TO operand2 */
   { calc_VALevent2 * e = (calc_VALevent2 *) Escher_NewxtUMLEvent( operand2, &calc_VALevent2c );
@@ -252,10 +228,10 @@ calc_EXPR_act4( calc_EXPR * self, const Escher_xtUMLEvent_t * const event )
   calc_EXPRevent2 * rcvd_evt = (calc_EXPRevent2 *) event;
   /* self.combine( code:PARAM.code ) */
   calc_EXPR_op_combine( self,  rcvd_evt->p_code );
-  /*  SEND kb::result(value:self.evaluation) */
-  calc_kb_result( self->evaluation );
-  /* IF ( ( PARAM.code != 14 ) ) */
-  if ( ( rcvd_evt->p_code != 14 ) ) {
+  /* SEND kb::result(value:self.evaluation) */
+  calc_kb_result( ((calc_EXPR *)xtUML_detect_empty_handle( self, "EXPR", "self.evaluation" ))->evaluation );
+  /* IF ( PARAM.code != 14 ) */
+  if ( rcvd_evt->p_code != 14 ) {
     /* GENERATE EXPR2:op(code:PARAM.code) TO self */
     { calc_EXPRevent2 * e = (calc_EXPRevent2 *) Escher_NewxtUMLEvent( self, &calc_EXPRevent2c );
       e->p_code = rcvd_evt->p_code;
@@ -267,11 +243,9 @@ calc_EXPR_act4( calc_EXPR * self, const Escher_xtUMLEvent_t * const event )
 const Escher_xtUMLEventConstant_t calc_EXPRevent2c = {
   calc_DOMAIN_ID, calc_EXPR_CLASS_NUMBER, CALC_EXPREVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t calc_EXPRevent4c = {
   calc_DOMAIN_ID, calc_EXPR_CLASS_NUMBER, CALC_EXPREVENT4NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -315,7 +289,6 @@ calc_EXPR_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 4 ) {
@@ -324,9 +297,9 @@ calc_EXPR_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = calc_EXPR_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 4 ) {
-        /* Execute the state action and update the current state.  */
-        ( *calc_EXPR_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *calc_EXPR_acts[ next_state ] )( instance, event );
       } else if ( next_state == EVENT_CANT_HAPPEN ) {
           /* event cant happen */
           UserEventCantHappenCallout( current_state, next_state, event_number );
@@ -336,5 +309,4 @@ calc_EXPR_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

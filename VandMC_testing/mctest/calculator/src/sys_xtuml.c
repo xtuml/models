@@ -2,15 +2,35 @@
  * File:  sys_xtuml.c
  *
  * Description:
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "calculator_sys_types.h"
 #include "calc_classes.h"
 #include "keypad_classes.h"
 
-
 /* No containers allocated.  */
+
+/*
+ * Supply a unique integer ID.
+ */
+Escher_UniqueID_t
+Escher_ID_factory( void )
+{
+  static Escher_UniqueID_t Escher_ID_factory = 1;
+  return Escher_ID_factory++;
+}
+
+/*
+ * Detect empty handles in expressions.
+ */
+void * xtUML_detect_empty_handle( void * h, const char * s1, const char * s2 )
+{
+  if ( 0 == h ) {
+    XTUML_EMPTY_HANDLE_TRACE( s1, s2 );
+  }
+  return h;
+}
 
 /*
  * Initialize the node1 instances by linking them into a collection.
@@ -38,6 +58,26 @@ Escher_SetFactoryInit( const i_t n1_size )
 /* Set clearing code optimized out.  */
 
 /*
+ * Take the union of set1 and set2 and return to_set
+ */
+/* Set union optimized out.  */
+
+/*
+ * Take the intersection of set1 and set2 and return to_set
+ */
+/* Set intersection optimized out.  */
+
+/*
+ * Subtract set2 from set1 and return to_set
+ */
+/* Set difference optimized out.  */
+
+/*
+ * Take the symmetric difference of set1 and set2 and return to_set
+ */
+/* Set symmetric difference optimized out.  */
+
+/*
  * Insert a single element into the set in no particular order.
  * The element is a data item.  A container node will be allocated
  * to link in the element.
@@ -52,8 +92,8 @@ Escher_SetFactoryInit( const i_t n1_size )
 Escher_SetElement_s *
 Escher_SetInsertBlock( Escher_SetElement_s * container,
                        const u1_t * instance,
-                       const u2_t length,
-                       u2_t count )
+                       const Escher_size_t length,
+                       Escher_size_t count )
 {
   Escher_SetElement_s * head = ( count > 0 ) ? container : 0;
   while ( count > 0 ) {
@@ -93,11 +133,11 @@ Escher_SetRemoveNode(
 )
 {
   Escher_SetElement_s * t = set->head; /* Start with first node.           */
+  Escher_SetElement_s * t_old = t;
   /* Find node containing data and unlink from list.                 */
   if ( t->object == d ) {        /* Element found at head.           */
     set->head = t->next;         /* Unlink it from the list.         */
   } else {
-    Escher_SetElement_s * t_old;
     do {                         /* Search for data element.         */
       t_old = t;
       t = t->next;
@@ -131,6 +171,7 @@ Escher_SetContains(
     if ( node->object == element ) { return node; }  /* found  */
     node = node->next;
   }
+  if ( 0 == element ) return ( const void * ) 1; /* every set contains null */
   return 0;                                      /* absent */
 }
 
@@ -138,10 +179,10 @@ Escher_SetContains(
  * Count the elements in the set.  Return that count.
  * This routine counts nodes.
  */
-u2_t 
+Escher_size_t
 Escher_SetCardinality( const Escher_ObjectSet_s * const set )
 {
-  u2_t result = 0;
+  Escher_size_t result = 0;
   const Escher_SetElement_s * node = set->head;
   while ( node != 0 ) {
     result++;
@@ -152,19 +193,35 @@ Escher_SetCardinality( const Escher_ObjectSet_s * const set )
 
 /*
  * Return true when the left and right set are equivalent.
- * Note:  This currently is not implemented.
+ * The left set is equal to the right set if and only if
+ * the left set contains all elements of the right set AND
+ * the right set contains all elements of the left set.
  */
 bool
 Escher_SetEquality( Escher_ObjectSet_s * const left_set,
                     Escher_ObjectSet_s * const right_set )
 {
-  bool rc = false;
-  if ( (left_set->head == 0) && (right_set->head == 0) ) {
-    rc = true;
-  } else if ( ( (left_set->head != 0) && (right_set->head != 0) ) &&
-    (Escher_SetCardinality( left_set ) == Escher_SetCardinality( right_set )) ) {
-    rc = true;
-  } else { /* nop */ }
+  bool rc = true;
+  /* Assure the right set contains all elements in the left set */
+  const Escher_SetElement_s * node = left_set->head;
+  while ( 0 != node ) {
+    if ( 0 == right_set || !Escher_SetContains( right_set, node->object ) ) {
+      rc = false;
+      break;
+    }
+    node = node->next;
+  }
+  if ( rc ) {
+    /* Assure the left set contains all elements in the right set */
+    node = right_set->head;
+    while ( 0 != node ) {
+      if ( 0 == left_set || !Escher_SetContains( left_set, node->object ) ) {
+        rc = false;
+        break;
+      }
+      node = node->next;
+    }
+  }
   return rc;
 }
 
@@ -208,7 +265,7 @@ Escher_IteratorNext( Escher_Iterator_s * const iter )
  * Set memory bytes to value at destination.
  */
 void
-Escher_memset( void * const dst, const u1_t val, u2_t len )
+Escher_memset( void * const dst, const u1_t val, Escher_size_t len )
 {
   u1_t * d = (u1_t *) dst;
   while ( len > 0 ) {
@@ -221,7 +278,7 @@ Escher_memset( void * const dst, const u1_t val, u2_t len )
  * Move memory bytes from source to destination.
  */
 void
-Escher_memmove( void * const dst, const void * const src, u2_t len )
+Escher_memmove( void * const dst, const void * const src, Escher_size_t len )
 {
   u1_t * s = (u1_t *) src;
   u1_t * d = (u1_t *) dst;
@@ -238,12 +295,14 @@ c_t *
 Escher_strcpy( c_t * dst, const c_t * src )
 {
   c_t * s = dst;
-  s2_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
-  while ( ( i > 0 ) && ( *src != '\0' ) ) {
-    --i;
-    *dst++ = *src++;
+  if ( ( 0 != src ) && ( 0 != dst ) ) {
+    Escher_size_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
+    while ( ( i > 0 ) && ( *src != '\0' ) ) {
+      --i;
+      *dst++ = *src++;
+    }
+    *dst = '\0';  /* Ensure delimiter.  */
   }
-  *dst = '\0';  /* Ensure delimiter.  */
   return s;
 }
 
@@ -253,9 +312,11 @@ Escher_strcpy( c_t * dst, const c_t * src )
 c_t *
 Escher_stradd( const c_t * left, const c_t * right )
 {
-  s2_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
+  Escher_size_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
   c_t * s = Escher_strget();
   c_t * dst = s;
+  if ( 0 == left ) left = "";
+  if ( 0 == right ) right = "";
   while ( ( i > 0 ) && ( *left != '\0' ) ) {
     --i;
     *dst++ = *left++;
@@ -280,7 +341,7 @@ Escher_strcmp( const c_t *p1, const c_t *p2 )
   const c_t *s1 = p1;
   const c_t *s2 = p2;
   c_t c1, c2;
-  s2_t i = ESCHER_SYS_MAX_STRING_LEN;
+  i_t i = ESCHER_SYS_MAX_STRING_LEN;
   do {
     c1 = *s1++;
     c2 = *s2++;
@@ -296,10 +357,13 @@ Escher_strcmp( const c_t *p1, const c_t *p2 )
 c_t *
 Escher_strget( void )
 {
+  c_t * r;
   static u1_t i = 0;
-  static c_t s[ 4 ][ ESCHER_SYS_MAX_STRING_LEN ];
-  i = ( i + 1 ) % 4;
-  return ( &s[ i ][ 0 ] );
+  static c_t s[ 32 ][ ESCHER_SYS_MAX_STRING_LEN ];
+  i = ( i + 1 ) % 32;
+  r = &s[ i ][ 0 ];
+  *r = 0;
+  return ( r );
 }
 
 
@@ -330,7 +394,9 @@ Escher_CreateInstance(
 
   dci->inactive.head = dci->inactive.head->next;
   instance = (Escher_iHandle_t) node->object;
-  instance->current_state = dci->initial_state;
+  if ( 0 != dci->initial_state ) {
+    instance->current_state = dci->initial_state;
+  }
   Escher_SetInsertInstance( &dci->active, node );
   return instance;
 }
@@ -347,13 +413,17 @@ Escher_DeleteInstance(
 {
   Escher_SetElement_s * node;
   Escher_Extent_t * dci = *(domain_class_info[ domain_num ] + class_num);
-  node = Escher_SetRemoveNode( &dci->active, instance );
-  node->next = dci->inactive.head;
-  dci->inactive.head = node;
-  /* Initialize storage to zero.  */
-  Escher_memset( instance, 0, dci->size );
+  if ( 0 != instance ) {
+    node = Escher_SetRemoveNode( &dci->active, instance );
+    node->next = dci->inactive.head;
+    dci->inactive.head = node;
+    /* Initialize storage to zero.  */
+    Escher_memset( instance, 0, dci->size );
+    if ( ( 0 != dci->size ) && ( 0 != dci->initial_state ) ) {
+      instance->current_state = -1; /* 0xff max for error detection */
+    }
+  }
 }
-
 
 /*
  * Initialize object factory services.
@@ -368,7 +438,7 @@ Escher_ClassFactoryInit(
   Escher_Extent_t * dci = *(domain_class_info[ domain_num ] + class_num);
   if ( 0 != dci ) {
   dci->active.head = 0;
-  dci->inactive.head = Escher_SetInsertBlock( 
+  dci->inactive.head = Escher_SetInsertBlock(
     dci->container,
     (const u1_t *) dci->pool,
     dci->size,
@@ -378,7 +448,6 @@ Escher_ClassFactoryInit(
 /*
  * Following provides the dispatcher loops for the xtUML event queues.
  */
-
 
 bool Escher_run_flag = true; /* Turn this off to exit dispatch loop(s).  */
 
@@ -430,7 +499,7 @@ InitializeOoaEventPool( void )
 Escher_xtUMLEvent_t * Escher_AllocatextUMLEvent( void )
 {
   Escher_xtUMLEvent_t * event = 0;
-  if ( free_event_list == 0 ) {
+  if ( 0 == free_event_list ) {
     UserEventFreeListEmptyCallout();   /* Bad news!  No more events.  */
   } else {
     event = free_event_list;       /* Grab front of the free list.  */
@@ -591,7 +660,7 @@ static void ooa_loop( void )
   static const EventTaker_t * DomainClassDispatcherTable[ 2 ] =
     {
       calc_EventDispatcher,
-      0,
+      0
     };
   Escher_xtUMLEvent_t * event;
   /* Start consuming events and dispatching background processes.  */
@@ -604,6 +673,7 @@ static void ooa_loop( void )
       ( *( DomainClassDispatcherTable[ GetEventDestDomainNumber( event ) ] )[ GetEventDestObjectNumber( event ) ] )( event );
       Escher_DeletextUMLEvent( event );
     } else {
+      /* event queues empty */
     }
     UserBackgroundProcessingCallout();
   }

@@ -4,7 +4,7 @@
  * This file defines the object type identification numbers for all classes
  * in the component:  calc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef CALC_CLASSES_H
@@ -19,11 +19,9 @@ extern	"C"	{
  */
 extern Escher_Extent_t * const calc_class_info[];
 extern const EventTaker_t calc_EventDispatcher[];
-extern void calc_execute_initialization( void );
+void calc_execute_initialization( void );
 
 #define calc_STATE_MODELS 2
-
-
 /* Define constants to map to class numbers.  */
 #define calc_EXPR_CLASS_NUMBER 0
 #define calc_VAL_CLASS_NUMBER 1
@@ -32,11 +30,6 @@ extern void calc_execute_initialization( void );
 
 /* Provide a map of classes to task numbers.  */
 #define calc_TASK_NUMBERS  0, 0
-
-#define calc_CLASS_INFO_INIT\
-  &pG_calc_EXPR_extent,\
-  &pG_calc_VAL_extent,\
-  &pG_calc_OP_extent
 
 #define calc_class_dispatchers\
   calc_EXPR_Dispatch,\
@@ -55,7 +48,6 @@ typedef struct calc_OP calc_OP;
 /*
  * Internal enumerated and structured data types for component:  calc
  */
-
 /*
  * Enumerated Data Type:  optype
  */
@@ -69,26 +61,21 @@ typedef enum {
 } calculator_optype_t;
 
 
-
-
-#include "ARCH_bridge.h"
 #include "LOG_bridge.h"
+#include "ARCH_bridge.h"
 #include "calc.h"
 #include "calc_EXPR_class.h"
 #include "calc_OP_class.h"
 #include "calc_VAL_class.h"
-
-
 /*
- * roll-up of all events (with their parameters) for domain calc
+ * roll-up of all events (with their parameters) for component calc
  */
 typedef union {
   calc_EXPR_Events_u calc_EXPR_Events_u_namespace;
   calc_VAL_Events_u calc_VAL_Events_u_namespace;
 } calc_DomainEvents_u;
+
 #ifdef	__cplusplus
 }
 #endif
-
 #endif  /* CALC_CLASSES_H */
-

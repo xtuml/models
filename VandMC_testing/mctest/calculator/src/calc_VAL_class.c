@@ -4,7 +4,7 @@
  * Class:       operand  (VAL)
  * Component:   calc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "calculator_sys_types.h"
@@ -19,17 +19,56 @@ void
 calc_VAL_op_init( calc_VAL * self)
 {
   /* ASSIGN self.value = 0.0 */
-  self->value = 0.0;
+  ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.value" ))->value = 0.0;
   /* ASSIGN self.sign = 1 */
-  self->sign = 1;
+  ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.sign" ))->sign = 1;
   /* ASSIGN self.whole = 0 */
-  self->whole = 0;
+  ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.whole" ))->whole = 0;
   /* ASSIGN self.fraction = 0.0 */
-  self->fraction = 0.0;
-
+  ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.fraction" ))->fraction = 0.0;
 }
 
+/*
+ * RELATE OP TO VAL ACROSS R2
+ */
+void
+calc_VAL_R2_Link_has_left( calc_OP * part, calc_VAL * form )
+{
+  if ( (part == 0) || (form == 0) ) {
+    XTUML_EMPTY_HANDLE_TRACE( "VAL", "calc_VAL_R2_Link_has_left" );
+    return;
+  }
+  /* Note:  VAL->OP[R2] not navigated */
+  part->VAL_R2_has_left = form;
+}
 
+/*
+ * RELATE OP TO VAL ACROSS R3
+ */
+void
+calc_VAL_R3_Link_has_right( calc_OP * part, calc_VAL * form )
+{
+  if ( (part == 0) || (form == 0) ) {
+    XTUML_EMPTY_HANDLE_TRACE( "VAL", "calc_VAL_R3_Link_has_right" );
+    return;
+  }
+  /* Note:  VAL->OP[R3] not navigated */
+  part->VAL_R3_has_right = form;
+}
+
+/*
+ * UNRELATE OP FROM VAL ACROSS R3
+ */
+void
+calc_VAL_R3_Unlink_has_right( calc_OP * part, calc_VAL * form )
+{
+  if ( (part == 0) || (form == 0) ) {
+    XTUML_EMPTY_HANDLE_TRACE( "VAL", "calc_VAL_R3_Unlink_has_right" );
+    return;
+  }
+  /* Note:  VAL->OP[R3] not navigated */
+  part->VAL_R3_has_right = 0;
+}
 
 /*----------------------------------------------------------------------------
  * Operation action methods implementation for the following class:
@@ -65,18 +104,18 @@ static void
 calc_VAL_act1( calc_VAL * self, const Escher_xtUMLEvent_t * const event )
 {
   calc_VALevent2 * rcvd_evt = (calc_VALevent2 *) event;
-  i_t key; 
+  i_t key;
   /* ASSIGN key = PARAM.code */
   key = rcvd_evt->p_code;
-  /* IF ( ( key <= 9 ) ) */
-  if ( ( key <= 9 ) ) {
+  /* IF ( key <= 9 ) */
+  if ( key <= 9 ) {
     /* GENERATE VAL1:digit(code:PARAM.code) TO self */
     { calc_VALevent1 * e = (calc_VALevent1 *) Escher_NewxtUMLEvent( self, &calc_VALevent1c );
       e->p_code = rcvd_evt->p_code;
       Escher_SendSelfEvent( (Escher_xtUMLEvent_t *) e );
     }
   }
-  else if ( ( key == 20 ) ) {
+  else if ( key == 20 ) {
     /* GENERATE VAL3:point(code:key) TO self */
     { calc_VALevent3 * e = (calc_VALevent3 *) Escher_NewxtUMLEvent( self, &calc_VALevent3c );
       e->p_code = key;
@@ -84,18 +123,18 @@ calc_VAL_act1( calc_VAL * self, const Escher_xtUMLEvent_t * const event )
     }
   }
   else {
-    calc_EXPR * expr=0; 
-    /* IF ( ( key == 11 ) ) */
-    if ( ( key == 11 ) ) {
+    calc_EXPR * expr=0;
+    /* IF ( key == 11 ) */
+    if ( key == 11 ) {
       /* ASSIGN self.sign = - self.sign */
-      self->sign = -self->sign;
+      ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.sign" ))->sign = -((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.sign" ))->sign;
     }
     /* SELECT any expr FROM INSTANCES OF EXPR */
     expr = (calc_EXPR *) Escher_SetGetAny( &pG_calc_EXPR_extent.active );
     /* ASSIGN key = expr.getkey() */
     key = calc_EXPR_op_getkey(expr);
-    /* IF ( ( key > 0 ) ) */
-    if ( ( key > 0 ) ) {
+    /* IF ( key > 0 ) */
+    if ( key > 0 ) {
       /* GENERATE VAL2:symbol(code:key) TO self */
       { calc_VALevent2 * e = (calc_VALevent2 *) Escher_NewxtUMLEvent( self, &calc_VALevent2c );
         e->p_code = key;
@@ -113,20 +152,20 @@ static void
 calc_VAL_act2( calc_VAL * self, const Escher_xtUMLEvent_t * const event )
 {
   calc_VALevent1 * rcvd_evt = (calc_VALevent1 *) event;
-  i_t key; calc_EXPR * expr=0; 
+  i_t key;calc_EXPR * expr=0;
   /* ASSIGN key = PARAM.code */
   key = rcvd_evt->p_code;
   /* SELECT any expr FROM INSTANCES OF EXPR */
   expr = (calc_EXPR *) Escher_SetGetAny( &pG_calc_EXPR_extent.active );
-  /* IF ( ( key == 20 ) ) */
-  if ( ( key == 20 ) ) {
+  /* IF ( key == 20 ) */
+  if ( key == 20 ) {
     /* GENERATE VAL3:point(code:key) TO self */
     { calc_VALevent3 * e = (calc_VALevent3 *) Escher_NewxtUMLEvent( self, &calc_VALevent3c );
       e->p_code = key;
       Escher_SendSelfEvent( (Escher_xtUMLEvent_t *) e );
     }
   }
-  else if ( ( ( 10 <= key ) && ( key <= 14 ) ) ) {
+  else if ( ( 10 <= key ) && ( key <= 14 ) ) {
     /* GENERATE EXPR2:op(code:key) TO expr */
     { calc_EXPRevent2 * e = (calc_EXPRevent2 *) Escher_NewxtUMLEvent( expr, &calc_EXPRevent2c );
       e->p_code = key;
@@ -134,24 +173,24 @@ calc_VAL_act2( calc_VAL * self, const Escher_xtUMLEvent_t * const event )
     }
   }
   else {
-    /* IF ( ( key <= 9 ) ) */
-    if ( ( key <= 9 ) ) {
-      /* IF ( ( 0 == self.whole ) ) */
-      if ( ( 0 == self->whole ) ) {
+    /* IF ( key <= 9 ) */
+    if ( key <= 9 ) {
+      /* IF ( 0 == self.whole ) */
+      if ( 0 == ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.whole" ))->whole ) {
         /* ASSIGN self.whole = key */
-        self->whole = key;
+        ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.whole" ))->whole = key;
       }
       else {
         /* ASSIGN self.whole = ( ( self.whole * 10 ) + key ) */
-        self->whole = ( ( self->whole * 10 ) + key );
+        ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.whole" ))->whole = ( ( ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.whole" ))->whole * 10 ) + key );
       }
       /* ASSIGN self.value = ( ( self.sign * self.whole ) + ( self.fraction / 10.0 ) ) */
-      self->value = ( ( self->sign * self->whole ) + ( self->fraction / 10.0 ) );
+      ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.value" ))->value = ( ( ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.sign" ))->sign * ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.whole" ))->whole ) + ( ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.fraction" ))->fraction / 10.0 ) );
     }
     /* ASSIGN key = expr.getkey() */
     key = calc_EXPR_op_getkey(expr);
-    /* IF ( ( key > 0 ) ) */
-    if ( ( key > 0 ) ) {
+    /* IF ( key > 0 ) */
+    if ( key > 0 ) {
       /* GENERATE VAL2:symbol(code:key) TO self */
       { calc_VALevent2 * e = (calc_VALevent2 *) Escher_NewxtUMLEvent( self, &calc_VALevent2c );
         e->p_code = key;
@@ -169,13 +208,13 @@ static void
 calc_VAL_act3( calc_VAL * self, const Escher_xtUMLEvent_t * const event )
 {
   calc_VALevent3 * rcvd_evt = (calc_VALevent3 *) event;
-  i_t key; calc_EXPR * expr=0; 
+  i_t key;calc_EXPR * expr=0;
   /* ASSIGN key = PARAM.code */
   key = rcvd_evt->p_code;
   /* SELECT any expr FROM INSTANCES OF EXPR */
   expr = (calc_EXPR *) Escher_SetGetAny( &pG_calc_EXPR_extent.active );
-  /* IF ( ( ( 10 <= key ) and ( key <= 14 ) ) ) */
-  if ( ( ( 10 <= key ) && ( key <= 14 ) ) ) {
+  /* IF ( ( 10 <= key ) and ( key <= 14 ) ) */
+  if ( ( 10 <= key ) && ( key <= 14 ) ) {
     /* GENERATE EXPR2:op(code:key) TO expr */
     { calc_EXPRevent2 * e = (calc_EXPRevent2 *) Escher_NewxtUMLEvent( expr, &calc_EXPRevent2c );
       e->p_code = key;
@@ -183,17 +222,17 @@ calc_VAL_act3( calc_VAL * self, const Escher_xtUMLEvent_t * const event )
     }
   }
   else {
-    /* IF ( ( key <= 9 ) ) */
-    if ( ( key <= 9 ) ) {
+    /* IF ( key <= 9 ) */
+    if ( key <= 9 ) {
       /* ASSIGN self.fraction = key */
-      self->fraction = key;
+      ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.fraction" ))->fraction = key;
       /* ASSIGN self.value = ( ( self.sign * self.whole ) + ( self.fraction / 10.0 ) ) */
-      self->value = ( ( self->sign * self->whole ) + ( self->fraction / 10.0 ) );
+      ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.value" ))->value = ( ( ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.sign" ))->sign * ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.whole" ))->whole ) + ( ((calc_VAL *)xtUML_detect_empty_handle( self, "VAL", "self.fraction" ))->fraction / 10.0 ) );
     }
     /* ASSIGN key = expr.getkey() */
     key = calc_EXPR_op_getkey(expr);
-    /* IF ( ( key > 0 ) ) */
-    if ( ( key > 0 ) ) {
+    /* IF ( key > 0 ) */
+    if ( key > 0 ) {
       /* GENERATE VAL2:symbol(code:key) TO self */
       { calc_VALevent2 * e = (calc_VALevent2 *) Escher_NewxtUMLEvent( self, &calc_VALevent2c );
         e->p_code = key;
@@ -206,15 +245,12 @@ calc_VAL_act3( calc_VAL * self, const Escher_xtUMLEvent_t * const event )
 const Escher_xtUMLEventConstant_t calc_VALevent1c = {
   calc_DOMAIN_ID, calc_VAL_CLASS_NUMBER, CALC_VALEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t calc_VALevent2c = {
   calc_DOMAIN_ID, calc_VAL_CLASS_NUMBER, CALC_VALEVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t calc_VALevent3c = {
   calc_DOMAIN_ID, calc_VAL_CLASS_NUMBER, CALC_VALEVENT3NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -255,7 +291,6 @@ calc_VAL_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 3 ) {
@@ -264,9 +299,9 @@ calc_VAL_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = calc_VAL_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 3 ) {
-        /* Execute the state action and update the current state.  */
-        ( *calc_VAL_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *calc_VAL_acts[ next_state ] )( instance, event );
       } else if ( next_state == EVENT_CANT_HAPPEN ) {
           /* event cant happen */
           UserEventCantHappenCallout( current_state, next_state, event_number );
@@ -276,5 +311,4 @@ calc_VAL_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

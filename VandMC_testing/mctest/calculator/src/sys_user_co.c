@@ -13,7 +13,7 @@
  * additional functionality (if necessary) to be performed at these
  * callout points.
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "calculator_sys_types.h"
@@ -38,10 +38,6 @@
 void
 UserInitializationCalloutf( void )
 {
-/* Activate this invocation to initialize the example simple TIM.  */
-  #if ESCHER_SYS_MAX_XTUML_TIMERS > 0
-  TIM_init();
-  #endif
   /* Insert implementation specific code here.  */
   SYS_USER_CO_PRINTF( "UserInitializationCallout\n" )
 }
@@ -85,10 +81,6 @@ UserPostOoaInitializationCalloutf( void )
 void
 UserBackgroundProcessingCalloutf( void )
 {
-/* Activate this invocation to periodically tick the example simple TIM.  */
-  #if ESCHER_SYS_MAX_XTUML_TIMERS > 0
-  TIM_tick();
-  #endif
   /* Insert implementation specific code here.  */
 }
 

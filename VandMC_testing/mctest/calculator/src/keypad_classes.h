@@ -4,7 +4,7 @@
  * This file defines the object type identification numbers for all classes
  * in the component:  keypad
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef KEYPAD_CLASSES_H
@@ -19,20 +19,15 @@ extern	"C"	{
  */
 extern Escher_Extent_t * const keypad_class_info[];
 extern const EventTaker_t keypad_EventDispatcher[];
-extern void keypad_execute_initialization( void );
+void keypad_execute_initialization( void );
 
 #define keypad_STATE_MODELS 1
-
-
 /* Define constants to map to class numbers.  */
 #define keypad_TEST_CLASS_NUMBER 0
 #define keypad_MAX_CLASS_NUMBERS 1
 
 /* Provide a map of classes to task numbers.  */
 #define keypad_TASK_NUMBERS  0
-
-#define keypad_CLASS_INFO_INIT\
-  &pG_keypad_TEST_extent
 
 #define keypad_class_dispatchers\
   keypad_TEST_Dispatch
@@ -48,27 +43,16 @@ typedef struct keypad_TEST keypad_TEST;
 /*
  * UML Domain Functions (Synchronous Services)
  */
-extern void keypad_testcase1( void );
-extern void keypad_testcase3( void );
-extern void keypad_testcase4( void );
-extern void keypad_testcase2( void );
+void keypad_testcase1( void );
+void keypad_testcase2( void );
+void keypad_testcase3( void );
+void keypad_testcase4( void );
 
-
-
-#include "ARCH_bridge.h"
 #include "LOG_bridge.h"
+#include "ARCH_bridge.h"
 #include "keypad.h"
 #include "keypad_TEST_class.h"
-
-
-/*
- * roll-up of all events (with their parameters) for domain keypad
- */
-typedef union {
-} keypad_DomainEvents_u;
 #ifdef	__cplusplus
 }
 #endif
-
 #endif  /* KEYPAD_CLASSES_H */
-
