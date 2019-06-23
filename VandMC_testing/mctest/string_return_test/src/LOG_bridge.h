@@ -16,7 +16,6 @@ extern	"C"	{
 #endif
 
 #include "string_return_test_sys_types.h"
-
 void LOG_LogSuccess( c_t[ESCHER_SYS_MAX_STRING_LEN] );
 void LOG_LogFailure( c_t[ESCHER_SYS_MAX_STRING_LEN] );
 void LOG_LogInfo( c_t[ESCHER_SYS_MAX_STRING_LEN] );

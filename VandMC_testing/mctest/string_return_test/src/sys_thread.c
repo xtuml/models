@@ -23,15 +23,17 @@ static u1_t threadnumber[ NUM_OF_TOTAL_THREADS ];
 void Escher_InitializeThreading( void )
 {
   u1_t i;
-  int rc;
   for ( i = 0; i < NUM_OF_TOTAL_THREADS; i++ ) {
     threadnumber[ i ] = i;
-    rc = pthread_cond_init( &nonbusy_wait_cond[ i ], 0 );
+    if ( 0 != pthread_cond_init( &nonbusy_wait_cond[ i ], 0 ) ) {
+      /* error recovery TBD */
+    }
   }
   for ( i = 0; i < SEMAPHORE_FLAVOR_MAX; i++ ) {
-    rc = pthread_mutex_init( &mutices[ i ], 0 );
+    if ( 0 != pthread_mutex_init( &mutices[ i ], 0 ) ) {
+      /* error recovery TBD */
+    }
   }
-  rc = rc;
 }
 
 /*
@@ -40,8 +42,9 @@ void Escher_InitializeThreading( void )
  */
 void Escher_mutex_lock( const u1_t flavor )
 {
-  int rc = pthread_mutex_lock( &mutices[ flavor ] );
-  rc = rc;
+  if ( 0 != pthread_mutex_lock( &mutices[ flavor ] ) ) {
+    /* error recovery TBD */
+  }
 }
 
 /*
@@ -49,8 +52,9 @@ void Escher_mutex_lock( const u1_t flavor )
  */
 void Escher_mutex_unlock( const u1_t flavor )
 {
-  int rc = pthread_mutex_unlock( &mutices[ flavor ] );
-  rc = rc;
+  if ( 0 != pthread_mutex_unlock( &mutices[ flavor ] ) ) {
+    /* error recovery TBD */
+  }
 }
 
 /*
@@ -59,12 +63,13 @@ void Escher_mutex_unlock( const u1_t flavor )
  */
 void Escher_nonbusy_wait( const u1_t thread )
 {
-  int rc;
   void * vp = 0;
   pthread_cond_t * dwc = &nonbusy_wait_cond[ thread ];
   Escher_mutex_lock( SEMAPHORE_FLAVOR_NONBUSY );
   if ( ( thread != 0 ) || ( vp == 0 ) ) {
-    rc = pthread_cond_wait( dwc, &mutices[ SEMAPHORE_FLAVOR_NONBUSY ] );
+    if ( 0 != pthread_cond_wait( dwc, &mutices[ SEMAPHORE_FLAVOR_NONBUSY ] ) ) {
+      /* error recovery TBD */
+    }
   }
   Escher_mutex_unlock( SEMAPHORE_FLAVOR_NONBUSY );
 }
@@ -74,10 +79,11 @@ void Escher_nonbusy_wait( const u1_t thread )
  */
 void Escher_nonbusy_wake( const u1_t thread )
 {
-  int rc;
   pthread_cond_t * dwc = &nonbusy_wait_cond[ thread ];
   Escher_mutex_lock( SEMAPHORE_FLAVOR_NONBUSY );
-  rc = pthread_cond_broadcast( dwc );
+  if ( 0 != pthread_cond_broadcast( dwc ) ) {
+    /* error recovery TBD */
+  }
   Escher_mutex_unlock( SEMAPHORE_FLAVOR_NONBUSY );
 }
 
@@ -87,8 +93,9 @@ void Escher_nonbusy_wake( const u1_t thread )
 void Escher_thread_create( void *(routine)(void *), const u1_t i )
 {
   static pthread_t pthread[ NUM_OF_TOTAL_THREADS ];
-  int rc = pthread_create( &pthread[ i - 1 ], 0, routine, &threadnumber[ i ] );
-  rc = rc;
+  if ( 0 != pthread_create( &pthread[ i - 1 ], 0, routine, &threadnumber[ i ] ) ) {
+    /* error recovery TBD */
+  }
 }
 
 /*
@@ -97,11 +104,14 @@ void Escher_thread_create( void *(routine)(void *), const u1_t i )
 void Escher_thread_shutdown( void )
 {
   u1_t i;
-  int rc;
   for ( i = 0; i < NUM_OF_TOTAL_THREADS; i++ ) {
-    rc = pthread_cond_destroy( &nonbusy_wait_cond[ i ] );
+    if ( 0 != pthread_cond_destroy( &nonbusy_wait_cond[ i ] ) ) {
+      /* error recovery TBD */
+    }
   }
   for ( i = 0; i < SEMAPHORE_FLAVOR_MAX; i++ ) {
-    rc = pthread_mutex_destroy( &mutices[ i ] );
+    if ( 0 != pthread_mutex_destroy( &mutices[ i ] ) ) {
+      /* error recovery TBD */
+    }
   }
 }

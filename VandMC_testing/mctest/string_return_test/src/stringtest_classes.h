@@ -62,7 +62,6 @@ typedef struct stringtest_buffer stringtest_buffer;
  */
 void stringtest_init( void );
 
-
 #include "LOG_bridge.h"
 #include "stringtest.h"
 #include "stringtest_host_class.h"
@@ -88,4 +87,3 @@ typedef union {
 }
 #endif
 #endif  /* STRINGTEST_CLASSES_H */
-

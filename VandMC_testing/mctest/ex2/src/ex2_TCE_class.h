@@ -31,7 +31,6 @@ struct ex2_TCE {
   i_t i2;  /* - i2 */
   r_t r1;  /* - r1 */
   r_t r2;  /* - r2 */
-
 };
 
 
@@ -47,7 +46,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } ex2_TCEevent1;
 extern const Escher_xtUMLEventConstant_t ex2_TCEevent1c;
-
 /*
  * instance event:  TCE2:'next test'
  */
@@ -56,7 +54,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } ex2_TCEevent2;
 extern const Escher_xtUMLEventConstant_t ex2_TCEevent2c;
-
 /*
  * instance event:  TCE3:'event with supp data'
  */
@@ -66,7 +63,6 @@ typedef struct {
   c_t p_name[ESCHER_SYS_MAX_STRING_LEN]; /* name */
 } ex2_TCEevent3;
 extern const Escher_xtUMLEventConstant_t ex2_TCEevent3c;
-
 /*
  * instance event:  TCE4:'next test with supp data'
  */
@@ -80,7 +76,6 @@ typedef struct {
   r_t p_r2; /* r2 */
 } ex2_TCEevent4;
 extern const Escher_xtUMLEventConstant_t ex2_TCEevent4c;
-
 /*
  * instance event:  TCE5:'bool event'
  */
@@ -89,7 +84,6 @@ typedef struct {
   bool p_b1; /* b1 */
 } ex2_TCEevent5;
 extern const Escher_xtUMLEventConstant_t ex2_TCEevent5c;
-
 /*
  * instance event:  TCE6:'int event'
  */
@@ -98,7 +92,6 @@ typedef struct {
   i_t p_i1; /* i1 */
 } ex2_TCEevent6;
 extern const Escher_xtUMLEventConstant_t ex2_TCEevent6c;
-
 /*
  * union of events targeted towards 'TCE' state machine
  */
@@ -110,7 +103,6 @@ typedef union {
   ex2_TCEevent5 tce5_5;  
   ex2_TCEevent6 tce6_6;  
 } ex2_TCE_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -150,5 +142,3 @@ extern void ex2_TCE_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* EX2_TCE_CLASS_H */
-
-

@@ -4,7 +4,7 @@
  * Class:       div  (DIV)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -29,7 +29,6 @@ polycalc_DIV_R1_Link( polycalc_OP * supertype, polycalc_DIV * subtype )
   supertype->R1_subtype = subtype;
   supertype->R1_object_id = polycalc_DIV_CLASS_NUMBER;
 }
-
 
 /*
  * Statically allocate space for the instance population for this class.
@@ -58,12 +57,11 @@ static void polycalc_DIV_act1( polycalc_DIV *, const Escher_xtUMLEvent_t * const
 static void
 polycalc_DIV_act1( polycalc_DIV * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_OP * op = 0; /* op (OP) */
- 
+  polycalc_OP * op=0;
   /* SELECT one op RELATED BY self->OP[R1] */
-  op = self->OP_R1;
+  op = ( 0 != self ) ? self->OP_R1 : 0;
   /* ASSIGN op.result = ( op.left / op.right ) */
-  op->result = ( op->left / op->right );
+  ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.result" ))->result = ( ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.left" ))->left / ((polycalc_OP *)xtUML_detect_empty_handle( op, "OP", "op.right" ))->right );
   /* GENERATE OP3:done() TO op */
   { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( op, &polycalc_OPevent3c );
     Escher_SendEvent( e );
@@ -74,7 +72,6 @@ polycalc_DIV_act1( polycalc_DIV * self, const Escher_xtUMLEvent_t * const event 
 const Escher_xtUMLEventConstant_t polycalc_DIVevent_OP_PE2c = {
   polycalc_DOMAIN_ID, polycalc_DIV_CLASS_NUMBER, POLYCALC_DIVEVENT_OP_PE2NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 
 
 /*
@@ -109,7 +106,6 @@ polycalc_DIV_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 1 ) {
@@ -118,9 +114,9 @@ polycalc_DIV_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_DIV_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 1 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_DIV_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_DIV_acts[ next_state ] )( instance, event );
       } else if ( next_state == EVENT_CANT_HAPPEN ) {
           /* event cant happen */
           UserEventCantHappenCallout( current_state, next_state, event_number );
@@ -130,5 +126,4 @@ polycalc_DIV_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

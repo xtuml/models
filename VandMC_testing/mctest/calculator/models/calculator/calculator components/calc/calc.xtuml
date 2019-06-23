@@ -1,4 +1,4 @@
--- BP 7.1 content: Component syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: Component syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO C_C
 	VALUES ("07602feb-2a2b-475e-8ef4-504e664acc03",
@@ -7,7 +7,9 @@ INSERT INTO C_C
 	'calc',
 	'',
 	0,
-	"00000000-0000-0000-0000-000000000000");
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'');
 INSERT INTO GD_MD
 	VALUES ("c349b08e-ec4b-4b78-9a27-357dc09ae48f",
 	111,
@@ -25,13 +27,15 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'3.3.0');
+	'3.3.0',
+	'calculator::calculator components::calc');
 INSERT INTO GD_GE
 	VALUES ("79cebfb2-25f1-4753-b810-915d9fb851d3",
 	"c349b08e-ec4b-4b78-9a27-357dc09ae48f",
 	"07602feb-2a2b-475e-8ef4-504e664acc03",
 	103,
-	0);
+	0,
+	'calculator::calculator components::calc');
 INSERT INTO GD_SHP
 	VALUES ("79cebfb2-25f1-4753-b810-915d9fb851d3");
 INSERT INTO GD_CTR
@@ -59,7 +63,8 @@ INSERT INTO GD_GE
 	"c349b08e-ec4b-4b78-9a27-357dc09ae48f",
 	"f8e4c27b-66cf-44ad-862d-8b6427814c77",
 	93,
-	0);
+	0,
+	'calculator::calculator components::calc::kb::keyIO');
 INSERT INTO GD_CON
 	VALUES ("82812f18-b539-43bf-8b11-b18524df8ece",
 	"00000000-0000-0000-0000-000000000000");
@@ -158,7 +163,8 @@ INSERT INTO GD_GE
 	"c349b08e-ec4b-4b78-9a27-357dc09ae48f",
 	"68b3c6b9-c1cf-4d47-b85f-9bc7fe47f8ea",
 	108,
-	0);
+	0,
+	'calculator::calculator components::calc::calculator');
 INSERT INTO GD_SHP
 	VALUES ("e3777074-4652-42b3-b851-b9f6aada7c43");
 INSERT INTO GD_NCS
@@ -181,7 +187,8 @@ INSERT INTO GD_GE
 	"c349b08e-ec4b-4b78-9a27-357dc09ae48f",
 	"92a5d64c-d913-4210-9798-381d4d796a25",
 	108,
-	0);
+	0,
+	'calculator::calculator components::calc::calculator types');
 INSERT INTO GD_SHP
 	VALUES ("c63711f1-7c3f-4498-86b3-ee104dbf3d0a");
 INSERT INTO GD_NCS
@@ -221,7 +228,8 @@ INSERT INTO C_R
 	VALUES ("f8e4c27b-66cf-44ad-862d-8b6427814c77",
 	'keyIO',
 	'',
-	'Unnamed Interface');
+	'Unnamed Interface',
+	'calc::kb::keyIO');
 INSERT INTO SPR_REP
 	VALUES ("a4e94ad7-ce1d-451a-b86b-903a55f7a5df",
 	"54a94145-a9ff-4487-ad79-62953855ba78",
@@ -244,12 +252,14 @@ if ( empty expression )
   relate op to operand1 across R2;
 end if;
 expression.addkey( code: param.code );',
-	1);
+	1,
+	0);
 INSERT INTO C_EP_PROXY
 	VALUES ("54a94145-a9ff-4487-ad79-62953855ba78",
 	"94bad6cd-f0b8-47fc-93a5-f31084fa857d",
 	-1,
 	'key',
+	'',
 	'../../key IO/keyIO/keyIO.xtuml');
 INSERT INTO SPR_REP
 	VALUES ("3c143296-d21e-4676-b810-eee3c0a0d3af",
@@ -260,12 +270,14 @@ INSERT INTO SPR_RS
 	'result',
 	'',
 	'',
-	1);
+	1,
+	0);
 INSERT INTO C_EP_PROXY
 	VALUES ("e0bee01d-90bb-404b-8218-a56fa32fad81",
 	"94bad6cd-f0b8-47fc-93a5-f31084fa857d",
 	-1,
 	'result',
+	'',
 	'../../key IO/keyIO/keyIO.xtuml');
 INSERT INTO C_I_PROXY
 	VALUES ("94bad6cd-f0b8-47fc-93a5-f31084fa857d",
@@ -273,22 +285,17 @@ INSERT INTO C_I_PROXY
 	'keyIO',
 	'',
 	'../../key IO/keyIO/keyIO.xtuml');
-INSERT INTO PE_PE_PROXY
+INSERT INTO PE_PE
 	VALUES ("07602feb-2a2b-475e-8ef4-504e664acc03",
 	1,
 	"025d46f3-3678-41b3-b408-767d8a52d7e4",
 	"00000000-0000-0000-0000-000000000000",
-	2,
+	2);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("025d46f3-3678-41b3-b408-767d8a52d7e4",
+	"d993d6ae-95e4-401e-b167-f0465920ebd8",
+	"d993d6ae-95e4-401e-b167-f0465920ebd8",
+	'calculator components',
+	'',
+	0,
 	'../calculator components.xtuml');
-INSERT INTO PE_PE
-	VALUES ("68b3c6b9-c1cf-4d47-b85f-9bc7fe47f8ea",
-	1,
-	"00000000-0000-0000-0000-000000000000",
-	"07602feb-2a2b-475e-8ef4-504e664acc03",
-	7);
-INSERT INTO PE_PE
-	VALUES ("92a5d64c-d913-4210-9798-381d4d796a25",
-	1,
-	"00000000-0000-0000-0000-000000000000",
-	"07602feb-2a2b-475e-8ef4-504e664acc03",
-	7);

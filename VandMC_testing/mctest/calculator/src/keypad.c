@@ -4,28 +4,15 @@
  * UML Component Port Messages
  * Component/Module Name:  keypad
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "calculator_sys_types.h"
-#include "ARCH_bridge.h"
+#include "keypad.h"
 #include "LOG_bridge.h"
+#include "ARCH_bridge.h"
 #include "calc.h"
 #include "keypad_classes.h"
-
-/*
- * Interface:  keyIO
- * Provided Port:  tocalc
- * To Provider Message:  result
- */
-void
-keypad_tocalc_result( r_t p_value)
-{
-  /* LOG::LogReal( message:'result', r:PARAM.value ) */
-  LOG_LogReal( "result", p_value );
-  /* ARCH::shutdown(  ) */
-  ARCH_shutdown();
-}
 
 /*
  * Interface:  keyIO
@@ -33,9 +20,23 @@ keypad_tocalc_result( r_t p_value)
  * From Provider Message:  key
  */
 void
-keypad_tocalc_key( i_t p_code)
+keypad_tocalc_key( const i_t p_code )
 {
   calc_kb_key(  p_code );
+}
+
+/*
+ * Interface:  keyIO
+ * Provided Port:  tocalc
+ * To Provider Message:  result
+ */
+void
+keypad_tocalc_result( const r_t p_value )
+{
+  /* LOG::LogReal( message:result, r:PARAM.value ) */
+  LOG_LogReal( "result", p_value );
+  /* ARCH::shutdown(  ) */
+  ARCH_shutdown();
 }
 
 /*
@@ -49,11 +50,9 @@ keypad_instrumentation_start_test()
   /* ::testcase1(  ) */
   keypad_testcase1();
 }
-
 /*
  * UML Domain Functions (Synchronous Services)
  */
-
 
 /*
  * Domain Function:  testcase1
@@ -61,63 +60,15 @@ keypad_instrumentation_start_test()
 void
 keypad_testcase1()
 {
-  /*  SEND tocalc::key(code:1) */
+  /* SEND tocalc::key(code:1) */
   keypad_tocalc_key( 1 );
-  /*  SEND tocalc::key(code:10) */
+  /* SEND tocalc::key(code:10) */
   keypad_tocalc_key( 10 );
-  /*  SEND tocalc::key(code:2) */
+  /* SEND tocalc::key(code:2) */
   keypad_tocalc_key( 2 );
-  /*  SEND tocalc::key(code:10) */
+  /* SEND tocalc::key(code:10) */
   keypad_tocalc_key( 10 );
-
 }
-
-
-/*
- * Domain Function:  testcase3
- */
-void
-keypad_testcase3()
-{
-  /*  SEND tocalc::key(code:7) */
-  keypad_tocalc_key( 7 );
-  /*  SEND tocalc::key(code:20) */
-  keypad_tocalc_key( 20 );
-  /*  SEND tocalc::key(code:5) */
-  keypad_tocalc_key( 5 );
-  /*  SEND tocalc::key(code:11) */
-  keypad_tocalc_key( 11 );
-  /*  SEND tocalc::key(code:4) */
-  keypad_tocalc_key( 4 );
-  /*  SEND tocalc::key(code:20) */
-  keypad_tocalc_key( 20 );
-  /*  SEND tocalc::key(code:3) */
-  keypad_tocalc_key( 3 );
-  /*  SEND tocalc::key(code:14) */
-  keypad_tocalc_key( 14 );
-
-}
-
-
-/*
- * Domain Function:  testcase4
- */
-void
-keypad_testcase4()
-{
-  /*  SEND tocalc::key(code:1) */
-  keypad_tocalc_key( 1 );
-  /*  SEND tocalc::key(code:2) */
-  keypad_tocalc_key( 2 );
-  /*  SEND tocalc::key(code:12) */
-  keypad_tocalc_key( 12 );
-  /*  SEND tocalc::key(code:3) */
-  keypad_tocalc_key( 3 );
-  /*  SEND tocalc::key(code:14) */
-  keypad_tocalc_key( 14 );
-
-}
-
 
 /*
  * Domain Function:  testcase2
@@ -125,27 +76,65 @@ keypad_testcase4()
 void
 keypad_testcase2()
 {
-  /*  SEND tocalc::key(code:1) */
+  /* SEND tocalc::key(code:1) */
   keypad_tocalc_key( 1 );
-  /*  SEND tocalc::key(code:10) */
+  /* SEND tocalc::key(code:10) */
   keypad_tocalc_key( 10 );
-  /*  SEND tocalc::key(code:2) */
+  /* SEND tocalc::key(code:2) */
   keypad_tocalc_key( 2 );
-  /*  SEND tocalc::key(code:10) */
+  /* SEND tocalc::key(code:10) */
   keypad_tocalc_key( 10 );
-  /*  SEND tocalc::key(code:3) */
+  /* SEND tocalc::key(code:3) */
   keypad_tocalc_key( 3 );
-  /*  SEND tocalc::key(code:14) */
+  /* SEND tocalc::key(code:14) */
   keypad_tocalc_key( 14 );
-
 }
 
-#if keypad_MAX_CLASS_NUMBERS > 0
+/*
+ * Domain Function:  testcase3
+ */
+void
+keypad_testcase3()
+{
+  /* SEND tocalc::key(code:7) */
+  keypad_tocalc_key( 7 );
+  /* SEND tocalc::key(code:20) */
+  keypad_tocalc_key( 20 );
+  /* SEND tocalc::key(code:5) */
+  keypad_tocalc_key( 5 );
+  /* SEND tocalc::key(code:11) */
+  keypad_tocalc_key( 11 );
+  /* SEND tocalc::key(code:4) */
+  keypad_tocalc_key( 4 );
+  /* SEND tocalc::key(code:20) */
+  keypad_tocalc_key( 20 );
+  /* SEND tocalc::key(code:3) */
+  keypad_tocalc_key( 3 );
+  /* SEND tocalc::key(code:14) */
+  keypad_tocalc_key( 14 );
+}
+
+/*
+ * Domain Function:  testcase4
+ */
+void
+keypad_testcase4()
+{
+  /* SEND tocalc::key(code:1) */
+  keypad_tocalc_key( 1 );
+  /* SEND tocalc::key(code:2) */
+  keypad_tocalc_key( 2 );
+  /* SEND tocalc::key(code:12) */
+  keypad_tocalc_key( 12 );
+  /* SEND tocalc::key(code:3) */
+  keypad_tocalc_key( 3 );
+  /* SEND tocalc::key(code:14) */
+  keypad_tocalc_key( 14 );
+}
 /* xtUML class info (collections, sizes, etc.) */
 Escher_Extent_t * const keypad_class_info[ keypad_MAX_CLASS_NUMBERS ] = {
-  keypad_CLASS_INFO_INIT
+  &pG_keypad_TEST_extent
 };
-#endif
 
 /*
  * Array of pointers to the class event dispatcher method.

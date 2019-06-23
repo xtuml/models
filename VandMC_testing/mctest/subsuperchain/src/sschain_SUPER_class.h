@@ -4,7 +4,7 @@
  * Class:       super  (SUPER)
  * Component:   sschain
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef SSCHAIN_SUPER_CLASS_H
@@ -21,7 +21,6 @@ extern	"C"	{
 struct sschain_SUPER {
 
   /* application analysis class attributes */
-
   /* relationship storage */
   /* Note:  No storage needed for SUPER->TOP[R1] */
   void * R2_subtype;
@@ -40,7 +39,6 @@ void sschain_SUPER_R1_Link( sschain_TOP *, sschain_SUPER * );
      ((sschain_SUBA *)((SUPER)->R2_subtype)) : (0) )
 
 
-
 #define sschain_SUPER_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_sschain_SUPER_extent;
 
@@ -49,5 +47,3 @@ extern Escher_Extent_t pG_sschain_SUPER_extent;
 #endif
 
 #endif  /* SSCHAIN_SUPER_CLASS_H */
-
-

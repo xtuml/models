@@ -4,7 +4,7 @@
  * Class:       video disc drive  (DVD)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -46,7 +46,6 @@ polycalc_DVD_R200_Unlink( polycalc_DRIVE * supertype, polycalc_DVD * subtype )
   supertype->R200_object_id = 0;
 }
 
-
 /*
  * Statically allocate space for the instance population for this class.
  * Allocate space for the class instance and its attribute values.
@@ -74,14 +73,13 @@ static void polycalc_DVD_act1( polycalc_DVD *, const Escher_xtUMLEvent_t * const
 static void
 polycalc_DVD_act1( polycalc_DVD * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_LOCATION * location = 0; /* location (LOCATION) */
- 
-  /* LOG::LogInfo( message:'dvd mounting' ) */
+  polycalc_LOCATION * location=0;
+  /* LOG::LogInfo( message:dvd mounting ) */
   LOG_LogInfo( "dvd mounting" );
   /* SELECT one location RELATED BY self->DRIVE[R200]->LOCATION[R100] */
   location = 0;
   {  if ( 0 != self ) {
-  polycalc_DRIVE * DRIVE_R200 = (polycalc_DRIVE *) self->DRIVE_R200;
+  polycalc_DRIVE * DRIVE_R200 = self->DRIVE_R200;
   if ( 0 != DRIVE_R200 ) {
   location = DRIVE_R200->LOCATION_R100;
 }}}
@@ -98,16 +96,15 @@ static void polycalc_DVD_act2( polycalc_DVD *, const Escher_xtUMLEvent_t * const
 static void
 polycalc_DVD_act2( polycalc_DVD * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_PORTAL * portal = 0; /* portal (PORTAL) */
- 
-  /* LOG::LogInfo( message:'deinstalling (received remove event)' ) */
+  polycalc_PORTAL * portal=0;
+  /* LOG::LogInfo( message:deinstalling (received remove event) ) */
   LOG_LogInfo( "deinstalling (received remove event)" );
   /* SELECT one portal RELATED BY self->DRIVE[R200]->LOCATION[R100]->PORTAL[R300] */
   portal = 0;
   {  if ( 0 != self ) {
-  polycalc_DRIVE * DRIVE_R200 = (polycalc_DRIVE *) self->DRIVE_R200;
+  polycalc_DRIVE * DRIVE_R200 = self->DRIVE_R200;
   if ( 0 != DRIVE_R200 ) {
-  polycalc_LOCATION * LOCATION_R100 = (polycalc_LOCATION *) DRIVE_R200->LOCATION_R100;
+  polycalc_LOCATION * LOCATION_R100 = DRIVE_R200->LOCATION_R100;
   if ( 0 != LOCATION_R100 ) {
   portal = LOCATION_R100->PORTAL_R300;
 }}}}
@@ -120,11 +117,9 @@ polycalc_DVD_act2( polycalc_DVD * self, const Escher_xtUMLEvent_t * const event 
 const Escher_xtUMLEventConstant_t polycalc_DVDevent_LOCATION_PE2c = {
   polycalc_DOMAIN_ID, polycalc_DVD_CLASS_NUMBER, POLYCALC_DVDEVENT_LOCATION_PE2NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_DVDevent_PORTAL_PE1c = {
   polycalc_DOMAIN_ID, polycalc_DVD_CLASS_NUMBER, POLYCALC_DVDEVENT_PORTAL_PE1NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 
 
 /*
@@ -137,7 +132,7 @@ static const Escher_SEMcell_t polycalc_DVD_StateEventMatrix[ 2 + 1 ][ 2 ] = {
   /* row 0:  uninitialized state (for creation events) */
   { EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN },
   /* row 1:  polycalc_DVD_STATE_1 (mounting dvd) */
-  { polycalc_DVD_STATE_1, polycalc_DVD_STATE_2 },
+  { polycalc_DVD_STATE_2, polycalc_DVD_STATE_1 },
   /* row 2:  polycalc_DVD_STATE_2 (deinstalling) */
   { EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN }
 };
@@ -162,7 +157,6 @@ polycalc_DVD_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 2 ) {
@@ -171,9 +165,9 @@ polycalc_DVD_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_DVD_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 2 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_DVD_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_DVD_acts[ next_state ] )( instance, event );
       } else if ( next_state == EVENT_CANT_HAPPEN ) {
           /* event cant happen */
           UserEventCantHappenCallout( current_state, next_state, event_number );
@@ -183,5 +177,4 @@ polycalc_DVD_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

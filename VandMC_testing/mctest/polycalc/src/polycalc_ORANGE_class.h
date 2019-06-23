@@ -4,7 +4,7 @@
  * Class:       orange  (ORANGE)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef POLYCALC_ORANGE_CLASS_H
@@ -22,14 +22,12 @@ struct polycalc_ORANGE {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
   c_t state[ESCHER_SYS_MAX_STRING_LEN];  /* - state */
-
   /* relationship storage */
   polycalc_FRUIT * FRUIT_R3;
 };
 
 void polycalc_ORANGE_R3_Link( polycalc_FRUIT *, polycalc_ORANGE * );
 /* Note:  No FRUIT<-R3->ORANGE unrelate accessor needed.  */
-
 
 #define polycalc_ORANGE_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_polycalc_ORANGE_extent;
@@ -42,14 +40,12 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_ORANGEevent_FRUIT_PE1;
 extern const Escher_xtUMLEventConstant_t polycalc_ORANGEevent_FRUIT_PE1c;
-
 /*
  * union of events targeted towards 'ORANGE' state machine
  */
 typedef union {
-  polycalc_ORANGEevent_FRUIT_PE1 orange11;  
+  polycalc_ORANGEevent_FRUIT_PE1 orange1_1;  
 } polycalc_ORANGE_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -65,5 +61,3 @@ extern void polycalc_ORANGE_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* POLYCALC_ORANGE_CLASS_H */
-
-

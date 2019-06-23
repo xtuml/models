@@ -40,13 +40,13 @@ static void
 stringtest_pong_act1( stringtest_pong * self, const Escher_xtUMLEvent_t * const event )
 {
   stringtest_pongevent1 * rcvd_evt = (stringtest_pongevent1 *) event;
-  c_t s[ESCHER_SYS_MAX_STRING_LEN];stringtest_ping * p;c_t r[ESCHER_SYS_MAX_STRING_LEN];
+  c_t vtrv2stringtest_buffer_op_scmp13[ESCHER_SYS_MAX_STRING_LEN];c_t r[ESCHER_SYS_MAX_STRING_LEN];stringtest_ping * p;c_t s[ESCHER_SYS_MAX_STRING_LEN];
   /* ASSIGN s = PARAM.s */
   Escher_strcpy( s, rcvd_evt->p_s );
   /* ASSIGN p = PARAM.p */
   p = rcvd_evt->p_p;
   /* ASSIGN r = buffer::scmp(s1:s, s2:ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string) */
-  Escher_strcpy( r, stringtest_buffer_op_scmp(s, "ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string").s );
+  Escher_strcpy( r, stringtest_buffer_op_scmp(vtrv2stringtest_buffer_op_scmp13, s, "ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string") );
   /* GENERATE ping1:bounce(p:self, s:r) TO p */
   { stringtest_pingevent1 * e = (stringtest_pingevent1 *) Escher_NewxtUMLEvent( p, &stringtest_pingevent1c );
     e->p_p = self;    Escher_strcpy( e->p_s, r );
@@ -57,7 +57,6 @@ stringtest_pong_act1( stringtest_pong * self, const Escher_xtUMLEvent_t * const 
 const Escher_xtUMLEventConstant_t stringtest_pongevent1c = {
   stringtest_DOMAIN_ID, stringtest_pong_CLASS_NUMBER, STRINGTEST_PONGEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -101,7 +100,6 @@ stringtest_pong_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 1 ) {
@@ -111,15 +109,14 @@ stringtest_pong_Dispatch( Escher_xtUMLEvent_t * event )
       next_state = stringtest_pong_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 1 ) {
         STATE_TXN_START_TRACE( "pong", current_state, state_name_strings[ current_state ] );
-        /* Execute the state action and update the current state.  */
+        /* Update the current state and execute the state action.  */
+        instance->current_state = next_state;
         ( *stringtest_pong_acts[ next_state ] )( instance, event );
         STATE_TXN_END_TRACE( "pong", next_state, state_name_strings[ next_state ] );
-        instance->current_state = next_state;
       } else {
         /* empty else */
       }
     }
   }
 }
-
 

@@ -4,7 +4,7 @@
  * Class:       op  (OP)
  * Component:   calc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "calculator_sys_types.h"
@@ -21,49 +21,19 @@ calc_OP_op_combine( calc_OP * self)
 
 }
 
-
 /*
- * RELATE VAL TO OP ACROSS R2
+ * RELATE EXPR TO OP ACROSS R1
  */
 void
-calc_OP_R2_Link( calc_VAL * part, calc_OP * form )
+calc_OP_R1_Link_is_combined_by( calc_EXPR * part, calc_OP * form )
 {
   if ( (part == 0) || (form == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "OP", "calc_OP_R2_Link" );
+    XTUML_EMPTY_HANDLE_TRACE( "OP", "calc_OP_R1_Link_is_combined_by" );
     return;
   }
-  form->VAL_R2 = part;
-  /* Note:  VAL->OP[R2] not navigated */
+  /* Note:  OP->EXPR[R1] not navigated */
+  part->OP_R1_is_combined_by = form;
 }
-
-/*
- * RELATE VAL TO OP ACROSS R3
- */
-void
-calc_OP_R3_Link( calc_VAL * part, calc_OP * form )
-{
-  if ( (part == 0) || (form == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "OP", "calc_OP_R3_Link" );
-    return;
-  }
-  form->VAL_R3 = part;
-  /* Note:  VAL->OP[R3] not navigated */
-}
-
-/*
- * UNRELATE VAL FROM OP ACROSS R3
- */
-void
-calc_OP_R3_Unlink( calc_VAL * part, calc_OP * form )
-{
-  if ( (part == 0) || (form == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "OP", "calc_OP_R3_Unlink" );
-    return;
-  }
-  form->VAL_R3 = 0;
-  /* Note:  VAL->OP[R3] not navigated */
-}
-
 
 /*----------------------------------------------------------------------------
  * Operation action methods implementation for the following class:
@@ -84,5 +54,4 @@ Escher_Extent_t pG_calc_OP_extent = {
   (Escher_iHandle_t) &calc_OP_instances,
   sizeof( calc_OP ), 0, calc_OP_MAX_EXTENT_SIZE
   };
-
 

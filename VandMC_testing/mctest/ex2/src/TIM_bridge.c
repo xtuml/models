@@ -39,25 +39,6 @@
 
 #define USEC_CONVERT 1000UL
 
-/*---------------------------------------------------------------------
- * Timer "Object" Structure Declaration
- *    [next] is the mechanism used to collect and sequence timers.
- *    Timer instances are strung together in an active (animate)
- *    list and an inactive (inanimate) list.  The next pointer
- *    provides the "hole for the beads".
- *    [expiration] is the system clock time at which this
- *    timer will pop.
- *    [recurrence] is the repeating expiration duration
- *    [event] is the handle of the event that the timer will
- *    generate upon expiration.
- *-------------------------------------------------------------------*/
-typedef struct ETimer_s ETimer_t;
-struct ETimer_s {
-  ETimer_t * next;
-  ETimer_time_t expiration;
-  ETimer_time_t recurrence;
-  Escher_xtUMLEvent_t * event;
-};
 
 #ifdef USED_TO_ALLOW_PAUSING
 static ETimer_time_t start_of_pause = 0;
@@ -68,6 +49,7 @@ static struct timeb systyme;
 #if ESCHER_SYS_MAX_XTUML_TIMERS > 0
 static ETimer_t swtimers[ ESCHER_SYS_MAX_XTUML_TIMERS ];  /* system.clr color */
 static ETimer_t * animate = 0, * inanimate = 0;
+static u4_t timer_access_key = 0;
 
 static void timer_insert_sorted( ETimer_t * );
 static void timer_fire( ETimer_t * const );
@@ -87,15 +69,16 @@ static ETimer_time_t ETimer_msec_time( void );
  *   event_inst:<event_inst_var> )
  * This bridge starts up an instance of a one-shot xtUML timer.
  *===================================================================*/
-Escher_Timer_t *
+Escher_Timer_t
 TIM_timer_start(
   Escher_xtUMLEvent_t * ee_event_inst,
   const Escher_uSec_t ee_microseconds )
 {
   /* Insert implementation specific code here.  */
   ETimer_t * t = timer_start( ee_microseconds/USEC_CONVERT, ee_event_inst );
+  Escher_Timer_t result = { t, t->accesskey };
   t->recurrence = 0;
-  return (Escher_Timer_t *) t;
+  return result;
 }
 
 /*=====================================================================
@@ -105,15 +88,16 @@ TIM_timer_start(
  *   event_inst:<event_inst_var> )
  * This bridge starts up an instance of a recurring xtUML timer.
  *===================================================================*/
-Escher_Timer_t *
+Escher_Timer_t
 TIM_timer_start_recurring(
   Escher_xtUMLEvent_t * ee_event_inst,
   const Escher_uSec_t ee_microseconds )
 {
   /* Insert implementation specific code here.  */
   ETimer_t * t = timer_start( ee_microseconds/USEC_CONVERT, ee_event_inst );
+  Escher_Timer_t result = { t, t->accesskey };
   t->recurrence = ee_microseconds/USEC_CONVERT;
-  return (Escher_Timer_t *) t;
+  return result;
 }
 
 /*=====================================================================
@@ -124,13 +108,13 @@ TIM_timer_start_recurring(
  *===================================================================*/
 Escher_uSec_t
 TIM_timer_remaining_time(
-  const Escher_Timer_t * const ee_timer_inst_ref )
+  const Escher_Timer_t ee_timer_inst )
 {
   /* Insert implementation specific code here.  */
   Escher_uSec_t rv = 0UL;
   ETimer_t * t;
-  t = (ETimer_t *) ee_timer_inst_ref;
-  if ( 0 != t ) {
+  t = ee_timer_inst.timer;
+  if ( ( 0 != t ) && ( ee_timer_inst.key == t->accesskey ) ) {
     rv = ETimer_msec_time();
     rv = ( t->expiration > rv ) ? USEC_CONVERT * ( t->expiration - rv ) : 0UL;
   }
@@ -148,13 +132,13 @@ TIM_timer_remaining_time(
 bool
 TIM_timer_reset_time(
   const Escher_uSec_t ee_microseconds,
-  Escher_Timer_t * const ee_timer_inst_ref )
+  const Escher_Timer_t ee_timer_inst )
 {
   /* Insert implementation specific code here.  */
   bool rc = false;
   ETimer_t * t;
-  t = (ETimer_t *) ee_timer_inst_ref;
-  if ( ( 0 != t ) && ( t->expiration > 0UL ) ) {
+  t = ee_timer_inst.timer;
+  if ( ( 0 != t ) && ( ee_timer_inst.key == t->accesskey ) && ( t->expiration > 0UL ) ) {
     t->expiration = ETimer_msec_time() + ee_microseconds/USEC_CONVERT + 1UL;
     rc = timer_find_and_reinsert_sorted( t );
   }
@@ -172,13 +156,13 @@ TIM_timer_reset_time(
 bool
 TIM_timer_add_time(
   const Escher_uSec_t ee_microseconds,
-  Escher_Timer_t * const ee_timer_inst_ref )
+  const Escher_Timer_t ee_timer_inst )
 {
   /* Insert implementation specific code here.  */
   bool rc = false;
   ETimer_t * t;
-  t = (ETimer_t *) ee_timer_inst_ref;
-  if ( ( 0 != t ) && ( t->expiration > 0UL ) ) {
+  t = ee_timer_inst.timer;
+  if ( ( 0 != t ) && ( ee_timer_inst.key == t->accesskey ) && ( t->expiration > 0UL ) ) {
     t->expiration += ee_microseconds/USEC_CONVERT;
     rc = timer_find_and_reinsert_sorted( t );
   }
@@ -194,10 +178,15 @@ TIM_timer_add_time(
  *===================================================================*/
 bool
 TIM_timer_cancel(
-  Escher_Timer_t * const ee_timer_inst_ref )
+  const Escher_Timer_t ee_timer_inst )
 {
   /* Insert implementation specific code here.  */
-  return timer_cancel( (ETimer_t * const) ee_timer_inst_ref );
+  ETimer_t * t = ee_timer_inst.timer;
+  bool rc = false;
+  if ( ( 0 != t ) && ( ee_timer_inst.key == t->accesskey ) ) {
+    rc = timer_cancel( t );
+  }
+  return ( rc );
 }
 #endif   /* if ESCHER_SYS_MAX_XTUML_TIMERS > 0 */
 
@@ -393,6 +382,8 @@ timer_start(
     /* at least as long as duration.                                 */
     /*---------------------------------------------------------------*/
     t->expiration = ETimer_msec_time() + duration + 1UL;
+    timer_access_key = timer_access_key + 1 ? timer_access_key + 1 : 1;
+    t->accesskey = timer_access_key;
     timer_insert_sorted( t );
   } else {
     /* no timers left */
@@ -463,6 +454,7 @@ timer_find_and_delete( ETimer_t * const t )
       prev->next = t->next;                             /* unlink */
     }
     t->expiration = 0; /* in case anyone tries to read the handle */
+    t->accesskey = 0;
     t->next = inanimate;
     inanimate = t;
     rc = true;
@@ -509,13 +501,15 @@ timer_cancel(
   ETimer_t * const t
 )
 {
-  bool rc; Escher_xtUMLEvent_t * e;
+  bool rc = false; Escher_xtUMLEvent_t * e;
+  if ( 0 != t ) {
   rc = timer_find_and_delete( t );
   e = t->event;
   if ( true == rc ) {
     if ( 0 != e ) {
       Escher_DeletextUMLEvent( e );
     }
+  }
   }
   return ( rc );
 }
@@ -531,6 +525,7 @@ timer_fire(
 )
 {
   t->expiration = ( 0 == t->recurrence ) ? 0 : t->expiration + t->recurrence;
+  t->accesskey = ( 0 == t->recurrence ) ? 0 : t->accesskey;
   Escher_SendEvent( t->event );
   if ( 0 != t->recurrence ) {
     Escher_xtUMLEvent_t * e = Escher_AllocatextUMLEvent();
@@ -539,6 +534,7 @@ timer_fire(
     animate = animate->next;      /* Remove from front of list.    */
     timer_insert_sorted( t );
   } else {
+  t->event = 0;                   /* Be sure event is not reused.  */
   animate = animate->next;        /* Remove from active list.      */
   t->next = inanimate;            /* Connect to inactive list.     */
   inanimate = t;
@@ -580,6 +576,7 @@ TIM_init( void )
     swtimers[ i ].recurrence = 0;
     swtimers[ i ].event = 0;
     swtimers[ i ].next = inanimate;
+    swtimers[ i ].accesskey = 0;
     inanimate = &swtimers[ i ];
   }
 #endif   /* if ESCHER_SYS_MAX_XTUML_TIMERS > 0 */
@@ -598,9 +595,11 @@ TIM_tick( void )
   /*-----------------------------------------------------------------*/
   /* Check to see if there are timers in the ticking timers list.    */
   /*-----------------------------------------------------------------*/
-  if ( 0 != animate ) {
+  while ( 0 != animate ) {
     if ( animate->expiration <= ETimer_msec_time() ) {
       timer_fire( animate );
+    } else {
+      break;
     }
   }
 #endif   /* if ESCHER_SYS_MAX_XTUML_TIMERS > 0 */

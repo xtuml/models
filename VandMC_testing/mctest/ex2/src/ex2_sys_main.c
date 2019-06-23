@@ -18,8 +18,7 @@ static void ApplicationLevelInitialization( void )
 {
   Escher_DomainNumber_t d;
   Escher_ClassNumber_t c;
-
-  static const Escher_ClassNumber_t domain_class_count[ SYSTEM_DOMAIN_COUNT ] = {
+  const Escher_ClassNumber_t domain_class_count[ SYSTEM_DOMAIN_COUNT ] = {
     ex2_MAX_CLASS_NUMBERS
   };
   for ( d = 0; d < SYSTEM_DOMAIN_COUNT; d++ ) {
@@ -44,6 +43,10 @@ main( int argc, char ** argv )
   UserInitializationCallout();
   Escher_SetFactoryInit( SYS_MAX_CONTAINERS );
   InitializeOoaEventPool();
+  /* Initialize TIM.  To change this, copy TIM_bridge.c to the gen folder.  */
+  #if ESCHER_SYS_MAX_XTUML_TIMERS > 0
+  TIM_init();
+  #endif
   ApplicationLevelInitialization();
   UserPreOoaInitializationCallout();
   ex2_execute_initialization();

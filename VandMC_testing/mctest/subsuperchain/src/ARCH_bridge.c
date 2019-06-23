@@ -1,19 +1,14 @@
 /*----------------------------------------------------------------------------
- * File:  ARCH_bridge.c
- *
- * Description:
- * Methods for bridging to an external entity.
+ * Description:   Methods for bridging to an external entity.
  *
  * External Entity:  Architecture (ARCH)
  * 
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "subsuperchain_sys_types.h"
 #include "ARCH_bridge.h"
 #include "LOG_bridge.h"
-#include "ARCH_bridge.h"
-#include "subsuperchain_sys_types.h"
 extern bool Escher_run_flag; /* Turn this false to stop the event queues.  */
 
 /*
@@ -28,5 +23,4 @@ ARCH_shutdown()
   /* CONTROL */
   ARCH_shutdown();
 }
-
 

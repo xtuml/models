@@ -51,10 +51,21 @@ typedef struct {
   Escher_InstanceIndex_t population;
 } Escher_Extent_t;
 
+Escher_UniqueID_t Escher_ID_factory( void );
 void Escher_SetFactoryInit( const i_t );
 void Escher_CopySet( Escher_ObjectSet_s *,
-                Escher_ObjectSet_s * const );
+                const Escher_ObjectSet_s * const );
 void Escher_ClearSet( Escher_ObjectSet_s * );
+#define ESCHER_SET_LHS_IS_INSTANCE 0x01
+#define ESCHER_SET_RHS_IS_INSTANCE 0x02
+Escher_ObjectSet_s *
+Escher_SetUnion( Escher_ObjectSet_s * const, void * const, void * const, int );
+Escher_ObjectSet_s *
+Escher_SetIntersection( Escher_ObjectSet_s * const, void * const, void * const, int );
+Escher_ObjectSet_s *
+Escher_SetDifference( Escher_ObjectSet_s * const, void * const, void * const, int );
+Escher_ObjectSet_s *
+Escher_SetSymmetricDifference( Escher_ObjectSet_s * const, void * const, void * const, int );
 void Escher_SetInsertElement( Escher_ObjectSet_s *,
                          void * const );
 Escher_SetElement_s *

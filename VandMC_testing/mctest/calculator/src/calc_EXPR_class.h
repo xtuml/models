@@ -4,7 +4,7 @@
  * Class:       expression  (EXPR)
  * Component:   calc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef CALC_EXPR_CLASS_H
@@ -25,17 +25,13 @@ struct calc_EXPR {
   i_t raw[80];  /* - raw */
   i_t index;  /* - index */
   i_t outdex;  /* - outdex */
-
   /* relationship storage */
-  calc_OP * OP_R1;
+  calc_OP * OP_R1_is_combined_by;
 };
 i_t calc_EXPR_op_getkey( calc_EXPR * );
 void calc_EXPR_op_init( calc_EXPR * );
-void calc_EXPR_op_addkey( calc_EXPR *, i_t );
-void calc_EXPR_op_combine( calc_EXPR *, i_t );
-
-void calc_EXPR_R1_Link( calc_OP *, calc_EXPR * );
-/* Note:  OP<-R1->EXPR unrelate accessor not needed */
+void calc_EXPR_op_addkey( calc_EXPR *, const i_t );
+void calc_EXPR_op_combine( calc_EXPR *, const i_t );
 
 
 #define calc_EXPR_MAX_EXTENT_SIZE 10
@@ -49,7 +45,6 @@ typedef struct {
   i_t p_code; /* code */
 } calc_EXPRevent2;
 extern const Escher_xtUMLEventConstant_t calc_EXPRevent2c;
-
 /*
  * instance event:  EXPR4:'symbol'
  */
@@ -58,15 +53,13 @@ typedef struct {
   i_t p_code; /* code */
 } calc_EXPRevent4;
 extern const Escher_xtUMLEventConstant_t calc_EXPRevent4c;
-
 /*
  * union of events targeted towards 'EXPR' state machine
  */
 typedef union {
-  calc_EXPRevent2 expr21;  
-  calc_EXPRevent4 expr42;  
+  calc_EXPRevent2 expr2_1;  
+  calc_EXPRevent4 expr4_2;  
 } calc_EXPR_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -86,5 +79,3 @@ extern void calc_EXPR_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* CALC_EXPR_CLASS_H */
-
-

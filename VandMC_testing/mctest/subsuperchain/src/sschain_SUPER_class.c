@@ -4,7 +4,7 @@
  * Class:       super  (SUPER)
  * Component:   sschain
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "subsuperchain_sys_types.h"
@@ -29,7 +29,6 @@ sschain_SUPER_R1_Link( sschain_TOP * part, sschain_SUPER * form )
 
 /* Accessors to SUPER[R2] subtypes */
 
-
 /*
  * Statically allocate space for the instance population for this class.
  * Allocate space for the class instance and its attribute values.
@@ -43,5 +42,4 @@ Escher_Extent_t pG_sschain_SUPER_extent = {
   (Escher_iHandle_t) &sschain_SUPER_instances,
   sizeof( sschain_SUPER ), 0, sschain_SUPER_MAX_EXTENT_SIZE
   };
-
 

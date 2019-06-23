@@ -21,7 +21,6 @@ extern	"C"	{
 struct stringtest_ping {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
-
 };
 
 
@@ -38,14 +37,12 @@ typedef struct {
   c_t p_s[ESCHER_SYS_MAX_STRING_LEN]; /* s */
 } stringtest_pingevent1;
 extern const Escher_xtUMLEventConstant_t stringtest_pingevent1c;
-
 /*
  * union of events targeted towards 'ping' state machine
  */
 typedef union {
   stringtest_pingevent1 ping1_1;  
 } stringtest_ping_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -61,5 +58,3 @@ extern void stringtest_ping_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* STRINGTEST_PING_CLASS_H */
-
-

@@ -4,7 +4,7 @@
  * Class:       disk drive  (DRIVE)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -18,18 +18,16 @@
 void
 polycalc_DRIVE_op_dispose( polycalc_DRIVE * self)
 {
-  polycalc_CD * cd = 0; /* cd (CD) */
- 
+  polycalc_CD * cd=0;
   /* SELECT one cd RELATED BY self->CD[R200] */
   cd = 0;
-  if ( polycalc_CD_CLASS_NUMBER == self->R200_object_id )  cd = (polycalc_CD *) self->R200_subtype;
+  if ( ( 0 != self ) && ( polycalc_CD_CLASS_NUMBER == self->R200_object_id ) )  cd = ( 0 != self ) ? (polycalc_CD *) self->R200_subtype : 0;
   /* IF ( empty cd ) */
   if ( ( 0 == cd ) ) {
-    polycalc_DVD * dvd = 0; /* dvd (DVD) */
- 
+    polycalc_DVD * dvd=0;
     /* SELECT one dvd RELATED BY self->DVD[R200] */
     dvd = 0;
-    if ( polycalc_DVD_CLASS_NUMBER == self->R200_object_id )    dvd = (polycalc_DVD *) self->R200_subtype;
+    if ( ( 0 != self ) && ( polycalc_DVD_CLASS_NUMBER == self->R200_object_id ) )    dvd = ( 0 != self ) ? (polycalc_DVD *) self->R200_subtype : 0;
     /* IF ( not_empty dvd ) */
     if ( ( 0 != dvd ) ) {
       /* UNRELATE dvd FROM self ACROSS R200 */
@@ -55,9 +53,7 @@ polycalc_DRIVE_op_dispose( polycalc_DRIVE * self)
     XTUML_EMPTY_HANDLE_TRACE( "DRIVE", "Escher_DeleteInstance" );
   }
   Escher_DeleteInstance( (Escher_iHandle_t) self, polycalc_DOMAIN_ID, polycalc_DRIVE_CLASS_NUMBER );
-
 }
-
 
 /*
  * RELATE LOCATION TO DRIVE ACROSS R100
@@ -96,7 +92,6 @@ polycalc_DRIVE_R100_Unlink( polycalc_LOCATION * supertype, polycalc_DRIVE * subt
 /* Accessors to DRIVE[R200] subtypes */
 
 
-
 /*----------------------------------------------------------------------------
  * Operation action methods implementation for the following class:
  *
@@ -130,7 +125,7 @@ static void polycalc_DRIVE_act1( polycalc_DRIVE *, const Escher_xtUMLEvent_t * c
 static void
 polycalc_DRIVE_act1( polycalc_DRIVE * self, const Escher_xtUMLEvent_t * const event )
 {
-  /* LOG::LogInfo( message:'drive spinning up' ) */
+  /* LOG::LogInfo( message:drive spinning up ) */
   LOG_LogInfo( "drive spinning up" );
 }
 
@@ -138,7 +133,6 @@ polycalc_DRIVE_act1( polycalc_DRIVE * self, const Escher_xtUMLEvent_t * const ev
 const Escher_xtUMLEventConstant_t polycalc_DRIVEevent_LOCATION_PE3c = {
   polycalc_DOMAIN_ID, polycalc_DRIVE_CLASS_NUMBER, POLYCALC_DRIVEEVENT_LOCATION_PE3NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 
 
 /*
@@ -173,7 +167,6 @@ polycalc_DRIVE_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 1 ) {
@@ -182,9 +175,9 @@ polycalc_DRIVE_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_DRIVE_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 1 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_DRIVE_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_DRIVE_acts[ next_state ] )( instance, event );
       } else if ( next_state == EVENT_CANT_HAPPEN ) {
           /* event cant happen */
           UserEventCantHappenCallout( current_state, next_state, event_number );
@@ -194,5 +187,4 @@ polycalc_DRIVE_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

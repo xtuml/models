@@ -3,7 +3,7 @@
  *
  * UML Component (Module) Declaration (Operations and Signals)
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef SSCHAIN_H
@@ -14,7 +14,6 @@ extern	"C"	{
 
 #include "subsuperchain_sys_types.h"
 void sschain_instrumentation_start_test( void );
-
 
 #ifdef	__cplusplus
 }

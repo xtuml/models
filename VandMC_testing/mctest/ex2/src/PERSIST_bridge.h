@@ -16,7 +16,6 @@ extern	"C"	{
 #endif
 
 #include "ex2_sys_types.h"
-
 i_t PERSIST_commit( void );
 i_t PERSIST_restore( void );
 

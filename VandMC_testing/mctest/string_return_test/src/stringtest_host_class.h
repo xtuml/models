@@ -22,14 +22,10 @@ struct stringtest_host {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
   c_t upper[ESCHER_SYS_MAX_STRING_LEN];  /* - upper */
-
   /* relationship storage */
   /* Note:  No storage needed for host->buffer[R1] */
 };
-xtuml_string stringtest_host_op_rstr( stringtest_host * );
-
-void stringtest_host_R1_Link( stringtest_buffer *, stringtest_host * );
-/* Note:  buffer<-R1->host unrelate accessor not needed */
+c_t * stringtest_host_op_rstr( stringtest_host *, c_t[ESCHER_SYS_MAX_STRING_LEN] );
 
 
 #define stringtest_host_MAX_EXTENT_SIZE 10
@@ -44,7 +40,6 @@ typedef struct {
   c_t p_s[ESCHER_SYS_MAX_STRING_LEN]; /* s */
 } stringtest_hostevent1;
 extern const Escher_xtUMLEventConstant_t stringtest_hostevent1c;
-
 /*
  * instance event:  host2:'put'
  */
@@ -54,7 +49,6 @@ typedef struct {
   c_t p_s[ESCHER_SYS_MAX_STRING_LEN]; /* s */
 } stringtest_hostevent2;
 extern const Escher_xtUMLEventConstant_t stringtest_hostevent2c;
-
 /*
  * union of events targeted towards 'host' state machine
  */
@@ -62,7 +56,6 @@ typedef union {
   stringtest_hostevent1 host1_1;  
   stringtest_hostevent2 host2_2;  
 } stringtest_host_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -80,5 +73,3 @@ extern void stringtest_host_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* STRINGTEST_HOST_CLASS_H */
-
-

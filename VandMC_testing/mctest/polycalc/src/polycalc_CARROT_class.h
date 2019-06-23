@@ -4,7 +4,7 @@
  * Class:       carrot  (CARROT)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef POLYCALC_CARROT_CLASS_H
@@ -21,14 +21,12 @@ extern	"C"	{
 struct polycalc_CARROT {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
-
   /* relationship storage */
   polycalc_VEGETABLE * VEGETABLE_R4;
 };
 
 void polycalc_CARROT_R4_Link( polycalc_VEGETABLE *, polycalc_CARROT * );
 /* Note:  No VEGETABLE<-R4->CARROT unrelate accessor needed.  */
-
 
 #define polycalc_CARROT_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_polycalc_CARROT_extent;
@@ -41,14 +39,12 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_CARROTevent_VEGETABLE_PE1;
 extern const Escher_xtUMLEventConstant_t polycalc_CARROTevent_VEGETABLE_PE1c;
-
 /*
  * union of events targeted towards 'CARROT' state machine
  */
 typedef union {
-  polycalc_CARROTevent_VEGETABLE_PE1 carrot11;  
+  polycalc_CARROTevent_VEGETABLE_PE1 carrot1_1;  
 } polycalc_CARROT_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -64,5 +60,3 @@ extern void polycalc_CARROT_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* POLYCALC_CARROT_CLASS_H */
-
-

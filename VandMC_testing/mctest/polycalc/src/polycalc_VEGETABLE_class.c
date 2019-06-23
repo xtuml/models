@@ -4,7 +4,7 @@
  * Class:       vegetable  (VEGETABLE)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -14,7 +14,6 @@
 
 
 /* Accessors to VEGETABLE[R4] subtypes */
-
 
 /*
  * Statically allocate space for the instance population for this class.
@@ -44,7 +43,7 @@ static void
 polycalc_VEGETABLE_act1( polycalc_VEGETABLE * self, const Escher_xtUMLEvent_t * const event )
 {
   polycalc_VEGETABLEevent2 * rcvd_evt = (polycalc_VEGETABLEevent2 *) event;
-  polycalc_PUZZLE * puzzle=0; 
+  polycalc_PUZZLE * puzzle=0;
   /* SELECT any puzzle FROM INSTANCES OF PUZZLE */
   puzzle = (polycalc_PUZZLE *) Escher_SetGetAny( &pG_polycalc_PUZZLE_extent.active );
   /* GENERATE PUZZLE2:done(value:PARAM.height) TO puzzle */
@@ -57,11 +56,9 @@ polycalc_VEGETABLE_act1( polycalc_VEGETABLE * self, const Escher_xtUMLEvent_t * 
 const Escher_xtUMLEventConstant_t polycalc_VEGETABLEevent1c = {
   polycalc_DOMAIN_ID, polycalc_VEGETABLE_CLASS_NUMBER, POLYCALC_VEGETABLEEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_POLYMORPHIC_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_VEGETABLEevent2c = {
   polycalc_DOMAIN_ID, polycalc_VEGETABLE_CLASS_NUMBER, POLYCALC_VEGETABLEEVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -96,7 +93,6 @@ polycalc_VEGETABLE_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   /* If event is polymorphic, forward to the dispatcher in the responding
      subtype below us in the generalization hierarchy.  */
   if ( 0 != GetIsPolymorphicEvent( event ) ) {
@@ -109,9 +105,9 @@ polycalc_VEGETABLE_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_VEGETABLE_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 1 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_VEGETABLE_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_VEGETABLE_acts[ next_state ] )( instance, event );
       } else {
         /* empty else */
       }
@@ -150,7 +146,8 @@ polycalc_VEGETABLE_R4PolymorphicEvent( const polycalc_VEGETABLE * const p_vegeta
           break; /* after transition */
       }
       break;
+    default:
+      UserEventCantHappenCallout( 0, 0, event_number );
   }
 }
-
 

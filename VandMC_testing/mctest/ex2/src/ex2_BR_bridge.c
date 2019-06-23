@@ -1,8 +1,5 @@
 /*----------------------------------------------------------------------------
- * File:  ex2_BR_bridge.c
- *
- * Description:
- * Methods for bridging to an external entity.
+ * Description:   Methods for bridging to an external entity.
  *
  * External Entity:  Realized Bridge (BR)
  * 
@@ -17,8 +14,6 @@
 #include "TIM_bridge.h"
 #include "ex2_BR_bridge.h"
 #include "ex2_classes.h"
-#include "ex2_BR_bridge.h"
-#include "ex2_sys_types.h"
 
 /*
  * Bridge:  ret_bool
@@ -57,5 +52,4 @@ ex2_BR_ret_real( const r_t p_r )
   {r_t xtumlOALrv = p_r;
   return xtumlOALrv;}
 }
-
 

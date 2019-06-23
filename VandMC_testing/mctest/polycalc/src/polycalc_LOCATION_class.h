@@ -4,7 +4,7 @@
  * Class:       location  (LOCATION)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef POLYCALC_LOCATION_CLASS_H
@@ -24,14 +24,12 @@ struct polycalc_LOCATION {
   i_t x;  /* - x */
   i_t y;  /* - y */
   i_t z;  /* - z */
-
   /* relationship storage */
   void * R100_subtype;
   Escher_ClassNumber_t R100_object_id;
   polycalc_PORTAL * PORTAL_R300;
 };
 void polycalc_LOCATION_op_dispose( polycalc_LOCATION * );
-
 
 /* Accessors to LOCATION[R100] subtypes */
 #define polycalc_DRIVE_R100_From_LOCATION( LOCATION ) \
@@ -44,7 +42,6 @@ void polycalc_LOCATION_op_dispose( polycalc_LOCATION * );
 void polycalc_LOCATION_R300_Link( polycalc_PORTAL *, polycalc_LOCATION * );
 void polycalc_LOCATION_R300_Unlink( polycalc_PORTAL *, polycalc_LOCATION * );
 
-
 #define polycalc_LOCATION_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_polycalc_LOCATION_extent;
 
@@ -56,7 +53,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_LOCATION_CBevent1;
 extern const Escher_xtUMLEventConstant_t polycalc_LOCATION_CBevent1c;
-
 /*
  * class-based event:  LOCATION_A2:'done'
  */
@@ -65,7 +61,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_LOCATION_CBevent2;
 extern const Escher_xtUMLEventConstant_t polycalc_LOCATION_CBevent2c;
-
 /*
  * class-based event:  LOCATION_A3:'complete'
  */
@@ -74,50 +69,27 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_LOCATION_CBevent3;
 extern const Escher_xtUMLEventConstant_t polycalc_LOCATION_CBevent3c;
-
 /*
  * union of events targeted towards 'LOCATION' state machine
  */
 typedef union {
-  polycalc_LOCATION_CBevent1 location11;  
-  polycalc_LOCATION_CBevent2 location22;  
-  polycalc_LOCATION_CBevent3 location33;  
+  polycalc_LOCATION_CBevent1 location1_1;  
+  polycalc_LOCATION_CBevent2 location2_2;  
+  polycalc_LOCATION_CBevent3 location3_3;  
 } polycalc_LOCATION_CB_Events_u;
-
 /*
  * enumeration of state model states for class
  */
 #define polycalc_LOCATION_CB_STATE_1 1  /* state [1]:  (first test) */
 #define polycalc_LOCATION_CB_STATE_2 2  /* state [2]:  (removing portal) */
 #define polycalc_LOCATION_CB_STATE_3 3  /* state [3]:  (passed) */
-
 /*
  * enumeration of state model event numbers
  */
 #define POLYCALC_LOCATION_CBEVENT1NUM 0  /* LOCATION_A1:'start' */
 #define POLYCALC_LOCATION_CBEVENT2NUM 1  /* LOCATION_A2:'done' */
 #define POLYCALC_LOCATION_CBEVENT3NUM 2  /* LOCATION_A3:'complete' */
-
 extern void polycalc_LOCATION_CBDispatch( Escher_xtUMLEvent_t * );
-
-
-/*
- * instance event:  LOCATION2:'mount'
- */
-typedef struct {
-  EVENT_BASE_ATTRIBUTE_LIST         /* base attributes of all event classes */
-  /* Note:  no supplemental data for this event */
-} polycalc_LOCATIONevent2;
-extern const Escher_xtUMLEventConstant_t polycalc_LOCATIONevent2c;
-
-/*
- * instance event:  LOCATION3:'spinup'
- */
-typedef struct {
-  EVENT_BASE_ATTRIBUTE_LIST         /* base attributes of all event classes */
-  /* Note:  no supplemental data for this event */
-} polycalc_LOCATIONevent3;
-extern const Escher_xtUMLEventConstant_t polycalc_LOCATIONevent3c;
 
 /*
  * instance event:  LOCATION1:'mounted'
@@ -127,16 +99,30 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_LOCATIONevent1;
 extern const Escher_xtUMLEventConstant_t polycalc_LOCATIONevent1c;
-
+/*
+ * instance event:  LOCATION2:'mount'
+ */
+typedef struct {
+  EVENT_BASE_ATTRIBUTE_LIST         /* base attributes of all event classes */
+  /* Note:  no supplemental data for this event */
+} polycalc_LOCATIONevent2;
+extern const Escher_xtUMLEventConstant_t polycalc_LOCATIONevent2c;
+/*
+ * instance event:  LOCATION3:'spinup'
+ */
+typedef struct {
+  EVENT_BASE_ATTRIBUTE_LIST         /* base attributes of all event classes */
+  /* Note:  no supplemental data for this event */
+} polycalc_LOCATIONevent3;
+extern const Escher_xtUMLEventConstant_t polycalc_LOCATIONevent3c;
 /*
  * union of events targeted towards 'LOCATION' state machine
  */
 typedef union {
-  polycalc_LOCATIONevent2 location21;  /* polymorphic event - not consumed by LOCATION */
-  polycalc_LOCATIONevent3 location32;  /* polymorphic event - not consumed by LOCATION */
-  polycalc_LOCATIONevent1 location13;  
+  polycalc_LOCATIONevent1 location1_1;  
+  polycalc_LOCATIONevent2 location2_2;  /* polymorphic event - not consumed by LOCATION */
+  polycalc_LOCATIONevent3 location3_3;  /* polymorphic event - not consumed by LOCATION */
 } polycalc_LOCATION_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -160,5 +146,3 @@ extern void polycalc_LOCATION_R100PolymorphicEvent( const polycalc_LOCATION * co
 #endif
 
 #endif  /* POLYCALC_LOCATION_CLASS_H */
-
-

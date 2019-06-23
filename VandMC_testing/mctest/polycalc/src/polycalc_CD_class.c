@@ -4,7 +4,7 @@
  * Class:       compact disc drive  (CD)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -46,7 +46,6 @@ polycalc_CD_R200_Unlink( polycalc_DRIVE * supertype, polycalc_CD * subtype )
   supertype->R200_object_id = 0;
 }
 
-
 /*
  * Statically allocate space for the instance population for this class.
  * Allocate space for the class instance and its attribute values.
@@ -74,14 +73,13 @@ static void polycalc_CD_act1( polycalc_CD *, const Escher_xtUMLEvent_t * const )
 static void
 polycalc_CD_act1( polycalc_CD * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_LOCATION * location = 0; /* location (LOCATION) */
- 
-  /* LOG::LogInfo( message:'cd mounting' ) */
+  polycalc_LOCATION * location=0;
+  /* LOG::LogInfo( message:cd mounting ) */
   LOG_LogInfo( "cd mounting" );
   /* SELECT one location RELATED BY self->DRIVE[R200]->LOCATION[R100] */
   location = 0;
   {  if ( 0 != self ) {
-  polycalc_DRIVE * DRIVE_R200 = (polycalc_DRIVE *) self->DRIVE_R200;
+  polycalc_DRIVE * DRIVE_R200 = self->DRIVE_R200;
   if ( 0 != DRIVE_R200 ) {
   location = DRIVE_R200->LOCATION_R100;
 }}}
@@ -98,16 +96,15 @@ static void polycalc_CD_act2( polycalc_CD *, const Escher_xtUMLEvent_t * const )
 static void
 polycalc_CD_act2( polycalc_CD * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_PORTAL * portal = 0; /* portal (PORTAL) */
- 
-  /* LOG::LogInfo( message:'going offline (receive remove event)' ) */
+  polycalc_PORTAL * portal=0;
+  /* LOG::LogInfo( message:going offline (receive remove event) ) */
   LOG_LogInfo( "going offline (receive remove event)" );
   /* SELECT one portal RELATED BY self->DRIVE[R200]->LOCATION[R100]->PORTAL[R300] */
   portal = 0;
   {  if ( 0 != self ) {
-  polycalc_DRIVE * DRIVE_R200 = (polycalc_DRIVE *) self->DRIVE_R200;
+  polycalc_DRIVE * DRIVE_R200 = self->DRIVE_R200;
   if ( 0 != DRIVE_R200 ) {
-  polycalc_LOCATION * LOCATION_R100 = (polycalc_LOCATION *) DRIVE_R200->LOCATION_R100;
+  polycalc_LOCATION * LOCATION_R100 = DRIVE_R200->LOCATION_R100;
   if ( 0 != LOCATION_R100 ) {
   portal = LOCATION_R100->PORTAL_R300;
 }}}}
@@ -120,11 +117,9 @@ polycalc_CD_act2( polycalc_CD * self, const Escher_xtUMLEvent_t * const event )
 const Escher_xtUMLEventConstant_t polycalc_CDevent_LOCATION_PE2c = {
   polycalc_DOMAIN_ID, polycalc_CD_CLASS_NUMBER, POLYCALC_CDEVENT_LOCATION_PE2NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_CDevent_PORTAL_PE1c = {
   polycalc_DOMAIN_ID, polycalc_CD_CLASS_NUMBER, POLYCALC_CDEVENT_PORTAL_PE1NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 
 
 /*
@@ -137,7 +132,7 @@ static const Escher_SEMcell_t polycalc_CD_StateEventMatrix[ 2 + 1 ][ 2 ] = {
   /* row 0:  uninitialized state (for creation events) */
   { EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN },
   /* row 1:  polycalc_CD_STATE_1 (mounting cd) */
-  { polycalc_CD_STATE_1, polycalc_CD_STATE_2 },
+  { polycalc_CD_STATE_2, polycalc_CD_STATE_1 },
   /* row 2:  polycalc_CD_STATE_2 (offline) */
   { EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN }
 };
@@ -162,7 +157,6 @@ polycalc_CD_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 2 ) {
@@ -171,9 +165,9 @@ polycalc_CD_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_CD_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 2 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_CD_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_CD_acts[ next_state ] )( instance, event );
       } else if ( next_state == EVENT_CANT_HAPPEN ) {
           /* event cant happen */
           UserEventCantHappenCallout( current_state, next_state, event_number );
@@ -183,5 +177,4 @@ polycalc_CD_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

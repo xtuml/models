@@ -23,7 +23,6 @@ struct ex2_A {
   /* application analysis class attributes */
   Escher_UniqueID_t a_id;  /* * a_id */
   i_t a;  /* - a */
-
 };
 
 
@@ -36,5 +35,3 @@ extern Escher_Extent_t pG_ex2_A_extent;
 #endif
 
 #endif  /* EX2_A_CLASS_H */
-
-

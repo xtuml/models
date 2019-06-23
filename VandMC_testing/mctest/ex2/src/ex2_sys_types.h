@@ -19,7 +19,7 @@
  * MaxInterleavedBridges:  0
  * MaxInterleavedBridgeDataSize:  8
  * CollectionsFlavor:  0
- * ForcePriorityEvents:  FALSE
+ * ForcePriorityEvents:  False
  * PEIClassCount:  0
  * PersistentClassCount:  0
  * PersistInstanceCacheDepth:  128
@@ -88,7 +88,6 @@ typedef unsigned char bool;
 #define ESCHER_SYS_MAX_INTERLEAVED_BRIDGES 0
 #define ESCHER_SYS_MAX_INTERLEAVED_BRIDGE_DATA 8
 
-
 /*
  * Core types with byte widths defined for MISRA-C compliance.
  */
@@ -131,7 +130,7 @@ typedef struct {
   Escher_StateNumber_t current_state;
 } Escher_InstanceBase_t;
 typedef Escher_InstanceBase_t * Escher_iHandle_t;
-typedef Escher_iHandle_t Escher_UniqueID_t;
+typedef i_t Escher_UniqueID_t;
 typedef void (*Escher_idf)( Escher_iHandle_t ); 
 
 /* Return code type for dispatch of a polymorphic event (see sys_events.h).  */
@@ -208,7 +207,32 @@ typedef struct Escher_xtUMLevent_s Escher_xtUMLEvent_t;
 
 typedef unsigned long ETimer_time_t;
 
-typedef void Escher_Timer_t;
+/*---------------------------------------------------------------------
+ * Timer "Object" Structure Declaration
+ *    [next] is the mechanism used to collect and sequence timers.
+ *    Timer instances are strung together in an active (animate)
+ *    list and an inactive (inanimate) list.  The next pointer
+ *    provides the "hole for the beads".
+ *    [expiration] is the system clock time at which this
+ *    timer will pop.
+ *    [recurrence] is the repeating expiration duration
+ *    [event] is the handle of the event that the timer will
+ *    generate upon expiration.
+ *    [accesskey] is the unique serial number for this timer allocation
+ *-------------------------------------------------------------------*/
+typedef struct ETimer_s ETimer_t;
+struct ETimer_s {
+  ETimer_t * next;
+  ETimer_time_t expiration;
+  ETimer_time_t recurrence;
+  Escher_xtUMLEvent_t * event;
+  u4_t accesskey;
+};
+
+typedef struct {
+  ETimer_t * timer;
+  u4_t key;
+} Escher_Timer_t;
 
 /*
  * Event Macros
@@ -309,7 +333,6 @@ void Escher_thread_shutdown( void );
 #define ex2_DOMAIN_ID 0
 #define ex2_DOMAIN_ID_text "ex2"
 #include "ex2_classes.h"
-
 /*----------------------------------------------------------------------------
  *
  * Run time instrumentation and tracing declarations are defined here.
@@ -403,6 +426,8 @@ void Escher_thread_shutdown( void );
 #ifndef XTUML_EMPTY_HANDLE_TRACE
 #define XTUML_EMPTY_HANDLE_TRACE( object_keyletters, s ) do { UserEmptyHandleDetectedCallout( object_keyletters, s ); } while (0)
 #endif
+
+void * xtUML_detect_empty_handle( void *, const char *, const char * );
 
 /*
  * Declare state information structure.

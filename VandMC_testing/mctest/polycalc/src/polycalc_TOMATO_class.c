@@ -4,7 +4,7 @@
  * Class:       tomato  (TOMATO)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -48,7 +48,6 @@ polycalc_TOMATO_R4_Link( polycalc_VEGETABLE * supertype, polycalc_TOMATO * subty
   supertype->R4_object_id = polycalc_TOMATO_CLASS_NUMBER;
 }
 
-
 /*
  * Statically allocate space for the instance population for this class.
  * Allocate space for the class instance and its attribute values.
@@ -76,10 +75,9 @@ static void polycalc_TOMATO_act1( polycalc_TOMATO *, const Escher_xtUMLEvent_t *
 static void
 polycalc_TOMATO_act1( polycalc_TOMATO * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_FRUIT * fruit = 0; /* fruit (FRUIT) */
- 
+  polycalc_FRUIT * fruit=0;
   /* SELECT one fruit RELATED BY self->FRUIT[R3] */
-  fruit = self->FRUIT_R3;
+  fruit = ( 0 != self ) ? self->FRUIT_R3 : 0;
   /* GENERATE FRUIT2:juiced(percentage:35) TO fruit */
   { polycalc_FRUITevent2 * e = (polycalc_FRUITevent2 *) Escher_NewxtUMLEvent( fruit, &polycalc_FRUITevent2c );
     e->p_percentage = 35;
@@ -94,10 +92,9 @@ static void polycalc_TOMATO_act2( polycalc_TOMATO *, const Escher_xtUMLEvent_t *
 static void
 polycalc_TOMATO_act2( polycalc_TOMATO * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_VEGETABLE * vegetable = 0; /* vegetable (VEGETABLE) */
- 
+  polycalc_VEGETABLE * vegetable=0;
   /* SELECT one vegetable RELATED BY self->VEGETABLE[R4] */
-  vegetable = self->VEGETABLE_R4;
+  vegetable = ( 0 != self ) ? self->VEGETABLE_R4 : 0;
   /* GENERATE VEGETABLE2:grown(height:42) TO vegetable */
   { polycalc_VEGETABLEevent2 * e = (polycalc_VEGETABLEevent2 *) Escher_NewxtUMLEvent( vegetable, &polycalc_VEGETABLEevent2c );
     e->p_height = 42;
@@ -108,11 +105,9 @@ polycalc_TOMATO_act2( polycalc_TOMATO * self, const Escher_xtUMLEvent_t * const 
 const Escher_xtUMLEventConstant_t polycalc_TOMATOevent_FRUIT_PE1c = {
   polycalc_DOMAIN_ID, polycalc_TOMATO_CLASS_NUMBER, POLYCALC_TOMATOEVENT_FRUIT_PE1NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_TOMATOevent_VEGETABLE_PE1c = {
   polycalc_DOMAIN_ID, polycalc_TOMATO_CLASS_NUMBER, POLYCALC_TOMATOEVENT_VEGETABLE_PE1NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_TRUE_EVENT };
-
 
 
 /*
@@ -125,9 +120,9 @@ static const Escher_SEMcell_t polycalc_TOMATO_StateEventMatrix[ 2 + 1 ][ 2 ] = {
   /* row 0:  uninitialized state (for creation events) */
   { EVENT_CANT_HAPPEN, EVENT_CANT_HAPPEN },
   /* row 1:  polycalc_TOMATO_STATE_1 (juicing) */
-  { polycalc_TOMATO_STATE_1, polycalc_TOMATO_STATE_2 },
+  { polycalc_TOMATO_STATE_2, polycalc_TOMATO_STATE_1 },
   /* row 2:  polycalc_TOMATO_STATE_2 (weeding) */
-  { polycalc_TOMATO_STATE_1, polycalc_TOMATO_STATE_2 }
+  { polycalc_TOMATO_STATE_2, polycalc_TOMATO_STATE_1 }
 };
 
   /*
@@ -150,7 +145,6 @@ polycalc_TOMATO_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 2 ) {
@@ -159,14 +153,13 @@ polycalc_TOMATO_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_TOMATO_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 2 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_TOMATO_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_TOMATO_acts[ next_state ] )( instance, event );
       } else {
         /* empty else */
       }
     }
   }
 }
-
 

@@ -4,7 +4,7 @@
  * Class:       suba  (SUBA)
  * Component:   sschain
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "subsuperchain_sys_types.h"
@@ -30,7 +30,6 @@ sschain_SUBA_R2_Link( sschain_SUPER * supertype, sschain_SUBA * subtype )
   supertype->R2_object_id = sschain_SUBA_CLASS_NUMBER;
 }
 
-
 /*
  * Statically allocate space for the instance population for this class.
  * Allocate space for the class instance and its attribute values.
@@ -44,5 +43,4 @@ Escher_Extent_t pG_sschain_SUBA_extent = {
   (Escher_iHandle_t) &sschain_SUBA_instances,
   sizeof( sschain_SUBA ), 0, sschain_SUBA_MAX_EXTENT_SIZE
   };
-
 

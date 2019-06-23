@@ -4,7 +4,7 @@
  * Class:       op  (OP)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef POLYCALC_OP_CLASS_H
@@ -25,7 +25,6 @@ struct polycalc_OP {
   i_t left;  /* - left */
   i_t right;  /* - right */
   i_t result;  /* - result */
-
   /* relationship storage */
   void * R1_subtype;
   Escher_ClassNumber_t R1_object_id;
@@ -47,10 +46,13 @@ struct polycalc_OP {
      ((polycalc_DIV *)((OP)->R1_subtype)) : (0) )
 
 
-
 #define polycalc_OP_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_polycalc_OP_extent;
 
+/*
+ * instance event:  OP1:'local1'
+ * warning:  Event is not used in application - no code generated.
+ */
 /*
  * instance event:  OP2:'combine'
  */
@@ -59,12 +61,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_OPevent2;
 extern const Escher_xtUMLEventConstant_t polycalc_OPevent2c;
-
-/*
- * instance event:  OP1:'local1'
- * warning:  Event is not used in application - no code generated.
- */
-
 /*
  * instance event:  OP3:'done'
  */
@@ -73,15 +69,13 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_OPevent3;
 extern const Escher_xtUMLEventConstant_t polycalc_OPevent3c;
-
 /*
  * union of events targeted towards 'OP' state machine
  */
 typedef union {
-  polycalc_OPevent2 op21;  /* polymorphic event - not consumed by OP */
-  polycalc_OPevent3 op32;  
+  polycalc_OPevent2 op2_1;  /* polymorphic event - not consumed by OP */
+  polycalc_OPevent3 op3_2;  
 } polycalc_OP_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -103,5 +97,3 @@ extern void polycalc_OP_R1PolymorphicEvent( const polycalc_OP * const, Escher_xt
 #endif
 
 #endif  /* POLYCALC_OP_CLASS_H */
-
-

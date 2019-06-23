@@ -4,7 +4,7 @@
  * Class:       location  (LOCATION)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -18,18 +18,16 @@
 void
 polycalc_LOCATION_op_dispose( polycalc_LOCATION * self)
 {
-  polycalc_TAPE * tape = 0; /* tape (TAPE) */
- 
+  polycalc_TAPE * tape=0;
   /* SELECT one tape RELATED BY self->TAPE[R100] */
   tape = 0;
-  if ( polycalc_TAPE_CLASS_NUMBER == self->R100_object_id )  tape = (polycalc_TAPE *) self->R100_subtype;
+  if ( ( 0 != self ) && ( polycalc_TAPE_CLASS_NUMBER == self->R100_object_id ) )  tape = ( 0 != self ) ? (polycalc_TAPE *) self->R100_subtype : 0;
   /* IF ( empty tape ) */
   if ( ( 0 == tape ) ) {
-    polycalc_DRIVE * drive = 0; /* drive (DRIVE) */
- 
+    polycalc_DRIVE * drive=0;
     /* SELECT one drive RELATED BY self->DRIVE[R100] */
     drive = 0;
-    if ( polycalc_DRIVE_CLASS_NUMBER == self->R100_object_id )    drive = (polycalc_DRIVE *) self->R100_subtype;
+    if ( ( 0 != self ) && ( polycalc_DRIVE_CLASS_NUMBER == self->R100_object_id ) )    drive = ( 0 != self ) ? (polycalc_DRIVE *) self->R100_subtype : 0;
     /* IF ( not_empty drive ) */
     if ( ( 0 != drive ) ) {
       /* UNRELATE drive FROM self ACROSS R100 */
@@ -52,9 +50,7 @@ polycalc_LOCATION_op_dispose( polycalc_LOCATION * self)
     XTUML_EMPTY_HANDLE_TRACE( "LOCATION", "Escher_DeleteInstance" );
   }
   Escher_DeleteInstance( (Escher_iHandle_t) self, polycalc_DOMAIN_ID, polycalc_LOCATION_CLASS_NUMBER );
-
 }
-
 
 /* Accessors to LOCATION[R100] subtypes */
 
@@ -91,7 +87,6 @@ polycalc_LOCATION_R300_Unlink( polycalc_PORTAL * supertype, polycalc_LOCATION * 
   supertype->R300_subtype = 0;
   supertype->R300_object_id = 0;
 }
-
 
 
 /*----------------------------------------------------------------------------
@@ -136,13 +131,12 @@ static void polycalc_LOCATION_act2( polycalc_LOCATION *, const Escher_xtUMLEvent
 static void
 polycalc_LOCATION_act2( polycalc_LOCATION * self, const Escher_xtUMLEvent_t * const event )
 {
-  /* LOG::LogSuccess( message:'location mount complete' ) */
+  /* LOG::LogSuccess( message:location mount complete ) */
   LOG_LogSuccess( "location mount complete" );
   /* GENERATE LOCATION_A2:done() TO LOCATION CLASS */
-  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( (void *) 0, &polycalc_LOCATION_CBevent2c );
+  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( 0, &polycalc_LOCATION_CBevent2c );
     Escher_SendSelfEvent( e );
   }
-
 }
 
 /*
@@ -152,25 +146,25 @@ static void polycalc_LOCATION_CB_act1( polycalc_LOCATION *, const Escher_xtUMLEv
 static void
 polycalc_LOCATION_CB_act1( polycalc_LOCATION * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_LOCATION * location; polycalc_DRIVE * drive; polycalc_DVD * dvd; polycalc_PORTAL * portal; 
-  /* LOG::LogInfo( message:'deep test started' ) */
+  polycalc_PORTAL * portal;polycalc_DVD * dvd;polycalc_DRIVE * drive;polycalc_LOCATION * location;
+  /* LOG::LogInfo( message:deep test started ) */
   LOG_LogInfo( "deep test started" );
   /* CREATE OBJECT INSTANCE location OF LOCATION */
   location = (polycalc_LOCATION *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_LOCATION_CLASS_NUMBER );
   /* ASSIGN location.x = 1 */
-  location->x = 1;
+  ((polycalc_LOCATION *)xtUML_detect_empty_handle( location, "LOCATION", "location.x" ))->x = 1;
   /* ASSIGN location.y = 2 */
-  location->y = 2;
+  ((polycalc_LOCATION *)xtUML_detect_empty_handle( location, "LOCATION", "location.y" ))->y = 2;
   /* ASSIGN location.z = 3 */
-  location->z = 3;
+  ((polycalc_LOCATION *)xtUML_detect_empty_handle( location, "LOCATION", "location.z" ))->z = 3;
   /* CREATE OBJECT INSTANCE drive OF DRIVE */
   drive = (polycalc_DRIVE *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_DRIVE_CLASS_NUMBER );
   /* ASSIGN drive.capacity = 100 */
-  drive->capacity = 100;
+  ((polycalc_DRIVE *)xtUML_detect_empty_handle( drive, "DRIVE", "drive.capacity" ))->capacity = 100;
   /* CREATE OBJECT INSTANCE dvd OF DVD */
   dvd = (polycalc_DVD *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_DVD_CLASS_NUMBER );
   /* ASSIGN dvd.encryption = 7 */
-  dvd->encryption = 7;
+  ((polycalc_DVD *)xtUML_detect_empty_handle( dvd, "DVD", "dvd.encryption" ))->encryption = 7;
   /* CREATE OBJECT INSTANCE portal OF PORTAL */
   portal = (polycalc_PORTAL *) Escher_CreateInstance( polycalc_DOMAIN_ID, polycalc_PORTAL_CLASS_NUMBER );
   /* RELATE portal TO location ACROSS R300 */
@@ -192,7 +186,7 @@ static void polycalc_LOCATION_CB_act2( polycalc_LOCATION *, const Escher_xtUMLEv
 static void
 polycalc_LOCATION_CB_act2( polycalc_LOCATION * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_PORTAL * portal=0; 
+  polycalc_PORTAL * portal=0;
   /* SELECT any portal FROM INSTANCES OF PORTAL */
   portal = (polycalc_PORTAL *) Escher_SetGetAny( &pG_polycalc_PORTAL_extent.active );
   /* GENERATE PORTAL1:remove() TO portal */
@@ -208,27 +202,24 @@ static void polycalc_LOCATION_CB_act3( polycalc_LOCATION *, const Escher_xtUMLEv
 static void
 polycalc_LOCATION_CB_act3( polycalc_LOCATION * self, const Escher_xtUMLEvent_t * const event )
 {
-  polycalc_PORTAL * portal=0; 
+  polycalc_PORTAL * portal=0;
   /* SELECT any portal FROM INSTANCES OF PORTAL */
   portal = (polycalc_PORTAL *) Escher_SetGetAny( &pG_polycalc_PORTAL_extent.active );
   /* portal.dispose() */
   polycalc_PORTAL_op_dispose( portal );
-  /* LOG::LogSuccess( message:'deep test passed' ) */
+  /* LOG::LogSuccess( message:deep test passed ) */
   LOG_LogSuccess( "deep test passed" );
 }
 
 const Escher_xtUMLEventConstant_t polycalc_LOCATION_CBevent1c = {
   polycalc_DOMAIN_ID, polycalc_LOCATION_CLASS_NUMBER_CB, POLYCALC_LOCATION_CBEVENT1NUM,
   ESCHER_IS_ASSIGNER_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_LOCATION_CBevent2c = {
   polycalc_DOMAIN_ID, polycalc_LOCATION_CLASS_NUMBER_CB, POLYCALC_LOCATION_CBEVENT2NUM,
   ESCHER_IS_ASSIGNER_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_LOCATION_CBevent3c = {
   polycalc_DOMAIN_ID, polycalc_LOCATION_CLASS_NUMBER_CB, POLYCALC_LOCATION_CBEVENT3NUM,
   ESCHER_IS_ASSIGNER_EVENT };
-
 
 
 /*
@@ -271,9 +262,9 @@ polycalc_LOCATION_CBDispatch( Escher_xtUMLEvent_t * event )
   Escher_StateNumber_t next_state = polycalc_LOCATION_CB_StateEventMatrix[ current_state ][ event_number ];
 
   if ( next_state <= 3 ) {
-    /* Execute the state action and update the current state.  */
-    ( *polycalc_LOCATION_CB_acts[ next_state ] )( &class_based_singleton, event );
+    /* Update the current state and execute the state action.  */
     class_based_singleton.current_state = next_state;
+    ( *polycalc_LOCATION_CB_acts[ next_state ] )( &class_based_singleton, event );
   } else {
     if ( EVENT_CANT_HAPPEN == next_state ) {
       /* Event cannot happen.  */
@@ -286,18 +277,15 @@ polycalc_LOCATION_CBDispatch( Escher_xtUMLEvent_t * event )
   }
 }
 
-const Escher_xtUMLEventConstant_t polycalc_LOCATIONevent2c = {
-  polycalc_DOMAIN_ID, polycalc_LOCATION_CLASS_NUMBER, POLYCALC_LOCATIONEVENT2NUM,
-  ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_POLYMORPHIC_EVENT };
-
-const Escher_xtUMLEventConstant_t polycalc_LOCATIONevent3c = {
-  polycalc_DOMAIN_ID, polycalc_LOCATION_CLASS_NUMBER, POLYCALC_LOCATIONEVENT3NUM,
-  ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_POLYMORPHIC_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_LOCATIONevent1c = {
   polycalc_DOMAIN_ID, polycalc_LOCATION_CLASS_NUMBER, POLYCALC_LOCATIONEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
+const Escher_xtUMLEventConstant_t polycalc_LOCATIONevent2c = {
+  polycalc_DOMAIN_ID, polycalc_LOCATION_CLASS_NUMBER, POLYCALC_LOCATIONEVENT2NUM,
+  ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_POLYMORPHIC_EVENT };
+const Escher_xtUMLEventConstant_t polycalc_LOCATIONevent3c = {
+  polycalc_DOMAIN_ID, polycalc_LOCATION_CLASS_NUMBER, POLYCALC_LOCATIONEVENT3NUM,
+  ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_POLYMORPHIC_EVENT };
 
 
 /*
@@ -335,7 +323,6 @@ polycalc_LOCATION_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   /* If event is polymorphic, forward to the dispatcher in the responding
      subtype below us in the generalization hierarchy.  */
   if ( 0 != GetIsPolymorphicEvent( event ) ) {
@@ -348,9 +335,9 @@ polycalc_LOCATION_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_LOCATION_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 2 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_LOCATION_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_LOCATION_acts[ next_state ] )( instance, event );
       } else if ( next_state == EVENT_CANT_HAPPEN ) {
           /* event cant happen */
           UserEventCantHappenCallout( current_state, next_state, event_number );
@@ -397,6 +384,8 @@ polycalc_LOCATION_R100PolymorphicEvent( const polycalc_LOCATION * const p_locati
                   break; /* after transition */
               }
               break;
+            default:
+              UserEventCantHappenCallout( 0, 0, event_number );
           }
         /* transition (or cant happen) events in subtype */
         case POLYCALC_LOCATIONEVENT3NUM:  /* LOCATION3*'spinup' */
@@ -416,7 +405,8 @@ polycalc_LOCATION_R100PolymorphicEvent( const polycalc_LOCATION * const p_locati
           break; /* after transition */
       }
       break;
+    default:
+      UserEventCantHappenCallout( 0, 0, event_number );
   }
 }
-
 

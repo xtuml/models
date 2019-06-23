@@ -22,7 +22,6 @@ struct ex2_DR {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
   Escher_UniqueID_t dr_id;  /* * dr_id */
-
 };
 
 
@@ -38,7 +37,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } ex2_DRevent1;
 extern const Escher_xtUMLEventConstant_t ex2_DRevent1c;
-
 /*
  * instance event:  DR2:'next test'
  */
@@ -47,7 +45,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } ex2_DRevent2;
 extern const Escher_xtUMLEventConstant_t ex2_DRevent2c;
-
 /*
  * instance event:  DR3:'send event with supp data'
  */
@@ -56,7 +53,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } ex2_DRevent3;
 extern const Escher_xtUMLEventConstant_t ex2_DRevent3c;
-
 /*
  * instance event:  DR4:'test complete'
  */
@@ -65,7 +61,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } ex2_DRevent4;
 extern const Escher_xtUMLEventConstant_t ex2_DRevent4c;
-
 /*
  * instance event:  DR5:'go to idle'
  */
@@ -74,7 +69,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } ex2_DRevent5;
 extern const Escher_xtUMLEventConstant_t ex2_DRevent5c;
-
 /*
  * union of events targeted towards 'DR' state machine
  */
@@ -85,7 +79,6 @@ typedef union {
   ex2_DRevent4 dr4_4;  
   ex2_DRevent5 dr5_5;  
 } ex2_DR_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -109,5 +102,3 @@ extern void ex2_DR_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* EX2_DR_CLASS_H */
-
-

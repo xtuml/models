@@ -4,7 +4,7 @@
  * Class:       portal  (PORTAL)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef POLYCALC_PORTAL_CLASS_H
@@ -21,19 +21,16 @@ extern	"C"	{
 struct polycalc_PORTAL {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
-
   /* relationship storage */
   void * R300_subtype;
   Escher_ClassNumber_t R300_object_id;
 };
 void polycalc_PORTAL_op_dispose( polycalc_PORTAL * );
 
-
 /* Accessors to PORTAL[R300] subtypes */
 #define polycalc_LOCATION_R300_From_PORTAL( PORTAL ) \
    ( (((PORTAL)->R300_object_id) == polycalc_LOCATION_CLASS_NUMBER) ? \
      ((polycalc_LOCATION *)((PORTAL)->R300_subtype)) : (0) )
-
 
 
 #define polycalc_PORTAL_MAX_EXTENT_SIZE 10
@@ -47,7 +44,6 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_PORTALevent1;
 extern const Escher_xtUMLEventConstant_t polycalc_PORTALevent1c;
-
 /*
  * instance event:  PORTAL2:'removed'
  */
@@ -56,15 +52,13 @@ typedef struct {
   /* Note:  no supplemental data for this event */
 } polycalc_PORTALevent2;
 extern const Escher_xtUMLEventConstant_t polycalc_PORTALevent2c;
-
 /*
  * union of events targeted towards 'PORTAL' state machine
  */
 typedef union {
-  polycalc_PORTALevent1 portal11;  /* polymorphic event - not consumed by PORTAL */
-  polycalc_PORTALevent2 portal22;  
+  polycalc_PORTALevent1 portal1_1;  /* polymorphic event - not consumed by PORTAL */
+  polycalc_PORTALevent2 portal2_2;  
 } polycalc_PORTAL_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -86,5 +80,3 @@ extern void polycalc_PORTAL_R300PolymorphicEvent( const polycalc_PORTAL * const,
 #endif
 
 #endif  /* POLYCALC_PORTAL_CLASS_H */
-
-

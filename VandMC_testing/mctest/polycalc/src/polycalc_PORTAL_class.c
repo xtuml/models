@@ -4,7 +4,7 @@
  * Class:       portal  (PORTAL)
  * Component:   polycalc
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "polycalc_sys_types.h"
@@ -18,11 +18,10 @@
 void
 polycalc_PORTAL_op_dispose( polycalc_PORTAL * self)
 {
-  polycalc_LOCATION * location = 0; /* location (LOCATION) */
- 
+  polycalc_LOCATION * location=0;
   /* SELECT one location RELATED BY self->LOCATION[R300] */
   location = 0;
-  if ( polycalc_LOCATION_CLASS_NUMBER == self->R300_object_id )  location = (polycalc_LOCATION *) self->R300_subtype;
+  if ( ( 0 != self ) && ( polycalc_LOCATION_CLASS_NUMBER == self->R300_object_id ) )  location = ( 0 != self ) ? (polycalc_LOCATION *) self->R300_subtype : 0;
   /* IF ( not_empty location ) */
   if ( ( 0 != location ) ) {
     /* UNRELATE self FROM location ACROSS R300 */
@@ -35,12 +34,9 @@ polycalc_PORTAL_op_dispose( polycalc_PORTAL * self)
     XTUML_EMPTY_HANDLE_TRACE( "PORTAL", "Escher_DeleteInstance" );
   }
   Escher_DeleteInstance( (Escher_iHandle_t) self, polycalc_DOMAIN_ID, polycalc_PORTAL_CLASS_NUMBER );
-
 }
 
-
 /* Accessors to PORTAL[R300] subtypes */
-
 
 
 /*----------------------------------------------------------------------------
@@ -77,22 +73,19 @@ static void
 polycalc_PORTAL_act1( polycalc_PORTAL * self, const Escher_xtUMLEvent_t * const event )
 {
   /* GENERATE LOCATION_A3:complete() TO LOCATION CLASS */
-  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( (void *) 0, &polycalc_LOCATION_CBevent3c );
+  { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( 0, &polycalc_LOCATION_CBevent3c );
     Escher_SendEvent( e );
   }
-
-  /* LOG::LogSuccess( message:'removal complete' ) */
+  /* LOG::LogSuccess( message:removal complete ) */
   LOG_LogSuccess( "removal complete" );
 }
 
 const Escher_xtUMLEventConstant_t polycalc_PORTALevent1c = {
   polycalc_DOMAIN_ID, polycalc_PORTAL_CLASS_NUMBER, POLYCALC_PORTALEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT + ESCHER_IS_POLYMORPHIC_EVENT };
-
 const Escher_xtUMLEventConstant_t polycalc_PORTALevent2c = {
   polycalc_DOMAIN_ID, polycalc_PORTAL_CLASS_NUMBER, POLYCALC_PORTALEVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -127,7 +120,6 @@ polycalc_PORTAL_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   /* If event is polymorphic, forward to the dispatcher in the responding
      subtype below us in the generalization hierarchy.  */
   if ( 0 != GetIsPolymorphicEvent( event ) ) {
@@ -140,9 +132,9 @@ polycalc_PORTAL_Dispatch( Escher_xtUMLEvent_t * event )
     } else {
       next_state = polycalc_PORTAL_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 1 ) {
-        /* Execute the state action and update the current state.  */
-        ( *polycalc_PORTAL_acts[ next_state ] )( instance, event );
+        /* Update the current state and execute the state action.  */
         instance->current_state = next_state;
+        ( *polycalc_PORTAL_acts[ next_state ] )( instance, event );
       } else {
         /* empty else */
       }
@@ -191,6 +183,8 @@ polycalc_PORTAL_R300PolymorphicEvent( const polycalc_PORTAL * const p_portal, Es
                           break; /* after transition */
                       }
                       break;
+                    default:
+                      UserEventCantHappenCallout( 0, 0, event_number );
                   }
               }
               break;
@@ -198,10 +192,13 @@ polycalc_PORTAL_R300PolymorphicEvent( const polycalc_PORTAL * const p_portal, Es
               switch ( event_number ) {
               }
               break;
+            default:
+              UserEventCantHappenCallout( 0, 0, event_number );
           }
       }
       break;
+    default:
+      UserEventCantHappenCallout( 0, 0, event_number );
   }
 }
-
 
