@@ -4,7 +4,7 @@
  * Class:       top  (TOP)
  * Component:   sschain
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #ifndef SSCHAIN_TOP_CLASS_H
@@ -21,13 +21,11 @@ extern	"C"	{
 struct sschain_TOP {
 
   /* application analysis class attributes */
-
   /* relationship storage */
   Escher_ObjectSet_s SUPER_R1;
 };
 
 #define sschain_SUPER_R1_From_TOP( TOP ) ( &((TOP)->SUPER_R1) )
-
 
 #define sschain_TOP_MAX_EXTENT_SIZE 10
 extern Escher_Extent_t pG_sschain_TOP_extent;
@@ -37,5 +35,3 @@ extern Escher_Extent_t pG_sschain_TOP_extent;
 #endif
 
 #endif  /* SSCHAIN_TOP_CLASS_H */
-
-

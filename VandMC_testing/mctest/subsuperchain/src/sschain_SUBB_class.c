@@ -4,7 +4,7 @@
  * Class:       subb  (SUBB)
  * Component:   sschain
  *
- * (C) Copyright 1998-2012 Mentor Graphics Corporation.  All rights reserved.
+ * your copyright statement can go here (from te_copyright.body)
  *--------------------------------------------------------------------------*/
 
 #include "subsuperchain_sys_types.h"
@@ -30,7 +30,6 @@ sschain_SUBB_R2_Link( sschain_SUPER * supertype, sschain_SUBB * subtype )
   supertype->R2_object_id = sschain_SUBB_CLASS_NUMBER;
 }
 
-
 /*
  * Statically allocate space for the instance population for this class.
  * Allocate space for the class instance and its attribute values.
@@ -44,5 +43,4 @@ Escher_Extent_t pG_sschain_SUBB_extent = {
   (Escher_iHandle_t) &sschain_SUBB_instances,
   sizeof( sschain_SUBB ), 0, sschain_SUBB_MAX_EXTENT_SIZE
   };
-
 
