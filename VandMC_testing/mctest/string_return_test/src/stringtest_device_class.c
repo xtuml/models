@@ -14,29 +14,12 @@
 /*
  * instance operation:  rstr
  */
-xtuml_string
-stringtest_device_op_rstr( stringtest_device * self)
+c_t *
+stringtest_device_op_rstr( stringtest_device * self, c_t A0xtumlsret[ESCHER_SYS_MAX_STRING_LEN] )
 {
   /* RETURN self.lower */
-  {xtuml_string xtumlOALrv;
-  Escher_strcpy( xtumlOALrv.s, self->lower );
-  return xtumlOALrv;}
-
-}
-
-
-/*
- * RELATE buffer TO device ACROSS R2
- */
-void
-stringtest_device_R2_Link( stringtest_buffer * part, stringtest_device * form )
-{
-  if ( (part == 0) || (form == 0) ) {
-    XTUML_EMPTY_HANDLE_TRACE( "device", "stringtest_device_R2_Link" );
-    return;
-  }
-  /* Note:  device->buffer[R2] not navigated */
-  /* Note:  buffer->device[R2] not navigated */
+  {c_t * xtumlOALrv = ((stringtest_device *)xtUML_detect_empty_handle( self, "device", "self.lower" ))->lower;
+  return Escher_strcpy( A0xtumlsret, xtumlOALrv );}
 }
 
 
@@ -74,13 +57,13 @@ static void
 stringtest_device_act1( stringtest_device * self, const Escher_xtUMLEvent_t * const event )
 {
   stringtest_deviceevent1 * rcvd_evt = (stringtest_deviceevent1 *) event;
-  stringtest_host * h;c_t l[ESCHER_SYS_MAX_STRING_LEN];
+  c_t vtrv5stringtest_device_op_rstr42[ESCHER_SYS_MAX_STRING_LEN];c_t vtrv5stringtest_buffer_op_scmp13[ESCHER_SYS_MAX_STRING_LEN];c_t vtrv3stringtest_buffer_op_scmp13[ESCHER_SYS_MAX_STRING_LEN];c_t l[ESCHER_SYS_MAX_STRING_LEN];stringtest_host * h;
   /* ASSIGN h = PARAM.h */
   h = rcvd_evt->p_h;
   /* ASSIGN l = buffer::scmp(s1:h.upper, s2:PARAM.s) */
-  Escher_strcpy( l, stringtest_buffer_op_scmp(h->upper, rcvd_evt->p_s).s );
-  /* ASSIGN l = buffer::scmp(s1:self.lower, s2:) */
-  Escher_strcpy( l, stringtest_buffer_op_scmp(self->lower, stringtest_device_op_rstr(self).s).s );
+  Escher_strcpy( l, stringtest_buffer_op_scmp(vtrv3stringtest_buffer_op_scmp13, ((stringtest_host *)xtUML_detect_empty_handle( h, "host", "h.upper" ))->upper, rcvd_evt->p_s) );
+  /* ASSIGN l = buffer::scmp(s1:self.lower, self.rstr()) */
+  Escher_strcpy( l, stringtest_buffer_op_scmp(vtrv5stringtest_buffer_op_scmp13, ((stringtest_device *)xtUML_detect_empty_handle( self, "device", "self.lower" ))->lower, stringtest_device_op_rstr(self, vtrv5stringtest_device_op_rstr42)) );
   /* GENERATE host1:get(s:l, d:self) TO h */
   { stringtest_hostevent1 * e = (stringtest_hostevent1 *) Escher_NewxtUMLEvent( h, &stringtest_hostevent1c );
     Escher_strcpy( e->p_s, l );    e->p_d = self;
@@ -96,13 +79,13 @@ static void
 stringtest_device_act2( stringtest_device * self, const Escher_xtUMLEvent_t * const event )
 {
   stringtest_deviceevent2 * rcvd_evt = (stringtest_deviceevent2 *) event;
-  stringtest_host * h;c_t l[ESCHER_SYS_MAX_STRING_LEN];
+  c_t vtrv5stringtest_device_op_rstr42[ESCHER_SYS_MAX_STRING_LEN];c_t vtrv5stringtest_buffer_op_scmp13[ESCHER_SYS_MAX_STRING_LEN];c_t vtrv3stringtest_buffer_op_scmp13[ESCHER_SYS_MAX_STRING_LEN];c_t l[ESCHER_SYS_MAX_STRING_LEN];stringtest_host * h;
   /* ASSIGN h = PARAM.h */
   h = rcvd_evt->p_h;
   /* ASSIGN l = buffer::scmp(s1:h.upper, s2:PARAM.s) */
-  Escher_strcpy( l, stringtest_buffer_op_scmp(h->upper, rcvd_evt->p_s).s );
-  /* ASSIGN l = buffer::scmp(s1:self.lower, s2:) */
-  Escher_strcpy( l, stringtest_buffer_op_scmp(self->lower, stringtest_device_op_rstr(self).s).s );
+  Escher_strcpy( l, stringtest_buffer_op_scmp(vtrv3stringtest_buffer_op_scmp13, ((stringtest_host *)xtUML_detect_empty_handle( h, "host", "h.upper" ))->upper, rcvd_evt->p_s) );
+  /* ASSIGN l = buffer::scmp(s1:self.lower, self.rstr()) */
+  Escher_strcpy( l, stringtest_buffer_op_scmp(vtrv5stringtest_buffer_op_scmp13, ((stringtest_device *)xtUML_detect_empty_handle( self, "device", "self.lower" ))->lower, stringtest_device_op_rstr(self, vtrv5stringtest_device_op_rstr42)) );
   /* GENERATE host2:put(s:l, d:self) TO h */
   { stringtest_hostevent2 * e = (stringtest_hostevent2 *) Escher_NewxtUMLEvent( h, &stringtest_hostevent2c );
     Escher_strcpy( e->p_s, l );    e->p_d = self;
@@ -113,11 +96,9 @@ stringtest_device_act2( stringtest_device * self, const Escher_xtUMLEvent_t * co
 const Escher_xtUMLEventConstant_t stringtest_deviceevent1c = {
   stringtest_DOMAIN_ID, stringtest_device_CLASS_NUMBER, STRINGTEST_DEVICEEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 const Escher_xtUMLEventConstant_t stringtest_deviceevent2c = {
   stringtest_DOMAIN_ID, stringtest_device_CLASS_NUMBER, STRINGTEST_DEVICEEVENT2NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -165,7 +146,6 @@ stringtest_device_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 2 ) {
@@ -175,10 +155,10 @@ stringtest_device_Dispatch( Escher_xtUMLEvent_t * event )
       next_state = stringtest_device_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 2 ) {
         STATE_TXN_START_TRACE( "device", current_state, state_name_strings[ current_state ] );
-        /* Execute the state action and update the current state.  */
+        /* Update the current state and execute the state action.  */
+        instance->current_state = next_state;
         ( *stringtest_device_acts[ next_state ] )( instance, event );
         STATE_TXN_END_TRACE( "device", next_state, state_name_strings[ next_state ] );
-        instance->current_state = next_state;
       } else if ( next_state == EVENT_CANT_HAPPEN ) {
           /* event cant happen */
           UserEventCantHappenCallout( current_state, next_state, event_number );
@@ -189,5 +169,4 @@ stringtest_device_Dispatch( Escher_xtUMLEvent_t * event )
     }
   }
 }
-
 

@@ -40,7 +40,7 @@ static void
 stringtest_ping_act1( stringtest_ping * self, const Escher_xtUMLEvent_t * const event )
 {
   stringtest_pingevent1 * rcvd_evt = (stringtest_pingevent1 *) event;
-  c_t s[ESCHER_SYS_MAX_STRING_LEN];stringtest_pong * p;c_t t[ESCHER_SYS_MAX_STRING_LEN];c_t r[ESCHER_SYS_MAX_STRING_LEN];
+  c_t vtrv3stringtest_buffer_op_scmp13[ESCHER_SYS_MAX_STRING_LEN];c_t r[ESCHER_SYS_MAX_STRING_LEN];c_t t[ESCHER_SYS_MAX_STRING_LEN];stringtest_pong * p;c_t s[ESCHER_SYS_MAX_STRING_LEN];
   /* ASSIGN s = PARAM.s */
   Escher_strcpy( s, rcvd_evt->p_s );
   /* ASSIGN p = PARAM.p */
@@ -48,7 +48,7 @@ stringtest_ping_act1( stringtest_ping * self, const Escher_xtUMLEvent_t * const 
   /* ASSIGN t = ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string */
   Escher_strcpy( t, "ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string ping pong string" );
   /* ASSIGN r = buffer::scmp(s1:s, s2:t) */
-  Escher_strcpy( r, stringtest_buffer_op_scmp(s, t).s );
+  Escher_strcpy( r, stringtest_buffer_op_scmp(vtrv3stringtest_buffer_op_scmp13, s, t) );
   /* GENERATE pong1:fly(p:self, s:s) TO p */
   { stringtest_pongevent1 * e = (stringtest_pongevent1 *) Escher_NewxtUMLEvent( p, &stringtest_pongevent1c );
     e->p_p = self;    Escher_strcpy( e->p_s, s );
@@ -59,7 +59,6 @@ stringtest_ping_act1( stringtest_ping * self, const Escher_xtUMLEvent_t * const 
 const Escher_xtUMLEventConstant_t stringtest_pingevent1c = {
   stringtest_DOMAIN_ID, stringtest_ping_CLASS_NUMBER, STRINGTEST_PINGEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -103,7 +102,6 @@ stringtest_ping_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 1 ) {
@@ -113,15 +111,14 @@ stringtest_ping_Dispatch( Escher_xtUMLEvent_t * event )
       next_state = stringtest_ping_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 1 ) {
         STATE_TXN_START_TRACE( "ping", current_state, state_name_strings[ current_state ] );
-        /* Execute the state action and update the current state.  */
+        /* Update the current state and execute the state action.  */
+        instance->current_state = next_state;
         ( *stringtest_ping_acts[ next_state ] )( instance, event );
         STATE_TXN_END_TRACE( "ping", next_state, state_name_strings[ next_state ] );
-        instance->current_state = next_state;
       } else {
         /* empty else */
       }
     }
   }
 }
-
 

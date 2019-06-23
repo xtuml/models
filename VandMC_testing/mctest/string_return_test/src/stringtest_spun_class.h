@@ -21,7 +21,6 @@ extern	"C"	{
 struct stringtest_spun {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
-
 };
 
 
@@ -37,14 +36,12 @@ typedef struct {
   stringtest_spin * p_spin; /* spin */
 } stringtest_spunevent1;
 extern const Escher_xtUMLEventConstant_t stringtest_spunevent1c;
-
 /*
  * union of events targeted towards 'spun' state machine
  */
 typedef union {
   stringtest_spunevent1 spun1_1;  
 } stringtest_spun_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -60,5 +57,3 @@ extern void stringtest_spun_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* STRINGTEST_SPUN_CLASS_H */
-
-

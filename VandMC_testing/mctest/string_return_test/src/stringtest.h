@@ -15,7 +15,6 @@ extern	"C"	{
 #include "string_return_test_sys_types.h"
 void stringtest_INSTR_start( void );
 
-
 #ifdef	__cplusplus
 }
 #endif

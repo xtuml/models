@@ -21,7 +21,6 @@ extern	"C"	{
 struct stringtest_pong {
   Escher_StateNumber_t current_state;
   /* application analysis class attributes */
-
 };
 
 
@@ -38,14 +37,12 @@ typedef struct {
   c_t p_s[ESCHER_SYS_MAX_STRING_LEN]; /* s */
 } stringtest_pongevent1;
 extern const Escher_xtUMLEventConstant_t stringtest_pongevent1c;
-
 /*
  * union of events targeted towards 'pong' state machine
  */
 typedef union {
   stringtest_pongevent1 pong1_1;  
 } stringtest_pong_Events_u;
-
 /*
  * enumeration of state model states for class
  */
@@ -61,5 +58,3 @@ extern void stringtest_pong_Dispatch( Escher_xtUMLEvent_t * );
 #endif
 
 #endif  /* STRINGTEST_PONG_CLASS_H */
-
-

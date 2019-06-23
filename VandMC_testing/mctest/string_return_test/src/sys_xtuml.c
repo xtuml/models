@@ -8,8 +8,28 @@
 #include "string_return_test_sys_types.h"
 #include "stringtest_classes.h"
 
-
 /* No containers allocated.  */
+
+/*
+ * Supply a unique integer ID.
+ */
+Escher_UniqueID_t
+Escher_ID_factory( void )
+{
+  static Escher_UniqueID_t Escher_ID_factory = 1;
+  return Escher_ID_factory++;
+}
+
+/*
+ * Detect empty handles in expressions.
+ */
+void * xtUML_detect_empty_handle( void * h, const char * s1, const char * s2 )
+{
+  if ( 0 == h ) {
+    XTUML_EMPTY_HANDLE_TRACE( s1, s2 );
+  }
+  return h;
+}
 
 /*
  * Initialize the node1 instances by linking them into a collection.
@@ -35,6 +55,26 @@ Escher_SetFactoryInit( const i_t n1_size )
  * Release all nodes in the given set back to the free pool.
  */
 /* Set clearing code optimized out.  */
+
+/*
+ * Take the union of set1 and set2 and return to_set
+ */
+/* Set union optimized out.  */
+
+/*
+ * Take the intersection of set1 and set2 and return to_set
+ */
+/* Set intersection optimized out.  */
+
+/*
+ * Subtract set2 from set1 and return to_set
+ */
+/* Set difference optimized out.  */
+
+/*
+ * Take the symmetric difference of set1 and set2 and return to_set
+ */
+/* Set symmetric difference optimized out.  */
 
 /*
  * Insert a single element into the set in no particular order.
@@ -92,11 +132,11 @@ Escher_SetRemoveNode(
 )
 {
   Escher_SetElement_s * t = set->head; /* Start with first node.           */
+  Escher_SetElement_s * t_old = t;
   /* Find node containing data and unlink from list.                 */
   if ( t->object == d ) {        /* Element found at head.           */
     set->head = t->next;         /* Unlink it from the list.         */
   } else {
-    Escher_SetElement_s * t_old;
     do {                         /* Search for data element.         */
       t_old = t;
       t = t->next;
@@ -152,19 +192,35 @@ Escher_SetCardinality( const Escher_ObjectSet_s * const set )
 
 /*
  * Return true when the left and right set are equivalent.
- * Note:  This currently is not implemented.
+ * The left set is equal to the right set if and only if
+ * the left set contains all elements of the right set AND
+ * the right set contains all elements of the left set.
  */
 bool
 Escher_SetEquality( Escher_ObjectSet_s * const left_set,
                     Escher_ObjectSet_s * const right_set )
 {
-  bool rc = false;
-  if ( (left_set->head == 0) && (right_set->head == 0) ) {
-    rc = true;
-  } else if ( ( (left_set->head != 0) && (right_set->head != 0) ) &&
-    (Escher_SetCardinality( left_set ) == Escher_SetCardinality( right_set )) ) {
-    rc = true;
-  } else { /* nop */ }
+  bool rc = true;
+  /* Assure the right set contains all elements in the left set */
+  const Escher_SetElement_s * node = left_set->head;
+  while ( 0 != node ) {
+    if ( 0 == right_set || !Escher_SetContains( right_set, node->object ) ) {
+      rc = false;
+      break;
+    }
+    node = node->next;
+  }
+  if ( rc ) {
+    /* Assure the left set contains all elements in the right set */
+    node = right_set->head;
+    while ( 0 != node ) {
+      if ( 0 == left_set || !Escher_SetContains( left_set, node->object ) ) {
+        rc = false;
+        break;
+      }
+      node = node->next;
+    }
+  }
   return rc;
 }
 
@@ -238,8 +294,8 @@ c_t *
 Escher_strcpy( c_t * dst, const c_t * src )
 {
   c_t * s = dst;
-  Escher_size_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
   if ( ( 0 != src ) && ( 0 != dst ) ) {
+    Escher_size_t i = ESCHER_SYS_MAX_STRING_LEN - 1;
     while ( ( i > 0 ) && ( *src != '\0' ) ) {
       --i;
       *dst++ = *src++;
@@ -300,11 +356,15 @@ Escher_strcmp( const c_t *p1, const c_t *p2 )
 c_t *
 Escher_strget( void )
 {
+  c_t * r;
   static u1_t i = 0;
-  static c_t s[ 16 ][ ESCHER_SYS_MAX_STRING_LEN ];
-  i = ( i + 1 ) % 16;
-  s[ i ][ 0 ] = 0;
-  return ( &s[ i ][ 0 ] );
+  static c_t s[ 32 ][ ESCHER_SYS_MAX_STRING_LEN ];
+  Escher_mutex_lock( SEMAPHORE_FLAVOR_ILB );
+  i = ( i + 1 ) % 32;
+  r = &s[ i ][ 0 ];
+  *r = 0;
+  Escher_mutex_unlock( SEMAPHORE_FLAVOR_ILB );
+  return ( r );
 }
 
 
@@ -392,7 +452,6 @@ Escher_ClassFactoryInit(
 /*
  * Following provides the dispatcher loops for the xtUML event queues.
  */
-
 
 bool Escher_run_flag = true; /* Turn this off to exit dispatch loop(s).  */
 /* Map the classes to the tasks/threads for each domain.  */
@@ -587,9 +646,10 @@ static void * ooa_loop( void * thread )
       ( *( DomainClassDispatcherTable[ GetEventDestDomainNumber( event ) ] )[ GetEventDestObjectNumber( event ) ] )( event );
       Escher_DeletextUMLEvent( event );
     } else {
+      /* event queues empty */
       Escher_nonbusy_wait( t );
     }
-    if ( t == 0 ) {   /* Is this the default task/thread?  */
+    if ( 0 == t ) {   /* Is this the default task/thread?  */
       UserBackgroundProcessingCallout();
     }
   }

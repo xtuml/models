@@ -40,20 +40,20 @@ static void
 stringtest_spun_act1( stringtest_spun * self, const Escher_xtUMLEvent_t * const event )
 {
   stringtest_spunevent1 * rcvd_evt = (stringtest_spunevent1 *) event;
-  c_t s[ESCHER_SYS_MAX_STRING_LEN];c_t t[ESCHER_SYS_MAX_STRING_LEN];i_t count;stringtest_spin * spin;
+  stringtest_spin * spin;i_t count;c_t t[ESCHER_SYS_MAX_STRING_LEN];c_t s[ESCHER_SYS_MAX_STRING_LEN];
   /* ASSIGN s = C        10         20 .        30         40 .        50         60 .        70         80 .        90         00 .        10         20 .        30         40 .        50         60 .        70         80 .        90         00 */
   Escher_strcpy( s, "C        10         20 .        30         40 .        50         60 .        70         80 .        90         00 .        10         20 .        30         40 .        50         60 .        70         80 .        90         00" );
   /* ASSIGN t = D        10         20 .        30         40 .        50         60 .        70         80 .        90         00 .        10         20 .        30         40 .        50         60 .        70         80 .        90         00 */
   Escher_strcpy( t, "D        10         20 .        30         40 .        50         60 .        70         80 .        90         00 .        10         20 .        30         40 .        50         60 .        70         80 .        90         00" );
   /* ASSIGN count = 9999 */
   count = 9999;
-  /* WHILE ( ( count > 0 ) ) */
-  while ( ( count > 0 ) ) {
-    c_t u[ESCHER_SYS_MAX_STRING_LEN];
+  /* WHILE ( count > 0 ) */
+  while ( count > 0 ) {
+    c_t vtrv6stringtest_buffer_op_twist15[ESCHER_SYS_MAX_STRING_LEN];c_t u[ESCHER_SYS_MAX_STRING_LEN];
     /* ASSIGN count = ( count - 1 ) */
     count = ( count - 1 );
     /* ASSIGN u = buffer::twist(s1:1, s2:t, s3:0, s4:s) */
-    Escher_strcpy( u, stringtest_buffer_op_twist("1", t, "0", s).s );
+    Escher_strcpy( u, stringtest_buffer_op_twist(vtrv6stringtest_buffer_op_twist15, "1", t, "0", s) );
   }
   /* ASSIGN spin = PARAM.spin */
   spin = rcvd_evt->p_spin;
@@ -67,7 +67,6 @@ stringtest_spun_act1( stringtest_spun * self, const Escher_xtUMLEvent_t * const 
 const Escher_xtUMLEventConstant_t stringtest_spunevent1c = {
   stringtest_DOMAIN_ID, stringtest_spun_CLASS_NUMBER, STRINGTEST_SPUNEVENT1NUM,
   ESCHER_IS_INSTANCE_EVENT };
-
 
 
 /*
@@ -111,7 +110,6 @@ stringtest_spun_Dispatch( Escher_xtUMLEvent_t * event )
   Escher_EventNumber_t event_number = GetOoaEventNumber( event );
   Escher_StateNumber_t current_state;
   Escher_StateNumber_t next_state;
-  
   if ( 0 != instance ) {
     current_state = instance->current_state;
     if ( current_state > 1 ) {
@@ -121,15 +119,14 @@ stringtest_spun_Dispatch( Escher_xtUMLEvent_t * event )
       next_state = stringtest_spun_StateEventMatrix[ current_state ][ event_number ];
       if ( next_state <= 1 ) {
         STATE_TXN_START_TRACE( "spun", current_state, state_name_strings[ current_state ] );
-        /* Execute the state action and update the current state.  */
+        /* Update the current state and execute the state action.  */
+        instance->current_state = next_state;
         ( *stringtest_spun_acts[ next_state ] )( instance, event );
         STATE_TXN_END_TRACE( "spun", next_state, state_name_strings[ next_state ] );
-        instance->current_state = next_state;
       } else {
         /* empty else */
       }
     }
   }
 }
-
 
