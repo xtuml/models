@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<TraceTranslationData domain="${te_c.Name}" version="2">
+.select many te_pos related by te_c->TE_PO[R2005]
+.for each te_po in te_pos
+  .select one c_i related by te_po->C_I[R2007]
+  <Port name="${te_po.Name}" number="${te_po.Order}">
+    <interface name="${c_i.Name}"><description>${c_i.Descrip}</description></interface>
+  .select many te_macts related by te_po->TE_MACT[R2006]
+  .for each te_mact in te_macts
+    <Method name="${te_mact.MessageName}" number="${te_mact.Order}"><description>${te_mact.Descrip}</description></Method>
+  .end for
+  </Port>
+.end for
+
+.//select all classes in exactly the same order as in q.domain.classes.arc
+  .select any te_class related by te_c->TE_CLASS[R2064] where ( not selected.ExcludeFromGen )
+  .// Find first te_class.
+  .assign first_te_class = te_class
+  .while ( not_empty te_class )
+    .assign first_te_class = te_class
+    .select one te_class related by te_class->TE_CLASS[R2092.'succeeds']
+  .end while
+  .assign object_set_type = 0
+  .assign class_number_count = 0
+  .while ( object_set_type < 3 )
+    .assign te_class = first_te_class
+    .while ( not_empty te_class )
+      .assign combineddispatchers = te_class.dispatcher + te_class.CBdispatcher
+      .if ( ( ( ( 0 == object_set_type ) and ( "" != combineddispatchers ) ) or ( ( 1 == object_set_type ) and ( "" != te_class.CBdispatcher ) ) ) or ( ( 2 == object_set_type ) and ( "" == combineddispatchers ) ) )
+      .select one o_obj related by te_class->O_OBJ[R2019]
+      .assign sm_type = ""
+      .if (object_set_type == 0)
+        .assign sm_type = "Instance"
+      .elif (object_set_type == 1) 
+        .assign sm_type = "Class"
+      .end if
+  <Class keyletter="${o_obj.Key_Lett}" name="${te_class.Name}" number="${class_number_count}" statemachine_type="${sm_type}">
+    <description>${o_obj.Descrip}</description>
+      .select many te_sms related by te_class->TE_SM[R2072]
+      .//TODO get rid of the next for loop: it overlaps if both an instance and class state machine are defined
+      .//on the other hand: we can't distinguish it in logging either
+      .for each te_sm in te_sms
+        .select many te_states related by te_sm->SM_SM[R2043]->SM_STATE[R501]->TE_STATE[R2037]
+        .for each te_state in te_states
+          .assign state_id = te_state.Order + 1
+    <State name="${te_state.Name}" number="${state_id}" />
+        .end for
+        .select many te_evts related by te_sm->TE_EVT[R2071]
+        .for each te_evt in te_evts
+    <Event name="${te_evt.Name}" generated_name="${te_evt.GeneratedName}" number="${te_evt.Numb}" />
+        .end for
+      .end for
+  </Class>
+      .assign class_number_count = class_number_count + 1
+      .end if
+      .select one te_class related by te_class->TE_CLASS[R2092.'precedes']
+    .end while
+    .assign object_set_type = object_set_type + 1
+  .end while
+</TraceTranslationData>

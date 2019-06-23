@@ -1,0 +1,7 @@
+<Domains>
+.select many te_cs from instances of TE_C where ( selected.included_in_build )
+.for each te_c in te_cs
+  .//assumes it's called after DeclareDomainIdentityEnums in sys_util.arc 
+  <Domain name="${te_c.Name}" number="${te_c.number}" />
+.end for
+</Domains>
