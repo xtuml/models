@@ -1,0 +1,363 @@
+= Association Editor Test Procedure
+
+== 1 Abstract
+
+This document outlines testing for the association editor.
+
+== 2 Introduction and Background
+
+This document outlines a test plan to manually test the new association
+editor built to address <<dr-1,11554 Association Editor>>.
+
+.Test Matrix Dimensions
+|===
+| simple (SIMP)  | ternary (ASSOC) | super/subtype (SUPSUB) |
+| create         | edit            |                        |
+| binary         | reflexive       |                        |
+| no identifiers | 1 identifier    | 1 each                 | 2 identifiers (in one class)
+|===
+
+There are three types of association:  simple, ternary and super/subtype.
+These are represented in the meta-model as subtypes of R_REL as R_SIMP,
+R_ASSOC and R_SUPSUB.
+
+The association editor can create new associations or edit existing
+associations.  The dialogue needs to pre-populated correctly in both
+cases.
+
+Associations can be between different classes or the same class (reflexive).
+
+Formalization of associations can involve various combinations of identifiers.
+0, 1 or more than 1 identifier must be dealt with.  Also, the case of at
+least one identifier in each participating class is interesting.
+
+=== 2.1 Use Cases
+
+Using the above matrix the following (non-exhaustive) set of use cases
+are identified and selected for test coverage.
+
+* <<3.1 Simple Associations>>
+  ** <<3.1.1 simple, create, binary, 0 identifier>>
+  ** <<3.1.2 simple, create, binary, 1 identifier>>
+  ** <<3.1.3 simple, create, binary, each identifier>>
+  ** <<3.1.4 simple, create, binary, 2 identifiers>>
+  ** <<3.1.5 simple, create, reflexive, 1 identifier>>
+  ** <<3.1.6 simple, create, reflexive, 2 identifiers>>
+  ** <<3.1.7 simple, edit, binary, 0 identifier>>
+  ** <<3.1.8 simple, edit, binary, 1 identifier>>
+  ** <<3.1.9 simple, edit, binary, each identifier>>
+  ** <<3.1.10 simple, edit, binary, 2 identifiers>>
+  ** <<3.1.11 simple, edit, reflexive, 0 identifier>>
+  ** <<3.1.12 simple, edit, reflexive, 1 identifier>>
+* <<3.2 Associatives>>
+  ** <<3.2.1 ternary, create, binary, 0 identifier>>
+  ** <<3.2.2 ternary, create, binary, 1 identifier>>
+  ** <<3.2.3 ternary, create, binary, each identifier>>
+  ** <<3.2.4 ternary, create, binary, 2 identifiers>>
+  ** <<3.2.5 ternary, create, reflexive, 1 identifier>>
+  ** <<3.2.6 ternary, create, reflexive, 2 identifiers>>
+  ** <<3.2.7 ternary, edit, binary, 0 identifier>>
+  ** <<3.2.8 ternary, edit, binary, 1 identifier>>
+  ** <<3.2.9 ternary, edit, binary, each identifier>>
+  ** <<3.2.10 ternary, edit, binary, 2 identifiers>>
+  ** <<3.2.11 ternary, edit, reflexive, 0 identifier>>
+  ** <<3.2.12 ternary, edit, reflexive, 1 identifier>>
+* <<3.3 Subtype/Supertypes>>
+  ** <<3.3.1 supsub, create, 0 identifier>>
+  ** <<3.3.2 supsub, create, 1 identifier>>
+  ** <<3.3.3 supsub, create, 2 identifier>>
+  ** <<3.3.4 supsub, edit, 0 identifier>>
+  ** <<3.3.5 supsub, edit, 1 identifier>>
+  ** <<3.3.6 supsub, edit, 2 identifiers>>
+
+== 3 Test Procedures
+
+* Configure BridgePoint to require role phrases and formalization.
+
+=== 3.1 Simple Associations
+
+For each of 3.1.1 through 3.1.6 perform the following:
+
+. Select 'Classes -> Association' from the palette and draw association from
+  'part<N>' to 'form<N>'.
+. *See* pop-up association dialogue.
+. *See* participant classes named along left and right sides of dialogue box.
+. *See* editable empty role phrase boxes.
+. *See* clickable conditionality and multiplicity buttons which toggle.
+. Set role phrases with various legal alphanumeric strings.
+
+==== 3.1.1 simple, create, binary, 0 identifier
+
+. *See* that association cannot be formalized, because there is no identifier.
+. Click 'Cancel'.
+
+==== 3.1.2 simple, create, binary, 1 identifier
+
+. *See* 'form<N>' as the formalizing class.
+. *See* 'part<N>' identifier pre-populated.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.1.3 simple, create, binary, each identifier
+
+. In the 'Formalized in' list, select 'form<N>'.
+. *See* the primary identifier of 'part<N>' listed in the selection box.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.1.4 simple, create, binary, 2 identifiers
+
+. In the 'Formalized in' list, select 'form<N>'.
+. *See* the primary identifier of 'part<N>' listed in the selection box.
+. Choose the secondary identifier of 'part<N>'.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.1.5 simple, create, reflexive, 1 identifier
+
+. *See* 'partform' as the formalizing class.
+. *See* identifier pre-populated.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.1.6 simple, create, reflexive, 2 identifiers
+
+. *See* options for formalizing end and for selection of identifier.
+. Select secondary identifier.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+For each of 3.1.7 through 3.1.12 perform the following:
+
+. Select (right-click) existing association and 'Edit association...'.
+. *See* pop-up association dialogue.
+. *See* participant classes named along left and right sides of dialogue box.
+. *See* conditionality and multiplicity buttons matching the existing diagram.
+. *See* editable role phrase boxes pre-populated with pre-existing role phrases
+  if any.
+. Set role phrases with various legal alphanumeric strings.
+. Toggle conditionality and multiplicity in various combinations.
+
+==== 3.1.7 simple, edit, binary, 0 identifier
+
+. *See* that association cannot be formalized, because there are no identifiers.
+. Click 'Cancel'.
+. *See* that nothing changed.
+
+==== 3.1.8 simple, edit, binary, 1 identifier
+
+. *See* 'form<N>' as the formalizing class.
+. *See* 'part<N>' identifier pre-populated.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.1.9 simple, edit, binary, each identifier
+
+. In the 'Formalized in' list, select 'form<N>'.
+. *See* the primary identifier of 'part<N>' listed in the selection box.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.1.10 simple, edit, binary, 2 identifiers
+
+. In the 'Formalized in' list, select 'form<N>'.
+. *See* the primary identifier of 'part<N>' listed in the selection box.
+. Choose the secondary identifier of 'part<N>'.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.1.11 simple, edit, reflexive, 0 identifier
+
+. *See* 'partform' as the formalizing class.
+. *See* identifier pre-populated.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.1.12 simple, edit, reflexive, 1 identifier
+
+. *See* options for formalizing end and selecting identifier.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+=== 3.2 Associatives
+
+For each of 3.2.1 through 3.2.6 perform the following:
+
+. Select 'Classes -> Association' from the palette and draw association from
+  'one<N>' to 'other<N>' (or 'oneother<N>' looped back on itself if reflexive).
+. *See* pop-up association dialogue.
+. *See* participant classes named along left and right sides of dialogue box.
+. *See* editable empty role phrase boxes.
+. *See* clickable conditionality and multiplicity buttons which toggle.
+. Set role phrases with various legal alphanumeric strings.
+. Toggle conditionality and multiplicity in various combinations.
+. Set 'Associative' radio button.
+. *See* 'Associative class' selection list.
+. *See* 'Formalize' check box defaulted to checked (preference).
+
+==== 3.2.1 ternary, create, binary, 0 identifier
+
+. *See* that association cannot be formalized, because there are no identifiers.
+. Click 'Cancel'.
+. *See* that nothing changed.
+
+==== 3.2.2 ternary, create, binary, 1 identifier
+
+. *See* that association cannot be formalized, because of missing identifier.
+. Click 'Cancel'.
+. *See* that nothing changed.
+
+==== 3.2.3 ternary, create, binary, each identifier
+
+. Choose 'assoc3' associative class.
+. *See* the primary identifiers of participating classes in selection boxes.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.2.4 ternary, create, binary, 2 identifiers
+
+. Choose 'assoc4' associative class.
+. *See* the primary identifiers of participating classes in selection boxes.
+. Choose secondary identifier on 'one4'.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.2.5 ternary, create, reflexive, 1 identifier
+
+. Choose 'assoc5' associative class.
+. *See* the primary identifiers of participating class ends in selection boxes.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.2.6 ternary, create, reflexive, 2 identifiers
+
+. Choose 'assoc6' associative class.
+. *See* the primary identifiers of participating class ends in selection boxes.
+. Choose secondary identifier on 'oneother6'.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+
+For each of 3.2.7 through 3.2.12 perform the following:
+
+. Select (right-click) existing association and 'Edit association...'.
+. *See* pop-up association dialogue.
+. *See* participant classes named along left and right sides of dialogue box.
+. *See* conditionality and multiplicity buttons matching the existing diagram.
+. *See* editable role phrase boxes pre-populated with pre-existing role phrases
+  if any.
+. Set role phrases with various legal alphanumeric strings.
+. Toggle conditionality and multiplicity in various combinations.
+. Set 'Associative' radio button.
+. *See* 'Associative class' selection list.
+. *See* 'Formalize' check box defaulted to checked (preference).
+
+==== 3.2.7 ternary, edit, binary, 0 identifier
+
+. *See* that association cannot be formalized, because there are no identifiers.
+. Click 'Cancel'.
+. *See* that nothing changed.
+
+==== 3.2.8 ternary, edit, binary, 1 identifier
+
+. *See* that association cannot be formalized, because of missing identifier.
+. Click 'Cancel'.
+. *See* that nothing changed.
+
+==== 3.2.9 ternary, edit, binary, each identifier
+
+. Choose 'assoc9' associative class.
+. *See* the primary identifiers of participating classes in selection boxes.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.2.10 ternary, edit, binary, 2 identifiers
+
+. Choose 'assoc10' associative class.
+. *See* the primary identifiers of participating classes in selection boxes.
+. Choose secondary identifier on 'one10'.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.2.11 ternary, edit, reflexive, 0 identifier
+
+. Choose 'assoc11' associative class.
+. *See* the primary identifiers of participating class ends in selection boxes.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.2.12 ternary, edit, reflexive, 1 identifier
+
+. Choose 'assoc12' associative class.
+. *See* the primary identifiers of participating class ends in selection boxes.
+. Choose secondary identifier on 'oneother12'.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+
+=== 3.3 Subtype/Supertypes
+
+For each of 3.3.1 through 3.1.3 perform the following:
+
+. Select 'Classes -> Subtype' from the palette and draw association from
+  'sub<N>' class to the end of the supertype line on 'sup<N>'.
+. *See* pop-up association dialogue with editable association number.
+. *See* 'Formalize' checkbox defaulted to on (preference).
+
+==== 3.3.1 supsub, create, 0 identifier
+
+. *See* that association cannot be formalized, because of missing identifier.
+. Click 'Cancel'.
+. *See* that nothing changed.
+
+==== 3.3.2 supsub, create, 1 identifier
+
+. *See* 'sup<N>' primary identifier pre-populated in selection.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.3.3 supsub, create, 2 identifier
+
+. *See* 'sup<N>' primary identifier pre-populated in selection.
+. Choose the secondary identifier of 'sup<N>'.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+For each of 3.3.4 through 3.1.6 perform the following:
+
+. Select (right-click) existing association and 'Edit association...'.
+. *See* pop-up association dialogue with editable association number.
+. *See* 'Formalize' checkbox defaulted to on (preference).
+
+==== 3.3.4 supsub, edit, 0 identifier
+
+. *See* that association cannot be formalized, because of missing identifier.
+. Click 'Cancel'.
+. *See* that nothing changed.
+
+==== 3.3.5 supsub, edit, 1 identifier
+
+. *See* 'sup<N>' primary identifier pre-populated in selection.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+==== 3.3.6 supsub, edit, 2 identifiers
+
+. *See* 'sup<N>' primary identifier pre-populated in selection.
+. Choose the secondary identifier of 'sup<N>'.
+. Click 'Finish'.
+. *See* complete formalized association.
+
+=== 3.4 Testing Preferences
+
+TBD - no formalization, formalization
+
+== 4 Document References
+
+. [[dr-1]] https://support.onefact.net/issues/11554[11554 - Association Editor]
+
+---
+
+This work is licensed under the Creative Commons CC0 License
+
+---
