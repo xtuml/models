@@ -1,0 +1,19 @@
+define function  TNK4:Inform_Connected_Pumps_Fuel_Available
+input
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+# The fuel level in this tank has return to 
+# an operational level. Inform all connected
+# pumps that the fuel level is ok
+
+{connected_pumps} = this->R1
+
+for pump in {connected_pumps} do
+	generate PMP5:Fuel_Available() to pump
+endfor
+
+enddefine

@@ -1,0 +1,31 @@
+define function  TRN1:Create_Transaction
+input \
+	Delivery_Time:Time_of_Day ,\
+	Delivery_Pump:Base_Integer_Type ,\
+	Delivery_Cost:currency_type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+# Create pending transaction waiting payment from customer
+
+new_transaction = create unique TRANSACTION with \
+	Delivery_Start_Time = Delivery_Time & \
+	Pump_Number = Delivery_Pump & \
+	Cost = Delivery_Cost & \
+	Transaction_Type = 'Pending' & \
+        Current_State = 'Created'
+
+new_pending_transaction = create PENDING_TRANSACTION with \
+	Transaction_Number = new_transaction.Transaction_Number
+
+link new_transaction R4 new_pending_transaction
+
+delivery_pump = find-one PUMP where Pump_Number = Delivery_Pump
+
+link new_transaction R10 delivery_pump
+link new_pending_transaction R9 delivery_pump
+
+enddefine
