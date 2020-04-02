@@ -8,8 +8,9 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 # USAGE
 print_usage () { 
     echo "Usage:"
-    echo "        regression_test [-o <output directory>] [-r]";
+    echo "        regression_test [-o <output directory>] [-w] [-r]";
     echo "";
+    echo "  - Specify the '-w' flag to choose WASL conversion; MASL is default.";
     echo "  - Specify the '-r' flag to force exit and relaunch of BridgePoint before export.";
 }
 
@@ -26,15 +27,18 @@ if [[ "" == "$BPINSTALL" ]]; then
 fi
 OUT_DIR=
 RELAUNCH=
+ARCHITECTURE="MASL" # Default to MASL.
 
 # parse arguments
 DIRECTIVE=
 for arg in $@; do
-    if [[ $arg == "-o" ]]; then                     # set the directive
+    if [[ $arg == "-o" || $arg == "-a" ]]; then     # set the directive
         DIRECTIVE=$arg
     elif [[ $arg == "-r" ]]; then                   # specify to restart BP before export
         RELAUNCH=$arg
-    elif [[ $DIRECTIVE == "-o" && $OUT_DIR == "" ]]; then           # only can set the output directory once
+    elif [[ $DIRECTIVE == "-a" ]]; then             # specify WASL conversion
+        ARCHITECTURE=$arg
+    elif [[ $DIRECTIVE == "-o" && $OUT_DIR == "" ]]; then # only can set the output directory once
         OUT_DIR=$arg
     else
         print_usage
@@ -75,10 +79,10 @@ while read TEST; do
                 CMD="$CMD$DIR/${projects[$i]} "
                 i=$[$i +1]
             done
-            $BPINSTALL/tools/mc/bin/masl_round_trip $CMD -o $OUT_DIR/$COUNTER $RELAUNCH -c
+            $BPINSTALL/tools/mc/bin/round_trip $CMD -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
         else
             # run round trip for a domain
-            $BPINSTALL/tools/mc/bin/masl_round_trip -d $DIR/$TEST -o $OUT_DIR/$COUNTER $RELAUNCH -c
+            $BPINSTALL/tools/mc/bin/round_trip -d $DIR/$TEST -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
         fi
     fi
     COUNTER=$[$COUNTER +1]
