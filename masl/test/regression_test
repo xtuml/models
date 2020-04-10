@@ -8,9 +8,9 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 # USAGE
 print_usage () { 
     echo "Usage:"
-    echo "        regression_test [-o <output directory>] [-w] [-r]";
+    echo "        regression_test [-o <output directory>] [-a <architecture>] [-r]";
     echo "";
-    echo "  - Specify the '-w' flag to choose WASL conversion; MASL is default.";
+    echo "  - Specify the '-a' flag to specify the dialect/architecture; MASL is the default.";
     echo "  - Specify the '-r' flag to force exit and relaunch of BridgePoint before export.";
 }
 
@@ -36,7 +36,7 @@ for arg in $@; do
         DIRECTIVE=$arg
     elif [[ $arg == "-r" ]]; then                   # specify to restart BP before export
         RELAUNCH=$arg
-    elif [[ $DIRECTIVE == "-a" ]]; then             # specify WASL conversion
+    elif [[ $DIRECTIVE == "-a" ]]; then             # specify dialect / architecture
         ARCHITECTURE=$arg
     elif [[ $DIRECTIVE == "-o" && $OUT_DIR == "" ]]; then # only can set the output directory once
         OUT_DIR=$arg
