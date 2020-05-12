@@ -1,0 +1,97 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("827c3fb1-9a59-4994-8419-7569b5a9898a",
+	'MakeMeEpoch',
+	1,
+	'MME',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("fb957176-3411-46ee-923c-c2c667552a71",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a",
+	'makeMeAmerican',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	1,
+	'return EPOCH::format( date:self.myBirthday, format:"MM/dd/yyyy hh:mm:ss" );',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0);
+INSERT INTO O_TFR
+	VALUES ("333cfcf4-639b-458b-8cd3-082113afdeab",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a",
+	'birthTime',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'return EPOCH::time_of_day( date:self.myBirthday );',
+	1,
+	'',
+	"fb957176-3411-46ee-923c-c2c667552a71",
+	0);
+INSERT INTO O_DBATTR
+	VALUES ("10278413-9222-4081-99db-a28f0fd4e390",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a",
+	'birth_date = 0;
+// Make birth time as 15:34:51
+self.myBirthday = birth_date + 51 + (34 * 60) + (15 * 60 * 60);',
+	1,
+	0);
+INSERT INTO O_BATTR
+	VALUES ("10278413-9222-4081-99db-a28f0fd4e390",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a");
+INSERT INTO O_ATTR
+	VALUES ("10278413-9222-4081-99db-a28f0fd4e390",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a",
+	"00000000-0000-0000-0000-000000000000",
+	'myBirthday',
+	'',
+	'',
+	'myBirthday',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("4cd0988f-622a-4893-b5e8-fdd7f15eb63c",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a");
+INSERT INTO O_BATTR
+	VALUES ("4cd0988f-622a-4893-b5e8-fdd7f15eb63c",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a");
+INSERT INTO O_ATTR
+	VALUES ("4cd0988f-622a-4893-b5e8-fdd7f15eb63c",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a",
+	"10278413-9222-4081-99db-a28f0fd4e390",
+	'myString',
+	'self.myString = EPOCH::format( date:self.myBirthday, format:"yyyy/MM/dd hh:mm:ss" );',
+	'',
+	'myString',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"827c3fb1-9a59-4994-8419-7569b5a9898a");
+INSERT INTO O_ID
+	VALUES (1,
+	"827c3fb1-9a59-4994-8419-7569b5a9898a");
+INSERT INTO O_ID
+	VALUES (2,
+	"827c3fb1-9a59-4994-8419-7569b5a9898a");
+INSERT INTO PE_PE
+	VALUES ("827c3fb1-9a59-4994-8419-7569b5a9898a",
+	1,
+	"0f9467a0-127f-4648-8d47-84b3f4e9e873",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("0f9467a0-127f-4648-8d47-84b3f4e9e873",
+	"00000000-0000-0000-0000-000000000000",
+	"43a51b71-02de-494b-83f2-ec07c5b339f4",
+	'EpochUser',
+	'',
+	0,
+	'../EpochUser.xtuml');
