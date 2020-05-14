@@ -1,0 +1,67 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	"43a51b71-02de-494b-83f2-ec07c5b339f4",
+	'Functions',
+	'',
+	0);
+INSERT INTO S_SYNC
+	VALUES ("b0b8bf24-9f12-4118-a5ef-fa3f41ce0193",
+	"00000000-0000-0000-0000-000000000000",
+	'testrun',
+	'',
+	'EPOCH::set_epoch( year:2000, month:1, day:1 );
+int_default_epochStart = 0;
+create object instance makeme of MME;
+makeme.myString = EPOCH::format( date:makeme.myBirthday, format:"yyyy/MM/dd hh:mm:ss" );
+today = 0;
+if ( int_default_epochStart != today )
+  LOG::LogFailure( message:"Epoch not properly set!");
+elif ( "2000/01/01 15:34:51" != makeme.myString )
+  LOG::LogFailure( message:"EPOCH::format_time formatting returned: " + makeme.myString);
+else
+  us_string = makeme.makeMeAmerican();
+  if ( "01/01/2000 15:34:51" != us_string )
+    LOG::LogFailure( message:"EPOCH::format_time formatting returned: " + us_string);
+  else
+    birth_time = 51 + (34 * 60) + (15 * 60 * 60);
+    if (birth_time != makeme.birthTime())
+      LOG::LogFailure( message:"EPOCH::time_of_day returned wrong value." );
+    end if;
+  end if;
+end if;
+LOG::LogInfo( message:"Test run completed!" );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("b0b8bf24-9f12-4118-a5ef-fa3f41ce0193",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("335cce5c-4a87-414a-9cf5-29925e9dd979",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"9e468b99-6235-49e8-b4c3-26287a2f7f96",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("9e468b99-6235-49e8-b4c3-26287a2f7f96",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'EpochUser',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../EpochUser.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("43a51b71-02de-494b-83f2-ec07c5b339f4",
+	'EpochTest',
+	1,
+	'../../../EpochTest.xtuml');
