@@ -10,7 +10,7 @@ INSERT INTO EP_PKG
 INSERT INTO S_SYNC
 	VALUES ("b0b8bf24-9f12-4118-a5ef-fa3f41ce0193",
 	"00000000-0000-0000-0000-000000000000",
-	'testrun',
+	'testrunEPOCH',
 	'',
 	'EPOCH::set_epoch( year:2000, month:1, day:1 );
 int_default_epochStart = 0;
@@ -39,6 +39,106 @@ LOG::LogInfo( message:"Test run completed!" );',
 	0);
 INSERT INTO PE_PE
 	VALUES ("b0b8bf24-9f12-4118-a5ef-fa3f41ce0193",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
+	"00000000-0000-0000-0000-000000000000",
+	'testrunTIM',
+	'',
+	'cc = TIM::current_clock(); // existing bridge returning Timestamp
+//cc = cc + 1; does not parse
+
+// TA2
+TIM::set_epoch( year:2020, month:1, day:1 );
+
+// TA3
+t1 = TIM::current_time();
+if ( t1 != 0 )
+  LOG::LogFailure( message:"TIM::current_time failure!" );
+end if;
+
+// TA11
+t2 = TIM::set_time( year:2020, month:11, day:5, hour:8, minute:0, second:0 );
+if ( t2 != 26726400 )
+  LOG::LogFailure( message:"TIM::set_time failure!" );
+end if;
+
+// TA4
+datetime_string = TIM::format( date:t1, format:"yyyy/MM/dd hh:mm:ss" );
+if (datetime_string != "2020/01/01 00:00:00")
+  LOG::LogFailure( message:"TIM::format failure!" );
+end if;
+
+// TA5
+if (t1 < t2) or (t1 > t2) or (t1 <= t2) or (t1 >= t2) or (t1 != t2) or (t1 == t2)
+  // Check specific instance
+  if ( t2 <= t1 )
+    LOG::LogFailure( message:"TIM datetime comparison failure!" );
+  end if;
+end if;
+
+d1 = TIM::current_date(); // existing bridge returning Date
+//cd = cd + 1; does not parse
+if ( ( 2020 != TIM::get_year( date:d1 ) ) and 
+     ( 11 != TIM::get_month( date:d1 ) ) and 
+     ( 5 != TIM::get_day( date:d1 ) ) and 
+     ( 8 != TIM::get_hour( date:d1 ) ) and 
+     ( 0 != TIM::get_minute( date:d1 ) ) )
+  LOG::LogFailure( message:"TIM::current_date failure!" );
+end if;
+
+d2 = TIM::create_date( year:2020, month:11, day:5, hour:8, minute:10, second:5 ); // existing bridge returning Date
+if (d1 < d2) or (d1 > d2) or (d1 <= d2) or (d1 >= d2) or (d1 != d2) or (d1 == d2)
+  // Check specific instance
+  if ( d2 <= d1 )
+    LOG::LogFailure( message:"TIM date comparison failure!" );
+  end if;
+end if;
+
+d3 = TIM::create_date( year:0, month:0, day:0, hour:8, minute:10, second:5 ); // existing bridge returning Date
+if ( ( d2 - d1 ) > d3 )
+  // Experimental
+  LOG::LogFailure( message:"TIM create time from date failure!" );
+end if;
+
+// TA6
+// NOTE: t1 should be 0
+if ( ( t2 - t1 ) != t2 )
+  LOG::LogFailure( message:"TIM datetime subtract datetime failure!" );
+end if;
+
+// TA7
+if ( ( t2 + 1 ) != 26726401 )
+  LOG::LogFailure( message:"TIM datetime add duration failure!" );
+end if;
+
+// TA8
+if ( ( t2 - 1 ) != 26726399 )
+  LOG::LogFailure( message:"TIM datetime subtract duration failure!" );
+end if;
+
+// TA9
+if ( ( 8 * 3600 ) != TIM::time_of_day( datetime:t2 ) )
+  LOG::LogFailure( message:"TIM::current_date failure!" );
+end if;
+
+// TA10 this model
+
+// TA11
+if ( ( TIM::advance_time( seconds:60 ) - TIM::current_time() ) != 60 )
+  LOG::LogFailure( message:"TIM::advance_time failure!" );
+end if;
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
 	1,
 	"335cce5c-4a87-414a-9cf5-29925e9dd979",
 	"00000000-0000-0000-0000-000000000000",
