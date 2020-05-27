@@ -10,7 +10,7 @@ INSERT INTO EP_PKG
 INSERT INTO S_SYNC
 	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
 	"00000000-0000-0000-0000-000000000000",
-	'testrunTIM',
+	'reqTestRun',
 	'',
 	'
 // TA2
@@ -50,12 +50,12 @@ end if;
 
 // TA8
 datetime_minus_duration = t2 - 1;
-if ( ( datetime_minus_duration != 0 )
+if ( datetime_minus_duration != 0 )
   LOG::LogFailure( message:"TIM datetime subtract duration failure!" );
 end if;
 
 // TA9
-time_since_midnight = TIM::time_of_day( timestamp:t1 );
+time_since_midnight = TIM::time_of_day( timeval:t1 );
 if ( time_since_midnight != 0 )
   LOG::LogFailure( message:"TIM::current_date failure!" );
 end if;
@@ -81,6 +81,26 @@ end if;
 	0);
 INSERT INTO PE_PE
 	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("a2693ebc-15e2-44f0-9ab1-a0a66dddb840",
+	"00000000-0000-0000-0000-000000000000",
+	'testrun',
+	'',
+	'create object instance baby of MME;
+LOG::LogInfo( message:"Birthday before epoch set: " + baby.myString );
+::reqTestRun();
+create object instance epochBaby of MME;
+LOG::LogInfo( message:"Birthday after epoch set: " + epochBaby.myString );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("a2693ebc-15e2-44f0-9ab1-a0a66dddb840",
 	1,
 	"335cce5c-4a87-414a-9cf5-29925e9dd979",
 	"00000000-0000-0000-0000-000000000000",
