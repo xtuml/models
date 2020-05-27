@@ -17,18 +17,18 @@ INSERT INTO S_SYNC
 TIM::set_epoch( year:2020, month:1, day:1 );
 
 // TA3
-t1 = TIM::current_clock();
+t1 = TIM::current_seconds();
 t2 = TIM::current_clock();
-timestamp_string = TIM::timestamp_to_string( timestamp:t1 );
-if ( timestamp_string != "2020-01-01T00:00:00Z" )
-  LOG::LogFailure( message:"TIM::timestamp_to_string failure!" );
-end if;
+LOG::LogTime( message:"is TIM::current_seconds() value(t1).", t:t1 );
+LOG::LogTime( message:"is TIM::current_clock() value(t2)(microseconds).", t:t2 );
+timestamp1_string = TIM::timestamp_to_string( timestamp:t1 );
+timestamp2_string = TIM::timestamp_to_string( timestamp:t2 );
+LOG::LogInfo( message:"t1 timestamp: " + timestamp1_string );
+LOG::LogInfo( message:"t2 timestamp: " + timestamp2_string );
 
 // TA4
 epochtime_string = TIM::timestamp_format( ts:t1, format:"yyyy/MM/dd hh:mm:ss" );
-if (epochtime_string != "2020/01/01 00:00:00")
-  LOG::LogFailure( message:"TIM::timestamp_format failure!" );
-end if;
+LOG::LogInfo( message:"t1 timestamp formatted as yyyy/MM/dd hh:mm:ss: " + timestamp1_string );
 
 // TA5
 if (t1 < t2) or (t1 > t2) or (t1 <= t2) or (t1 >= t2) or (t1 != t2) or (t1 == t2)
@@ -37,27 +37,35 @@ else
 end if;
 
 // TA6
-datetime_minus_datetime = t2 - t1;
-if ( datetime_minus_datetime != 0 )
-  LOG::LogFailure( message:"TIM datetime subtract datetime failure!" );
+datetime_minus_datetime = t2 - (t1 * 1000 * 1000);
+LOG::LogTime( message:"is t2 - t1(in microseconds).", t:datetime_minus_datetime );
+if ( datetime_minus_datetime >= t2 )
+  LOG::LogFailure( message:"TIM timestamp subtract timestamp failure!" );
 end if;
 
 // TA7
 datetime_plus_duration = t2 + 1;
-if ( datetime_plus_duration != 1 )
-  LOG::LogFailure( message:"TIM datetime add duration failure!" );
+LOG::LogTime( message:"is t2 + 1.", t: datetime_plus_duration);
+if ( datetime_plus_duration == t2 )
+  LOG::LogFailure( message:"TIM timestamp add duration failure!" );
 end if;
 
 // TA8
 datetime_minus_duration = t2 - 1;
-if ( datetime_minus_duration != 0 )
-  LOG::LogFailure( message:"TIM datetime subtract duration failure!" );
+LOG::LogTime( message:"is t2 - 1.", t: datetime_minus_duration);
+if ( datetime_minus_duration == t2 )
+  LOG::LogFailure( message:"TIM timestamp subtract duration failure!" );
 end if;
 
 // TA9
-time_since_midnight = TIM::time_of_day( timeval:t1 );
-if ( time_since_midnight != 0 )
-  LOG::LogFailure( message:"TIM::current_date failure!" );
+time_since_midnight = TIM::time_of_day( timeval:t2 );
+LOG::LogTime( message:"is microsecond time since midnight of t2.", t: time_since_midnight );
+LOG::LogTime( message:"hours.", t: ((time_since_midnight / 1000) / 1000) / 3600 );
+LOG::LogTime( message:"minutes.", t: (((time_since_midnight / 1000) / 1000) % 3600) / 60 );
+LOG::LogTime( message:"seconds.", t: ((((time_since_midnight / 1000) / 1000) % 3600) % 60) % 60 );
+LOG::LogTime( message:"subseconds.", t: time_since_midnight % 1000000 );
+if ( time_since_midnight == t1 )
+  LOG::LogFailure( message:"TIM::time_of_day failure!" );
 end if;
 
 // TA10 this model
