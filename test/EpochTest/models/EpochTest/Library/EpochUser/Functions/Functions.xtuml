@@ -8,37 +8,107 @@ INSERT INTO EP_PKG
 	'',
 	0);
 INSERT INTO S_SYNC
-	VALUES ("b0b8bf24-9f12-4118-a5ef-fa3f41ce0193",
+	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
 	"00000000-0000-0000-0000-000000000000",
-	'testrun',
+	'reqTestRun',
 	'',
-	'EPOCH::set_epoch( year:2000, month:1, day:1 );
-int_default_epochStart = 0;
-create object instance makeme of MME;
-makeme.myString = EPOCH::format( date:makeme.myBirthday, format:"yyyy/MM/dd hh:mm:ss" );
-today = 0;
-if ( int_default_epochStart != today )
-  LOG::LogFailure( message:"Epoch not properly set!");
-elif ( "2000/01/01 15:34:51" != makeme.myString )
-  LOG::LogFailure( message:"EPOCH::format_time formatting returned: " + makeme.myString);
+	'
+// TA2
+TIM::set_epoch( year:2020, month:1, day:1 );
+
+// TA3
+t1 = TIM::current_clock();
+t2 = TIM::current_clock();
+LOG::LogTime( message:"is TIM::current_clock() value(t1)(microseconds).", t:t1 );
+LOG::LogTime( message:"is TIM::current_clock() value(t2)(microseconds).", t:t2 );
+timestamp1_string = TIM::timestamp_to_string( timestamp:t1 );
+timestamp2_string = TIM::timestamp_to_string( timestamp:t2 );
+LOG::LogInfo( message:"t1 timestamp: " + timestamp1_string );
+LOG::LogInfo( message:"t2 timestamp: " + timestamp2_string );
+
+// TA4
+epochtime_string = TIM::timestamp_format( ts:t1, format:"yyyy/MM/dd hh:mm:ss" );
+LOG::LogInfo( message:"t1 timestamp formatted as yyyy/MM/dd hh:mm:ss: " + epochtime_string );
+
+// TA5
+if (t1 < t2) or (t1 > t2) or (t1 <= t2) or (t1 >= t2) or (t1 != t2) or (t1 == t2)
 else
-  us_string = makeme.makeMeAmerican();
-  if ( "01/01/2000 15:34:51" != us_string )
-    LOG::LogFailure( message:"EPOCH::format_time formatting returned: " + us_string);
-  else
-    birth_time = 51 + (34 * 60) + (15 * 60 * 60);
-    if (birth_time != makeme.birthTime())
-      LOG::LogFailure( message:"EPOCH::time_of_day returned wrong value." );
-    end if;
-  end if;
+  LOG::LogFailure( message:"TIM timestamp comparison failure!" );
 end if;
-LOG::LogInfo( message:"Test run completed!" );',
+
+// TA6
+datetime_minus_datetime = t2 - t1;
+LOG::LogTime( message:"is t2 - t1(in microseconds).", t:datetime_minus_datetime );
+if ( datetime_minus_datetime >= t2 )
+  LOG::LogFailure( message:"TIM timestamp subtract timestamp failure!" );
+end if;
+
+// TA7
+datetime_plus_duration = t2 + 1;
+LOG::LogTime( message:"is t2 + 1.", t: datetime_plus_duration);
+if ( datetime_plus_duration == t2 )
+  LOG::LogFailure( message:"TIM timestamp add duration failure!" );
+end if;
+
+// TA8
+datetime_minus_duration = t2 - 1;
+LOG::LogTime( message:"is t2 - 1.", t: datetime_minus_duration);
+if ( datetime_minus_duration == t2 )
+  LOG::LogFailure( message:"TIM timestamp subtract duration failure!" );
+end if;
+
+// TA9
+time_since_midnight = TIM::time_of_day( timeval:t1 );
+LOG::LogTime( message:"is microsecond time since midnight of t1.", t: time_since_midnight );
+LOG::LogTime( message:"hours.", t: ((time_since_midnight / 1000) / 1000) / 3600 );
+LOG::LogTime( message:"minutes.", t: (((time_since_midnight / 1000) / 1000) % 3600) / 60 );
+LOG::LogTime( message:"seconds.", t: ((((time_since_midnight / 1000) / 1000) % 3600) % 60) % 60 );
+LOG::LogTime( message:"subseconds.", t: time_since_midnight % 1000000 );
+if ( time_since_midnight == t1 )
+  LOG::LogFailure( message:"TIM::time_of_day failure!" );
+end if;
+
+// TA10 this model
+// TA11
+// t = TIM::set_time( year:2020, month:11, day:5, hour:8, minute:0, second:0 );
+// t = TIM::advance_time( seconds:60 );
+
+// The following demonstrate weaknesses in the existing date bridges.
+d1 = TIM::current_date(); // existing bridge returning Date
+// d1 = d1 + 1; does not parse
+d2 = TIM::current_date(); // existing bridge returning Date
+if (d1 < d2) or (d1 > d2) or (d1 <= d2) or (d1 >= d2) or (d1 != d2) or (d1 == d2)
+else
+  LOG::LogFailure( message:"TIM date comparison failure!" );
+end if;
+
+',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
 	0);
 INSERT INTO PE_PE
-	VALUES ("b0b8bf24-9f12-4118-a5ef-fa3f41ce0193",
+	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("a2693ebc-15e2-44f0-9ab1-a0a66dddb840",
+	"00000000-0000-0000-0000-000000000000",
+	'testrun',
+	'',
+	'create object instance baby of MME;
+LOG::LogInfo( message:"Birthday before epoch set: " + baby.myString );
+::reqTestRun();
+create object instance epochBaby of MME;
+LOG::LogInfo( message:"Birthday after epoch set: " + epochBaby.myString );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("a2693ebc-15e2-44f0-9ab1-a0a66dddb840",
 	1,
 	"335cce5c-4a87-414a-9cf5-29925e9dd979",
 	"00000000-0000-0000-0000-000000000000",
