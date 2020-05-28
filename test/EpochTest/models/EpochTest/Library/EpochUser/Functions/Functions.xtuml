@@ -10,7 +10,7 @@ INSERT INTO EP_PKG
 INSERT INTO S_SYNC
 	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
 	"00000000-0000-0000-0000-000000000000",
-	'reqTestRun',
+	'test_realtime_requirements',
 	'',
 	'
 // TA2
@@ -71,9 +71,6 @@ if ( time_since_midnight == t1 )
 end if;
 
 // TA10 this model
-// TA11
-// t = TIM::set_time( year:2020, month:11, day:5, hour:8, minute:0, second:0 );
-// t = TIM::advance_time( seconds:60 );
 
 // The following demonstrate weaknesses in the existing date bridges.
 d1 = TIM::current_date(); // existing bridge returning Date
@@ -98,11 +95,11 @@ INSERT INTO PE_PE
 INSERT INTO S_SYNC
 	VALUES ("a2693ebc-15e2-44f0-9ab1-a0a66dddb840",
 	"00000000-0000-0000-0000-000000000000",
-	'testrun',
+	'testEpochUser',
 	'',
 	'create object instance baby of MME;
 LOG::LogInfo( message:"Birthday before epoch set: " + baby.myString );
-::reqTestRun();
+TIM::set_epoch( day:21, month:6, year:2111 );
 create object instance epochBaby of MME;
 LOG::LogInfo( message:"Birthday after epoch set: " + epochBaby.myString );',
 	"ba5eda7a-def5-0000-0000-000000000000",
@@ -111,6 +108,29 @@ LOG::LogInfo( message:"Birthday after epoch set: " + epochBaby.myString );',
 	0);
 INSERT INTO PE_PE
 	VALUES ("a2693ebc-15e2-44f0-9ab1-a0a66dddb840",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("866e0c01-eced-4011-a019-0e4108a806dc",
+	"00000000-0000-0000-0000-000000000000",
+	'test_simulation_requirements',
+	'',
+	'// TA11 - These functions are for simulated time usage
+t = TIM::set_time( year:2020, month:11, day:5, hour:8, minute:0, second:0, microsecond:234567);
+sim1_string = TIM::timestamp_to_string( timestamp:t );
+t = TIM::advance_time( microseconds:60000000 );
+sim2_string = TIM::timestamp_to_string( timestamp:t );
+LOG::LogInfo( message:"TIM::set_time value: " + sim1_string ); 
+LOG::LogInfo( message:"TIM::advance_time value: " + sim2_string ); 
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("866e0c01-eced-4011-a019-0e4108a806dc",
 	1,
 	"335cce5c-4a87-414a-9cf5-29925e9dd979",
 	"00000000-0000-0000-0000-000000000000",
