@@ -118,12 +118,28 @@ INSERT INTO S_SYNC
 	'test_simulation_requirements',
 	'',
 	'// TA11 - These functions are for simulated time usage
-t = TIM::set_time( year:2020, month:11, day:5, hour:8, minute:0, second:0, microsecond:234567);
-sim1_string = TIM::timestamp_to_string( timestamp:t );
-t = TIM::advance_time( microseconds:60000000 );
-sim2_string = TIM::timestamp_to_string( timestamp:t );
+t1 = TIM::set_time( year:2020, month:11, day:5, hour:8, minute:0, second:0, microsecond:234567);
+LOG::LogTime( message:" is set time.", t:t1 );
+dateCheck = TIM::current_date();
+if ( ( 2020 != TIM::get_year( date: dateCheck ) ) or ( 11 != TIM::get_month( date: dateCheck ) ) or 
+     ( 5 != TIM::get_day( date: dateCheck ) ) or ( 8 != TIM::get_hour( date: dateCheck ) ) )
+  LOG::LogFailure( message:"TIM::set_time failure!" );
+end if;
+sim1_string = TIM::timestamp_to_string( timestamp:t1 );
+advance = 60000000;
+t2 = TIM::advance_time( microseconds:advance );
+sim2_string = TIM::timestamp_to_string( timestamp:t2 );
 LOG::LogInfo( message:"TIM::set_time value: " + sim1_string ); 
 LOG::LogInfo( message:"TIM::advance_time value: " + sim2_string ); 
+if ( ( t2 - t1 ) < advance )
+  LOG::LogFailure( message:"advance_time failure!" );
+end if;
+create object instance me of MME;
+// 2020-11-05T08:01:00.234567 + 00:00:30.446782 = 2020-11-05T08:01:30.681349
+lifeTime = advance + 30446782;
+me.myDeathDay = TIM::create_date( day:10, hour:0, minute:0, month:11, second:0, year:2020 );
+create event instance lifeEvent of MME1:live( time_of_life:lifeTime ) to me;
+timer1 = TIM::timer_start( event_inst: lifeEvent, microseconds: lifeTime );
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
