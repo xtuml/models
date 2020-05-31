@@ -93,15 +93,12 @@ end if;
 // TA3 continued
 t2 = TIM::current_seconds();
 LOG::LogTime( message: "is t2 TIM::current_seconds value.", t:t2 );
-/* Current implementation doesn''t handle integer and timestamp operations correctly.
 microseconds_per_second = 1000000;
-t2Value = t2 * microseconds_per_second;
-if ( ( t2Value - t1 ) > 1 )
+if ( ( t2 - ( t1 / microseconds_per_second ) ) > 1 )
   LOG::LogFailure( message:"TIM::current_seconds failure." );
   LOG::LogTime( message:" was time given in microseconds.", t:t1 );
   LOG::LogTime( message:" is time given in seconds.", t:t2 );
 end if;
-*/
 
 timestamp_string = TIM::timestamp_to_string( timestamp:t1 );
 LOG::LogInfo( message:"t1 timestamp_to_string output: " + timestamp_string );
@@ -132,19 +129,11 @@ end if;
 
 // TA9
 time_since_midnight = TIM::time_of_day( timeval:t1 );
-/* Current implementation doesn''t handle integer and timestamp math operations correctly.
-microseconds_per_day = 24 * 3600 * microseconds_per_second;
-if ( ( time_since_midnight >= t1 ) or ( time_since_midnight >= microseconds_per_day ) )
-  LOG::LogFailure( message:"TIM::time_of_day failure!" );
-*/
-  LOG::LogTime( message:"is microsecond time since midnight of t1.", t: time_since_midnight );
-  LOG::LogTime( message:"hours.", t: ((time_since_midnight / 1000) / 1000) / 3600 );
-  LOG::LogTime( message:"minutes.", t: (((time_since_midnight / 1000) / 1000) % 3600) / 60 );
-  LOG::LogTime( message:"seconds.", t: ((((time_since_midnight / 1000) / 1000) % 3600) % 60) % 60 );
-  LOG::LogTime( message:"subseconds.", t: time_since_midnight % 1000000 );
-/*
-end if;
-*/
+LOG::LogTime( message:"is microsecond time since midnight of t1.", t: time_since_midnight );
+LOG::LogTime( message:"hours.", t: ((time_since_midnight / 1000) / 1000) / 3600 );
+LOG::LogTime( message:"minutes.", t: (((time_since_midnight / 1000) / 1000) % 3600) / 60 );
+LOG::LogTime( message:"seconds.", t: ((((time_since_midnight / 1000) / 1000) % 3600) % 60) % 60 );
+LOG::LogTime( message:"subseconds.", t: time_since_midnight % 1000000 );
 
 // TA10 this model
 // TA11 - These test time offsets on top of epoch
@@ -186,6 +175,7 @@ end if;
 
 LOG::LogInfo( message:"End of real time Panda requirement tests." );
 LOG::LogInfo( message:"=========================================" );
+
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
