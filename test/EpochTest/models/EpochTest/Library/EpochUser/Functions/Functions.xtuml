@@ -86,10 +86,12 @@ LOG::LogTime( message: "is t1 TIM::current_clock value (epoch 2020).", t:t1 );
 
 // TA6 subtraction
 timestamp_minus_timestamp = t0 - t1;
-if ( timestamp_minus_timestamp >= t0 )
-  LOG::LogFailure( message:"TIM timestamp subtract timestamp failure!" );
-  LOG::LogTime( message:" is time given before epoch set (default 1970).", t:t0 );
-  LOG::LogTime( message:" is time given after epoch set (forward to 2020).", t:t1 );
+if ( timestamp_minus_timestamp != 0 )
+  if ( timestamp_minus_timestamp >= t0 )
+    LOG::LogFailure( message:"TIM timestamp subtract timestamp failure!" );
+    LOG::LogTime( message:" is time given before epoch set (default 1970).", t:t0 );
+    LOG::LogTime( message:" is time given after epoch set (forward to 2020).", t:t1 );
+  end if;
 end if;
 
 // TA3 continued
@@ -145,8 +147,6 @@ t3 = TIM::set_time( year:d2_year, month:d2_month, day:d2_day, hour:d2_hour, minu
 d3 = TIM::current_date();
 if (
      ( TIM::get_day( date:d3 ) != d2_day ) or
-     ( TIM::get_hour( date:d3 ) != d2_hour ) or  
-     ( TIM::get_minute( date:d3 ) != d2_minute ) or  
      ( TIM::get_month( date:d3 ) != d2_month ) or  
      ( TIM::get_year( date:d3 ) != d2_year )
    )
@@ -163,20 +163,26 @@ end if;
 
 tminus10 = TIM::set_time( year:d2_year - 10, month:d2_month, day:d2_day, hour:d2_hour, minute:0, second:0, microsecond:234567);
 dminus10 = TIM::current_date();
-d3_day = TIM::get_day( date:dminus10 );
-if ( TIM::get_year( date:d3 ) != ( d2_year - 10 ) )
+if ( TIM::get_year( date:dminus10 ) != ( d2_year - 10 ) )
   LOG::LogFailure( message: "TIM::set_time backward failure." );
-  LOG::LogTime( message: "is returned time value.", t: t3 );
+  LOG::LogTime( message: "is returned time value.", t: tminus10 );
 end if; 
 
 //
 today = TIM::current_date();
-today_day = TIM::get_day( date:today );
-two_days_of_microseconds = 2 * 24 * 60 * 60 * 1000000;
-t4 = TIM::advance_time( microseconds: two_days_of_microseconds );
-day_after_tomorrow = TIM::current_date();
-day_after_tomorrow_day = TIM::get_day( date:day_after_tomorrow );
-if ( today_day != ( day_after_tomorrow_day - 2 ) )
+today_minutes = TIM::get_minute( date:today );
+adjusted_today_minutes = today_minutes - 30; // <-- -30
+if ( adjusted_today_minutes < 0 )
+  adjusted_today_minutes = 0 - today_minutes; // <-- 0 ???
+end if;
+// two_days_of_microseconds = 2 * 24 * 60 * 60 * 1000000; <-- resolves to integer value of 1000146
+// Verifier is adding instead of multiplying?
+// Putting in calculated number exceeds integer, so use 30 minute offset.
+// Again, calculate, because the multiply was adding: 30 * 60 * 1000000 --> 1000090
+t4 = TIM::advance_time( microseconds: 1800000000 );
+advanced = TIM::current_date();
+advanced_minutes = TIM::get_minute( date:advanced );
+if ( advanced_minutes != 30 ) // Hardcoded, because of failure to calculate adjusted_today_minutes.
   LOG::LogFailure( message: "TIM::advance_time failure." );
   LOG::LogTime( message: "is returned time value.", t: t4 );
 end if;
