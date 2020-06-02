@@ -8,37 +8,220 @@ INSERT INTO EP_PKG
 	'',
 	0);
 INSERT INTO S_SYNC
-	VALUES ("b0b8bf24-9f12-4118-a5ef-fa3f41ce0193",
+	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
 	"00000000-0000-0000-0000-000000000000",
-	'testrun',
+	'test_realtime_requirements',
 	'',
-	'EPOCH::set_epoch( year:2000, month:1, day:1 );
-int_default_epochStart = 0;
-create object instance makeme of MME;
-makeme.myString = EPOCH::format( date:makeme.myBirthday, format:"yyyy/MM/dd hh:mm:ss" );
-today = 0;
-if ( int_default_epochStart != today )
-  LOG::LogFailure( message:"Epoch not properly set!");
-elif ( "2000/01/01 15:34:51" != makeme.myString )
-  LOG::LogFailure( message:"EPOCH::format_time formatting returned: " + makeme.myString);
-else
-  us_string = makeme.makeMeAmerican();
-  if ( "01/01/2000 15:34:51" != us_string )
-    LOG::LogFailure( message:"EPOCH::format_time formatting returned: " + us_string);
-  else
-    birth_time = 51 + (34 * 60) + (15 * 60 * 60);
-    if (birth_time != makeme.birthTime())
-      LOG::LogFailure( message:"EPOCH::time_of_day returned wrong value." );
-    end if;
-  end if;
+	'// TA2
+t0 = TIM::current_clock();
+d0 = TIM::current_date();
+d0_day = TIM::get_day( date:d0 );
+d0_hour = TIM::get_hour( date:d0 );
+d0_minute = TIM::get_minute( date:d0 );
+d0_month = TIM::get_month( date:d0 );
+d0_second = TIM::get_second( date:d0 );
+d0_year = TIM::get_year( date:d0 );
+TIM::set_epoch( year:2020, month:1, day:1 );
+d1 = TIM::current_date();
+if ( ( d0_day != TIM::get_day( date:d1 ) ) or
+     ( d0_hour != TIM::get_hour( date:d1 ) ) or  
+     ( d0_minute != TIM::get_minute( date:d1 ) ) or  
+     ( d0_month != TIM::get_month( date:d1 ) ) or  
+     ( d0_second != TIM::get_second( date:d1 ) ) or  
+     ( d0_year != TIM::get_year( date:d1 ) )
+   )
+  LOG::LogFailure(message: "Set epoch forward failure." );
+  LOG::LogInfo( message:"d0 year month day hour minute second" );
+  LOG::LogInteger( message: d0_year);
+  LOG::LogInteger( message: d0_month);
+  LOG::LogInteger( message: d0_day);
+  LOG::LogInteger( message: d0_hour);
+  LOG::LogInteger( message: d0_minute);
+  LOG::LogInteger( message: d0_second);
+  LOG::LogInfo( message:"d1 year month day hour minute second" );
+  LOG::LogInteger( message: TIM::get_year( date:d1 ));
+  LOG::LogInteger( message: TIM::get_month( date:d1 ));
+  LOG::LogInteger( message: TIM::get_day( date:d1 ));
+  LOG::LogInteger( message: TIM::get_hour( date:d1 ));
+  LOG::LogInteger( message: TIM::get_minute( date:d1 ));
+  LOG::LogInteger( message: TIM::get_second( date:d1 ));
 end if;
-LOG::LogInfo( message:"Test run completed!" );',
+TIM::set_epoch( day:1, month:1, year:1930 );
+d2 = TIM::current_date();
+d2_day = TIM::get_day( date:d2 );
+d2_hour = TIM::get_hour( date:d2 );
+d2_minute = TIM::get_minute( date:d2 );
+d2_month = TIM::get_month( date:d2 );
+d2_second = TIM::get_second( date:d2 );
+d2_year = TIM::get_year( date:d2 );
+if ( ( d0_day != d2_day ) or
+     ( d0_hour != d2_hour ) or  
+     ( d0_minute != d2_minute ) or  
+     ( d0_month != d2_month ) or  
+     ( d0_second != d2_second ) or  
+     ( d0_year != d2_year )
+   )
+  LOG::LogFailure(message: "Set epoch backward failure." );
+  LOG::LogInfo( message:"d0 year month day hour minute second" );
+  LOG::LogInteger( message: d0_year);
+  LOG::LogInteger( message: d0_month);
+  LOG::LogInteger( message: d0_day);
+  LOG::LogInteger( message: d0_hour);
+  LOG::LogInteger( message: d0_minute);
+  LOG::LogInteger( message: d0_second);
+  LOG::LogInfo( message:"d2 year month day hour minute second" );
+  LOG::LogInteger( message: d2_year);
+  LOG::LogInteger( message: d2_month);
+  LOG::LogInteger( message: d2_day);
+  LOG::LogInteger( message: d2_hour);
+  LOG::LogInteger( message: d2_minute);
+  LOG::LogInteger( message: d2_second);
+end if;
+
+// TA3
+t1 = TIM::current_clock();
+LOG::LogTime( message: "is t1 TIM::current_clock value.", t:t1 );
+
+// TA6
+timestamp_minus_timestamp = t1 - t0;
+if ( timestamp_minus_timestamp >= t1 )
+  LOG::LogFailure( message:"TIM timestamp subtract timestamp failure!" );
+  LOG::LogTime( message:" is time given before epoch set.", t:t0 );
+  LOG::LogTime( message:" is time given after epoch set.", t:t1 );
+end if;
+
+// TA3 continued
+t2 = TIM::current_seconds();
+LOG::LogTime( message: "is t2 TIM::current_seconds value.", t:t2 );
+microseconds_per_second = 1000000;
+if ( ( t2 - ( t1 / microseconds_per_second ) ) > 1 )
+  LOG::LogFailure( message:"TIM::current_seconds failure." );
+  LOG::LogTime( message:" was time given in microseconds.", t:t1 );
+  LOG::LogTime( message:" is time given in seconds.", t:t2 );
+end if;
+
+timestamp_string = TIM::timestamp_to_string( timestamp:t1 );
+LOG::LogInfo( message:"t1 timestamp_to_string output: " + timestamp_string );
+timestamp0_string = TIM::timestamp_to_string( timestamp:t0 );
+LOG::LogInfo( message:"t0 timestamp_to_string output: " + timestamp_string );
+
+// TA4
+formatted_time_string = TIM::timestamp_format( ts:t1, format:"yyyy/MM/dd HH:mm:ss" );
+LOG::LogInfo( message:"t1 timestamp_format output, formatted as yyyy/MM/dd HH:mm:ss: " + formatted_time_string );
+
+// TA5
+if (t1 < t0) or (t1 > t0) or (t1 <= t0) or (t1 >= t0) or (t1 != t0) or (t1 == t0)
+else
+  LOG::LogFailure( message:"TIM timestamp comparison failure!" );
+end if;
+
+// TA7
+timestamp_plus_duration = t1 + 1;
+if ( timestamp_plus_duration == t1 )
+  LOG::LogFailure( message:"TIM timestamp add duration failure!" );
+end if;
+
+// TA8
+timestamp_minus_duration = t1 - 1;
+if ( timestamp_minus_duration == t1 )
+  LOG::LogFailure( message:"TIM timestamp subtract duration failure!" );
+end if;
+
+// TA9
+time_since_midnight = TIM::time_of_day( timeval:t1 );
+LOG::LogTime( message:"is microsecond time since midnight of t1.", t: time_since_midnight );
+LOG::LogTime( message:"hours.", t: ((time_since_midnight / 1000) / 1000) / 3600 );
+LOG::LogTime( message:"minutes.", t: (((time_since_midnight / 1000) / 1000) % 3600) / 60 );
+LOG::LogTime( message:"seconds.", t: ((((time_since_midnight / 1000) / 1000) % 3600) % 60) % 60 );
+LOG::LogTime( message:"subseconds.", t: time_since_midnight % 1000000 );
+
+// TA10 this model
+// TA11 - These test time offsets on top of epoch
+t3 = TIM::set_time( year:d2_year, month:d2_month, day:d2_day, hour:d2_hour, minute:0, second:0, microsecond:234567);
+d3 = TIM::current_date();
+if (
+     ( TIM::get_day( date:d3 ) != d2_day ) or
+     ( TIM::get_hour( date:d3 ) != d2_hour ) or  
+     ( TIM::get_minute( date:d3 ) != d2_minute ) or  
+     ( TIM::get_month( date:d3 ) != d2_month ) or  
+     ( TIM::get_year( date:d3 ) != d2_year )
+   )
+  LOG::LogFailure( message: "TIM::set_time failure." );
+  LOG::LogTime( message: "is returned time value.", t: t3 );
+end if; 
+
+t3 = TIM::set_time( year:d2_year + 20, month:d2_month, day:d2_day, hour:d2_hour, minute:0, second:0, microsecond:234567);
+d3 = TIM::current_date();
+if ( ( TIM::get_year( date:d3 ) != ( d2_year ) ) )
+  LOG::LogFailure( message: "TIM::set_time forward failure." );
+  LOG::LogTime( message: "is returned time value.", t: t3 );
+end if; 
+
+t3 = TIM::set_time( year:d2_year - 10, month:d2_month, day:d2_day, hour:d2_hour, minute:0, second:0, microsecond:234567);
+d3 = TIM::current_date();
+d3_day = TIM::get_day( date:d3 );
+if ( ( TIM::get_year( date:d3 ) != ( d2_year ) ) )
+  LOG::LogFailure( message: "TIM::set_time backward failure." );
+  LOG::LogTime( message: "is returned time value.", t: t3 );
+end if; 
+
+//
+t4 = TIM::advance_time( microseconds: 432000000000 );
+d4 = TIM::current_date();
+if ( ( ( d3_day ) != TIM::get_day( date:d4 ) ) )
+  LOG::LogFailure( message: "TIM::advance_time failure." );
+  LOG::LogTime( message: "is returned time value.", t: t4 );
+end if;
+
+LOG::LogInfo( message:"End of real time Panda requirement tests." );
+LOG::LogInfo( message:"=========================================" );
+
+',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
 	0);
 INSERT INTO PE_PE
-	VALUES ("b0b8bf24-9f12-4118-a5ef-fa3f41ce0193",
+	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("866e0c01-eced-4011-a019-0e4108a806dc",
+	"00000000-0000-0000-0000-000000000000",
+	'test_simulated_time_requirements',
+	'',
+	'// TA11 - These tests are for simulated time usage
+t1 = TIM::set_time( year:2020, month:11, day:5, hour:8, minute:0, second:0, microsecond:234567);
+d1 = TIM::current_date();
+if ( ( 2020 != TIM::get_year( date: d1 ) ) or ( 11 != TIM::get_month( date: d1 ) ) or 
+     ( 5 != TIM::get_day( date: d1 ) ) or ( 8 != TIM::get_hour( date: d1 ) ) )
+  LOG::LogFailure( message:"TIM::set_time failure!" );
+  LOG::LogInfo( message:"d1 year month day hour minute second" );
+  LOG::LogInteger( message: TIM::get_year( date:d1 ));
+  LOG::LogInteger( message: TIM::get_month( date:d1 ));
+  LOG::LogInteger( message: TIM::get_day( date:d1 ));
+  LOG::LogInteger( message: TIM::get_hour( date:d1 ));
+  LOG::LogInteger( message: TIM::get_minute( date:d1 ));
+  LOG::LogInteger( message: TIM::get_second( date:d1 ));
+end if;
+advance = 60000000;
+t2 = TIM::advance_time( microseconds:advance );
+d2 = TIM::current_date();
+if ( ( ( t2 - t1 ) < advance ) or (1 != TIM::get_minute( date:d2 ) ) )
+  LOG::LogFailure( message:"advance_time failure!" );
+  LOG::LogTime( message: "is the minute value.", t: TIM::get_minute( date:d2 ) );
+end if;
+
+LOG::LogInfo( message:"End of simulated time Panda requirement tests." );
+LOG::LogInfo( message:"==============================================" );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("866e0c01-eced-4011-a019-0e4108a806dc",
 	1,
 	"335cce5c-4a87-414a-9cf5-29925e9dd979",
 	"00000000-0000-0000-0000-000000000000",

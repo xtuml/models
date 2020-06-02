@@ -8,35 +8,21 @@ INSERT INTO O_OBJ
 	'',
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO O_TFR
-	VALUES ("fb957176-3411-46ee-923c-c2c667552a71",
-	"827c3fb1-9a59-4994-8419-7569b5a9898a",
-	'makeMeAmerican',
-	'',
-	"ba5eda7a-def5-0000-0000-000000000004",
-	1,
-	'return EPOCH::format( date:self.myBirthday, format:"MM/dd/yyyy hh:mm:ss" );',
-	1,
-	'',
-	"00000000-0000-0000-0000-000000000000",
-	0);
-INSERT INTO O_TFR
 	VALUES ("333cfcf4-639b-458b-8cd3-082113afdeab",
 	"827c3fb1-9a59-4994-8419-7569b5a9898a",
 	'birthTime',
 	'',
 	"ba5eda7a-def5-0000-0000-000000000002",
 	1,
-	'return EPOCH::time_of_day( date:self.myBirthday );',
+	'return TIM::time_of_day( timeval:self.myBirthday );',
 	1,
 	'',
-	"fb957176-3411-46ee-923c-c2c667552a71",
+	"00000000-0000-0000-0000-000000000000",
 	0);
 INSERT INTO O_DBATTR
 	VALUES ("10278413-9222-4081-99db-a28f0fd4e390",
 	"827c3fb1-9a59-4994-8419-7569b5a9898a",
-	'birth_date = 0;
-// Make birth time as 15:34:51
-self.myBirthday = birth_date + 51 + (34 * 60) + (15 * 60 * 60);',
+	'self.myBirthday = TIM::current_clock();',
 	1,
 	0);
 INSERT INTO O_BATTR
@@ -51,12 +37,16 @@ INSERT INTO O_ATTR
 	'',
 	'myBirthday',
 	0,
-	"ba5eda7a-def5-0000-0000-000000000002",
+	"ba5eda7a-def5-0000-0000-000000000010",
 	'',
 	'');
-INSERT INTO O_NBATTR
+INSERT INTO O_DBATTR
 	VALUES ("4cd0988f-622a-4893-b5e8-fdd7f15eb63c",
-	"827c3fb1-9a59-4994-8419-7569b5a9898a");
+	"827c3fb1-9a59-4994-8419-7569b5a9898a",
+	'self.myString = TIM::timestamp_to_string( timestamp:self.myBirthday );
+',
+	1,
+	0);
 INSERT INTO O_BATTR
 	VALUES ("4cd0988f-622a-4893-b5e8-fdd7f15eb63c",
 	"827c3fb1-9a59-4994-8419-7569b5a9898a");
@@ -65,11 +55,47 @@ INSERT INTO O_ATTR
 	"827c3fb1-9a59-4994-8419-7569b5a9898a",
 	"10278413-9222-4081-99db-a28f0fd4e390",
 	'myString',
-	'self.myString = EPOCH::format( date:self.myBirthday, format:"yyyy/MM/dd hh:mm:ss" );',
+	'',
 	'',
 	'myString',
 	0,
 	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("706ea79e-2094-49ab-bf0b-86828584e502",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a");
+INSERT INTO O_BATTR
+	VALUES ("706ea79e-2094-49ab-bf0b-86828584e502",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a");
+INSERT INTO O_ATTR
+	VALUES ("706ea79e-2094-49ab-bf0b-86828584e502",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a",
+	"4cd0988f-622a-4893-b5e8-fdd7f15eb63c",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("8e3c5b50-a6e8-42fc-8c18-ba2f0c2d8d09",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a");
+INSERT INTO O_BATTR
+	VALUES ("8e3c5b50-a6e8-42fc-8c18-ba2f0c2d8d09",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a");
+INSERT INTO O_ATTR
+	VALUES ("8e3c5b50-a6e8-42fc-8c18-ba2f0c2d8d09",
+	"827c3fb1-9a59-4994-8419-7569b5a9898a",
+	"706ea79e-2094-49ab-bf0b-86828584e502",
+	'myDeathDay',
+	'',
+	'',
+	'myDeathDay',
+	0,
+	"ba5eda7a-def5-0000-0000-00000000000e",
 	'',
 	'');
 INSERT INTO O_ID
