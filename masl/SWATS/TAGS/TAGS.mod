@@ -337,7 +337,7 @@ domain TAGS is
   end object;
   pragma id (4);
   pragma key_letter ("APAOOO");
-  pragma multiplicity_array ("1");
+  pragma multiple ("1");
 
   object Report_Data is
 
@@ -502,7 +502,7 @@ domain TAGS is
   end object;
   pragma id (8);
   pragma key_letter ("AAAOOO");
-  pragma multiplicity_array ("1");
+  pragma multiple ("1");
 
   object An_Active_Array_Of_Three_Objects is
 
@@ -576,7 +576,7 @@ domain TAGS is
   end object;
   pragma id (9);
   pragma key_letter ("AAAOTO");
-  pragma multiplicity_array ("3");
+  pragma multiple ("3");
 
   object A_Passive_Array_Of_Three_Objects is
 
@@ -586,7 +586,7 @@ domain TAGS is
   end object;
   pragma id (10);
   pragma key_letter ("APAOTO");
-  pragma multiplicity_array ("3");
+  pragma multiple ("3");
 
   object Single_Tagged_Object is
 
@@ -612,7 +612,7 @@ domain TAGS is
   end object;
   pragma id (12);
   pragma key_letter ("MTO");
-  pragma multiplicity_array ("3");
+  pragma multiple ("3");
 
   object Active_Tagged_Single_Object is
 
@@ -668,7 +668,7 @@ domain TAGS is
   end object;
   pragma id (14);
   pragma key_letter ("ATMO");
-  pragma multiplicity_array ("3");
+  pragma multiple ("3");
 
   object Tagged_Many_Left is
 
@@ -680,7 +680,7 @@ domain TAGS is
   end object;
   pragma id (15);
   pragma key_letter ("TM_LEFT");
-  pragma multiplicity_array ("3");
+  pragma multiple ("3");
 
   object Tagged_Many_Right is
 
@@ -692,7 +692,7 @@ domain TAGS is
   end object;
   pragma id (16);
   pragma key_letter ("TM_RIGHT");
-  pragma multiplicity_array ("3");
+  pragma multiple ("3");
 
   object Tagged_Single_Assoc is
 
@@ -708,7 +708,7 @@ domain TAGS is
   end object;
   pragma id (17);
   pragma key_letter ("TS_ASSOC");
-  pragma multiplicity_array ("9");
+  pragma multiple ("9");
 
   object Tagged_Many_Supertype is
 
@@ -720,7 +720,7 @@ domain TAGS is
   end object;
   pragma id (18);
   pragma key_letter ("TAG_SUPER");
-  pragma multiplicity_array ("1");
+  pragma multiple ("1");
 
   object Subtype_1 is
 
@@ -732,7 +732,7 @@ domain TAGS is
   end object;
   pragma id (19);
   pragma key_letter ("SUB_ONE");
-  pragma multiplicity_array ("2");
+  pragma multiple ("2");
 
   object Subtype_2 is
 
@@ -773,7 +773,7 @@ domain TAGS is
   end object;
   pragma id (22);
   pragma key_letter ("MGR");
-  pragma multiplicity_array ("3");
+  pragma multiple ("3");
   pragma non_initialised ("");
 
   object Active_Tagged_Many_Left is
@@ -801,7 +801,7 @@ domain TAGS is
   end object;
   pragma id (23);
   pragma key_letter ("ATML");
-  pragma multiplicity_array ("3");
+  pragma multiple ("3");
 
   object Active_Tagged_Many_Right is
 
@@ -828,7 +828,7 @@ domain TAGS is
   end object;
   pragma id (24);
   pragma key_letter ("ATMR");
-  pragma multiplicity_array ("3");
+  pragma multiple ("3");
 
   object Active_Tagged_Single_Assoc is
 
@@ -855,7 +855,7 @@ domain TAGS is
   end object;
   pragma id (25);
   pragma key_letter ("ATSASSOC");
-  pragma multiplicity_array ("9");
+  pragma multiple ("9");
 
   object Active_Tagged_Supertype is
 
@@ -908,7 +908,7 @@ domain TAGS is
   end object;
   pragma id (27);
   pragma key_letter ("ATSUBONE");
-  pragma multiplicity_array ("2");
+  pragma multiple ("2");
 
   object Active_Tagged_Subtype_Two is
 
@@ -960,7 +960,7 @@ domain TAGS is
   end object;
   pragma id (29);
   pragma key_letter ("ATSUBTHREE");
-  pragma multiplicity_array ("1");
+  pragma multiple ("1");
 
   object Multiplicity_Single_Glitch_Recovery_Object is
 
@@ -972,7 +972,7 @@ domain TAGS is
   end object;
   pragma id (30);
   pragma key_letter ("MSGR");
-  pragma multiplicity_array ("1");
+  pragma multiple ("1");
   pragma non_initialised ("");
 
   object A_Static_Object is
@@ -1005,7 +1005,7 @@ domain TAGS is
   pragma id (33);
   pragma key_letter ("AMSO");
   pragma static ("");
-  pragma multiplicity_array ("2");
+  pragma multiple ("2");
 
   object Just_Multiple is
 
@@ -1015,7 +1015,7 @@ domain TAGS is
   end object;
   pragma id (34);
   pragma key_letter ("JM");
-  pragma multiplicity_array ("2");
+  pragma multiple ("2");
 
 end domain;
 pragma number (20);
