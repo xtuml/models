@@ -12,8 +12,11 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'test_realtime_requirements',
 	'',
-	'// TA2 set_epoch
+	'passed = true;
+// TA2 set_epoch
+LOG::LogInfo( message:"TA2 set_epoch" );
 t0 = TIM::current_clock();
+LOG::LogTime( message: "is t0 TIM::current_clock value (default epoch).", t:t0 );
 d0 = TIM::current_date();
 d0_day = TIM::get_day( date:d0 );
 d0_hour = TIM::get_hour( date:d0 );
@@ -21,6 +24,7 @@ d0_minute = TIM::get_minute( date:d0 );
 d0_month = TIM::get_month( date:d0 );
 d0_second = TIM::get_second( date:d0 );
 d0_year = TIM::get_year( date:d0 );
+// Set epoch to 1930.  There are 2838240000000000 microseconds between 1930 and 2020.
 TIM::set_epoch( year:1930, month:1, day:1 );
 d1 = TIM::current_date();
 // TA2.a Ensure that setting the epoch backward does not change the return value of get_date.
@@ -31,6 +35,7 @@ if ( ( d0_day != TIM::get_day( date:d1 ) ) or
      ( d0_second != TIM::get_second( date:d1 ) ) or  
      ( d0_year != TIM::get_year( date:d1 ) )
    )
+  passed = false;
   LOG::LogFailure(message: "Set epoch backward failure." );
   LOG::LogInfo( message:"d0 year month day hour minute second" );
   LOG::LogInteger( message: d0_year);
@@ -47,7 +52,25 @@ if ( ( d0_day != TIM::get_day( date:d1 ) ) or
   LOG::LogInteger( message: TIM::get_minute( date:d1 ));
   LOG::LogInteger( message: TIM::get_second( date:d1 ));
 end if;
+t1930 = TIM::current_clock();
+s1930 = TIM::timestamp_to_string( timestamp:t1930 );
+LOG::LogTime( message: "is t1930 TIM::current_clock value (epoch 1930).", t:t1930 );
+LOG::LogInfo( message:s1930 + " is current microseconds since 1930 and should be larger than next..." );
+LOG::LogInfo( message:"2838240000000000" );
+if ( t1930 < 2838240000000000 )
+  passed = false;
+  LOG::LogFailure(message: "Bad timestamp (or < comparison) after setting epoch backward to 1930." );
+end if;
 TIM::set_epoch( day:1, month:1, year:2020 );
+t2020 = TIM::current_clock();
+s2020 = TIM::timestamp_to_string( timestamp:t2020 );
+LOG::LogTime( message: "is t2020 TIM::current_clock value (epoch 2020).", t:t2020 );
+LOG::LogInfo( message:s2020 + " is current microseconds since 2020 and should be smaller than next..." );
+LOG::LogInfo( message:"315360000000000" );
+if ( t2020 > 315360000000000 )
+  passed = false;
+  LOG::LogFailure(message: "Bad timestamp (or > comparison) after setting epoch forward to 2020." );
+end if;
 d2 = TIM::current_date();
 d2_day = TIM::get_day( date:d2 );
 d2_hour = TIM::get_hour( date:d2 );
@@ -63,6 +86,7 @@ if ( ( d0_day != d2_day ) or
      ( d0_second != d2_second ) or  
      ( d0_year != d2_year )
    )
+  passed = false;
   LOG::LogFailure(message: "Set epoch forward failure." );
   LOG::LogInfo( message:"d0 year month day hour minute second" );
   LOG::LogInteger( message: d0_year);
@@ -81,59 +105,74 @@ if ( ( d0_day != d2_day ) or
 end if;
 
 // TA3 getting current time(stamp) time
+LOG::LogInfo( message:"TA3 getting current time(stamp) time" );
 t1 = TIM::current_clock();
-LOG::LogTime( message: "is t1 TIM::current_clock value (epoch 2020).", t:t1 );
+LOG::LogTime( message: "is t1 TIM::current_clock value (epoch 2020) read after t2020.", t:t1 );
+if ( t1 < t2020 )
+  passed = false;
+  LOG::LogFailure(message: "Bad timestamp (or > comparison) between t2020 and t1." );
+end if;
+
+t2 = TIM::current_seconds();
+LOG::LogTime( message: "is t2 TIM::current_seconds value (expect t2 to match t1 in first digits).", t:t2 );
+microseconds_per_second = 1000000;
+if ( ( t2 - ( t1 / microseconds_per_second ) ) > 1 )
+  passed = false;
+  LOG::LogFailure( message:"TIM::current_seconds failure." );
+  LOG::LogTime( message:" was time given in microseconds.", t:t1 );
+  LOG::LogTime( message:" is time given in seconds.", t:t2 );
+end if;
+
+// TA4 format
+LOG::LogInfo( message:"TA4 format" );
+formatted_time_string = TIM::timestamp_format( timestamp:t1, format:"yyyy/MM/dd HH:mm:ss" );
+LOG::LogInfo( message:"t1 timestamp_format output, formatted as yyyy/MM/dd HH:mm:ss: " + formatted_time_string );
+formatted_time_string = TIM::timestamp_format( timestamp:t1, format:"MM-dd-yyyy" );
+LOG::LogInfo( message:"t1 timestamp_format output, formatted as MM-dd-yyyy: " + formatted_time_string );
+
+timestamp0_string = TIM::timestamp_to_string( timestamp:t0 );
+LOG::LogInfo( message:"t0 timestamp_to_string output: " + timestamp0_string );
+timestamp1_string = TIM::timestamp_to_string( timestamp:t1 );
+LOG::LogInfo( message:"t1 timestamp_to_string output: " + timestamp1_string );
+
+// TA5 comparison of timestamps
+LOG::LogInfo( message:"TA5 comparison of timestamps" );
+if (t1 < t0) or (t1 > t0) or (t1 <= t0) or (t1 >= t0) or (t1 != t0) or (t1 == t0)
+else
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison failure" );
+end if;
 
 // TA6 subtraction
+LOG::LogInfo( message:"TA6 subtraction" );
 timestamp_minus_timestamp = t0 - t1;
 if ( timestamp_minus_timestamp != 0 )
   if ( timestamp_minus_timestamp >= t0 )
+    passed = false;
     LOG::LogFailure( message:"TIM timestamp subtract timestamp failure!" );
     LOG::LogTime( message:" is time given before epoch set (default 1970).", t:t0 );
     LOG::LogTime( message:" is time given after epoch set (forward to 2020).", t:t1 );
   end if;
 end if;
 
-// TA3 continued
-t2 = TIM::current_seconds();
-LOG::LogTime( message: "is t2 TIM::current_seconds value (expect t2 to match t1 in first digits).", t:t2 );
-microseconds_per_second = 1000000;
-if ( ( t2 - ( t1 / microseconds_per_second ) ) > 1 )
-  LOG::LogFailure( message:"TIM::current_seconds failure." );
-  LOG::LogTime( message:" was time given in microseconds.", t:t1 );
-  LOG::LogTime( message:" is time given in seconds.", t:t2 );
-end if;
-
-timestamp_string = TIM::timestamp_to_string( timestamp:t1 );
-LOG::LogInfo( message:"t1 timestamp_to_string output: " + timestamp_string );
-timestamp0_string = TIM::timestamp_to_string( timestamp:t0 );
-LOG::LogInfo( message:"t0 timestamp_to_string output: " + timestamp_string );
-
-// TA4 format
-formatted_time_string = TIM::timestamp_format( ts:t1, format:"yyyy/MM/dd HH:mm:ss" );
-LOG::LogInfo( message:"t1 timestamp_format output, formatted as yyyy/MM/dd HH:mm:ss: " + formatted_time_string );
-formatted_time_string = TIM::timestamp_format( ts:t1, format:"MM-dd-yyyy" );
-LOG::LogInfo( message:"t1 timestamp_format output, formatted as MM-dd-yyyy: " + formatted_time_string );
-
-// TA5 comparison of timestamps
-if (t1 < t0) or (t1 > t0) or (t1 <= t0) or (t1 >= t0) or (t1 != t0) or (t1 == t0)
-else
-  LOG::LogFailure( message:"TIM timestamp comparison failure!" );
-end if;
-
 // TA7 addition
+LOG::LogInfo( message:"TA7 addition" );
 timestamp_plus_duration = t1 + 1;
 if ( timestamp_plus_duration == t1 )
-  LOG::LogFailure( message:"TIM timestamp add duration failure!" );
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp add duration failure" );
 end if;
 
-// TA8 subtraction
+// TA8 subtracting duration
+LOG::LogInfo( message:"TA8 subtracting duration" );
 timestamp_minus_duration = t1 - 1;
 if ( timestamp_minus_duration == t1 )
-  LOG::LogFailure( message:"TIM timestamp subtract duration failure!" );
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp subtract duration failure" );
 end if;
 
 // TA9 time-of-day
+LOG::LogInfo( message:"TA9 time-of-day" );
 time_since_midnight = TIM::time_of_day( timeval:t1 );
 LOG::LogTime( message:"is microsecond time since midnight of t1.", t: time_since_midnight );
 LOG::LogTime( message:"hours.", t: ((time_since_midnight / 1000) / 1000) / 3600 );
@@ -143,20 +182,25 @@ LOG::LogTime( message:"subseconds.", t: time_since_midnight % 1000000 );
 
 // TA10 this model
 // TA11 setting and advancing time
-t3 = TIM::set_time( year:d2_year, month:d2_month, day:d2_day, hour:d2_hour, minute:0, second:0, microsecond:234567);
-d3 = TIM::current_date();
+LOG::LogInfo( message:"TA11 setting time" );
+t2020feb2 = TIM::set_time( year:2020, month:2, day:2, hour:2, minute:2, second:2, microsecond:2);
+d2020feb2 = TIM::current_date();
 if (
-     ( TIM::get_day( date:d3 ) != d2_day ) or
-     ( TIM::get_month( date:d3 ) != d2_month ) or  
-     ( TIM::get_year( date:d3 ) != d2_year )
+     ( TIM::get_day( date:d2020feb2 ) != 2 ) or
+     ( TIM::get_month( date:d2020feb2 ) != 2 ) or  
+     ( TIM::get_year( date:d2020feb2 ) != 2020 )
    )
-  LOG::LogFailure( message: "TIM::set_time failure." );
-  LOG::LogTime( message: "is returned time value.", t: t3 );
+  passed = false;
+  LOG::LogFailure( message: "TIM::set_time failure reading back the current_date." );
+  LOG::LogTime( message: "is returned time value.", t: t2020feb2 );
 end if; 
+tset = TIM::current_clock();
+LOG::LogTime( message: "is current_clock after being set to.", t: tset );
 
 tplus20 = TIM::set_time( year:d2_year + 20, month:d2_month, day:d2_day, hour:d2_hour, minute:0, second:0, microsecond:234567);
 dplus20 = TIM::current_date();
 if ( ( TIM::get_year( date:dplus20 ) != ( d2_year + 20 ) ) )
+  passed = false;
   LOG::LogFailure( message: "TIM::set_time forward failure." );
   LOG::LogTime( message: "is returned time value.", t: tplus20 );
 end if; 
@@ -164,11 +208,12 @@ end if;
 tminus10 = TIM::set_time( year:d2_year - 10, month:d2_month, day:d2_day, hour:d2_hour, minute:0, second:0, microsecond:234567);
 dminus10 = TIM::current_date();
 if ( TIM::get_year( date:dminus10 ) != ( d2_year - 10 ) )
+  passed = false;
   LOG::LogFailure( message: "TIM::set_time backward failure." );
   LOG::LogTime( message: "is returned time value.", t: tminus10 );
 end if; 
 
-//
+LOG::LogInfo( message:"TA11 advancing time" );
 today = TIM::current_date();
 today_minutes = TIM::get_minute( date:today );
 adjusted_today_minutes = today_minutes - 30; // <-- -30
@@ -183,10 +228,17 @@ t4 = TIM::advance_time( microseconds: 1800000000 );
 advanced = TIM::current_date();
 advanced_minutes = TIM::get_minute( date:advanced );
 if ( advanced_minutes != 30 ) // Hardcoded, because of failure to calculate adjusted_today_minutes.
+  passed = false;
   LOG::LogFailure( message: "TIM::advance_time failure." );
   LOG::LogTime( message: "is returned time value.", t: t4 );
 end if;
 
+if ( passed )
+  LOG::LogInfo( message:"test passed" );
+else
+  LOG::LogInfo( message:"test failed" );
+end if;
+	
 LOG::LogInfo( message:"End of real time Panda requirement tests." );
 LOG::LogInfo( message:"=========================================" );
 
