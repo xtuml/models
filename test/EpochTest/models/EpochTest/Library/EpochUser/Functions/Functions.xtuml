@@ -258,27 +258,8 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'test_simulated_time_requirements',
 	'',
-	'// TA11 - These tests are for simulated time usage
-t1 = TIM::set_time( year:2020, month:11, day:5, hour:8, minute:0, second:0, microsecond:234567);
-d1 = TIM::current_date();
-if ( ( 2020 != TIM::get_year( date: d1 ) ) or ( 11 != TIM::get_month( date: d1 ) ) or 
-     ( 5 != TIM::get_day( date: d1 ) ) or ( 8 != TIM::get_hour( date: d1 ) ) )
-  LOG::LogFailure( message:"TIM::set_time failure!" );
-  LOG::LogInfo( message:"d1 year month day hour minute second" );
-  LOG::LogInteger( message: TIM::get_year( date:d1 ));
-  LOG::LogInteger( message: TIM::get_month( date:d1 ));
-  LOG::LogInteger( message: TIM::get_day( date:d1 ));
-  LOG::LogInteger( message: TIM::get_hour( date:d1 ));
-  LOG::LogInteger( message: TIM::get_minute( date:d1 ));
-  LOG::LogInteger( message: TIM::get_second( date:d1 ));
-end if;
-advance = 60000000;
-t2 = TIM::advance_time( microseconds:advance );
-d2 = TIM::current_date();
-if ( ( ( t2 - t1 ) < advance ) or (1 != TIM::get_minute( date:d2 ) ) )
-  LOG::LogFailure( message:"advance_time failure!" );
-  LOG::LogTime( message: "is the minute value.", t: TIM::get_minute( date:d2 ) );
-end if;
+	'// Call the realtime test.  Simtime should get the same results with roughly the same values.
+::test_realtime_requirements();
 
 LOG::LogInfo( message:"End of simulated time Panda requirement tests." );
 LOG::LogInfo( message:"==============================================" );',
