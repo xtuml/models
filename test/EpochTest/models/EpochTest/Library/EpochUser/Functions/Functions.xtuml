@@ -10,13 +10,32 @@ INSERT INTO EP_PKG
 INSERT INTO S_SYNC
 	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
 	"00000000-0000-0000-0000-000000000000",
-	'test_realtime_requirements',
+	'test_epoch_time',
 	'',
 	'passed = true;
-// TA2 set_epoch
-LOG::LogInfo( message:"TA2 set_epoch" );
+// benchmark measurements before testing requirements
+d = TIM::current_date();
+LOG::LogInfo( message:"The date today is (yyyy, MM, dd, hh, mm, ss) UTC:" );
+LOG::LogInteger( message: TIM::get_year( date:d ) );
+LOG::LogInteger( message: TIM::get_month( date:d ) );
+LOG::LogInteger( message: TIM::get_day( date:d ) );
+LOG::LogInteger( message: TIM::get_hour( date:d ) );
+LOG::LogInteger( message: TIM::get_minute( date:d ) );
+LOG::LogInteger( message: TIM::get_second( date:d ) );
+
 t0 = TIM::current_clock();
 LOG::LogTime( message: "is t0 TIM::current_clock value (default epoch).", t:t0 );
+s0 = TIM::timestamp_to_string( timestamp:t0 );
+LOG::LogInfo( message: s0 + " is long integer string of current timestamp." );
+LOG::LogInfo( message: "1576800000000000 is the 2020 microseconds since default 1970 epoch." );
+
+s = TIM::timestamp_format( timestamp:t0, format:"yyyy/MM/dd HH:mm:ss" );
+LOG::LogInfo( message:"current time timestamp_format output, formatted as yyyy/MM/dd HH:mm:ss: " + s );
+
+LOG::LogInfo( message:"" );
+
+// TA2 set_epoch
+LOG::LogInfo( message:"TA2 set_epoch" );
 d0 = TIM::current_date();
 d0_day = TIM::get_day( date:d0 );
 d0_hour = TIM::get_hour( date:d0 );
@@ -32,7 +51,6 @@ if ( ( d0_day != TIM::get_day( date:d1 ) ) or
      ( d0_hour != TIM::get_hour( date:d1 ) ) or  
      ( d0_minute != TIM::get_minute( date:d1 ) ) or  
      ( d0_month != TIM::get_month( date:d1 ) ) or  
-     ( d0_second != TIM::get_second( date:d1 ) ) or  
      ( d0_year != TIM::get_year( date:d1 ) )
    )
   passed = false;
@@ -83,7 +101,6 @@ if ( ( d0_day != d2_day ) or
      ( d0_hour != d2_hour ) or  
      ( d0_minute != d2_minute ) or  
      ( d0_month != d2_month ) or  
-     ( d0_second != d2_second ) or  
      ( d0_year != d2_year )
    )
   passed = false;
@@ -126,9 +143,9 @@ end if;
 // TA4 format
 LOG::LogInfo( message:"TA4 format" );
 formatted_time_string = TIM::timestamp_format( timestamp:t1, format:"yyyy/MM/dd HH:mm:ss" );
-LOG::LogInfo( message:"t1 timestamp_format output, formatted as yyyy/MM/dd HH:mm:ss: " + formatted_time_string );
+LOG::LogInfo( message:"t1 (current epoch 2020) timestamp_format output, formatted as yyyy/MM/dd HH:mm:ss: " + formatted_time_string );
 formatted_time_string = TIM::timestamp_format( timestamp:t1, format:"MM-dd-yyyy" );
-LOG::LogInfo( message:"t1 timestamp_format output, formatted as MM-dd-yyyy: " + formatted_time_string );
+LOG::LogInfo( message:"t1 (current epoch 2020) timestamp_format output, formatted as MM-dd-yyyy: " + formatted_time_string );
 
 timestamp0_string = TIM::timestamp_to_string( timestamp:t0 );
 LOG::LogInfo( message:"t0 timestamp_to_string output: " + timestamp0_string );
@@ -193,17 +210,29 @@ if (
   passed = false;
   LOG::LogFailure( message: "TIM::set_time failure reading back the current_date." );
   LOG::LogTime( message: "is returned time value.", t: t2020feb2 );
+  s = TIM::timestamp_format( timestamp:t2020feb2, format:"yyyy/MM/dd HH:mm:ss" );
+  LOG::LogInfo( message: s + " is returned string timestamp." );
 end if; 
 tset = TIM::current_clock();
 LOG::LogTime( message: "is current_clock after being set to.", t: tset );
+LOG::LogInfo( message: "2858522000002 is expected value." );
 
-tplus20 = TIM::set_time( year:d2_year + 20, month:d2_month, day:d2_day, hour:d2_hour, minute:0, second:0, microsecond:234567);
-dplus20 = TIM::current_date();
-if ( ( TIM::get_year( date:dplus20 ) != ( d2_year + 20 ) ) )
+tplus10 = TIM::set_time( year:2030, month:10, day:10, hour:10, minute:10, second:10, microsecond:10);
+dplus10 = TIM::current_date();
+if (
+     ( TIM::get_day( date:dplus10 ) != 10 ) or
+     ( TIM::get_month( date:dplus10 ) != 10 ) or  
+     ( TIM::get_year( date:dplus10 ) != 2030 )
+   )
   passed = false;
   LOG::LogFailure( message: "TIM::set_time forward failure." );
-  LOG::LogTime( message: "is returned time value.", t: tplus20 );
+  LOG::LogTime( message: "is returned time value.", t: tplus10 );
+  s = TIM::timestamp_format( timestamp:tplus10, format:"yyyy/MM/dd HH:mm:ss" );
+  LOG::LogInfo( message: s + " is returned string timestamp." );
 end if; 
+tset = TIM::current_clock();
+LOG::LogTime( message: "is current_clock after being set to.", t: tset );
+LOG::LogInfo( message: "316260610000010 is expected value." );
 
 tminus10 = TIM::set_time( year:d2_year - 10, month:d2_month, day:d2_day, hour:d2_hour, minute:0, second:0, microsecond:234567);
 dminus10 = TIM::current_date();
@@ -254,21 +283,60 @@ INSERT INTO PE_PE
 	"00000000-0000-0000-0000-000000000000",
 	1);
 INSERT INTO S_SYNC
-	VALUES ("866e0c01-eced-4011-a019-0e4108a806dc",
+	VALUES ("be6d206b-9281-49b4-8c73-29a45ea4f7e0",
 	"00000000-0000-0000-0000-000000000000",
-	'test_simulated_time_requirements',
+	'advance_time_5_seconds',
 	'',
-	'// Call the realtime test.  Simtime should get the same results with roughly the same values.
-::test_realtime_requirements();
-
-LOG::LogInfo( message:"End of simulated time Panda requirement tests." );
-LOG::LogInfo( message:"==============================================" );',
+	'ts = TIM::advance_time( microseconds:5000000 );
+LOG::LogInfo( message:"Advanced time by 5 seconds to:  " + TIM::timestamp_format( timestamp:ts, format:"hh:mm:ss" ) );',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
 	'',
 	0);
 INSERT INTO PE_PE
-	VALUES ("866e0c01-eced-4011-a019-0e4108a806dc",
+	VALUES ("be6d206b-9281-49b4-8c73-29a45ea4f7e0",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("bc778e3c-e730-46ba-9e15-de72c0dddf88",
+	"00000000-0000-0000-0000-000000000000",
+	'launch_rocket',
+	'',
+	'create object instance rocket of rocket;
+rocket.name = "FalconHeavyDragon";
+t = TIM::current_clock();
+LOG::LogTime( t:t, message:" is time of launch." );
+s = TIM::timestamp_format( timestamp:t, format:"yyyy/MM/dd hh:mm:ss" );
+LOG::LogInfo( message:"Launch " + rocket.name + " at " + s );
+generate rocket1:go() to rocket;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("bc778e3c-e730-46ba-9e15-de72c0dddf88",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ea04ea18-9323-42e6-8b2d-cdaac4243aa1",
+	"00000000-0000-0000-0000-000000000000",
+	'testEpochUser',
+	'',
+	'create object instance baby of MME;
+LOG::LogInfo( message:"Birthday before epoch set: " + baby.myString );
+TIM::set_epoch( day:21, month:6, year:2111 );
+create object instance epochBaby of MME;
+LOG::LogInfo( message:"Birthday after epoch set: " + epochBaby.myString );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("ea04ea18-9323-42e6-8b2d-cdaac4243aa1",
 	1,
 	"335cce5c-4a87-414a-9cf5-29925e9dd979",
 	"00000000-0000-0000-0000-000000000000",
