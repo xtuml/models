@@ -153,11 +153,56 @@ timestamp1_string = TIM::timestamp_to_string( timestamp:t1 );
 LOG::LogInfo( message:"t1 timestamp_to_string output: " + timestamp1_string );
 
 // TA5 comparison of timestamps
+// t0 is a large long integer.  t1 is smaller.
 LOG::LogInfo( message:"TA5 comparison of timestamps" );
 if (t1 < t0) or (t1 > t0) or (t1 <= t0) or (t1 >= t0) or (t1 != t0) or (t1 == t0)
 else
   passed = false;
   LOG::LogFailure( message:"TIM timestamp comparison failure" );
+end if;
+if ( t0 < t1 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 < t1) failure" );
+end if;
+if ( t1 > t0 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison (t1 > t0) failure" );
+end if;
+if ( t0 <= t1 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 <= t1) failure" );
+end if;
+if ( t1 >= t0 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison (t1 >= t0) failure" );
+end if;
+if ( t0 == t1 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 == t1) failure" );
+end if;
+if ( t0 != t0 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 != t0) failure" );
+end if;
+if ( t0 < 1576800000000000 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 < 1576800000000000) failure" );
+end if;
+if ( 1576800000000000 > t0 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison (1576800000000000 > t0) failure" );
+end if;
+if ( t0 <= 1576800000000000 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 <= 1576800000000000) failure" );
+end if;
+if ( 1576800000000000 >= t0 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison (1576800000000000 >= t0) failure" );
+end if;
+if ( t0 == 1576800000000000 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 == 1576800000000000) failure" );
 end if;
 
 // TA6 subtraction
