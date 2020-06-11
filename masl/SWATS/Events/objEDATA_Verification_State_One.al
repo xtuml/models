@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Event_Data.Verification_State_One (A           : in  integer,
                                                  B           : in  integer,
                                                  C           : in  integer,

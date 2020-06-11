@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TAGS::Check_On_Active_Object.Check_State (Test_Number               : in  integer,
                                                 Active_IH                 : in  instance of An_Active_Object,
                                                 Testing_For               : in  string,

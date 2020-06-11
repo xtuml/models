@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This domain deals with instance creation and deletion. It
 //! check both synchronous and asynchronous creation and
 //! deletion.

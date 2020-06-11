@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TAGS::Active_Tagged_Many_Objects.State_One (ATMO_Test_No : in  integer) is
 [] = RPT1:Start_Test[ATMO_Test_No, "Null Requid", "Tagging", "Active Many Tagged Object", "generate to Active Many"]
 

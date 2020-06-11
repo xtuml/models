@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Bodges? We don need no stinkin bodges!
 domain TAGS is
   object An_Active_Object;
@@ -39,7 +35,7 @@ domain TAGS is
   object Just_Multiple;
 
   //! a tagged integer with range 1 to 100
-  private type A_Tagged_Integer_Type is integer;
+  private type A_Tagged_Integer_Type is integer; pragma type_range(1,100);
 
   private type Environment_Type is enum (WACA,
                                          ISIM);

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::CCA_A.Idle (Test : in  integer) is
 if this.CARef = 1 then
 

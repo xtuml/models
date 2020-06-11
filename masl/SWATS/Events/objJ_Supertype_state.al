@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This state receives an external event that is passed onto
 //! its related
 //! subtype object.

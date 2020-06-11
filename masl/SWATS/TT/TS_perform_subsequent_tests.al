@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TT::Test_Scheduler.perform_subsequent_tests (test_instance : in  instance of Test) is
 the_current_test = test_instance
 the_next_test = the_current_test -> R4."is_followed_by".Test

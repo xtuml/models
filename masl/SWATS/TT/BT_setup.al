@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TT::Basic_Timer.setup () is
 the_test_scheduler = find-one Test_Scheduler
 test_number = the_test_scheduler.current_test_number + 1

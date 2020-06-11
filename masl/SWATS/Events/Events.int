@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Tests the various forms of event transmission, in particular
 //! polymorphic events and event data.
 domain Events is

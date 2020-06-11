@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Test_Effects.Update_Result (Test_No     : in  integer,
                                           Effect_Type : in  string) is
 if Effect_Type = "Ignored" then

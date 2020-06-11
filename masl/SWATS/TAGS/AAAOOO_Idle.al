@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TAGS::An_Active_Array_Of_One_Object.Idle (Final_Value : in  integer,
                                                 Test_Number : in  integer,
                                                 Purpose     : in  string,

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! 
 //! Proves that an event received by the supertype is
 //! polymorphically

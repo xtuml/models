@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Tests Relationship manipulations.
 domain Relationships is
   object Object_A;

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::CCA_Super.Check (Test : in  integer) is
 if this.CSRef = 1 then
 

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Tests finds and set manipulations.
 domain Find_and_Sets is
   object Report_Data;

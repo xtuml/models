@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 domain UDT is
   object Object_With_Integers;
   object Object_Into_Bridge;
@@ -40,32 +36,32 @@ domain UDT is
                                  Hot,
                                  Boiling);
 
-  public type Subset_Zero_Of_Integer is integer;
+  public type Subset_Zero_Of_Integer is integer; pragma type_range(-10,10);
 
   //! Insert system defined integer'last
-  public type One_To_Maximum_Integer is integer;
+  public type One_To_Maximum_Integer is integer; pragma type_range(1,32767);
 
   public type Timer_ID is integer;
 
-  private type Subset_1_Of_Integer is integer;
+  private type Subset_1_Of_Integer is integer; pragma type_range(1,10);
 
-  private type Subset_Minus_1_Of_Integer is integer;
+  private type Subset_Minus_1_Of_Integer is integer; pragma type_range(-10,-1);
 
-  private type Minimum_To_Minus_One_Integer is integer;
+  private type Minimum_To_Minus_One_Integer is integer; pragma type_range(-32768,-1);
 
-  private type Minimum_To_Maximum_Integer is integer;
+  private type Minimum_To_Maximum_Integer is integer; pragma type_range(-32768,32767);
 
-  private type Subset_1_Of_Real is real;
+  private type Subset_1_Of_Real is real; pragma type_range(1.0,10.0);
 
-  private type Subset_Minus_1_Of_Real is real;
+  private type Subset_Minus_1_Of_Real is real; pragma type_range(-10.0,-1.0);
 
-  private type Subset_Zero_Of_Real is real;
+  private type Subset_Zero_Of_Real is real; pragma type_range(-10.0,10.0);
 
-  private type One_To_Maximum_Of_Real is real;
+  private type One_To_Maximum_Of_Real is real; pragma type_range(1.0,32767.0);
 
-  private type Minimum_To_Minus_One_Of_Real is real;
+  private type Minimum_To_Minus_One_Of_Real is real; pragma type_range(-32768.0,-1.0);
 
-  private type Mminimum_To_Maximum_Of_Real is real;
+  private type Mminimum_To_Maximum_Of_Real is real; pragma type_range(-32768.0,32767.0);
 
   private type Active_Object_Status_Type is enum (Enumeral,
                                                   Number,

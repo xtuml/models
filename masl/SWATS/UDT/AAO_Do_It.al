@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state UDT::An_Active_Object.Do_It (Enum_Parameter : in  Simple_Enumeration_Type) is
 This_Test = this.The_Test_Number
 

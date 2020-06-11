@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Check_Delete.Check (Test_No : in  integer,
                                   Deleted : in  boolean) is
 newCD = find-one Check_Delete where idCD = 1

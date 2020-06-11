@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state ASL_Mapping::BIG_Object.Idle_State () is
 # If we gete here, there is serious grief.
 

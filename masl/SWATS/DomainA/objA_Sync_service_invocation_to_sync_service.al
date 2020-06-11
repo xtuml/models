@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This state verifies a synchronous service in DomainA
 //! can invoke a synchronous service in DomainB and
 //! pass/receive parameters.

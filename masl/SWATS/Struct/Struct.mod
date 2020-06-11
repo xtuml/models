@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Mission statement? 
 //! You're having a laugh!
 domain Struct is
@@ -72,9 +68,9 @@ domain Struct is
     A_Real     : UDT_Real_Type;
   end structure;
 
-  private type UDT_Integer_Type is integer;
+  private type UDT_Integer_Type is integer; pragma type_range(0,100);
 
-  private type UDT_Real_Type is real;
+  private type UDT_Real_Type is real; pragma type_range(0.0,100.0);
 
   //! This structure shall contain a structure, a couple of user 
   //! defined types and a simple integer base type.

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Priority_A.Idle (Test_No : in  integer) is
 [] = Events5::Dump_Text["Finish Event In PriA Triggered"]
 

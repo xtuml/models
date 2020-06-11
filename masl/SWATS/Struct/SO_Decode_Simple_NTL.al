@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Struct::Structured_Object.Decode_Simple_NTL (Test            : in  integer,
                                                    A_NTL_Structure : in  sequence of Name_and_Type_Linked_Simple_Structure_Type) is
 [] = RPT1:Start_Test[Test, "Null Requid", "Structures", "Structured_Object", "generate simple NTL decode"]

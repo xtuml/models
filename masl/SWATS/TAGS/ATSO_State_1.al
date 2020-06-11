@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TAGS::Active_Tagged_Single_Object.State_1 (The_Test_No : in  integer) is
 [] = RPT1:Start_Test[The_Test_No, "Null Requid", "Tagging", "Active Tagged Single object", "Generate ATSO"]
 

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 domain CT_Tags is
   object CCA_A;
   object CCA_B;

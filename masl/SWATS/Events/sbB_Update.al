@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Idle state.
 state Events::SubB.Update (Test : in  integer) is
 # find the supertype
