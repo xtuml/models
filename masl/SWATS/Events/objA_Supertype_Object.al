@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! State machine only in supertype object. 
 //! Update result if called correctly.
 state Events::Object_A.Supertype_Object (Test        : in  integer,

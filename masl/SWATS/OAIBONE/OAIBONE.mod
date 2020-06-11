@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 domain OAIBONE is
   object Source_Bridge_Data;
   object Very_Simple_Data_Object;
@@ -39,7 +35,7 @@ domain OAIBONE is
     Real_Type : real;
   end structure;
 
-  private type Pos is integer;
+  private type Pos is integer; pragma type_range(1,10);
 
   public service Receive_A_Very_Simple_Structure (Received_Very_Simple_Structure : in  sequence of Very_Simple_Structure_Type,
                                                   Received_Control_Integer       : in  integer,

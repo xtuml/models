@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state ASL_Mapping::BIG_Object.Next_Stage (Big_IH           : in  instance of BIG_Object,
                                           Next_Test_Number : in  integer) is
 

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This state verifies the following:
 //! 
 //! [1] Creation events are possible. - UNSUPPORTED

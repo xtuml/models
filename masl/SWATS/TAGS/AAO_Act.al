@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TAGS::An_Active_Object.Act (Value_To_Add : in  integer) is
 # Update the results attribute to show that we got here at least.
 

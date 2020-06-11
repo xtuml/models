@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::CCA_B.Unlink_From_Global (Test : in  integer) is
 instCS = find-one CCA_Super where idCS = 1
 instGSI = instCS -> R7.Global_SubI

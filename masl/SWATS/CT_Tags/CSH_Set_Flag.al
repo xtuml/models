@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::CCA_SubH.Set_Flag (Test : in  integer) is
 instCS = this -> R7.CCA_Super
 

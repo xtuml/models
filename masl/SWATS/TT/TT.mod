@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This Domain is for testing the timer features of the
 //! software architecture.
 domain TT is

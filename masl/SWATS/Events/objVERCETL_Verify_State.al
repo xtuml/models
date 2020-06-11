@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This state verifies that the tests performed within the
 //! objects
 //! 'Creation_Object' and 'Terminal_Object' provide the correct

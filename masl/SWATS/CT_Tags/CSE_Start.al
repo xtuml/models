@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::CCA_SubE.Start (Test : in  integer) is
 temp = this.CSERef
 temp = temp + 1

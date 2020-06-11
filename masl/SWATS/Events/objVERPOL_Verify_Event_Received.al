@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This state verifies that the event was received or not
 //! received in the 
 //! subtype or the supertype object depending upon the test

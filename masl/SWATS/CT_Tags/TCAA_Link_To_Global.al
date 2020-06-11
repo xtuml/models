@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::TCA_A.Link_To_Global (Test : in  integer) is
 instGSF = find-one Global_SubF where idGSF = 1
 instTS  = find-one TCA_Super where idTS = 1

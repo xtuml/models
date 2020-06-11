@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This state shall show that a tagged active instance can 
 //! arrive at this state, and this should therefore prevent 
 //! another instance of this object being created until it 

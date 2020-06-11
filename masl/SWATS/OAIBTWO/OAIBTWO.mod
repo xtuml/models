@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 domain OAIBTWO is
   object I_Into_The_Great_Wide_Open;
   object Report_Data;

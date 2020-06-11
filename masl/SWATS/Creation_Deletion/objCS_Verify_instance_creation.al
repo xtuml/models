@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This state verifies that instance creation within
 //! a creation state is successful.
 state Creation_Deletion::Creation_State.Verify_instance_creation (Test : in  integer) is

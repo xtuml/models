@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Check_Parameters.StartA (Start_Val : in  integer) is
 if Start_Val < 10 then
    temp = Start_Val

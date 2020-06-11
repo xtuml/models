@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TAGS::Active_Tagged_Single_Assoc.Blast_Off (ATS_ASSOC_Test_No : in  integer) is
 [] = RPT1:Start_Test[ATS_ASSOC_Test_No, "1241-0000-01-0128", "Tagging", "Active Tagged Many", "generate to ATS_ASSOC"]
 

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TT::Test_Scheduler.setup () is
 [] = TT1::create_report_data[]
 

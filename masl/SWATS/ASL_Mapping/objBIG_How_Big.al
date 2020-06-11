@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state ASL_Mapping::BIG_Object.How_Big (Big_IH                 : in  instance of BIG_Object,
                                        Current_Test_Number    : in  integer,
                                        Expected_Result_Number : in  integer) is

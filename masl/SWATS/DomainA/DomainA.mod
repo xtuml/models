@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! For use in multiple domain builds
 domain DomainA is
   object Object_A;

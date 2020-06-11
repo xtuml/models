@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::TCA_Super.Check_Result (Test : in  integer) is
 if this.TSRef = 1 then
 

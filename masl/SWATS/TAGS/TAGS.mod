@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Bodges? We don need no stinkin bodges!
 domain TAGS is
   object An_Active_Object;
@@ -39,7 +35,7 @@ domain TAGS is
   object Just_Multiple;
 
   //! a tagged integer with range 1 to 100
-  private type A_Tagged_Integer_Type is integer;
+  private type A_Tagged_Integer_Type is integer; pragma type_range(1,100);
 
   private type Environment_Type is enum (WACA,
                                          ISIM);
@@ -337,7 +333,7 @@ domain TAGS is
   end object;
   pragma id (4);
   pragma key_letter ("APAOOO");
-  pragma array ("1");
+  pragma multiple ("1");
 
   object Report_Data is
 
@@ -502,7 +498,7 @@ domain TAGS is
   end object;
   pragma id (8);
   pragma key_letter ("AAAOOO");
-  pragma array ("1");
+  pragma multiple ("1");
 
   object An_Active_Array_Of_Three_Objects is
 
@@ -576,7 +572,7 @@ domain TAGS is
   end object;
   pragma id (9);
   pragma key_letter ("AAAOTO");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object A_Passive_Array_Of_Three_Objects is
 
@@ -586,7 +582,7 @@ domain TAGS is
   end object;
   pragma id (10);
   pragma key_letter ("APAOTO");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Single_Tagged_Object is
 
@@ -612,7 +608,7 @@ domain TAGS is
   end object;
   pragma id (12);
   pragma key_letter ("MTO");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Active_Tagged_Single_Object is
 
@@ -668,7 +664,7 @@ domain TAGS is
   end object;
   pragma id (14);
   pragma key_letter ("ATMO");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Tagged_Many_Left is
 
@@ -680,7 +676,7 @@ domain TAGS is
   end object;
   pragma id (15);
   pragma key_letter ("TM_LEFT");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Tagged_Many_Right is
 
@@ -692,7 +688,7 @@ domain TAGS is
   end object;
   pragma id (16);
   pragma key_letter ("TM_RIGHT");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Tagged_Single_Assoc is
 
@@ -708,7 +704,7 @@ domain TAGS is
   end object;
   pragma id (17);
   pragma key_letter ("TS_ASSOC");
-  pragma array ("9");
+  pragma multiple ("9");
 
   object Tagged_Many_Supertype is
 
@@ -720,7 +716,7 @@ domain TAGS is
   end object;
   pragma id (18);
   pragma key_letter ("TAG_SUPER");
-  pragma array ("1");
+  pragma multiple ("1");
 
   object Subtype_1 is
 
@@ -732,7 +728,7 @@ domain TAGS is
   end object;
   pragma id (19);
   pragma key_letter ("SUB_ONE");
-  pragma array ("2");
+  pragma multiple ("2");
 
   object Subtype_2 is
 
@@ -773,7 +769,7 @@ domain TAGS is
   end object;
   pragma id (22);
   pragma key_letter ("MGR");
-  pragma array ("3");
+  pragma multiple ("3");
   pragma non_initialised ("");
 
   object Active_Tagged_Many_Left is
@@ -801,7 +797,7 @@ domain TAGS is
   end object;
   pragma id (23);
   pragma key_letter ("ATML");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Active_Tagged_Many_Right is
 
@@ -828,7 +824,7 @@ domain TAGS is
   end object;
   pragma id (24);
   pragma key_letter ("ATMR");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Active_Tagged_Single_Assoc is
 
@@ -855,7 +851,7 @@ domain TAGS is
   end object;
   pragma id (25);
   pragma key_letter ("ATSASSOC");
-  pragma array ("9");
+  pragma multiple ("9");
 
   object Active_Tagged_Supertype is
 
@@ -908,7 +904,7 @@ domain TAGS is
   end object;
   pragma id (27);
   pragma key_letter ("ATSUBONE");
-  pragma array ("2");
+  pragma multiple ("2");
 
   object Active_Tagged_Subtype_Two is
 
@@ -960,7 +956,7 @@ domain TAGS is
   end object;
   pragma id (29);
   pragma key_letter ("ATSUBTHREE");
-  pragma array ("1");
+  pragma multiple ("1");
 
   object Multiplicity_Single_Glitch_Recovery_Object is
 
@@ -972,7 +968,7 @@ domain TAGS is
   end object;
   pragma id (30);
   pragma key_letter ("MSGR");
-  pragma array ("1");
+  pragma multiple ("1");
   pragma non_initialised ("");
 
   object A_Static_Object is
@@ -1005,7 +1001,7 @@ domain TAGS is
   pragma id (33);
   pragma key_letter ("AMSO");
   pragma static ("");
-  pragma array ("2");
+  pragma multiple ("2");
 
   object Just_Multiple is
 
@@ -1015,7 +1011,7 @@ domain TAGS is
   end object;
   pragma id (34);
   pragma key_letter ("JM");
-  pragma array ("2");
+  pragma multiple ("2");
 
 end domain;
 pragma number (20);

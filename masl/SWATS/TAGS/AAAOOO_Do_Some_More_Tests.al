@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TAGS::An_Active_Array_Of_One_Object.Do_Some_More_Tests () is
 # The array of 1 should be treated exactly the same way as an object tagged
 # SINGLETON.

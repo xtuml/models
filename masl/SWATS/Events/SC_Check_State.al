@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::State_Check.Check_State (Test_No : in  integer) is
 if this.Current_State = 'Check_State' then
    this.Whats_The_State = "Check_State"

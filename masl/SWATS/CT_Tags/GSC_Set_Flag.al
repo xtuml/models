@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::Global_SubC.Set_Flag (Test : in  integer) is
 instGS = find-one Global_Super where idGS = 1
 

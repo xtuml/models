@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! 
 //! # This state shall add the value specified to the ResultQ 
 //! # attribute. 
