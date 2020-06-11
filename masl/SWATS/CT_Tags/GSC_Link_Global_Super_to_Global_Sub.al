@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::Global_SubC.Link_Global_Super_to_Global_Sub (Test : in  integer) is
 instGS = find-one Global_Super where idGS = 1
 

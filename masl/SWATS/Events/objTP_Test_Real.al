@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Test_Persistence.Test_Real (Test_No  : in  integer,
                                           Real_Val : in  real) is
 if Real_Val = 99.9 then

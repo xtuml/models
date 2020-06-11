@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Test_Effects.Unsupported (Test_No     : in  integer,
                                         The_Reqid   : in  string,
                                         Effect_Type : in  string) is

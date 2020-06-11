@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Function_Calls::A_Tight_Object.Operations (Termination_Required : in  boolean) is
 [] = RPT1:Start_Test[this.Start_Value, "Null Requid", "Function_Calls", "A Tight Object", "Generate to active object"]
 

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 domain CP_Tags is
   object TCA_CP;
   object CCA_CP;

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::TCA_E.Link_SuperSub (Test : in  integer) is
 instTS  = find-one TCA_Super where idTS = 1
 instTSD = find-one TCA_SubD where idTSD = 1

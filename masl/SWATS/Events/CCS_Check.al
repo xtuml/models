@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Check_Current_States.Check (Test_No    : in  integer,
                                           Which_Test : in  string) is
 if Which_Test = "Ignore" then

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Object_X.Check_ASL_In_State (Test_No     : in  integer,
                                            Input_Param : in  integer) is
 

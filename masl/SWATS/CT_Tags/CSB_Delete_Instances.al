@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 terminal state CT_Tags::CCA_SubB.Delete_Instances (Test : in  integer) is
    {SetCSB} = find-all CCA_SubB
    for instCSB in {SetCSB} do

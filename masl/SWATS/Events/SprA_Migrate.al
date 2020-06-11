@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Migrate the sub types.
 state Events::SuperA.Migrate (Test : in  integer) is
 

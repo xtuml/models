@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Test_Persistence.Stage_A (Test_No : in  integer,
                                         A_Val   : in  integer) is
 temp = 1

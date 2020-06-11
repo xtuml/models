@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 terminal state TT::Deleting_Timer.deletion () is
 [] = Delete_Timer[this.timer_id_one]
 the_test = this -> R2.Test

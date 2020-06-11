@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This state verifies that it is possible for a synchronous
 //! service in DomainA to invoke an event into DomainB.
 state DomainB::Object_B.Sync_service_DomainA_to_an_event_DomainB (paramA : in  integer,

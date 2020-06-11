@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Object_X.Idle (Test_No      : in  integer,
                              The_Test     : in  string,
                              Returning_No : in  integer) is

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This domain deals with the basic ASL process modelling. It
 //! does not require the creation of instances, relationships or
 //! event mechanisms. It does require and use domain & object

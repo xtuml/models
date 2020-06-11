@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Struct::Structured_Object.Decode_Simple (Test               : in  integer,
                                                A_Simple_Structure : in  sequence of Simple_Structure_Type) is
 [] = RPT1:Start_Test[Test, "Null Requid", "Structures", "Structured_Object", "generate simple decode"]

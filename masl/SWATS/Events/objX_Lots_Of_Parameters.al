@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Object_X.Lots_Of_Parameters (Test_No : in  integer,
                                            Param_A : in  integer,
                                            Param_B : in  integer,

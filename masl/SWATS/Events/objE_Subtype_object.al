@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This state receives the external event that is also sent to
 //! the supertype
 //! object.

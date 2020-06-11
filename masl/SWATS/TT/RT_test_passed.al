@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TT::Resetting_Timer.test_passed () is
 the_test_scheduler = find-one Test_Scheduler
 [] = RPT2:Test_Passed["Reset_Timer", the_test_scheduler.current_test_number, 0]

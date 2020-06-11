@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Tests Domain, object and instance based functions.
 domain Function_Calls is
   object Object_A;

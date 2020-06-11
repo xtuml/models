@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TAGS::An_Active_Array_Of_Three_Objects.More_Tests () is
 
 my_test = find-one Test_Data
