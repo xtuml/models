@@ -75,7 +75,7 @@ s1930 = TIM::timestamp_to_string( timestamp:t1930 );
 LOG::LogTime( message: "is t1930 TIM::current_clock value (epoch 1930).", t:t1930 );
 LOG::LogInfo( message:s1930 + " is current microseconds since 1930 and should be larger than next..." );
 LOG::LogInfo( message:"2838240000000000" );
-if ( t1930 < 2838240000000000 )
+if ( t1930 < t0 )
   passed = false;
   LOG::LogFailure(message: "Bad timestamp (or < comparison) after setting epoch backward to 1930." );
 end if;
@@ -84,8 +84,7 @@ t2020 = TIM::current_clock();
 s2020 = TIM::timestamp_to_string( timestamp:t2020 );
 LOG::LogTime( message: "is t2020 TIM::current_clock value (epoch 2020).", t:t2020 );
 LOG::LogInfo( message:s2020 + " is current microseconds since 2020 and should be smaller than next..." );
-LOG::LogInfo( message:"315360000000000" );
-if ( t2020 > 315360000000000 )
+if ( t2020 > t0 )
   passed = false;
   LOG::LogFailure(message: "Bad timestamp (or > comparison) after setting epoch forward to 2020." );
 end if;
@@ -155,54 +154,62 @@ LOG::LogInfo( message:"t1 timestamp_to_string output: " + timestamp1_string );
 // TA5 comparison of timestamps
 // t0 is a large long integer.  t1 is smaller.
 LOG::LogInfo( message:"TA5 comparison of timestamps" );
+t = TIM::current_clock();
+tsame = t;
+tplus1 = t + 1;
+tminus1 = t - 1;
+if ( t < tplus1 )
+  LOG::LogInfo( message:"t < tplus1" );
+else
+  LOG::LogInfo( message:"fail t < tplus1" ); passed = false;
+end if;
+if ( t <= tplus1 )
+  LOG::LogInfo( message:"t <= tplus1" );
+else
+  LOG::LogInfo( message:"fail t <= tplus1" ); passed = false;
+end if;
+if ( t > tminus1 )
+  LOG::LogInfo( message:"t > tminus1" );
+else
+  LOG::LogInfo( message:"fail t > tminus1" ); passed = false;
+end if;
+if ( t >= tminus1 )
+  LOG::LogInfo( message:"t >= tminus1" );
+else
+  LOG::LogInfo( message:"fail t >= tminus1" ); passed = false;
+end if;
+if ( t == tsame )
+  LOG::LogInfo( message:"t == tsame" );
+else
+  LOG::LogInfo( message:"fail t == tsame" ); passed = false;
+end if;
+if ( t != tsame )
+  LOG::LogInfo( message:"fail t != tsame" ); passed = false;
+else
+  LOG::LogInfo( message:"t != tsame" );
+end if;
+
 if (t1 < t0) or (t1 > t0) or (t1 <= t0) or (t1 >= t0) or (t1 != t0) or (t1 == t0)
 else
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison failure" );
+  LOG::LogFailure( message:"TIM timestamp comparison failure" ); passed = false;
 end if;
 if ( t0 < t1 )
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison (t0 < t1) failure" );
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 < t1) failure" ); passed = false;
 end if;
 if ( t1 > t0 )
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison (t1 > t0) failure" );
+  LOG::LogFailure( message:"TIM timestamp comparison (t1 > t0) failure" ); passed = false;
 end if;
 if ( t0 <= t1 )
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison (t0 <= t1) failure" );
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 <= t1) failure" ); passed = false;
 end if;
 if ( t1 >= t0 )
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison (t1 >= t0) failure" );
+  LOG::LogFailure( message:"TIM timestamp comparison (t1 >= t0) failure" ); passed = false;
 end if;
 if ( t0 == t1 )
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison (t0 == t1) failure" );
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 == t1) failure" ); passed = false;
 end if;
 if ( t0 != t0 )
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison (t0 != t0) failure" );
-end if;
-if ( t0 < 1576800000000000 )
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison (t0 < 1576800000000000) failure" );
-end if;
-if ( 1576800000000000 > t0 )
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison (1576800000000000 > t0) failure" );
-end if;
-if ( t0 <= 1576800000000000 )
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison (t0 <= 1576800000000000) failure" );
-end if;
-if ( 1576800000000000 >= t0 )
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison (1576800000000000 >= t0) failure" );
-end if;
-if ( t0 == 1576800000000000 )
-  passed = false;
-  LOG::LogFailure( message:"TIM timestamp comparison (t0 == 1576800000000000) failure" );
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 != t0) failure" ); passed = false;
 end if;
 
 // TA6 subtraction
