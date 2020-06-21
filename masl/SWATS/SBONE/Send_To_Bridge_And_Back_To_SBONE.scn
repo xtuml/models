@@ -1,0 +1,269 @@
+//! Send_To_Bridge_And_Back_To_SBONE
+private service SBONE::Send_To_Bridge_And_Back_To_SBONE () is
+my_test = find-one Test_Data
+
+# Define a local data structure to be passed via a bridge
+# into a destination domain.
+
+{Source_Structure_One}   is Source_Structure_Type
+{Source_Structure_Two}   is Source_Structure_Type
+{Source_Structure_Three} is Source_Structure_Type
+
+{Returned_Structure_1}   is Source_Structure_Type
+{Returned_Structure_2}   is Source_Structure_Type
+{Returned_Structure_3}   is Source_Structure_Type
+
+Test = my_test.This_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"Null Requid", "Source Structure Bridge", "Scenario", "Send 1 structure to bridge"]
+
+   Object_One = create Source_Bridge_Data with Reference   = Test    &\
+                                               The_Integer = 1       &\
+                                               The_Real    = 2.0     &\
+                                               The_String  = "three" &\ 
+                                               The_Colour  = 'Red'   &\
+                                               The_Boolean = FALSE
+
+   append [Object_One.The_Integer, \
+           Object_One.The_Real,    \
+           Object_One.The_String,  \
+           Object_One.The_Boolean, \
+           Object_One.The_Colour]   to {Source_Structure_One}
+
+   Elements_In_Structure = 1
+
+   # Pass this lot into the bridge.
+   Result = FALSE
+
+   Local_Test = Test + 1
+
+   [Result, {Returned_Structure_1} ] = ITGWO1:Across_The_Great_Divide[Local_Test,             \
+                                                                      {Source_Structure_One}, \
+                                                                      Object_One.The_Integer, \
+                                                                      Object_One.The_Real,    \
+                                                                      Object_One.The_String,  \
+                                                                      Object_One.The_Colour,  \
+                                                                      Object_One.The_Boolean, \
+                                                                      Elements_In_Structure]
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Source 1 Structure sent", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Source 1 Structure sent", Test, -1]
+   endif
+
+   Test = Test + 2
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"Null Requid", "Source Structure Bridge", "Scenario", "Send 2 structures to bridge"]
+
+   Object_Two = create Source_Bridge_Data with Reference   = Test   &\
+                                               The_Integer = 4      &\
+                                               The_Real    = 5.0    &\
+                                               The_String  = "six"  &\
+                                               The_Colour  = 'Blue' &\
+                                               The_Boolean = TRUE
+
+   append [Object_One.The_Integer, \
+           Object_One.The_Real,    \
+           Object_One.The_String,  \
+           Object_One.The_Boolean, \
+           Object_One.The_Colour    ]   to {Source_Structure_Two}
+
+
+   append [Object_Two.The_Integer, \
+           Object_Two.The_Real,    \
+           Object_Two.The_String,  \
+           Object_Two.The_Boolean, \
+           Object_Two.The_Colour   ]   to {Source_Structure_Two}
+
+
+   Elements_In_Structure = 2
+
+   # Pass this lot into the bridge.
+   Local_Test = Test + 1
+   Result = FALSE
+
+   [Result, {Returned_Structure_2} ] = ITGWO1:Across_The_Great_Divide[Local_Test,             \
+                                                                      {Source_Structure_Two}, \
+                                                                      Object_Two.The_Integer, \
+                                                                      Object_Two.The_Real,    \
+                                                                      Object_Two.The_String,  \
+                                                                      Object_Two.The_Colour,  \
+                                                                      Object_Two.The_Boolean, \
+                                                                      Elements_In_Structure]
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Source 2 Structures sent", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Source 2 Structures sent", Test, -1]
+   endif
+
+   Test = Test + 2
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"Null Requid", "Source Structure Bridge", "Scenario", "Send 3 structures to bridge"]
+
+   Object_Three = create Source_Bridge_Data with Reference   = Test   &\
+                                                 The_Integer = 7      &\
+                                                 The_Real    = 8.0    &\
+                                                 The_String  = "nine" &\
+                                                 The_Colour  = 'Blue' &\
+                                                 The_Boolean = TRUE
+
+   append [Object_One.The_Integer, \
+           Object_One.The_Real,    \
+           Object_One.The_String,  \
+           Object_One.The_Boolean, \
+           Object_One.The_Colour  ]   to {Source_Structure_Three}
+
+   append [Object_Two.The_Integer, \
+           Object_Two.The_Real,    \
+           Object_Two.The_String,  \
+           Object_Two.The_Boolean, \
+           Object_Two.The_Colour   ]   to {Source_Structure_Three}
+
+   append [Object_Three.The_Integer, \
+           Object_Three.The_Real,    \
+           Object_Three.The_String,  \
+           Object_Three.The_Boolean, \
+           Object_Three.The_Colour  ]   to {Source_Structure_Three}
+
+   Elements_In_Structure = 3
+
+   # Pass this lot into the bridge.
+   Result = FALSE
+   Local_Test = Test + 1
+
+   [Result, {Returned_Structure_3} ] = ITGWO1:Across_The_Great_Divide[Local_Test,\
+                                                                      {Source_Structure_Three}, \
+                                                                      Object_Three.The_Integer, \
+                                                                      Object_Three.The_Real,    \
+                                                                      Object_Three.The_String,  \ 
+                                                                      Object_Three.The_Colour,  \
+                                                                      Object_Three.The_Boolean, \
+                                                                      Elements_In_Structure]
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["Source 3 Structures sent", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Source 3 Structures sent", Test, -1]
+   endif
+
+   Test = Test + 2
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"Null Requid", "Source Structure Bridge", "Scenario", "Struct IH to bridge"]
+
+   {Decomposed_Struct} is VSD_Struct
+
+   ValA = 0
+   ValB = 0
+   ValC = 0
+   ValD = 0
+
+   Simple_ObjA = create Very_Simple_Data_Object with Object_Reference_VSD  = 1 &\
+                                                     Object_Simple_Integer = 1 &\
+                                                     Object_Simple_Real    = 1.0
+
+   Simple_ObjB = create Very_Simple_Data_Object with Object_Reference_VSD  = 2 &\
+                                                     Object_Simple_Integer = 2 &\
+                                                     Object_Simple_Real    = 2.0
+
+   Simple_ObjC = create Very_Simple_Data_Object with Object_Reference_VSD  = 3 &\
+                                                     Object_Simple_Integer = 3 &\
+                                                     Object_Simple_Real    = 3.0
+
+   [{Decomposed_Struct}] = ITGWO4:The_IH_Struct_Across_Bridge[Simple_ObjA, Simple_ObjB, Simple_ObjC]
+
+   for [A_Ref, A_Int, A_Real] in {Decomposed_Struct} do
+
+      if A_Ref = 1 then
+  
+         if A_Int = 1 then
+
+            if A_Real = 1.0 then
+               ValA = 10
+            else
+               ValA = -10
+            endif
+
+         else
+            ValA = -11
+         endif
+
+      else
+
+         if A_Ref = 2 then
+     
+            if A_Int = 2 then
+
+               if A_Real = 2.0 then
+                  ValB = 20
+               else
+                  ValB = -20
+               endif
+
+            else
+               ValB = -21
+            endif
+
+         else
+
+            if A_Ref = 3 then
+
+               if A_Int = 3 then
+
+                  if A_Real = 3.0 then
+                     ValC = 30
+                  else
+                     ValC = -3
+                  endif
+
+               else
+                  ValC = -31
+               endif
+
+            else
+               ValD = -40
+            endif
+
+         endif
+
+      endif
+
+   endfor
+
+
+   if ValA = 10 and ValB = 20 and ValC = 30 and ValD = 0 then
+      [] = RPT2:Test_Passed["Struct IH to bridge", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Struct IH to bridge", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+
+my_test.This_Test_Number = Test

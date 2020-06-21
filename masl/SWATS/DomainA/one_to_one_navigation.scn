@@ -1,0 +1,37 @@
+//! one_to_one_navigation
+private service DomainA::one_to_one_navigation () is
+my_test = find-one Test_Data
+Test    = my_test.This_Test_Number
+
+#------------------------------------------------------------------------#
+# Create five instances of left and right parts of the one to one relationship.
+#------------------------------------------------------------------------#
+
+   Termination_Condition = Test + 5
+
+   loop_counter = Test
+
+   loop
+      left  = create One_To_One_Left_Side with otols_id  = loop_counter
+      right = create One_To_One_Right_Side with otors_id = loop_counter
+
+      link left R1 right
+
+      loop_counter = loop_counter + 1
+
+      breakif loop_counter = Termination_Condition
+
+   endloop
+
+   # Call bridge service to see if we can navigate from one side to the other
+
+   loop 
+      [] = NAV3:One_to_One_Navigate[Test]
+      Test = Test + 1
+      breakif Test = Termination_Condition
+   endloop
+
+#------------------------------------------------------------------------#
+
+my_test.This_Test_Number = Test
+

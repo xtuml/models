@@ -160,19 +160,19 @@ domain Function_Calls is
 
 
   //! Perform Function Calls Tests
-  private service Perform_Function_Calls_Tests_1 (); pragma scenario (1);
+  private service Perform_Function_Calls_Tests (); pragma scenario (1);
 
   //! Start Function Calls Tests
-  private service Start_Function_Calls_Tests_2 (); pragma scenario (2);
+  private service Start_Function_Calls_Tests (); pragma scenario (2);
 
   //! Finish Function Calls Tests
-  private service Finish_Function_Calls_Tests_3 (); pragma scenario (3);
+  private service Finish_Function_Calls_Tests (); pragma scenario (3);
 
   //! Multiple_IH_Parameters_Scenario
-  private service Multiple_IH_Parameters_Scenario_4 (); pragma scenario (4);
+  private service Multiple_IH_Parameters_Scenario (); pragma scenario (4);
 
   //! Test
-  private service Test_5 (); pragma scenario (5);
+  private service Test (); pragma scenario (5);
 
   //! This object verifies complex function calls.
   object Object_A is
@@ -682,3 +682,6 @@ domain Function_Calls is
 
 end domain;
 pragma number (9);
+pragma name ("Function_Calls");
+pragma kl ("Function_Calls");
+pragma version (14);

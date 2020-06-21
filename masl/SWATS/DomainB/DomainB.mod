@@ -128,19 +128,19 @@ domain DomainB is
 
 
   //! Domain B setup
-  private service Domain_B_setup_1 (); pragma scenario (1);
+  private service Domain_B_setup (); pragma scenario (1);
 
   //! Perform domain B nav tests
-  private service Perform_domain_B_nav_tests_2 (); pragma scenario (2);
+  private service Perform_domain_B_nav_tests (); pragma scenario (2);
 
   //! Start DomainB Tests
-  private service Start_DomainB_Tests_3 (); pragma scenario (3);
+  private service Start_DomainB_Tests (); pragma scenario (3);
 
   //! Finish DomainB Tests
-  private service Finish_DomainB_Tests_4 (); pragma scenario (4);
+  private service Finish_DomainB_Tests (); pragma scenario (4);
 
   //! Check_Enumeration_Across_Domain_B
-  private service Check_Enumeration_Across_Domain_B_5 (); pragma scenario (5);
+  private service Check_Enumeration_Across_Domain_B (); pragma scenario (5);
 
   relationship R1 is Object_C conditionally controls many Object_D,
                      Object_D conditionally is_controlled_by many Object_C
@@ -299,3 +299,6 @@ domain DomainB is
 
 end domain;
 pragma number (5);
+pragma name ("DomainB");
+pragma kl ("DomainB");
+pragma version (12);

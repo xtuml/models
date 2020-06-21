@@ -1,0 +1,44 @@
+//! Initial Call to Domain Two
+private service OAIBONE::Initial_Call_to_Domain_Two () is
+my_test = find-one Test_Data
+
+Test = my_test.This_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1 - Define a local data structure to be passed via a bridge into a 
+#          destination domain
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"Null Requid", "OAIBONE", "Scenario3", "Send 1 v simple structure to SBTWO"]
+
+   {Source_Structure_One}   is Very_Simple_Structure_Type
+
+   My_Simple_Integer = 10
+   My_Simple_Real    = 20.0
+
+   count = 1
+
+   loop
+
+      My_Simple_Integer = My_Simple_Integer * count
+
+      append [My_Simple_Integer, My_Simple_Real] to {Source_Structure_One}
+
+      breakif count = 5
+
+      count = count + 1
+
+   endloop
+
+   # Pass this lot into the bridge.
+   [] = RPT2:Test_Passed["OAIBONE Send a simple structure", Test, My_Simple_Integer]
+
+   [] = IITGWO2:Wide_Blue_Yonder [Test, {Source_Structure_One}]
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+
+my_test.This_Test_Number = Test

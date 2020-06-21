@@ -1,0 +1,201 @@
+//! Test_IH_In_Structures
+private service Struct::Test_IH_In_Structures () is
+my_test = find-one Test_Data
+
+[Environment] = ET1:Env_String[]
+
+Test_Number = my_test.The_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1 - First test in the sequence.
+#          Create a Structured Object and append it to a structure.
+#--------------------------------------------------------------------------
+
+   Primary_SO = create unique Structured_Object with An_Integer    = Test_Number &\
+                                                     A_Real        = 1.0         &\
+                                                     Some_Text     = "No text"   &\
+                                                     A_Boolean     = TRUE        &\
+                                                     A_Colour      = 'Red'       &\
+                                                     Current_State = 'Idle'
+
+   # Take a copy of the preferred attribute for later use.
+   Local_Copy_Of_IH_Identifer = Primary_SO.Reference_SO
+
+   {The_First_Structure} is Structure_and_IH_Type
+
+   append [Primary_SO] to {The_First_Structure}
+
+   [] = Struct1::Receive_Structure_IH [Test_Number, {The_First_Structure}, 1, \
+                                       Primary_SO.Reference_SO, "Single instance in structure"]
+
+   Test_Number = Test_Number + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 - Do the same test again, on the same data to prove that it has 
+#          not been corrupted and/or modified. Use the previously stored 
+#          value to compare against.
+#--------------------------------------------------------------------------
+
+   [] = Struct1::Receive_Structure_IH [Test_Number, {The_First_Structure}, 1, \
+                                       Local_Copy_Of_IH_Identifer, "Second bite at Single instance in structure"]
+
+   Test_Number = Test_Number + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Create a second Structured Object and append it to a structure.
+#--------------------------------------------------------------------------
+
+   Secondary_SO = create unique Structured_Object with An_Integer    = Test_Number &\
+                                                       A_Real        = 2.0         &\
+                                                       Some_Text     = "No text"   &\
+                                                       A_Boolean     = TRUE        &\
+                                                       A_Colour      = 'Red'       &\
+                                                       Current_State = 'Idle'
+
+   # Take a copy of the preferred attribute for later use.
+   Local_Copy_Of_IH_Identifer = Secondary_SO.Reference_SO
+
+   append [Secondary_SO] to {The_First_Structure}
+
+   [] = Struct1::Receive_Structure_IH [Test_Number, {The_First_Structure}, 2, \
+                                       Secondary_SO.Reference_SO, "Second instance in structure"]
+
+   Test_Number = Test_Number + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4 - Do the same test again, on the same data to prove that it has 
+#          not been corrupted and/or modified. Use the previously stored 
+#          value to compare against.
+#--------------------------------------------------------------------------
+
+   [] = Struct1::Receive_Structure_IH [Test_Number, {The_First_Structure}, 2, \
+                                       Local_Copy_Of_IH_Identifer, "Second bite at Second instance in structure"]
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5 - Send an empty structure to the target function. This may be 
+#          required as a target function could return a non-empty structure
+#--------------------------------------------------------------------------
+
+#Test_Number = Test_Number + 1
+
+# UNSUPPORTED 
+
+
+# Clear up, but delete {The_First_Structure} operation is not implemented in ASL.
+# So, create a new structure over the old one.
+
+# This test ensures that redeclaring the structure clears it out completely.
+
+# {The_First_Structure} is Structure_and_IH_Type
+
+# {Returned_Structure}  is Structure_and_IH_Type
+
+# [{Returned_Structure}] = Struct3::Receive_Empty_Structure_IH [Test_Number, {The_First_Structure}, \
+#    Primary_SO, "Pass in empty structure, return full"]
+
+#--------------------------------------------------------------------------
+
+# Using the return from the previous test, check to see that the return parameter has been
+# created and silled out as expected.
+
+# UNSUPPORTED due to previous test
+
+#Test_Number = Test_Number + 1
+
+#[] = Struct1::Receive_Structure_IH [Test_Number, {Returned_Structure}, 1, \
+#   Primary_SO.Reference_SO, "Previously returned structure is ok"]
+
+
+
+#--------------------------------------------------------------------------
+# Series of tests
+#--------------------------------------------------------------------------
+
+   bean_counter = 1
+
+   {Next_Structure} is Structure_and_IH_Type
+
+   loop
+      Test_Number = Test_Number + 1
+
+      Next_SO = create unique Structured_Object with An_Integer    = Test_Number &\
+                                                     A_Real        = 1.0         &\
+                                                     Some_Text     = "No text"   &\
+                                                     A_Boolean     = TRUE        &\
+                                                     A_Colour      = 'Red'       &\
+                                                     Current_State = 'Idle'
+
+      append [Next_SO] to {Next_Structure}
+
+      [] = Struct1::Receive_Structure_IH [Test_Number, {Next_Structure}, bean_counter, Next_SO.Reference_SO, "Many instances in structure"]
+ 
+      bean_counter = bean_counter + 1
+
+      breakif bean_counter > 5
+
+   endloop
+
+#--------------------------------------------------------------------------
+# Next series of tests. Let's see what happens when the structure is deleted after it is appended.
+# This test will make sure that the data is copied into the target structure, and not just passed
+# by reference.
+#--------------------------------------------------------------------------
+
+   bean_counter = 1
+
+   {Delete_Structure} is Structure_and_IH_Type
+
+   loop
+      Test_Number = Test_Number + 1
+
+      # Resuse the Next_SO data name.
+      Next_SO = create unique Structured_Object with An_Integer    = Test_Number &\
+                                                     A_Real        = 1.0         &\
+                                                     Some_Text     = "No text"   &\
+                                                     A_Boolean     = TRUE        &\
+                                                     A_Colour      = 'Red'       &\
+                                                     Current_State = 'Idle'
+
+      SO_ID = Next_SO.Reference_SO
+
+      append [Next_SO] to {Delete_Structure}
+
+      [] = Struct1::Receive_Structure_IH [Test_Number, {Delete_Structure}, bean_counter, SO_ID, "Structure fully copied"]
+
+      # Deleting the instance object before it is passed into the function call as a component of the structure
+      # causes I-Sim grief. It appears that a shallow copy is taken, ie. it is passed by reference. To prove this
+      # delete the instance object and then do the same test again.
+      if Environment = "WACA" then
+         delete Next_SO
+      endif
+
+      Test_Number = Test_Number + 1
+
+      [] = Struct1::Receive_Structure_IH [Test_Number, {Delete_Structure}, bean_counter, SO_ID, "Structure fully copied"]
+ 
+      bean_counter = bean_counter + 1
+
+      breakif bean_counter > 5
+
+   endloop
+
+   # Delete structure is not supported by ASL or WACA, although it will compile.
+   # Run_Time crash in I-SIM awaits the unwary.
+   # delete {Next_Structure}
+
+
+#--------------------------------------------------------------------------
+# Tidy up and finish this sequence of tests.
+#--------------------------------------------------------------------------
+
+Test_Number = Test_Number + 1
+
+my_test.The_Test_Number = Test_Number

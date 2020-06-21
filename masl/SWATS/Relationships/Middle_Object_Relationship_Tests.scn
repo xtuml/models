@@ -1,0 +1,143 @@
+//! Middle Object Relationship Tests
+private service Relationships::Middle_Object_Relationship_Tests () is
+#-------------------------------------------------------------------#
+#
+# Perform tests via scenario for the Middle_Object relationships
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create the instances
+#-------------------------------------------------------------------#
+
+   # Create Left_Object Instances
+   newLeft = create Left_Object with idLO = 1
+   newLeft = create Left_Object with idLO = 2
+   newLeft = create Left_Object with idLO = 3
+
+   # Create Middle_Object Instances
+   newMiddle = create Middle_Object with idMO    = 1 &\
+                                         ResultA = 0
+
+   newMiddle = create Middle_Object with idMO    = 3 &\
+                                         ResultA = 0 
+
+   newMiddle = create Middle_Object with idMO    = 4 &\
+                                         ResultA = 0 
+
+   newMiddle = create Middle_Object with idMO    = 5 &\
+                                         ResultA = 0 
+
+   # Create Right_Object Instances
+   newRight = create Right_Object with idRO = 2
+   newRight = create Right_Object with idRO = 4
+   newRight = create Right_Object with idRO = 5
+
+
+   # MR_Assoc
+   newMR = create MR_Assoc with idMR = 1
+   newMR = create MR_Assoc with idMR = 2
+   newMR = create MR_Assoc with idMR = 3
+   newMR = create MR_Assoc with idMR = 5
+
+#-------------------------------------------------------------------#
+# Test that the object instances have been correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "MO", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetL}   = find-all Left_Object
+   {SetM}   = find-all Middle_Object
+   {SetR}   = find-all Right_Object
+   {SetMRA} = find-all MR_Assoc
+
+   if countof {SetL} = 3 then
+
+      if countof {SetM} = 4 then
+
+         if countof {SetR} = 3 then
+
+            if countof {SetMRA} != 4 then
+               Has_Failed   = TRUE
+               Failure_Code = -10
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -40
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["MO", Test, 0]
+   else
+      [] = RPT3:Test_Failed["MO", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Create the relationships
+#-------------------------------------------------------------------#
+
+ # Initiate the test
+ [] = MO1:Create_Relationships[Test]
+ Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+
+   Count  = 1
+
+   loop
+
+      # Initiate the test
+      [] = MO2:Middle_Object_Navigation[Count, Test]
+
+      Test  = Test  + 1
+      Count = Count + 1
+      breakif Count = 19
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Delete the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = MO3:Delete_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test

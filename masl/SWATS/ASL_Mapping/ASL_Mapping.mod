@@ -152,13 +152,13 @@ domain ASL_Mapping is
 
 
   //! Perform ASL Mapping Tests
-  private service Perform_ASL_Mapping_Tests_1 (); pragma scenario (1);
+  private service Perform_ASL_Mapping_Tests (); pragma scenario (1);
 
   //! Start ASL Mapping Tests
-  private service Start_ASL_Mapping_Tests_2 (); pragma scenario (2);
+  private service Start_ASL_Mapping_Tests (); pragma scenario (2);
 
   //! Finish ASL Mapping Tests
-  private service Finish_ASL_Mapping_Tests_3 (); pragma scenario (3);
+  private service Finish_ASL_Mapping_Tests (); pragma scenario (3);
 
   relationship R1 is Left unconditionally WARNING_undefined_role_name many Right,
                      Right unconditionally WARNING_undefined_role_name one Left
@@ -804,3 +804,6 @@ domain ASL_Mapping is
 
 end domain;
 pragma number (2);
+pragma name ("ASL_Mapping");
+pragma kl ("ASL_Mapping");
+pragma version (18);

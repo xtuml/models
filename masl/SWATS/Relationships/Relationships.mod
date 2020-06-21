@@ -126,40 +126,40 @@ domain Relationships is
 
 
   //! Start_Relationhip_Tests
-  private service Start_Relationhip_Tests_2 (); pragma scenario (2);
+  private service Start_Relationhip_Tests (); pragma scenario (2);
 
   //! Finish_Relationship_Tests
-  private service Finish_Relationship_Tests_3 (); pragma scenario (3);
+  private service Finish_Relationship_Tests (); pragma scenario (3);
 
   //! Perform Nav to Set
-  private service Perform_Nav_to_Set_5 (); pragma scenario (5);
+  private service Perform_Nav_to_Set (); pragma scenario (5);
 
   //! Middle Object Relationship Tests
-  private service Middle_Object_Relationship_Tests_4 (); pragma scenario (4);
+  private service Middle_Object_Relationship_Tests (); pragma scenario (4);
 
   //! Test Relationships For Left Many
-  private service Test_Relationships_For_Left_Many_6 (); pragma scenario (6);
+  private service Test_Relationships_For_Left_Many (); pragma scenario (6);
 
   //! One to One Tests
-  private service One_to_One_Tests_8 (); pragma scenario (8);
+  private service One_to_One_Tests (); pragma scenario (8);
 
   //! One to Many Assoc Tests
-  private service One_to_Many_Assoc_Tests_9 (); pragma scenario (9);
+  private service One_to_Many_Assoc_Tests (); pragma scenario (9);
 
   //! Many to Many Assoc Tests
-  private service Many_to_Many_Assoc_Tests_10 (); pragma scenario (10);
+  private service Many_to_Many_Assoc_Tests (); pragma scenario (10);
 
   //! Super Sub Tests
-  private service Super_Sub_Tests_11 (); pragma scenario (11);
+  private service Super_Sub_Tests (); pragma scenario (11);
 
   //! Reflexive Tests
-  private service Reflexive_Tests_12 (); pragma scenario (12);
+  private service Reflexive_Tests (); pragma scenario (12);
 
   //! Composed Relationships Tests
-  private service Composed_Relationships_Tests_1 (); pragma scenario (1);
+  private service Composed_Relationships_Tests (); pragma scenario (1);
 
   //! Nav From Sets
-  private service Nav_From_Sets_7 (); pragma scenario (7);
+  private service Nav_From_Sets (); pragma scenario (7);
 
   relationship R1 is Object_A conditionally Has_a one Object_B,
                      Object_B conditionally May_have_a one Object_A;
@@ -1198,3 +1198,6 @@ domain Relationships is
 
 end domain;
 pragma number (10);
+pragma name ("Relationships");
+pragma kl ("Relationships");
+pragma version (18);
