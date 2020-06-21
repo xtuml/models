@@ -90,13 +90,13 @@ domain SBTWO is
 
 
   //! Local scenario for SBTWO standalone test
-  private service Local_scenario_for_SBTWO_standalone_test_1 (); pragma scenario (1);
+  private service Local_scenario_for_SBTWO_standalone_test (); pragma scenario (1);
 
   //! Start_SBTWO_Tests
-  private service Start_SBTWO_Tests_3 (); pragma scenario (3);
+  private service Start_SBTWO_Tests (); pragma scenario (3);
 
   //! Finish_SBTWO_Tests
-  private service Finish_SBTWO_Tests_4 (); pragma scenario (4);
+  private service Finish_SBTWO_Tests (); pragma scenario (4);
 
   object Report_Data is
 
@@ -111,3 +111,6 @@ domain SBTWO is
 
 end domain;
 pragma number (15);
+pragma name ("Structure_Bridge_Two");
+pragma kl ("SBTWO");
+pragma version (5);

@@ -1,0 +1,52 @@
+//! many_to_many_navigation
+private service DomainA::many_to_many_navigation () is
+my_test = find-one Test_Data
+Test    = my_test.This_Test_Number
+
+#------------------------------------------------------------------------#
+# Create five instances of left and right parts of the many to many relationship.
+#------------------------------------------------------------------------#
+
+   number_of_tests = 5
+   loop_counter    = Test
+
+   terminate_condition = number_of_tests + Test + 1
+
+   loop
+      left  = create Many_To_Many_Left_Side with mtmls_id = loop_counter
+
+      inner_loop_counter = loop_counter
+      break_condition    = loop_counter + 3
+
+      # Make three instances of the right side of the navigation to link to
+      # a single instance of the left
+
+      loop
+         right = create Many_To_Many_Right_Side with mtmrs_id   = loop_counter
+         assoc = create Many_To_Many_Associative with mtma_data = loop_counter
+ 
+         link left R3 right using assoc
+
+         inner_loop_counter = inner_loop_counter + 1
+
+         breakif inner_loop_counter = break_condition
+
+      endloop
+
+      loop_counter = loop_counter + 1
+
+      breakif loop_counter = terminate_condition
+
+   endloop
+
+   # Call bridge service to see if we can navigate from one side to the other
+
+   loop 
+      [] = NAV5:Many_to_Many_Navigate[Test]
+      Test = Test + 1
+      breakif Test = terminate_condition
+   endloop
+
+#------------------------------------------------------------------------#
+
+my_test.This_Test_Number = Test

@@ -103,13 +103,13 @@ domain Find_and_Sets is
 
 
   //! Find_And_Sets_Main
-  private service Find_And_Sets_Main_1 (); pragma scenario (1);
+  private service Find_And_Sets_Main (); pragma scenario (1);
 
   //! Start Find and Sets Tests
-  private service Start_Find_and_Sets_Tests_2 (); pragma scenario (2);
+  private service Start_Find_and_Sets_Tests (); pragma scenario (2);
 
   //! Finish Find and Sets Tests
-  private service Finish_Find_and_Sets_Tests_3 (); pragma scenario (3);
+  private service Finish_Find_and_Sets_Tests (); pragma scenario (3);
 
   relationship R1 is Left_Obj unconditionally WARNING_undefined_role_name many Right_Obj,
                      Right_Obj unconditionally WARNING_undefined_role_name many Left_Obj
@@ -304,3 +304,6 @@ domain Find_and_Sets is
 
 end domain;
 pragma number (8);
+pragma name ("Find_and_Sets");
+pragma kl ("Find_and_Sets");
+pragma version (14);

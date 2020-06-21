@@ -1,0 +1,14 @@
+//! shared bridge test
+private service DomainA::shared_bridge_test () is
+#------------------------------------------------------------------------#
+# Call shared bridge to perform navigation in domain B.
+#------------------------------------------------------------------------#
+
+my_test = find-one Test_Data
+Test    = my_test.This_Test_Number
+
+[] = NAV2:Shared_Bridge_Navigate[Test]
+
+Test = Test + 1
+
+my_test.This_Test_Number = Test

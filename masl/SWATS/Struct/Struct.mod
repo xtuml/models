@@ -230,40 +230,40 @@ domain Struct is
 
 
   //! Simple Structure Scenario
-  private service Simple_Structure_Scenario_1 (); pragma scenario (1);
+  private service Simple_Structure_Scenario (); pragma scenario (1);
 
   //! Complex Structure Scenario
-  private service Complex_Structure_Scenario_2 (); pragma scenario (2);
+  private service Complex_Structure_Scenario (); pragma scenario (2);
 
   //! Simple Type Linked Structure Scenario
-  private service Simple_Type_Linked_Structure_Scenario_3 (); pragma scenario (3);
+  private service Simple_Type_Linked_Structure_Scenario (); pragma scenario (3);
 
   //! Simple Name and Type Linked Scenario
-  private service Simple_Name_and_Type_Linked_Scenario_4 (); pragma scenario (4);
+  private service Simple_Name_and_Type_Linked_Scenario (); pragma scenario (4);
 
   //! Nested Structure Scenario
-  private service Nested_Structure_Scenario_5 (); pragma scenario (5);
+  private service Nested_Structure_Scenario (); pragma scenario (5);
 
   //! Start_Structures_Tests
-  private service Start_Structures_Tests_6 (); pragma scenario (6);
+  private service Start_Structures_Tests (); pragma scenario (6);
 
   //! Finish_Structures_Tests
-  private service Finish_Structures_Tests_7 (); pragma scenario (7);
+  private service Finish_Structures_Tests (); pragma scenario (7);
 
   //! Multiple_Structures_In_A_Structure_Scenario
-  private service Multiple_Structures_In_A_Structure_Scenario_8 (); pragma scenario (8);
+  private service Multiple_Structures_In_A_Structure_Scenario (); pragma scenario (8);
 
   //! Empty_Structures_Test
-  private service Empty_Structures_Test_9 (); pragma scenario (9);
+  private service Empty_Structures_Test (); pragma scenario (9);
 
   //! Test_IH_In_Structures
-  private service Test_IH_In_Structures_10 (); pragma scenario (10);
+  private service Test_IH_In_Structures (); pragma scenario (10);
 
   //! Structures_are_Cleared
-  private service Structures_are_Cleared_11 (); pragma scenario (11);
+  private service Structures_are_Cleared (); pragma scenario (11);
 
   //! Test_the_Structure
-  private service Test_the_Structure_12 (); pragma scenario (12);
+  private service Test_the_Structure (); pragma scenario (12);
 
   object Structured_Object is
 
@@ -441,3 +441,6 @@ domain Struct is
 
 end domain;
 pragma number (13);
+pragma name ("Structures");
+pragma kl ("Struct");
+pragma version (6);

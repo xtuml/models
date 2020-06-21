@@ -1,0 +1,126 @@
+//! Many to Many Assoc Tests
+private service Relationships::Many_to_Many_Assoc_Tests () is
+#-------------------------------------------------------------------#
+#
+# Perform relationships tests for Mc:Mc navigation
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create a few instance of Objects E, F and EF
+#-------------------------------------------------------------------#
+
+   Count = 5
+
+   loop
+      # Object_E
+      newE  = create Object_E  with idE      = Count &\
+                                    ResultA  = 0
+
+      # Object_F
+      newF  = create Object_F  with idF = Count
+
+      # Object_EF
+      newEF = create Object_EF with idEF = Count
+
+      Count = Count - 1
+
+      breakif Count = 0
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Test that all the objects have be correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetE}  = find-all Object_E
+   {SetF}  = find-all Object_F
+   {SetEF} = find-all Object_EF
+
+   if countof {SetE} = 5 then
+
+      if countof {SetF} = 5 then
+
+         if countof {SetEF} != 5 then
+            Has_Failed   = TRUE
+            Failure_Code = -10
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -30
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objE", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objE", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Create the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objE1:Create_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+
+   Count  = 1
+
+   loop
+
+      # Initiate the test
+      [] = objE2:ObjE_Navigation[Count,Test]
+
+      Test   = Test   + 1
+      Count  = Count  + 1
+      breakif Count = 23
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Delete the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objE3:Delete_Relationships[Test]
+   Test   = Test   + 1
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test
+
+
