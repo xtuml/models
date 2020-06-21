@@ -165,49 +165,49 @@ domain DomainA is
 
 
   //! Domain A setup
-  private service Domain_A_setup_1 (); pragma scenario (1);
+  private service Domain_A_setup (); pragma scenario (1);
 
   //! Sync to event
-  private service Sync_to_event_3 (); pragma scenario (3);
+  private service Sync_to_event (); pragma scenario (3);
 
   //! Sync to sync
-  private service Sync_to_sync_2 (); pragma scenario (2);
+  private service Sync_to_sync (); pragma scenario (2);
 
   //! single bridge test
-  private service single_bridge_test_4 (); pragma scenario (4);
+  private service single_bridge_test (); pragma scenario (4);
 
   //! shared bridge test
-  private service shared_bridge_test_5 (); pragma scenario (5);
+  private service shared_bridge_test (); pragma scenario (5);
 
   //! one_to_one_navigation
-  private service one_to_one_navigation_6 (); pragma scenario (6);
+  private service one_to_one_navigation (); pragma scenario (6);
 
   //! one_to_many_navigation
-  private service one_to_many_navigation_7 (); pragma scenario (7);
+  private service one_to_many_navigation (); pragma scenario (7);
 
   //! many_to_many_navigation
-  private service many_to_many_navigation_8 (); pragma scenario (8);
+  private service many_to_many_navigation (); pragma scenario (8);
 
   //! invoke misc calls
-  private service invoke_misc_calls_9 (); pragma scenario (9);
+  private service invoke_misc_calls (); pragma scenario (9);
 
   //! Start DomainA Tests
-  private service Start_DomainA_Tests_10 (); pragma scenario (10);
+  private service Start_DomainA_Tests (); pragma scenario (10);
 
   //! Finish DomainA Tests
-  private service Finish_DomainA_Tests_11 (); pragma scenario (11);
+  private service Finish_DomainA_Tests (); pragma scenario (11);
 
   //! Enumeration Across Bridge Check
-  private service Enumeration_Across_Bridge_Check_12 (); pragma scenario (12);
+  private service Enumeration_Across_Bridge_Check (); pragma scenario (12);
 
   //! Enumeration_Across_Lots_Of_Bridges
-  private service Enumeration_Across_Lots_Of_Bridges_13 (); pragma scenario (13);
+  private service Enumeration_Across_Lots_Of_Bridges (); pragma scenario (13);
 
   //! Passing IH
-  private service Passing_IH_14 (); pragma scenario (14);
+  private service Passing_IH (); pragma scenario (14);
 
   //! Pass_Params
-  private service Pass_Params_15 (); pragma scenario (15);
+  private service Pass_Params (); pragma scenario (15);
 
   relationship R1 is One_To_One_Left_Side conditionally has_one one One_To_One_Right_Side,
                      One_To_One_Right_Side conditionally is_one_of one One_To_One_Left_Side;
@@ -432,3 +432,6 @@ domain DomainA is
 
 end domain;
 pragma number (4);
+pragma name ("DomainA");
+pragma kl ("DomainA");
+pragma version (11);

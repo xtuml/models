@@ -91,13 +91,13 @@ domain OAIBTWO is
 
 
   //! Local scenario for OAIBTWO standalone test
-  private service Local_scenario_for_OAIBTWO_standalone_test_1 (); pragma scenario (1);
+  private service Local_scenario_for_OAIBTWO_standalone_test (); pragma scenario (1);
 
   //! Start_OAIBTWO_Tests
-  private service Start_OAIBTWO_Tests_3 (); pragma scenario (3);
+  private service Start_OAIBTWO_Tests (); pragma scenario (3);
 
   //! Finish_OAIBTWO_Tests
-  private service Finish_OAIBTWO_Tests_4 (); pragma scenario (4);
+  private service Finish_OAIBTWO_Tests (); pragma scenario (4);
 
   //! Class realising Interface
   object I_Into_The_Great_Wide_Open is
@@ -134,3 +134,6 @@ domain OAIBTWO is
 
 end domain;
 pragma number (12);
+pragma name ("Open Architecture Internal Bridge Domain Two");
+pragma kl ("OAIBTWO");
+pragma version (1);

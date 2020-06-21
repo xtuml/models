@@ -155,22 +155,22 @@ domain Events is
 
 
   //! Events Scenario
-  private service Events_Scenario_1 (); pragma scenario (1);
+  private service Events_Scenario (); pragma scenario (1);
 
   //! Start Events Tests
-  private service Start_Events_Tests_2 (); pragma scenario (2);
+  private service Start_Events_Tests (); pragma scenario (2);
 
   //! Polymorphism
-  private service Polymorphism_3 (); pragma scenario (3);
+  private service Polymorphism (); pragma scenario (3);
 
   //! Basic_Events
-  private service Basic_Events_4 (); pragma scenario (4);
+  private service Basic_Events (); pragma scenario (4);
 
   //! End Events Tests
-  private service End_Events_Tests_5 (); pragma scenario (5);
+  private service End_Events_Tests (); pragma scenario (5);
 
   //! Event Priorities
-  private service Event_Priorities_6 (); pragma scenario (6);
+  private service Event_Priorities (); pragma scenario (6);
 
   relationship R1 is Object_A is_a (Object_B,
                                     Object_C);
@@ -2956,3 +2956,6 @@ domain Events is
 
 end domain;
 pragma number (7);
+pragma name ("Events");
+pragma kl ("Events");
+pragma version (22);
