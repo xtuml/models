@@ -1,0 +1,112 @@
+//! Nested Structure Scenario
+private service Struct::Nested_Structure_Scenario () is
+My_Test_Data = find-one Test_Data
+
+local_test_number = My_Test_Data.The_Test_Number
+
+
+#--------------------------------------------------------------------------
+# Test 1 - Create a nested stucture containing another structure which in 
+#          turn contains another structure. Pass it into a domain based 
+#          synchronous service for decoding.
+#--------------------------------------------------------------------------
+
+   Zero  = 0
+   One   = 1
+   Two   = 2
+   Three = 3
+
+   The_Colour of Colour_Type = 'Blue'
+
+   {The_Third_Structure}  is Third_Nested_Structure_Type
+   {The_Second_Structure} is Second_Nested_Structure_Type
+   {The_First_Structure}  is First_Nested_Structure_Type
+
+   append [Three, The_Colour]           to {The_Third_Structure}
+   append [{The_Third_Structure}, Two]  to {The_Second_Structure}
+   append [{The_Second_Structure}, One] to {The_First_Structure}
+
+   [] = Struct7::Decode_Three_Level_Nested_Structure [local_test_number,     \
+                                                      {The_First_Structure}, \
+                                                      {The_Second_Structure},\
+                                                      {The_Third_Structure}, \
+                                                      One, One,              \
+                                                      Two, One,              \
+                                                      Three, One, The_Colour]
+
+   local_test_number = local_test_number + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 
+#--------------------------------------------------------------------------
+
+   {The_Next_First_Structure}  is First_Nested_Structure_Type
+   {The_Next_Second_Structure} is Second_Nested_Structure_Type
+   {The_Next_Third_Structure}  is Third_Nested_Structure_Type
+
+   termination_condition = Three
+
+   loop
+      append [Three, The_Colour] to {The_Next_Third_Structure}
+      termination_condition = termination_condition - 1
+      breakif termination_condition = Zero
+   endloop
+
+   termination_condition = Three
+
+   loop
+      append [{The_Next_Third_Structure}, Two] to {The_Next_Second_Structure}
+      termination_condition = termination_condition - 1
+      breakif termination_condition = Zero
+   endloop
+
+   termination_condition = Three
+
+   loop
+      append [ {The_Next_Second_Structure}, One] to {The_Next_First_Structure}
+      termination_condition = termination_condition - 1
+      breakif termination_condition = Zero
+   endloop
+
+   [] = Struct7::Decode_Three_Level_Nested_Structure [local_test_number,          \
+                                                      {The_Next_First_Structure}, \
+                                                      {The_Next_Second_Structure},\
+                                                      {The_Next_Third_Structure}, \
+                                                      One, Three,                 \
+                                                      Two, Three,                 \
+                                                      Three, Three, The_Colour]
+
+   local_test_number = local_test_number + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - create a Beasty test. This is where a primitve component of the
+#          structure is defined, and the sub (nested) structure component 
+#          is null.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[local_test_number,"1241-0000-01-1212", "Structures", "Complex nested structures", "contains a null structure"]
+
+   {This_First_Structure} is First_Nested_Structure_Type
+   {This_Second_Structure} is Second_Nested_Structure_Type
+
+   append [ {This_Second_Structure} , One] to {This_First_Structure}
+
+   how_many = countof {This_First_Structure} 
+
+   if how_many = 1 then
+      [] = RPT2:Test_Passed["null structure", local_test_number, 0]
+   else
+      [] = RPT3:Test_Failed["null_structure", local_test_number, how_many]
+   endif
+
+   local_test_number = local_test_number + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+
+My_Test_Data.The_Test_Number = local_test_number

@@ -1,0 +1,75 @@
+//! Real_Numbers_Scenario
+private service UDT::Real_Numbers_Scenario () is
+#Call object based synchronous service
+
+my_final_test = find-one Final_Test_Data
+
+Test = my_final_test.Final_Test_Number
+
+New_Object   = TRUE
+Final_Object = FALSE
+
+Dummy_TD = create Test_Data with The_Test_Number = 99 & Testing_For_What = "Nothing"
+
+A_Test_Data_IH = Dummy_TD
+
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, Dummy_TD,     Test, "Object data assignment", Final_Object]
+
+# Don't need this beasty any more, it was only ever a dummy.
+delete Dummy_TD
+
+New_Object = FALSE
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Max value assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Min value assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Common local assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Unique local assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Unique local assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Min plus max", Final_Object]
+
+Final_Object = TRUE
+
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Report Number Of UDTs", Final_Object]
+
+local_counter = 8
+
+if A_Test_Data_IH != UNDEFINED then
+  
+   [] = RL1:Check_The_Reals[local_counter, A_Test_Data_IH.Testing_For_What, "1241-0000-01-0111"]
+
+   loop
+
+      breakif local_counter = Test
+      local_counter = local_counter + 1
+ 
+      A_Test_Data_IH = A_Test_Data_IH -> R1."Has_a".Test_Data   
+
+      if A_Test_Data_IH != UNDEFINED then
+
+         if local_counter = 14 then
+            [] = RL1:Check_The_Reals[local_counter, A_Test_Data_IH.Testing_For_What, "Null Requid"]
+         endif
+
+         if local_counter != 14 and local_counter !=15 then
+            [] = RL1:Check_The_Reals[local_counter, A_Test_Data_IH.Testing_For_What,"1241-0000-01-0111"]
+         endif
+
+         if local_counter = 15 then
+            [] = UDT5::Report_No_UDT_Used[local_counter, A_Test_Data_IH.Testing_For_What]
+         endif
+
+      else
+         # Oops
+         break
+      endif
+
+   endloop
+
+else
+   [] = RPT5:Test_Text[local_counter, "First Test Data object corrupt"]
+endif
+
+# Tidy up the test data objects starting at the final one
+
+[] = UDT7::Tidy_Up_Test_Data[]
+
+
