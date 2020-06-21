@@ -120,19 +120,19 @@ domain SBONE is
 
 
   //! Send_To_Bridge_And_Back_To_SBONE
-  private service Send_To_Bridge_And_Back_To_SBONE_2 (); pragma scenario (2);
+  private service Send_To_Bridge_And_Back_To_SBONE (); pragma scenario (2);
 
   //! Send_Structure_To_SBTWO_Via_Bridge
-  private service Send_Structure_To_SBTWO_Via_Bridge_3 (); pragma scenario (3);
+  private service Send_Structure_To_SBTWO_Via_Bridge (); pragma scenario (3);
 
   //! Start_SBONE_Tests
-  private service Start_SBONE_Tests_4 (); pragma scenario (4);
+  private service Start_SBONE_Tests (); pragma scenario (4);
 
   //! Finish_SBONE_Tests
-  private service Finish_SBONE_Tests_5 (); pragma scenario (5);
+  private service Finish_SBONE_Tests (); pragma scenario (5);
 
   //! Send_To_Bridge
-  private service Send_To_Bridge_1 (); pragma scenario (1);
+  private service Send_To_Bridge (); pragma scenario (1);
 
   object Source_Bridge_Data is
 
@@ -188,3 +188,6 @@ domain SBONE is
 
 end domain;
 pragma number (14);
+pragma name ("Structure_Bridge_One");
+pragma kl ("SBONE");
+pragma version (6);

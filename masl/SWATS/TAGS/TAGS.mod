@@ -190,40 +190,40 @@ domain TAGS is
 
 
   //! Start_TAGGED_Tests
-  private service Start_TAGGED_Tests_1 (); pragma scenario (1);
+  private service Start_TAGGED_Tests (); pragma scenario (1);
 
   //! Perform_Passive_Static_Tests
-  private service Perform_Passive_Static_Tests_2 (); pragma scenario (2);
+  private service Perform_Passive_Static_Tests (); pragma scenario (2);
 
   //! Perform_Active_Object_Tests
-  private service Perform_Active_Object_Tests_3 (); pragma scenario (3);
+  private service Perform_Active_Object_Tests (); pragma scenario (3);
 
   //! Perform_Passive_Array_Tests
-  private service Perform_Passive_Array_Tests_4 (); pragma scenario (4);
+  private service Perform_Passive_Array_Tests (); pragma scenario (4);
 
   //! Finish_TAGGED_Tests
-  private service Finish_TAGGED_Tests_5 (); pragma scenario (5);
+  private service Finish_TAGGED_Tests (); pragma scenario (5);
 
   //! Perform_Active_Array_Tests
-  private service Perform_Active_Array_Tests_6 (); pragma scenario (6);
+  private service Perform_Active_Array_Tests (); pragma scenario (6);
 
   //! Perform_Single_To_Many_Navigations
-  private service Perform_Single_To_Many_Navigations_7 (); pragma scenario (7);
+  private service Perform_Single_To_Many_Navigations (); pragma scenario (7);
 
   //! Perform_Terminator_Tag_Tests
-  private service Perform_Terminator_Tag_Tests_8 (); pragma scenario (8);
+  private service Perform_Terminator_Tag_Tests (); pragma scenario (8);
 
   //! Perform_Glitch_Recovery_Tests
-  private service Perform_Glitch_Recovery_Tests_9 (); pragma scenario (9);
+  private service Perform_Glitch_Recovery_Tests (); pragma scenario (9);
 
   //! Perform_Many_To_Many_Navigations
-  private service Perform_Many_To_Many_Navigations_10 (); pragma scenario (10);
+  private service Perform_Many_To_Many_Navigations (); pragma scenario (10);
 
   //! Perform_Super_Sub_Tests
-  private service Perform_Super_Sub_Tests_11 (); pragma scenario (11);
+  private service Perform_Super_Sub_Tests (); pragma scenario (11);
 
   //! Perform_Static_Tests
-  private service Perform_Static_Tests_12 (); pragma scenario (12);
+  private service Perform_Static_Tests (); pragma scenario (12);
 
   relationship R1 is Single_Tagged_Object unconditionally WARNING_undefined_role_name many Many_Tagged_Objects,
                      Many_Tagged_Objects unconditionally WARNING_undefined_role_name one Single_Tagged_Object;
@@ -1015,3 +1015,6 @@ domain TAGS is
 
 end domain;
 pragma number (20);
+pragma name ("Tagging");
+pragma kl ("TAGS");
+pragma version (6);

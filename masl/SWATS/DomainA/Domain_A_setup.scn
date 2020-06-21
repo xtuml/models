@@ -1,0 +1,28 @@
+//! Domain A setup
+private service DomainA::Domain_A_setup () is
+
+
+my_test = create Test_Data with This_Test_Number = 1
+
+#Create several instances of Object_A
+count = 5
+loop
+
+   newA = create Object_A with idA = count &\
+                               ResultA = 0 &\
+                               Current_State  = 'Idle'
+   count = count - 1
+   breakif count = 0
+endloop
+
+Super1 = create Domain_A_Object_Super with idSUPER = 1
+Sub_A1 = create Domain_A_Object_SubA with SubA_Attribute = 1 & A_Text = "Sub A1"
+Sub_B1 = create Domain_A_Object_SubB with SubB_Attribute = 1 & B_Text = "Sub B1"
+
+link Super1 R4 Sub_A1
+
+Super2 = create Domain_A_Object_Super with idSUPER = 2
+Sub_A2 = create Domain_A_Object_SubA with SubA_Attribute = 2 & A_Text = "Sub A2"
+Sub_B2 = create Domain_A_Object_SubB with SubB_Attribute = 2 & B_Text = "Sub B2"
+
+link Super2 R4 Sub_B2

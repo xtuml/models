@@ -1,0 +1,149 @@
+//! Perform_Terminator_Tag_Tests
+private service TAGS::Perform_Terminator_Tag_Tests () is
+# Perform calls to tagged terminator and untagged terminator
+
+My_Test = find-one Test_Data
+
+The_Test_Number = My_Test.Number
+
+Where_Are_We = My_Test.Environment
+
+#--------------------------------------------------------------------------
+# Test 1 - Call tagged local terminator
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-1111", "Tagging", "Terminators", "Tagged locally defined"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1101-0000-01-0112"]
+
+   Local_Input_Parameter = 1
+   Local_Output_Parameter = 0
+
+   [Local_Output_Parameter] = TT1:A_Tagged_Local_Terminator[Local_Input_Parameter]
+
+   if Where_Are_We = 'WACA' then
+
+      if Local_Output_Parameter = Local_Input_Parameter then
+         [] = RPT3:Test_Failed["Tagged locally defined",The_Test_Number,  -1]
+      else
+         [] = RPT2:Test_Passed["Tagged locally defined",The_Test_Number,  0]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[The_Test_Number]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 - Call tagged project terminator
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-1111", "Tagging", "Terminators", "Untagged local defined"]
+ 
+   Local_Input_Parameter = 1
+   Local_Output_Parameter = 0
+
+   [Local_Output_Parameter] = UT1:An_Untagged_Local_Terminator[Local_Input_Parameter]
+
+   if Where_Are_We = 'WACA' then
+
+      if Local_Output_Parameter != Local_Input_Parameter then
+         [] = RPT3:Test_Failed["Untagged local defined",The_Test_Number,  Local_Output_Parameter]
+      else
+         [] = RPT2:Test_Passed["Untagged local defined",The_Test_Number,  0]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[The_Test_Number]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Call local untagged terminator
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-1111", "Tagging", "Terminators", "Tagged project defined"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1101-0000-01-0112"]
+
+   Local_Input_Parameter = 1
+   Local_Output_Parameter = 0
+
+   [Local_Output_Parameter] = TT3:A_Tagged_Project_Terminator[Local_Input_Parameter]
+
+   if Where_Are_We = 'WACA' then
+
+      if Local_Output_Parameter = Local_Input_Parameter then
+         [] = RPT3:Test_Failed["Tagged project defined",The_Test_Number,  Local_Output_Parameter]
+      else
+         [] = RPT2:Test_Passed["Tagged project defined",The_Test_Number,  0]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[The_Test_Number]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4 - Call untagged project terminator
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-1111", "Tagging", "Terminators", "Untagged project defined"]
+
+   Local_Input_Parameter = 1
+   Local_Output_Parameter = 0
+
+   [Local_Output_Parameter] = UT2:An_Untagged_Project_Terminator[Local_Input_Parameter]
+
+   if Where_Are_We = 'WACA' then
+
+      if Local_Output_Parameter != Local_Input_Parameter then
+         [] = RPT3:Test_Failed["Untagged project defined",The_Test_Number,  -1]
+      else
+         [] = RPT2:Test_Passed["Untagged project defined",The_Test_Number,  0]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[The_Test_Number]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-1111", "Tagging", "Terminators", "Two tagged called from untagged terminator"]
+
+   This_Result = FALSE
+
+   [This_Result] = TD1:Call_Tagged_Terminators[]
+
+   if Where_Are_We = 'WACA' then
+
+      if This_Result = FALSE then
+         [] = RPT3:Test_Failed["Two tagged called from untagged terminator",The_Test_Number,  -1]
+      else
+         [] = RPT2:Test_Passed["Two tagged called from untagged terminator",The_Test_Number,  0]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[The_Test_Number]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+
+My_Test.Number = The_Test_Number

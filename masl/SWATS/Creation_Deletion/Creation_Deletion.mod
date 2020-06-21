@@ -105,13 +105,13 @@ domain Creation_Deletion is
 
 
   //! Perform Creation Deletion Tests
-  private service Perform_Creation_Deletion_Tests_1 (); pragma scenario (1);
+  private service Perform_Creation_Deletion_Tests (); pragma scenario (1);
 
   //! Start Creation Deletion Tests
-  private service Start_Creation_Deletion_Tests_2 (); pragma scenario (2);
+  private service Start_Creation_Deletion_Tests (); pragma scenario (2);
 
   //! Finish Creation Deletion Tests
-  private service Finish_Creation_Deletion_Tests_3 (); pragma scenario (3);
+  private service Finish_Creation_Deletion_Tests (); pragma scenario (3);
 
   relationship R1 is Coloured_Object conditionally has many Flavoured_Object,
                      Flavoured_Object conditionally has many Coloured_Object
@@ -428,3 +428,6 @@ domain Creation_Deletion is
 
 end domain;
 pragma number (3);
+pragma name ("Creation_Deletion");
+pragma kl ("Creation_Deletion");
+pragma version (14);

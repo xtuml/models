@@ -1,0 +1,829 @@
+//! TCA_Tests
+private service CT_Tags::TCA_Tests () is
+my_test = find-one Test_Data
+
+Test = my_test.Current_Test_Number
+
+LocalCount = 0
+
+instResult = find-one Results where idRes = 1
+
+instResult.TCAFlag = TRUE
+
+firstGS = create Global_Super with idGS          = 2      &\
+                                   GSRef         = 0      &\
+                                   CCAFlag       = FALSE  &\
+                                   TCAFlag       = FALSE  &\
+                                   GlobalFlag    = FALSE  &\
+                                   Current_State = 'Idle'
+
+firstTSA = create TCA_SubA with idTSA         = 2     &\
+                                Current_State = 'Idle'
+
+firstGSC = create Global_SubC with idGSC         = 2 &\
+                                   Current_State = 'Idle'
+
+
+firstTS = create TCA_Super with idTS          = 2     &\
+                                TSRef         = 0     &\
+                                TCAFlag       = FALSE &\
+                                Current_State = 'Idle'
+
+firstTSD = create TCA_SubD with idTSD         = 2 &\
+                                Current_State = 'Idle'
+
+firstGSF = create Global_SubF with idGSF         = 2     &\
+                                   GlobalFlag    = FALSE &\
+                                   Current_State = 'Idle'
+
+firstTCA_D = create TCA_D with idTD          = 2     &\
+                               TDRef         = 0     &\
+                               TDPassed      = FALSE &\
+                               TDLinked      = FALSE &\
+                               Current_State = 'Idle'
+
+firstTCA_E = create TCA_E with idTE          = 2 &\
+                               TERef         = 0 &\
+                               Current_State = 'Idle'
+
+firstTCA_F = create TCA_F with idTF          = 2 &\
+                               TFRef         = 0 &\
+                               Current_State = 'Idle'
+
+firstTSG = create TCA_SubG with idTSG = 2
+
+firstGSI = create Global_SubI with idGSI         = 2     &\
+                                   GlobalFlag    = FALSE &\
+                                   Current_State = 'Idle'
+
+firstTA = create TCA_A    with idTA = 2 and Current_State = 'Idle'
+firstTB = create TCA_B    with idTB = 2
+firstTC = create TCA_C    with idTC = 2
+firstGA = create Global_A with idGA = 2
+firstGB = create Global_B with idGB = 2
+
+firstTCA_CP = create TCA_CP with idTCP = 2
+firstGlob_CP = create Global_CP with idGCP = 2
+
+#-----------------------------------------------------------------------------------
+# Test 1 - Test for existance of object instances
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "TCA Objects created"]
+
+   if firstTA != UNDEFINED then
+
+      if firstTB != UNDEFINED then
+
+         if firstTC != UNDEFINED then
+
+            if firstGA != UNDEFINED then
+
+               if firstGB != UNDEFINED then
+                  [] = RPT2:Test_Passed["TCA Objects created", Test, 0]
+               else
+                  [] = RPT3:Test_Failed["TCA Objects created", Test, -10]
+               endif
+
+            else
+               [] = RPT3:Test_Failed["TCA Objects created", Test, -20]
+            endif
+
+         else
+            [] = RPT3:Test_Failed["TCA Objects created", Test, -30]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["TCA Objects created", Test, -40]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["TCA Objects created", Test, -50]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 1
+
+#-----------------------------------------------------------------------------------
+# Test 2 - Navigate from TCA_A to TCA_B
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Navigate TCA super to TCA sub"]
+
+   link firstTA R2 firstTB
+
+   instTB = firstTA -> R2.TCA_B
+
+   unlink firstTA R2 firstTB
+
+   if instTB !=UNDEFINED then
+
+      if instTB.idTB = 2 then
+         [] = RPT2:Test_Passed["Navigate TCA super to TCA sub", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Navigate TCA super to TCA sub", Test, -10]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Navigate TCA super to TCA sub", Test, -20]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 2
+
+#-----------------------------------------------------------------------------------
+# Test 3 - Navigate from Global_B to TCA_C
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Navigate GlobB to TCA"]
+
+   link firstGB R4 firstTC
+
+   instTC = firstGB -> R4.TCA_C
+
+   unlink firstGB R4 firstTC
+
+   if instTC != UNDEFINED then
+
+      if instTC.idTC = 2 then
+         [] = RPT2:Test_Passed["Navigate GlobB to TCA", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Navigate GlobB to TCA", Test, -10]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Navigate GlobB to TCA", Test, -20]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 3
+
+#-----------------------------------------------------------------------------------
+# Test 4 - Navigate from Global_A to Global_B
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Navigate Global to Global"]
+
+   link firstGA R13 firstGB
+
+   instGB = firstGA -> R13.Global_B
+
+   unlink firstGA R13 firstGB
+
+   if instGB != UNDEFINED then
+
+      if instGB.idGB = 2 then
+         [] = RPT2:Test_Passed["Navigate Global to Global", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Navigate Global to Global", Test, -10]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Navigate Global to Global", Test, -20]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 4
+
+#-----------------------------------------------------------------------------------
+# Test 5 - Navigate round Global super type TCA subtypes
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Global Super type"]
+
+   link firstGS    R5  firstTSA
+   link firstTSA   R8  firstTCA_D
+   link firstTCA_D R12 firstTCA_E
+   link firstTCA_E R11 firstTCA_F
+   link firstTCA_F R10 firstGSC
+
+   instTSA   = firstGS   -> R5.TCA_SubA
+   instTCA_D = instTSA   -> R8.TCA_D
+   instTCA_E = instTCA_D -> R12.TCA_E
+   instTCA_F = instTCA_E -> R11.TCA_F
+   instGSC   = instTCA_F -> R10.Global_SubC
+
+   unlink firstGS    R5  firstTSA
+   unlink firstTSA   R8  firstTCA_D
+   unlink firstTCA_D R12 firstTCA_E
+   unlink firstTCA_E R11 firstTCA_F
+   unlink firstTCA_F R10 firstGSC
+
+   if instGSC.idGSC = 2 then
+      [] = RPT2:Test_Passed["Global Super type", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Global Super type", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 5
+
+#-----------------------------------------------------------------------------------
+# Test 6 - Navigate round Global super type TCA subtypes
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Global Super type"]
+
+   link firstGS    R5  firstGSC
+   link firstTSA   R8  firstTCA_D
+   link firstTCA_D R12 firstTCA_E
+   link firstTCA_E R11 firstTCA_F
+   link firstTCA_F R10 firstGSC
+
+   instGSC   = firstGS   -> R5.Global_SubC
+   instTCA_F = instGSC   -> R10.TCA_F
+   instTCA_E = instTCA_F -> R11.TCA_E
+   instTCA_D = instTCA_E -> R12.TCA_D
+   instTSA   = instTCA_D -> R8.TCA_SubA
+
+   unlink firstGS    R5  firstGSC
+   unlink firstTSA   R8  firstTCA_D
+   unlink firstTCA_D R12 firstTCA_E
+   unlink firstTCA_E R11 firstTCA_F
+   unlink firstTCA_F R10 firstGSC
+
+   if instTSA.idTSA = 2 then
+      [] = RPT2:Test_Passed["Global Super type", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Global Super type", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 6
+
+#-----------------------------------------------------------------------------------
+# Test 7 - Navigate TCA Super type to TSA sub type
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "TCA Supertype to TCA subtype"]
+
+   link firstTS R6 firstTSD
+
+   instTSD = firstTS -> R6.TCA_SubD
+
+   unlink firstTS R6 firstTSD
+
+   temp = instTSD.idTSD
+
+   instTSD = firstTS -> R6.TCA_SubD
+
+   if temp = 2 and instTSD = UNDEFINED then
+      [] = RPT2:Test_Passed["TCA Supertype to TCA subtype", Test, 0]
+   else
+      [] = RPT3:Test_Failed["TCA Supertype to TCA subtype", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 7
+
+#-----------------------------------------------------------------------------------
+# Test 8 - Navigate TCA Super type to Global sub type
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "TCA Supertype to Global subtype"]
+
+   link firstTS R6 firstGSF
+
+   instGSF = firstTS -> R6.Global_SubF
+
+   unlink firstTS R6 firstGSF
+
+   temp = instGSF.idGSF
+
+   instGSF = firstTS -> R6.Global_SubF
+
+   if temp = 2 and instGSF = UNDEFINED then
+      [] = RPT2:Test_Passed["TCA Supertype to Global subtype", Test, 0]
+   else
+      [] = RPT3:Test_Failed["TCA Supertype to Global subtype", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 8
+
+#-----------------------------------------------------------------------------------
+# Test 9 - Ensure that sub type of a CCA super type still exists
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "TCA Sub type of CCA super type"]
+
+   if firstTSG != UNDEFINED then
+      [] = RPT2:Test_Passed["TCA Sub type of CCA super type", Test, 0]
+   else
+      [] = RPT3:Test_Failed["TCA Sub type of CCA super type", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 9
+
+#-----------------------------------------------------------------------------------
+# Test 10 - Ensure that Global sub type of CCA super type still exists
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Glob Sub type of CCA super type"]
+
+   if firstGSI != UNDEFINED then
+      [] = RPT2:Test_Passed["Glob Sub type of CCA super type", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Glob Sub type of CCA super type", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 10
+
+#-----------------------------------------------------------------------------------
+# Test 11 - Test TCA object sync service for a TCA object
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Call TCA service"]
+
+   TheRes = 0
+
+   [TheRes] = TCAA1:Add_One[TheRes]
+
+   if TheRes = 1 then
+      [] = RPT2:Test_Passed["Call TCA service", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Call TCA service", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 11
+
+#-----------------------------------------------------------------------------------
+# Test 12 - Test Global object sync service for a global object
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Call Global service"]
+
+   [TheRes] = GA1:Add_One[TheRes]
+
+   if TheRes = 2 then
+      [] = RPT2:Test_Passed["Call Global service", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Call Global service", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 12
+
+#-----------------------------------------------------------------------------------
+# Test 13 - Test TCA Domain Sync Service
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Call Global service"]
+
+   [TheRes] = CT_Tags1::TCA_Add_One[TheRes]
+
+   if TheRes = 3 then
+      [] = RPT2:Test_Passed["Call TCA Domain Sync service", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Call TCA Domain Sync service", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 13
+
+#-----------------------------------------------------------------------------------
+# Test 14 - Test TCA Domain Sync Service
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Call Global service"]
+
+   [TheRes] = CT_Tags3::Global_Add_One[TheRes]
+
+   if TheRes = 4 then
+      [] = RPT2:Test_Passed["Call Global Domain Sync service", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Call Global Domain Sync service", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 14
+
+#-----------------------------------------------------------------------------------
+# Test 15 - Test TCA Domain Sync Service
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "TCA_Bridge"]
+
+   [TheRes] = AO1:TCA_Add[TheRes]
+
+   if TheRes = 5 then
+      [] = RPT2:Test_Passed["TCA_Bridge", Test, 0]
+   else
+      [] = RPT3:Test_Failed["TCA_Bridge", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 15
+
+#-----------------------------------------------------------------------------------
+# Test 16 - Test TCA Domain Sync Service
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "TCA_Bridge"]
+
+   [TheRes] = AO2:Global_Add[TheRes]
+
+   if TheRes = 6 then
+      [] = RPT2:Test_Passed["TCA_Bridge", Test, 0]
+   else
+      [] = RPT3:Test_Failed["TCA_Bridge", Test, -10]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 16
+
+#-----------------------------------------------------------------------------------
+# Test 17 - TCA to TCA Counterpoint link
+#-----------------------------------------------------------------------------------
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "TCA to TCA Counterpoint Link"]
+
+   [ReturnVal] = Nav_TCA2:Create_And_Link_TCA[firstTCA_CP]
+
+   if ReturnVal = 1 then
+      [] = RPT2:Test_Passed["TCA counterpoint link", Test, 0]
+   else
+      [] = RPT3:Test_Failed["TCA counterpoint link", Test, ReturnVal]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 17
+
+#-----------------------------------------------------------------------------------
+# Test 18 - TCA to TCA Counterpoint navigate
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "TCA to TCA Counterpoint nav"]
+
+   [ReturnVal] = Nav_TCA1:Navigate_TCA[firstTCA_CP]
+
+   if ReturnVal = 1 then
+      [] = RPT2:Test_Passed["TCA counterpoint nav", Test, 0]
+   else
+      [] = RPT3:Test_Failed["TCA counterpoint nav", Test, ReturnVal]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 18
+
+#-----------------------------------------------------------------------------------
+# Test 19 - TCA to TCA Counterpoint navigate
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "TCA to TCA Counterpoint unlink"]
+
+   [ReturnVal] = Nav_TCA3:Unlink_TCA[firstTCA_CP]
+
+   if ReturnVal = 1 then
+      [] = RPT2:Test_Passed["TCA counterpoint unlink", Test, 0]
+   else
+      [] = RPT3:Test_Failed["TCA counterpoint unlink", Test, ReturnVal]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 19
+
+#-----------------------------------------------------------------------------------
+# Test 20 - Global to Global Counterpoint link
+#-----------------------------------------------------------------------------------
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Glob to Glob Counterpoint Link"]
+
+   [ReturnVal] = Nav_Glob1:Create_And_Link_Glob[firstGlob_CP]
+
+   if ReturnVal = 1 then
+      [] = RPT2:Test_Passed["Glob counterpoint link", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Glob counterpoint link", Test, ReturnVal]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 20
+
+#-----------------------------------------------------------------------------------
+# Test 21 - Global to Global Counterpoint navigate
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Glob to Glob Counterpoint nav"]
+
+   [ReturnVal] = Nav_Glob2:Navigate_Glob[firstGlob_CP]
+
+   if ReturnVal = 1 then
+      [] = RPT2:Test_Passed["Glob counterpoint nav", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Glob counterpoint nav", Test, ReturnVal]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 21
+
+#-----------------------------------------------------------------------------------
+# Test 22 - Global to Global Counterpoint unlink
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Glob to Glob Counterpoint unlink"]
+
+   [ReturnVal] = Nav_Glob3:Unlink_Glob[firstGlob_CP]
+
+   if ReturnVal = 1 then
+      [] = RPT2:Test_Passed["Glob counterpoint unlink", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Glob counterpoint unlink", Test, ReturnVal]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 22
+
+#-----------------------------------------------------------------------------------
+# Test 23 - Delete all TCA instances
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Delete all TCA instances"]
+
+   {SetTS} = find-all TCA_Super
+   for instTS in {SetTS} do
+      delete instTS
+   endfor
+
+   {SetTSA} = find-all TCA_SubA
+   for instTSA in {SetTSA} do
+      delete instTSA
+   endfor
+
+   {SetTSD} = find-all TCA_SubD
+   for instTSD in {SetTSD} do
+      delete instTSD
+   endfor
+
+   {SetTD} = find-all TCA_D
+   for instTD in {SetTD} do
+      delete instTD
+   endfor
+
+   {SetTE} = find-all TCA_E
+   for instTE in {SetTE} do
+      delete instTE
+   endfor
+
+   {SetTF} = find-all TCA_F
+   for instTF in {SetTF} do
+      delete instTF
+   endfor
+
+   {SetTG} = find-all TCA_SubG
+   for instTG in {SetTG} do
+      delete instTG
+   endfor
+
+   {SetTA} = find-all TCA_A
+   for instTA in {SetTA} do
+      delete instTA
+   endfor
+
+   {SetTB} = find-all TCA_B
+   for instTB in {SetTB} do
+      delete instTB
+   endfor
+
+   {SetTC} = find-all TCA_C
+   for instTC in {SetTC} do
+      delete instTC
+   endfor
+
+
+   {SetTS} = find-all TCA_Super
+   {SetTSA} = find-all TCA_SubA
+   {SetTSD} = find-all TCA_SubD
+   {SetTD} = find-all TCA_D
+   {SetTE} = find-all TCA_E
+   {SetTF} = find-all TCA_F
+   {SetTG} = find-all TCA_SubG
+   {SetTA} = find-all TCA_A
+   {SetTB} = find-all TCA_B
+   {SetTC} = find-all TCA_C
+
+   if countof {SetTS} = 0 then
+
+      if countof {SetTSA} = 0 then
+
+         if countof {SetTSD} = 0 then
+
+            if countof {SetTD} = 0 then
+
+               if countof {SetTE} = 0 then
+
+                  if countof {SetTF} = 0 then
+
+                     if countof {SetTG} = 0 then
+   
+                        if countof {SetTA} = 0 then
+
+                           if countof {SetTB} = 0 then
+
+                              if countof {SetTC} = 0 then
+                                 [] = RPT2:Test_Passed["Delete all TCA instances", Test, 0]
+                              else
+                                 [] = RPT3:Test_Failed["Delete all TCA instances", Test, -10]
+                              endif
+
+                           else
+                              [] = RPT3:Test_Failed["Delete all TCA instances", Test, -20]
+                           endif
+
+                        else
+                           [] = RPT3:Test_Failed["Delete all TCA instances", Test, -30]
+                        endif
+
+                     else
+                        [] = RPT3:Test_Failed["Delete all TCA instances", Test, -40]
+                     endif
+
+                  else
+                     [] = RPT3:Test_Failed["Delete all TCA instances", Test, -50]
+                  endif
+
+               else
+                  [] = RPT3:Test_Failed["Delete all TCA instances", Test, -60]
+               endif
+
+            else
+               [] = RPT3:Test_Failed["Delete all TCA instances", Test, -70]
+            endif
+
+         else
+            [] = RPT3:Test_Failed["Delete all TCA instances", Test, -80]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Delete all TCA instances", Test, -90]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Delete all TCA instances", Test, -90]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 23
+
+#-----------------------------------------------------------------------------------
+# Test 24 - Delete all global instances
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Delete all Global instances"]
+
+   {SetGS} = find-all Global_Super
+   for instGS in {SetGS} do
+      delete instGS
+   endfor
+
+   {SetGSC} = find-all Global_SubC
+   for instGSC in {SetGSC} do
+      delete instGSC
+   endfor
+
+   {SetGSF} = find-all Global_SubF
+   for instGSF in {SetGSF} do
+      delete instGSF
+   endfor
+
+   {SetGSI} = find-all Global_SubI
+   for instGSI in {SetGSI} do
+      delete instGSI
+   endfor
+
+   {SetGA} = find-all Global_A
+   for instGA in {SetGA} do
+      delete instGA
+   endfor
+
+   {SetGB} = find-all Global_B
+   for instGB in {SetGB} do
+      delete instGB
+   endfor
+
+   {SetGS}  = find-all Global_Super
+   {SetGSC} = find-all Global_SubC
+   {SetGSF} = find-all Global_SubF
+   {SetGSI} = find-all Global_SubI
+   {SetGA}  = find-all Global_A
+   {SetGB}  = find-all Global_B
+
+   if countof {SetGS} = 0 then
+
+      if countof {SetGSC} = 0 then
+
+         if countof {SetGSF} = 0 then
+
+            if countof {SetGSI} = 0 then
+
+               if countof {SetGA} = 0 then
+
+                  if countof {SetGB} = 0 then
+                     [] = RPT2:Test_Passed["Global instances deleted", Test, 0]
+                  else
+                     [] = RPT3:Test_Failed["Global instances not deleted", Test, -10]
+                  endif
+
+               else
+                  [] = RPT3:Test_Failed["Global instances not deleted", Test, -20]
+               endif
+   
+            else
+               [] = RPT3:Test_Failed["Global instances not deleted", Test, -30]
+            endif
+
+         else
+            [] = RPT3:Test_Failed["Global instances not deleted", Test, -40]
+         endif
+   
+      else
+         [] = RPT3:Test_Failed["Global instances not deleted", Test, -50]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Global instances not deleted", Test, -60]
+   endif
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 24
+
+#-----------------------------------------------------------------------------------
+
+temp = instResult.TCATotal
+temp = temp + LocalCount
+instResult.TCATotal = temp
+
+my_test.Current_Test_Number = Test

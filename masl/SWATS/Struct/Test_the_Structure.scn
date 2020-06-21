@@ -1,0 +1,142 @@
+//! Test_the_Structure
+private service Struct::Test_the_Structure () is
+# Set up scenario test data.
+Test_Has_Passed = FALSE
+
+My_Test_Data = find-one Test_Data
+Test = My_Test_Data.The_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Returning Structure", "Test returning structure"]
+
+   The_New_Int = 100
+   The_New_Col of Colour_Type = 'Red'
+
+   {The_New_Struct} is My_Simple_Structure
+
+   append[The_New_Int,The_New_Col] to {The_New_Struct}
+
+   [{Returning_Structure}] = Struct5::Test_The_Structure[Test, {The_New_Struct}]
+
+   for [the_integer, the_colour] in {Returning_Structure} do
+
+      if the_integer = 200 then
+
+         if the_colour = 'Blue' then
+            [] = RPT2:Test_Passed["Structures", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Structures", Test, -1]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Structures", Test, -2]
+      endif
+
+   endfor
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Returning Structure", "Test returning structure"]
+
+   The_New_Int = 100
+   The_New_Real = 1.0
+   The_New_String = "Structures Test"
+   The_New_Colour of Colour_Type = 'Blue'
+
+   [{The_Returning_Structure}] = Struct10::Check_Returning_Structure[The_New_Int, The_New_Real, The_New_String, The_New_Colour]
+
+   for [The_Returned_Int, The_Returned_Real, The_Returned_String, The_Returned_UDT] in {The_Returning_Structure} do
+
+      if The_Returned_Int = 200 then
+
+         if The_Returned_Real = 2.0 then
+
+            if The_Returned_String = "Test Complete" then
+
+               if The_Returned_UDT = 'Green' then   
+                  [] = RPT2:Test_Passed["Structures", Test, 0]
+               else   
+                  [] = RPT3:Test_Failed["Structures", Test, -1]
+               endif
+
+            else
+              [] = RPT3:Test_Failed["Structures", Test, -2]
+            endif
+
+         else
+            [] = RPT3:Test_Failed["Structures", Test, -3]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Structures", Test, -4]
+      endif
+
+   endfor
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Returning Structure", "Test returning structure"]
+
+   The_New_Int = 100
+   The_New_Col of Colour_Type = 'Red'
+
+   {New_Structure} is My_Simple_Structure
+
+   append[The_New_Int, The_New_Col] to {New_Structure}
+
+   
+   [{New_Structure}] = Struct5::Test_The_Structure[Test, {New_Structure}]
+
+   How_Many = countof{New_Structure}
+
+   if How_Many = 2 then
+
+      Count = 1
+
+      for [the_integer, the_colour] in {New_Structure} do
+
+         if the_integer = 200 then
+
+            if the_colour = 'Blue' then
+               [] = RPT2:Test_Passed["Structures", Test, 0]
+            else
+               [] = RPT3:Test_Failed["Structures", Test, -1]
+           endif
+
+         else
+            Count = Count + 1
+
+            if Count = 3 then
+               [] = RPT3:Test_Failed["Structures", Test, -2]
+            endif
+
+         endif
+
+      endfor
+ 
+   else
+      [] = RPT3:Test_Failed["Structures", Test, -3]
+   endif
+  
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+
+My_Test_Data.The_Test_Number = Test

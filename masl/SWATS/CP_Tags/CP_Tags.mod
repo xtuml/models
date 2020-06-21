@@ -41,3 +41,6 @@ domain CP_Tags is
 
 end domain;
 pragma number (41);
+pragma name ("Counterpoint Tags");
+pragma kl ("CP_Tags");
+pragma version (1);

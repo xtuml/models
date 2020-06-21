@@ -211,34 +211,34 @@ domain UDT is
 
 
   //! Integer_Number_Scenarios
-  private service Integer_Number_Scenarios_1 (); pragma scenario (1);
+  private service Integer_Number_Scenarios (); pragma scenario (1);
 
   //! Start_UDT_Tests
-  private service Start_UDT_Tests_2 (); pragma scenario (2);
+  private service Start_UDT_Tests (); pragma scenario (2);
 
   //! Finish_UDT_Tests
-  private service Finish_UDT_Tests_3 (); pragma scenario (3);
+  private service Finish_UDT_Tests (); pragma scenario (3);
 
   //! Real_Numbers_Scenario
-  private service Real_Numbers_Scenario_4 (); pragma scenario (4);
+  private service Real_Numbers_Scenario (); pragma scenario (4);
 
   //! Predeclared_Integer_Scenario
-  private service Predeclared_Integer_Scenario_5 (); pragma scenario (5);
+  private service Predeclared_Integer_Scenario (); pragma scenario (5);
 
   //! Terminator_Type_Scenario
-  private service Terminator_Type_Scenario_6 (); pragma scenario (6);
+  private service Terminator_Type_Scenario (); pragma scenario (6);
 
   //! Events_UDT_Scenario
-  private service Events_UDT_Scenario_7 (); pragma scenario (7);
+  private service Events_UDT_Scenario (); pragma scenario (7);
 
   //! Timer_Enum_Scenario
-  private service Timer_Enum_Scenario_8 (); pragma scenario (8);
+  private service Timer_Enum_Scenario (); pragma scenario (8);
 
   //! Enum_Scenario
-  private service Enum_Scenario_9 (); pragma scenario (9);
+  private service Enum_Scenario (); pragma scenario (9);
 
   //! Check_Constraint
-  private service Check_Constraint_10 (); pragma scenario (10);
+  private service Check_Constraint (); pragma scenario (10);
 
   relationship R1 is Test_Data unconditionally Has_a one Test_Data,
                      Test_Data conditionally Has_one one Test_Data;
@@ -435,3 +435,6 @@ domain UDT is
 
 end domain;
 pragma number (19);
+pragma name ("User_Defined_Types");
+pragma kl ("UDT");
+pragma version (6);
