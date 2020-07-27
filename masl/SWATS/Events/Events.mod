@@ -1,5 +1,4 @@
-//! Tests the various forms of event transmission, in particular
-//! polymorphic events and event data.
+//! Tests the various forms of event transmission, in particular polymorphic events and event data.
 domain Events is
   object Object_L;
   object Object_A;
@@ -339,12 +338,10 @@ domain Events is
     //! Referential attribute.
     ReferenceD            : preferred integer;
 
-    //! This attribute is manipulated to indicated that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicated that the required operation was successful.
     ResultA               : integer;
 
-    //! captures the number of events received by this super/subtype
-    //! family
+    //! captures the number of events received by this super/subtype family
     no_of_received_events : integer;
 
     latest_test           : integer;
@@ -354,8 +351,7 @@ domain Events is
     state Idle (Test_Number : in  integer);
     pragma state_number (1);
 
-    //! This state receives the external event that, also sent to
-    //! the subtype object.
+    //! This state receives the external event that, also sent to the subtype object.
     state Supertype_Object (Test        : in  integer,
                             Test_Number : in  integer);
     pragma state_number (3);
@@ -399,8 +395,7 @@ domain Events is
     //! Referential attribute.
     ReferenceE     : integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA        : integer;
 
     ReferenceD     : preferred referential (R5.ReferenceD) integer;
@@ -412,8 +407,7 @@ domain Events is
     state Idle (Test_Number : in  integer);
     pragma state_number (1);
 
-    //! This state receives the external event that is also sent to
-    //! the supertype
+    //! This state receives the external event that is also sent to the supertype
     //! object.
     state Subtype_object (Test        : in  integer,
                           Test_Number : in  integer);
@@ -460,16 +454,12 @@ domain Events is
     Result_N    : integer;
 
 
-    //! This Service is automatically created for a Generic Class.
-    //! It is invoked to create the counterpart Generic Class when a
-    //! Specific Class is created. Only the action ASL is editable.
+    //! This Service is automatically created for a Generic Class. It is invoked to create the counterpart Generic Class when a Specific Class is created. Only the action ASL is editable.
     public service GO_Creation_Service (Specific_Type          : in  Specific_Classes_JTT,
                                         Created_Generic_Object : out instance of Object_N);
     pragma operation_number (1);
 
-    //! This Service is automatically created for a Generic Class.
-    //! It is invoked to delete the counterpart Generic Class when a
-    //! Specific Class is deleted. Only the action ASL is editable.
+    //! This Service is automatically created for a Generic Class. It is invoked to delete the counterpart Generic Class when a Specific Class is deleted. Only the action ASL is editable.
     public instance service GO_Deletion_Service ();
     pragma operation_number (2);
 
@@ -477,19 +467,16 @@ domain Events is
   pragma id (12);
   pragma key_letter ("objN");
 
-  //! This object verifies that both the subtype and supertype
-  //! objects receiver the polymorphic event.
+  //! This object verifies that both the subtype and supertype objects receiver the polymorphic event.
   object Object_Verify_Polymorphic is
 
     //! Referential attribute.
     ReferenceVER    : preferred integer;
 
-    //! This attribute is manipulated to indicate that the event was
-    //! received by the supertype object.
+    //! This attribute is manipulated to indicate that the event was received by the supertype object.
     ResultSUPERTYPE : integer;
 
-    //! This attribute is manipulated to indicate that the event was
-    //! received by the subtype object.
+    //! This attribute is manipulated to indicate that the event was received by the subtype object.
     ResultSUBTYPE   : integer;
 
 
@@ -503,15 +490,12 @@ domain Events is
     state Idle ();
     pragma state_number (1);
 
-    //! This state verifies that the event was received or not
-    //! received in the 
-    //! subtype or the supertype object depending upon the test
-    //! being performed.
+    //! This state verifies that the event was received or not received in the 
+    //! subtype or the supertype object depending upon the test being performed.
     //! 
     //! The following test create the followng results:
     //! 
-    //!     Test  File    Super  Sub  Super     Sub        Verify  
-    //!     Verify
+    //!     Test  File    Super  Sub  Super     Sub        Verify   Verify
     //!                   Obj    Obj  ResultA   ResultA    ResultA  ResultB
     //!     1     001     D      E    10        10         10       10
     //!           002
@@ -529,27 +513,20 @@ domain Events is
     //!           014
     //! 
     //! Test:           Test case identity.
-    //! File:           Indicates the scenario file used within each
-    //! test case.
-    //! Super Obj:      Indicates the 'SUPERtype' object used within
-    //! the test
+    //! File:           Indicates the scenario file used within each test case.
+    //! Super Obj:      Indicates the 'SUPERtype' object used within the test
     //!                 case.
-    //! Sub Obj:        Indicates the 'SUBtype' object used within
-    //! the test case.
-    //! Super ResultA:  The attribute 'ResultA' is manipulated
-    //! within the
+    //! Sub Obj:        Indicates the 'SUBtype' object used within the test case.
+    //! Super ResultA:  The attribute 'ResultA' is manipulated within the
     //!                 'SUPERtype' Object to indicate if required operation was
     //!                 successful.
-    //! Sub ResultA:    The attribute 'ResultA' is manipulated
-    //! within the
+    //! Sub ResultA:    The attribute 'ResultA' is manipulated within the
     //!                 'SUBtype' Object to indicate if required operation was
     //!                 successful.
-    //! Verify ResultA: The attribute 'ResultA' is manipulated
-    //! within the
+    //! Verify ResultA: The attribute 'ResultA' is manipulated within the
     //!                 Verify_Object to indicate that the required operation was
     //!                 successful for the 'SUPERtype' object.
-    //! Verify ResultB: The attribute 'ResultB' is manipulated
-    //! within the
+    //! Verify ResultB: The attribute 'ResultB' is manipulated within the
     //!                 Verify_Object to indicate that the required operation was
     //!                 success for the 'SUBtype' object.
     state Verify_Event_Received (Test : in  integer);
@@ -606,8 +583,7 @@ domain Events is
     //! Referential attribute
     ReferenceJ   : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultJ      : integer;
 
     action_count : integer;
@@ -619,8 +595,7 @@ domain Events is
     state Idle (Test_Number : in  integer);
     pragma state_number (3);
 
-    //! This state receives an external event that is passed onto
-    //! its related
+    //! This state receives an external event that is passed onto its related
     //! subtype object.
     state Supertype_state (Test_Number : in  integer);
     pragma state_number (4);
@@ -647,8 +622,7 @@ domain Events is
   //! Subtype and supertype object.
   object Object_K is
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultK    : integer;
 
     ReferenceK : integer;
@@ -660,8 +634,7 @@ domain Events is
     state Idle (Test_Number : in  integer);
     pragma state_number (1);
 
-    //! This state receives an event from its related supertype
-    //! object, and also
+    //! This state receives an event from its related supertype object, and also
     //! passes the event onto its related subtype object.
     state Sub_Super_state ();
     pragma state_number (2);
@@ -674,11 +647,11 @@ domain Events is
                        Object_J.StartA      => Cannot_Happen,
                        Object_J.ST_Finished => Cannot_Happen);
       Idle (           Finished             => Cannot_Happen,
-                       Object_J.StartA      => Cannot_Happen,
-                       Object_J.ST_Finished => Cannot_Happen);
+                       Object_J.StartA      => Ignore,
+                       Object_J.ST_Finished => Ignore);
       Sub_Super_state (Finished             => Idle,
-                       Object_J.StartA      => Cannot_Happen,
-                       Object_J.ST_Finished => Cannot_Happen);
+                       Object_J.StartA      => Ignore,
+                       Object_J.ST_Finished => Ignore);
     end transition;
 
   end object;
@@ -897,8 +870,7 @@ domain Events is
 
   object Reflexive is
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA          : integer;
 
     ReferenceREFLECT : preferred integer;
@@ -990,8 +962,7 @@ domain Events is
     //! Referential attribute.
     ReferenceTERM : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA       : integer;
 
 
@@ -1030,10 +1001,8 @@ domain Events is
     state Idle ();
     pragma state_number (1);
 
-    //! This state verifies that the tests performed within the
-    //! objects
-    //! 'Creation_Object' and 'Terminal_Object' provide the correct
-    //! results.
+    //! This state verifies that the tests performed within the objects
+    //! 'Creation_Object' and 'Terminal_Object' provide the correct results.
     //! 
     //! The following tests produced the following results:
     //! 
@@ -1044,14 +1013,10 @@ domain Events is
     //! 
     //! 
     //! Test:      Test case identity.
-    //! Object:    Indicates which object to which the test
-    //! applies.
-    //! Reference: Indicates which instance of
-    //! Object_Verify_Creation_Deletion
-    //!            was used to verify the tests performed in the
-    //!            above objects.
-    //! ResultA:   Indicates the value written into the attribute
-    //! 'ResultA'
+    //! Object:    Indicates which object to which the test applies.
+    //! Reference: Indicates which instance of Object_Verify_Creation_Deletion
+    //!            was used to verify the tests performed in the above objects.
+    //! ResultA:   Indicates the value written into the attribute 'ResultA'
     //!            if the test was successful.
     state Verify_State (Test        : in  integer,
                         Test_Number : in  integer);
@@ -1083,17 +1048,13 @@ domain Events is
   pragma id (28);
   pragma key_letter ("objVERCETL");
 
-  //! This object verifies the sending of strange event data and a
-  //! compilers ability to recognise that the event data contained
-  //! within multiple events is the same (i.e. has a corresponding
-  //! name and data type).
+  //! This object verifies the sending of strange event data and a compilers ability to recognise that the event data contained within multiple events is the same (i.e. has a corresponding name and data type).
   object Event_Data is
 
     //! Referential attribute.
     ReferenceEDATA : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA        : integer;
 
 
@@ -1200,8 +1161,7 @@ domain Events is
     //! Preferred identifier.
     idA          : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA      : integer;
 
     Reference_ID : integer;
@@ -1424,15 +1384,13 @@ domain Events is
   pragma id (35);
   pragma key_letter ("SL_ONE_A");
 
-  //! This object verifies that an object may have more than one
-  //! creation state.
+  //! This object verifies that an object may have more than one creation state.
   object Multiple_Creation_States is
 
     //! Preferred identifier.
     idMCS   : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA : integer;
 
 
@@ -1530,19 +1488,16 @@ domain Events is
   pragma id (36);
   pragma key_letter ("objMCS");
 
-  //! This object verifies sending an event to one's self whilst
-  //! others are in the event queue is acted upon first.
+  //! This object verifies sending an event to one's self whilst others are in the event queue is acted upon first.
   object EventToSelf is
 
     //! Preferred identifier.
     idETS     : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     NewResult : integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     OldResult : integer;
 
 
@@ -1640,13 +1595,11 @@ domain Events is
     //! Preferred identifier.
     idBTD   : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA : integer;
 
 
-    //! Cause transition into creation state, for subsequent
-    //! deletion
+    //! Cause transition into creation state, for subsequent deletion
     public service Into_Creation (Test        : in  integer,
                                   Test_Number : in  integer);
     pragma operation_number (1);
@@ -2759,8 +2712,7 @@ domain Events is
     pragma state_number (1);
 
     //! 
-    //! Proves that an event received by the supertype is
-    //! polymorphically
+    //! Proves that an event received by the supertype is polymorphically
     //! delivered to the second subtype.
     state Subtype_object (Test        : in  integer,
                           Test_Number : in  integer);
@@ -2958,4 +2910,4 @@ end domain;
 pragma number (7);
 pragma name ("Events");
 pragma kl ("Events");
-pragma version (22);
+pragma version (23);

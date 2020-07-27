@@ -1,0 +1,26 @@
+//! Perform Captured Requirements Analysis
+private service RP::Perform_Captured_Requirements_Analysis () is
+
+$INLINE
+fprintf(stderr,"Captured requirements analysis started\n");
+$ENDINLINE
+
+#$ADA_INLINE
+#
+#   with Test_Suite_Text_IO;
+#
+#   Test_Suite_Text_IO.Dump_String(Value => "Captured requirements analysis started");
+#
+#$END_ADAINLINE
+
+The_Test_Suite = find-one Test_Suite
+
+if The_Test_Suite != UNDEFINED then
+
+   generate TS3:Go() to The_Test_Suite
+
+else
+
+   [] = RP7::Report_Run_Time_Error["Requirements capture not enabled, analysis impossible"]
+
+endif

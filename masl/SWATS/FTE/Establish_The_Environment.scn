@@ -1,0 +1,19 @@
+//! Establish_The_Environment
+private service FTE::Establish_The_Environment () is
+This_Environment = create unique The_Environment with Where_Are_We = "WACA"
+
+Test_Data = 0
+
+$INLINE
+
+   Test_Data = 1;
+
+   fprintf(stderr,"***** Setting I-SIM environment *****\n");
+
+$ENDINLINE
+
+if Test_Data = 1 then
+   This_Environment.Where_Are_We = "ISIM"
+endif
+
+

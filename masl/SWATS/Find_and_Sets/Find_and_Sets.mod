@@ -128,12 +128,16 @@ domain Find_and_Sets is
 
   object Left_Obj is
 
+    objLO_id : preferred integer;
+
 
   end object;
   pragma id (3);
   pragma key_letter ("objLO");
 
   object Right_Obj is
+
+    objRO_id : preferred integer;
 
 
   end object;
@@ -142,7 +146,11 @@ domain Find_and_Sets is
 
   object Assoc_Obj is
 
-    idAO : integer;
+    idAO     : integer;
+
+    objLO_id : preferred referential (R1.WARNING_undefined_role_name.Left_Obj.objLO_id) integer;
+
+    objRO_id : preferred referential (R1.WARNING_undefined_role_name.Right_Obj.objRO_id) integer;
 
 
   end object;
@@ -158,8 +166,7 @@ domain Find_and_Sets is
     //! Preferred identifier.
     idFM     : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultFM : integer;
 
 
@@ -190,8 +197,7 @@ domain Find_and_Sets is
     //! Preferred identifier.
     idFSI     : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultFSI : integer;
 
 
@@ -221,8 +227,7 @@ domain Find_and_Sets is
   pragma id (10);
   pragma key_letter ("objFSI");
 
-  //! This object verifies that the following statements maybe
-  //! peroformed on an existing set:
+  //! This object verifies that the following statements maybe peroformed on an existing set:
   //! 
   //! 	find-one
   //! 	find-only
@@ -233,8 +238,7 @@ domain Find_and_Sets is
     //! Preferred identifier.
     idFS     : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultFS : integer;
 
 
@@ -256,8 +260,7 @@ domain Find_and_Sets is
   pragma id (12);
   pragma key_letter ("objFS");
 
-  //! This object contains data that is manipulated by other
-  //! objects.
+  //! This object contains data that is manipulated by other objects.
   object Object_A is
 
     //! Preferred identifier.
@@ -271,9 +274,7 @@ domain Find_and_Sets is
   pragma id (15);
   pragma key_letter ("objA");
 
-  //! Object_B contains no instances and hence any operations
-  //! performed upon it will return an empty set are an undefined
-  //! instance handle.
+  //! Object_B contains no instances and hence any operations performed upon it will return an empty set are an undefined instance handle.
   object Object_B is
 
     //! Preferred identifier.
@@ -284,8 +285,7 @@ domain Find_and_Sets is
   pragma id (16);
   pragma key_letter ("objB");
 
-  //! This object contains data that is manipulated by other
-  //! objects.
+  //! This object contains data that is manipulated by other objects.
   object Object_E is
 
     //! Preferred identifier.
@@ -306,4 +306,4 @@ end domain;
 pragma number (8);
 pragma name ("Find_and_Sets");
 pragma kl ("Find_and_Sets");
-pragma version (14);
+pragma version (15);

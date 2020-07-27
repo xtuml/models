@@ -1,6 +1,5 @@
 //! 
-//! Proves that an event received by the supertype is
-//! polymorphically
+//! Proves that an event received by the supertype is polymorphically
 //! delivered to the second subtype.
 state Events::Object_F.Subtype_object (Test        : in  integer,
                                        Test_Number : in  integer) is

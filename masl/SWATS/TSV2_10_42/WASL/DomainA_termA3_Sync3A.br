@@ -1,0 +1,23 @@
+define bridge  DomainA:termA3:Sync3A
+input \
+	InputA:Base_Integer_Type ,\
+	InputB:Base_Integer_Type ,\
+	Test:Base_Integer_Type 
+output \
+	OutputA:Base_Integer_Type ,\
+	OutputB:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+  $USE DomainB
+     [ReturnA, ReturnB] = DomainB3::Sync3B[InputA, InputB, Test]
+
+      OutputA = ReturnA
+      OutputB = ReturnB
+
+   $ENDUSE
+
+enddefine

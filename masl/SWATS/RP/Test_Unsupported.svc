@@ -1,0 +1,25 @@
+public service RP::Test_Unsupported (Unsupported_Test_Number   : in  integer,
+                                     Unsupported_Domain_Number : in  integer) is
+the_test = Unsupported_Test_Number
+
+the_domain = Unsupported_Domain_Number
+
+[] = DD3:A_Test_Is_Unsupported[the_test, the_domain]
+
+$INLINE
+fprintf(stderr, "Test Number %d is UNSUPPORTED\n",
+        the_test);
+$ENDINLINE
+
+
+#$ADA_INLINE
+# with Ada.Text_IO;
+#
+# 
+# -- Ada.Text_IO.Put_Line("Test Number " & integer'image(integer(the_test)) & 
+# --                     " is UNSUPPORTED");
+#
+#$END_ADAINLINE
+
+
+

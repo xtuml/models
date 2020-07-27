@@ -1,0 +1,18 @@
+//! A test has passed, update the attribute accordingly.
+public service RP::A_Test_That_Passed.Got_One (Invoker_Domain_IH : in  instance of Domain_Details) is
+
+The_Passed_Instance = Invoker_Domain_IH -> R1.A_Test_That_Passed
+
+if The_Passed_Instance != UNDEFINED then
+
+   local_increment = The_Passed_Instance.Passed_Counter
+
+   local_increment = local_increment + 1
+
+   The_Passed_Instance.Passed_Counter = local_increment
+
+else
+
+   [] = RP7::Report_Run_Time_Error["Can not find a passed instance associated with this domain"]
+ 
+endif

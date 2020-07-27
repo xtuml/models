@@ -64,10 +64,7 @@ domain DomainA is
                            OutputB : out integer);
     pragma terminator_operation_number(4);
 
-    //! This terminator is project level defined and shall prove
-    //! that two domains (A & B) can use a locally defined object
-    //! within a $USE $ENDUSE section, where the local object has
-    //! the same name in both domains.
+    //! This terminator is project level defined and shall prove that two domains (A & B) can use a locally defined object within a $USE $ENDUSE section, where the local object has the same name in both domains.
     public service Common_Named_Object_Usage (Test_Number_Parameter   : in  integer,
                                               This_Test_Has_Failed    : out boolean,
                                               This_Test_Failure_Value : out integer);
@@ -116,8 +113,7 @@ domain DomainA is
   pragma key_letter ("RPT");
 
 
-  //! Bridge that will allow navigation of a relationship in the
-  //! target domain.
+  //! Bridge that will allow navigation of a relationship in the target domain.
   terminator Navigate is
     public service Single_Bridge_Navigate (Test : in  integer);
     pragma terminator_operation_number(1);
@@ -222,8 +218,7 @@ domain DomainA is
   relationship R4 is Domain_A_Object_Super is_a (Domain_A_Object_SubA,
                                                  Domain_A_Object_SubB);
 
-  //! Object_A is used to invoke the series of tests as specified
-  //! in the domain mission statement.
+  //! Object_A is used to invoke the series of tests as specified in the domain mission statement.
   //! 
   //! The tests are invoked through a series of events.
   object Object_A is
@@ -231,13 +226,11 @@ domain DomainA is
     //! Preferred indentifier.
     idA     : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA : integer;
 
 
-    //! This function invokes an open contract peer to peer bridge
-    //! implementation.
+    //! This function invokes an open contract peer to peer bridge implementation.
     public service do_ptp_open ();
     pragma operation_number (1);
 

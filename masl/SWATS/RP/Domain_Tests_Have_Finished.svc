@@ -1,0 +1,25 @@
+public service RP::Domain_Tests_Have_Finished (Completed_Domain_Name : in  string,
+                                               Domain_Identifer      : in  integer) is
+#Find the only domain currently in existence.
+
+The_Domain_Details = find-one Domain_Details where Domain_Number = Domain_Identifer
+
+if The_Domain_Details != UNDEFINED then
+
+   if The_Domain_Details.Domain_Name = Completed_Domain_Name then
+
+      generate DD1:Tests_Have_Finished() to The_Domain_Details
+
+   else
+
+      [] = RP7::Report_Run_Time_Error["Mismatched domains to report from"]
+
+
+   endif
+
+
+else
+
+   [] = RP7::Report_Run_Time_Error["No domain found to report from"]
+
+endif

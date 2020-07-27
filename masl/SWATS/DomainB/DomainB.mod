@@ -14,8 +14,7 @@ domain DomainB is
                                       Sandy,
                                       Wes);
 
-  //! This synchronous service is invoked by a synchronous service
-  //! in DomainA.
+  //! This synchronous service is invoked by a synchronous service in DomainA.
   public service Sync1B (inputA  : in  integer,
                          inputB  : in  integer,
                          Test    : in  integer,
@@ -23,9 +22,7 @@ domain DomainB is
                          outputB : out integer);
   pragma domain_operation_number (1);
 
-  //! This synchronous service is invoked by an event being sent
-  //! to a terminator in DomainA, thus an 'Event invokes a Sync
-  //! service in another domain'.
+  //! This synchronous service is invoked by an event being sent to a terminator in DomainA, thus an 'Event invokes a Sync service in another domain'.
   public service Sync2B (inputA  : in  integer,
                          inputB  : in  integer,
                          Test    : in  integer,
@@ -226,8 +223,7 @@ domain DomainB is
   pragma id (4);
   pragma key_letter ("objB");
 
-  //! Referential object for many to many relationships Object_C
-  //! ObjectD
+  //! Referential object for many to many relationships Object_C ObjectD
   object Object_CD is
 
     idC    : preferred referential (R1.is_controlled_by.Object_C.idC) integer;

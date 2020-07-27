@@ -180,8 +180,7 @@ domain Function_Calls is
     //! Preferred identifier.
     ReferenceA : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA    : integer;
 
 
@@ -270,8 +269,7 @@ domain Function_Calls is
     //! Preferred identifier.
     ReferenceB : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA    : integer;
 
 
@@ -284,14 +282,12 @@ domain Function_Calls is
     public service FunctionF (OutputA : out integer);
     pragma operation_number (2);
 
-    //! This function receives an input parameter but does not
-    //! return a parameter to the calling function.
+    //! This function receives an input parameter but does not return a parameter to the calling function.
     public service FunctionG (InputA : in  instance of Object_B,
                               InputB : in  integer);
     pragma operation_number (3);
 
-    //! This function receives no parameters and returns no
-    //! parameters.
+    //! This function receives no parameters and returns no parameters.
     public service FunctionH ();
     pragma operation_number (4);
 
@@ -610,8 +606,7 @@ domain Function_Calls is
   pragma id (14);
   pragma key_letter ("BO");
 
-  //! Object used for proving that passive objects created and
-  //! passed into services in a tight loop are dealt with.
+  //! Object used for proving that passive objects created and passed into services in a tight loop are dealt with.
   object A_Tight_Object is
 
     Start_Value     : integer;

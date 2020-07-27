@@ -52,8 +52,7 @@ domain Relationships is
   object Sub_Sub_L11;
   object Object_K;
 
-  //! Colour is a user defined type, for the purpose of verifing
-  //! enumeration.
+  //! Colour is a user defined type, for the purpose of verifing enumeration.
   private type Colour is enum (Red,
                                Green,
                                Black);
@@ -271,11 +270,9 @@ domain Relationships is
   pragma id (2);
   pragma key_letter ("objA");
 
-  //! This object forms part of a 1c:1c and 1-(1c:1c)
-  //! relationships.
+  //! This object forms part of a 1c:1c and 1-(1c:1c) relationships.
   //! 
-  //! All tests for the above relationships are controlled by this
-  //! object.
+  //! All tests for the above relationships are controlled by this object.
   object Object_B is
 
     //! Preferred identifier.
@@ -283,8 +280,7 @@ domain Relationships is
 
     idA     : referential (R1.May_have_a.Object_A.idA) integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA : integer;
 
     idM     : referential (R18.Has_a.Object_M.idM) integer;
@@ -358,15 +354,13 @@ domain Relationships is
 
   //! This object forms part of 1c:Mc and 1-(1c:Mc) relationship.
   //! 
-  //! All tests for the above relationships are controlled by this
-  //! object.
+  //! All tests for the above relationships are controlled by this object.
   object Object_D is
 
     //! Preferred identifier.
     idD         : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA     : integer;
 
     //! Colour enumeration
@@ -420,8 +414,7 @@ domain Relationships is
 
   //! This object forms part of a 1-(Mc:Mc) relationships.
   //! 
-  //! All tests for the above relationship are controlled by this
-  //! object.
+  //! All tests for the above relationship are controlled by this object.
   object Object_E is
 
     //! Preferred identifier.
@@ -499,27 +492,19 @@ domain Relationships is
   pragma id (8);
   pragma key_letter ("objF");
 
-  //! This is the associative object that forms part of the
-  //! 1-(Mc:Mc) relationship.
+  //! This is the associative object that forms part of the 1-(Mc:Mc) relationship.
   object Object_EF is
 
     idE     : preferred referential (R5.Has_lots.Object_E.idE) integer;
 
     idF     : preferred referential (R5.Has_many.Object_F.idF) integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA : integer;
 
     //!    
     idEF    : integer;
 
-
-    assigner event Fault ();
-
-    assigner event Finished ();
-
-    assigner event StartA ();
 
   end object;
   pragma id (9);
@@ -565,8 +550,7 @@ domain Relationships is
     //! Preferred identifier.
     idH     : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA : integer;
 
 
@@ -660,19 +644,16 @@ domain Relationships is
   pragma id (17);
   pragma key_letter ("MRA");
 
-  //! This object forms part of the following types of reflexive
-  //! relationships:
+  //! This object forms part of the following types of reflexive relationships:
   //! 
   //! 	1c:1c
   //! 	1c:Mc
   //! 	Mc:Mc
   //! 
-  //! All tests for the above relationships are handled by this
-  //! object.
+  //! All tests for the above relationships are handled by this object.
   object Object_G is
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA          : integer;
 
     idG              : preferred integer;
@@ -902,8 +883,7 @@ domain Relationships is
   pragma id (28);
   pragma key_letter ("objO");
 
-  //! This is the associative object that forms part of the
-  //! 1-(1c:Mc) realtionship.
+  //! This is the associative object that forms part of the 1-(1c:Mc) realtionship.
   object Object_DO is
 
     idD  : referential (R19.Has_a.Object_D.idD) integer;
@@ -923,8 +903,7 @@ domain Relationships is
     //! Preferred identifier.
     idP     : preferred integer;
 
-    //! This attribute is manipulted to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulted to indicate that the required operation was successful.
     ResultA : integer;
 
 
@@ -1200,4 +1179,4 @@ end domain;
 pragma number (10);
 pragma name ("Relationships");
 pragma kl ("Relationships");
-pragma version (18);
+pragma version (19);

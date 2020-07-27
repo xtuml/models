@@ -1,0 +1,295 @@
+project TSV2 is
+  domain DomainA is
+    terminator Navigate is
+      public service Single_Bridge_Navigate (Test : in  integer);
+
+      public service Shared_Bridge_Navigate (Test : in  integer);
+
+      public service One_to_One_Navigate (Test : in  integer);
+
+      public service One_to_Many_Navigate (Test : in  integer);
+
+      public service Many_to_Many_Navigate (Test : in  integer);
+
+      public service Misc_Calls (Test : in  integer);
+
+      public service Enum_Test (Test       : in  integer,
+                                Enum_Input : in  Test_Enum_Type);
+
+      public service Big_Bridge_Navigation (Test       : in  integer,
+                                            Enum_Input : in  Test_Enum_Type);
+
+      public service Pass_IH (Test   : in  integer,
+                              The_IH : in  instance of Object_A);
+
+      public service Pass_Parameters (The_Int_Input  : in  integer,
+                                      The_Real_Input : in  real,
+                                      The_Text_Input : in  string,
+                                      The_Bool_Input : in  boolean,
+                                      The_Result     : out integer);
+
+    end terminator;
+    pragma key_letter ("NAV");
+
+
+    terminator Report is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name : in  string);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+    terminator TerminatorA is
+      public service Sync1A (inputA  : in  integer,
+                             inputB  : in  integer,
+                             Test    : in  integer,
+                             outputA : out integer,
+                             outputB : out integer);
+
+      public service Sync2A (inputA  : in  integer,
+                             inputB  : in  integer,
+                             Test    : in  integer,
+                             outputA : out integer,
+                             outputB : out integer);
+
+      public service Sync3A (InputA  : in  integer,
+                             InputB  : in  integer,
+                             Test    : in  integer,
+                             OutputA : out integer,
+                             OutputB : out integer);
+
+      public service Sync4A (InputA  : in  integer,
+                             InputB  : in  integer,
+                             Test    : in  integer,
+                             OutputA : out integer,
+                             OutputB : out integer);
+
+      public service Common_Named_Object_Usage (Test_Number_Parameter   : in  integer,
+                                                This_Test_Has_Failed    : out boolean,
+                                                This_Test_Failure_Value : out integer);
+
+    end terminator;
+    pragma key_letter ("termA");
+
+
+  end domain;
+
+  domain DomainB is
+    terminator Navigate is
+      public service Navigate_One_to_One (Test : in  integer);
+
+      public service Navigate_One_to_Many (Test : in  integer);
+
+      public service Navigate_Many_to_Many (Test : in  integer);
+
+      public service Misc_Calls (Test : in  integer);
+
+      public service Enum_Test (Test       : in  integer,
+                                Enum_Input : in  Test_Enum_Type);
+
+    end terminator;
+    pragma key_letter ("NAV");
+
+
+    terminator Report is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name : in  string);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+
+  end domain;
+
+  domain RP is
+  end domain;
+
+  domain Creation_Deletion is
+    terminator Enumeration_Terminator is
+      public service Big_Bridge_Test (Test : in  integer);
+
+    end terminator;
+    pragma key_letter ("ENUM");
+
+
+    terminator Report_Terminator is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name   : in  string,
+                                           This_Domain_Number : in  integer);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+  end domain;
+
+  domain Find_and_Sets is
+
+    terminator Report is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name : in  string);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+    terminator Where_Are_We is
+      public service What_Env (Env_Text : out string);
+
+    end terminator;
+    pragma key_letter ("WAW");
+
+
+  end domain;
+
+  domain Function_Calls is
+    terminator Nav_To_Bridge is
+      public service Call_Domain_Sync_Service (Test        : in  integer,
+                                               InputValue1 : in  integer,
+                                               InputValue2 : in  integer,
+                                               InputValue3 : in  integer);
+
+      public service Call_Object_Sync_Service (Test        : in  integer,
+                                               Text_Input  : in  string,
+                                               The_Integer : in  integer,
+                                               The_Real    : in  real);
+
+    end terminator;
+    pragma key_letter ("NTB");
+
+
+    terminator Report is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name : in  string);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+    terminator Where_Are_We is
+      public service What_Env (Env_Text : out string);
+
+    end terminator;
+    pragma key_letter ("WAW");
+
+
+  end domain;
+
+end project;
