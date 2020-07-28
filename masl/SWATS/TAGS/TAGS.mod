@@ -107,8 +107,7 @@ domain TAGS is
                                                 Outgoing_Parameter_3 : out integer); pragma hand_coded ("1");
     pragma terminator_operation_number(3);
 
-    //! Dummy tagged terminator with odd param names to get around
-    //! possible I-SIM error
+    //! Dummy tagged terminator with odd param names to get around possible I-SIM error
     public service A_Tagged_Dummy_Terminator_One (Mickey_Mouse_Input_One  : in  integer,
                                                   Minnie_Mouse_Output_One : out integer); pragma hand_coded ("");
     pragma terminator_operation_number(2);
@@ -741,9 +740,7 @@ domain TAGS is
   pragma id (20);
   pragma key_letter ("SUB_TWO");
 
-  //! This object shall define several attributes, each to be
-  //! stored in non-initialised memory for so called "glitch
-  //! recovery". This is a singleton object.
+  //! This object shall define several attributes, each to be stored in non-initialised memory for so called "glitch recovery". This is a singleton object.
   object Singleton_Glitch_Recovery is
 
     An_Integer  : integer;

@@ -1,0 +1,489 @@
+define function  DD4:End_Of_Test
+input \
+	The_Domain:Domain_Details_IH 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+
+if The_Domain != UNDEFINED then
+
+   {Failed_Data} is Failed_Tests_Record_Type
+
+   {Unsupported_Data} is Unsupported_Tests_Record_Type
+
+   {Duplicated_Data} is Duplicated_Tests_Record_Type
+
+   # find the objects detailing the pass/fail & unsupported data
+   Tell_Me_About_The_Passes        = The_Domain -> R1.A_Test_That_Passed
+   Tell_Me_About_The_Failures      = The_Domain -> R2.A_Test_That_Failed
+   Tell_Me_About_The_Unsupported   = The_Domain -> R3.A_Test_That_Is_Unsupported
+   {Tell_Me_About_The_Duplicated}  = The_Domain -> R4.Duplicated_Result
+   {Tell_Me_About_The_Tests}       = The_Domain -> R8.Test_Details
+   {Tell_Me_About_The_Comments}    = The_Domain -> R9.Supporting_Comments
+
+   Local_Total_Duplicated_Count = 0
+
+   # Dump out the details
+   Local_Passed          = Tell_Me_About_The_Passes.Passed_Counter
+   Local_Failed          = Tell_Me_About_The_Failures.Failed_Counter
+   Local_Unsupported     = Tell_Me_About_The_Unsupported.Unsupported_Counter
+   Local_The_Domain_Name = The_Domain.Domain_Name
+
+   local_next_test_number = 0
+   local_all_test_results_dumped = FALSE
+   local_match_found = FALSE
+
+   domain_name_for_file_handling = The_Domain.Domain_Name
+   domain_number_for_file_handling = The_Domain.Domain_Number
+
+
+   # Open a new output file for writing the results to. This will only be done for ADA runs.
+   #
+
+
+#$ADA_INLINE
+#with Test_Suite_Text_IO;
+#Test_Suite_Text_IO.Open_File_For_Writing(
+   #    Name_Of_File             => domain_name_for_file_handling,
+   #    Unique_Domain_Identifier => domain_number_for_file_handling);
+#$END_ADAINLINE
+
+
+   # Loop through all of the tests until all of the tests results have been dumped
+   loop
+
+      # Get the next test number 
+      local_next_test_number = local_next_test_number + 1
+      local_match_found = FALSE
+
+      # Obtain a single instance of the test details and obtain the results for that instance
+      for Each_Test_Result in {Tell_Me_About_The_Tests} do     
+
+         Tell_Me_About_The_Results = Each_Test_Result -> R6.Results_Of_Tests
+
+         # Sitting in this loop is a good place to now retrieve the
+         # requirement identifiers that may be associated with this test.
+
+         {All_The_Requirements} = Each_Test_Result -> R7.Requirement_Identifier_For_Test
+
+         How_Many_Requirements = countof {All_The_Requirements}
+
+
+         # If results have been found for the current instance 
+         if Tell_Me_About_The_Results != UNDEFINED then
+
+            # If the reult of the current instance = the current test to be dumped obtain the reults data
+            if Tell_Me_About_The_Results.The_Number_Of_Test = local_next_test_number then
+               local_match_found             = TRUE
+               Local_Test_Number             = Tell_Me_About_The_Results.The_Number_Of_Test
+               Local_Test_Domain_Name        = Tell_Me_About_The_Results.The_Name_Of_The_Domain 
+               Local_Duplicated_Result_Count = Tell_Me_About_The_Results.The_No_Of_Duplicated_Results
+               Local_The_Object              = Tell_Me_About_The_Results.The_Result_Of_Object
+               Local_Result_Value            = Tell_Me_About_The_Results.The_Value_Of_The_Result
+               Local_Test_Details            = Tell_Me_About_The_Results.Domain_Test_Details
+
+               Local_Test_Purpose     = Tell_Me_About_The_Results.The_Purpose_Of_Test
+
+               {Local_Comments}    = find Supporting_Comments where The_Test_No = local_next_test_number & Comment_ID = The_Domain.Domain_Number
+
+
+               # If the test passed set the test result to passed
+               if Tell_Me_About_The_Results.The_Result_Of_Test = 'Passed' then  
+
+                  Local_Test_Result      = "PASSED"
+
+               else
+   
+                  # If the test failed set the test result to failed
+                  if Tell_Me_About_The_Results.The_Result_Of_Test = 'Failed' then  
+
+                     Local_Test_Result      = "** ** FAILED ** **"
+                     # Stash the failed test number to dump out later.
+                     append [Local_Test_Number] to {Failed_Data}
+
+                  else
+                    
+                     # If the test failed set the test result to unsupported
+                     if Tell_Me_About_The_Results.The_Result_Of_Test = 'Unsupported' then
+
+                        Local_Test_Result = "UNSUPPORTED"
+                        #stash the unsupported test number to dump out later
+                        append [Local_Test_Number, Local_Test_Purpose] to {Unsupported_Data}
+
+                     else
+
+                        # Neither fish nor fowl, should NEVER happen.
+                        Local_Test_Result = "UNKNOWN"
+                        [] = RP9::Test_Anomalous_Behaviour[Local_Test_Number, "UNKNOWN result"]
+ 
+                     endif
+
+                  endif
+
+               endif
+ 
+
+               Local_Total_Duplicated_Count = Local_Total_Duplicated_Count + Local_Duplicated_Result_Count
+ 
+               #stash the duplicated count for this test
+               if Local_Duplicated_Result_Count > 0 then
+                  append [Local_Test_Number, Local_Duplicated_Result_Count ] to {Duplicated_Data}
+               endif
+
+               $INLINE
+
+                  fprintf(stderr, " \n");
+                  fprintf(stderr, "---------------------------------------------------------------------------\n");
+                  fprintf(stderr, "Domain                      %s\n", Local_Test_Domain_Name);
+                  fprintf(stderr, "Test Number                 %d\n", Local_Test_Number);
+                  fprintf(stderr, "Object                      %s\n", Local_The_Object);
+                  fprintf(stderr, "Duplicated Results          %d\n", Local_Duplicated_Result_Count);
+                  fprintf(stderr, "Test Purpose                %s\n", Local_Test_Purpose);
+                  
+               $ENDINLINE
+
+               for Next_Comment in {Local_Comments} do
+                  A_Comment = Next_Comment.The_Comment
+                  $INLINE
+                     fprintf(stderr, "Comments -                  %s\n", A_Comment);
+                  $ENDINLINE
+               endfor
+
+               #$ADA_INLINE
+
+                  # Test_Suite_Text_IO.Dump_String("");
+                  # Test_Suite_Text_IO.Dump_String("---------------------------------------------------------------------------");
+                  # Test_Suite_Text_IO.Dump_String("Domain                       " & Local_Test_Domain_Name);
+                  # Test_Suite_Text_IO.Dump_String("Object                       " & Local_The_Object);
+                  # Test_Suite_Text_IO.Dump_String("Test Number                  " & integer'image(integer(Local_Test_Number )) );
+                  # Test_Suite_Text_IO.Dump_String("Duplicated Tests For Domain  " & integer'image(integer(Local_Duplicated_Result_Count )) );
+                  # Test_Suite_Text_IO.Dump_String("Test Purpose                 " & Local_Test_Purpose);
+
+
+               #$END_ADAINLINE
+
+               for each_comment in {Local_Comments} do
+                  A_Comment = each_comment.The_Comment
+                  #$ADA_INLINE
+                     # Test_Suite_Text_IO.Dump_String("Comments -                   " & A_Comment);
+                  #$END_ADAINLINE
+               endfor
+
+               # Dump out any other specified requirement identifiers.
+               if How_Many_Requirements > 0 then
+
+                  First_Time_Through = TRUE
+
+                  for Individual_Requid in {All_The_Requirements} do
+                      Local_Test_Req_ID = Individual_Requid.requid
+
+                      if First_Time_Through = TRUE then
+
+                         $INLINE
+                           fprintf(stderr, "Requirement Identifier(s)   %s\n", Local_Test_Req_ID );
+                         $ENDINLINE
+
+                         
+                         #$ADA_INLINE
+                            #Test_Suite_Text_IO.Display_Requid ("Requirement Identifier(s)    " , 
+                            #    Local_Test_Req_ID);
+                         #$END_ADAINLINE
+
+                      else
+                         $INLINE
+                           fprintf(stderr, "                            %s\n", Local_Test_Req_ID );
+                         $ENDINLINE
+
+                         
+                         #$ADA_INLINE
+                            #Test_Suite_Text_IO.Display_Requid ("                              " , 
+                            #    Specific_Requid => Local_Test_Req_ID);
+                         #$END_ADAINLINE
+
+                      endif
+
+
+                     First_Time_Through = FALSE
+
+                  endfor
+               endif
+
+               $INLINE
+                  fprintf(stderr, "\n");
+                  fprintf(stderr, "Result data                 %s\n", Local_Test_Details );
+                  fprintf(stderr, "Test Result                 %s with %d\n", Local_Test_Result, Local_Result_Value);
+               $ENDINLINE
+ 
+               #$ADA_INLINE
+                  #Test_Suite_Text_IO.Dump_String("");
+                  #Test_Suite_Text_IO.Dump_String("Result data                  " & Local_Test_Details);
+                  #Test_Suite_Text_IO.Dump_String("Test Result                  " & Local_Test_Result & "with " &  
+                  #    integer'image(integer(Local_Result_Value ))  );
+               #$END_ADAINLINE
+
+
+            endif
+         
+            # If all of the tests have been dumped then set the all results dumped flag to TRUE
+            if local_next_test_number >= countof {Tell_Me_About_The_Tests} then
+               local_all_test_results_dumped = TRUE
+            endif
+      
+
+         else
+            # Not found a result for this test
+            [] = RP9::Test_Anomalous_Behaviour[Each_Test_Result.The_Test_No, "One or More Results Were Not Found"]
+
+         endif
+
+         # If a match between the result test number and required test number has been found then break out of the for loop
+         breakif local_match_found = TRUE
+
+      endfor
+
+      # If all of the reults have been dumped then break out of the loop
+      breakif local_all_test_results_dumped = TRUE 
+
+   endloop
+
+   # If there was some failures found during the run
+
+   Total_Number_Of_Tests_Attempted = Local_Passed + Local_Failed + Local_Unsupported
+
+   $INLINE
+      fprintf(stderr, " \n");
+      fprintf(stderr,"***************************************************************************\n");
+      fprintf(stderr,"***************************************************************************\n");
+      fprintf(stderr, " \n");
+      fprintf(stderr, "Overall Results for domain      %s\n", Local_The_Domain_Name);
+      fprintf(stderr, "Total  Tests      %d\n", Total_Number_Of_Tests_Attempted);
+      fprintf(stderr, "Passed Tests      %d\n", Local_Passed);
+      fprintf(stderr, "Failed Tests      %d\n", Local_Failed);
+   $ENDINLINE
+
+   #$ADA_INLINE
+      #Test_Suite_Text_IO.Dump_String("");
+      #Test_Suite_Text_IO.Dump_String("***************************************************************************");
+      #Test_Suite_Text_IO.Dump_String("***************************************************************************");
+      #Test_Suite_Text_IO.Dump_String("");
+      #Test_Suite_Text_IO.Dump_String("Overall Results for domain " & Local_The_Domain_Name);
+      #Test_Suite_Text_IO.Dump_String("Total Tests       " & integer'image(integer(Total_Number_Of_Tests_Attempted )) );
+      #Test_Suite_Text_IO.Dump_String("Passed Tests      " & integer'image(integer(Local_Passed )) );
+      #Test_Suite_Text_IO.Dump_String("Failed Tests      " & integer'image(integer(Local_Failed )) );
+   #$END_ADAINLINE
+
+   if Local_Failed != 0 then
+      for [Local_Failed_Test_Number] in {Failed_Data} do
+
+         $INLINE
+            fprintf(stderr, " failure found in test %d\n", Local_Failed_Test_Number);
+         $ENDINLINE
+
+         #$ADA_INLINE
+            #Test_Suite_Text_IO.Dump_String(" failure found in test " & 
+            #    integer'image(integer( Local_Failed_Test_Number )) );
+         #$END_ADAINLINE
+
+      endfor
+   endif
+
+   $INLINE
+   fprintf(stderr, "Unsupported Tests %d\n", Local_Unsupported);
+   $ENDINLINE
+
+   #$ADA_INLINE
+   #Test_Suite_Text_IO.Dump_String("Unsupported Tests " & 
+   #    integer'image(integer( Local_Unsupported )) );
+   #$END_ADAINLINE
+
+   if countof {Unsupported_Data} != 0 then
+
+      for [This_Unsupported_Test_Number, This_Test_Details_Text] in {Unsupported_Data} do
+
+         $INLINE
+            fprintf(stderr, " test %d was testing for %s\n", This_Unsupported_Test_Number, This_Test_Details_Text  );
+         $ENDINLINE
+
+         #$ADA_INLINE
+            #Test_Suite_Text_IO.Dump_String(" test " & integer'image(integer( This_Unsupported_Test_Number )) & 
+            # " was testing for " & This_Test_Details_Text );
+         #$END_ADAINLINE
+
+      endfor
+
+   endif
+
+
+   $INLINE
+      fprintf(stderr, "Total Duplicated Tests  %d\n", Local_Total_Duplicated_Count);
+   $ENDINLINE
+
+   #$ADA_INLINE
+   #Test_Suite_Text_IO.Dump_String("Total Duplicated Tests  " & 
+   #    integer'image(integer( Local_Total_Duplicated_Count )) );
+   #$END_ADAINLINE
+
+
+   if countof {Duplicated_Data} != 0 then
+
+      for [This_Duplicated_Test_Number, Number_Of_Duplicated_Results] in {Duplicated_Data} do
+
+         if Number_Of_Duplicated_Results > 1 then
+            $INLINE
+               fprintf(stderr, " test %d had %d duplicated results\n", This_Duplicated_Test_Number, Number_Of_Duplicated_Results );
+            $ENDINLINE
+
+            #$ADA_INLINE
+               #Test_Suite_Text_IO.Dump_String(" test " & integer'image(integer( This_Duplicated_Test_Number )) & " had " & 
+               #    integer'image(integer(Number_Of_Duplicated_Results)) & " duplicated results" );
+            #$END_ADAINLINE
+
+         else
+            $INLINE
+               fprintf(stderr, " test %d had %d duplicated result\n", This_Duplicated_Test_Number, Number_Of_Duplicated_Results );
+            $ENDINLINE
+
+            #$ADA_INLINE
+               #Test_Suite_Text_IO.Dump_String(" test " & integer'image(integer( This_Duplicated_Test_Number )) & " had " & 
+               #    integer'image(integer(Number_Of_Duplicated_Results)) & " duplicated result" );
+            #$END_ADAINLINE
+
+         endif
+
+      endfor
+
+   endif
+
+
+   $INLINE
+      fprintf(stderr, " \n");
+      fprintf(stderr,"***************************************************************************\n");
+      fprintf(stderr,"***************************************************************************\n");
+      fprintf(stderr, " \n");
+   $ENDINLINE
+
+
+   #$ADA_INLINE
+      #Test_Suite_Text_IO.Dump_String("");
+      #Test_Suite_Text_IO.Dump_String("***************************************************************************");
+      #Test_Suite_Text_IO.Dump_String("***************************************************************************");
+      #Test_Suite_Text_IO.Dump_String("");
+   #$END_ADAINLINE
+
+
+ 
+
+   # Unlink R1, R2 & R3
+   unlink The_Domain R1 Tell_Me_About_The_Passes
+   delete Tell_Me_About_The_Passes
+
+   unlink The_Domain R2 Tell_Me_About_The_Failures
+   delete Tell_Me_About_The_Failures
+
+   unlink The_Domain R3 Tell_Me_About_The_Unsupported
+   delete Tell_Me_About_The_Unsupported
+   
+   # Unlink and delete each instance of the duplicated results
+   for each_duplicated_set in {Tell_Me_About_The_Duplicated} do
+      unlink The_Domain R4 each_duplicated_set
+      delete each_duplicated_set
+   endfor
+   
+   for inst_of_comment in {Tell_Me_About_The_Comments} do
+      unlink The_Domain R9 inst_of_comment
+      delete inst_of_comment
+   endfor
+
+
+   # Obtain each instance of the test details unlink and delete the results of the 
+   # instance then unlink and delete the test details instance
+
+   no_more_results = FALSE
+
+
+   {All_Of_The_Tests} = The_Domain -> R8.Test_Details   
+
+   for Each_Test in {All_Of_The_Tests} do
+      
+      if Each_Test != UNDEFINED then
+         
+         res = Each_Test -> R6.Results_Of_Tests
+
+        if res != UNDEFINED then
+           unlink Each_Test R6 res
+           delete res
+
+        else
+
+           # Couldn't find the results for this test
+           [] = RP9::Test_Anomalous_Behaviour[Each_Test.The_Test_No, "One or More Results Were Not Found"]
+
+        endif  
+
+        unlink Each_Test R8 The_Domain
+
+        # any left
+        still_res = Each_Test -> R6.Results_Of_Tests
+        if still_res != UNDEFINED then
+           # This is technically an error condition
+           # all outstanding relationships should already have been unlinked
+           # but they haven't
+           unlink Each_Test R6 still_res
+           delete still_res
+        endif
+
+        # Now sort out the linked in requirement identifier object.
+
+        {set_of_requids} = Each_Test -> R7.Requirement_Identifier_For_Test
+        for each_requid in {set_of_requids} do
+           unlink Each_Test R7 each_requid
+           delete each_requid
+        endfor
+
+        delete Each_Test
+
+      else
+
+         # Couldn't find the Test_Details for this test
+           [] = RP7::Report_Run_Time_Error["One Or More Test Details Were Not Found"]
+
+      endif
+
+   endfor
+
+
+   # closes the open ada file
+
+   #$ADA_INLINE
+   #Test_Suite_Text_IO.Close_File_For_Writing(
+      #    Name_Of_File             => domain_name_for_file_handling,
+      #    Unique_Domain_Identifier => domain_number_for_file_handling);
+   #$END_ADAINLINE
+
+
+   #If the Test Suite object exists, initiate requirements analysis.
+   # .... and if the current state is 'Waiting', ie. it has been triggered from the
+   # idle state into Waiting by the Scenario 4 being called at the end of a test run.
+
+   The_Requirements_Object = find-one Test_Suite
+
+   if The_Requirements_Object != UNDEFINED then 
+
+      if The_Requirements_Object.Current_State = 'Waiting' then
+         generate TS1:Perform_Analysis() to The_Requirements_Object
+      endif
+
+   endif
+
+else
+
+   [] = RP7::Report_Run_Time_Error["Undefined Domain"]
+
+endif
+
+
+enddefine

@@ -1,0 +1,12 @@
+public service DomainA::TerminatorA~>Sync3A (InputA  : in  integer,
+                                             InputB  : in  integer,
+                                             Test    : in  integer,
+                                             OutputA : out integer,
+                                             OutputB : out integer) is
+  $USE DomainB
+     [ReturnA, ReturnB] = DomainB3::Sync3B[InputA, InputB, Test]
+
+      OutputA = ReturnA
+      OutputB = ReturnB
+
+   $ENDUSE

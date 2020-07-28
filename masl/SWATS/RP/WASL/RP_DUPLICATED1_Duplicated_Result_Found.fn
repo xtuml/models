@@ -1,0 +1,26 @@
+define function  DUPLICATED1:Duplicated_Result_Found
+input \
+	Invoker_Domain_IH:Duplicated_Result_IH 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+if Invoker_Domain_IH != UNDEFINED then
+
+    local_increment = Invoker_Domain_IH.Duplicated_Test_Count
+ 
+    local_increment = local_increment + 1
+
+    Invoker_Domain_IH.Duplicated_Test_Count = local_increment
+
+else
+
+   [] = RP7::Report_Run_Time_Error["Can not find a duplicated instance associated with this domain"]
+ 
+endif
+
+
+enddefine

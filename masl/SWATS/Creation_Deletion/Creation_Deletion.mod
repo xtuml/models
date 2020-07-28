@@ -1,6 +1,4 @@
-//! This domain deals with instance creation and deletion. It
-//! check both synchronous and asynchronous creation and
-//! deletion.
+//! This domain deals with instance creation and deletion. It check both synchronous and asynchronous creation and deletion.
 domain Creation_Deletion is
   object Object_A;
   object Object_B;
@@ -20,8 +18,7 @@ domain Creation_Deletion is
                                       Sandy,
                                       Wes);
 
-  //! This attribute is used to verify that an object instance can
-  //! be created, when the data type uses enumeration.
+  //! This attribute is used to verify that an object instance can be created, when the data type uses enumeration.
   private type Base_Colour is enum (Red,
                                     Green,
                                     Blue,
@@ -141,8 +138,7 @@ domain Creation_Deletion is
     ColourA    : Base_Colour;
 
 
-    //! Perform object service to test synchronous create
-    //! operation.
+    //! Perform object service to test synchronous create operation.
     //! @@1103-0000-01-0511
     //! @@1103-0000-01-0311
     public service do_sync_create (Test_Number          : in  integer,
@@ -200,8 +196,7 @@ domain Creation_Deletion is
                                  Returned_Number : out integer);
     pragma operation_number (1);
 
-    //! There is a problem in version 2.0.2 of WACA. This service
-    //! will attempt to clarify what is going wrong.
+    //! There is a problem in version 2.0.2 of WACA. This service will attempt to clarify what is going wrong.
     public service Regression_Tests (Test_Number          : in  integer,
                                      Returned_Test_Number : out integer);
     pragma operation_number (2);
@@ -224,8 +219,7 @@ domain Creation_Deletion is
                                       Returned_Test_Number : out integer);
     pragma operation_number (1);
 
-    //! This service shall prove that deletion of multiple instances
-    //! from a
+    //! This service shall prove that deletion of multiple instances from a
     //! set is correct.
     public service do_multiple_deletion_tests (Test_Number          : in  integer,
                                                Returned_Test_Number : out integer);
@@ -252,8 +246,7 @@ domain Creation_Deletion is
     //! Preferred identifier.
     ReferenceCS : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultCS    : integer;
 
 
@@ -410,15 +403,12 @@ domain Creation_Deletion is
   pragma id (13);
   pragma key_letter ("drenemy");
 
-  //! This object shall be replicated in all domains existing
-  //! within the Software Architecture Test Suite that use the
-  //! Reporter Domain.
+  //! This object shall be replicated in all domains existing within the Software Architecture Test Suite that use the Reporter Domain.
   object Report_Data is
 
     Report_Data_Unique_id  : preferred integer;
 
-    //! Unique identifer for this domain as foar as the Reporter
-    //! domain is concerned.
+    //! Unique identifer for this domain as foar as the Reporter domain is concerned.
     Reported_Domain_Number : integer;
 
 

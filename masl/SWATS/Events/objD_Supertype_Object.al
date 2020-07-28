@@ -1,5 +1,4 @@
-//! This state receives the external event that, also sent to
-//! the subtype object.
+//! This state receives the external event that, also sent to the subtype object.
 state Events::Object_D.Supertype_Object (Test        : in  integer,
                                          Test_Number : in  integer) is
 #-------------------------------------------------------------------------

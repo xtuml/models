@@ -1,0 +1,29 @@
+public service RP::Test_Suite.Add_Requirement (New_Requid      : in  string,
+                                               New_Requid_Text : in  string) is
+# Specify a requirement identifier that must be met by this test suite
+
+Exists = find-one All_Requirements_In_Test_Suite where REQUID = New_Requid
+
+Me = find-one Test_Suite
+
+if Me != UNDEFINED then
+
+  [] = RP7::Report_Run_Time_Error["Test Suite not configured for requid capture"]
+
+else
+
+
+   if Exists != UNDEFINED then
+
+      [] = RP7::Report_Run_Time_Error["Requid already specified"]
+
+   else
+
+      The_New_Requirement_id = create unique All_Requirements_In_Test_Suite with REQUID = New_Requid &\
+         Requid_Test_Status = 'Not_Tested' & Requid_Text = New_Requid_Text
+
+      link Me R11 The_New_Requirement_id
+
+   endif
+
+endif

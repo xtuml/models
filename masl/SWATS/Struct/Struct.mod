@@ -151,8 +151,7 @@ domain Struct is
   public service Delete_Report_Data ();
   pragma domain_operation_number (9);
 
-  //! Receive a structure containing and IH as a component of that
-  //! structure.
+  //! Receive a structure containing and IH as a component of that structure.
   public service Receive_Structure_IH (This_Test_Number        : in  integer,
                                        Input_Structure         : in  sequence of Structure_and_IH_Type,
                                        Number_Of_Elements      : in  integer,
