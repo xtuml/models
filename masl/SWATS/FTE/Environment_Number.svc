@@ -1,0 +1,38 @@
+//! This domain based synch service shall return a number: 
+//! 
+//! 1 for ISIM or
+//! 0 for WACA 
+//! 
+//! defining environment execution.
+public service FTE::Environment_Number (Env_Number : out integer) is
+My_Env = find-one The_Environment
+
+A_Value = 99
+
+if My_Env != UNDEFINED then
+
+   if My_Env.Where_Are_We = "ISIM" then
+
+      A_Value = 1
+
+   else
+
+      if My_Env.Where_Are_We = "WACA" then
+
+         A_Value = 0
+
+      else
+
+         A_Value = -1
+
+      endif
+
+   endif
+
+else
+
+   A_Value = -1
+
+endif
+
+Env_Number = A_Value

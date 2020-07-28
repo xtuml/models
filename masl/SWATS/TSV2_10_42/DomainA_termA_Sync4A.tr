@@ -1,0 +1,20 @@
+public service DomainA::TerminatorA~>Sync4A (InputA  : in  integer,
+                                             InputB  : in  integer,
+                                             Test    : in  integer,
+                                             OutputA : out integer,
+                                             OutputB : out integer) is
+   $USE DomainB
+
+      if (InputA != 1)|(InputB != 2) then
+         # Input values are incorrect do not send an event to DomainB
+         OutputA = 1
+         OutputB = 2
+      else
+         # Input values are correct and send an event to DomainB
+         OutputA = 3
+         OutputB = 4
+         an_instanceB = find-one Object_B where idB = 2
+         generate objB1:event1_from_DomainA(3, 4, Test) to an_instanceB
+      endif
+
+   $ENDUSE

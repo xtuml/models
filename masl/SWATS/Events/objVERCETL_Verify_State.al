@@ -1,7 +1,5 @@
-//! This state verifies that the tests performed within the
-//! objects
-//! 'Creation_Object' and 'Terminal_Object' provide the correct
-//! results.
+//! This state verifies that the tests performed within the objects
+//! 'Creation_Object' and 'Terminal_Object' provide the correct results.
 //! 
 //! The following tests produced the following results:
 //! 
@@ -12,14 +10,10 @@
 //! 
 //! 
 //! Test:      Test case identity.
-//! Object:    Indicates which object to which the test
-//! applies.
-//! Reference: Indicates which instance of
-//! Object_Verify_Creation_Deletion
-//!            was used to verify the tests performed in the
-//!            above objects.
-//! ResultA:   Indicates the value written into the attribute
-//! 'ResultA'
+//! Object:    Indicates which object to which the test applies.
+//! Reference: Indicates which instance of Object_Verify_Creation_Deletion
+//!            was used to verify the tests performed in the above objects.
+//! ResultA:   Indicates the value written into the attribute 'ResultA'
 //!            if the test was successful.
 state Events::Object_Verify_Creation_Terminal.Verify_State (Test        : in  integer,
                                                             Test_Number : in  integer) is

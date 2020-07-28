@@ -1,0 +1,38 @@
+define bridge  Creation_Deletion:RPT7:Domain_Test_Finished
+input \
+	This_Domain_Name:Base_Text_Type ,\
+	This_Domain_Number:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+local_text = This_Domain_Name
+
+My_Report = find-one Report_Data
+
+if My_Report = UNDEFINED then
+
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["DTF Calling domain has not created Report_Data"]
+
+   $ENDUSE
+
+else
+
+   local_domain_number = My_Report.Reported_Domain_Number
+
+endif
+
+
+$USE RP
+
+   [] = RP8::Domain_Tests_Have_Finished[local_text, local_domain_number]
+
+
+$ENDUSE
+
+enddefine

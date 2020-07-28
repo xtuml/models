@@ -1,0 +1,39 @@
+define bridge  Creation_Deletion:RPT4:Test_Unsupported
+input \
+	Unsupported_Test_Number:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+local_test_number = Unsupported_Test_Number
+
+
+# Find the reporter object for this domain, there will be only one.
+
+The_Reporter_Object = find-one Report_Data
+
+
+if The_Reporter_Object = UNDEFINED then
+
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["TU Calling domain has not created Report_Data"]
+
+   $ENDUSE
+else
+
+   Unique_Domain_ID =  The_Reporter_Object.Reported_Domain_Number
+
+   $USE RP
+
+   [] = RP3::Test_Unsupported[local_test_number, Unique_Domain_ID];
+
+   $ENDUSE
+
+endif
+
+
+enddefine

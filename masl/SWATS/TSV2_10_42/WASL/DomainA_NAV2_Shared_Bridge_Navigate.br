@@ -1,0 +1,63 @@
+define bridge  DomainA:NAV2:Shared_Bridge_Navigate
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+#------------------------------------------------------------------------#
+# Call the shared bridge to navigate a relationship in domain_B
+#------------------------------------------------------------------------#
+
+   Locally_Held_Returned_Number = 99
+   What_We_Got                  = 99
+
+   My_Report = find-one Report_Data
+
+   if My_Report = UNDEFINED then
+
+      $USE RP
+         [] = RP7::Report_Run_Time_Error["Calling domain has not created Report_Data"]
+      $ENDUSE
+
+   else
+      This_Domain_Number = My_Report.Reported_Domain_Number
+
+      $USE RP
+         [] = RP4::Test_Description[Test, "1241-0000-01-1102", "Domain_A", "Bridge", "shared bridge", This_Domain_Number]
+         [] = RP10::Specify_Requid[This_Domain_Number, Test, "1241-0000-01-1104"]
+         [] = RP10::Specify_Requid[This_Domain_Number, Test, "1241-0000-01-1105"]
+         [] = RP10::Specify_Requid[This_Domain_Number, Test, "1241-0000-01-1109"]
+         [] = RP10::Specify_Requid[This_Domain_Number, Test, "1103-0000-01-1021"]
+         [] = RP10::Specify_Requid[This_Domain_Number, Test, "1103-0000-01-1311"]         
+      $ENDUSE
+
+      $USE DomainB
+         an_object_C = find-one Object_C where idC = 1
+         {set_of_object_D} = an_object_C -> R1.Object_D
+
+         # Prove that the navigation was successful
+         for the_object_D in {set_of_object_D} do
+            Locally_Held_Returned_Number = the_object_D.D_Number
+         endfor
+
+      $ENDUSE
+
+      # ASL won't allow the calling of another bridge service in this one, so
+      # fake it, and USE the relevent domain. Sneaky.
+      $USE RP
+
+         if Locally_Held_Returned_Number = What_We_Got then
+            [] = RP2::Test_Failed["Bridge", Test, Locally_Held_Returned_Number, This_Domain_Number]
+         else
+            [] = RP1::Test_Passed["Bridge", Test, Locally_Held_Returned_Number, This_Domain_Number]
+         endif
+
+      $ENDUSE
+
+   endif
+
+enddefine

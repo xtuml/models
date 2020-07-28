@@ -98,8 +98,7 @@ domain UDT is
                                                  Testing_For : in  string);
   pragma domain_operation_number (2);
 
-  //! Returns the number of user defined types used and confims
-  //! that the reported number is actually the number used.
+  //! Returns the number of user defined types used and confims that the reported number is actually the number used.
   public service Report_No_UDT_Used (Test        : in  integer,
                                      Testing_For : in  string);
   pragma domain_operation_number (5);
