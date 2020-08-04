@@ -10,6 +10,8 @@ domain TAGS is
   public service Perform_Passive_Singleton_Object_Tests (Test                 : in  integer,
                                                          Returned_Test_Number : out integer);
 
+  //! Test requirement Tag
+  //! @@TAGS-01-0001
   public service Report_Now (Test_Number     : in  integer,
                              Testing_For     : in  string,
                              Failure         : in  integer,
@@ -107,6 +109,7 @@ domain TAGS is
 
 
   terminator Env_Terminator is
+    //! @@TAGS-01-0007
     public service Env_String (Env_Text : out string);
     pragma terminator_operation_number(1);
 
@@ -137,4 +140,4 @@ end domain;
 pragma number (20);
 pragma name ("Tagging");
 pragma kl ("TAGS");
-pragma version (6);
+pragma version (7);

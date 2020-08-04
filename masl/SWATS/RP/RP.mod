@@ -80,8 +80,7 @@ domain RP is
   pragma domain_operation_number (5);
 
   //! This service shall create a unique object for reporting a test pass or fail.
-  //! It shall report its' own unique identifer to the invoking domain, returned via the bridge. This is so that the reporting domain can specify which object to report into. There can be more than one object in existance at any one time. THis is due to the way
-  //! the event queue is asynchronous, and service invocations are sysnchronous.
+  //! It shall report its' own unique identifer to the invoking domain, returned via the bridge. This is so that the reporting domain can specify which object to report into. There can be more than one object in existance at any one time. THis is due to the way the event queue is asynchronous, and service invocations are sysnchronous.
   //! 
   public service Create_New_Domain_Test (Invoker_Domain_Name      : in  string,
                                          Domain_Unique_Identifier : out integer);
@@ -372,7 +371,7 @@ domain RP is
 
     The_Test_No   : integer;
 
-    Result_Found  : boolean := FASLE;
+    Result_Found  : boolean;
 
 
   end object;
@@ -501,4 +500,4 @@ end domain;
 pragma number (6);
 pragma name ("Report");
 pragma kl ("RP");
-pragma version (8);
+pragma version (9);
