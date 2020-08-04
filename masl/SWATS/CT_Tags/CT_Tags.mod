@@ -146,7 +146,6 @@ domain CT_Tags is
 
   end terminator;
   pragma key_letter ("AO");
-  pragma tca ("");
 
 
   //! Start_Domain_Tests
@@ -1089,4 +1088,4 @@ end domain;
 pragma number (38);
 pragma name ("CCA_TCA_Tagging");
 pragma kl ("CT_Tags");
-pragma version (2);
+pragma version (3);

@@ -37,6 +37,7 @@ domain TAGS is
   //! a tagged integer with range 1 to 100
   private type A_Tagged_Integer_Type is integer; pragma type_range(1,100);
 
+  //! @@TAGS-01-0009
   private type Environment_Type is enum (WACA,
                                          ISIM);
 
@@ -54,6 +55,8 @@ domain TAGS is
                                                          Returned_Test_Number : out integer);
   pragma domain_operation_number (4);
 
+  //! Test requirement Tag
+  //! @@TAGS-01-0001
   public service Report_Now (Test_Number     : in  integer,
                              Testing_For     : in  string,
                              Failure         : in  integer,
@@ -162,6 +165,7 @@ domain TAGS is
 
 
   terminator Env_Terminator is
+    //! @@TAGS-01-0007
     public service Env_String (Env_Text : out string);
     pragma terminator_operation_number(1);
 
@@ -224,12 +228,14 @@ domain TAGS is
   //! Perform_Static_Tests
   private service Perform_Static_Tests (); pragma scenario (12);
 
+  //! @@TAGS-01-0010
   relationship R1 is Single_Tagged_Object unconditionally WARNING_undefined_role_name many Many_Tagged_Objects,
                      Many_Tagged_Objects unconditionally WARNING_undefined_role_name one Single_Tagged_Object;
 
   relationship R2 is Active_Tagged_Single_Object unconditionally WARNING_undefined_role_name many Active_Tagged_Many_Objects,
                      Active_Tagged_Many_Objects unconditionally WARNING_undefined_role_name one Active_Tagged_Single_Object;
 
+  //! @@TAGS-01-0011
   relationship R3 is Tagged_Many_Left unconditionally WARNING_undefined_role_name many Tagged_Many_Right,
                      Tagged_Many_Right unconditionally WARNING_undefined_role_name many Tagged_Many_Left
                      using Tagged_Single_Assoc;
@@ -432,6 +438,7 @@ domain TAGS is
     Result            : integer;
 
 
+    //! @@TAGS-01-0004
     public service Do_Active_Single_Array_Tests ();
     pragma operation_number (1);
 
@@ -533,6 +540,7 @@ domain TAGS is
                  Expected_Result : in  integer);
     pragma event_number (1);
 
+    //! @@TAGS-01-0006
     event Finish (Final_Value : in  integer,
                   Test_Number : in  integer,
                   Purpose     : in  string,
@@ -970,6 +978,7 @@ domain TAGS is
 
   object A_Static_Object is
 
+    //! @@TAGS-V01-0003
     Unique_ID : integer;
 
 
@@ -1014,4 +1023,4 @@ end domain;
 pragma number (20);
 pragma name ("Tagging");
 pragma kl ("TAGS");
-pragma version (6);
+pragma version (7);

@@ -121,11 +121,10 @@ domain Creation_Deletion is
   //! Object_A is manipulated by object 'Instance_Creation'.
   object Object_A is
 
-    //! @@BBP-V01-0001
     //! Preferred identifier.
     ReferenceA : preferred integer;
 
-    //! @@BBP-V01-0014 An integer
+    //! An integer
     IntegerA   : integer;
 
     //! Some text.
@@ -139,8 +138,6 @@ domain Creation_Deletion is
 
 
     //! Perform object service to test synchronous create operation.
-    //! @@1103-0000-01-0511
-    //! @@1103-0000-01-0311
     public service do_sync_create (Test_Number          : in  integer,
                                    Returned_Test_Number : out integer);
     pragma operation_number (1);
@@ -420,4 +417,4 @@ end domain;
 pragma number (3);
 pragma name ("Creation_Deletion");
 pragma kl ("Creation_Deletion");
-pragma version (14);
+pragma version (15);

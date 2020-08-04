@@ -111,8 +111,8 @@ domain Find_and_Sets is
   //! Finish Find and Sets Tests
   private service Finish_Find_and_Sets_Tests (); pragma scenario (3);
 
-  relationship R1 is Left_Obj unconditionally WARNING_undefined_role_name many Right_Obj,
-                     Right_Obj unconditionally WARNING_undefined_role_name many Left_Obj
+  relationship R1 is Left_Obj unconditionally has many Right_Obj,
+                     Right_Obj unconditionally has many Left_Obj
                      using Assoc_Obj;
 
   object Report_Data is
@@ -148,9 +148,9 @@ domain Find_and_Sets is
 
     idAO     : integer;
 
-    objLO_id : preferred referential (R1.WARNING_undefined_role_name.Left_Obj.objLO_id) integer;
+    objLO_id : preferred referential (R1.has.Left_Obj.objLO_id) integer;
 
-    objRO_id : preferred referential (R1.WARNING_undefined_role_name.Right_Obj.objRO_id) integer;
+    objRO_id : preferred referential (R1.has.Right_Obj.objRO_id) integer;
 
 
   end object;
