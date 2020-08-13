@@ -162,102 +162,148 @@ domain Relationships is
 
   relationship R1 is Object_A conditionally Has_a one Object_B,
                      Object_B conditionally May_have_a one Object_A;
+ pragma Class_A ("Object_A");
+ pragma Class_B ("Object_B");
 
   relationship R3 is Object_C conditionally Has_a one Object_D,
                      Object_D conditionally Has_many many Object_C;
+ pragma Class_A ("Object_C");
+ pragma Class_B ("Object_D");
 
   relationship R5 is Object_F conditionally Has_lots many Object_E,
                      Object_E conditionally Has_many many Object_F
                      using Object_EF;
+ pragma Class_A ("Object_F");
+ pragma Class_B ("Object_E");
 
   relationship R11 is Object_G conditionally Has_a one Object_G,
                       Object_G conditionally May_have one Object_G;
+ pragma Class_A ("Object_G");
+ pragma Class_B ("Object_G");
 
   relationship R13 is Object_G conditionally Has_many many Object_G,
                       Object_G conditionally Has_a one Object_G;
+ pragma Class_A ("Object_G");
+ pragma Class_B ("Object_G");
 
   relationship R18 is Object_B conditionally Has_a one Object_M,
                       Object_M conditionally Has_one one Object_B;
+ pragma Class_A ("Object_B");
+ pragma Class_B ("Object_M");
 
   relationship R19 is Object_D conditionally Has_Many many Object_O,
                       Object_O conditionally Has_a one Object_D
                       using Object_DO;
+ pragma Class_A ("Object_D");
+ pragma Class_B ("Object_O");
 
   relationship R20 is Object_P conditionally Has_many many Object_Q,
                       Object_Q conditionally Has_a one Object_P;
+ pragma Class_A ("Object_P");
+ pragma Class_B ("Object_Q");
 
   relationship R21 is Object_Q conditionally Has_a one Object_R,
                       Object_R conditionally Has_many many Object_Q;
+ pragma Class_A ("Object_Q");
+ pragma Class_B ("Object_R");
 
   relationship R22 is Object_P conditionally Has_many many Object_R,
                       Object_R conditionally Has_a one Object_P;
+ pragma Class_A ("Object_P");
+ pragma Class_B ("Object_R");
 
   relationship R2 is Object_G conditionally A_Large_relationship_role one Object_G,
                      Object_G conditionally qwertyuiopasdfghjklzxcvbnmqwerty one Object_G;
+ pragma Class_A ("Object_G");
+ pragma Class_B ("Object_G");
 
   relationship R4 is Object_G conditionally Has_a one Object_G,
                      Object_G conditionally Has_many many Object_G;
+ pragma Class_A ("Object_G");
+ pragma Class_B ("Object_G");
 
-  relationship R6 is Far_Left unconditionally WARNING_undefined_role_name one Middle,
-                     Middle unconditionally WARNING_undefined_role_name one Far_Left;
+  relationship R6 is Far_Left unconditionally has one Middle,
+                     Middle unconditionally has one Far_Left;
+ pragma Class_A ("Far_Left");
+ pragma Class_B ("Middle");
 
-  relationship R7 is Middle unconditionally WARNING_undefined_role_name many Many_Right,
-                     Many_Right unconditionally WARNING_undefined_role_name one Middle;
+  relationship R7 is Middle unconditionally has many Many_Right,
+                     Many_Right unconditionally has one Middle;
+ pragma Class_A ("Middle");
+ pragma Class_B ("Many_Right");
 
-  relationship R8 is Many_Right unconditionally WARNING_undefined_role_name many Many_Far_Right,
-                     Many_Far_Right unconditionally WARNING_undefined_role_name many Many_Right
+  relationship R8 is Many_Right unconditionally has many Many_Far_Right,
+                     Many_Far_Right unconditionally has many Many_Right
                      using Many_Right_Assoc;
+ pragma Class_A ("Many_Right");
+ pragma Class_B ("Many_Far_Right");
 
-  relationship R10 is Many_Right unconditionally WARNING_undefined_role_name many Many_Above,
-                      Many_Above unconditionally WARNING_undefined_role_name one Many_Right;
+  relationship R10 is Many_Right unconditionally has many Many_Above,
+                      Many_Above unconditionally has one Many_Right;
+ pragma Class_A ("Many_Right");
+ pragma Class_B ("Many_Above");
 
-  relationship R12 is Left_Object unconditionally WARNING_undefined_role_name many Middle_Object,
-                      Middle_Object unconditionally WARNING_undefined_role_name one Left_Object;
+  relationship R12 is Left_Object unconditionally has many Middle_Object,
+                      Middle_Object unconditionally has one Left_Object;
+ pragma Class_A ("Left_Object");
+ pragma Class_B ("Middle_Object");
 
-  relationship R14 is Middle_Object unconditionally WARNING_undefined_role_name one Right_Object,
-                      Right_Object unconditionally WARNING_undefined_role_name many Middle_Object
+  relationship R14 is Middle_Object unconditionally has one Right_Object,
+                      Right_Object unconditionally has many Middle_Object
                       using MR_Assoc;
+ pragma Class_A ("Middle_Object");
+ pragma Class_B ("Right_Object");
 
-  relationship R15 is Left_Many unconditionally WARNING_undefined_role_name many Right_Many,
-                      Right_Many unconditionally WARNING_undefined_role_name many Left_Many
+  relationship R15 is Left_Many unconditionally has many Right_Many,
+                      Right_Many unconditionally has many Left_Many
                       using LMRM_Assoc;
+ pragma Class_A ("Left_Many");
+ pragma Class_B ("Right_Many");
 
-  relationship R16 is LMRM_Assoc unconditionally WARNING_undefined_role_name many Bottom_Many,
-                      Bottom_Many unconditionally WARNING_undefined_role_name one LMRM_Assoc;
+  relationship R16 is LMRM_Assoc unconditionally has many Bottom_Many,
+                      Bottom_Many unconditionally has one LMRM_Assoc;
+ pragma Class_A ("LMRM_Assoc");
+ pragma Class_B ("Bottom_Many");
 
-  relationship R17 is Ref_Att_ObjA unconditionally WARNING_undefined_role_name one Ref_Att_ObjA,
-                      Ref_Att_ObjA unconditionally WARNING_undefined_role_name one Ref_Att_ObjA;
+  relationship R17 is Ref_Att_ObjA unconditionally has one Ref_Att_ObjA,
+                      Ref_Att_ObjA unconditionally has one Ref_Att_ObjA;
+ pragma Class_A ("Ref_Att_ObjA");
+ pragma Class_B ("Ref_Att_ObjA");
 
-  relationship R23 is Ref_Att_ObjA unconditionally WARNING_undefined_role_name one Ref_Att_ObjA,
-                      Ref_Att_ObjA unconditionally WARNING_undefined_role_name one Ref_Att_ObjA;
+  relationship R23 is Ref_Att_ObjA unconditionally has one Ref_Att_ObjA,
+                      Ref_Att_ObjA unconditionally has one Ref_Att_ObjA;
+ pragma Class_A ("Ref_Att_ObjA");
+ pragma Class_B ("Ref_Att_ObjA");
 
-  relationship R32 is Object_K unconditionally WARNING_undefined_role_name one Sub_Sub_L6,
-                      Sub_Sub_L6 unconditionally WARNING_undefined_role_name many Object_K;
+  relationship R32 is Object_K unconditionally has one Sub_Sub_L6,
+                      Sub_Sub_L6 unconditionally has many Object_K;
+ pragma Class_A ("Object_K");
+ pragma Class_B ("Sub_Sub_L6");
 
-  relationship R9 is Object_H is_a (Object_L,
-                                    Object_I);
+  relationship R9 is Object_H is_a (Object_I,
+                                    Object_L);
 
-  relationship R26 is Object_L is_a (Sub_L1,
+  relationship R26 is Object_L is_a (Sub_L3,
                                      Sub_L2,
-                                     Sub_L3);
+                                     Sub_L1);
 
-  relationship R27 is Sub_L3 is_a (Sub_Sub_L2,
-                                   Sub_Sub_L3,
+  relationship R27 is Sub_L3 is_a (Sub_Sub_L4,
                                    Sub_Sub_L1,
-                                   Sub_Sub_L4);
+                                   Sub_Sub_L3,
+                                   Sub_Sub_L2);
 
-  relationship R29 is Sub_L3 is_a (Sub_Sub_L6,
+  relationship R29 is Sub_L3 is_a (Sub_Sub_L5,
                                    Sub_Sub_L7,
-                                   Sub_Sub_L5);
+                                   Sub_Sub_L6);
 
-  relationship R30 is Sub_L3 is_a (Sub_Sub_L9,
-                                   Sub_Sub_L8);
+  relationship R31 is Sub_L3 is_a (Sub_Sub_L11,
+                                   Sub_Sub_L10);
 
-  relationship R31 is Sub_L3 is_a (Sub_Sub_L10,
-                                   Sub_Sub_L11);
+  relationship R30 is Sub_L3 is_a (Sub_Sub_L8,
+                                   Sub_Sub_L9);
 
-  relationship R28 is Sub_Sub_L2 is_a (Sub_Sub_Sub_L1,
-                                       Sub_Sub_Sub_L2);
+  relationship R28 is Sub_Sub_L2 is_a (Sub_Sub_Sub_L2,
+                                       Sub_Sub_Sub_L1);
 
   //! This object forms part of a normal 1c:1c relationship.
   object Object_A is
@@ -514,7 +560,7 @@ domain Relationships is
 
     Left_Identifier   : preferred integer;
 
-    Middle_Identifier : referential (R6.WARNING_undefined_role_name.Middle.Middle_Identifier) integer;
+    Middle_Identifier : referential (R6.has.Middle.Middle_Identifier) integer;
 
     Left_Data         : integer;
 
@@ -602,7 +648,7 @@ domain Relationships is
 
     Right_Data        : integer;
 
-    Middle_Identifier : referential (R7.WARNING_undefined_role_name.Middle.Middle_Identifier) integer;
+    Middle_Identifier : referential (R7.has.Middle.Middle_Identifier) integer;
 
 
   end object;
@@ -631,9 +677,9 @@ domain Relationships is
 
   object Many_Right_Assoc is
 
-    Right_Identifier : preferred referential (R8.WARNING_undefined_role_name.Many_Right.Right_Identifier) integer;
+    Right_Identifier : preferred referential (R8.has.Many_Right.Right_Identifier) integer;
 
-    MFR_Identifier   : preferred referential (R8.WARNING_undefined_role_name.Many_Far_Right.MFR_Identifier) integer;
+    MFR_Identifier   : preferred referential (R8.has.Many_Far_Right.MFR_Identifier) integer;
 
     MRA_Data         : integer;
 
@@ -708,7 +754,7 @@ domain Relationships is
 
   object Many_Above is
 
-    Right_Identifier : referential (R10.WARNING_undefined_role_name.Many_Right.Right_Identifier) integer;
+    Right_Identifier : referential (R10.has.Many_Right.Right_Identifier) integer;
 
     Above_Data       : integer;
 
@@ -739,7 +785,7 @@ domain Relationships is
 
     idMO    : preferred integer;
 
-    idLO    : referential (R12.WARNING_undefined_role_name.Left_Object.idLO) integer;
+    idLO    : referential (R12.has.Left_Object.idLO) integer;
 
     ResultA : integer;
 
@@ -779,9 +825,9 @@ domain Relationships is
 
   object MR_Assoc is
 
-    idMO : preferred referential (R14.WARNING_undefined_role_name.Middle_Object.idMO) integer;
+    idMO : preferred referential (R14.has.Middle_Object.idMO) integer;
 
-    idRO : referential (R14.WARNING_undefined_role_name.Right_Object.idRO) integer;
+    idRO : referential (R14.has.Right_Object.idRO) integer;
 
     idMR : integer;
 
@@ -951,9 +997,9 @@ domain Relationships is
 
   object LMRM_Assoc is
 
-    idLM   : preferred referential (R15.WARNING_undefined_role_name.Left_Many.idLM) integer;
+    idLM   : preferred referential (R15.has.Left_Many.idLM) integer;
 
-    idRM   : preferred referential (R15.WARNING_undefined_role_name.Right_Many.idRM) integer;
+    idRM   : preferred referential (R15.has.Right_Many.idRM) integer;
 
     idLMRM : integer;
 
@@ -964,9 +1010,9 @@ domain Relationships is
 
   object Bottom_Many is
 
-    idLM : referential (R16.WARNING_undefined_role_name.LMRM_Assoc.idLM) integer;
+    idLM : referential (R16.has.LMRM_Assoc.idLM) integer;
 
-    idRM : referential (R16.WARNING_undefined_role_name.LMRM_Assoc.idRM) integer;
+    idRM : referential (R16.has.LMRM_Assoc.idRM) integer;
 
     idBM : preferred integer;
 
@@ -979,9 +1025,9 @@ domain Relationships is
 
     RAOA_id                : preferred integer;
 
-    RAOA_id_R_SEVENTEEN    : referential (R17.WARNING_undefined_role_name.Ref_Att_ObjA.RAOA_id) integer;
+    RAOA_id_R_SEVENTEEN    : referential (R17.has.Ref_Att_ObjA.RAOA_id) integer;
 
-    RAOA_id_R_TWENTY_THREE : referential (R23.WARNING_undefined_role_name.Ref_Att_ObjA.RAOA_id) integer;
+    RAOA_id_R_TWENTY_THREE : referential (R23.has.Ref_Att_ObjA.RAOA_id) integer;
 
 
   end object;
@@ -1016,6 +1062,9 @@ domain Relationships is
 
     idSL3 : integer;
 
+
+
+    identifier is ();
 
   end object;
   pragma id (42);
@@ -1122,9 +1171,9 @@ domain Relationships is
 
   object Sub_Sub_L8 is
 
-    idH    : preferred referential (R30.idH) integer;
-
     idSSL8 : integer;
+
+    idH    : preferred referential (R30.idH) integer;
 
 
   end object;
@@ -1133,9 +1182,9 @@ domain Relationships is
 
   object Sub_Sub_L9 is
 
-    idH    : preferred referential (R30.idH) integer;
-
     idSSL9 : integer;
+
+    idH    : preferred referential (R30.idH) integer;
 
 
   end object;
@@ -1168,7 +1217,7 @@ domain Relationships is
 
     idK : integer;
 
-    idH : referential (R32.WARNING_undefined_role_name.Sub_Sub_L6.idH) integer;
+    idH : referential (R32.has.Sub_Sub_L6.idH) integer;
 
 
   end object;

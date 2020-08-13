@@ -241,6 +241,8 @@ domain UDT is
 
   relationship R1 is Test_Data unconditionally Has_a one Test_Data,
                      Test_Data conditionally Has_one one Test_Data;
+ pragma Class_A ("Test_Data");
+ pragma Class_B ("Test_Data");
 
   object Object_With_Integers is
 
