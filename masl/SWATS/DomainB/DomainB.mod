@@ -142,9 +142,11 @@ domain DomainB is
   relationship R1 is Object_C conditionally controls many Object_D,
                      Object_D conditionally is_controlled_by many Object_C
                      using Object_CD;
+ pragma Class_A ("Object_C");
+ pragma Class_B ("Object_D");
 
-  relationship R4 is Domain_B_Object_Super is_a (Domain_B_Object_SubA,
-                                                 Domain_B_Object_SubB);
+  relationship R4 is Domain_B_Object_Super is_a (Domain_B_Object_SubB,
+                                                 Domain_B_Object_SubA);
 
   object Object_C is
 
