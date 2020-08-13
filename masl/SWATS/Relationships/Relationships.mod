@@ -1063,9 +1063,6 @@ domain Relationships is
     idSL3 : integer;
 
 
-
-    identifier is ();
-
   end object;
   pragma id (42);
   pragma key_letter ("objSL3");
