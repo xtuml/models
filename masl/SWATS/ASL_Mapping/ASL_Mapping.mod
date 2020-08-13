@@ -156,12 +156,16 @@ domain ASL_Mapping is
   //! Finish ASL Mapping Tests
   private service Finish_ASL_Mapping_Tests (); pragma scenario (3);
 
-  relationship R1 is Left unconditionally WARNING_undefined_role_name many Right,
-                     Right unconditionally WARNING_undefined_role_name one Left
+  relationship R1 is Left unconditionally is_next_to many Right,
+                     Right unconditionally is_next_to one Left
                      using LeftRight;
+ pragma Class_A ("Left");
+ pragma Class_B ("Right");
 
-  relationship R2 is LeftRight unconditionally WARNING_undefined_role_name one Another_Right,
-                     Another_Right unconditionally WARNING_undefined_role_name one LeftRight;
+  relationship R2 is LeftRight unconditionally is_next_to one Another_Right,
+                     Another_Right unconditionally is_next_to one LeftRight;
+ pragma Class_A ("LeftRight");
+ pragma Class_B ("Another_Right");
 
   //! This object verifies the 'IF' statement.
   object Object_IF is
@@ -761,11 +765,11 @@ domain ASL_Mapping is
 
   object LeftRight is
 
-    idL  : referential (R1.WARNING_undefined_role_name.Left.idL) integer;
+    idL  : referential (R1.is_next_to.Left.idL) integer;
 
-    idR  : preferred referential (R1.WARNING_undefined_role_name.Right.idR) integer;
+    idR  : preferred referential (R1.is_next_to.Right.idR) integer;
 
-    idAR : referential (R2.WARNING_undefined_role_name.Another_Right.idAR) integer;
+    idAR : referential (R2.is_next_to.Another_Right.idAR) integer;
 
 
 
@@ -788,4 +792,4 @@ end domain;
 pragma number (2);
 pragma name ("ASL_Mapping");
 pragma kl ("ASL_Mapping");
-pragma version (18);
+pragma version (19);

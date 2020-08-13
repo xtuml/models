@@ -171,61 +171,61 @@ domain Events is
   //! Event Priorities
   private service Event_Priorities (); pragma scenario (6);
 
-  relationship R1 is Object_A is_a (Object_B,
-                                    Object_C);
+  relationship R1 is Object_A is_a (Object_C,
+                                    Object_B);
 
   relationship R2 is Object_M is_a (Object_N);
 
-  relationship R5 is Object_D is_a (Object_E,
-                                    Object_F);
+  relationship R5 is Object_D is_a (Object_F,
+                                    Object_E);
 
   relationship R3 is Object_N is_a (Object_O);
 
   relationship R7 is Object_J is_a (Object_K);
 
-  relationship R4 is Object_P is_a (Object_Q,
+  relationship R4 is Object_P is_a (Object_S,
                                     Object_R,
-                                    Object_S);
+                                    Object_Q);
 
   relationship R8 is Object_T is_a (Object_U);
 
-  relationship R13 is SuperA is_a (SubB,
-                                   SubA);
+  relationship R13 is SuperA is_a (SubA,
+                                   SubB);
 
-  relationship R14 is SuperA is_a (SubC,
-                                   SubD);
+  relationship R14 is SuperA is_a (SubD,
+                                   SubC);
 
-  relationship R6 is SuperA is_a (SubE,
-                                  SubF);
+  relationship R6 is SuperA is_a (SubF,
+                                  SubE);
 
-  relationship R9 is Top_Level is_a (Sub_Level_1_A,
-                                     Sub_Level_1_B);
+  relationship R9 is Top_Level is_a (Sub_Level_1_B,
+                                     Sub_Level_1_A);
 
-  relationship R10 is Sub_Level_1_A is_a (Sub_Level_2_A,
-                                          Sub_Level_2_B);
+  relationship R10 is Sub_Level_1_A is_a (Sub_Level_2_B,
+                                          Sub_Level_2_A);
 
-  relationship R11 is Sub_Level_1_B is_a (Sub_Level_2_C,
-                                          Sub_Level_2_D);
+  relationship R11 is Sub_Level_1_B is_a (Sub_Level_2_D,
+                                          Sub_Level_2_C);
 
-  relationship R12 is Sub_Level_2_A is_a (Sub_Level_3_A,
-                                          Sub_Level_3_B);
+  relationship R12 is Sub_Level_2_A is_a (Sub_Level_3_B,
+                                          Sub_Level_3_A);
 
-  relationship R17 is Sub_Level_2_D is_a (Sub_Level_3_D,
-                                          Sub_Level_3_C);
+  relationship R17 is Sub_Level_2_D is_a (Sub_Level_3_C,
+                                          Sub_Level_3_D);
 
-  relationship R15 is Sub_Level_3_A is_a (Bottom_Level_A,
-                                          Bottom_Level_B);
+  relationship R15 is Sub_Level_3_A is_a (Bottom_Level_B,
+                                          Bottom_Level_A);
 
-  relationship R18 is Sub_Level_3_A is_a (Bottom_Level_F,
-                                          Bottom_Level_E,
+  relationship R18 is Sub_Level_3_A is_a (Bottom_Level_C,
                                           Bottom_Level_D,
-                                          Bottom_Level_C);
+                                          Bottom_Level_E,
+                                          Bottom_Level_F);
 
-  relationship R19 is Sub_Level_3_A is_a (Bottom_Level_G,
-                                          Bottom_Level_H);
+  relationship R19 is Sub_Level_3_A is_a (Bottom_Level_H,
+                                          Bottom_Level_G);
 
-  relationship R16 is Sub_Level_3_D is_a (Bottom_Level_I,
-                                          Bottom_Level_J);
+  relationship R16 is Sub_Level_3_D is_a (Bottom_Level_J,
+                                          Bottom_Level_I);
 
   relationship R20 is Priority_A is_a (Priority_B);
 

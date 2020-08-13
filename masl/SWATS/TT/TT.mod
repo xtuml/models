@@ -100,18 +100,24 @@ domain TT is
 
   relationship R1 is Test_Scheduler unconditionally runs_first one Test,
                      Test conditionally is_run_by one Test_Scheduler;
+ pragma Class_A ("Test_Scheduler");
+ pragma Class_B ("Test");
 
   relationship R3 is Test_Scheduler unconditionally uses one Report_Data,
                      Report_Data unconditionally is_used_by one Test_Scheduler;
+ pragma Class_A ("Test_Scheduler");
+ pragma Class_B ("Report_Data");
 
   relationship R4 is Test unconditionally follows one Test,
                      Test conditionally is_followed_by one Test;
+ pragma Class_A ("Test");
+ pragma Class_B ("Test");
 
-  relationship R2 is Test is_a (Basic_Timer,
-                                Unsupported,
-                                Deleting_Timer,
+  relationship R2 is Test is_a (Time_Remaining,
                                 Resetting_Timer,
-                                Time_Remaining);
+                                Deleting_Timer,
+                                Unsupported,
+                                Basic_Timer);
 
   object Report_Data is
 
