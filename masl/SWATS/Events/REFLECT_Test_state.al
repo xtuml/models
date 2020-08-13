@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This state verifies that an instance of a reflexive object 
 //! can send an event to its self and to other instances of 
 //! the same object.

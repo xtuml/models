@@ -1,0 +1,58 @@
+public service RP::Requirement_Tracker (Updated_Domain_ID   : in  integer,
+                                        Updated_Test_Number : in  integer,
+                                        Updated_Result      : in  Result_Type) is
+Requid_Tracker = find-one Test_Suite
+
+if Requid_Tracker != UNDEFINED then
+
+
+   {The_Match} = find Requirement_Met where Domain_Number = Updated_Domain_ID &\
+      Meeting_Test_Number = Updated_Test_Number
+
+   if countof{The_Match} != 0 then
+
+      for each_match in {The_Match} do
+
+         if each_match.Requid_Test_Result = 'Unknown' then
+
+            each_match.Requid_Test_Result = Updated_Result
+
+         else
+
+            [] = RP7::Report_Run_Time_Error["Requirement already reported for this domain and test"]
+
+         endif 
+      endfor
+
+ 
+#   The_Match = find-one Requirement_Met where Domain_Number = Updated_Domain_ID &\
+#      Meeting_Test_Number = Updated_Test_Number
+
+#   if The_Match != UNDEFINED then
+
+#      if The_Match.Requid_Test_Result = 'Unknown' then
+
+#         The_Match.Requid_Test_Result = Updated_Result
+
+#      else
+
+#         [] = RP7::Report_Run_Time_Error["Requirement already reported for this domain and test"]
+
+#      endif   
+
+# Temporarily ignore this for the moment. Reinstate it later.
+#   else
+#      [] = RP7::Report_Run_Time_Error["Can't find the matching requirement"]
+
+   endif   
+
+
+
+#else
+
+   # If it is not here, then we are not tracking requirements in this
+   # This is not an error condition, so ignore.
+
+
+
+endif

@@ -1,0 +1,12 @@
+//! End Events Tests
+private service Events::End_Events_Tests () is
+   my_test = find-one Test_Data
+   The_Test_Number = my_test.Current_Test_Number
+
+   [] = Events2::Delete_Report_Data[]
+
+   my_test = find-one Test_Data
+
+   if my_test != UNDEFINED then
+      delete my_test
+   endif

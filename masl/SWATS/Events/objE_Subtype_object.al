@@ -1,9 +1,4 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
-//! This state receives the external event that is also sent to
-//! the supertype
+//! This state receives the external event that is also sent to the supertype
 //! object.
 state Events::Object_E.Subtype_object (Test        : in  integer,
                                        Test_Number : in  integer) is

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TT::Unsupported.complete () is
 the_test_scheduler = find-one Test_Scheduler
 the_test = this -> R2.Test

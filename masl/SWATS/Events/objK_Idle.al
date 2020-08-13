@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Idle state.
 state Events::Object_K.Idle (Test_Number : in  integer) is
 #-----------------------------------------------------------

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Tests finds and set manipulations.
 domain Find_and_Sets is
   object Report_Data;
@@ -107,16 +103,16 @@ domain Find_and_Sets is
 
 
   //! Find_And_Sets_Main
-  private service Find_And_Sets_Main_1 (); pragma scenario (1);
+  private service Find_And_Sets_Main (); pragma scenario (1);
 
   //! Start Find and Sets Tests
-  private service Start_Find_and_Sets_Tests_2 (); pragma scenario (2);
+  private service Start_Find_and_Sets_Tests (); pragma scenario (2);
 
   //! Finish Find and Sets Tests
-  private service Finish_Find_and_Sets_Tests_3 (); pragma scenario (3);
+  private service Finish_Find_and_Sets_Tests (); pragma scenario (3);
 
-  relationship R1 is Left_Obj unconditionally WARNING_undefined_role_name many Right_Obj,
-                     Right_Obj unconditionally WARNING_undefined_role_name many Left_Obj
+  relationship R1 is Left_Obj unconditionally has many Right_Obj,
+                     Right_Obj unconditionally has many Left_Obj
                      using Assoc_Obj;
 
   object Report_Data is
@@ -132,12 +128,16 @@ domain Find_and_Sets is
 
   object Left_Obj is
 
+    objLO_id : preferred integer;
+
 
   end object;
   pragma id (3);
   pragma key_letter ("objLO");
 
   object Right_Obj is
+
+    objRO_id : preferred integer;
 
 
   end object;
@@ -146,7 +146,11 @@ domain Find_and_Sets is
 
   object Assoc_Obj is
 
-    idAO : integer;
+    idAO     : integer;
+
+    objLO_id : preferred referential (R1.has.Left_Obj.objLO_id) integer;
+
+    objRO_id : preferred referential (R1.has.Right_Obj.objRO_id) integer;
 
 
   end object;
@@ -162,8 +166,7 @@ domain Find_and_Sets is
     //! Preferred identifier.
     idFM     : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultFM : integer;
 
 
@@ -194,8 +197,7 @@ domain Find_and_Sets is
     //! Preferred identifier.
     idFSI     : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultFSI : integer;
 
 
@@ -225,8 +227,7 @@ domain Find_and_Sets is
   pragma id (10);
   pragma key_letter ("objFSI");
 
-  //! This object verifies that the following statements maybe
-  //! peroformed on an existing set:
+  //! This object verifies that the following statements maybe peroformed on an existing set:
   //! 
   //! 	find-one
   //! 	find-only
@@ -237,8 +238,7 @@ domain Find_and_Sets is
     //! Preferred identifier.
     idFS     : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultFS : integer;
 
 
@@ -260,8 +260,7 @@ domain Find_and_Sets is
   pragma id (12);
   pragma key_letter ("objFS");
 
-  //! This object contains data that is manipulated by other
-  //! objects.
+  //! This object contains data that is manipulated by other objects.
   object Object_A is
 
     //! Preferred identifier.
@@ -275,9 +274,7 @@ domain Find_and_Sets is
   pragma id (15);
   pragma key_letter ("objA");
 
-  //! Object_B contains no instances and hence any operations
-  //! performed upon it will return an empty set are an undefined
-  //! instance handle.
+  //! Object_B contains no instances and hence any operations performed upon it will return an empty set are an undefined instance handle.
   object Object_B is
 
     //! Preferred identifier.
@@ -288,8 +285,7 @@ domain Find_and_Sets is
   pragma id (16);
   pragma key_letter ("objB");
 
-  //! This object contains data that is manipulated by other
-  //! objects.
+  //! This object contains data that is manipulated by other objects.
   object Object_E is
 
     //! Preferred identifier.
@@ -308,3 +304,6 @@ domain Find_and_Sets is
 
 end domain;
 pragma number (8);
+pragma name ("Find_and_Sets");
+pragma kl ("Find_and_Sets");
+pragma version (15);

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Object_X.Check_Attributes (Test_No    : in  integer,
                                          Which_Test : in  string) is
 if Which_Test = "Read_Target_Instance" then

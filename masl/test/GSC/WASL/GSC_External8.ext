@@ -1,0 +1,14 @@
+
+$EXTERNAL, 8
+# Customer absconds from Pump 2 without paying
+
+pump = find-one PUMP where Pump_Number = 2
+
+current_pending_transaction = pump->R9
+
+if current_pending_transaction != UNDEFINED then
+	current_transaction = current_pending_transaction->R4
+	generate TRN3:Customer_Absconds("Details") to current_transaction
+endif
+
+$ENDEXTERNAL

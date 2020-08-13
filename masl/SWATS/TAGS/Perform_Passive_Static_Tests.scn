@@ -1,0 +1,30 @@
+//! Perform_Passive_Static_Tests
+private service TAGS::Perform_Passive_Static_Tests () is
+my_test = find-one Test_Data
+
+Test      = my_test.Number
+Last_Test = 0
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [Last_Test] = TAGS1::Perform_Unique_Passive_Singleton_Object_Tests[Test]
+
+   Test = Last_Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [Last_Test]  = TAGS4::Perform_Passive_Singleton_Object_Tests[Test]
+
+   Test = Last_Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+
+my_test.Number = Test

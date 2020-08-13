@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 creation state Events::Creation_Object.Creation_State (Test        : in  integer,
                                                        Test_Number : in  integer) is
 #-----------------------------------------------------------

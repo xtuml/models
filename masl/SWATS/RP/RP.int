@@ -1,0 +1,65 @@
+//! Consistent reports of test results
+domain RP is
+  public type Result_Type is enum (Passed,
+                                   Failed,
+                                   Unsupported,
+                                   Unknown);
+
+  //! Same function as domain based synch service.
+  public service Test_Passed (Passed_Domain            : in  string,
+                              Passed_Test_Number       : in  integer,
+                              Passed_Test_Result_Value : in  integer,
+                              Passed_Domain_Number     : in  integer);
+
+  public service Test_Failed (Failed_Domain        : in  string,
+                              the_test_no          : in  integer,
+                              the_test_value       : in  integer,
+                              Failed_Domain_Number : in  integer);
+
+  public service Test_Unsupported (Unsupported_Test_Number   : in  integer,
+                                   Unsupported_Domain_Number : in  integer);
+
+  public service Test_Description (Write_Test_Number           : in  integer,
+                                   Write_Requid                : in  string,
+                                   Write_Invoker_Domain_Name   : in  string,
+                                   Write_Object                : in  string,
+                                   Write_Test_Purpose          : in  string,
+                                   Write_Invoker_Domain_Number : in  integer);
+
+  //! Free form description for a test
+  public service Test_Text (Domain_No        : in  integer,
+                            Text_Test_Number : in  integer,
+                            Free_Text        : in  string);
+
+  //! This service shall create a unique object for reporting a test pass or fail.
+  //! It shall report its' own unique identifer to the invoking domain, returned via the bridge. This is so that the reporting domain can specify which object to report into. There can be more than one object in existance at any one time. THis is due to the way the event queue is asynchronous, and service invocations are sysnchronous.
+  //! 
+  public service Create_New_Domain_Test (Invoker_Domain_Name      : in  string,
+                                         Domain_Unique_Identifier : out integer);
+
+  public service Report_Run_Time_Error (Detail : in  string);
+
+  public service Domain_Tests_Have_Finished (Completed_Domain_Name : in  string,
+                                             Domain_Identifer      : in  integer);
+
+  public service Test_Anomalous_Behaviour (Anomalous_Test_Number : in  integer,
+                                           Anomalous_Detail      : in  string);
+
+  //! This service shall allow the calling domain specify a requirement identifier for a given domain and test.
+  public service Specify_Requid (Requid_Domain_Number : in  integer,
+                                 Requid_Test_Number   : in  integer,
+                                 Requid_Identifier    : in  string);
+
+  public service Add_All_Requids (New_Requid : in  string);
+
+  public service Requirement_Tracker (Updated_Domain_ID   : in  integer,
+                                      Updated_Test_Number : in  integer,
+                                      Updated_Result      : in  Result_Type);
+
+  public service Perform_Req_Analysis ();
+
+end domain;
+pragma number (6);
+pragma name ("Report");
+pragma kl ("RP");
+pragma version (9);

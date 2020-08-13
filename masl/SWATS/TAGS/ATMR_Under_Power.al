@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TAGS::Active_Tagged_Many_Right.Under_Power (ATMR_Test_No : in  integer) is
 [] = RPT1:Start_Test[ATMR_Test_No, "1241-0000-01-0128", "Tagging", "Active Tagged Many", "generate to ATMR"]
 

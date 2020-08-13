@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 domain OAIBTWO is
   object I_Into_The_Great_Wide_Open;
   object Report_Data;
@@ -81,8 +77,7 @@ domain OAIBTWO is
 
   terminator Under_The_Bridge is
     //! This bridge will pass a simple structure
-    //! into a target domain, and then check to see that an object
-    //! in the target domain has had its attributes set accordingly.
+    //! into a target domain, and then check to see that an object in the target domain has had its attributes set accordingly.
     public service Create_A_Structure_In_Target_Domain (Source_Very_Simple_Structure : in  sequence of Very_Simple_Source_Structure_Type,
                                                         Source_Control_Integer       : in  integer,
                                                         Source_Control_Real          : in  real,
@@ -95,13 +90,13 @@ domain OAIBTWO is
 
 
   //! Local scenario for OAIBTWO standalone test
-  private service Local_scenario_for_OAIBTWO_standalone_test_1 (); pragma scenario (1);
+  private service Local_scenario_for_OAIBTWO_standalone_test (); pragma scenario (1);
 
   //! Start_OAIBTWO_Tests
-  private service Start_OAIBTWO_Tests_3 (); pragma scenario (3);
+  private service Start_OAIBTWO_Tests (); pragma scenario (3);
 
   //! Finish_OAIBTWO_Tests
-  private service Finish_OAIBTWO_Tests_4 (); pragma scenario (4);
+  private service Finish_OAIBTWO_Tests (); pragma scenario (4);
 
   //! Class realising Interface
   object I_Into_The_Great_Wide_Open is
@@ -138,3 +133,6 @@ domain OAIBTWO is
 
 end domain;
 pragma number (12);
+pragma name ("Open Architecture Internal Bridge Domain Two");
+pragma kl ("OAIBTWO");
+pragma version (1);

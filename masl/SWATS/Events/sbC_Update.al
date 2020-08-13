@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Idle state.
 state Events::SubC.Update (Test : in  integer) is
 my_super = this -> R14.SuperA

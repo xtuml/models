@@ -1,16 +1,9 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
-//! This state verifies that the event was received or not
-//! received in the 
-//! subtype or the supertype object depending upon the test
-//! being performed.
+//! This state verifies that the event was received or not received in the 
+//! subtype or the supertype object depending upon the test being performed.
 //! 
 //! The following test create the followng results:
 //! 
-//!     Test  File    Super  Sub  Super     Sub        Verify  
-//!     Verify
+//!     Test  File    Super  Sub  Super     Sub        Verify   Verify
 //!                   Obj    Obj  ResultA   ResultA    ResultA  ResultB
 //!     1     001     D      E    10        10         10       10
 //!           002
@@ -28,27 +21,20 @@
 //!           014
 //! 
 //! Test:           Test case identity.
-//! File:           Indicates the scenario file used within each
-//! test case.
-//! Super Obj:      Indicates the 'SUPERtype' object used within
-//! the test
+//! File:           Indicates the scenario file used within each test case.
+//! Super Obj:      Indicates the 'SUPERtype' object used within the test
 //!                 case.
-//! Sub Obj:        Indicates the 'SUBtype' object used within
-//! the test case.
-//! Super ResultA:  The attribute 'ResultA' is manipulated
-//! within the
+//! Sub Obj:        Indicates the 'SUBtype' object used within the test case.
+//! Super ResultA:  The attribute 'ResultA' is manipulated within the
 //!                 'SUPERtype' Object to indicate if required operation was
 //!                 successful.
-//! Sub ResultA:    The attribute 'ResultA' is manipulated
-//! within the
+//! Sub ResultA:    The attribute 'ResultA' is manipulated within the
 //!                 'SUBtype' Object to indicate if required operation was
 //!                 successful.
-//! Verify ResultA: The attribute 'ResultA' is manipulated
-//! within the
+//! Verify ResultA: The attribute 'ResultA' is manipulated within the
 //!                 Verify_Object to indicate that the required operation was
 //!                 successful for the 'SUPERtype' object.
-//! Verify ResultB: The attribute 'ResultB' is manipulated
-//! within the
+//! Verify ResultB: The attribute 'ResultB' is manipulated within the
 //!                 Verify_Object to indicate that the required operation was
 //!                 success for the 'SUBtype' object.
 state Events::Object_Verify_Polymorphic.Verify_Event_Received (Test : in  integer) is

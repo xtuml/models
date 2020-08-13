@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Bodges? We don need no stinkin bodges!
 domain TAGS is
   object An_Active_Object;
@@ -39,8 +35,9 @@ domain TAGS is
   object Just_Multiple;
 
   //! a tagged integer with range 1 to 100
-  private type A_Tagged_Integer_Type is integer;
+  private type A_Tagged_Integer_Type is integer; pragma type_range(1,100);
 
+  //! @@TAGS-01-0009
   private type Environment_Type is enum (WACA,
                                          ISIM);
 
@@ -58,6 +55,8 @@ domain TAGS is
                                                          Returned_Test_Number : out integer);
   pragma domain_operation_number (4);
 
+  //! Test requirement Tag
+  //! @@TAGS-01-0001
   public service Report_Now (Test_Number     : in  integer,
                              Testing_For     : in  string,
                              Failure         : in  integer,
@@ -111,8 +110,7 @@ domain TAGS is
                                                 Outgoing_Parameter_3 : out integer); pragma hand_coded ("1");
     pragma terminator_operation_number(3);
 
-    //! Dummy tagged terminator with odd param names to get around
-    //! possible I-SIM error
+    //! Dummy tagged terminator with odd param names to get around possible I-SIM error
     public service A_Tagged_Dummy_Terminator_One (Mickey_Mouse_Input_One  : in  integer,
                                                   Minnie_Mouse_Output_One : out integer); pragma hand_coded ("");
     pragma terminator_operation_number(2);
@@ -167,6 +165,7 @@ domain TAGS is
 
 
   terminator Env_Terminator is
+    //! @@TAGS-01-0007
     public service Env_String (Env_Text : out string);
     pragma terminator_operation_number(1);
 
@@ -194,47 +193,49 @@ domain TAGS is
 
 
   //! Start_TAGGED_Tests
-  private service Start_TAGGED_Tests_1 (); pragma scenario (1);
+  private service Start_TAGGED_Tests (); pragma scenario (1);
 
   //! Perform_Passive_Static_Tests
-  private service Perform_Passive_Static_Tests_2 (); pragma scenario (2);
+  private service Perform_Passive_Static_Tests (); pragma scenario (2);
 
   //! Perform_Active_Object_Tests
-  private service Perform_Active_Object_Tests_3 (); pragma scenario (3);
+  private service Perform_Active_Object_Tests (); pragma scenario (3);
 
   //! Perform_Passive_Array_Tests
-  private service Perform_Passive_Array_Tests_4 (); pragma scenario (4);
+  private service Perform_Passive_Array_Tests (); pragma scenario (4);
 
   //! Finish_TAGGED_Tests
-  private service Finish_TAGGED_Tests_5 (); pragma scenario (5);
+  private service Finish_TAGGED_Tests (); pragma scenario (5);
 
   //! Perform_Active_Array_Tests
-  private service Perform_Active_Array_Tests_6 (); pragma scenario (6);
+  private service Perform_Active_Array_Tests (); pragma scenario (6);
 
   //! Perform_Single_To_Many_Navigations
-  private service Perform_Single_To_Many_Navigations_7 (); pragma scenario (7);
+  private service Perform_Single_To_Many_Navigations (); pragma scenario (7);
 
   //! Perform_Terminator_Tag_Tests
-  private service Perform_Terminator_Tag_Tests_8 (); pragma scenario (8);
+  private service Perform_Terminator_Tag_Tests (); pragma scenario (8);
 
   //! Perform_Glitch_Recovery_Tests
-  private service Perform_Glitch_Recovery_Tests_9 (); pragma scenario (9);
+  private service Perform_Glitch_Recovery_Tests (); pragma scenario (9);
 
   //! Perform_Many_To_Many_Navigations
-  private service Perform_Many_To_Many_Navigations_10 (); pragma scenario (10);
+  private service Perform_Many_To_Many_Navigations (); pragma scenario (10);
 
   //! Perform_Super_Sub_Tests
-  private service Perform_Super_Sub_Tests_11 (); pragma scenario (11);
+  private service Perform_Super_Sub_Tests (); pragma scenario (11);
 
   //! Perform_Static_Tests
-  private service Perform_Static_Tests_12 (); pragma scenario (12);
+  private service Perform_Static_Tests (); pragma scenario (12);
 
+  //! @@TAGS-01-0010
   relationship R1 is Single_Tagged_Object unconditionally WARNING_undefined_role_name many Many_Tagged_Objects,
                      Many_Tagged_Objects unconditionally WARNING_undefined_role_name one Single_Tagged_Object;
 
   relationship R2 is Active_Tagged_Single_Object unconditionally WARNING_undefined_role_name many Active_Tagged_Many_Objects,
                      Active_Tagged_Many_Objects unconditionally WARNING_undefined_role_name one Active_Tagged_Single_Object;
 
+  //! @@TAGS-01-0011
   relationship R3 is Tagged_Many_Left unconditionally WARNING_undefined_role_name many Tagged_Many_Right,
                      Tagged_Many_Right unconditionally WARNING_undefined_role_name many Tagged_Many_Left
                      using Tagged_Single_Assoc;
@@ -337,7 +338,7 @@ domain TAGS is
   end object;
   pragma id (4);
   pragma key_letter ("APAOOO");
-  pragma array ("1");
+  pragma multiple ("1");
 
   object Report_Data is
 
@@ -437,6 +438,7 @@ domain TAGS is
     Result            : integer;
 
 
+    //! @@TAGS-01-0004
     public service Do_Active_Single_Array_Tests ();
     pragma operation_number (1);
 
@@ -502,7 +504,7 @@ domain TAGS is
   end object;
   pragma id (8);
   pragma key_letter ("AAAOOO");
-  pragma array ("1");
+  pragma multiple ("1");
 
   object An_Active_Array_Of_Three_Objects is
 
@@ -538,6 +540,7 @@ domain TAGS is
                  Expected_Result : in  integer);
     pragma event_number (1);
 
+    //! @@TAGS-01-0006
     event Finish (Final_Value : in  integer,
                   Test_Number : in  integer,
                   Purpose     : in  string,
@@ -576,7 +579,7 @@ domain TAGS is
   end object;
   pragma id (9);
   pragma key_letter ("AAAOTO");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object A_Passive_Array_Of_Three_Objects is
 
@@ -586,7 +589,7 @@ domain TAGS is
   end object;
   pragma id (10);
   pragma key_letter ("APAOTO");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Single_Tagged_Object is
 
@@ -612,7 +615,7 @@ domain TAGS is
   end object;
   pragma id (12);
   pragma key_letter ("MTO");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Active_Tagged_Single_Object is
 
@@ -668,7 +671,7 @@ domain TAGS is
   end object;
   pragma id (14);
   pragma key_letter ("ATMO");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Tagged_Many_Left is
 
@@ -680,7 +683,7 @@ domain TAGS is
   end object;
   pragma id (15);
   pragma key_letter ("TM_LEFT");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Tagged_Many_Right is
 
@@ -692,7 +695,7 @@ domain TAGS is
   end object;
   pragma id (16);
   pragma key_letter ("TM_RIGHT");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Tagged_Single_Assoc is
 
@@ -708,7 +711,7 @@ domain TAGS is
   end object;
   pragma id (17);
   pragma key_letter ("TS_ASSOC");
-  pragma array ("9");
+  pragma multiple ("9");
 
   object Tagged_Many_Supertype is
 
@@ -720,7 +723,7 @@ domain TAGS is
   end object;
   pragma id (18);
   pragma key_letter ("TAG_SUPER");
-  pragma array ("1");
+  pragma multiple ("1");
 
   object Subtype_1 is
 
@@ -732,7 +735,7 @@ domain TAGS is
   end object;
   pragma id (19);
   pragma key_letter ("SUB_ONE");
-  pragma array ("2");
+  pragma multiple ("2");
 
   object Subtype_2 is
 
@@ -745,9 +748,7 @@ domain TAGS is
   pragma id (20);
   pragma key_letter ("SUB_TWO");
 
-  //! This object shall define several attributes, each to be
-  //! stored in non-initialised memory for so called "glitch
-  //! recovery". This is a singleton object.
+  //! This object shall define several attributes, each to be stored in non-initialised memory for so called "glitch recovery". This is a singleton object.
   object Singleton_Glitch_Recovery is
 
     An_Integer  : integer;
@@ -773,7 +774,7 @@ domain TAGS is
   end object;
   pragma id (22);
   pragma key_letter ("MGR");
-  pragma array ("3");
+  pragma multiple ("3");
   pragma non_initialised ("");
 
   object Active_Tagged_Many_Left is
@@ -801,7 +802,7 @@ domain TAGS is
   end object;
   pragma id (23);
   pragma key_letter ("ATML");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Active_Tagged_Many_Right is
 
@@ -828,7 +829,7 @@ domain TAGS is
   end object;
   pragma id (24);
   pragma key_letter ("ATMR");
-  pragma array ("3");
+  pragma multiple ("3");
 
   object Active_Tagged_Single_Assoc is
 
@@ -855,7 +856,7 @@ domain TAGS is
   end object;
   pragma id (25);
   pragma key_letter ("ATSASSOC");
-  pragma array ("9");
+  pragma multiple ("9");
 
   object Active_Tagged_Supertype is
 
@@ -908,7 +909,7 @@ domain TAGS is
   end object;
   pragma id (27);
   pragma key_letter ("ATSUBONE");
-  pragma array ("2");
+  pragma multiple ("2");
 
   object Active_Tagged_Subtype_Two is
 
@@ -960,7 +961,7 @@ domain TAGS is
   end object;
   pragma id (29);
   pragma key_letter ("ATSUBTHREE");
-  pragma array ("1");
+  pragma multiple ("1");
 
   object Multiplicity_Single_Glitch_Recovery_Object is
 
@@ -972,11 +973,12 @@ domain TAGS is
   end object;
   pragma id (30);
   pragma key_letter ("MSGR");
-  pragma array ("1");
+  pragma multiple ("1");
   pragma non_initialised ("");
 
   object A_Static_Object is
 
+    //! @@TAGS-V01-0003
     Unique_ID : integer;
 
 
@@ -1005,7 +1007,7 @@ domain TAGS is
   pragma id (33);
   pragma key_letter ("AMSO");
   pragma static ("");
-  pragma array ("2");
+  pragma multiple ("2");
 
   object Just_Multiple is
 
@@ -1015,7 +1017,10 @@ domain TAGS is
   end object;
   pragma id (34);
   pragma key_letter ("JM");
-  pragma array ("2");
+  pragma multiple ("2");
 
 end domain;
 pragma number (20);
+pragma name ("Tagging");
+pragma kl ("TAGS");
+pragma version (7);

@@ -1,0 +1,27 @@
+define function  UNSUPPORTED1:Not_Done_It_Yet
+input \
+	Invoker_Domain_IH:Domain_Details_IH 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+The_Unsupported_Instance = Invoker_Domain_IH -> R3.A_Test_That_Is_Unsupported
+
+if The_Unsupported_Instance != UNDEFINED then
+
+   local_increment = The_Unsupported_Instance.Unsupported_Counter
+
+   local_increment = local_increment + 1
+
+   The_Unsupported_Instance.Unsupported_Counter = local_increment
+
+else
+
+   [] = RP7::Report_Run_Time_Error["Can not find an unsupported instance associated with this domain"]
+ 
+endif
+
+
+enddefine

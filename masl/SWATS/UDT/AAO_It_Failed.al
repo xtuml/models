@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state UDT::An_Active_Object.It_Failed (Reason : in  Active_Object_Status_Type) is
 Failed_Because = 0
 

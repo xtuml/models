@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Creation State.
 creation state Function_Calls::Object_B.Initial (Test_Case_ID : in  integer) is
 

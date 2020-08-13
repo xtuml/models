@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::Global_SubC.Unlink_Global_Super_from_Global_Sub (Test : in  integer) is
 instGS = this -> R5.Global_Super
 

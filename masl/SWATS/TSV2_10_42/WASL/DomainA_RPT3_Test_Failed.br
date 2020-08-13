@@ -1,0 +1,42 @@
+define bridge  DomainA:RPT3:Test_Failed
+input \
+	Failed_Domain_Object:Base_Text_Type ,\
+	Failed_Test_Number:Base_Integer_Type ,\
+	Failed_Test_Value:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+local_test_number = Failed_Test_Number
+local_test_value = Failed_Test_Value
+local_object_domain = Failed_Domain_Object
+
+# Find the reporter object for this domain, there will be only one.
+
+The_Reporter_Object = find-one Report_Data
+
+if The_Reporter_Object = UNDEFINED then
+
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["TF Calling domain has not created Report_Data"]
+
+   $ENDUSE
+
+else
+
+   Unique_Domain_ID =  The_Reporter_Object.Reported_Domain_Number
+
+
+   $USE RP
+
+   [] = RP2::Test_Failed[local_object_domain, local_test_number, local_test_value, Unique_Domain_ID];
+
+   $ENDUSE
+
+endif
+
+enddefine

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Object_S.Subtype_State (Test : in  integer) is
 #-----------------------------------------------------------
 # SUBTYPE

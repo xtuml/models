@@ -1,9 +1,4 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
-//! This state receives an external event that is passed onto
-//! its related
+//! This state receives an external event that is passed onto its related
 //! subtype object.
 state Events::Object_J.Supertype_state (Test_Number : in  integer) is
 #-----------------------------------------------------------

@@ -1,0 +1,33 @@
+public service Creation_Deletion::Report_Terminator~>Test_Text (Test_Number : in  integer,
+                                                                Free_Text   : in  string) is
+local_test_number = Test_Number
+local_text = Free_Text
+
+#$USE RP
+
+#   [] = RP5::Test_Text[local_test_number, local_text]
+
+#$ENDUSE
+
+#-----------------------------------------------
+# New stuff
+#-----------------------------------------------
+
+# Find the reporter object for this domain, there will be only one.
+The_Reporter_Object = find-one Report_Data
+
+if The_Reporter_Object = UNDEFINED then
+
+   $USE RP
+      [] = RP7::Report_Run_Time_Error["TP Calling domain has not created Report_Data"]
+   $ENDUSE
+
+else
+
+   Unique_Domain_ID =  The_Reporter_Object.Reported_Domain_Number
+ 
+   $USE RP
+      [] = RP5::Test_Text[Unique_Domain_ID, local_test_number, local_text]
+   $ENDUSE
+
+endif

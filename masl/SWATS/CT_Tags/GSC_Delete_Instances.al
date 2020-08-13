@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 terminal state CT_Tags::Global_SubC.Delete_Instances (Test : in  integer) is
 {SetGS} = find-all Global_Super
 for instGS in {SetGS} do

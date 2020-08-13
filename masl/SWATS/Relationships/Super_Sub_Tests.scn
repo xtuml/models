@@ -1,0 +1,169 @@
+//! Super Sub Tests
+private service Relationships::Super_Sub_Tests () is
+#-------------------------------------------------------------------#
+#
+# Perform relationship tests via scenario for Super/sub type 
+# relationships
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test      = find-one Test_Data
+   Test         = my_test.The_Test_Number
+   Has_Failed   = FALSE
+   Failure_Code = 0
+#-------------------------------------------------------------------#
+# Create instances of objects
+#-------------------------------------------------------------------#
+
+   Count = 5
+
+   loop
+
+      # Object_H
+      newH  = create Object_H  with idH      = Count &\
+                                    ResultA  = 0
+
+      # Object_L
+      newL  = create Object_L  with idL = Count
+
+      # Object_I
+      newI  = create Object_I with IDI = Count
+
+      # Object_K
+      newK  = create Object_K with idK = Count
+
+      # Sub_L1
+      newSL1 = create Sub_L1 with idSL1 = Count
+
+      # Sub_L2
+      newSL2 = create Sub_L2 with idSL2 = Count
+
+      # Sub_L3
+      newSL4 = create Sub_L3 with idSL3 = Count
+
+      # Sub_Sub_L1
+      newSSL1 = create Sub_Sub_L1 with idSSL1 = Count
+
+      # Sub_Sub_L2
+      newSSL2 = create Sub_Sub_L2 with idSSL2 = Count
+
+      # Sub_Sub_L3
+      newSSL3 = create Sub_Sub_L3 with idSSL3 = Count
+
+      # Sub_Sub_L4
+      newSSL4 = create Sub_Sub_L4 with idSSL4 = Count
+
+      # Sub_Sub_L5
+      newSSL5 = create Sub_Sub_L5 with idSSL5 = Count
+
+      # Sub_Sub_L6
+      newSSL6 = create Sub_Sub_L6 with idSSL6 = Count
+
+      # Sub_Sub_L7
+      newSSL7 = create Sub_Sub_L7 with idSSL7 = Count
+
+      # Sub_Sub_L8
+      newSSL8 = create Sub_Sub_L8 with idSSL8 = Count
+
+      # Sub_Sub_L9
+      newSSL9 = create Sub_Sub_L9 with idSSL9 = Count
+
+      # Sub_Sub_L10
+      newSSL10 = create Sub_Sub_L10 with idSSL10 = Count
+
+      # Sub_Sub_L11
+      newSSL11 = create Sub_Sub_L11 with idSSL11 = Count
+
+      # Sub_Sub_Sub_L1
+      newSSSL1 = create Sub_Sub_Sub_L1 with idSSSL1 = Count
+
+      # Sub_Sub_Sub_L2
+      newSSSL2 = create Sub_Sub_Sub_L2 with idSSSL2 = Count
+
+      Count = Count - 1
+      breakif Count = 0
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Test that the object instances have been correctly created
+# Because there are so many objects test just a few
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objH", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetH} = find-all Object_H
+   {SetL} = find-all Object_L
+   {SetI} = find-all Object_I
+   {SetK} = find-all Object_K
+
+   if countof {SetH} = 5 then
+
+      if countof {SetL} = 5 then
+
+         if countof {SetI} = 5 then
+
+            if countof {SetK} != 5 then
+               Has_Failed   = TRUE
+               Failure_Code = -10
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -40
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objH", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objH", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+
+#-------------------------------------------------------------------#
+# Perform the Super/Sub type relationships
+#-------------------------------------------------------------------#
+
+   Count = 1
+
+   loop
+
+      [] = objH1:Super_Sub_Relationships[Count, Test]
+
+      Count  = Count + 1
+      Test   = Test  + 1
+      breakif Count = 14
+
+   endloop
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test
+

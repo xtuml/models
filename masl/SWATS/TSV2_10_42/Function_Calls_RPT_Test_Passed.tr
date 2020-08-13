@@ -1,0 +1,31 @@
+public service Function_Calls::Report~>Test_Passed (Test_Object_Domain : in  string,
+                                                    Test_Number        : in  integer,
+                                                    Test_Value         : in  integer) is
+local_test_number = Test_Number
+local_test_value = Test_Value
+local_object_domain = Test_Object_Domain
+
+# Find the reporter object for this domain, there will be only one.
+
+The_Reporter_Object = find-one Report_Data
+
+
+if The_Reporter_Object = UNDEFINED then
+
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["TP Calling domain has not created Report_Data"]
+
+   $ENDUSE
+
+else
+
+   Unique_Domain_ID =  The_Reporter_Object.Reported_Domain_Number
+ 
+   $USE RP
+
+   [] = RP1::Test_Passed[local_object_domain, local_test_number, local_test_value, Unique_Domain_ID];
+
+   $ENDUSE
+
+endif

@@ -1,0 +1,70 @@
+public service DomainB::Navigate~>Navigate_One_to_Many (Test : in  integer) is
+#------------------------------------------------------------------------#
+# Perform a navigation in domainA
+#------------------------------------------------------------------------#
+
+My_Report = find-one Report_Data
+
+if My_Report = UNDEFINED then
+
+   $USE RP
+      [] = RP7::Report_Run_Time_Error["Calling domain has not created Report_Data"]
+   $ENDUSE
+
+else
+
+   This_Domain_Number = My_Report.Reported_Domain_Number
+   Bridge_Test_Passed = FALSE
+
+   $USE RP
+      [] = RP4::Test_Description[Test, "1241-0000-01-1102", "Domain_B", "DomainB DomainA", "one to many nav", This_Domain_Number]
+      [] = RP10::Specify_Requid[This_Domain_Number, Test, "1241-0000-01-1104"]
+      [] = RP10::Specify_Requid[This_Domain_Number, Test, "1241-0000-01-1105"]
+      [] = RP10::Specify_Requid[This_Domain_Number, Test, "1241-0000-01-1109"]
+      [] = RP10::Specify_Requid[This_Domain_Number, Test, "1103-0000-01-1311"]
+   $ENDUSE
+
+   # Only local variables and input parameters are in scope within a bridge
+   local_id = 0
+
+   $USE DomainA
+      left_side = find-one One_To_Many_Left_Side 
+
+      #where otmls_id = Test
+
+      if left_side != UNDEFINED then
+
+         {a_set_of_right_sides} = left_side -> R2.One_To_Many_Right_Side
+
+         for a_right_side in {a_set_of_right_sides} do
+
+            if a_right_side != UNDEFINED then
+
+               Bridge_Test_Passed = TRUE
+
+               # Copy id to local variable
+               local_id = a_right_side.otmrs_id
+
+            endif
+
+         endfor
+
+      else 
+         Bridge_Test_Passed = FALSE
+         local_id = -1
+      endif
+
+
+   $ENDUSE
+
+   $USE RP
+
+      if Bridge_Test_Passed = TRUE then
+         [] = RP1::Test_Passed["DomainB DomainA", Test, local_id, This_Domain_Number]
+      else
+         [] = RP2::Test_Failed["DomainB DomainA", Test, local_id, This_Domain_Number]
+      endif
+
+   $ENDUSE
+
+endif

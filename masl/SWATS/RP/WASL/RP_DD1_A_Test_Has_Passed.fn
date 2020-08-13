@@ -1,0 +1,197 @@
+define function  DD1:A_Test_Has_Passed
+input \
+	New_Test_Number:Base_Integer_Type ,\
+	Invoking_Domain:Base_Integer_Type ,\
+	New_Test_Result_Value:Base_Integer_Type ,\
+	Details_Of_Test:Base_Text_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+local_result_found  = FALSE
+local_test_purpose  = " "
+local_tested_object = " "
+local_invoking_domain = Invoking_Domain
+local_domain_test_details = Details_Of_Test
+local_test_number = New_Test_Number
+
+# For requirement identifier tracking, update the requirement status
+[] = RP13::Requirement_Tracker[local_invoking_domain, local_test_number, 'Passed']
+
+The_Domain_IH = find-one Domain_Details where Domain_Number = local_invoking_domain
+
+if The_Domain_IH != UNDEFINED then
+      
+   {Set_Of_Test_Details} = The_Domain_IH -> R8.Test_Details
+
+   for a_test in {Set_Of_Test_Details} do
+      if a_test.The_Test_No  = New_Test_Number then
+         a_test.Result_Found = TRUE
+         local_result_found  = TRUE
+         local_test_purpose  = a_test.Test_Purpose
+         local_tested_object = a_test.Tested_Object
+      endif
+       
+   endfor      
+
+   if New_Test_Number != The_Domain_IH.Last_Reported_Test_Number then      
+
+      # New stuff 24/04/01
+      # Find the matching instance from the objects in the set returned from a navigation.
+      # A simple find operation could return instances created for other domains!
+
+      {set_of_duplicated_results} = The_Domain_IH -> R4.Duplicated_Result
+      for a_duplicated_result in {set_of_duplicated_results} do
+
+         if a_duplicated_result.Duplicated_Test_Number = The_Domain_IH.Last_Reported_Test_Number then
+
+            the_d_r_ih = a_duplicated_result
+
+         endif
+
+      endfor
+
+
+      # New stuff 24/04/01
+      # Use the navigation rather than find to make sure we get the instance
+      # that we are expecting to see.
+      {Local_Set_Of_Test_Details} = The_Domain_IH -> R8.Test_Details
+      for a_test_detail in {Local_Set_Of_Test_Details} do
+
+         if  a_test_detail.The_Test_No = The_Domain_IH.Last_Reported_Test_Number then
+
+            the_old_results_ih = a_test_detail -> R6.Results_Of_Tests
+
+         endif
+      endfor
+
+      if the_d_r_ih != UNDEFINED and the_old_results_ih != UNDEFINED then         
+         the_old_results_ih.The_No_Of_Duplicated_Results = the_d_r_ih.Duplicated_Test_Count
+      endif
+
+      [] = PASS1:Got_One[The_Domain_IH]
+
+      The_Domain_IH.Last_Reported_Test_Number = New_Test_Number
+
+      new_results_of_test_instance = create Results_Of_Tests with \
+         The_Number_Of_Test           = New_Test_Number &\
+         The_Name_Of_The_Domain       = The_Domain_IH.Domain_Name &\
+         The_Result_Of_Test           = 'Passed' &\ 
+         The_Value_Of_The_Result      = New_Test_Result_Value &\        
+         The_Purpose_Of_Test          = local_test_purpose &\
+         The_No_Of_Duplicated_Results = 0 &\
+         The_Result_Of_Object         = local_tested_object &\
+         Domain_Test_Details          = local_domain_test_details
+
+      
+      #find the test data that matches the test result
+# Can't use referential attribute to find the Test_Details.
+#      Matching_Test_Details = find-one Test_Details where The_Test_No = New_Test_Number and \
+#                                 Domain_Number = local_invoking_domain
+
+      {Matching_Test_Details_Set} = The_Domain_IH -> R8.Test_Details
+
+      for Matching_Test_Details in {Matching_Test_Details_Set} do
+
+         breakif Matching_Test_Details.The_Test_No = New_Test_Number
+
+      endfor
+
+      # Link this report to the matching test details if it exists
+
+      if Matching_Test_Details != UNDEFINED then 
+
+         link new_results_of_test_instance R6 Matching_Test_Details
+      
+      else
+
+         [] = RP9::Test_Anomalous_Behaviour[New_Test_Number,"Passed. No Test Details Found"]
+
+      endif
+
+   else
+
+      # Find the duplicated result IH that was linked in when duplication 
+      # was first seen.
+ 
+      # Duplicate report found.
+
+#      the_d_r_ih = find-one Duplicated_Result where \
+#         Duplicated_Test_Number = New_Test_Number and \
+#         Domain_Number = local_invoking_domain
+
+      {Duplicated_Reports} = The_Domain_IH -> R4.Duplicated_Result
+
+      for the_d_r_ih in {Duplicated_Reports} do
+          breakif the_d_r_ih.Duplicated_Test_Number = New_Test_Number
+      endfor
+
+
+      if the_d_r_ih = UNDEFINED then
+         new_duplicated_instance               = create Duplicated_Result with \
+            Duplicated_Test_Number             = New_Test_Number &\
+            Who_Reported_The_Duplicated_Result = 'Passed'        &\
+            Duplicated_Test_Count              = 0
+
+         link new_duplicated_instance R4 The_Domain_IH
+  
+         the_d_r_ih = new_duplicated_instance
+
+      else
+
+         # Check to see if the reported result is the same! Passed then failed? We need to know.
+
+#         Previous_Reported_Result = find-one Results_Of_Tests where Domain_Number = local_invoking_domain &\
+#                                       The_Number_Of_Test = New_Test_Number
+
+         {Matching_Test_Details_Set} = The_Domain_IH -> R8.Test_Details
+
+         for Matching_Test_Details in {Matching_Test_Details_Set} do
+
+            breakif Matching_Test_Details.The_Test_No = New_Test_Number
+
+         endfor
+
+         if Matching_Test_Details != UNDEFINED then
+            Previous_Reported_Result = Matching_Test_Details -> R6.Results_Of_Tests       
+         else
+            [] = RP9::Test_Anomalous_Behaviour[New_Test_Number,"Duplicated Pass. No Test Details Found"]
+         endif
+
+
+         if Previous_Reported_Result != UNDEFINED then
+
+            if Previous_Reported_Result.The_Result_Of_Test != 'Passed' then
+
+               [] = RP9::Test_Anomalous_Behaviour[New_Test_Number, "Inconsistent duplicated pass result"]
+
+            endif
+
+         else
+
+            # Big problems, we thought this was duplicated, but it would appear not!
+
+            [] = RP9::Test_Anomalous_Behaviour[New_Test_Number, "Error in duplication of test passed result"]
+
+         endif
+
+      endif      
+
+
+
+      [] = DUPLICATED1:Duplicated_Result_Found[the_d_r_ih]       
+      
+      The_Domain_IH.Last_Reported_Test_Number = New_Test_Number
+      
+   endif
+
+else
+
+   [] = RP7::Report_Run_Time_Error["Test Passed undefined domain details IH"]
+   
+endif
+
+enddefine

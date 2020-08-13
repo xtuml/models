@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 domain CP_Tags is
   object TCA_CP;
   object CCA_CP;
@@ -45,3 +41,6 @@ domain CP_Tags is
 
 end domain;
 pragma number (41);
+pragma name ("Counterpoint Tags");
+pragma kl ("CP_Tags");
+pragma version (1);

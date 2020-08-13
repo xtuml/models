@@ -1,0 +1,246 @@
+public service DomainA::Navigate~>Big_Bridge_Navigation (Test       : in  integer,
+                                                         Enum_Input : in  Test_Enum_Type) is
+My_Report = find-one Report_Data
+
+if My_Report = UNDEFINED then
+   $USE RP
+      [] = RP7::Report_Run_Time_Error["Calling domain has not created Report_Data"]
+   $ENDUSE
+
+else
+   This_Domain_Number = My_Report.Reported_Domain_Number
+   Which_Domain       = 0
+ 
+   Total_Val = 0
+
+   loop
+      Which_Domain = Which_Domain + 1
+ 
+      switch Which_Domain
+
+         case 1
+            [DomainA_Val] = DomainA3::Check_Enum['Sly']
+
+            if DomainA_Val = 11 then
+               Total_Val = Total_Val + DomainA_Val
+            else          
+               Which_Domain = 7
+               Total_Val = DomainA_Val
+            endif
+            
+         case 2
+            switch Enum_Input
+
+               case 'Sly'
+                  DomainA_Enum_Val of Test_Enum_Type = 'Sly'
+               case 'Sandy'
+                  DomainA_Enum_Val of Test_Enum_Type = 'Sandy'
+               case 'Wes'
+                  DomainA_Enum_Val of Test_Enum_Type = 'Wes'
+            endswitch
+
+            $USE DomainB
+
+               switch Enum_Input
+                  case 'Sly'
+                     DomainB_Enum_Val of Test_Enum_Type = 'Sly'
+                  case 'Sandy'
+                     DomainB_Enum_Val of Test_Enum_Type = 'Sandy'
+                  case 'Wes'
+                     DomainB_Enum_Val of Test_Enum_Type = 'Wes'
+               endswitch
+
+               [DomainB_Val] = DomainB7::Check_Enum[DomainB_Enum_Val]
+    
+            $ENDUSE          
+
+            [DomainA_Val] = DomainA3::Check_Enum[DomainA_Enum_Val]
+
+            if DomainB_Val = 22 then
+               Total_Val = Total_Val + DomainB_Val
+
+               if DomainA_Val = 12 then
+                  Total_Val = Total_Val + DomainA_Val
+               else
+                  Total_Val = DomainA_Val
+                  Which_Domain = 7
+               endif              
+
+            else
+               Total_Val = DomainB_Val
+               Which_Domain = 7
+            endif
+ 
+
+         case 3
+
+            $USE Creation_Deletion
+               [Creation_Deletion_Val] = Creation_Deletion3::Check_Enum['Sly']
+            $ENDUSE
+
+            if Creation_Deletion_Val = 31 then
+               Total_Val = Total_Val + Creation_Deletion_Val
+            else
+               Total_Val = Creation_Deletion_Val
+               Which_Domain = 7
+            endif
+ 
+         case 4 
+
+            $USE Find_and_Sets
+               [Find_and_Sets_Val] = Find_and_Sets4::Check_Enum['Sly']
+            $ENDUSE
+
+            $USE Creation_Deletion
+               [Creation_Deletion_Val] = Creation_Deletion3::Check_Enum['Sandy']
+            $ENDUSE
+
+            if Find_and_Sets_Val = 41 then
+                Total_Val = Total_Val + Find_and_Sets_Val
+
+                if Creation_Deletion_Val = 32 then
+                   Total_Val = Total_Val + Creation_Deletion_Val
+                else
+
+                   Total_Val = Creation_Deletion_Val
+                   Which_Domain = 7
+ 
+                endif
+
+            else
+               Total_Val = Find_and_Sets_Val
+               Which_Domain = 7
+            endif
+ 
+         case 5
+
+            $USE Creation_Deletion
+
+               switch Enum_Input
+                  case 'Sly'
+                     Creation_Deletion_Enum_Val of Test_Enum_Type = 'Sly'
+                  case 'Sandy'
+                     Creation_Deletion_Enum_Val of Test_Enum_Type = 'Sandy'
+                  case 'Wes'
+                     Creation_Deletion_Enum_Val of Test_Enum_Type = 'Wes'
+               endswitch
+
+               [Creation_Deletion_Val] = Creation_Deletion3::Check_Enum[Creation_Deletion_Enum_Val]
+            $ENDUSE
+
+            $USE DomainB
+
+               switch Enum_Input
+                  case 'Sly'
+                     DomainB_Enum_Val of Test_Enum_Type = 'Sly'
+                  case 'Sandy'
+                     DomainB_Enum_Val of Test_Enum_Type = 'Sandy'
+                  case 'Wes'
+                     DomainB_Enum_Val of Test_Enum_Type = 'Wes'
+               endswitch
+
+
+               [DomainB_Val] = DomainB7::Check_Enum[DomainB_Enum_Val]
+            $ENDUSE          
+
+               switch Enum_Input
+                  case 'Sly'
+                     DomainA_Enum_Val of Test_Enum_Type = 'Sly'
+                  case 'Sandy'
+                     DomainA_Enum_Val of Test_Enum_Type = 'Sandy'
+                  case 'Wes'
+                     DomainA_Enum_Val of Test_Enum_Type = 'Wes'
+               endswitch
+
+            [DomainA_Val] = DomainA3::Check_Enum[DomainA_Enum_Val]
+
+            if Creation_Deletion_Val = 32 then
+                Total_Val = Total_Val + Creation_Deletion_Val
+
+                if DomainB_Val = 22 then
+                   Total_Val = Total_Val + DomainB_Val
+
+                   if DomainA_Val = 12 then
+                      Total_Val = Total_Val + DomainA_Val
+                   else
+                      Total_Val = DomainA_Val
+                      Which_Domain = 7
+                   endif
+
+                else
+                   Total_Val = DomainB_Val
+                   Which_Domain = 7
+                endif
+
+            else
+               Total_Val = Creation_Deletion_Val
+               Which_Domain = 7
+            endif
+
+
+         case 6
+
+            $USE Function_Calls
+
+               [Func_Calls_Val] = Function_Calls7::Nav_Enum_Over_Bridge['Sly']
+               if Func_Calls_Val = 'Slys_Mum' then
+                  Total_Val = Total_Val + 51
+               else
+                  Total_Val = -51
+                  Which_Domain = 7
+               endif
+
+            $ENDUSE
+ 
+         default
+
+            Which_Domain = Which_Domain + 1
+
+      endswitch
+
+      breakif Which_Domain > 5
+
+   endloop 
+
+   $USE RP
+
+      [] = RP4::Test_Description[Test, "1241-0000-01-1102", "Domain_A", "Bridge", "Enumeration across lots of bridges", This_Domain_Number]
+         [] = RP10::Specify_Requid[This_Domain_Number, Test, "1241-0000-01-1107"]
+         [] = RP10::Specify_Requid[This_Domain_Number, Test, "1241-0000-01-1109"]
+      switch Total_Val
+
+         case 266
+
+            [] = RP1::Test_Passed["Bridge", Test, Total_Val, This_Domain_Number]
+
+         case -11
+
+            [] = RP2::Test_Failed["Bridge", Test, -11, This_Domain_Number]
+
+         case -21
+
+            [] = RP2::Test_Failed["Bridge", Test, -21, This_Domain_Number]
+
+         case -31
+
+            [] = RP2::Test_Failed["Bridge", Test, -31, This_Domain_Number]
+
+         case -41
+
+            [] = RP2::Test_Failed["Bridge", Test, -41, This_Domain_Number]
+
+         case -51
+
+            [] = RP2::Test_Failed["Bridge", Test, -51, This_Domain_Number]
+
+
+         default
+           [] = RP2::Test_Failed["Bridge", Test, -51, This_Domain_Number]
+
+      endswitch
+
+   $ENDUSE
+
+
+ endif
+

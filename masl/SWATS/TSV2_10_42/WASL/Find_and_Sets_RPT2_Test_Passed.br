@@ -1,0 +1,42 @@
+define bridge  Find_and_Sets:RPT2:Test_Passed
+input \
+	Test_Object_Domain:Base_Text_Type ,\
+	Test_Number:Base_Integer_Type ,\
+	Test_Value:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+local_test_number = Test_Number
+local_test_value = Test_Value
+local_object_domain = Test_Object_Domain
+
+# Find the reporter object for this domain, there will be only one.
+
+The_Reporter_Object = find-one Report_Data
+
+
+if The_Reporter_Object = UNDEFINED then
+
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["TP Calling domain has not created Report_Data"]
+
+   $ENDUSE
+
+else
+
+   Unique_Domain_ID =  The_Reporter_Object.Reported_Domain_Number
+ 
+   $USE RP
+
+   [] = RP1::Test_Passed[local_object_domain, local_test_number, local_test_value, Unique_Domain_ID];
+
+   $ENDUSE
+
+endif
+
+enddefine

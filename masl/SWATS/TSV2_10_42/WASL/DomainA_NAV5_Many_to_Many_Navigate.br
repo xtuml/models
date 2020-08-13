@@ -1,0 +1,72 @@
+define bridge  DomainA:NAV5:Many_to_Many_Navigate
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+# Perform a navigation in THIS domain
+
+My_Report = find-one Report_Data
+
+if My_Report = UNDEFINED then
+
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["Calling domain has not created Report_Data"]
+
+   $ENDUSE
+
+else
+
+   This_Domain_Number = My_Report.Reported_Domain_Number
+
+   Bridge_Test_Passed = FALSE
+
+   local_id = 0
+
+   $USE RP
+
+      [] = RP4::Test_Description[Test, "1241-0000-01-1102", "Domain_A", "Bridge", "local many to many nav", This_Domain_Number]
+      [] = RP10::Specify_Requid[This_Domain_Number, Test, "1103-0000-01-1021"]
+   $ENDUSE
+
+   left_side = find-one Many_To_Many_Left_Side where mtmls_id = Test
+
+   {a_set_of_right_sides} = left_side -> R3.Many_To_Many_Right_Side
+
+
+
+   for a_right_side in {a_set_of_right_sides} do
+
+      if a_right_side.mtmrs_id = Test then
+         Bridge_Test_Passed = TRUE
+
+         local_id = a_right_side.mtmrs_id
+
+      endif
+
+   endfor
+
+
+   $USE RP
+
+      if Bridge_Test_Passed = TRUE then
+
+         [] = RP1::Test_Passed["Bridge", Test, local_id, This_Domain_Number]
+
+      else
+ 
+         [] = RP2::Test_Failed["Bridge", Test, local_id, This_Domain_Number]
+
+      endif
+
+   $ENDUSE
+
+endif
+ 
+
+enddefine

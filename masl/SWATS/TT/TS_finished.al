@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 terminal state TT::Test_Scheduler.finished () is
 the_current_test = this -> R1.Test
 unlink this R1 the_current_test

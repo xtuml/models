@@ -1,11 +1,4 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
-//! This domain deals with the basic ASL process modelling. It
-//! does not require the creation of instances, relationships or
-//! event mechanisms. It does require and use domain & object
-//! based functions.
+//! This domain deals with the basic ASL process modelling. It does not require the creation of instances, relationships or event mechanisms. It does require and use domain & object based functions.
 domain ASL_Mapping is
   object Object_IF;
   object Object_FOR;
@@ -45,8 +38,7 @@ domain ASL_Mapping is
     Simple_Enum    : Enum;
   end structure;
 
-  //! This function test basic ASL operations on base types and
-  //! enumerated types.
+  //! This function test basic ASL operations on base types and enumerated types.
   public service basic_asl_enumeration (Test_Start : in  integer,
                                         Final_Test : out integer);
   pragma domain_operation_number (1);
@@ -156,13 +148,13 @@ domain ASL_Mapping is
 
 
   //! Perform ASL Mapping Tests
-  private service Perform_ASL_Mapping_Tests_1 (); pragma scenario (1);
+  private service Perform_ASL_Mapping_Tests (); pragma scenario (1);
 
   //! Start ASL Mapping Tests
-  private service Start_ASL_Mapping_Tests_2 (); pragma scenario (2);
+  private service Start_ASL_Mapping_Tests (); pragma scenario (2);
 
   //! Finish ASL Mapping Tests
-  private service Finish_ASL_Mapping_Tests_3 (); pragma scenario (3);
+  private service Finish_ASL_Mapping_Tests (); pragma scenario (3);
 
   relationship R1 is Left unconditionally WARNING_undefined_role_name many Right,
                      Right unconditionally WARNING_undefined_role_name one Left
@@ -177,14 +169,11 @@ domain ASL_Mapping is
     //! Preferred identifier.
     ReferenceIF : preferred integer;
 
-    //! This attribute is manipulated to indicated that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicated that the required operation was successful.
     ResultA     : integer;
 
 
-    //! Object based function for performing 'if' tests. Tests
-    //! simple logical expressions on Integer local variables and
-    //! requires instance creation, attribute assignment.
+    //! Object based function for performing 'if' tests. Tests simple logical expressions on Integer local variables and requires instance creation, attribute assignment.
     public service do_if_test (Test_Start : in  integer,
                                Final_Test : out integer);
     pragma operation_number (1);
@@ -199,8 +188,7 @@ domain ASL_Mapping is
     //! Preferred identifier.
     ReferenceFOR : preferred integer;
 
-    //! This attribute is manipulated to indicated that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicated that the required operation was successful.
     ResultA      : integer;
 
 
@@ -219,8 +207,7 @@ domain ASL_Mapping is
     //! Preferred identifier.
     ReferenceLOOP : preferred integer;
 
-    //! This attribute is manipulated to indicated that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicated that the required operation was successful.
     ResultA       : integer;
 
 
@@ -248,12 +235,10 @@ domain ASL_Mapping is
     //! Preferred identifier.
     ReferenceNESTED : preferred integer;
 
-    //! This attribute is manipulated to inducate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to inducate that the required operation was successful.
     ResultA         : integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultB         : integer;
 
 
@@ -286,8 +271,7 @@ domain ASL_Mapping is
     //! Preferred identifier.
     ReferenceSWITCH : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA         : integer;
 
     //! Determines which case statement to execute.
@@ -326,8 +310,7 @@ domain ASL_Mapping is
 
     BooleanAttr     : boolean;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA         : integer;
 
     //! Preferred identifier.
@@ -367,15 +350,13 @@ domain ASL_Mapping is
   pragma id (7);
   pragma key_letter ("objLOGIC");
 
-  //! This object verifies nested 'IF' statements and multiple
-  //! conditions that the statement must verify.
+  //! This object verifies nested 'IF' statements and multiple conditions that the statement must verify.
   object Nested_IF is
 
     //! Preferred identifier.
     ReferenceNstIF : preferred integer;
 
-    //! This attribute if manipulated to indicated that the required
-    //! operation was successful.
+    //! This attribute if manipulated to indicated that the required operation was successful.
     ResultA        : integer;
 
 
@@ -406,8 +387,7 @@ domain ASL_Mapping is
     //! Preferred identifier.
     ReferenceNstFOR : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA         : integer;
 
 
@@ -434,8 +414,7 @@ domain ASL_Mapping is
     //! Preferred identifier.
     ReferenceNstLOOP : preferred integer;
 
-    //! This attribute is manipulated to indicate that th required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that th required operation was successful.
     ResultA          : integer;
 
 
@@ -468,8 +447,7 @@ domain ASL_Mapping is
   pragma id (11);
   pragma key_letter ("RD");
 
-  //! This object shall contain 80+  attributes, just to see what
-  //! happens.
+  //! This object shall contain 80+  attributes, just to see what happens.
   //! This as a result of DEFECT 718.
   object BIG_Object is
 
@@ -808,3 +786,6 @@ domain ASL_Mapping is
 
 end domain;
 pragma number (2);
+pragma name ("ASL_Mapping");
+pragma kl ("ASL_Mapping");
+pragma version (18);

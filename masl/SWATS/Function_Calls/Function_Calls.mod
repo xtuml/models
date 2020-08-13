@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Tests Domain, object and instance based functions.
 domain Function_Calls is
   object Object_A;
@@ -164,19 +160,19 @@ domain Function_Calls is
 
 
   //! Perform Function Calls Tests
-  private service Perform_Function_Calls_Tests_1 (); pragma scenario (1);
+  private service Perform_Function_Calls_Tests (); pragma scenario (1);
 
   //! Start Function Calls Tests
-  private service Start_Function_Calls_Tests_2 (); pragma scenario (2);
+  private service Start_Function_Calls_Tests (); pragma scenario (2);
 
   //! Finish Function Calls Tests
-  private service Finish_Function_Calls_Tests_3 (); pragma scenario (3);
+  private service Finish_Function_Calls_Tests (); pragma scenario (3);
 
   //! Multiple_IH_Parameters_Scenario
-  private service Multiple_IH_Parameters_Scenario_4 (); pragma scenario (4);
+  private service Multiple_IH_Parameters_Scenario (); pragma scenario (4);
 
   //! Test
-  private service Test_5 (); pragma scenario (5);
+  private service Test (); pragma scenario (5);
 
   //! This object verifies complex function calls.
   object Object_A is
@@ -184,8 +180,7 @@ domain Function_Calls is
     //! Preferred identifier.
     ReferenceA : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA    : integer;
 
 
@@ -274,8 +269,7 @@ domain Function_Calls is
     //! Preferred identifier.
     ReferenceB : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultA    : integer;
 
 
@@ -288,14 +282,12 @@ domain Function_Calls is
     public service FunctionF (OutputA : out integer);
     pragma operation_number (2);
 
-    //! This function receives an input parameter but does not
-    //! return a parameter to the calling function.
+    //! This function receives an input parameter but does not return a parameter to the calling function.
     public service FunctionG (InputA : in  instance of Object_B,
                               InputB : in  integer);
     pragma operation_number (3);
 
-    //! This function receives no parameters and returns no
-    //! parameters.
+    //! This function receives no parameters and returns no parameters.
     public service FunctionH ();
     pragma operation_number (4);
 
@@ -614,8 +606,7 @@ domain Function_Calls is
   pragma id (14);
   pragma key_letter ("BO");
 
-  //! Object used for proving that passive objects created and
-  //! passed into services in a tight loop are dealt with.
+  //! Object used for proving that passive objects created and passed into services in a tight loop are dealt with.
   object A_Tight_Object is
 
     Start_Value     : integer;
@@ -686,3 +677,6 @@ domain Function_Calls is
 
 end domain;
 pragma number (9);
+pragma name ("Function_Calls");
+pragma kl ("Function_Calls");
+pragma version (14);

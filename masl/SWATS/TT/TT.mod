@@ -1,9 +1,4 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
-//! This Domain is for testing the timer features of the
-//! software architecture.
+//! This Domain is for testing the timer features of the software architecture.
 domain TT is
   object Basic_Timer;
   object Deleting_Timer;
@@ -101,7 +96,7 @@ domain TT is
 
 
   //! start timer tests
-  private service start_timer_tests_1 (); pragma scenario (1);
+  private service start_timer_tests (); pragma scenario (1);
 
   relationship R1 is Test_Scheduler unconditionally runs_first one Test,
                      Test conditionally is_run_by one Test_Scheduler;
@@ -917,3 +912,6 @@ domain TT is
 
 end domain;
 pragma number (36);
+pragma name ("Test_Timers");
+pragma kl ("TT");
+pragma version (7);

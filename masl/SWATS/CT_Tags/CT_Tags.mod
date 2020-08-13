@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 domain CT_Tags is
   object CCA_A;
   object CCA_B;
@@ -150,29 +146,28 @@ domain CT_Tags is
 
   end terminator;
   pragma key_letter ("AO");
-  pragma tca ("");
 
 
   //! Start_Domain_Tests
-  private service Start_Domain_Tests_4 (); pragma scenario (4);
+  private service Start_Domain_Tests (); pragma scenario (4);
 
   //! TCA_Tests
-  private service TCA_Tests_1 (); pragma scenario (1); pragma tca ("");
+  private service TCA_Tests (); pragma scenario (1); pragma tca ("");
 
   //! Get_Totals
-  private service Get_Totals_6 (); pragma scenario (6);
+  private service Get_Totals (); pragma scenario (6);
 
   //! Finish_Domain_Tests
-  private service Finish_Domain_Tests_5 (); pragma scenario (5);
+  private service Finish_Domain_Tests (); pragma scenario (5);
 
   //! CCA_Tests
-  private service CCA_Tests_2 (); pragma scenario (2); pragma cca ("");
+  private service CCA_Tests (); pragma scenario (2); pragma cca ("");
 
   //! TCA_Events
-  private service TCA_Events_3 (); pragma scenario (3); pragma tca ("");
+  private service TCA_Events (); pragma scenario (3); pragma tca ("");
 
   //! CCA_Events
-  private service CCA_Events_7 (); pragma scenario (7); pragma cca ("");
+  private service CCA_Events (); pragma scenario (7); pragma cca ("");
 
   relationship R1 is CCA_A unconditionally WARNING_undefined_role_name one CCA_B,
                      CCA_B unconditionally WARNING_undefined_role_name one CCA_A;
@@ -1091,3 +1086,6 @@ domain CT_Tags is
 
 end domain;
 pragma number (38);
+pragma name ("CCA_TCA_Tagging");
+pragma kl ("CT_Tags");
+pragma version (3);

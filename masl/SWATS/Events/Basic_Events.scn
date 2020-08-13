@@ -1,0 +1,573 @@
+//! Basic_Events
+private service Events::Basic_Events () is
+   my_test = find-one Test_Data
+
+   if my_test = UNDEFINED then
+      # Start in safe mode
+      The_Test_Number = 100
+   else
+      The_Test_Number = my_test.Current_Test_Number
+   endif
+
+   [Host] = WAW1:What_Env[]
+
+#-------------------------------------------------------------------------
+# Test 1 - Test that for an active class a Current State attribute exists
+#          by reading it and also by writing to it and so changing the 
+#          Current State
+#------------------------------------------------------------------------- 
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0201", "Events", "Scenario", "Check Current State"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0103"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0104"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0202"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0205"]
+
+   firstSC = create State_Check with The_ID          = 0               &\
+                                     The_Test_No     = The_Test_Number &\
+                                     Whats_The_State = "Idle"          &\
+                                     Current_State   = 'Idle' 
+
+   if firstSC.Current_State = 'Idle' then
+      [] = RPT2:Test_Passed["Events", The_Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed["Events", The_Test_Number, -10]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 1
+
+#-------------------------------------------------------------------------
+# Test 2 - Check that the Current_State attribute can be written to
+#          This test also proves that an active object supports the notion
+#          of states by navigating from the 'Start' state to the 
+#          'Check_State' state and then on to the 'Idle' state
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0204", "Events", "Scenario", "Check the states"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0501"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0402"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0205"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0209"]
+
+   generate SC1:Check_The_State (The_Test_Number) to firstSC
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 2
+
+#-------------------------------------------------------------------------
+# Test 3 - This test creates a new instance of State_Check and then
+#          updates the Current_State.
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0202", "Events", "Scenario", "Write to the current state"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0204"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0402"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0205"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0209"]
+
+   secondSC = create State_Check with The_ID          = 0               &\
+                                      The_Test_No     = The_Test_Number &\
+                                      Whats_The_State = " "             &\
+                                      Current_State   = 'Idle'
+
+   secondSC.Current_State = 'Idle'
+
+   generate SC1:Check_The_State (The_Test_Number) to secondSC
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 3
+
+#-------------------------------------------------------------------------
+# Test 4 - Test Creation States
+#          N.B. Creation States are not currently supported
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0203", "Events", "Scenario", "Check Creation State"]
+   [] = RPT5:Test_Text[The_Test_Number, "Creation States are not supported"]
+   [] = RPT4:Test_Unsupported[The_Test_Number]
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 4
+
+#-------------------------------------------------------------------------
+# Test 5 - Test that ASL in Creation States works correctly
+#           N.B. Creation States are not currently supported
+#-------------------------------------------------------------------------
+
+  [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0506", "Events", "Scenario", "Check ASL in creation state"]
+  [] = RPT5:Test_Text[The_Test_Number, "Creation States are not supported"]
+  [] = RPT4:Test_Unsupported[The_Test_Number]
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 5
+
+#-------------------------------------------------------------------------
+# Test 6 - Test that events may be generated successfully from scenarios
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0301", "Events", "Scenario", "Event from Scenario"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1103-0000-01-0711"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0402"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0209"]
+
+   firstX = create Object_X with ResultX         = 0               &\
+                                 The_Test_No     = The_Test_Number &\
+                                 Integer_Att     = 0               &\
+                                 Real_Att        = 0.0             &\
+                                 Text_Att        = " "             &\
+                                 Boolean_Att     = FALSE           &\
+                                 Current_State   = 'Idle'
+
+   generate objX1:Check_ASL(The_Test_Number, "Scenario") to firstX
+
+   The_Test_Number = The_Test_Number + 1
+
+# end Test 6
+
+#-------------------------------------------------------------------------
+# Test 7 - This test calls a domain sync servince which in turn generates
+#          an event to test that events may be generated from services
+#-------------------------------------------------------------------------
+
+   [] = Events3::Generate_From_Service[The_Test_Number, firstX]
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 7
+
+#-------------------------------------------------------------------------
+# Test 8 - This test generates an event which in turn generates an event 
+#          from within the state machine to test that states may be 
+#          generated from within state machines
+#-------------------------------------------------------------------------
+  
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0301", "Events", "Scenario", "Event from State"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1103-0000-01-0711"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0402"]
+
+   generate objX3:From_State (The_Test_Number) to firstX
+
+  The_Test_Number = The_Test_Number + 1
+
+# End Test 8
+
+#-------------------------------------------------------------------------
+# Test 9 - This test calls a bridge function which then generates an event
+#          to test that events may be generated from bridge functions
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0301", "Events", "Scenario", "Event from bridge"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1103-0000-01-0711"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0402"]
+
+   [] = GFB1:Generate_Event[The_Test_Number, firstX]
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 9
+
+#-------------------------------------------------------------------------
+# Test 10 - Test that attributes from the target instance can be read from
+#           within its own state action
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0503", "Events", "Scenario", "Read attribute from target"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0402"]
+
+   fourthX = create Object_X with ResultX         = 0               &\
+                                  The_Test_No     = The_Test_Number &\
+                                  Integer_Att     = 100             &\
+                                  Real_Att        = 99.9            &\
+                                  Text_Att        = "Test_Data"     &\
+                                  Boolean_Att     = TRUE            &\
+                                  Current_State   = 'Idle'
+
+   generate objX4:Check_Attributes (The_Test_Number, "Read_Target_Instance") to fourthX
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 10
+
+#-------------------------------------------------------------------------
+# Test 11 - Test that attributes from the target instance can be written
+#           to from within its own state action
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0503", "Events", "Scenario", "Update attributes from target"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0402"]
+
+   fifthX = create Object_X with ResultX         = 0               &\
+                                 The_Test_No     = The_Test_Number &\
+                                 Integer_Att     = 100             &\
+                                 Real_Att        = 99.9            &\
+                                 Text_Att        = "Test_Data"     &\
+                                 Boolean_Att     = FALSE           &\
+                                 Current_State   = 'Idle'
+
+   generate objX4:Check_Attributes (The_Test_Number, "Write_Target_Instance") to fifthX
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 11
+
+#-------------------------------------------------------------------------
+# Test 12 - Test that attributes of a different instance to the current
+#           state action can be read from
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0504", "Events", "Scenario", "Read attribute from another instance"]
+
+   newX = create Object_X with ResultX         = 999             &\
+                               The_Test_No     = The_Test_Number &\
+                               Integer_Att     = 1111            &\
+                               Real_Att        = 11.1            &\
+                               Text_Att        = "Dummy_Data"    &\
+                               Boolean_Att     = FALSE           &\
+                               Current_State   = 'Idle'
+
+   generate objX4:Check_Attributes (The_Test_Number, "Read_Other_Instance") to fourthX
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 12
+
+
+#-------------------------------------------------------------------------
+# Test 13 - Test that attributes of a different instance to the current
+#           state action can be written to
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0504", "Events", "Scenario", "Update attribute from another instance"]
+
+   fifthX = create Object_X with ResultX         = 0               &\
+                                 The_Test_No     = The_Test_Number &\
+                                 Integer_Att     = 100             &\
+                                 Real_Att        = 99.9            &\
+                                 Text_Att        = "Test_Data"     &\
+                                 Boolean_Att     = FALSE           &\
+                                 Current_State   = 'Idle'
+
+   generate objX4:Check_Attributes (The_Test_Number, "Write_Other_Instance") to fourthX
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 13
+
+#-------------------------------------------------------------------------
+# Test 14 - Test that instances from different objects can be read from
+#           within the state machine
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0505", "Events", "Scenario", "Read attribute from another object"]
+
+   firstZ = create Object_Z with The_Test_No = The_Test_Number &\
+                                 Int_Att     = 1000            &\
+                                 Real_Att    = 1000.0          &\
+                                 Text_Att    = "Test_Data"
+
+   generate objX4:Check_Attributes (The_Test_Number, "Read_Other_Object") to fourthX
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 14
+
+#-------------------------------------------------------------------------
+# Test 15 - Test that attributes from instances from other objects can be 
+#           written to from within the target state machine
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0505", "Events", "Scenario", "Update attribute from another object"]
+
+   secondZ = create Object_Z with The_Test_No = The_Test_Number &\
+                                  Int_Att     = 0   &\
+                                  Real_Att    = 0.0 &\
+                                  Text_Att    = " "
+
+   generate objX4:Check_Attributes (The_Test_Number, "Write_Other_Object") to fourthX
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 15
+
+
+#-------------------------------------------------------------------------
+# Test 16 - Check that ASL in a state machine is supported
+#-------------------------------------------------------------------------
+
+  [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0507", "Events", "Scenario", "Check ASL in instance state"]
+
+  generate objX5:Check_ASL_In_State(The_Test_Number, 100) to fourthX
+
+  The_Test_Number = The_Test_Number + 1
+
+# End Test 16
+
+#-------------------------------------------------------------------------
+# Test 18 - Test that the architecture does not restrict the number
+#          of parameters that an event can carry
+#          1241-0000-01-0408
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0408", "Events", "objX", "Lots of Params"]
+
+   [] = RPT5:Test_Text[The_Test_Number, "More params than ever required"]
+
+   Val_A = 1
+   Val_B = 2
+   Val_C = 4
+   Val_D = 8
+   Val_E = 16
+   Val_F = 32
+   Val_G = 64
+   Val_H = 128
+   Val_I = 256
+   Val_J = 512
+   Val_K = 1024
+   Val_L = 2048
+   Val_M = 4096
+   Val_N = 8192
+   Val_O = 16384
+   Val_P = 32768
+   Val_Q = 65536
+   Val_R = 131072
+   Val_S = 262144
+   Val_T = 524288
+   Val_U = 1048576
+   Val_V = 2097152
+   Val_W = 4194304
+   Val_X = 8388608
+   Val_Y = 16777216
+   Val_Z = 33554432
+
+   secondX = create Object_X with ResultX         = 0               &\
+                                 The_Test_No     = The_Test_Number &\
+                                 Integer_Att     = 0               &\
+                                 Real_Att        = 0.0             &\
+                                 Text_Att        = " "             &\
+                                 Boolean_Att     = FALSE           &\
+                                 Current_State   = 'Idle'
+
+   # Initiate the test
+   generate objX6:Check_Lots_Of_Params(The_Test_Number, Val_A, Val_B, Val_C, Val_D, Val_E, Val_F, Val_G, Val_H, Val_I, Val_J, Val_K, Val_L, Val_M, \
+                                               Val_N, Val_O, Val_P, Val_Q, Val_R, Val_S, Val_T, Val_U, Val_V, Val_W, Val_X, Val_Y, Val_Z) to secondX
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 18 
+
+#-------------------------------------------------------------------------
+# Test 19
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0214", "Events", "Scenario", "Lots of states"]
+   [] = RPT5:Test_Text[The_Test_Number, "More states than ever required"]
+
+   inst_Huge_State = create Huge_State_Machine with Current_State = 'Idle'
+
+   generate HSM1:Increment(The_Test_Number, 0) to inst_Huge_State
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 19
+
+#-------------------------------------------------------------------------
+# Test 20
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0502", "Events", "Scenario", "Parameter Check"]
+
+   instCP = create Check_Parameters with CP_ID          = 0               &\
+                                         Number_Of_Test = The_Test_Number &\
+                                         Current_State  = 'Idle'
+
+   The_Start_Value = 0
+
+   generate CP1:Start(The_Start_Value) to instCP
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 20
+
+#-------------------------------------------------------------------------
+# Test 21 - Test that the architecture does not restrict the number of
+#           events that can be queued
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0305", "Events", "Scenario", "Many events on queue"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0407"]
+
+   [] = RPT5:Test_Text [The_Test_Number, "More queued events than ever required"]
+
+   instZ = create Object_Z with The_Test_No    = The_Test_Number &\
+                                Int_Att        = 0               &\
+                                Real_Att       = 0.0             &\
+                                Text_Att       = " "             &\
+                                Current_State  = 'Idle'
+
+   Count = 0
+
+   loop
+      generate objZ1:Start() to instZ
+      Count = Count + 1
+      breakif Count = 1000
+   endloop
+
+   generate objZ3:Check_Total() to instZ
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 21
+
+#-------------------------------------------------------------------------
+# Test 23 - Ensure that generated events with an Ignore effect are 
+#           dealt with correctly
+#-------------------------------------------------------------------------
+
+   instTE1 = create Test_Effects with ID            = 0 &\
+                                      Result        = 0  &\
+                                      Current_State = 'Idle'
+
+   generate TE1:Gen_Ignore(The_Test_Number) to instTE1
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 23
+
+#-------------------------------------------------------------------------
+# Test 24
+#-------------------------------------------------------------------------
+
+   instTE2 = create Test_Effects with ID            = 1 &\
+                                      Result        = 0 &\
+                                      Current_State = 'Idle'
+
+   instCCS = create Check_Current_States with Current_State = 'Check'
+
+   generate TE2:Check_Ignore_State(The_Test_Number) to instTE2
+
+   generate CCS1:Start(The_Test_Number, "Ignore") to instCCS
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 24
+
+#-------------------------------------------------------------------------
+# Test 25
+#-------------------------------------------------------------------------
+
+   instTE3 = create Test_Effects with ID            = 2 &\
+                                      Result        = 0 &\
+                                      Current_State = 'Idle'
+
+   if Host = "ISIM" then
+      generate TE6:Gen_To_Unsupported(The_Test_Number, "1241-0000-01-0212", "Cannot Happen") to instTE3
+   else
+      generate TE4:Gen_Cannot_Happen(The_Test_Number) to instTE3
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 25
+
+#-------------------------------------------------------------------------
+# Test 26
+#-------------------------------------------------------------------------
+
+   instTE4 = create Test_Effects with ID            = 3 &\
+                                      Result        = 0 &\
+                                      Current_State = 'Idle'
+
+   if Host = "ISIM" then
+      generate TE6:Gen_To_Unsupported(The_Test_Number, "1241-0000-01-0213", "Cannot Happen") to instTE4
+   else
+      generate TE5:Check_CH_State(The_Test_Number) to instTE4
+
+      generate CCS1:Start(The_Test_Number, "Cannot Happen") to instCCS
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 26
+
+#-------------------------------------------------------------------------
+# Test 27
+#-------------------------------------------------------------------------
+
+   instTE5 = create Test_Effects with ID            = 4 &\
+                                      Result        = 0 &\
+                                      Current_State = 'Idle'
+
+   if Host = "ISIM" then
+      generate TE6:Gen_To_Unsupported(The_Test_Number, "1241-0000-01-0213", "Undefined") to instTE4
+   else
+      generate TE7:Gen_To_Undefined(The_Test_Number) to instTE5
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 27
+
+#-------------------------------------------------------------------------
+# Test 
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0409", "Events", "Scenario", "Event from State"]
+
+   instCD1 = create Check_Delete with idCD          = 1     &\
+                                      CDTotal       = 0     &\
+                                      Current_State = 'Idle'
+
+   instCD2 = create Check_Delete with idCD          = 2     &\
+                                      CDTotal       = 0     &\
+                                      Current_State = 'Idle'
+
+   delete instCD2
+
+   if Host = "ISIM" then
+      [] = RPT4:Test_Unsupported[The_Test_Number]
+   else
+      generate objCD1:Check(The_Test_Number, TRUE) to instCD2
+      generate objCD1:Check(The_Test_Number, FALSE) to instCD1
+   endif
+ 
+   The_Test_Number = The_Test_Number + 1
+
+# End Test
+
+#-------------------------------------------------------------------------
+# Test 
+#-------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0403", "Events", "Scenario", "Check Persistence"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0303"]
+
+   InstTP = create Test_Persistence with TPID          = 10 &\
+                                         Current_State = 'Idle'
+
+   StartA_Value = 10
+
+   generate objTP1:Start_A(The_Test_Number, StartA_Value) to InstTP
+
+   The_Test_Number = The_Test_Number + 1
+
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0303", "Events", "Scenario", "Real as event data"]
+   generate objTP4:Pass_Real(The_Test_Number, 99.9) to InstTP
+
+   The_Test_Number = The_Test_Number + 1
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0303", "Events", "Scenario", "Test as event data"]
+   generate objTP6:Pass_Text(The_Test_Number, "Text Passed") to InstTP
+
+   The_Test_Number = The_Test_Number + 1
+
+#-------------------------------------------------------------------------
+   if my_test != UNDEFINED then
+      my_test.Current_Test_Number = The_Test_Number
+   endif

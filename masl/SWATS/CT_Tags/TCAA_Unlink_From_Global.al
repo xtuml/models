@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::TCA_A.Unlink_From_Global (Test : in  integer) is
 instTS = find-one TCA_Super where idTS = 1
 

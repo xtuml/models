@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! Add the value specified in the attribute to the supertype
 //! attribute ResultA.
 state Events::SubA.Update (Test : in  integer) is

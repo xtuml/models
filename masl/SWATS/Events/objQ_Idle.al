@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! 
 //! # This state shall prove that an event is passed from the 
 //! # supertype to the subtype even when there is no state 

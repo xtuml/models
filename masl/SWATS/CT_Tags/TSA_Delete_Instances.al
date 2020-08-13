@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 terminal state CT_Tags::TCA_SubA.Delete_Instances (Test : in  integer) is
 {SetTS} = find-all TCA_Super
 for instTS in {SetTS} do

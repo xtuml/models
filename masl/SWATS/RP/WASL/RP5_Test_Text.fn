@@ -1,0 +1,63 @@
+define function  RP5::Test_Text
+input \
+	Domain_No:Base_Integer_Type ,\
+	Text_Test_Number:Base_Integer_Type ,\
+	Free_Text:Base_Text_Type 
+output
+
+#$DESCRIPTION
+Free form description for a test
+#$END_DESCRIPTION
+
+
+the_test_number = Text_Test_Number
+the_text        = Free_Text
+
+This_Domain = find-one Domain_Details where Domain_Number = Domain_No
+
+$INLINE
+fprintf(stderr, " \n");
+fprintf(stderr, "TEXT NOTE\n");
+fprintf(stderr, "Test Number %d  %s\n", the_test_number, the_text);
+fprintf(stderr, " \n");
+$ENDINLINE
+
+#$ADA_INLINE
+# with Ada.Text_IO;
+#
+# -- Ada.Text_IO.New_Line(1);
+# -- Ada.Text_IO.Put_Line("TEXT NOTE");
+# -- Ada.Text_IO.Put_Line("Test Number "  & integer'image(integer(the_test_number)) );
+# -- Ada.Text_IO.Put("  "  & the_text);
+# -- Ada.Text_IO.New_Line(1);
+#
+#$END_ADAINLINE
+
+
+{Matching_Test_Details_Set} = This_Domain -> R8.Test_Details
+for The_Test in {Matching_Test_Details_Set} do
+    breakif The_Test.The_Test_No = Domain_No
+endfor
+
+if The_Test != UNDEFINED then
+
+   The_Domain_Details = The_Test -> R8.Domain_Details
+
+   if The_Domain_Details != UNDEFINED then
+
+      The_Supporting_Comment = create Supporting_Comments with Comment_ID  = Domain_No &\
+                                                               The_Comment = the_text  &\
+                                                               The_Test_No = the_test_number
+
+         link The_Supporting_Comment R9 The_Domain_Details
+
+   else
+      [] = RP9::Test_Anomalous_Behaviour[Domain_No, "Domain and Test unlinked"]
+   endif
+
+else
+   [] = RP9::Test_Anomalous_Behaviour[Domain_No, "Received a comment for unknown test"]
+endif
+
+
+enddefine
