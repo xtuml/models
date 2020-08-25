@@ -113,10 +113,14 @@ domain Creation_Deletion is
   relationship R1 is Coloured_Object conditionally has many Flavoured_Object,
                      Flavoured_Object conditionally has many Coloured_Object
                      using Flavour_and_Colour;
+ pragma Class_A ("Coloured_Object");
+ pragma Class_B ("Flavoured_Object");
 
-  relationship R2 is Doctor unconditionally WARNING_undefined_role_name many Enemy,
-                     Enemy unconditionally WARNING_undefined_role_name one Doctor
+  relationship R2 is Doctor unconditionally is_afraid_of many Enemy,
+                     Enemy unconditionally wants_to_kill one Doctor
                      using Doctors_Enemy;
+ pragma Class_A ("Doctor");
+ pragma Class_B ("Enemy");
 
   //! Object_A is manipulated by object 'Instance_Creation'.
   object Object_A is
@@ -389,9 +393,9 @@ domain Creation_Deletion is
 
   object Doctors_Enemy is
 
-    Humanoid          : preferred referential (R2.WARNING_undefined_role_name.Enemy.Humanoid) boolean;
+    Humanoid          : preferred referential (R2.is_afraid_of.Enemy.Humanoid) boolean;
 
-    Actor             : referential (R2.WARNING_undefined_role_name.Doctor.Actor) actors_who_have_played_the_doctor;
+    Actor             : referential (R2.wants_to_kill.Doctor.Actor) actors_who_have_played_the_doctor;
 
     battlefield_arena : battlefield_arena_type;
 

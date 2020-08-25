@@ -229,27 +229,35 @@ domain TAGS is
   private service Perform_Static_Tests (); pragma scenario (12);
 
   //! @@TAGS-01-0010
-  relationship R1 is Single_Tagged_Object unconditionally WARNING_undefined_role_name many Many_Tagged_Objects,
-                     Many_Tagged_Objects unconditionally WARNING_undefined_role_name one Single_Tagged_Object;
+  relationship R1 is Single_Tagged_Object unconditionally has many Many_Tagged_Objects,
+                     Many_Tagged_Objects unconditionally has one Single_Tagged_Object;
+ pragma Class_A ("Single_Tagged_Object");
+ pragma Class_B ("Many_Tagged_Objects");
 
-  relationship R2 is Active_Tagged_Single_Object unconditionally WARNING_undefined_role_name many Active_Tagged_Many_Objects,
-                     Active_Tagged_Many_Objects unconditionally WARNING_undefined_role_name one Active_Tagged_Single_Object;
+  relationship R2 is Active_Tagged_Single_Object unconditionally has many Active_Tagged_Many_Objects,
+                     Active_Tagged_Many_Objects unconditionally has one Active_Tagged_Single_Object;
+ pragma Class_A ("Active_Tagged_Single_Object");
+ pragma Class_B ("Active_Tagged_Many_Objects");
 
   //! @@TAGS-01-0011
-  relationship R3 is Tagged_Many_Left unconditionally WARNING_undefined_role_name many Tagged_Many_Right,
-                     Tagged_Many_Right unconditionally WARNING_undefined_role_name many Tagged_Many_Left
+  relationship R3 is Tagged_Many_Left unconditionally has many Tagged_Many_Right,
+                     Tagged_Many_Right unconditionally has many Tagged_Many_Left
                      using Tagged_Single_Assoc;
+ pragma Class_A ("Tagged_Many_Left");
+ pragma Class_B ("Tagged_Many_Right");
 
-  relationship R5 is Active_Tagged_Many_Left unconditionally WARNING_undefined_role_name many Active_Tagged_Many_Right,
-                     Active_Tagged_Many_Right unconditionally WARNING_undefined_role_name many Active_Tagged_Many_Left
+  relationship R5 is Active_Tagged_Many_Left unconditionally has many Active_Tagged_Many_Right,
+                     Active_Tagged_Many_Right unconditionally has many Active_Tagged_Many_Left
                      using Active_Tagged_Single_Assoc;
+ pragma Class_A ("Active_Tagged_Many_Left");
+ pragma Class_B ("Active_Tagged_Many_Right");
 
-  relationship R4 is Tagged_Many_Supertype is_a (Subtype_1,
-                                                 Subtype_2);
+  relationship R4 is Tagged_Many_Supertype is_a (Subtype_2,
+                                                 Subtype_1);
 
-  relationship R6 is Active_Tagged_Supertype is_a (Active_Tagged_Subtype_One,
+  relationship R6 is Active_Tagged_Supertype is_a (Active_Tagged_Subtype_Three,
                                                    Active_Tagged_Subtype_Two,
-                                                   Active_Tagged_Subtype_Three);
+                                                   Active_Tagged_Subtype_One);
 
   object An_Active_Object is
 
@@ -607,7 +615,7 @@ domain TAGS is
 
     Other_Unique_Identifier : preferred integer;
 
-    Unique_Identifier       : referential (R1.WARNING_undefined_role_name.Single_Tagged_Object.Unique_Identifier) integer;
+    Unique_Identifier       : referential (R1.has.Single_Tagged_Object.Unique_Identifier) integer;
 
     Attribute_Two           : integer;
 
@@ -646,7 +654,7 @@ domain TAGS is
 
   object Active_Tagged_Many_Objects is
 
-    Unique_Identifier       : referential (R2.WARNING_undefined_role_name.Active_Tagged_Single_Object.Unique_Identifier) integer;
+    Unique_Identifier       : referential (R2.has.Active_Tagged_Single_Object.Unique_Identifier) integer;
 
     Other_Unique_Identifier : preferred integer;
 
@@ -701,9 +709,9 @@ domain TAGS is
 
     Assoc_Unique_Identifier : integer;
 
-    Unique_Identifier       : preferred referential (R3.WARNING_undefined_role_name.Tagged_Many_Left.Unique_Identifier) integer;
+    Unique_Identifier       : preferred referential (R3.has.Tagged_Many_Left.Unique_Identifier) integer;
 
-    Other_Unique_Identifier : preferred referential (R3.WARNING_undefined_role_name.Tagged_Many_Right.Other_Unique_Identifier) integer;
+    Other_Unique_Identifier : preferred referential (R3.has.Tagged_Many_Right.Other_Unique_Identifier) integer;
 
     Attribute_Three         : integer;
 
@@ -833,7 +841,7 @@ domain TAGS is
 
   object Active_Tagged_Single_Assoc is
 
-    Assoc_Unique_Identifier : preferred referential (R5.WARNING_undefined_role_name.Active_Tagged_Many_Right.Other_Unique_Identifier, R5.WARNING_undefined_role_name.Active_Tagged_Many_Left.Unique_Identifier) integer;
+    Assoc_Unique_Identifier : preferred referential (R5.has.Active_Tagged_Many_Right.Other_Unique_Identifier, R5.has.Active_Tagged_Many_Left.Unique_Identifier) integer;
 
     Attribute_Three         : integer;
 

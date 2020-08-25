@@ -114,6 +114,8 @@ domain Find_and_Sets is
   relationship R1 is Left_Obj unconditionally has many Right_Obj,
                      Right_Obj unconditionally has many Left_Obj
                      using Assoc_Obj;
+ pragma Class_A ("Left_Obj");
+ pragma Class_B ("Right_Obj");
 
   object Report_Data is
 
