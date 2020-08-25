@@ -207,16 +207,22 @@ domain DomainA is
 
   relationship R1 is One_To_One_Left_Side conditionally has_one one One_To_One_Right_Side,
                      One_To_One_Right_Side conditionally is_one_of one One_To_One_Left_Side;
+ pragma Class_A ("One_To_One_Left_Side");
+ pragma Class_B ("One_To_One_Right_Side");
 
-  relationship R2 is One_To_Many_Left_Side unconditionally WARNING_undefined_role_name many One_To_Many_Right_Side,
-                     One_To_Many_Right_Side unconditionally WARNING_undefined_role_name one One_To_Many_Left_Side;
+  relationship R2 is One_To_Many_Left_Side unconditionally has_many many One_To_Many_Right_Side,
+                     One_To_Many_Right_Side unconditionally has_one one One_To_Many_Left_Side;
+ pragma Class_A ("One_To_Many_Left_Side");
+ pragma Class_B ("One_To_Many_Right_Side");
 
-  relationship R3 is Many_To_Many_Left_Side unconditionally WARNING_undefined_role_name many Many_To_Many_Right_Side,
-                     Many_To_Many_Right_Side unconditionally WARNING_undefined_role_name many Many_To_Many_Left_Side
+  relationship R3 is Many_To_Many_Left_Side unconditionally has_many many Many_To_Many_Right_Side,
+                     Many_To_Many_Right_Side unconditionally has_many many Many_To_Many_Left_Side
                      using Many_To_Many_Associative;
+ pragma Class_A ("Many_To_Many_Left_Side");
+ pragma Class_B ("Many_To_Many_Right_Side");
 
-  relationship R4 is Domain_A_Object_Super is_a (Domain_A_Object_SubA,
-                                                 Domain_A_Object_SubB);
+  relationship R4 is Domain_A_Object_Super is_a (Domain_A_Object_SubB,
+                                                 Domain_A_Object_SubA);
 
   //! Object_A is used to invoke the series of tests as specified in the domain mission statement.
   //! 
@@ -330,7 +336,7 @@ domain DomainA is
 
     otmrs_id : preferred integer;
 
-    otmls_id : referential (R2.WARNING_undefined_role_name.One_To_Many_Left_Side.otmls_id) integer;
+    otmls_id : referential (R2.has_one.One_To_Many_Left_Side.otmls_id) integer;
 
 
   end object;
@@ -357,9 +363,9 @@ domain DomainA is
 
   object Many_To_Many_Associative is
 
-    mtmls_id  : preferred referential (R3.WARNING_undefined_role_name.Many_To_Many_Left_Side.mtmls_id) integer;
+    mtmls_id  : preferred referential (R3.has_many.Many_To_Many_Left_Side.mtmls_id) integer;
 
-    mtmrs_id  : preferred referential (R3.WARNING_undefined_role_name.Many_To_Many_Right_Side.mtmrs_id) integer;
+    mtmrs_id  : preferred referential (R3.has_many.Many_To_Many_Right_Side.mtmrs_id) integer;
 
     mtma_data : integer;
 
@@ -427,4 +433,4 @@ end domain;
 pragma number (4);
 pragma name ("DomainA");
 pragma kl ("DomainA");
-pragma version (11);
+pragma version (12);

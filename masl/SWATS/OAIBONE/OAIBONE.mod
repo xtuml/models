@@ -190,4 +190,4 @@ end domain;
 pragma number (11);
 pragma name ("Open Architecture Internal Bridge Domain One");
 pragma kl ("OAIBONE");
-pragma version (1);
+pragma version (2);

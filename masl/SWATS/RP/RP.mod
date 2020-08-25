@@ -171,45 +171,69 @@ domain RP is
   //! Counterpart Requirements
   private service Counterpart_Requirements (); pragma scenario (19);
 
-  relationship R1 is Domain_Details unconditionally WARNING_undefined_role_name one A_Test_That_Passed,
-                     A_Test_That_Passed unconditionally WARNING_undefined_role_name one Domain_Details;
+  relationship R1 is Domain_Details unconditionally has one A_Test_That_Passed,
+                     A_Test_That_Passed unconditionally has one Domain_Details;
+ pragma Class_A ("Domain_Details");
+ pragma Class_B ("A_Test_That_Passed");
 
-  relationship R2 is Domain_Details unconditionally WARNING_undefined_role_name one A_Test_That_Failed,
-                     A_Test_That_Failed unconditionally WARNING_undefined_role_name one Domain_Details;
+  relationship R2 is Domain_Details unconditionally has one A_Test_That_Failed,
+                     A_Test_That_Failed unconditionally has one Domain_Details;
+ pragma Class_A ("Domain_Details");
+ pragma Class_B ("A_Test_That_Failed");
 
-  relationship R3 is Domain_Details unconditionally WARNING_undefined_role_name one A_Test_That_Is_Unsupported,
-                     A_Test_That_Is_Unsupported unconditionally WARNING_undefined_role_name one Domain_Details;
+  relationship R3 is Domain_Details unconditionally has one A_Test_That_Is_Unsupported,
+                     A_Test_That_Is_Unsupported unconditionally has one Domain_Details;
+ pragma Class_A ("Domain_Details");
+ pragma Class_B ("A_Test_That_Is_Unsupported");
 
   relationship R4 is Domain_Details conditionally May_Have_Some many Duplicated_Result,
-                     Duplicated_Result unconditionally WARNING_undefined_role_name one Domain_Details;
+                     Duplicated_Result unconditionally must_have_one one Domain_Details;
+ pragma Class_A ("Domain_Details");
+ pragma Class_B ("Duplicated_Result");
 
   relationship R5 is Duplicated_Result conditionally Has_one one Duplicated_Result,
                      Duplicated_Result conditionally Has_some many Duplicated_Result;
+ pragma Class_A ("Duplicated_Result");
+ pragma Class_B ("Duplicated_Result");
 
-  relationship R8 is Domain_Details unconditionally WARNING_undefined_role_name many Test_Details,
-                     Test_Details unconditionally WARNING_undefined_role_name one Domain_Details;
+  relationship R8 is Domain_Details unconditionally has many Test_Details,
+                     Test_Details unconditionally has one Domain_Details;
+ pragma Class_A ("Domain_Details");
+ pragma Class_B ("Test_Details");
 
-  relationship R6 is Test_Details unconditionally WARNING_undefined_role_name one Results_Of_Tests,
-                     Results_Of_Tests unconditionally WARNING_undefined_role_name one Test_Details;
+  relationship R6 is Test_Details unconditionally has one Results_Of_Tests,
+                     Results_Of_Tests unconditionally has one Test_Details;
+ pragma Class_A ("Test_Details");
+ pragma Class_B ("Results_Of_Tests");
 
   relationship R7 is Test_Details conditionally May_have_one_or_more many Requirement_Identifier_For_Test,
                      Requirement_Identifier_For_Test conditionally defines_test_requirement one Test_Details;
+ pragma Class_A ("Test_Details");
+ pragma Class_B ("Requirement_Identifier_For_Test");
 
   relationship R10 is Test_Suite unconditionally Contains_Many many Domain_Details,
                       Domain_Details unconditionally Is_Contained_By one Test_Suite;
+ pragma Class_A ("Test_Suite");
+ pragma Class_B ("Domain_Details");
 
-  relationship R11 is All_Requirements_In_Test_Suite unconditionally WARNING_undefined_role_name one Test_Suite,
-                      Test_Suite unconditionally WARNING_undefined_role_name many All_Requirements_In_Test_Suite;
+  relationship R11 is All_Requirements_In_Test_Suite unconditionally has one Test_Suite,
+                      Test_Suite unconditionally has many All_Requirements_In_Test_Suite;
+ pragma Class_A ("All_Requirements_In_Test_Suite");
+ pragma Class_B ("Test_Suite");
 
   relationship R12 is All_Requirements_In_Test_Suite conditionally May_have many Requirement_Met,
-                      Requirement_Met unconditionally WARNING_undefined_role_name one All_Requirements_In_Test_Suite;
+                      Requirement_Met unconditionally must_have one All_Requirements_In_Test_Suite;
+ pragma Class_A ("All_Requirements_In_Test_Suite");
+ pragma Class_B ("Requirement_Met");
 
-  relationship R9 is Domain_Details unconditionally WARNING_undefined_role_name many Supporting_Comments,
-                     Supporting_Comments unconditionally WARNING_undefined_role_name one Domain_Details;
+  relationship R9 is Domain_Details unconditionally has many Supporting_Comments,
+                     Supporting_Comments unconditionally has one Domain_Details;
+ pragma Class_A ("Domain_Details");
+ pragma Class_B ("Supporting_Comments");
 
   object A_Test_That_Passed is
 
-    Domain_Number  : referential (R1.WARNING_undefined_role_name.Domain_Details.Domain_Number) integer;
+    Domain_Number  : referential (R1.has.Domain_Details.Domain_Number) integer;
 
     Passed_Counter : integer;
 
@@ -224,7 +248,7 @@ domain RP is
 
   object A_Test_That_Failed is
 
-    Domain_Number  : referential (R2.WARNING_undefined_role_name.Domain_Details.Domain_Number) integer;
+    Domain_Number  : referential (R2.has.Domain_Details.Domain_Number) integer;
 
     Failed_Counter : integer;
 
@@ -299,7 +323,7 @@ domain RP is
 
   object A_Test_That_Is_Unsupported is
 
-    Domain_Number       : referential (R3.WARNING_undefined_role_name.Domain_Details.Domain_Number) integer;
+    Domain_Number       : referential (R3.has.Domain_Details.Domain_Number) integer;
 
     Unsupported_Counter : integer;
 
@@ -313,7 +337,7 @@ domain RP is
 
   object Duplicated_Result is
 
-    Domain_Number                      : referential (R4.WARNING_undefined_role_name.Domain_Details.Domain_Number) integer;
+    Domain_Number                      : referential (R4.must_have_one.Domain_Details.Domain_Number) integer;
 
     Who_Reported_The_Duplicated_Result : Result_Type;
 
@@ -352,7 +376,7 @@ domain RP is
 
     The_Result_Of_Object         : string;
 
-    Domain_Number                : referential (R6.WARNING_undefined_role_name.Test_Details.Domain_Number) integer;
+    Domain_Number                : referential (R6.has.Test_Details.Domain_Number) integer;
 
     Domain_Test_Details          : string;
 
@@ -363,7 +387,7 @@ domain RP is
 
   object Test_Details is
 
-    Domain_Number : preferred referential (R8.WARNING_undefined_role_name.Domain_Details.Domain_Number) integer;
+    Domain_Number : preferred referential (R8.has.Domain_Details.Domain_Number) integer;
 
     Test_Purpose  : string;
 
@@ -392,7 +416,7 @@ domain RP is
 
   object Supporting_Comments is
 
-    Domain_Number : referential (R9.WARNING_undefined_role_name.Domain_Details.Domain_Number) integer;
+    Domain_Number : referential (R9.has.Domain_Details.Domain_Number) integer;
 
     The_Comment   : string;
 
@@ -464,7 +488,7 @@ domain RP is
 
     REQUID               : string;
 
-    Unique_TS_Identifier : referential (R11.WARNING_undefined_role_name.Test_Suite.Unique_TS_Identifier) integer;
+    Unique_TS_Identifier : referential (R11.has.Test_Suite.Unique_TS_Identifier) integer;
 
     Requid_Test_Status   : Requid_Status_Type;
 
@@ -479,7 +503,7 @@ domain RP is
 
     Unique_Req_Met_ID   : preferred integer;
 
-    Unique_REQS_ID      : referential (R12.WARNING_undefined_role_name.All_Requirements_In_Test_Suite.Unique_REQS_ID) integer;
+    Unique_REQS_ID      : referential (R12.must_have.All_Requirements_In_Test_Suite.Unique_REQS_ID) integer;
 
     //! Unique domain number of the test that met the requirement.
     Domain_Name         : string;
