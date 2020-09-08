@@ -16,15 +16,26 @@ print_usage () {
 
 abort () {
     echo "Aborting..."
-    $BPINSTALL/tools/mc/bin/CLI.sh Launch -abort
+    $BINDIR/CLI.sh Launch -abort
     exit 1
 }
 trap abort SIGINT SIGTERM
 
-# input variables
+# set up paths
 if [[ "" == "$BPINSTALL" ]]; then
     BPINSTALL="/build/buildmt/roundtrip/BridgePoint"
 fi
+TMP="/tmp"
+BINDIR=$BPINSTALL/tools/mc/bin
+if [[ "$OSTYPE" == "cygwin" ]]; then
+    DIR=. # on Windows only run from local directory
+    BPINSTALL=`cygpath -w $BPINSTALL`
+    BINDIR=`cygpath -w $BINDIR`
+    TMP="." # on Windows operate from local directory
+fi
+export PATH=$BINDIR:$PATH
+
+# input variables
 OUT_DIR=
 RELAUNCH=
 ARCHITECTURE="MASL" # Default to MASL.
@@ -50,7 +61,7 @@ done
 if [[ $OUT_DIR == "" ]]; then OUT_DIR=.; fi
 
 # set up workspace
-export WORKSPACE="/tmp/importwork"
+export WORKSPACE="$TMP/importwork"
 if [[ -d $WORKSPACE ]]; then
     rm -rf $WORKSPACE
 fi
@@ -59,7 +70,7 @@ export BPHOME=$BPINSTALL
 
 # lanch eclipse
 echo "Launching an Eclipse command line instance..."
-$BPINSTALL/tools/mc/bin/CLI.sh Launch
+$BINDIR/CLI.sh Launch
 
 # Run tests
 COUNTER=1
@@ -79,17 +90,17 @@ while read TEST; do
                 CMD="$CMD$DIR/${projects[$i]} "
                 i=$[$i +1]
             done
-            $BPINSTALL/tools/mc/bin/round_trip $CMD -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
+            $BINDIR/round_trip $CMD -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
         else
             # run round trip for a domain
-            $BPINSTALL/tools/mc/bin/round_trip -d $DIR/$TEST -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
+            $BINDIR/round_trip -d $DIR/$TEST -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
         fi
     fi
     COUNTER=$[$COUNTER +1]
 done
 
 # shut down eclipse
-$BPINSTALL/tools/mc/bin/CLI.sh Launch -exit
+$BINDIR/CLI.sh Launch -exit
 
 find $OUT_DIR -name "diff_*" -exec wc -l {} \; | sort -n -t '/' +1
 find $OUT_DIR -name "diff_*" -exec wc -l {} \; | wc -l
