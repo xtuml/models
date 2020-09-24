@@ -296,11 +296,11 @@ domain Relationships is
                                    Sub_Sub_L7,
                                    Sub_Sub_L6);
 
-  relationship R31 is Sub_L3 is_a (Sub_Sub_L11,
-                                   Sub_Sub_L10);
-
   relationship R30 is Sub_L3 is_a (Sub_Sub_L8,
                                    Sub_Sub_L9);
+
+  relationship R31 is Sub_L3 is_a (Sub_Sub_L11,
+                                   Sub_Sub_L10);
 
   relationship R28 is Sub_Sub_L2 is_a (Sub_Sub_Sub_L2,
                                        Sub_Sub_Sub_L1);
@@ -1168,9 +1168,9 @@ domain Relationships is
 
   object Sub_Sub_L8 is
 
-    idSSL8 : integer;
-
     idH    : preferred referential (R30.idH) integer;
+
+    idSSL8 : integer;
 
 
   end object;
@@ -1179,9 +1179,9 @@ domain Relationships is
 
   object Sub_Sub_L9 is
 
-    idSSL9 : integer;
-
     idH    : preferred referential (R30.idH) integer;
+
+    idSSL9 : integer;
 
 
   end object;
