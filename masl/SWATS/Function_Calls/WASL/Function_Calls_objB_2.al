@@ -167,8 +167,7 @@ This object verifies the following:
       # Check that the function performed its task correctly
       if (this.ResultA != 10) then
         [] = RPT3:Test_Failed["objB", Test_Case_ID, -5]
-
-       has_failed = TRUE
+        has_failed = TRUE
         generate objB1:Fault() to this
      else
         temp = this.ResultA + 10
