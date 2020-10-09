@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::TCA_D.Idle (Test : in  integer) is
 if this.TDRef = 1 then
 

@@ -1,0 +1,58 @@
+public service DomainA::Navigate~>Pass_IH (Test   : in  integer,
+                                           The_IH : in  instance of Object_A) is
+#------------------------------------------------------------------------#
+# Recieve an instance handle of Object A from domain A
+#------------------------------------------------------------------------#
+
+   My_Report = find-one Report_Data
+
+   Has_Failed = TRUE
+
+   if My_Report = UNDEFINED then
+
+      $USE RP
+         [] = RP7::Report_Run_Time_Error["Calling domain has not created Report_Data"]
+      $ENDUSE
+ 
+   else
+      This_Domain_Number = My_Report.Reported_Domain_Number
+
+      $USE RP
+         [] = RP4::Test_Description[Test, "1241-0000-01-1108", "Domain_A", "Bridge", "Recieve IH via bridge", This_Domain_Number]
+         [] = RP10::Specify_Requid[This_Domain_Number, Test, "1241-0000-01-1109"]
+         [] = RP10::Specify_Requid[This_Domain_Number, Test, "1103-0000-01-1021"]
+      $ENDUSE
+ 
+      if The_IH.idA = 100 then
+
+         if The_IH.ResultA = 100 then
+
+#            if The_IH.Current_State = 'Sync_service_invocation_to_event' then
+               Has_Failed = FALSE
+#            else
+#               Failure_Code = -10
+#            endif
+
+         else
+            Failure_Code = -20
+         endif
+
+      else
+         Failure_Code = -30
+      endif
+
+
+      # ASL won't allow the calling of another bridge service in this one, so
+      # fake it, and USE the relevent domain. Sneaky.
+
+      $USE RP
+
+         if Has_Failed then
+            [] = RP2::Test_Failed["Bridge", Test, Failure_Code, This_Domain_Number]
+         else
+            [] = RP1::Test_Passed["Bridge", Test, 0, This_Domain_Number]
+         endif
+
+      $ENDUSE
+
+   endif

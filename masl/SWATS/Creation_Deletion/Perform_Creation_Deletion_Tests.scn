@@ -1,0 +1,183 @@
+//! Perform Creation Deletion Tests
+private service Creation_Deletion::Perform_Creation_Deletion_Tests () is
+#-------------------------------------------------------------------------------------------#
+# This scenario is basically the externals 1..8 incorporated in one scenario. This is done 
+# as externals are not supported by the current SWA.
+#-------------------------------------------------------------------------------------------#
+
+   # Create all objects to be used in these tests.
+ 
+   Test = 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0123", "Creation Deletion", "Scenario", "Create instances in scenario"]
+  
+   testObjA = create Object_A with ReferenceA = 0      &\ 
+                                   IntegerA   = 1      &\
+                                   TextA      = "Test" &\
+                                   BooleanA   = TRUE   &\
+                                   ColourA    = 'Red'
+
+   testObjB = create Object_B with ReferenceB = 0   &\
+                                   IntegerA   = 100
+
+   if testObjA.ReferenceA = 0 then
+
+      if testObjA.IntegerA = 1 then
+
+         if testObjB.IntegerA = 100 then
+ 
+            if testObjA.TextA = "Test" then
+
+               if testObjA.BooleanA = TRUE then
+
+                  if testObjA.ColourA = 'Red' then
+                     [] = RPT2:Test_Passed["Instance in scenario", Test, 0]
+                  else
+                     [] = RPT3:Test_Failed["Instance in scenario", Test, -10]
+                  endif
+
+               else
+                  [] = RPT3:Test_Failed["Instance in scenario", Test, -20]
+               endif
+
+            else
+               [] = RPT3:Test_Failed["Instance in scenario", Test, -30]
+            endif
+
+         else
+            [] = RPT3:Test_Failed["Instance in scenario", Test, -40]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Instance in scenario", Test, -50]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Instance in scenario", Test, -60]
+   endif
+
+   # delete the two newly created instances
+   delete testObjA
+   delete testObjB
+
+#-------------------------------------------------------------------------------------------#
+
+   # Create all objects to be used in these tests.
+
+   Test = 2
+   Returned_Test_Number = 2
+
+   [Returned_Test_Number] = objA1:do_sync_create[Test]
+
+   Test = Returned_Test_Number + 1
+
+   [Returned_Test_Number] = objB1:do_sync_create_unique[Test]
+
+   Test = Returned_Test_Number + 1
+
+   [Returned_Test_Number] = objC1:do_create_unique_mult[Test]
+  
+#-------------------------------------------------------------------------------------------#
+# Creation State tests.
+# These shall prove that a queue is handled in a correct manner.
+# This event should be placed on the queue, and the subsequent generation from within 
+# this object placed directly afterwards.
+# The second test in the sequence should prove that this has happened as it should start 
+# after the first has reported pass/fail.
+#-------------------------------------------------------------------------------------------#
+
+   Test = Returned_Test_Number + 1
+
+   # Creation Events are unsupported in WACA.
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0203", "Creation Deletion", "objCS", "Generate Creation events"]
+   [] = RPT5:Test_Text [Test, "Creation States are unsopported"]
+
+   # Start the test
+   # generate objCS1:StartA(Test)
+
+   # Find out how many tests are performed in objCS1:StartA
+   [] = RPT4:Test_Unsupported[Test]
+
+   # Test = Test + 1
+
+   # Start the test
+   # generate objCS1:StartA(Test)
+
+#-------------------------------------------------------------------------------------------#
+
+   Test = Test + 1
+   Returned_Test_Number = 0
+
+   # Perform deletion tests
+ 
+   [Returned_Test_Number] = objD1:do_deletion_tests[Test]
+
+#-------------------------------------------------------------------------------------------#
+
+   Test = Returned_Test_Number + 1
+
+   Returned_Test_Number = 0
+
+   # Perform multiple deletion tests, ie. delete more than one instance at a time
+   [Returned_Test_Number] = objD2:do_multiple_deletion_tests[Test]
+
+#-------------------------------------------------------------------------------------------#
+# Start termination state tests
+#-------------------------------------------------------------------------------------------#
+
+   Test = Returned_Test_Number + 1
+
+   Returned_Test_Number = 0
+
+   has_failed = FALSE
+
+   # Create an instance to delete
+   newTS = create Termination_State with ReferenceTS   = Test     &\
+                                         Current_State = 'Idle'
+
+   # Start test
+   generate objTS3:StartA() to newTS
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------------------------------#
+
+   # Create an instance to delete
+   newTS = create Termination_State with ReferenceTS   = Test     &\
+                                         Current_State = 'Idle'
+ 
+   generate objTS3:StartA() to newTS
+
+   Test = Test + 1 
+
+#-------------------------------------------------------------------------------------------#
+# Perform further creation tests, specifying attributes then attempt to delete the many to 
+# many relationship with associated object 
+#-------------------------------------------------------------------------------------------#
+
+   Returned_Test_Number = 0
+
+   [Returned_Test_Number] = coloured1:Colourize_It[Test]
+
+#-------------------------------------------------------------------------------------------#
+# Perform regression tests to clarify a discrepancy between find-all returning instance 
+# handle set and a navigate to a set of instance handles.
+#-------------------------------------------------------------------------------------------#
+
+   Test = Returned_Test_Number
+   Returned_Test_Number = 0
+
+   [Returned_Test_Number] = coloured2:Regression_Tests[Test]
+
+#-------------------------------------------------------------------------------------------#
+# Perform further creation tests, using Dr.Who, several enemies and the odd battle or two
+# as meaningful objects.
+#-------------------------------------------------------------------------------------------#
+
+Test = Returned_Test_Number
+Returned_Test_Number = 0
+
+[Returned_Test_Number] = dr1:Test_the_Doctors_Mettle[Test]
+
+#-------------------------------------------------------------------------------------------#
+

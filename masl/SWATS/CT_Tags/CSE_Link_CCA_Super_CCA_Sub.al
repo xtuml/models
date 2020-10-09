@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::CCA_SubE.Link_CCA_Super_CCA_Sub (Test : in  integer) is
 instCS  = find-one CCA_Super where idCS  = 1
 instCSH = find-one CCA_SubH  where idCSH = 1

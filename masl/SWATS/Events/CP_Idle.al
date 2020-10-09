@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Check_Parameters.Idle (Start_Val  : in  integer,
                                      Got_To_End : in  boolean) is
 if Got_To_End then

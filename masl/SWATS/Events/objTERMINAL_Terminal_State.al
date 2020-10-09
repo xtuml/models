@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! This state shall delete it's own instance, but only 
 //! after reporting itself as available for deletion.
 terminal state Events::Terminal_Object.Terminal_State (Test        : in  integer,

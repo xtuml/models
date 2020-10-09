@@ -1,0 +1,13 @@
+Transaction_Subtype,Enumeration,{Pending,Paid,Evaded}
+DELIVERY_IH,Root_Object.Object_Access
+PUMP_IH,Root_Object.Object_Access
+TANK_IH,Root_Object.Object_Access
+FUEL_GRADE_IH,Root_Object.Object_Access
+TRANSACTION_IH,Root_Object.Object_Access
+PENDING_TRANSACTION_IH,Root_Object.Object_Access
+PAID_TRANSACTION_IH,Root_Object.Object_Access
+EVADED_TRANSACTION_IH,Root_Object.Object_Access
+TYPE_OF_TANK_IH,Root_Object.Object_Access
+TankType,Enumeration,{Standard,Large}
+currency_type,Constrained_User_Type,Base_Float_Type,0..1000
+my_structure_type,Structure,{cost,Base_Float_Type;duration,Base_Integer_Type;aWEDASDF,currency_type}

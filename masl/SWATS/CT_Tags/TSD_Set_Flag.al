@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::TCA_SubD.Set_Flag (Test : in  integer) is
 instTS = this -> R6.TCA_Super
 instTS.TCAFlag  = TRUE

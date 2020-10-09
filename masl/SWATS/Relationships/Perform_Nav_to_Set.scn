@@ -1,0 +1,141 @@
+//! Perform Nav to Set
+private service Relationships::Perform_Nav_to_Set () is
+#-------------------------------------------------------------------#
+#
+# Perform navigation from a single instance to a set of instances via 
+# another single set.
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+
+   One_Left    = create Far_Left with Left_Identifier = 1 &\ 
+                                      Left_Data       = 0
+
+   One_Middle  = create Middle with Middle_Identifier = 1 &\
+                                    Middle_Data       = 0
+
+   One_Right   = create Many_Right with Right_Identifier = 1 &\
+                                        Right_Data       = 0
+
+   Two_Right   = create Many_Right with Right_Identifier  = 2 &\
+                                        Right_Data        = 0
+
+   Three_Right = create Many_Right with Right_Identifier  = 3 &\
+                                        Right_Data        = 0
+
+   One_MRA  = create Many_Right_Assoc with MRA_Identifier = 1 &\
+                                           MRA_Data       = 0
+
+   Two_MRA  = create Many_Right_Assoc with MRA_Identifier = 2 &\
+                                           MRA_Data = 0
+
+   One_MFR = create Many_Far_Right with MFR_Identifier = 1 &\
+                                        MFR_Data       = 0
+
+   Two_MFR = create Many_Far_Right with MFR_Identifier = 2 &\
+                                        MFR_Data       = 0
+
+#-------------------------------------------------------------------#
+# Test that the object instances have been correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "Middle", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetL}   = find-all Far_Left
+   {SetM}   = find-all Middle
+   {SetR}   = find-all Many_Right
+   {SetMRA} = find-all Many_Right_Assoc
+   {SetMFR} = find-all Many_Far_Right
+
+   if countof {SetL} = 1 then
+
+      if countof {SetM} = 1 then
+
+         if countof {SetR} = 3 then
+
+            if countof {SetMRA} = 2 then
+
+               if countof {SetMFR} != 2 then
+                  Has_Failed   = TRUE
+                  Failure_Code = countof {SetMRA}
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = -20
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -30
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -40
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -50
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["Middle", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Middle", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Create the relationships
+#-------------------------------------------------------------------#
+
+   [] = M1:Create_Relationships[Test]
+   Test=Test + 1
+
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+   
+   Count = 1
+  
+   loop
+      [] = M2:Middle_Navigation[Count, Test]
+      Test = Test + 1 
+      Count = Count + 1
+      breakif Count = 15
+   endloop
+
+#-------------------------------------------------------------------#
+# Delete the relationships
+#-------------------------------------------------------------------#
+
+   [] = M3:Delete_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+   my_test.The_Test_Number = Test

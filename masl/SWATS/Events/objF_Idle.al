@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Object_F.Idle (Test_Number : in  integer) is
 #-----------------------------------------------------------
 # In this state check that all the events have been processed 

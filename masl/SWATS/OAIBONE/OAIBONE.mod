@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 domain OAIBONE is
   object Source_Bridge_Data;
   object Very_Simple_Data_Object;
@@ -39,7 +35,7 @@ domain OAIBONE is
     Real_Type : real;
   end structure;
 
-  private type Pos is integer;
+  private type Pos is integer; pragma type_range(1,10);
 
   public service Receive_A_Very_Simple_Structure (Received_Very_Simple_Structure : in  sequence of Very_Simple_Structure_Type,
                                                   Received_Control_Integer       : in  integer,
@@ -124,19 +120,19 @@ domain OAIBONE is
 
 
   //! First Set of Tests
-  private service First_Set_of_Tests_2 (); pragma scenario (2);
+  private service First_Set_of_Tests (); pragma scenario (2);
 
   //! Initial Call to Domain Two
-  private service Initial_Call_to_Domain_Two_3 (); pragma scenario (3);
+  private service Initial_Call_to_Domain_Two (); pragma scenario (3);
 
   //! Start_OAIBONE_Tests
-  private service Start_OAIBONE_Tests_4 (); pragma scenario (4);
+  private service Start_OAIBONE_Tests (); pragma scenario (4);
 
   //! Finish_OAIBONE_Tests
-  private service Finish_OAIBONE_Tests_5 (); pragma scenario (5);
+  private service Finish_OAIBONE_Tests (); pragma scenario (5);
 
   //! Send_To_Bridge
-  private service Send_To_Bridge_1 (); pragma scenario (1);
+  private service Send_To_Bridge (); pragma scenario (1);
 
   object Source_Bridge_Data is
 
@@ -192,3 +188,6 @@ domain OAIBONE is
 
 end domain;
 pragma number (11);
+pragma name ("Open Architecture Internal Bridge Domain One");
+pragma kl ("OAIBONE");
+pragma version (2);

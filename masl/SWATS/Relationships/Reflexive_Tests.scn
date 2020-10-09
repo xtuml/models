@@ -1,0 +1,107 @@
+//! Reflexive Tests
+private service Relationships::Reflexive_Tests () is
+#-------------------------------------------------------------------#
+#
+# Perform Reflexive 1c:1c and Reflexive 1c:Mc tests
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test = my_test.The_Test_Number
+
+#-------------------------------------------------------------------#
+# Create the object instances
+#-------------------------------------------------------------------#
+
+   Count = 10
+
+   loop
+
+      # Object_G
+      newG  = create Object_G  with idG     = Count &\
+                                    ResultA = 0
+
+      Count = Count - 1
+      breakif Count = 0
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Test that all the objects have be correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objG", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetG}  = find-all Object_G
+
+   if countof {SetG} = 10 then
+      [] = RPT2:Test_Passed["objG", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objG", Test, -10]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Reflexive 1c:1c tests
+#-------------------------------------------------------------------#
+
+   Count  = 1
+
+   loop
+
+      # Initiate the test
+      [] = objG2:One_To_One_Reflexive[Count, Test]
+
+      Count = Count + 1
+      Test  = Test  + 1
+      breakif Count = 23 
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Reflexive 1c:Mc tests
+#-------------------------------------------------------------------#
+
+   Count  = 1
+
+   loop
+  
+      # Initiate the test
+      [] = objG3:One_To_Many_Reflexive[Count, Test]
+
+      Count = Count + 1 
+      Test  = Test  + 1
+
+      breakif Count = 16
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Mc:Mc reflexive navigation
+#
+# Not currently supported by the WACA
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objG4:Many_To_Many_Reflexive[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test

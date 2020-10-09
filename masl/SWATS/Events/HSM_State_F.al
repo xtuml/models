@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Huge_State_Machine.State_F (Test_No : in  integer,
                                           Count   : in  integer) is
 temp = Count

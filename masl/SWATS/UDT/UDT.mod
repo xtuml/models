@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 domain UDT is
   object Object_With_Integers;
   object Object_Into_Bridge;
@@ -40,32 +36,32 @@ domain UDT is
                                  Hot,
                                  Boiling);
 
-  public type Subset_Zero_Of_Integer is integer;
+  public type Subset_Zero_Of_Integer is integer; pragma type_range(-10,10);
 
   //! Insert system defined integer'last
-  public type One_To_Maximum_Integer is integer;
+  public type One_To_Maximum_Integer is integer; pragma type_range(1,32767);
 
   public type Timer_ID is integer;
 
-  private type Subset_1_Of_Integer is integer;
+  private type Subset_1_Of_Integer is integer; pragma type_range(1,10);
 
-  private type Subset_Minus_1_Of_Integer is integer;
+  private type Subset_Minus_1_Of_Integer is integer; pragma type_range(-10,-1);
 
-  private type Minimum_To_Minus_One_Integer is integer;
+  private type Minimum_To_Minus_One_Integer is integer; pragma type_range(-32768,-1);
 
-  private type Minimum_To_Maximum_Integer is integer;
+  private type Minimum_To_Maximum_Integer is integer; pragma type_range(-32768,32767);
 
-  private type Subset_1_Of_Real is real;
+  private type Subset_1_Of_Real is real; pragma type_range(1.0,10.0);
 
-  private type Subset_Minus_1_Of_Real is real;
+  private type Subset_Minus_1_Of_Real is real; pragma type_range(-10.0,-1.0);
 
-  private type Subset_Zero_Of_Real is real;
+  private type Subset_Zero_Of_Real is real; pragma type_range(-10.0,10.0);
 
-  private type One_To_Maximum_Of_Real is real;
+  private type One_To_Maximum_Of_Real is real; pragma type_range(1.0,32767.0);
 
-  private type Minimum_To_Minus_One_Of_Real is real;
+  private type Minimum_To_Minus_One_Of_Real is real; pragma type_range(-32768.0,-1.0);
 
-  private type Mminimum_To_Maximum_Of_Real is real;
+  private type Mminimum_To_Maximum_Of_Real is real; pragma type_range(-32768.0,32767.0);
 
   private type Active_Object_Status_Type is enum (Enumeral,
                                                   Number,
@@ -102,8 +98,7 @@ domain UDT is
                                                  Testing_For : in  string);
   pragma domain_operation_number (2);
 
-  //! Returns the number of user defined types used and confims
-  //! that the reported number is actually the number used.
+  //! Returns the number of user defined types used and confims that the reported number is actually the number used.
   public service Report_No_UDT_Used (Test        : in  integer,
                                      Testing_For : in  string);
   pragma domain_operation_number (5);
@@ -215,37 +210,39 @@ domain UDT is
 
 
   //! Integer_Number_Scenarios
-  private service Integer_Number_Scenarios_1 (); pragma scenario (1);
+  private service Integer_Number_Scenarios (); pragma scenario (1);
 
   //! Start_UDT_Tests
-  private service Start_UDT_Tests_2 (); pragma scenario (2);
+  private service Start_UDT_Tests (); pragma scenario (2);
 
   //! Finish_UDT_Tests
-  private service Finish_UDT_Tests_3 (); pragma scenario (3);
+  private service Finish_UDT_Tests (); pragma scenario (3);
 
   //! Real_Numbers_Scenario
-  private service Real_Numbers_Scenario_4 (); pragma scenario (4);
+  private service Real_Numbers_Scenario (); pragma scenario (4);
 
   //! Predeclared_Integer_Scenario
-  private service Predeclared_Integer_Scenario_5 (); pragma scenario (5);
+  private service Predeclared_Integer_Scenario (); pragma scenario (5);
 
   //! Terminator_Type_Scenario
-  private service Terminator_Type_Scenario_6 (); pragma scenario (6);
+  private service Terminator_Type_Scenario (); pragma scenario (6);
 
   //! Events_UDT_Scenario
-  private service Events_UDT_Scenario_7 (); pragma scenario (7);
+  private service Events_UDT_Scenario (); pragma scenario (7);
 
   //! Timer_Enum_Scenario
-  private service Timer_Enum_Scenario_8 (); pragma scenario (8);
+  private service Timer_Enum_Scenario (); pragma scenario (8);
 
   //! Enum_Scenario
-  private service Enum_Scenario_9 (); pragma scenario (9);
+  private service Enum_Scenario (); pragma scenario (9);
 
   //! Check_Constraint
-  private service Check_Constraint_10 (); pragma scenario (10);
+  private service Check_Constraint (); pragma scenario (10);
 
   relationship R1 is Test_Data unconditionally Has_a one Test_Data,
                      Test_Data conditionally Has_one one Test_Data;
+ pragma Class_A ("Test_Data");
+ pragma Class_B ("Test_Data");
 
   object Object_With_Integers is
 
@@ -439,3 +436,6 @@ domain UDT is
 
 end domain;
 pragma number (19);
+pragma name ("User_Defined_Types");
+pragma kl ("UDT");
+pragma version (6);

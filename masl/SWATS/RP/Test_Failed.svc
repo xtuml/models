@@ -1,0 +1,31 @@
+public service RP::Test_Failed (Failed_Domain        : in  string,
+                                the_test_no          : in  integer,
+                                the_test_value       : in  integer,
+                                Failed_Domain_Number : in  integer) is
+the_test = the_test_no
+the_val = the_test_value
+
+the_domain = Failed_Domain
+
+the_domain_number = Failed_Domain_Number
+
+[] = DD2:A_Test_Has_Failed[the_test, the_domain_number, the_val, the_domain]
+
+$INLINE
+fprintf(stderr, "Test Number %d has **** FAILED **** with %d\n",
+        the_test, the_val);
+$ENDINLINE
+
+#$ADA_INLINE
+# with Ada.Text_IO;
+#
+# -- Ada.Text_IO.New_Line(1);
+# -- Ada.Text_IO.Put_Line("Object " & the_domain & 
+# --                    " Test Number " & integer'image(integer(the_test)) & 
+# --                    " has **** FAILED **** with " & integer'image(integer(the_val)));
+# -- Ada.Text_IO.New_Line(1);
+#$END_ADAINLINE
+
+
+
+

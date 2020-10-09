@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::CCA_SubE.Idle (Test : in  integer) is
 if this.CSERef = 1 then
 

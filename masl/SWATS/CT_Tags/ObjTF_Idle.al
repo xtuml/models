@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::TCA_F.Idle (Test : in  integer) is
 if this.TFRef = 1 then
    [] = RPT2:Test_Passed["TCA Event", Test, 0]

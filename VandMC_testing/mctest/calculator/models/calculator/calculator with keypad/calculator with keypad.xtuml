@@ -1,4 +1,4 @@
--- BP 7.1 content: Package syschar: 3 persistence-version: 7.1.5
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
 
 INSERT INTO EP_PKG
 	VALUES ("137f76c9-5c89-4041-a065-d56f0d6eca57",
@@ -61,7 +61,7 @@ INSERT INTO GD_GE
 	"c59ae13a-3b47-4c58-a2c3-2b8d5b3fcd04",
 	106,
 	0,
-	'calculator::calculator with keypad::calculator::calculator components::calc::keyIO');
+	'calculator::calculator with keypad::calculator::calculator components::calc::::keyIO');
 INSERT INTO GD_CON
 	VALUES ("bbbfed03-2285-420f-8b2d-ccfb656f675d",
 	"00000000-0000-0000-0000-000000000000");
@@ -195,7 +195,7 @@ INSERT INTO GD_GE
 	"a3f154bf-5d50-44dc-a65b-019abb998fc2",
 	105,
 	0,
-	'calculator::calculator with keypad::calculator::calculator components::keypad::keyIO');
+	'calculator::calculator with keypad::calculator::calculator components::keypad::::keyIO');
 INSERT INTO GD_CON
 	VALUES ("9ea14e47-2de4-4750-86de-4d2eb3dd5a94",
 	"00000000-0000-0000-0000-000000000000");
@@ -303,7 +303,7 @@ INSERT INTO GD_GE
 	"51b451bb-5314-468b-ab09-829e19b7a1e2",
 	105,
 	0,
-	'calculator::calculator with keypad::calculator::calculator components::keypad::instrumentation');
+	'calculator::calculator with keypad::calculator::calculator components::keypad::::instrumentation');
 INSERT INTO GD_CON
 	VALUES ("9a691f2b-83df-46bf-811b-97c20e3af4e8",
 	"00000000-0000-0000-0000-000000000000");
@@ -404,38 +404,6 @@ INSERT INTO DIM_DIA
 	4000.000000,
 	3000.000000,
 	"00000000-0000-0000-0000-000000000000");
-INSERT INTO PE_PE
-	VALUES ("61b6573f-9188-42ac-a6ca-cd88c4136700",
-	1,
-	"137f76c9-5c89-4041-a065-d56f0d6eca57",
-	"00000000-0000-0000-0000-000000000000",
-	22);
-INSERT INTO C_SF
-	VALUES ("61b6573f-9188-42ac-a6ca-cd88c4136700",
-	"f8e4c27b-66cf-44ad-862d-8b6427814c77",
-	"8d0a26bd-eccf-4659-9a9e-8c256ed6b8d1",
-	'',
-	'keypad::tocalc::keyIO -o)- calc::kb::keyIO');
-INSERT INTO C_R_PROXY
-	VALUES ("f8e4c27b-66cf-44ad-862d-8b6427814c77",
-	'keyIO',
-	'',
-	'Unnamed Interface',
-	'calc::kb::keyIO',
-	'../calculator components/calc/calc.xtuml');
-INSERT INTO C_P_PROXY
-	VALUES ("8d0a26bd-eccf-4659-9a9e-8c256ed6b8d1",
-	'keyIO',
-	'Unnamed Interface',
-	'',
-	'keypad::tocalc::keyIO',
-	'../calculator components/keypad/keypad.xtuml');
-INSERT INTO PE_PE
-	VALUES ("37dec3fa-f783-4cc7-aa97-b3cca42cda43",
-	1,
-	"137f76c9-5c89-4041-a065-d56f0d6eca57",
-	"00000000-0000-0000-0000-000000000000",
-	21);
 INSERT INTO CL_IC
 	VALUES ("37dec3fa-f783-4cc7-aa97-b3cca42cda43",
 	"07602feb-2a2b-475e-8ef4-504e664acc03",
@@ -445,10 +413,15 @@ INSERT INTO CL_IC
 	'',
 	'calculator::calculator components::calc',
 	'');
+INSERT INTO CL_POR
+	VALUES ("37dec3fa-f783-4cc7-aa97-b3cca42cda43",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"2244d6f4-0413-4277-b126-23d884d83350");
 INSERT INTO CL_IIR
 	VALUES ("c59ae13a-3b47-4c58-a2c3-2b8d5b3fcd04",
 	"f8e4c27b-66cf-44ad-862d-8b6427814c77",
-	"37dec3fa-f783-4cc7-aa97-b3cca42cda43",
+	"2244d6f4-0413-4277-b126-23d884d83350",
 	"00000000-0000-0000-0000-000000000000",
 	'keyIO',
 	'');
@@ -463,6 +436,12 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"2aa6d2d3-b4d5-4f1b-ad20-6bc5611f73b0",
 	'../calculator components/calc/calc.xtuml');
+INSERT INTO PE_PE
+	VALUES ("37dec3fa-f783-4cc7-aa97-b3cca42cda43",
+	1,
+	"137f76c9-5c89-4041-a065-d56f0d6eca57",
+	"00000000-0000-0000-0000-000000000000",
+	21);
 INSERT INTO C_C_PROXY
 	VALUES ("07602feb-2a2b-475e-8ef4-504e664acc03",
 	"00000000-0000-0000-0000-000000000000",
@@ -474,12 +453,6 @@ INSERT INTO C_C_PROXY
 	0,
 	'',
 	'../calculator components/calc/calc.xtuml');
-INSERT INTO PE_PE
-	VALUES ("f36e573d-7fc9-45f2-b07d-0b57dd76f111",
-	1,
-	"137f76c9-5c89-4041-a065-d56f0d6eca57",
-	"00000000-0000-0000-0000-000000000000",
-	21);
 INSERT INTO CL_IC
 	VALUES ("f36e573d-7fc9-45f2-b07d-0b57dd76f111",
 	"baeee19e-9c96-4295-acac-e88eb71be2ac",
@@ -489,10 +462,15 @@ INSERT INTO CL_IC
 	'',
 	'calculator::calculator components::keypad',
 	'');
+INSERT INTO CL_POR
+	VALUES ("f36e573d-7fc9-45f2-b07d-0b57dd76f111",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"c7bda83f-cd1f-4e0f-85ea-e280a161206b");
 INSERT INTO CL_IIR
 	VALUES ("a3f154bf-5d50-44dc-a65b-019abb998fc2",
 	"8d0a26bd-eccf-4659-9a9e-8c256ed6b8d1",
-	"f36e573d-7fc9-45f2-b07d-0b57dd76f111",
+	"c7bda83f-cd1f-4e0f-85ea-e280a161206b",
 	"00000000-0000-0000-0000-000000000000",
 	'keyIO',
 	'');
@@ -509,10 +487,15 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"0be36171-917e-4ffc-a0e2-5d33d13c5049",
 	'../calculator components/keypad/keypad.xtuml');
+INSERT INTO CL_POR
+	VALUES ("f36e573d-7fc9-45f2-b07d-0b57dd76f111",
+	"00000000-0000-0000-0000-000000000000",
+	'',
+	"48d6385f-3dcc-4e7c-ad0c-589acf9f62cb");
 INSERT INTO CL_IIR
 	VALUES ("51b451bb-5314-468b-ab09-829e19b7a1e2",
 	"7bc8529a-e834-4a90-b1af-049178f965b3",
-	"f36e573d-7fc9-45f2-b07d-0b57dd76f111",
+	"48d6385f-3dcc-4e7c-ad0c-589acf9f62cb",
 	"00000000-0000-0000-0000-000000000000",
 	'instrumentation',
 	'');
@@ -526,6 +509,12 @@ INSERT INTO C_IR_PROXY
 	"00000000-0000-0000-0000-000000000000",
 	"e3d7952b-08c8-4835-bbc7-a4eefa8f3b90",
 	'../calculator components/keypad/keypad.xtuml');
+INSERT INTO PE_PE
+	VALUES ("f36e573d-7fc9-45f2-b07d-0b57dd76f111",
+	1,
+	"137f76c9-5c89-4041-a065-d56f0d6eca57",
+	"00000000-0000-0000-0000-000000000000",
+	21);
 INSERT INTO C_C_PROXY
 	VALUES ("baeee19e-9c96-4295-acac-e88eb71be2ac",
 	"00000000-0000-0000-0000-000000000000",
@@ -537,6 +526,38 @@ INSERT INTO C_C_PROXY
 	0,
 	'',
 	'../calculator components/keypad/keypad.xtuml');
+INSERT INTO C_SF
+	VALUES ("61b6573f-9188-42ac-a6ca-cd88c4136700",
+	"f8e4c27b-66cf-44ad-862d-8b6427814c77",
+	"8d0a26bd-eccf-4659-9a9e-8c256ed6b8d1",
+	'',
+	'keypad::tocalc::keyIO -o)- calc::kb::keyIO');
+INSERT INTO PE_PE
+	VALUES ("61b6573f-9188-42ac-a6ca-cd88c4136700",
+	1,
+	"137f76c9-5c89-4041-a065-d56f0d6eca57",
+	"00000000-0000-0000-0000-000000000000",
+	22);
+INSERT INTO C_R_PROXY
+	VALUES ("f8e4c27b-66cf-44ad-862d-8b6427814c77",
+	'keyIO',
+	'',
+	'Unnamed Interface',
+	'calc::kb::keyIO',
+	'../calculator components/calc/calc.xtuml');
+INSERT INTO C_P_PROXY
+	VALUES ("8d0a26bd-eccf-4659-9a9e-8c256ed6b8d1",
+	'keyIO',
+	'Unnamed Interface',
+	'',
+	'keypad::tocalc::keyIO',
+	'../calculator components/keypad/keypad.xtuml');
+INSERT INTO PE_PE
+	VALUES ("137f76c9-5c89-4041-a065-d56f0d6eca57",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	7);
 INSERT INTO S_SYS_PROXY
 	VALUES ("d993d6ae-95e4-401e-b167-f0465920ebd8",
 	'calculator',

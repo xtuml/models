@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Test_Persistence.Test_Text (Test_No    : in  integer,
                                           Text_Input : in  string) is
 if Text_Input = "Text Passed" then

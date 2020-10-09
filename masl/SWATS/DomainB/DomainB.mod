@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 //! For use in multiple domain builds.
 domain DomainB is
   object Object_C;
@@ -18,8 +14,7 @@ domain DomainB is
                                       Sandy,
                                       Wes);
 
-  //! This synchronous service is invoked by a synchronous service
-  //! in DomainA.
+  //! This synchronous service is invoked by a synchronous service in DomainA.
   public service Sync1B (inputA  : in  integer,
                          inputB  : in  integer,
                          Test    : in  integer,
@@ -27,9 +22,7 @@ domain DomainB is
                          outputB : out integer);
   pragma domain_operation_number (1);
 
-  //! This synchronous service is invoked by an event being sent
-  //! to a terminator in DomainA, thus an 'Event invokes a Sync
-  //! service in another domain'.
+  //! This synchronous service is invoked by an event being sent to a terminator in DomainA, thus an 'Event invokes a Sync service in another domain'.
   public service Sync2B (inputA  : in  integer,
                          inputB  : in  integer,
                          Test    : in  integer,
@@ -132,26 +125,28 @@ domain DomainB is
 
 
   //! Domain B setup
-  private service Domain_B_setup_1 (); pragma scenario (1);
+  private service Domain_B_setup (); pragma scenario (1);
 
   //! Perform domain B nav tests
-  private service Perform_domain_B_nav_tests_2 (); pragma scenario (2);
+  private service Perform_domain_B_nav_tests (); pragma scenario (2);
 
   //! Start DomainB Tests
-  private service Start_DomainB_Tests_3 (); pragma scenario (3);
+  private service Start_DomainB_Tests (); pragma scenario (3);
 
   //! Finish DomainB Tests
-  private service Finish_DomainB_Tests_4 (); pragma scenario (4);
+  private service Finish_DomainB_Tests (); pragma scenario (4);
 
   //! Check_Enumeration_Across_Domain_B
-  private service Check_Enumeration_Across_Domain_B_5 (); pragma scenario (5);
+  private service Check_Enumeration_Across_Domain_B (); pragma scenario (5);
 
   relationship R1 is Object_C conditionally controls many Object_D,
                      Object_D conditionally is_controlled_by many Object_C
                      using Object_CD;
+ pragma Class_A ("Object_C");
+ pragma Class_B ("Object_D");
 
-  relationship R4 is Domain_B_Object_Super is_a (Domain_B_Object_SubA,
-                                                 Domain_B_Object_SubB);
+  relationship R4 is Domain_B_Object_Super is_a (Domain_B_Object_SubB,
+                                                 Domain_B_Object_SubA);
 
   object Object_C is
 
@@ -230,8 +225,7 @@ domain DomainB is
   pragma id (4);
   pragma key_letter ("objB");
 
-  //! Referential object for many to many relationships Object_C
-  //! ObjectD
+  //! Referential object for many to many relationships Object_C ObjectD
   object Object_CD is
 
     idC    : preferred referential (R1.is_controlled_by.Object_C.idC) integer;
@@ -303,3 +297,6 @@ domain DomainB is
 
 end domain;
 pragma number (5);
+pragma name ("DomainB");
+pragma kl ("DomainB");
+pragma version (12);

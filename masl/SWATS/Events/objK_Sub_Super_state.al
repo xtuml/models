@@ -1,9 +1,4 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
-//! This state receives an event from its related supertype
-//! object, and also
+//! This state receives an event from its related supertype object, and also
 //! passes the event onto its related subtype object.
 state Events::Object_K.Sub_Super_state () is
 #-----------------------------------------------------------

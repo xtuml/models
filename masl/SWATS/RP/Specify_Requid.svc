@@ -1,0 +1,96 @@
+//! This service shall allow the calling domain specify a requirement identifier for a given domain and test.
+public service RP::Specify_Requid (Requid_Domain_Number : in  integer,
+                                   Requid_Test_Number   : in  integer,
+                                   Requid_Identifier    : in  string) is
+# The Action for this domain synchronous service is simple.
+# It requires that a test is already defined, i.e. start test has already been 
+# sent.  Having established this, link in the new requirement identifier
+# for that test. There can be many requids associated with a given test.
+
+This_Domain = find-one Domain_Details where Domain_Number = Requid_Domain_Number
+
+#The_Test = find-one Test_Details where Domain_Number = Requid_Domain_Number &\
+#                                       The_Test_No   = Requid_Test_Number
+
+{Matching_Test_Details_Set} = This_Domain -> R8.Test_Details
+for The_Test in {Matching_Test_Details_Set} do
+    breakif The_Test.The_Test_No = Requid_Test_Number
+endfor
+
+
+if The_Test != UNDEFINED then
+
+   The_Domain_Details = The_Test -> R8.Domain_Details
+
+   if The_Domain_Details != UNDEFINED then
+
+      Requid_Domain_Name = The_Domain_Details.Domain_Name
+
+
+      # 'tick off' the requid against the listed requids through Test_Suite
+      # and Requirements objects.
+
+      Match = FALSE
+
+      The_Test_Suite = find-one Test_Suite
+
+      if The_Test_Suite != UNDEFINED then
+
+         # Grab all the known requirments in this test run
+         {Set_Of_Specified_Requids} = The_Test_Suite -> R11.All_Requirements_In_Test_Suite
+
+         for A_Requirement in {Set_Of_Specified_Requids} do
+
+            # If we find what we are looking for, update the test status
+            if A_Requirement.REQUID = Requid_Identifier then
+
+               # This is the first test in the test run to meet this requirement.
+               # There may well be more.
+               if A_Requirement.Requid_Test_Status = 'Not_Tested' then
+
+                  A_Requirement.Requid_Test_Status = 'Tested'
+
+               endif
+
+               # This requirement has already been met, but that is not to say
+               # that this current tests doesn't also meet the requirement.
+
+               # Create a new instance of the requirment met object and link it
+               # via a 1:M relationship to the All_Reqs. object
+
+               new_requid_met = create unique Requirement_Met
+        
+               new_requid_met.Domain_Number       = Requid_Domain_Number
+               new_requid_met.Domain_Name         = Requid_Domain_Name
+               new_requid_met.Meeting_Test_Number = Requid_Test_Number
+               new_requid_met.Requid_Test_Result  = 'Unknown'
+
+               link new_requid_met R12 A_Requirement
+
+               Match = TRUE
+
+               #Found the requid
+               break
+
+            endif
+
+         endfor
+
+         if !Match then
+            [] = RP7::Report_Run_Time_Error["Requirement identifier not specified for this run"] 
+         endif
+
+      endif
+
+   else
+
+      [] = RP9::Test_Anomalous_Behaviour[Requid_Test_Number, "Domain and Test unlinked"]
+
+   endif
+
+else
+
+   [] = RP9::Test_Anomalous_Behaviour[Requid_Test_Number, "Received a requid for unknown test"]
+
+
+endif

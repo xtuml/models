@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Check_Delete.Idle (Test_No : in  integer,
                                  Deleted : in  boolean) is
 if not Deleted then

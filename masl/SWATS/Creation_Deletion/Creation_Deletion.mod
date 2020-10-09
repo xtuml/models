@@ -1,10 +1,4 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
-//! This domain deals with instance creation and deletion. It
-//! check both synchronous and asynchronous creation and
-//! deletion.
+//! This domain deals with instance creation and deletion. It check both synchronous and asynchronous creation and deletion.
 domain Creation_Deletion is
   object Object_A;
   object Object_B;
@@ -24,8 +18,7 @@ domain Creation_Deletion is
                                       Sandy,
                                       Wes);
 
-  //! This attribute is used to verify that an object instance can
-  //! be created, when the data type uses enumeration.
+  //! This attribute is used to verify that an object instance can be created, when the data type uses enumeration.
   private type Base_Colour is enum (Red,
                                     Green,
                                     Blue,
@@ -109,30 +102,33 @@ domain Creation_Deletion is
 
 
   //! Perform Creation Deletion Tests
-  private service Perform_Creation_Deletion_Tests_1 (); pragma scenario (1);
+  private service Perform_Creation_Deletion_Tests (); pragma scenario (1);
 
   //! Start Creation Deletion Tests
-  private service Start_Creation_Deletion_Tests_2 (); pragma scenario (2);
+  private service Start_Creation_Deletion_Tests (); pragma scenario (2);
 
   //! Finish Creation Deletion Tests
-  private service Finish_Creation_Deletion_Tests_3 (); pragma scenario (3);
+  private service Finish_Creation_Deletion_Tests (); pragma scenario (3);
 
   relationship R1 is Coloured_Object conditionally has many Flavoured_Object,
                      Flavoured_Object conditionally has many Coloured_Object
                      using Flavour_and_Colour;
+ pragma Class_A ("Coloured_Object");
+ pragma Class_B ("Flavoured_Object");
 
-  relationship R2 is Doctor unconditionally WARNING_undefined_role_name many Enemy,
-                     Enemy unconditionally WARNING_undefined_role_name one Doctor
+  relationship R2 is Doctor unconditionally is_afraid_of many Enemy,
+                     Enemy unconditionally wants_to_kill one Doctor
                      using Doctors_Enemy;
+ pragma Class_A ("Doctor");
+ pragma Class_B ("Enemy");
 
   //! Object_A is manipulated by object 'Instance_Creation'.
   object Object_A is
 
-    //! @@BBP-V01-0001
     //! Preferred identifier.
     ReferenceA : preferred integer;
 
-    //! @@BBP-V01-0014 An integer
+    //! An integer
     IntegerA   : integer;
 
     //! Some text.
@@ -145,10 +141,7 @@ domain Creation_Deletion is
     ColourA    : Base_Colour;
 
 
-    //! Perform object service to test synchronous create
-    //! operation.
-    //! @@1103-0000-01-0511
-    //! @@1103-0000-01-0311
+    //! Perform object service to test synchronous create operation.
     public service do_sync_create (Test_Number          : in  integer,
                                    Returned_Test_Number : out integer);
     pragma operation_number (1);
@@ -204,8 +197,7 @@ domain Creation_Deletion is
                                  Returned_Number : out integer);
     pragma operation_number (1);
 
-    //! There is a problem in version 2.0.2 of WACA. This service
-    //! will attempt to clarify what is going wrong.
+    //! There is a problem in version 2.0.2 of WACA. This service will attempt to clarify what is going wrong.
     public service Regression_Tests (Test_Number          : in  integer,
                                      Returned_Test_Number : out integer);
     pragma operation_number (2);
@@ -228,8 +220,7 @@ domain Creation_Deletion is
                                       Returned_Test_Number : out integer);
     pragma operation_number (1);
 
-    //! This service shall prove that deletion of multiple instances
-    //! from a
+    //! This service shall prove that deletion of multiple instances from a
     //! set is correct.
     public service do_multiple_deletion_tests (Test_Number          : in  integer,
                                                Returned_Test_Number : out integer);
@@ -256,8 +247,7 @@ domain Creation_Deletion is
     //! Preferred identifier.
     ReferenceCS : preferred integer;
 
-    //! This attribute is manipulated to indicate that the required
-    //! operation was successful.
+    //! This attribute is manipulated to indicate that the required operation was successful.
     ResultCS    : integer;
 
 
@@ -403,9 +393,9 @@ domain Creation_Deletion is
 
   object Doctors_Enemy is
 
-    Humanoid          : preferred referential (R2.WARNING_undefined_role_name.Enemy.Humanoid) boolean;
+    Humanoid          : preferred referential (R2.is_afraid_of.Enemy.Humanoid) boolean;
 
-    Actor             : referential (R2.WARNING_undefined_role_name.Doctor.Actor) actors_who_have_played_the_doctor;
+    Actor             : referential (R2.wants_to_kill.Doctor.Actor) actors_who_have_played_the_doctor;
 
     battlefield_arena : battlefield_arena_type;
 
@@ -414,15 +404,12 @@ domain Creation_Deletion is
   pragma id (13);
   pragma key_letter ("drenemy");
 
-  //! This object shall be replicated in all domains existing
-  //! within the Software Architecture Test Suite that use the
-  //! Reporter Domain.
+  //! This object shall be replicated in all domains existing within the Software Architecture Test Suite that use the Reporter Domain.
   object Report_Data is
 
     Report_Data_Unique_id  : preferred integer;
 
-    //! Unique identifer for this domain as foar as the Reporter
-    //! domain is concerned.
+    //! Unique identifer for this domain as foar as the Reporter domain is concerned.
     Reported_Domain_Number : integer;
 
 
@@ -432,3 +419,6 @@ domain Creation_Deletion is
 
 end domain;
 pragma number (3);
+pragma name ("Creation_Deletion");
+pragma kl ("Creation_Deletion");
+pragma version (15);

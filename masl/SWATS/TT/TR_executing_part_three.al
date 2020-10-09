@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TT::Time_Remaining.executing_part_three () is
 #   CQ 6579 Changed from: [time_remaining] = Get_Time_Remaining[this.timer_id_one]
 timer_id_one_local = this.timer_id_one

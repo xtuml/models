@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::CCA_B.Link_To_Global (Test : in  integer) is
 instGSI = find-one Global_SubI where idGSI = 1
 instCS  = find-one CCA_Super where idCS = 1

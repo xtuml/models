@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state CT_Tags::TCA_E.Idle (Test : in  integer) is
 if this.TERef = 1 then
 

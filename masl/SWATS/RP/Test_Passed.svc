@@ -1,0 +1,32 @@
+//! Same function as domain based synch service.
+public service RP::Test_Passed (Passed_Domain            : in  string,
+                                Passed_Test_Number       : in  integer,
+                                Passed_Test_Result_Value : in  integer,
+                                Passed_Domain_Number     : in  integer) is
+Invoking_Domain_Number = Passed_Domain_Number
+
+the_test = Passed_Test_Number
+
+the_val  = Passed_Test_Result_Value
+
+the_domain = Passed_Domain
+
+[] = DD1:A_Test_Has_Passed[the_test, Invoking_Domain_Number, the_val, the_domain]
+
+$INLINE
+fprintf(stderr, "Test Number %d %s has PASSED with  %d\n",
+        the_test, the_domain, the_val);
+$ENDINLINE
+
+
+# $ADA_INLINE
+# with Ada.Text_IO;
+#
+# 
+# -- Ada.Text_IO.Put_Line("Object " & the_domain & 
+# --                     " Test Number " & integer'image(integer(the_test)) & 
+# --                     " has PASSED with " & integer'image(integer(the_val)));
+#
+# $END_ADAINLINE
+
+

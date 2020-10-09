@@ -1,0 +1,19 @@
+//! Test
+private service Function_Calls::Test () is
+my_test = find-one Test_Data
+
+Test = my_test.The_Test_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0806", "Function Calls", "Domain Sync Services", "Check memory usage"]
+
+   [The_Result] = Function_Calls10::Call_A[0]
+
+   if The_Result = 10 then
+      [] = RPT2:Test_Passed["Mem usage", Test, The_Result]
+   else
+      [] = RPT3:Test_Failed["Mem usage", Test, The_Result]      
+   endif
+
+Test = Test + 1
+
+my_test.The_Test_Number = Test

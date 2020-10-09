@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Object_X.Check_ASL (Test_No  : in  integer,
                                   ASL_Type : in  string) is
 if ASL_Type = "State Action" then

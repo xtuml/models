@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state TAGS::An_Active_Object.Idle () is
 # Update 'Result' attribute to show that we have transitioned back here 
 # from the 'act' state

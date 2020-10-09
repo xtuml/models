@@ -1,0 +1,40 @@
+define bridge  Find_and_Sets:RPT6:Domain_Test_Start
+input \
+	This_Domain_Name:Base_Text_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+local_text = This_Domain_Name
+
+
+$USE RP
+
+   [New_Domain_Number] = RP6::Create_New_Domain_Test[local_text]
+
+$ENDUSE
+
+
+# Can't create in a bridge, so find this object and update it. Rely on the invoker
+# domain to have created this object prior to this call.
+
+My_Report = find-one Report_Data
+
+if My_Report = UNDEFINED then
+
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["DTS Calling domain has not created Report_Data"]
+
+   $ENDUSE
+
+else
+
+   My_Report.Reported_Domain_Number = New_Domain_Number
+
+endif
+
+enddefine

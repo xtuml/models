@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 domain CT_Tags is
   object CCA_A;
   object CCA_B;
@@ -150,71 +146,90 @@ domain CT_Tags is
 
   end terminator;
   pragma key_letter ("AO");
-  pragma tca ("");
 
 
   //! Start_Domain_Tests
-  private service Start_Domain_Tests_4 (); pragma scenario (4);
+  private service Start_Domain_Tests (); pragma scenario (4);
 
   //! TCA_Tests
-  private service TCA_Tests_1 (); pragma scenario (1); pragma tca ("");
+  private service TCA_Tests (); pragma scenario (1); pragma tca ("");
 
   //! Get_Totals
-  private service Get_Totals_6 (); pragma scenario (6);
+  private service Get_Totals (); pragma scenario (6);
 
   //! Finish_Domain_Tests
-  private service Finish_Domain_Tests_5 (); pragma scenario (5);
+  private service Finish_Domain_Tests (); pragma scenario (5);
 
   //! CCA_Tests
-  private service CCA_Tests_2 (); pragma scenario (2); pragma cca ("");
+  private service CCA_Tests (); pragma scenario (2); pragma cca ("");
 
   //! TCA_Events
-  private service TCA_Events_3 (); pragma scenario (3); pragma tca ("");
+  private service TCA_Events (); pragma scenario (3); pragma tca ("");
 
   //! CCA_Events
-  private service CCA_Events_7 (); pragma scenario (7); pragma cca ("");
+  private service CCA_Events (); pragma scenario (7); pragma cca ("");
 
-  relationship R1 is CCA_A unconditionally WARNING_undefined_role_name one CCA_B,
-                     CCA_B unconditionally WARNING_undefined_role_name one CCA_A;
+  relationship R1 is CCA_A unconditionally has one CCA_B,
+                     CCA_B unconditionally has one CCA_A;
+ pragma Class_A ("CCA_A");
+ pragma Class_B ("CCA_B");
 
-  relationship R2 is TCA_A unconditionally WARNING_undefined_role_name one TCA_B,
-                     TCA_B unconditionally WARNING_undefined_role_name one TCA_A;
+  relationship R2 is TCA_A unconditionally has one TCA_B,
+                     TCA_B unconditionally has one TCA_A;
+ pragma Class_A ("TCA_A");
+ pragma Class_B ("TCA_B");
 
-  relationship R3 is Global_A unconditionally WARNING_undefined_role_name one CCA_C,
-                     CCA_C unconditionally WARNING_undefined_role_name one Global_A;
+  relationship R3 is Global_A unconditionally has one CCA_C,
+                     CCA_C unconditionally has one Global_A;
+ pragma Class_A ("Global_A");
+ pragma Class_B ("CCA_C");
 
-  relationship R4 is TCA_C unconditionally WARNING_undefined_role_name one Global_B,
-                     Global_B unconditionally WARNING_undefined_role_name one TCA_C;
+  relationship R4 is TCA_C unconditionally has one Global_B,
+                     Global_B unconditionally has one TCA_C;
+ pragma Class_A ("TCA_C");
+ pragma Class_B ("Global_B");
 
-  relationship R8 is TCA_SubA unconditionally WARNING_undefined_role_name one TCA_D,
-                     TCA_D unconditionally WARNING_undefined_role_name one TCA_SubA;
+  relationship R8 is TCA_SubA unconditionally has one TCA_D,
+                     TCA_D unconditionally has one TCA_SubA;
+ pragma Class_A ("TCA_SubA");
+ pragma Class_B ("TCA_D");
 
-  relationship R9 is CCA_SubB unconditionally WARNING_undefined_role_name one TCA_E,
-                     TCA_E unconditionally WARNING_undefined_role_name one CCA_SubB;
+  relationship R9 is CCA_SubB unconditionally has one TCA_E,
+                     TCA_E unconditionally has one CCA_SubB;
+ pragma Class_A ("CCA_SubB");
+ pragma Class_B ("TCA_E");
 
-  relationship R10 is Global_SubC unconditionally WARNING_undefined_role_name one TCA_F,
-                      TCA_F unconditionally WARNING_undefined_role_name one Global_SubC;
+  relationship R10 is Global_SubC unconditionally has one TCA_F,
+                      TCA_F unconditionally has one Global_SubC;
+ pragma Class_A ("Global_SubC");
+ pragma Class_B ("TCA_F");
 
-  relationship R11 is TCA_F unconditionally WARNING_undefined_role_name one TCA_E,
-                      TCA_E unconditionally WARNING_undefined_role_name one TCA_F;
+  relationship R11 is TCA_F unconditionally has one TCA_E,
+                      TCA_E unconditionally has one TCA_F;
+ pragma Class_A ("TCA_F");
+ pragma Class_B ("TCA_E");
 
-  relationship R12 is TCA_E unconditionally WARNING_undefined_role_name one TCA_D,
-                      TCA_D unconditionally WARNING_undefined_role_name one TCA_E;
+  relationship R12 is TCA_E unconditionally has one TCA_D,
+                      TCA_D unconditionally has one TCA_E;
+ pragma Class_A ("TCA_E");
+ pragma Class_B ("TCA_D");
 
-  relationship R13 is Global_B unconditionally WARNING_undefined_role_name one Global_A,
-                      Global_A unconditionally WARNING_undefined_role_name one Global_B;
+  relationship R13 is Global_B unconditionally has one Global_A,
+                      Global_A unconditionally has one Global_B;
+ pragma Class_A ("Global_B");
+ pragma Class_B ("Global_A");
 
-  relationship R5 is Global_Super is_a (CCA_SubB,
+  relationship R5 is Global_Super is_a (Global_SubC,
                                         TCA_SubA,
-                                        Global_SubC);
+                                        CCA_SubB);
 
-  relationship R6 is TCA_Super is_a (CCA_SubE,
+  relationship R6 is TCA_Super is_a (Global_SubF,
                                      TCA_SubD,
-                                     Global_SubF);
+                                     CCA_SubE);
 
-  relationship R7 is CCA_Super is_a (CCA_SubH,
+  relationship R7 is CCA_Super is_a (TCA_SubG,
                                      Global_SubI,
-                                     TCA_SubG);
+                                     CCA_SubH);
 
   object CCA_A is
 
@@ -1091,3 +1106,6 @@ domain CT_Tags is
 
 end domain;
 pragma number (38);
+pragma name ("CCA_TCA_Tagging");
+pragma kl ("CT_Tags");
+pragma version (3);

@@ -1,7 +1,3 @@
-//
-// UK Crown Copyright (c) 2019. All rights reserved.
-//
-
 state Events::Top_Level.Finish (Test_No : in  integer) is
 [Host] = WAW1:What_Env[]
 
