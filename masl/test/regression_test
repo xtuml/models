@@ -8,33 +8,48 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 # USAGE
 print_usage () { 
     echo "Usage:"
-    echo "        regression_test [-o <output directory>] [-r]";
+    echo "        regression_test [-o <output directory>] [-a <architecture>] [-r]";
     echo "";
+    echo "  - Specify the '-a' flag to specify the dialect/architecture; MASL is the default.";
     echo "  - Specify the '-r' flag to force exit and relaunch of BridgePoint before export.";
 }
 
 abort () {
     echo "Aborting..."
-    $BPINSTALL/tools/mc/bin/CLI.sh Launch -abort
+    $BINDIR/CLI.sh Launch -abort
     exit 1
 }
 trap abort SIGINT SIGTERM
 
-# input variables
+# set up paths
 if [[ "" == "$BPINSTALL" ]]; then
     BPINSTALL="/build/buildmt/roundtrip/BridgePoint"
 fi
+TMP="/tmp"
+BINDIR=$BPINSTALL/tools/mc/bin
+if [[ "$OSTYPE" == "cygwin" ]]; then
+    DIR=. # on Windows only run from local directory
+    BPINSTALL=`cygpath -w $BPINSTALL`
+    BINDIR=`cygpath -w $BINDIR`
+    TMP="." # on Windows operate from local directory
+fi
+export PATH=$BINDIR:$PATH
+
+# input variables
 OUT_DIR=
 RELAUNCH=
+ARCHITECTURE="MASL" # Default to MASL.
 
 # parse arguments
 DIRECTIVE=
 for arg in $@; do
-    if [[ $arg == "-o" ]]; then                     # set the directive
+    if [[ $arg == "-o" || $arg == "-a" ]]; then     # set the directive
         DIRECTIVE=$arg
     elif [[ $arg == "-r" ]]; then                   # specify to restart BP before export
         RELAUNCH=$arg
-    elif [[ $DIRECTIVE == "-o" && $OUT_DIR == "" ]]; then           # only can set the output directory once
+    elif [[ $DIRECTIVE == "-a" ]]; then             # specify dialect / architecture
+        ARCHITECTURE=$arg
+    elif [[ $DIRECTIVE == "-o" && $OUT_DIR == "" ]]; then # only can set the output directory once
         OUT_DIR=$arg
     else
         print_usage
@@ -46,7 +61,7 @@ done
 if [[ $OUT_DIR == "" ]]; then OUT_DIR=.; fi
 
 # set up workspace
-export WORKSPACE="/tmp/importwork"
+export WORKSPACE="$TMP/importwork"
 if [[ -d $WORKSPACE ]]; then
     rm -rf $WORKSPACE
 fi
@@ -55,7 +70,7 @@ export BPHOME=$BPINSTALL
 
 # lanch eclipse
 echo "Launching an Eclipse command line instance..."
-$BPINSTALL/tools/mc/bin/CLI.sh Launch
+$BINDIR/CLI.sh Launch
 
 # Run tests
 COUNTER=1
@@ -75,17 +90,17 @@ while read TEST; do
                 CMD="$CMD$DIR/${projects[$i]} "
                 i=$[$i +1]
             done
-            $BPINSTALL/tools/mc/bin/masl_round_trip $CMD -o $OUT_DIR/$COUNTER $RELAUNCH -c
+            $BINDIR/round_trip $CMD -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
         else
             # run round trip for a domain
-            $BPINSTALL/tools/mc/bin/masl_round_trip -d $DIR/$TEST -o $OUT_DIR/$COUNTER $RELAUNCH -c
+            $BINDIR/round_trip -d $DIR/$TEST -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
         fi
     fi
     COUNTER=$[$COUNTER +1]
 done
 
 # shut down eclipse
-$BPINSTALL/tools/mc/bin/CLI.sh Launch -exit
+$BINDIR/CLI.sh Launch -exit
 
 find $OUT_DIR -name "diff_*" -exec wc -l {} \; | sort -n -t '/' +1
 find $OUT_DIR -name "diff_*" -exec wc -l {} \; | wc -l
