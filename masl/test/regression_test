@@ -12,6 +12,7 @@ print_usage () {
     echo "";
     echo "  - Specify the '-a' flag to specify the dialect/architecture; MASL is the default.";
     echo "  - Specify the '-r' flag to force exit and relaunch of BridgePoint before export.";
+    echo "  - Specify the '-depl' flag to indicate the test source is a deployment.";
 }
 
 abort () {
@@ -39,6 +40,8 @@ export PATH=$BINDIR:$PATH
 OUT_DIR=
 RELAUNCH=
 ARCHITECTURE="MASL" # Default to MASL.
+DEPL="false"
+DEPL_OPTION=""
 
 # parse arguments
 DIRECTIVE=
@@ -49,6 +52,8 @@ for arg in $@; do
         RELAUNCH=$arg
     elif [[ $DIRECTIVE == "-a" ]]; then             # specify dialect / architecture
         ARCHITECTURE=$arg
+    elif [[ $arg == "-depl" ]]; then
+        DEPL="true"
     elif [[ $DIRECTIVE == "-o" && $OUT_DIR == "" ]]; then # only can set the output directory once
         OUT_DIR=$arg
     else
@@ -56,6 +61,15 @@ for arg in $@; do
         exit 1
     fi
 done
+
+if [ $# -eq 0 ]; then
+  print_usage
+  exit 1
+fi
+
+if [ $DEPL == "true" ]; then
+    DEPL_OPTION="-depl"
+fi
 
 # if no out directory was given, give the current working directory
 if [[ $OUT_DIR == "" ]]; then OUT_DIR=.; fi
@@ -77,6 +91,7 @@ COUNTER=1
 while read TEST; do
     if [[ $TEST != "#"* ]]; then
         projects=($TEST)
+        echo "Project array value ${#projects[@]}"
         if [[ ${#projects[@]} > 1 ]]; then
             # run round trip for a project
             CMD=
@@ -90,10 +105,10 @@ while read TEST; do
                 CMD="$CMD$DIR/${projects[$i]} "
                 i=$[$i +1]
             done
-            $BINDIR/round_trip $CMD -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
+            bash $BINDIR/round_trip $CMD $DEPL_OPTION -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
         else
             # run round trip for a domain
-            $BINDIR/round_trip -d $DIR/$TEST -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
+            bash $BINDIR/round_trip -d $DIR/$TEST $DEPL_OPTION -o $OUT_DIR/$COUNTER -a $ARCHITECTURE $RELAUNCH -c
         fi
     fi
     COUNTER=$[$COUNTER +1]
