@@ -13,6 +13,7 @@ print_usage () {
     echo "  - Specify the '-a' flag to specify the dialect/architecture; MASL is the default.";
     echo "  - Specify the '-r' flag to force exit and relaunch of BridgePoint before export.";
     echo "  - Specify the '-depl' flag to indicate the test source is a deployment.";
+    echo "  - Specify the '-genexp' flag to generate the expected results.";
 }
 
 abort () {
@@ -42,6 +43,7 @@ RELAUNCH=
 ARCHITECTURE="MASL" # Default to MASL.
 DEPL="false"
 DEPL_OPTION=""
+GENEXP=""
 
 # parse arguments
 DIRECTIVE=
@@ -54,6 +56,8 @@ for arg in $@; do
         ARCHITECTURE=$arg
     elif [[ $arg == "-depl" ]]; then
         DEPL="true"
+    elif [[ $arg == "-genexp" ]]; then
+        GENEXP="true"
     elif [[ $DIRECTIVE == "-o" && $OUT_DIR == "" ]]; then # only can set the output directory once
         OUT_DIR=$arg
     else
@@ -117,5 +121,26 @@ done
 # shut down eclipse
 $BINDIR/CLI.sh Launch -exit
 
-find $OUT_DIR -name "diff_*" -exec wc -l {} \; | sort -n -t '/' +1
-find $OUT_DIR -name "diff_*" -exec wc -l {} \; | wc -l
+find $OUT_DIR -name "diff_*" -exec wc -l {} \; | sort -n -t '/' +1 > $OUT_DIR/actual_results.txt
+find $OUT_DIR -name "diff_*" -exec wc -l {} \; | wc -l >> $OUT_DIR/actual_results.txt
+
+if [[ -z $EXPECTED_RESULTS ]]; then
+  EXPECTED_RESULTS=expected_results/wasl_all_expected_results.txt
+fi
+
+echo "Testing against expected results at: $EXPECTED_RESULTS"
+
+if [[ $GENEXP == "true" ]]; then
+  cat $OUT_DIR/actual_results.txt > $EXPECTED_RESULTS 
+fi
+
+diff $EXPECTED_RESULTS $OUT_DIR/actual_results.txt
+
+if [[ $? == 1 ]]; then
+  echo "*** FAIL: Actual results do not match expected"
+else
+  if [[ -f $EXPECTED_RESULTS ]]; then
+    echo "*** PASS: Actual results match expected"
+  fi
+fi
+
