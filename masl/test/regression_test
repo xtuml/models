@@ -121,7 +121,7 @@ done
 # shut down eclipse
 $BINDIR/CLI.sh Launch -exit
 
-find $OUT_DIR -name "diff_*" -exec wc -l {} \; | sort -n -t '/' +1 > $OUT_DIR/actual_results.txt
+find $OUT_DIR -name "diff_*" -exec wc -l {} \; | sort -n -t '/' +1 |  sed s,${OUT_DIR},"",g > $OUT_DIR/actual_results.txt
 find $OUT_DIR -name "diff_*" -exec wc -l {} \; | wc -l >> $OUT_DIR/actual_results.txt
 
 if [[ -z $EXPECTED_RESULTS ]]; then
