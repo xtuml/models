@@ -1,0 +1,59 @@
+project TSV2 is
+  domain Events is
+    terminator Report is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name : in  string);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+      public service Perform_Req_Anal ();
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+    terminator Generate_From_Bridge is
+      public service Generate_Event (Test_No : in  integer,
+                                     The_IH  : in  instance of Object_X);
+
+    end terminator;
+    pragma key_letter ("GFB");
+
+
+    terminator Where_Are_We is
+      public service What_Env (Local_Env_Text : out string);
+
+    end terminator;
+    pragma key_letter ("WAW");
+
+
+  end domain;
+
+  domain RP is
+  end domain;
+
+  domain FTE is
+  end domain;
+
+end project;

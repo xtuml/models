@@ -233,13 +233,15 @@ domain CT_Tags is
 
   object CCA_A is
 
-    idCA     : integer;
+    idCA     : preferred integer;
 
     CARef    : integer;
 
     CAPassed : boolean;
 
     CALinked : boolean;
+
+    idCB     : referential (R1.has.CCA_B.idCB) integer;
 
 
     public service Add_One (Input_No     : in  integer,
@@ -279,7 +281,7 @@ domain CT_Tags is
 
   object CCA_B is
 
-    idCB : integer;
+    idCB : preferred integer;
 
 
     state Idle (Test : in  integer);
@@ -315,7 +317,9 @@ domain CT_Tags is
 
   object TCA_A is
 
-    idTA : integer;
+    idTA : preferred integer;
+
+    idTB : referential (R2.has.TCA_B.idTB) integer;
 
 
     public service Add_One (Input_No     : in  integer,
@@ -334,18 +338,18 @@ domain CT_Tags is
     event Link_To_Global (Test : in  integer);
     pragma event_number (1);
 
-    event Unlink_from_Global (Test : in  integer);
+    event Unlink_From_Global (Test : in  integer);
     pragma event_number (2);
 
     transition is
       Non_Existent (      Link_To_Global     => Cannot_Happen,
-                          Unlink_from_Global => Cannot_Happen);
+                          Unlink_From_Global => Cannot_Happen);
       Idle (              Link_To_Global     => Link_To_Global,
-                          Unlink_from_Global => Unlink_From_Global);
+                          Unlink_From_Global => Unlink_From_Global);
       Link_To_Global (    Link_To_Global     => Idle,
-                          Unlink_from_Global => Idle);
+                          Unlink_From_Global => Idle);
       Unlink_From_Global (Link_To_Global     => Idle,
-                          Unlink_from_Global => Idle);
+                          Unlink_From_Global => Idle);
     end transition;
 
   end object;
@@ -355,7 +359,7 @@ domain CT_Tags is
 
   object TCA_B is
 
-    idTB : integer;
+    idTB : preferred integer;
 
 
   end object;
@@ -365,7 +369,9 @@ domain CT_Tags is
 
   object Global_A is
 
-    idGA : integer;
+    idGA : preferred integer;
+
+    idCC : referential (R3.has.CCA_C.idCC) integer;
 
 
     public service Add_One (Input_Value  : in  integer,
@@ -378,7 +384,7 @@ domain CT_Tags is
 
   object CCA_C is
 
-    idCC : integer;
+    idCC : preferred integer;
 
 
   end object;
@@ -388,7 +394,9 @@ domain CT_Tags is
 
   object Global_B is
 
-    idGB : integer;
+    idGB : preferred integer;
+
+    idGA : referential (R13.has.Global_A.idGA) integer;
 
 
   end object;
@@ -397,7 +405,9 @@ domain CT_Tags is
 
   object TCA_C is
 
-    idTC : integer;
+    idTC : preferred integer;
+
+    idGB : referential (R4.has.Global_B.idGB) integer;
 
 
   end object;
@@ -435,7 +445,7 @@ domain CT_Tags is
 
   object Global_Super is
 
-    idGS       : integer;
+    idGS       : preferred integer;
 
     GSRef      : integer;
 
@@ -474,6 +484,10 @@ domain CT_Tags is
   object TCA_SubA is
 
     idTSA : integer;
+
+    idGS  : preferred referential (R5.idGS) integer;
+
+    idTD  : referential (R8.has.TCA_D.idTD) integer;
 
 
     state Idle (Test : in  integer);
@@ -534,6 +548,10 @@ domain CT_Tags is
 
     idCSB : integer;
 
+    idGS  : preferred referential (R5.idGS) integer;
+
+    idTE  : referential (R9.has.TCA_E.idTE) integer;
+
 
     state Idle (Test : in  integer);
     pragma state_number (1);
@@ -592,6 +610,10 @@ domain CT_Tags is
   object Global_SubC is
 
     idGSC : integer;
+
+    idGS  : preferred referential (R5.idGS) integer;
+
+    idTF  : referential (R10.has.TCA_F.idTF) integer;
 
 
     state Idle (Test : in  integer);
@@ -666,7 +688,7 @@ domain CT_Tags is
 
   object TCA_Super is
 
-    idTS    : integer;
+    idTS    : preferred integer;
 
     TCAFlag : boolean;
 
@@ -709,6 +731,8 @@ domain CT_Tags is
     idTSD  : integer;
 
     TSDRef : integer;
+
+    idTS   : preferred referential (R6.idTS) integer;
 
 
     state Idle (Test : in  integer);
@@ -760,6 +784,8 @@ domain CT_Tags is
 
     CSEPassed : boolean;
 
+    idTS      : preferred referential (R6.idTS) integer;
+
 
     state Idle (Test : in  integer);
     pragma state_number (1);
@@ -806,20 +832,17 @@ domain CT_Tags is
 
     GlobalFlag : boolean;
 
+    idTS       : preferred referential (R6.idTS) integer;
+
 
     state Idle (Test : in  integer);
     pragma state_number (5);
 
-    event Finished ();
-    pragma event_number (1);
-
     transition is
       Non_Existent (TCA_Super.Fired    => Cannot_Happen,
-                    TCA_Super.Finished => Cannot_Happen,
-                    Finished           => Cannot_Happen);
+                    TCA_Super.Finished => Cannot_Happen);
       Idle (        TCA_Super.Fired    => Idle,
-                    TCA_Super.Finished => Ignore,
-                    Finished           => Ignore);
+                    TCA_Super.Finished => Ignore);
     end transition;
 
   end object;
@@ -828,7 +851,7 @@ domain CT_Tags is
 
   object CCA_Super is
 
-    idCS       : integer;
+    idCS       : preferred integer;
 
     CSRef      : integer;
 
@@ -872,6 +895,8 @@ domain CT_Tags is
 
     idTSG : integer;
 
+    idCS  : preferred referential (R7.idCS) integer;
+
 
   end object;
   pragma id (21);
@@ -881,6 +906,8 @@ domain CT_Tags is
   object CCA_SubH is
 
     idCSH : integer;
+
+    idCS  : preferred referential (R7.idCS) integer;
 
 
     state Idle (Test : in  integer);
@@ -928,20 +955,17 @@ domain CT_Tags is
 
     GlobalFlag : boolean;
 
+    idCS       : preferred referential (R7.idCS) integer;
+
 
     state Idle (Test : in  integer);
     pragma state_number (2);
 
-    event Finished ();
-    pragma event_number (1);
-
     transition is
       Non_Existent (CCA_Super.C_Fired  => Cannot_Happen,
-                    CCA_Super.Finished => Cannot_Happen,
-                    Finished           => Cannot_Happen);
+                    CCA_Super.Finished => Cannot_Happen);
       Idle (        CCA_Super.C_Fired  => Idle,
-                    CCA_Super.Finished => Ignore,
-                    Finished           => Ignore);
+                    CCA_Super.Finished => Ignore);
     end transition;
 
   end object;
@@ -950,7 +974,7 @@ domain CT_Tags is
 
   object TCA_D is
 
-    idTD     : integer;
+    idTD     : preferred integer;
 
     TDRef    : integer;
 
@@ -992,13 +1016,15 @@ domain CT_Tags is
 
   object TCA_E is
 
-    idTE     : integer;
+    idTE     : preferred integer;
 
     TERef    : integer;
 
     TELinked : boolean;
 
     TEPassed : boolean;
+
+    idTD     : referential (R12.has.TCA_D.idTD) integer;
 
 
     state Idle (Test : in  integer);
@@ -1041,9 +1067,11 @@ domain CT_Tags is
 
   object TCA_F is
 
-    idTF  : integer;
+    idTF  : preferred integer;
 
     TFRef : integer;
+
+    idTE  : referential (R11.has.TCA_E.idTE) integer;
 
 
     state Idle (Test : in  integer);
@@ -1068,6 +1096,8 @@ domain CT_Tags is
 
   object Test_Data is
 
+    idTD                : preferred integer;
+
     Current_Test_Number : integer;
 
 
@@ -1077,7 +1107,7 @@ domain CT_Tags is
 
   object TCA_CP is
 
-    idTCP : integer;
+    idTCP : preferred integer;
 
 
   end object;
@@ -1087,7 +1117,7 @@ domain CT_Tags is
 
   object CCA_CP is
 
-    idCCP : integer;
+    idCCP : preferred integer;
 
 
   end object;
@@ -1097,7 +1127,7 @@ domain CT_Tags is
 
   object Global_CP is
 
-    idGCP : integer;
+    idGCP : preferred integer;
 
 
   end object;
@@ -1108,4 +1138,4 @@ end domain;
 pragma number (38);
 pragma name ("CCA_TCA_Tagging");
 pragma kl ("CT_Tags");
-pragma version (3);
+pragma version (4);
