@@ -1,42 +1,47 @@
 2,CCA_A,CCAA,active
 PROCESSOR,CCA,
-.idCA,Base_Integer_Type,(),##
+*idCA,Base_Integer_Type,(),##
 .CARef,Base_Integer_Type,(),##
 .CAPassed,Boolean,(),##
 .CALinked,Boolean,(),##
+.idCB,Base_Integer_Type,(R1.idCB),##
 .Current_State,Object_State_Type,(),## 
 
 3,CCA_B,CCAB,active
 PROCESSOR,CCA,
-.idCB,Base_Integer_Type,(),##
+*idCB,Base_Integer_Type,(),##
 .Current_State,Object_State_Type,(),## 
 
 4,TCA_A,TCAA,active
 PROCESSOR,TCA,
-.idTA,Base_Integer_Type,(),##
+*idTA,Base_Integer_Type,(),##
+.idTB,Base_Integer_Type,(R2.idTB),##
 .Current_State,Object_State_Type,(),## 
 
 5,TCA_B,TCAB,passive
 PROCESSOR,TCA,
-.idTB,Base_Integer_Type,(),##
+*idTB,Base_Integer_Type,(),##
 .Current_State,Object_State_Type,(),## 
 
 6,Global_A,GA,passive
-.idGA,Base_Integer_Type,(),##
+*idGA,Base_Integer_Type,(),##
+.idCC,Base_Integer_Type,(R3.idCC),##
 .Current_State,Object_State_Type,(),## 
 
 7,CCA_C,CCAC,passive
 PROCESSOR,CCA,
-.idCC,Base_Integer_Type,(),##
+*idCC,Base_Integer_Type,(),##
 .Current_State,Object_State_Type,(),## 
 
 8,Global_B,GB,passive
-.idGB,Base_Integer_Type,(),##
+*idGB,Base_Integer_Type,(),##
+.idGA,Base_Integer_Type,(R13.idGA),##
 .Current_State,Object_State_Type,(),## 
 
 9,TCA_C,TCAC,passive
 PROCESSOR,TCA,
-.idTC,Base_Integer_Type,(),##
+*idTC,Base_Integer_Type,(),##
+.idGB,Base_Integer_Type,(R4.idGB),##
 .Current_State,Object_State_Type,(),## 
 
 10,Results,RES,passive
@@ -53,7 +58,7 @@ PROCESSOR,TCA,
 .Current_State,Object_State_Type,(),## 
 
 12,Global_Super,GS,active
-.idGS,Base_Integer_Type,(),##
+*idGS,Base_Integer_Type,(),##
 .GSRef,Base_Integer_Type,(),##
 .CCAFlag,Boolean,(),##
 .TCAFlag,Boolean,(),##
@@ -63,20 +68,26 @@ PROCESSOR,TCA,
 13,TCA_SubA,TSA,active
 PROCESSOR,TCA,
 .idTSA,Base_Integer_Type,(),##
+*idGS,Base_Integer_Type,(R5),##
+.idTD,Base_Integer_Type,(R8.idTD),##
 .Current_State,Object_State_Type,(),## 
 
 14,CCA_SubB,CSB,active
 PROCESSOR,CCA,
 .idCSB,Base_Integer_Type,(),##
+*idGS,Base_Integer_Type,(R5),##
+.idTE,Base_Integer_Type,(R9.idTE),##
 .Current_State,Object_State_Type,(),## 
 
 15,Global_SubC,GSC,active
 .idGSC,Base_Integer_Type,(),##
+*idGS,Base_Integer_Type,(R5),##
+.idTF,Base_Integer_Type,(R10.idTF),##
 .Current_State,Object_State_Type,(),## 
 
 16,TCA_Super,TS,active
 PROCESSOR,TCA,
-.idTS,Base_Integer_Type,(),##
+*idTS,Base_Integer_Type,(),##
 .TCAFlag,Boolean,(),##
 .TSRef,Base_Integer_Type,(),##
 .Current_State,Object_State_Type,(),## 
@@ -85,6 +96,7 @@ PROCESSOR,TCA,
 PROCESSOR,TCA,
 .idTSD,Base_Integer_Type,(),##
 .TSDRef,Base_Integer_Type,(),##
+*idTS,Base_Integer_Type,(R6),##
 .Current_State,Object_State_Type,(),## 
 
 18,CCA_SubE,CSE,active
@@ -93,16 +105,18 @@ PROCESSOR,CCA,
 .CSERef,Base_Integer_Type,(),##
 .CSELinked,Boolean,(),##
 .CSEPassed,Boolean,(),##
+*idTS,Base_Integer_Type,(R6),##
 .Current_State,Object_State_Type,(),## 
 
 19,Global_SubF,GSF,active
 .idGSF,Base_Integer_Type,(),##
 .GlobalFlag,Boolean,(),##
+*idTS,Base_Integer_Type,(R6),##
 .Current_State,Object_State_Type,(),## 
 
 20,CCA_Super,CS,active
 PROCESSOR,CCA,
-.idCS,Base_Integer_Type,(),##
+*idCS,Base_Integer_Type,(),##
 .CSRef,Base_Integer_Type,(),##
 .CCAFlag,Boolean,(),##
 .GlobalFlag,Boolean,(),##
@@ -111,21 +125,24 @@ PROCESSOR,CCA,
 21,TCA_SubG,TSG,passive
 PROCESSOR,TCA,
 .idTSG,Base_Integer_Type,(),##
+*idCS,Base_Integer_Type,(R7),##
 .Current_State,Object_State_Type,(),## 
 
 22,CCA_SubH,CSH,active
 PROCESSOR,CCA,
 .idCSH,Base_Integer_Type,(),##
+*idCS,Base_Integer_Type,(R7),##
 .Current_State,Object_State_Type,(),## 
 
 23,Global_SubI,GSI,active
 .idGSI,Base_Integer_Type,(),##
 .GlobalFlag,Boolean,(),##
+*idCS,Base_Integer_Type,(R7),##
 .Current_State,Object_State_Type,(),## 
 
 24,TCA_D,ObjTD,active
 PROCESSOR,TCA,
-.idTD,Base_Integer_Type,(),##
+*idTD,Base_Integer_Type,(),##
 .TDRef,Base_Integer_Type,(),##
 .TDPassed,Boolean,(),##
 .TDLinked,Boolean,(),##
@@ -133,33 +150,36 @@ PROCESSOR,TCA,
 
 25,TCA_E,ObjTE,active
 PROCESSOR,TCA,
-.idTE,Base_Integer_Type,(),##
+*idTE,Base_Integer_Type,(),##
 .TERef,Base_Integer_Type,(),##
 .TELinked,Boolean,(),##
 .TEPassed,Boolean,(),##
+.idTD,Base_Integer_Type,(R12.idTD),##
 .Current_State,Object_State_Type,(),## 
 
 26,TCA_F,ObjTF,active
 PROCESSOR,TCA,
-.idTF,Base_Integer_Type,(),##
+*idTF,Base_Integer_Type,(),##
 .TFRef,Base_Integer_Type,(),##
+.idTE,Base_Integer_Type,(R11.idTE),##
 .Current_State,Object_State_Type,(),## 
 
 27,Test_Data,TD,passive
+*idTD,Base_Integer_Type,(),##
 .Current_Test_Number,Base_Integer_Type,(),##
 .Current_State,Object_State_Type,(),## 
 
 28,TCA_CP,TCP,passive
 PROCESSOR,TCA,
-.idTCP,Base_Integer_Type,(),##
+*idTCP,Base_Integer_Type,(),##
 .Current_State,Object_State_Type,(),## 
 
 29,CCA_CP,CCP,passive
 PROCESSOR,CCA,
-.idCCP,Base_Integer_Type,(),##
+*idCCP,Base_Integer_Type,(),##
 .Current_State,Object_State_Type,(),## 
 
 30,Global_CP,GCP,passive
-.idGCP,Base_Integer_Type,(),##
+*idGCP,Base_Integer_Type,(),##
 .Current_State,Object_State_Type,(),## 
 
