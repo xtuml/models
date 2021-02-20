@@ -1,0 +1,18 @@
+public service TAGS::Delete_Report_Domain () is
+This_Report = find-one Report_Data
+
+if This_Report != UNDEFINED then
+   This_Domain_Identifier = This_Report.Reported_Domain_Number
+else
+   This_Domain_Identifier = -1
+endif
+
+[] = RPT7:Domain_Test_Finished["TAGGING", This_Domain_Identifier]
+
+# There are no events en-queued in this domain.
+
+# Events are not tagged currently, or at least there is no call to do, yet.
+
+if This_Domain_Identifier != -1 then
+   delete This_Report
+endif

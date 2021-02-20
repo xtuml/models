@@ -1,0 +1,22 @@
+public service Function_Calls::Call_To_Self (The_Input_Value  : in  integer,
+                                             The_Output_Value : out integer) is
+[Host] = WAW1:What_Env[]
+
+temp = The_Input_Value
+temp = temp + 1
+
+if Host = "ISIM" then
+   Total = 5
+else
+   Total = 700
+endif
+
+if temp = Total then
+   The_Output_Value = temp
+else
+   The_Output_Value = temp
+   [The_Output_Value] = Function_Calls8::Call_To_Self[temp]
+endif
+
+
+

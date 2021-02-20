@@ -1,0 +1,27 @@
+//! Returns a message if the instance state is not as expected
+public service Relationships::Get_Instance_State (Input_Instance_Value : in  integer,
+                                                  Input_Expected_Value : in  integer,
+                                                  Free_Text            : in  string) is
+the_instance_value = Input_Instance_Value
+expected_value = Input_Expected_Value
+instance_name = Free_Text
+
+if the_instance_value != expected_value then
+
+   $INLINE
+   fprintf(stderr, " \n");
+   fprintf(stderr, "UNEXPECTED INSTANCE VALUE FOR INSTANCE %s\n",instance_name);
+   fprintf(stderr, "Expected Value  %d  Actual Value  %d\n", expected_value, the_instance_value);
+   fprintf(stderr, " \n");
+   $ENDINLINE
+
+   #$ADA_INLINE
+   # with Ada.Text_IO;
+   #
+   # Ada.Text_IO.New_Line(1);
+   # Ada.Text_IO.Put_Line("UNEXPECTED VALUE FOR INSTANCE " & instance_name);
+   # Ada.Text_IO.Put_Line("Expected " & integer'image(integer(expected_value)) & "Actual " & integer'image(integer(the_instance_value)));   
+   # Ada.Text_IO.New_Line(1);
+   #
+   #$END_ADAINLINE
+endif

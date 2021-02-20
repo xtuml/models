@@ -1,0 +1,39 @@
+define function  SBONE1::Receive_A_Very_Simple_Structure
+input \
+	Received_Very_Simple_Structure:Very_Simple_Structure_Type ,\
+	Received_Control_Integer:Base_Integer_Type ,\
+	Received_Control_Real:Base_Float_Type ,\
+	Received_Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+[] = RPT1:Start_Test[Received_Test, "Null Requid", "SBONE", "DBSS rx a structure", "rx structure and create simple object"]
+
+VSD_One = create Very_Simple_Data_Object with Object_Reference_VSD = Received_Test
+
+# For the purposes of this simple test, we are assuming that there is
+# only one structure in the set.
+
+for [Local_Integer, Local_Real] in {Received_Very_Simple_Structure} do
+
+   VSD_One.Object_Simple_Integer = Local_Integer
+   VSD_One.Object_Simple_Real    = Local_Real
+
+endfor
+
+if VSD_One.Object_Simple_Integer = Received_Control_Integer & \
+   VSD_One.Object_Simple_Real    = Received_Control_Real then
+
+   [] = RPT2:Test_Passed["SBONE rx structure", Received_Test, 0]
+else
+   [] = RPT3:Test_Failed["SBONE rx structure", Received_Test, -1]
+endif
+
+
+
+
+enddefine

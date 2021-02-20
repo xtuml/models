@@ -1,0 +1,32 @@
+define bridge  DomainA:termA1:Sync1A
+input \
+	inputA:Base_Integer_Type ,\
+	inputB:Base_Integer_Type ,\
+	Test:Base_Integer_Type 
+output \
+	outputA:Base_Integer_Type ,\
+	outputB:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+   if (inputA != 1)|(inputB != 2) then
+      #Input values are incorrect
+      outputA = 1
+      outputB = 2
+
+      [] = RPT5:Test_Text[Test,"Term1A stub called with incorrect IO values"]
+
+   else
+      #Input values are correct
+      outputA = 3
+      outputB = 4
+
+      [] = RPT5:Test_Text[Test,"Term1A stub called with correct IO values"]
+
+
+   endif
+
+
+enddefine

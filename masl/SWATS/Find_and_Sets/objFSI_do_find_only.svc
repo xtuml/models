@@ -1,0 +1,131 @@
+public service Find_and_Sets::Find_Single.do_find_only (Test_Number     : in  integer,
+                                                        an_instanceFSI  : in  instance of Find_Single,
+                                                        Returned_Number : out integer) is
+#------------------------------------------------------------------------#
+# Find-only
+#------------------------------------------------------------------------#
+
+[Host] = WAW1:What_Env[]
+Test = Test_Number
+
+#------------------------------------------------------------------------#
+# Test 1 - FIND-ONLY return the first instance of Object A found
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0546", "Find and Sets", "objFSI find only","Return first inst with find-only"]
+   [] = RPT8:Specify_Requid [Test, "1241-0000-01-1208"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+
+   if Host = "ISIM" then
+      [] = RPT4:Test_Unsupported[Test]
+   else
+      an_instanceA = find-only Object_A
+
+      # Check that an instance is returned
+      if (an_instanceA = UNDEFINED) then
+         [] = RPT3:Test_Failed["objFSI find only", Test,-4]
+         Has_Failed = TRUE
+      else
+         temp = an_instanceFSI.ResultFSI + 10
+         an_instanceFSI.ResultFSI = temp
+         [] = RPT2:Test_Passed["objFSI find only", Test,temp]
+      endif
+
+   endif
+
+# End Test 1
+
+
+#------------------------------------------------------------------------#
+# Test 2 - FIND-ONLY WHERE <single condition>, an instance is returned
+#------------------------------------------------------------------------#
+
+   [Test] = Find_and_Sets1::Increment[Test]
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0547", "Find and Sets", "objFSI find only","a condition an instance ret"]
+   [] = RPT8:Specify_Requid [Test, "1241-0000-01-1209"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   an_instanceA = find-only Object_A where idA = 4
+
+   # Check that an instance is returned
+   if (an_instanceA = UNDEFINED)|(an_instanceA.idA != 4)then
+      [] = RPT3:Test_Failed["objFSI find only", Test,-1]
+      Has_Failed = TRUE
+   else
+
+      if an_instanceFSI = UNDEFINED then
+         Has_Failed = TRUE
+         [] = RPT3:Test_Failed["objFSI", Test, -2]
+      else
+         temp = an_instanceFSI.ResultFSI + 10
+         an_instanceFSI.ResultFSI = temp
+         [] = RPT2:Test_Passed["objFSI find only", Test,temp]
+      endif
+
+   endif
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 -  FIND-ONLY WHERE <only one condition fulfilled>, an instance 
+#           is returned
+#------------------------------------------------------------------------#
+
+   [Test] = Find_and_Sets1::Increment[Test]
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0547", "Find and Sets", "objFSI find only","a condition an instance ret"]
+   [] = RPT8:Specify_Requid [Test, "1241-0000-01-1209"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   an_instanceA = find-only Object_A where IntegerA = 666 | idA = 5
+
+   # Check that an instance is returned
+   if (an_instanceA = UNDEFINED)|(an_instanceA.idA != 5) then
+      [] = RPT3:Test_Failed["objFSI find only", Test,-2]
+      Has_Failed = TRUE
+   else
+      temp = an_instanceFSI.ResultFSI + 10
+      an_instanceFSI.ResultFSI = temp
+      [] = RPT2:Test_Passed["objFSI find only", Test,temp]
+   endif
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4 - FIND-ONLY WHERE <multiple conditions fulfilled>, an instance 
+#          is returned
+#------------------------------------------------------------------------#
+
+   [Test] = Find_and_Sets1::Increment[Test]
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0547", "Find and Sets", "objFSI find only","mult conditions 1 instance ret"]
+   [] = RPT8:Specify_Requid [Test, "1241-0000-01-1209"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   an_instanceA = find-only Object_A where IntegerA = 6 | idA = 6
+
+   # Check that an instance is returned
+   if (an_instanceA = UNDEFINED)|(an_instanceA.idA != 6) then
+      [] = RPT3:Test_Failed["objFSI find only", Test,-3]
+      Has_Failed = TRUE
+   else
+      temp = an_instanceFSI.ResultFSI + 10
+      an_instanceFSI.ResultFSI = temp
+      [] = RPT2:Test_Passed["objFSI find only", Test,temp]
+   endif
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+
+Returned_Number = Test

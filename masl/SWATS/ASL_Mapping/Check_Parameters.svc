@@ -1,0 +1,20 @@
+public service ASL_Mapping::Check_Parameters (Test               : in  integer,
+                                              The_Subtract_Param : in  integer,
+                                              Returning_No       : out integer) is
+#--------------------------------------------------
+# Check parameter ordering
+#--------------------------------------------------       
+
+   The_Result = 0
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "ASL Mapping", "Basic ASL DBSS","Check parameter ordering"]
+
+   The_Result = Test - The_Subtract_Param
+
+   if The_Result >= 0 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+Returning_No = Test + 1

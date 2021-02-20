@@ -1,0 +1,143 @@
+//! Bodges? We don need no stinkin bodges!
+domain TAGS is
+  public service Perform_Unique_Passive_Singleton_Object_Tests (Test                 : in  integer,
+                                                                Returned_Test_Number : out integer);
+
+  public service Create_Report_Data ();
+
+  public service Delete_Report_Domain ();
+
+  public service Perform_Passive_Singleton_Object_Tests (Test                 : in  integer,
+                                                         Returned_Test_Number : out integer);
+
+  //! Test requirement Tag
+  //! @@TAGS-01-0001
+  public service Report_Now (Test_Number     : in  integer,
+                             Testing_For     : in  string,
+                             Failure         : in  integer,
+                             It_Is_Supported : in  boolean);
+
+  //! C insert to set attribute for I-SIM
+  //! operation
+  public service Set_Environment (Input_Test_Data  : in  instance of Test_Data,
+                                  Output_Test_Data : out instance of Test_Data);
+
+  public service Perform_Passive_Array_of_3_Objects_Tests (Start_Test_Number : in  integer,
+                                                           Supported         : in  boolean,
+                                                           Final_Test_Number : out integer);
+
+  public service Perform_Passive_Array_of_1_Object_Tests (Start_Test_Number : in  integer,
+                                                          Supported         : in  boolean,
+                                                          Final_Test_Number : out integer);
+
+  public service Perform_One_To_Many_Tests ();
+
+  public service Perform_Active_One_To_Many_Tests ();
+
+  public service Perform_Passive_Many_To_Many_Tests ();
+
+  public service Perform_Passive_Super_Sub_Tests ();
+
+  public service Perform_Active_Many_To_Many_Tests ();
+
+  public service Perform_Active_Super_Sub_Tests ();
+
+  public service Perform_Static_Tests ();
+
+  terminator Tagged_Terminator is
+    //! This is a tagged terminitor in an untagged terminator group.
+    public service A_Tagged_Local_Terminator (Incoming_Parameter_1 : in  integer,
+                                              Outgoing_Parameter_1 : out integer); pragma hand_coded ("1");
+    pragma terminator_operation_number(1);
+
+    public service A_Tagged_Project_Terminator (Incoming_Parameter_3 : in  integer,
+                                                Outgoing_Parameter_3 : out integer); pragma hand_coded ("1");
+    pragma terminator_operation_number(3);
+
+    //! Dummy tagged terminator with odd param names to get around possible I-SIM error
+    public service A_Tagged_Dummy_Terminator_One (Mickey_Mouse_Input_One  : in  integer,
+                                                  Minnie_Mouse_Output_One : out integer); pragma hand_coded ("");
+    pragma terminator_operation_number(2);
+
+    public service A_Tagged_Dummy_Terminator_Two (Input_Two  : in  integer,
+                                                  Output_Two : out integer); pragma hand_coded ("");
+    pragma terminator_operation_number(4);
+
+  end terminator;
+  pragma key_letter ("TT");
+  pragma hand_coded ("");
+
+
+  terminator Report is
+    public service Start_Test (Test_Number     : in  integer,
+                               Requid          : in  string,
+                               Invoking_Domain : in  string,
+                               Invoking_Object : in  string,
+                               Purpose         : in  string);
+    pragma terminator_operation_number(1);
+
+    public service Test_Passed (Test_Object_Domain : in  string,
+                                Test_Number        : in  integer,
+                                Test_Value         : in  integer);
+    pragma terminator_operation_number(2);
+
+    public service Test_Failed (Failed_Domain_Object : in  string,
+                                Failed_Test_Number   : in  integer,
+                                Failed_Test_Value    : in  integer);
+    pragma terminator_operation_number(3);
+
+    public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+    pragma terminator_operation_number(4);
+
+    public service Test_Text (Test_Number : in  integer,
+                              Free_Text   : in  string);
+    pragma terminator_operation_number(5);
+
+    public service Domain_Test_Start (This_Domain_Name : in  string);
+    pragma terminator_operation_number(6);
+
+    public service Domain_Test_Finished (This_Domain_Name   : in  string,
+                                         This_Domain_Number : in  integer);
+    pragma terminator_operation_number(7);
+
+    public service Specify_Requid (Requid_Test_Number : in  integer,
+                                   The_Requid_Itself  : in  string);
+    pragma terminator_operation_number(8);
+
+  end terminator;
+  pragma key_letter ("RPT");
+
+
+  terminator Env_Terminator is
+    //! @@TAGS-01-0007
+    public service Env_String (Env_Text : out string);
+    pragma terminator_operation_number(1);
+
+    public service Env_Number (Env_Integer : out integer);
+    pragma terminator_operation_number(2);
+
+  end terminator;
+  pragma key_letter ("ET");
+
+
+  terminator Untagged_Terminator is
+    public service An_Untagged_Local_Terminator (Incoming_Parameter_2 : in  integer,
+                                                 Outgoing_Parameter_2 : out integer);
+    pragma terminator_operation_number(1);
+
+    public service An_Untagged_Project_Terminator (Incoming_Parameter_4 : in  integer,
+                                                   Outgoing_Parameter_4 : out integer);
+    pragma terminator_operation_number(2);
+
+    public service Untagged_Operational_Terminator ();
+    pragma terminator_operation_number(3);
+
+  end terminator;
+  pragma key_letter ("UT");
+
+
+end domain;
+pragma number (20);
+pragma name ("Tagging");
+pragma kl ("TAGS");
+pragma version (7);

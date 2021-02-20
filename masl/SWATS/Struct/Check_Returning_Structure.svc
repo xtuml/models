@@ -1,0 +1,23 @@
+public service Struct::Check_Returning_Structure (Integer_Input       : in  integer,
+                                                  Real_Input          : in  real,
+                                                  String_Input        : in  string,
+                                                  UDT_Input           : in  Colour_Type,
+                                                  Returning_Structure : out sequence of My_Second_Structure) is
+
+if Integer_Input = 100 then
+   Local_Integer = 200 
+endif
+
+if Real_Input = 1.0 then
+   Local_Real = 2.0
+endif
+
+if String_Input = "Structures Test" then
+  Local_String = "Test Complete"
+endif
+
+if UDT_Input = 'Blue' then
+   Local_UDT of Colour_Type = 'Green'
+endif
+
+append [Local_Integer, Local_Real, Local_String, Local_UDT] to {Returning_Structure}

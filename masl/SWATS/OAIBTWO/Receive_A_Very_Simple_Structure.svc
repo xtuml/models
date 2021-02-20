@@ -1,0 +1,22 @@
+public service OAIBTWO::Receive_A_Very_Simple_Structure (Test_Number                    : in  integer,
+                                                         Received_Very_Simple_Structure : in  sequence of Very_Simple_Source_Structure_Type) is
+
+[] = RPT1:Start_Test[Test_Number, "Null Requid", "OAIBTWO", "Receive simple structure", "RX from SBONE"]
+
+Total_Integer = 0
+Total_Real    = 0.0
+
+for [local_simple_integer, local_simple_real] in {Received_Very_Simple_Structure} do
+
+   Total_Integer = Total_Integer + local_simple_integer
+
+   Total_Real = Total_Real + local_simple_real
+
+endfor
+
+if Total_Integer = 1530 then 
+   [] = RPT2:Test_Passed["OAIBTWO Receive v simple structure", Test_Number, Total_Integer]
+else
+   [] = RPT3:Test_Failed["OAIBTWO Receive v simple structure", Test_Number, Total_Integer]
+endif
+

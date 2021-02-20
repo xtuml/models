@@ -1,0 +1,92 @@
+public service ASL_Mapping::Nested_LOOP.do_nested_loops (an_instanceNESTED_LOOP : in  instance of Nested_LOOP,
+                                                         Test_Start             : in  integer,
+                                                         Final_Test             : out integer) is
+#------------------------------------------------------------------------#
+# Nested LOOP statements
+#------------------------------------------------------------------------#
+
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+# Test 1 - Nest Loop statements
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objNESTEDLOOP","Nest Loop statements"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0452"]
+
+   Has_Failed = FALSE
+
+   # Ensure the attribute 'ResultA' is set to zero
+   if an_instanceNESTED_LOOP.ResultA != 0 then
+      an_instanceNESTED_LOOP.ResultA = 0
+   endif
+
+   # Perform the test
+   countA = 0
+   loop
+      countB = 0
+
+      loop
+         countC = 0
+
+         loop
+            countD = 0
+
+            loop
+               countE = 0
+      
+               loop
+                  countF = 0
+  
+                  loop
+                     temp = an_instanceNESTED_LOOP.ResultA + 1
+                     an_instanceNESTED_LOOP.ResultA = temp
+                     countF = countF + 1
+                     breakif countF = 5
+                  endloop
+      
+                  temp = an_instanceNESTED_LOOP.ResultA + 1
+                  an_instanceNESTED_LOOP.ResultA = temp
+                  countE = countE + 1
+                  breakif countE = 5
+               endloop
+   
+               temp = an_instanceNESTED_LOOP.ResultA + 1
+               an_instanceNESTED_LOOP.ResultA = temp
+               countD = countD + 1
+               breakif countD = 5
+            endloop
+   
+            temp = an_instanceNESTED_LOOP.ResultA + 1
+            an_instanceNESTED_LOOP.ResultA = temp
+            countC = countC + 1
+            breakif countC = 5
+         endloop
+
+         temp = an_instanceNESTED_LOOP.ResultA + 1
+         an_instanceNESTED_LOOP.ResultA = temp
+         countB = countB + 1
+         breakif countB = 5
+      endloop
+   
+      temp = an_instanceNESTED_LOOP.ResultA + 1
+      an_instanceNESTED_LOOP.ResultA = temp
+      countA = countA + 1
+      breakif countA = 5
+   endloop
+
+   # Check that the value of attribute 'ResultA' is correct.
+   if an_instanceNESTED_LOOP.ResultA != 19530 then
+      [] = RPT3:Test_Failed["objNESTEDFOR",Test, an_instanceNESTED_LOOP.ResultA]
+      Has_Failed = TRUE
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDFOR",Test, an_instanceNESTED_LOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+   Final_Test = Test
+
+#------------------------------------------------------------------------#

@@ -1,0 +1,19 @@
+//! Check_Constraint
+private service UDT::Check_Constraint () is
+my_final_test = find-one Final_Test_Data
+
+Test = my_final_test.Final_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = UDT11::Check_Constraint[Test]
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+
+my_final_test.Final_Test_Number = Test 

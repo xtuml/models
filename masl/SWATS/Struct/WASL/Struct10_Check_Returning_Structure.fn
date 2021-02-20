@@ -1,0 +1,33 @@
+define function  Struct10::Check_Returning_Structure
+input \
+	Integer_Input:Base_Integer_Type ,\
+	Real_Input:Base_Float_Type ,\
+	String_Input:Base_Text_Type ,\
+	UDT_Input:Colour_Type 
+output \
+	Returning_Structure:My_Second_Structure 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+if Integer_Input = 100 then
+   Local_Integer = 200 
+endif
+
+if Real_Input = 1.0 then
+   Local_Real = 2.0
+endif
+
+if String_Input = "Structures Test" then
+  Local_String = "Test Complete"
+endif
+
+if UDT_Input = 'Blue' then
+   Local_UDT of Colour_Type = 'Green'
+endif
+
+append [Local_Integer, Local_Real, Local_String, Local_UDT] to {Returning_Structure}
+
+enddefine

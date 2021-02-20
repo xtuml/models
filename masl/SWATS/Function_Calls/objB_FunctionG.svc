@@ -1,0 +1,12 @@
+//! This function receives an input parameter but does not return a parameter to the calling function.
+public service Function_Calls::Object_B.FunctionG (InputA : in  instance of Object_B,
+                                                   InputB : in  integer) is
+   tempA = InputA
+   tempB = InputB
+   if tempA.ReferenceB != tempB then
+      generate objB1:Fault() to tempA
+   else
+      # tempC = tempA.ResultA + 10
+      tempC = 10
+      tempA.ResultA = tempC
+   endif

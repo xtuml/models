@@ -1,0 +1,1 @@
+APPL_COBJS += EV3B_bridge.o EV3COL_bridge.o EV3GYR_bridge.o EV3M_bridge.o EV3TCH_bridge.o EV3ULS_bridge.o LOG_bridge.o Navigation.o Navigation_follower_class.o Navigation_leader_class.o Navigation_rover_class.o RComm.o Rover.o Rover_sys_main.o sys_thread.o sys_user_co.o sys_xtuml.o TIM_bridge.o MATH_bridge.o

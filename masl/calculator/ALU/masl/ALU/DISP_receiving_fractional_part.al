@@ -13,7 +13,9 @@ begin
   // +, -, *, /, =
   elsif ( 10 <= key and key <= 14 ) then
     generate Display.operator( key ) to this;
+    this.value := 1.0;
   else
     generate Display.error( "invalid key press" ) to this;
+    this.value := 1.0;
   end if;
 end state;

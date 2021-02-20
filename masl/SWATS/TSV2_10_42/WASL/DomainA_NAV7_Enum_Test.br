@@ -1,0 +1,85 @@
+define bridge  DomainA:NAV7:Enum_Test
+input \
+	Test:Base_Integer_Type ,\
+	Enum_Input:Test_Enum_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+My_Report = find-one Report_Data
+
+if My_Report = UNDEFINED then
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["Calling domain has not created Report_Data"]
+
+   $ENDUSE
+
+
+else
+
+   This_Domain_Number = My_Report.Reported_Domain_Number
+
+   Which_Domain = 0
+ 
+   loop
+
+      Which_Domain = Which_Domain + 1
+ 
+      switch Which_Domain
+
+         case 1
+
+            [The_DomainA_Val] = DomainA3::Check_Enum['Sly']
+   
+         case 2
+         
+            $USE DomainB
+
+               [The_DomainB_Val] = DomainB7::Check_Enum['Sandy']
+ 
+            $ENDUSE
+
+         default
+
+            Which_Domain = Which_Domain + 1
+
+
+      endswitch
+
+      breakif Which_Domain > 1
+
+   endloop 
+
+   $USE RP
+
+      [] = RP4::Test_Description[Test, "Null Requid", "Domain_A", "Bridge", "Check Enumeration across bridge", This_Domain_Number]
+        
+      if The_DomainA_Val = 11 then
+
+         if The_DomainB_Val = 22 then
+
+            [] = RP1::Test_Passed["Bridge", Test, The_DomainB_Val, This_Domain_Number]  
+
+         else
+ 
+            [] = RP2::Test_Failed["Bridge", Test, The_DomainB_Val, This_Domain_Number]
+
+         endif
+
+      else
+
+         [] = RP2::Test_Failed["Bridge", Test, The_DomainA_Val, This_Domain_Number]
+
+      endif
+
+   $ENDUSE
+
+
+ endif
+
+
+enddefine

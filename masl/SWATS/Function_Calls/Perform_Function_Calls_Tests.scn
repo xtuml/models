@@ -1,0 +1,335 @@
+//! Perform Function Calls Tests
+private service Function_Calls::Perform_Function_Calls_Tests () is
+my_test = find-one Test_Data
+
+Test = my_test.The_Test_Number
+
+[Host] = WAW1:What_Env[]
+
+# Define all the objects in this domain, ten each for ObjectA and ObjectB
+
+loop_counter = 1
+
+loop
+
+   newA = create Object_A with ReferenceA = loop_counter &\
+                               ResultA = 0 &\
+                               Current_State = 'Idle'
+
+   newB = create Object_B with ReferenceB = loop_counter     &\
+                               ResultA = 10           &\
+                               Current_State = 'Idle'
+
+   loop_counter = loop_counter + 1
+
+   breakif loop_counter = 11
+
+endloop
+
+#------------------------------------------------------------------------#
+# Loop again, but this time pass the active object IH into a synch service
+# Don't delete the object
+#------------------------------------------------------------------------#
+
+   loop_counter = 1
+
+   loop
+
+      a_tight_instance = create A_Tight_Object with Start_Value = Test and Increment_Value = 10 and Current_State = 'Idle'
+
+      generate ATO1:Get_Going(FALSE) to a_tight_instance
+
+      Test = Test + 1
+
+      loop_counter = loop_counter + 1
+
+      breakif loop_counter = 6
+
+   endloop
+
+#------------------------------------------------------------------------#
+# Loop again, but this time generate to the active object IH 
+# Cause the object to self delete
+#------------------------------------------------------------------------#
+
+   loop_counter = 1
+
+   loop
+
+      a_tight_instance = create A_Tight_Object with Start_Value = Test and Increment_Value = 10 and Current_State = 'Idle'
+
+      generate ATO1:Get_Going(TRUE) to a_tight_instance
+
+      Test = Test + 1
+
+      loop_counter = loop_counter + 1
+
+      breakif loop_counter = 6
+
+   endloop
+
+
+#------------------------------------------------------------------------#
+# Tests one through four on ObjectA
+#------------------------------------------------------------------------#
+
+   loop_counter = 1
+
+   loop
+
+      an_instance_A = find-one Object_A where ReferenceA = loop_counter
+
+      if an_instance_A != UNDEFINED then
+         generate objA3:Start(Test, loop_counter) to an_instance_A
+      else
+         [] = RPT5:Test_Text[loop_counter,"Scenario object A Test not performed"]
+      endif
+
+      loop_counter = loop_counter + 1
+      Test         = Test         + 1
+
+      breakif loop_counter = 6
+
+   endloop
+
+#------------------------------------------------------------------------#
+# Test five is a special case loop_counter is five, Test is also five.
+#------------------------------------------------------------------------#
+
+   an_instance_A = find-one Object_A where ReferenceA = loop_counter
+
+   an_instance_B = find-one Object_B where ReferenceB = loop_counter
+
+
+#if an_instance_A != UNDEFINED & \
+#   an_instance_B != UNDEFINED then
+
+#   generate objA3:Start (Test, loop_counter) to an_instance_A
+
+#   Test = Test + 1
+
+#   generate objB4:Verify(Test, loop_counter) to an_instance_B
+
+#else
+
+#   [] = RPT5:Test_Text[loop_counter,"Scenario object A and B Test not performed"]
+
+#endif
+
+#------------------------------------------------------------------------#
+# Tests six through ten on objectB 
+#------------------------------------------------------------------------#
+
+   loop_counter = 1
+
+   loop
+
+      # Grab the 6..10 objects
+      target = loop_counter + 5
+
+      an_instance_B = find-one Object_B where ReferenceB = target
+
+      if an_instance_B != UNDEFINED then
+         generate objB4:Verify(Test, loop_counter) to an_instance_B
+      else
+         [] = RPT5:Test_Text[loop_counter,"Scenario object B Test not performed"]
+      endif
+
+      loop_counter = loop_counter + 1
+      Test         = Test         + 1
+
+      # Break out after five generates.
+      breakif loop_counter = 6
+
+   endloop
+
+
+#------------------------------------------------------------------------#
+# Loop again, but this time pass the object IH into a synch service
+#------------------------------------------------------------------------#
+
+   loop_counter = 1
+
+   loop
+
+      Tight_Return_Value = 0
+
+      a_tight_instance = create A_Tight_Object with Start_Value = Test and Increment_Value = 10 and Current_State = 'Idle'
+
+      [Tight_Return_Value] = Function_Calls4::Perform_Service_In_Tight_Loop [a_tight_instance, Test, "Tightly controlled IH" ]
+
+      Expected_Result = Test + 10
+
+      if Tight_Return_Value != Expected_Result then
+         [] = RPT3:Test_Failed["Tightly controlled IH", Test, Tight_Return_Value]
+      else
+         [] = RPT2:Test_Passed["Tightly controlled IH", Test, Tight_Return_Value]
+      endif
+
+      Test         = Test         + 1
+      loop_counter = loop_counter + 1
+
+      breakif loop_counter = 6
+
+   endloop
+
+
+#------------------------------------------------------------------------#
+# Receive an enumeration value into a service call by locally defined 
+# variable
+#------------------------------------------------------------------------#
+
+   Local_Colour of Colour_Type = 'Red'
+
+   [] = Function_Calls6::Receive_Enumeration[Test, Local_Colour, "Variable defined enumeral"]
+
+#------------------------------------------------------------------------#
+# Do the same test again, but this time, use hard coded value for enumeral.
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = Function_Calls6::Receive_Enumeration[Test, 'Red', "Hard coded enumeral"]
+
+#------------------------------------------------------------------------#
+# Check that a domain syncronous service can call itself
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0808", "Function Calls", "Domain Sync Services", "Function Calls Iteslf"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0809"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+
+   [] = RPT5:Test_Text[Test, "Max 700"]
+
+   Returned_Val = 0
+
+   [Returned_Val] = Function_Calls8::Call_To_Self[0]
+
+   if Host = "ISIM" then
+
+      if Returned_Val = 5 then
+         [] = RPT2:Test_Passed["Function Calls Iteslf", Test, Returned_Val]
+      else
+         [] = RPT3:Test_Failed["Function Calls Iteslf", Test, Returned_Val]
+      endif
+
+   else
+
+      if Returned_Val = 700 then
+         [] = RPT2:Test_Passed["Function Calls Iteslf", Test, Returned_Val]
+      else
+         [] = RPT3:Test_Failed["Function Calls Iteslf", Test, Returned_Val]
+      endif
+
+   endif
+
+#------------------------------------------------------------------------#
+# Check that a object syncronous service can call itself
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   NewInstA = create Object_A with ReferenceA    = 0 &\
+                                  ResultA       = 0 &\
+                                  Current_State = 'Idle'
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0808", "Function Calls", "Domain Sync Services", "Object sync service calls itself"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-1031"]
+
+   Returned_Val = 0
+
+   [Returned_Val] = objA5:Call_To_Self[0]
+
+   if Returned_Val = 2 then
+      [] = RPT2:Test_Passed["Function Calls Iteslf", Test, Returned_Val]
+   else
+      [] = RPT3:Test_Failed["Function Calls Iteslf", Test, Returned_Val]
+   endif
+
+#------------------------------------------------------------------------#
+# Call domain sync service from a bridge
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0810", "Function Calls", "Domain Sync Services", "Call from bridge"]
+
+   InputVal1 = 1
+   InputVal2 = 2
+   InputVal3 = 3
+
+   [] = NTB2:Call_Domain_Sync_Service[Test, InputVal1, InputVal2, InputVal3]
+
+#------------------------------------------------------------------------#
+# Call object sync service from a bridge
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0810", "Function Calls", "Object Sync Services", "Call from bridge"]
+
+   The_Text = "From Bridge"
+   The_Int  = 100
+   The_Real = 99.9
+
+   [] = NTB3:Call_Object_Sync_Service[Test, The_Text, The_Int, The_Real]
+
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1215", "Function Calls", "Object Sync Services", "Check IH Parameters"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0138"]
+
+   InstC = create Object_C with idC   = 100  &\
+                                IntC  = 200  &\
+                                RealC = 99.9
+
+   [ReturnInst] = Function_Calls12::Test_IH_Params[InstC]
+
+   if ReturnInst.idC = 1000 then
+
+      if ReturnInst.IntC = 2000 then
+
+         if ReturnInst.RealC = 999.9 then
+            [] = RPT2:Test_Passed["Check IH Parameters", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Check IH Parameters", Test, -10]      
+         endif
+
+      else
+        [] = RPT3:Test_Failed["Check IH Parameters", Test, -2] 
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Check IH Parameters", Test, -30] 
+   endif
+
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0806", "Function Calls", "Domain Sync Services", "Check memory usage"]
+   [] = RPT5:Test_Text[Test, "1000000 functions called"]
+
+   [The_Result] = Function_Calls10::Call_A[0]
+
+   if Host = "ISIM" then
+      Total = 10
+   else
+      Total = 700
+   endif
+
+   if The_Result >= Total then
+      [] = RPT2:Test_Passed["Mem usage", Test, The_Result]
+   else
+      [] = RPT3:Test_Failed["Mem usage", Test, The_Result]      
+   endif
+
+Test = Test + 1
+
+my_test.The_Test_Number = Test

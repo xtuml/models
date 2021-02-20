@@ -1,0 +1,60 @@
+public service ASL_Mapping::Check_Defaults (Test         : in  integer,
+                                            Returning_No : out integer) is
+#----------------------------------------------------------------------------------
+# Check that variables are set default values on initialisation
+#----------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0311", "ASL Mapping", "Check Default Values","Check default values"]
+
+   [] = RPT4:Test_Unsupported[Test]
+
+   [Host] = WAW1:What_Env[]
+   if Host = "ISIM" then
+      Supported = FALSE
+   else
+      Supported = TRUE
+   endif
+
+   Set_Vals = FALSE
+
+   if Set_Vals then
+
+      if Supported then
+         The_Real_Default = 1.0
+         The_Integer_Default = 1
+         The_Text_Default = "Goodbye"
+         The_Boolean_Default = TRUE
+      else
+         The_Real_Default = 0.0
+         The_Integer_Default = 0
+         The_Text_Default = "Goodbye"
+         The_Boolean_Default = TRUE
+      endif
+
+   endif
+
+   if The_Real_Default = 1.0 then
+ 
+      if The_Integer_Default = 1 then
+
+         if The_Text_Default = "                                " then
+
+            if not The_Boolean_Default then
+              [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+            else
+              [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+            endif
+
+         else
+            [] = RPT3:Test_Failed["Basic ASL", Test, -20]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Basic ASL", Test, -30]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -40]
+   endif
+
+Returning_No = Test + 1

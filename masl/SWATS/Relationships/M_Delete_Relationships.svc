@@ -1,0 +1,215 @@
+public service Relationships::Middle.Delete_Relationships (Test : in  integer) is
+#-------------------------------------------------------------------#
+#
+# Delete all relationships
+#
+# The architectre shall provide a mechanism to allow deletion of a 
+# simple relationship link between two object instance
+# 1241-0000-01-0604
+#
+# The architecture shall provide a mechanism to allow the deletion of 
+# an associative link between an associative object and the link 
+# between two objects
+# 1241-0000-01-0612
+#
+# The architecture shall provide a mechanism to allow the deletion 
+# of a link between two objects in a associative relationship
+# 1241-0000-01-0613
+#
+# The architecture shall support a translation of the ASL unassociate
+# statment to map to the mechanism that allows the deletion of an 
+# associative link between an associative object and the link between
+# two objects
+# 1241-0000-01-1203
+#
+# The architecture shall support a translation of the ASL unlink
+# statement to map to the mechanism that allow the deletion of a 
+# link between two objects in a relationship
+# 1241-0000-01-1204
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0604", "Relationships", "Set Navigation", "Delete objects and relationships"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0612"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0613"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1203"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1204"]
+   [] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+   [] = RPT8:Specify_Requid [Test, "1103-0000-01-0622"]
+
+   One_Left     = find-one Far_Left   where Left_Identifier   = 1
+   One_Middle   = find-one Middle     where Middle_Identifier = 1
+   One_Right    = find-one Many_Right where Right_Identifier  = 1
+   Two_Right    = find-one Many_Right where Right_Identifier  = 2
+   Three_Right  = find-one Many_Right where Right_Identifier  = 3
+   Fourth_Right = find-one Many_Right where Right_Identifier  = 4
+   Five_Right   = find-one Many_Right where Right_Identifier  = 5
+   Six_Right    = find-one Many_Right where Right_Identifier  = 6
+
+   One_MRA = find-one Many_Right_Assoc where MRA_Identifier  = 1
+   Two_MRA = find-one Many_Right_Assoc where MRA_Identifier  = 2
+
+   One_MFR = find-one Many_Far_Right where MFR_Identifier = 1
+   Two_MFR = find-one Many_Far_Right where MFR_Identifier = 2
+
+   One_Above    = find-one Many_Above where Above_Data = 1
+   Two_Above    = find-one Many_Above where Above_Data = 2
+   Three_Above  = find-one Many_Above where Above_Data = 3
+   Fourth_Above = find-one Many_Above where Above_Data = 4
+
+   Has_Failed   = FALSE
+   Failure_Code = 0
+
+   unlink One_Left   R6 One_Middle
+
+   unlink One_Middle R7 One_Right
+   unlink One_Middle R7 Two_Right
+   unlink One_Middle R7 Three_Right
+   
+   unlink One_Above     R10 One_Right
+   unlink Two_Above     R10 One_Right
+   unlink Two_Above     R10 Three_Right
+   unlink Three_Above   R10 Three_Right
+   unlink Fourth_Above  R10 Fourth_Right
+
+   unassociate One_Right R8 One_MFR from One_MRA
+   unassociate One_Right R8 Two_MFR from Two_MRA
+   unassociate Two_Right R8 Two_MFR from Two_MRA
+
+   unlink One_Right R8 One_MFR
+   unlink One_Right R8 Two_MFR
+   unlink Two_Right R8 Two_MFR
+
+   # Test each object for any relationship links prior to deletion
+   InstM = One_Left -> R6.Middle
+
+   if InstM = UNDEFINED then
+      delete One_Left
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -1
+   endif
+
+   {SetMR} = One_Middle -> R7.Many_Right
+
+   if countof{SetMR} = 0 then
+      delete One_Middle
+   else
+      Has_Failed = TRUE
+      Failure_Code = Failure_Code - 2
+   endif
+
+   {SetMA} = One_Right -> R10.Many_Above
+
+   if countof{SetMA} = 0 then
+      delete One_Above
+   else
+      Has_Failed = TRUE
+      Failure_Code = Failure_Code - 4
+   endif
+
+   {SetMA} = Three_Right -> R10.Many_Above
+
+   if countof{SetMA} = 0 then
+      delete Two_Above
+      delete Three_Above
+      delete Three_Right
+   else
+      Has_Failed = TRUE
+      Failure_Code = Failure_Code - 8
+   endif
+
+   {SetMRA}  = One_Right -> R8.Many_Right_Assoc
+
+   if countof{SetMRA} = 0 then
+      delete One_Right
+      delete One_MRA
+      delete One_MFR
+   else
+      Has_Failed = TRUE
+      Failure_Code = Failure_Code - 16
+   endif
+
+   {SetMRA} = Two_MFR -> R8.Many_Right_Assoc
+   if countof {SetMRA} = 0 then
+      delete Two_MRA
+      delete Two_MFR
+   else
+      Has_Failed = TRUE
+      Failure_Code = Failure_Code - 32
+   endif
+
+   {SetMA} = Fourth_Right -> R10.Many_Above
+   if countof {SetMA} = 0 then
+      delete Fourth_Right
+      delete Fourth_Above
+   else
+      Has_Failed = TRUE
+      Failure_Code = -64
+   endif
+   
+   # Delete remaining unlinked instances
+   delete Two_Right
+
+   if not Has_Failed then
+
+      {SetFL}  = find-all Far_Left
+      {SetM}   = find-all Middle
+      {SetMR}  = find-all Many_Right
+      {SetMA}  = find-all Many_Above
+      {SetMRA} = find-all Many_Right_Assoc
+      {SetMFR} = find-all Many_Far_Right
+
+      CountFL = countof{SetFL}
+      CountM  = countof{SetM}
+      CountMR = countof{SetMR}
+      CountMA = countof{SetMA}
+      CountMRA = countof{SetMRA}
+      CountMFR = countof{SetMFR}
+
+      if CountFL = 0 then
+
+         if CountM = 0 then
+
+            if CountMR = 0 then
+
+               if CountMA = 0 then
+
+                  if CountMRA = 0 then
+
+                     if CountMFR != 0 then
+                        [] = RPT3:Test_Failed ["Delete all objects and relationships", Test, -10]      
+                     else
+                        [] = RPT2:Test_Passed ["Delete all objects and relationships", Test, 0]
+                     endif
+
+                  else
+                     [] = RPT3:Test_Failed ["Delete all objects and relationships", Test, -20]      
+                  endif
+
+               else
+                  [] = RPT3:Test_Failed ["Delete all objects and relationships", Test, -30]      
+               endif
+
+            else
+               [] = RPT3:Test_Failed ["Delete all objects and relationships", Test, -40]      
+            endif
+
+         else
+            [] = RPT3:Test_Failed ["Delete all objects and relationships", Test, -50]      
+         endif
+
+      else
+         [] = RPT3:Test_Failed ["Delete all objects and relationships", Test, -60]      
+      endif
+
+   else
+      [] = RPT3:Test_Failed ["Delete all objects and relationships", Test, Failure_Code]      
+   endif
+
+# End Test 21

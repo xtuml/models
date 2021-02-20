@@ -1,0 +1,166 @@
+define scenario  Relationships_Scenario6
+input
+output
+
+#$DESCRIPTION
+Test Relationships For Left Many
+#$END_DESCRIPTION
+
+#-------------------------------------------------------------------#
+#
+# Perform tests via scenario for the Left_Many relationships
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create the instances
+#-------------------------------------------------------------------#
+
+   # Create Left_Many Instances
+   newLeftMany = create Left_Many with idLM    = 1 &\  
+                                       ResultA = 0 
+
+   newLeftMany = create Left_Many with idLM    = 2 &\ 
+                                       ResultA = 0 
+
+   newLeftMany = create Left_Many with idLM    = 3 &\
+                                       ResultA = 0
+
+   newLeftMany = create Left_Many with idLM    = 10 &\  
+                                       ResultA = 0 
+
+   newLeftMany = create Left_Many with idLM    = 11 &\ 
+                                       ResultA = 0 
+
+   newLeftMany = create Left_Many with idLM    = 12 &\
+                                       ResultA = 0
+
+   # Create Right_Many Instances
+   newRightMany = create Right_Many with idRM = 1
+   newRightMany = create Right_Many with idRM = 2
+   newRightMany = create Right_Many with idRM = 3
+   newRightMany = create Right_Many with idRM = 10
+   newRightMany = create Right_Many with idRM = 11
+   newRightMany = create Right_Many with idRM = 12
+
+   # Create Associative Instances
+   newLMRM = create LMRM_Assoc with idLMRM = 2
+   newLMRM = create LMRM_Assoc with idLMRM = 3
+   newLMRM = create LMRM_Assoc with idLMRM = 4
+   newLMRM = create LMRM_Assoc with idLMRM = 5
+   newLMRM = create LMRM_Assoc with idLMRM = 8
+   newLMRM = create LMRM_Assoc with idLMRM = 9
+   newLMRM = create LMRM_Assoc with idLMRM = 10
+   newLMRM = create LMRM_Assoc with idLMRM = 11
+   newLMRM = create LMRM_Assoc with idLMRM = 12
+
+
+   # Create Bottom_Many Instance
+   newBottomMany = create Bottom_Many with idBM = 1
+   newBottomMany = create Bottom_Many with idBM = 3
+   newBottomMany = create Bottom_Many with idBM = 4
+   newBottomMany = create Bottom_Many with idBM = 5
+   newBottomMany = create Bottom_Many with idBM = 10
+
+#-------------------------------------------------------------------#
+# Test that the instances have been correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objLM", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetLM}   = find-all Left_Many
+   {SetRM}   = find-all Right_Many
+   {SetLMRM} = find-all LMRM_Assoc
+   {SetBM}   = find-all Bottom_Many
+
+   if countof {SetLM} = 6 then
+
+      if countof {SetRM} = 6 then
+
+         if countof {SetLMRM} = 9 then
+
+            if countof {SetBM} != 5 then
+               Has_Failed   = TRUE
+               Failure_Code = -10
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -40
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objLM", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLM", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Create the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objLM1:Create_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+
+   Count = 1
+
+   loop
+
+      # Initiate the test
+      [] = objLM2:Left_Many_Navigation[Count, Test]
+  
+      Test  = Test  + 1 
+      Count = Count + 1
+      breakif Count = 11
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Delete the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objLM3:Delete_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test
+enddefine

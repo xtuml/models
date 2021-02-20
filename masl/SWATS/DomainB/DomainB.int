@@ -1,0 +1,113 @@
+//! For use in multiple domain builds.
+domain DomainB is
+  public type Test_Enum_Type is enum (Sly,
+                                      Sandy,
+                                      Wes);
+
+  //! This synchronous service is invoked by a synchronous service in DomainA.
+  public service Sync1B (inputA  : in  integer,
+                         inputB  : in  integer,
+                         Test    : in  integer,
+                         outputA : out integer,
+                         outputB : out integer);
+
+  //! This synchronous service is invoked by an event being sent to a terminator in DomainA, thus an 'Event invokes a Sync service in another domain'.
+  public service Sync2B (inputA  : in  integer,
+                         inputB  : in  integer,
+                         Test    : in  integer,
+                         outputA : out integer,
+                         outputB : out integer);
+
+  //! This synchronous service is invoked by an event from DomainA
+  public service Sync3B (inputA  : in  integer,
+                         inputB  : in  integer,
+                         Test    : in  integer,
+                         outputA : out integer,
+                         outputB : out integer);
+
+  public service Perform_DomainA_Navigations ();
+
+  public service Create_Report_Data ();
+
+  public service Delete_Report_Data ();
+
+  public service Check_Enum (The_Input_Value  : in  Test_Enum_Type,
+                             The_Return_Value : out integer);
+
+  public service Service_Params (Input_Int      : in  integer,
+                                 Input_Real     : in  real,
+                                 Input_Text     : in  string,
+                                 Input_Bool     : in  boolean,
+                                 The_Return_Val : out integer);
+
+  terminator TerminatorB is
+  end terminator;
+  pragma key_letter ("termB");
+
+
+  terminator Report is
+    public service Start_Test (Test_Number     : in  integer,
+                               Requid          : in  string,
+                               Invoking_Domain : in  string,
+                               Invoking_Object : in  string,
+                               Purpose         : in  string);
+    pragma terminator_operation_number(1);
+
+    public service Test_Passed (Test_Object_Domain : in  string,
+                                Test_Number        : in  integer,
+                                Test_Value         : in  integer);
+    pragma terminator_operation_number(2);
+
+    public service Test_Failed (Failed_Domain_Object : in  string,
+                                Failed_Test_Number   : in  integer,
+                                Failed_Test_Value    : in  integer);
+    pragma terminator_operation_number(3);
+
+    public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+    pragma terminator_operation_number(4);
+
+    public service Test_Text (Test_Number : in  integer,
+                              Free_Text   : in  string);
+    pragma terminator_operation_number(5);
+
+    public service Domain_Test_Start (This_Domain_Name : in  string);
+    pragma terminator_operation_number(6);
+
+    public service Domain_Test_Finished (This_Domain_Name : in  string);
+    pragma terminator_operation_number(7);
+
+    public service Specify_Requid (Requid_Test_Number : in  integer,
+                                   The_Requid_Itself  : in  string);
+    pragma terminator_operation_number(8);
+
+  end terminator;
+  pragma key_letter ("RPT");
+
+
+  //! Navigate relationships in domainA
+  terminator Navigate is
+    public service Navigate_One_to_One (Test : in  integer);
+    pragma terminator_operation_number(1);
+
+    public service Navigate_One_to_Many (Test : in  integer);
+    pragma terminator_operation_number(2);
+
+    public service Navigate_Many_to_Many (Test : in  integer);
+    pragma terminator_operation_number(3);
+
+    public service Misc_Calls (Test : in  integer);
+    pragma terminator_operation_number(4);
+
+    public service Enum_Test (Test       : in  integer,
+                              Enum_Input : in  Test_Enum_Type);
+    pragma terminator_operation_number(5);
+
+  end terminator;
+  pragma key_letter ("NAV");
+
+
+end domain;
+pragma number (5);
+pragma name ("DomainB");
+pragma kl ("DomainB");
+pragma version (12);

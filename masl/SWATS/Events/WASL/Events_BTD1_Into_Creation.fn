@@ -1,0 +1,26 @@
+define function  BTD1:Into_Creation
+input \
+	Test:Base_Integer_Type ,\
+	Test_Number:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+Cause transition into creation state, for subsequent deletion
+#$END_DESCRIPTION
+
+
+
+
+#Create an instance
+Identity = 100 + Test
+newBTD = create BornToDie with idBTD = Identity & \
+                               ResultA = 0 & \
+                               Current_State = 'Creation_state'
+
+#Generate this instance
+generate BTD5:DeleteInstance(Test, Test_Number) to newBTD
+
+#------------------------------------------------------------------------#
+
+
+enddefine

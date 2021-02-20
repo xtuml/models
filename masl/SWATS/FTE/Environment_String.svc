@@ -1,0 +1,14 @@
+//! This domain based synch service shall return a text string indicating the 
+//! environment under which this system is executing.
+public service FTE::Environment_String (This_Environment : out string) is
+My_Env = find-one The_Environment
+
+if My_Env != UNDEFINED then
+
+   This_Environment = My_Env.Where_Are_We
+
+else
+
+   This_Environment = "Null Environment"
+
+endif

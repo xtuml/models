@@ -1,0 +1,67 @@
+//! Tests Relationship manipulations.
+domain Relationships is
+  public service Create_Report_Data ();
+
+  public service Delete_Report_Data ();
+
+  public service Memory_Leak_Test_One_To_Many ();
+
+  public service Memory_Leak_Test_Many_To_Many ();
+
+  //! Returns a message if the instance state is not as expected
+  public service Get_Instance_State (Input_Instance_Value : in  integer,
+                                     Input_Expected_Value : in  integer,
+                                     Free_Text            : in  string);
+
+  terminator Report is
+    public service Start_Test (Test_Number     : in  integer,
+                               Requid          : in  string,
+                               Invoking_Domain : in  string,
+                               Invoking_Object : in  string,
+                               Purpose         : in  string);
+    pragma terminator_operation_number(1);
+
+    public service Test_Passed (Test_Object_Domain : in  string,
+                                Test_Number        : in  integer,
+                                Test_Value         : in  integer);
+    pragma terminator_operation_number(2);
+
+    public service Test_Failed (Failed_Domain_Object : in  string,
+                                Failed_Test_Number   : in  integer,
+                                Failed_Test_Value    : in  integer);
+    pragma terminator_operation_number(3);
+
+    public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+    pragma terminator_operation_number(4);
+
+    public service Test_Text (Test_Number : in  integer,
+                              Free_Text   : in  string);
+    pragma terminator_operation_number(5);
+
+    public service Domain_Test_Start (This_Domain_Name : in  string);
+    pragma terminator_operation_number(6);
+
+    public service Domain_Test_Finished (This_Domain_Name : in  string);
+    pragma terminator_operation_number(7);
+
+    public service Specify_Requid (Requid_Test_Number : in  integer,
+                                   The_Requid_Itself  : in  string);
+    pragma terminator_operation_number(8);
+
+  end terminator;
+  pragma key_letter ("RPT");
+
+
+  terminator Where_Are_We is
+    public service What_Env (Env_Text : out string);
+    pragma terminator_operation_number(1);
+
+  end terminator;
+  pragma key_letter ("WAW");
+
+
+end domain;
+pragma number (10);
+pragma name ("Relationships");
+pragma kl ("Relationships");
+pragma version (19);

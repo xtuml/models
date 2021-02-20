@@ -1,0 +1,39 @@
+public service Relationships::Memory_Leak_Test_Many_To_Many () is
+{Set_Of_Far_Right} = find-all Many_Far_Right
+
+for Individual_Far_Right in {Set_Of_Far_Right} do
+
+   {Set_Of_Right} = Individual_Far_Right ->R8.Many_Right
+
+   for Individual_Right in {Set_Of_Right} do
+
+      # Go back over the link to the far right side
+      {Other_Side} = Individual_Right -> R8.Many_Far_Right
+
+      temp_value = countof {Other_Side}
+
+      # Update the right data with how many of the far right it is linked to
+      Individual_Right.Right_Data = temp_value
+
+   endfor
+
+   # Update the far right data with how many right it is linked to
+   temp_value = countof {Set_Of_Right}
+   Individual_Far_Right.MFR_Data = temp_value
+
+
+   # Navigate to assocative object for this far right object
+
+   {Set_Of_Assoc} = Individual_Far_Right -> R8.Many_Right_Assoc
+
+   for The_Assoc in {Set_Of_Assoc} do
+
+      # Navigate from the associated object through to the far left.
+      A_Left = The_Assoc -> R8.Many_Right -> R7.Middle -> R6.Far_Left
+      temp_value = A_Left.Left_Data
+      temp_value = temp_value + 1
+      A_Left.Left_Data = temp_value
+
+   endfor
+
+endfor

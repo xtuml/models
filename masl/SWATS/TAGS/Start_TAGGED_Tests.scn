@@ -1,0 +1,26 @@
+//! Start_TAGGED_Tests
+private service TAGS::Start_TAGGED_Tests () is
+[] = TAGS2::Create_Report_Data[]
+
+# Find the test details. If they already exist, it's because an external
+# created them, and this must be an I-SIM environment.
+
+my_test = find-one Test_Data
+
+if my_test = UNDEFINED then
+
+   # Stick a 'C' insert here to attempt to set an attribute.
+   Test_Details = create Test_Data with Number = 0 & Environment = 'WACA' & Current_State = 'Idle'
+
+   # Use this function to set the test number to 1 using a 'C' insert
+   # if it returns set, then this must be I-SIM else WACA.
+   [Test_Details] = TAGS6::Set_Environment[Test_Details]
+
+   if Test_Details.Number = 1 then
+      Test_Details.Environment = 'ISIM'
+   else
+      Test_Details.Number      = 1
+      Test_Details.Environment = 'WACA'
+   endif
+ 
+endif

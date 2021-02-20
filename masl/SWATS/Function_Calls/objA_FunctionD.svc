@@ -1,0 +1,16 @@
+public service Function_Calls::Object_A.FunctionD (InputA  : in  integer,
+                                                   InputB  : in  integer,
+                                                   InputC  : in  integer,
+                                                   OutputA : out integer,
+                                                   OutputB : out integer,
+                                                   OutputC : out integer) is
+   an_instance_A = find-one Object_A where ReferenceA = 4
+   if ((InputA != 1)|(InputB != 2)|(InputC != 3)) then
+      generate objA1:Fault() to an_instance_A
+   else
+      temp = an_instance_A.ResultA + 10
+      an_instance_A.ResultA = temp
+   endif
+   OutputA = 1
+   OutputB = 2
+   OutputC = 3

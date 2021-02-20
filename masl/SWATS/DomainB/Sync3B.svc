@@ -1,0 +1,37 @@
+//! This synchronous service is invoked by an event from DomainA
+public service DomainB::Sync3B (inputA  : in  integer,
+                                inputB  : in  integer,
+                                Test    : in  integer,
+                                outputA : out integer,
+                                outputB : out integer) is
+my_test = find-one Test_Data
+
+local_test = my_test.This_Test_Number
+
+[] = RPT1:Start_Test[local_test, "1241-0000-01-1110", "DomainB", "DSS 3", "sync service sync3B called "]
+
+if inputA = 3 & inputB = 4 then
+
+   #Return correct values and indicates that correct values where received
+   #by affecting the attribute 'ResultB'
+   an_instanceB = find-one Object_B where idB = 5
+   an_instanceB.ResultB = 50
+   outputA = 5
+   outputB = 6
+
+   [] = RPT2:Test_Passed["DSS 3", local_test, an_instanceB.ResultB]
+
+else
+
+   #Return incorrect values, becaus ethe input values where incorrect
+   outputA = 1
+   outputB = 2
+
+   [] = RPT3:Test_Failed["DSS 3", local_test, -1]
+
+endif
+
+local_test = local_test + 1
+
+my_test.This_Test_Number = local_test
+

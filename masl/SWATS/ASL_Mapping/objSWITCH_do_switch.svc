@@ -1,0 +1,84 @@
+public service ASL_Mapping::Object_SWITCH.do_switch (Test_Start : in  integer,
+                                                     Final_Test : out integer) is
+#------------------------------------------------------------------------#
+#
+# SWITCH Statement
+#
+# The ASL <switch> statement shall be supported
+# 1103-0000-01-0411
+#
+#------------------------------------------------------------------------#
+
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+# Test 1 - SWITCH statement without the default option
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "ASL Mapping", "objSWITCH", "SWITCH without default option"]
+   [] = RPT4:Test_Unsupported[Test]
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - SWITCH statement with the DEFAULT option
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0411", "ASL Mapping", "objSWITCH", "SWITCH with default option"]
+
+   {all_instance_of_SWITCH} = find-all Object_SWITCH
+   countA = 0
+   countB = 0
+   countC = 0
+   countD = 0
+   countE = 0
+
+   for each_instance in {all_instance_of_SWITCH} do
+
+      switch each_instance.IntegerAttr
+
+         case 1
+            temp = each_instance.ResultA + 10
+            each_instance.ResultA = temp
+            countA = countA + 1
+ 
+         case 2
+            temp = each_instance.ResultA + 11
+            each_instance.ResultA = temp
+            countB = countB + 1
+
+         case 3
+            temp = each_instance.ResultA + 12
+            each_instance.ResultA = temp
+            countC = countC + 1
+
+         default
+            temp = each_instance.ResultA + 9
+            each_instance.ResultA = temp
+            countD = countD + 1
+
+      endswitch
+
+      countE = countE + 1
+
+   endfor
+
+   # Verify count values
+   if (countA != 1)|(countB != 2)|(countC != 3)|(countD != 4)|\
+      (countE != 10) then
+
+      [] = RPT3:Test_Failed["objSWITCH", Test, -10]
+   else
+      [] = RPT2:Test_Passed["objSWITCH", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+
+Final_Test = Test
+

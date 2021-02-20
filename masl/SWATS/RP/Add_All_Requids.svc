@@ -1,0 +1,25 @@
+public service RP::Add_All_Requids (New_Requid : in  string) is
+# The idea here is that a new requid shall be for the full test suite, however
+# many domains make it up.
+
+# When a start test for a domain is received, it shall be compared against the 
+# list of requirements for the full test suite.
+
+# In this way all specified requirements for a test suite can be 'checked off'
+# against the known list.
+
+# This service allows the specification of a requirement for the test suite.
+
+this_suite = find-one Test_Suite
+
+if this_suite != UNDEFINED then
+
+   new_requirement = create unique All_Requirements_In_Test_Suite with REQUID = New_Requid
+
+   link this_suite R11 new_requirement
+
+   $INLINE
+   fprintf(stderr,"Adding the following requirement   %s\n", New_Requid);
+   $ENDINLINE
+
+endif

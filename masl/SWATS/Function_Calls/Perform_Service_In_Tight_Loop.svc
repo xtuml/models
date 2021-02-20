@@ -1,0 +1,20 @@
+public service Function_Calls::Perform_Service_In_Tight_Loop (A_Tight_Input_Parameter  : in  instance of A_Tight_Object,
+                                                              This_Test_Number         : in  integer,
+                                                              Testing_For_What         : in  string,
+                                                              A_Tight_Return_Parameter : out integer) is
+# ---------------------------------------------------------------------------
+# Start the test here, produce the pass/fail back in the scenario.
+# ---------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1241-0000-01-0805", "Function_Calls", "Perform Services in tight loop", Testing_For_What]
+   [] = RPT8:Specify_Requid[This_Test_Number, "1241-0000-01-1215"]
+   [] = RPT8:Specify_Requid[This_Test_Number, "1103-0000-01-1011"]
+
+   if A_Tight_Input_Parameter = UNDEFINED then
+      A_Tight_Return_Parameter = -1
+   else
+      A_Tight_Return_Parameter = A_Tight_Input_Parameter.Start_Value + A_Tight_Input_Parameter.Increment_Value
+   endif
+
+
+   

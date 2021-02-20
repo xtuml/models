@@ -1,0 +1,1030 @@
+define scenario  Events_Scenario1
+input
+output
+
+#$DESCRIPTION
+Events Scenario
+#$END_DESCRIPTION
+
+   my_test = find-one Test_Data
+
+   if my_test = UNDEFINED then
+      # Start in safe mode
+      The_Test_Number = 100
+   else
+      The_Test_Number = my_test.Current_Test_Number
+   endif
+
+   # Increment this count over every test in this scenario
+   Test_Counter = 0
+
+#-------------------------------------------------------------------------
+# Test 1
+#-------------------------------------------------------------------------
+
+   Temp = 1
+
+   # Create an instance of each object
+   SuperTypeD = create Object_D with ReferenceD            = Temp   &\
+                                     ResultA               = 0      &\
+                                     no_of_received_events = 0      &\
+                                     latest_test           = 0      &\
+                                     Current_State         = 'Idle'
+
+   Index_For_Subtype = The_Test_Number + 1
+
+   SubTypeE = create Object_E with ReferenceE     = Temp              &\
+                                   ResultA        = 0                 &\
+                                   Report_Test_No = Index_For_Subtype &\
+                                   Current_State  = 'Idle'
+
+   # Form the relationship
+   link SuperTypeD R5 SubTypeE
+
+   generate objD2:StartA (Temp, The_Test_Number) to SuperTypeD
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 1
+
+#-------------------------------------------------------------------------
+# Test 2 - Generate to sub type only. Prove that event is NOT delivered 
+#          upwards to the supertype.
+#-------------------------------------------------------------------------
+
+   Temp = 2
+
+   # 2 test reports from last test, super & sub
+   The_Test_Number = The_Test_Number + 2
+
+   # Create an instance of each object
+   Super2D = create Object_D with ReferenceD            = Temp   &\
+                                  ResultA               = 0      &\
+                                  no_of_received_events = 1      &\
+                                  latest_test           = 0      &\
+                                  Current_State         = 'Idle'
+
+   Sub2E = create Object_E with ReferenceE     = Temp            &\
+                                ResultA        = 0               &\
+                                Report_Test_No = The_Test_Number &\
+                                Current_State  = 'Idle'
+
+   link Super2D R5 Sub2E
+
+   generate objE6:StartB (Temp, The_Test_Number) to Sub2E
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 2
+
+#-------------------------------------------------------------------------
+# Test 3 - Generate to super type only. Prove that event is NOT delivered 
+#          downwards to the subtype as the relationship is not formalised.
+#          This test is incorrect. Every supertype must have a subtype 
+#          linked.
+#          Decision taken 15 Dec 1999 by John Mann, Ashley Field & David 
+#          Beatty.
+#
+#          NB. ASL actually allows a solitary supertype. 
+#          This seems to be against Schlaer-Mellor. KC are clueless.
+#-------------------------------------------------------------------------
+
+   Temp = 3
+
+   The_Test_Number = The_Test_Number + 1
+
+   # Create an instance of each object
+   SuperTypeD = create Object_D with ReferenceD            = Temp &\
+                                     ResultA               = 0    &\
+                                     no_of_received_events = 0    &\
+                                     latest_test           = 0    &\
+                                     Current_State = 'Idle'
+
+   Index_For_Subtype = The_Test_Number + 1
+
+   SubTypeE = create Object_E with ReferenceE     = Temp              &\
+                                   ResultA        = 0                 &\
+                                   Report_Test_No = Index_For_Subtype &\
+                                   Current_State  = 'Idle'
+
+   link SuperTypeD R5 SubTypeE
+
+   generate objD2:StartA (Temp, The_Test_Number) to SuperTypeD
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 3
+
+#-------------------------------------------------------------------------
+# Test 4 - Generate to super type only. Prove that event is NOT delivered 
+#          downwards to the subtype as sub type may not receive it.
+#-------------------------------------------------------------------------
+
+   Temp = 4
+
+   # Two events handled last time
+   The_Test_Number = The_Test_Number + 2
+
+   # Create an instance of each object
+   SuperTypeD = create Object_D with ReferenceD            = Temp   &\
+                                     ResultA               = 0      &\
+                                     no_of_received_events = 1      &\
+                                     latest_test           = 0      &\
+                                     Current_State         = 'Idle'
+
+   SubTypeE = create Object_E with ReferenceE     = Temp            &\
+                                   ResultA        = 0               &\
+                                   Report_Test_No = The_Test_Number &\
+                                   Current_State  = 'Idle'
+
+   link SuperTypeD R5 SubTypeE
+
+   generate objD3:StartC (Temp, The_Test_Number) to SuperTypeD
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 4
+
+#-------------------------------------------------------------------------
+# Test 5 - Generate to super and objF (other) subtype
+#-------------------------------------------------------------------------
+
+   Temp = 5
+
+   The_Test_Number = The_Test_Number + 1
+
+   # Create an instance of each object
+   SuperTypeD = create Object_D with ReferenceD            = Temp   &\
+                                     ResultA               = 0      &\
+                                     no_of_received_events = 0      &\
+                                     latest_test           = 0      &\
+                                     Current_State         = 'Idle'
+
+   Index_For_Subtype = The_Test_Number + 1
+
+   SubTypeF = create Object_F with ReferenceF     = Temp              &\
+                                   ResultA        = 0                 &\
+                                   Report_Test_No = Index_For_Subtype &\
+                                   Current_State  = 'Idle'
+
+   # Form the relationship
+   link SuperTypeD R5 SubTypeF
+
+   generate objD2:StartA (Temp, The_Test_Number) to SuperTypeD
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 5
+
+#-------------------------------------------------------------------------
+# Test 6 - Generate to sub type only. Prove that event is NOT delivered
+#          upwards to the supertype.
+#-------------------------------------------------------------------------
+
+   Temp = 6
+
+   The_Test_Number = The_Test_Number + 2
+
+   # Create an instance of each object
+   Super2D = create Object_D with ReferenceD            = Temp   &\
+                                  ResultA               = 0      &\
+                                  no_of_received_events = 1      &\
+                                  latest_test           = 0      &\
+                                  Current_State         = 'Idle'
+
+   Sub2F = create Object_F with ReferenceF     = Temp            &\
+                                ResultA        = 0               &\
+                                Report_Test_No = The_Test_Number &\
+                                Current_State  = 'Idle'
+
+   link Super2D R5 Sub2F
+
+   generate objF2:StartB (Temp, The_Test_Number) to Sub2F
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 6
+
+#-------------------------------------------------------------------------
+# Test 7 - Generate to super type only. Prove that event is NOT delivered 
+#          downwards to the subtype as the relationship is not formalised.
+#
+#          This test is incorrect. Every supertype must have a subtype 
+#          linked. Decision taken 15 Dec 1999 by John Mann, Ashley Field 
+#          & David Beatty.
+#
+# NB. ASL actually allows a solitary supertype. 
+# This seems to be against Shlaer-Mellor. KC are clueless.
+#-------------------------------------------------------------------------
+
+   Temp = 7
+
+   The_Test_Number = The_Test_Number + 1
+
+   # Create an instance of each object
+   SuperTypeD = create Object_D with ReferenceD            = Temp   &\
+                                     ResultA               = 0      &\
+                                     no_of_received_events = 0      &\
+                                     latest_test           = 0      &\
+                                     Current_State         = 'Idle'
+
+   Index_For_Subtype = The_Test_Number + 1
+
+   SubTypeF = create Object_F with ReferenceF     = Temp              &\
+                                   ResultA        = 0                 &\
+                                   Report_Test_No = Index_For_Subtype &\
+                                   Current_State  = 'Idle'
+
+   # Formalise the relationship. 
+   link SuperTypeD R5 SubTypeF
+
+   generate objD2:StartA (Temp, The_Test_Number) to SuperTypeD
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 7
+
+#-------------------------------------------------------------------------
+# Test 8 - Generate to super type only. Prove that event is NOT delivered
+#          downwards to the subtype as sub type may not receive it.
+#-------------------------------------------------------------------------
+ 
+   Temp = 8
+
+   The_Test_Number = The_Test_Number + 2
+
+   # Create an instance of each object
+   SuperTypeD = create Object_D with ReferenceD            = Temp &\
+                                     ResultA               = 0    &\
+                                     no_of_received_events = 1    &\
+                                     latest_test           = 0    &\
+                                     Current_State         = 'Idle'
+
+   SubTypeF = create Object_F with ReferenceF     = Temp            &\
+                                   ResultA        = 0               &\
+                                   Report_Test_No = The_Test_Number &\
+                                   Current_State  = 'Idle'
+
+   link SuperTypeD R5 SubTypeF
+
+   generate objD3:StartC (Temp, The_Test_Number) to SuperTypeD
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 8
+
+#-------------------------------------------------------------------------
+# Test 9 - Actually it's TEST 14
+#
+#          This shall prove that an event generated to a supertype 
+#          containing a state machine is dealt with in that supertype, and 
+#          the non-state machine containing subtype does not do anything 
+#          with the event.
+#-------------------------------------------------------------------------
+
+   Temp = 9
+
+   The_Test_Number = The_Test_Number + 1
+
+   # Create an instance of each object
+   SuperTypeA = create Object_A with ReferenceA    = Temp   &\
+                                     ResultA       = 0      &\
+                                     latest_test   = 0      &\
+                                     Current_State = 'Idle'
+
+   # DB Referential attribute removed. 12/7/01 
+   SubTypeB = create Object_B with ResultB = 0
+
+   # Formalise relationship
+   link SuperTypeA R1 SubTypeB
+
+   # Start the test
+   generate objA1:StartA(Temp, The_Test_Number) to SuperTypeA
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 9
+
+#-------------------------------------------------------------------------
+# Test 10 - Active SUPER and passive SUB is UNSUPPORTED
+#
+#           Object_A test from external 9 test number 5.
+#
+#           This shall prove that an event generated to a supertype 
+#           containing a state machine is dealt with in that supertype, 
+#           and the non-state machine containing subtype does not do 
+#           anything with the event.
+#-------------------------------------------------------------------------
+
+   Temp = 10
+
+   The_Test_Number = The_Test_Number + 1
+
+   # Create an instance of each object
+   SuperTypeA = create Object_A with ReferenceA    = Temp   &\
+                                     ResultA       = 0      &\
+                                     latest_test   = 0      &\
+                                     Current_State = 'Idle'
+
+   # DB Referential attribute removed. 12/7/01 
+   SubTypeC= create Object_C with ResultC = 0
+
+   # Formalise relationship
+   link SuperTypeA R1 SubTypeC
+
+   # Start the test
+   generate objA1:StartA(Temp, The_Test_Number) to SuperTypeA
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 10
+
+#-------------------------------------------------------------------------
+# Test 11 - This test shall prove that an event generated to a supertype 
+#           that has a state machine consisting only of the 'Non-Existant'
+#           state polymorphically delivers the event down to the subtype 
+#           to be dealt with.
+#-------------------------------------------------------------------------
+
+   Temp = 11
+
+   The_Test_Number = The_Test_Number + 1
+
+   SuperTypeT = create Object_T with Reference_T = Temp &\
+                                     Result_T    = 0
+
+
+   SubTypeU = create Object_U with Result_U      = 0               &\
+                                   latest_test   = The_Test_Number &\
+                                   Reference_T   = Temp            &\
+                                   Current_State = 'Idle'
+
+   link SuperTypeT R8 SubTypeU
+
+   generate objT1:StartT(The_Test_Number) to SuperTypeT
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 11
+
+#-------------------------------------------------------------------------
+# Test 12 - Prove that an event generated to the subtype as dealt with 
+#           exactly the same as if it were generated to the supertype that 
+#           contains a state machine with only the 'Non-Existant' state.
+#-------------------------------------------------------------------------
+
+   Temp = 12
+
+   The_Test_Number = The_Test_Number + 1
+
+   SuperTypeT = create Object_T with Reference_T = Temp &\
+                                     Result_T    = 0
+
+
+   SubTypeU = create Object_U with Result_U      = 0               &\
+                                   Reference_T   = Temp            &\
+                                   latest_test   = The_Test_Number &\
+                                   Current_State = 'Idle'
+
+   link SuperTypeT R8 SubTypeU
+
+   generate objU1:StartU(The_Test_Number) to SubTypeU
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 12
+
+#-------------------------------------------------------------------------
+# Test 13 - Prove that events are polymorphically delivered from super to 
+#           sub to sub types.
+#-------------------------------------------------------------------------
+
+   # Chained event delivery is currently unsupported by WACA at version 2.0.1
+
+#   The_Test_Number = The_Test_Number + 1
+
+   # Create an instance of each object
+   SuperTypeJ = create Object_J with ReferenceJ    = The_Test_Number &\
+                                     ResultJ       = 0               &\
+                                     action_count  = 2               &\
+                                     latest_test   = The_Test_Number &\
+                                     Current_State = 'Idle'
+
+   Temp = The_Test_Number + 1
+   SubSuperTypeK = create Object_K with ReferenceK    = Temp &\
+                                        ResultK       = 0    &\
+                                        Current_State = 'Idle'
+
+   #SubSubTypeL = create Object_L with ReferenceJ    = Temp &\
+   #                                   ReferenceL    = Temp &\
+   #                                   ResultL       = 0    &\  
+   #                                   Current_State = 'Idle'
+
+  
+   # Formalise relationship
+   link SuperTypeJ R7 SubSuperTypeK
+
+   # Chained super / sub / sub relationships are unsupported
+   # link subsupertypeK R8 subsubtypeL
+
+   #Start the test
+   #generate objJ1:StartA(The_Test_Number) to supertypeJ
+
+   # The finish event is generated here, in place of the relevent state in objJ
+   # as events that are polymorphically delivered  must complete before the 
+   # super type can call itself (ie. generate finished to this)
+   # Although ISIM actually allows this, it is incorrect.
+
+   #generate objJ2:Finished(The_Test_Number) to supertypeJ
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 13
+
+#-------------------------------------------------------------------------
+# Test 14 - Reflexive Navigations, REFLECT
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   Test = 1 
+   Temp = 0
+
+   # Create an instance of each object
+   Reflect141 = create Reflexive with ReferenceREFLECT = 0      &\
+                                      ResultA          = 0      &\
+                                      Current_State    = 'Idle'
+
+   # Start the test
+   generate REFLECT3:StartA(Test, Temp, The_Test_Number) to Reflect141
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 14
+
+#-------------------------------------------------------------------------
+# Test 14b - Reflexive Navigations, REFLECT
+#-------------------------------------------------------------------------
+
+#   The_Test_Number = The_Test_Number + 1
+
+#   Test = 2 
+#   Temp = 0
+
+   # Create an instance of each object
+#   newReflect = create Reflexive with ReferenceREFLECT = 0      &\
+#                                      ResultA          = 0      &\
+#                                      Current_State    = 'Idle'
+
+   # Start the test
+#   generate REFLECT3:StartA(Test, Temp, The_Test_Number) to newReflect
+
+#   Test_Counter = Test_Counter + 1
+
+# End Test 14
+
+#-------------------------------------------------------------------------
+# Test 15 - Reflexive Navigations, REFLECT
+#-------------------------------------------------------------------------
+
+#   The_Test_Number = The_Test_Number + 1
+
+#   Test = 3 
+#   Temp = 0
+
+   # Create further instances of the same object for sending events too.
+#   Reflect151 = create Reflexive with ReferenceREFLECT = 1      &\
+#                                      ResultA          = 0      &\
+#                                      Current_State    = 'Idle'
+
+#   Reflect152 = create Reflexive with ReferenceREFLECT = 2      &\
+#                                      ResultA          = 0      &\
+#                                      Current_State    = 'Idle'
+
+#   Reflect153 = create Reflexive with ReferenceREFLECT = 3      &\
+#                                      ResultA          = 0      &\
+#                                      Current_State    = 'Idle'
+
+   # Create an instance of each object
+#   Reflect154 = create Reflexive with ReferenceREFLECT = 4      &\
+#                                      ResultA          = 0      &\
+#                                      Current_State    = 'Idle'
+
+   # Start the test
+#   generate REFLECT3:StartA(Test, Temp, The_Test_Number) to Reflect151
+
+#   Test_Counter = Test_Counter + 1
+
+# End Test 15
+
+#-------------------------------------------------------------------------
+# Test 16 - objCREATE
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   Test = 1
+   Temp = 1
+
+   [] = RPT1:Start_Test[The_Test_Number, "Null Requid", "Events", "Scenario", "Creation event"]
+
+   # Send a creation event - Unsupported by SW architecture
+   # generate objCREATE1:StartA(temp)
+
+   [] = RPT4:Test_Unsupported[The_Test_Number]
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 16
+
+#-------------------------------------------------------------------------
+# Test 17 - This test shall verify that the object created in the previous 
+#           test actually exists.
+#
+#           Since Creation events are unsupported by the architecture, 
+#           this test is not required.
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   Temp = 1
+
+   # newVERIFY = create Object_Verify_Creation_Terminal with ReferenceCETL = Temp   &\
+   #                                                         ResultA       = 0      &\
+   #                                                         Current_State = 'Idle'
+
+   [] = RPT1:Start_Test[The_Test_Number, "Null Requid", "Events", "Scenario", "Verify object creation"]
+
+   # generate objVERCETL2:Verify(Temp) to newVERIFY
+
+   [] = RPT4:Test_Unsupported[The_Test_Number]
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 17
+
+#-------------------------------------------------------------------------
+# Test 18 - Create an object for deletion, then allow it to delete itself.
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   Temp = 1
+
+   {tob} = find-all Terminal_Object
+
+   noto = countof{tob}
+
+   if noto = 0 then
+
+      # Create an instance of each object
+      NewTerm = create Terminal_Object with ReferenceTERM = Temp   &\
+                                            ResultA       = 0      &\
+                                            Current_State = 'Idle'
+
+      # Start the test
+      generate objTERMINAL1:StartA(Temp, The_Test_Number) to NewTerm
+
+   endif
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 18
+
+#-------------------------------------------------------------------------
+# Test 19 - Verify that the deletion actually took place.
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   Temp = 2
+
+   newVERIFY = create Object_Verify_Creation_Terminal with ReferenceCETL = 1      &\
+                                                           ResultA       = 0      &\
+                                                           Current_State = 'Idle'
+
+   generate objVERCETL2:Verify(Temp, The_Test_Number) to newVERIFY
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 19
+
+#-------------------------------------------------------------------------
+# Test 20
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   Temp = 2
+
+   # Create an instance of each object
+   NewTerm = create Terminal_Object with ReferenceTERM =  Temp  &\
+                                         ResultA       = 0      &\
+                                         Current_State = 'Idle'
+
+   # Start the test
+   generate objTERMINAL1:StartA(Temp, The_Test_Number) to NewTerm
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 20
+
+#-------------------------------------------------------------------------
+# Test 21
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   Temp = 3
+
+   newVERIFY = create Object_Verify_Creation_Terminal with ReferenceCETL = 2      &\
+                                                           ResultA       = 0      &\
+                                                           Current_State = 'Idle'
+
+   generate objVERCETL2:Verify(Temp, The_Test_Number) to newVERIFY
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 21
+
+#-------------------------------------------------------------------------
+# Test 22
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   Temp = 1
+
+   newEDATA = create Event_Data with ReferenceEDATA = Temp   &\
+                                     ResultA        = 0      &\
+                                     Current_State  = 'Idle'
+
+   generate objEDATA3:EventA(1,2,3,4,5, Temp, The_Test_Number) to newEDATA
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 22
+
+#-------------------------------------------------------------------------
+# Test 23
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+   generate objEDATA4:EventB(1,2,3,4,5, Temp, The_Test_Number) to newEDATA
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 23
+
+#-------------------------------------------------------------------------
+# Test 24
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+   generate objEDATA5:EventC(1,2,3,4,5, Temp, The_Test_Number) to newEDATA
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 24
+
+#-------------------------------------------------------------------------
+# Test 25
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   Test = 2
+   Temp = 2
+
+   newEDATA = create Event_Data with ReferenceEDATA = Temp   &\
+                                     ResultA        = 0      &\
+                                     Current_State  = 'Idle'
+
+
+   generate objEDATA7:EventD(1,2, Temp, The_Test_Number) to newEDATA
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 25
+
+#-------------------------------------------------------------------------
+# Test 26 - Prove that delivery of polymorphic events are possible to 
+#           multiple subtypes.
+#
+#           While we are at it, prove that subtype migration is handled.
+#
+#           The Value_To_Add from each subtype will be added to the super 
+#           type
+#-------------------------------------------------------------------------
+ 
+   The_Test_Number = The_Test_Number + 1
+ 
+   SuperA1 = create SuperA with idA           = The_Test_Number &\
+                                ResultA       = 0               &\
+                                Reference_ID  = 1               &\
+                                Current_State = 'Idle'
+
+   SubA1 = create SubA with Value_To_Add  = 10     &\
+                            Current_State = 'Idle'
+
+   SubB1 = create SubB with Value_To_Add  = 5      &\
+                            Current_State = 'Idle'
+
+   SubC1 = create SubC with Value_To_Add  = 6      &\
+                            Current_State = 'Idle'
+
+   subD1 = create SubD with Value_To_Add  = 20     &\
+                            Current_State = 'Idle'
+
+   subE1 = create SubE with Value_To_Add  = 30     &\
+                            Current_State = 'Idle'
+
+   subF1 = create SubF with Value_To_Add  = 40     &\
+                            Current_State = 'Idle'
+
+
+   link SuperA1 R13 SubB1
+   link SuperA1 R14 SubC1
+
+   # Link in a normal subtype, there will be no monkey business 
+   # with subtype migration for this one.
+   link SuperA1 R6 subE1
+ 
+   # Initiate the test
+   generate SprA5:Creation_Event(The_Test_Number) to SuperA1
+
+   generate SprA2:Verify_Test(The_Test_Number) to SuperA1
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 26
+
+#-------------------------------------------------------------------------
+# Test 27 - Prove that delivery of polymorphic events are possible to 
+#           multiple subtypes.
+#
+#           While we are at it, prove that subtype migration is handled.
+#-------------------------------------------------------------------------
+ 
+   The_Test_Number = The_Test_Number + 1
+
+   SuperA2 = create SuperA with idA            = The_Test_Number &\
+                                 ResultA       = 0               &\
+                                 Reference_ID  = 2               &\
+                                 Current_State = 'Idle'
+
+   SubA2 = create SubA with Value_To_Add = 5       &\
+                            Current_State = 'Idle'
+
+   SubB2 = create SubB with Value_To_Add  = 0      &\
+                            Current_State = 'Idle'
+
+   SubC2 = create SubC with Value_To_Add  = 6      &\
+                            Current_State = 'Idle'
+
+   subD2 = create SubD with Value_To_Add  = 0      &\
+                            Current_State = 'Idle'
+
+   subE2 = create SubE with Value_To_Add  = 0      &\
+                            Current_State = 'Idle'
+
+   subF2 = create SubF with Value_To_Add  = 0      &\
+                            Current_State = 'Idle'
+
+   # Link to one side of each subfamily. These will be unlinked and then
+   # linked to the other side by subtype migration later on.   
+   link SuperA2 R13 SubB2
+   link SuperA2 R14 SubC2
+ 
+   # link in the other side of the subtype.
+   link SuperA2 R6 subF2
+
+   # Initiate the test
+   generate SprA5:Creation_Event(The_Test_Number) to SuperA2
+
+   generate SprA2:Verify_Test(The_Test_Number) to SuperA2
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 27
+
+#-------------------------------------------------------------------------
+# Test 28 - Prove that subtype delivery is possible with instances where 
+#           there are more than just two possible subtypes to choose from
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   Temp = 1
+
+   a_P1 = create Object_P with Reference_P               = 19              &\
+                               Result_P                  = 0               &\
+                               number_of_received_events = 0               &\
+                               latest_test               = The_Test_Number &\
+                               Value_To_Add              = 10              &\
+                               Current_State             = 'Idle'
+ 
+   a_Q = create Object_Q with Value_To_Add  = 1               &\
+                              latest_test   = The_Test_Number &\
+                              Result_Q      = 0               &\
+                              Current_State = 'Idle'
+
+   link a_P1 R4 a_Q
+
+   generate objP1:StartP(The_Test_Number) to a_P1
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 28
+
+#-------------------------------------------------------------------------
+# Test 29
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   Temp = 2
+
+   a_P2 = create Object_P with Reference_P               = 20              &\
+                               Result_P                  = 0               &\
+                               number_of_received_events = 0               &\
+                               latest_test               = The_Test_Number &\
+                               Value_To_Add              = 10              &\
+                               Current_State             = 'Idle'
+
+
+   a_R = create Object_R with Value_To_Add   = 2               &\
+                              latest_test    = The_Test_Number &\
+                               Result_R      = 0               &\
+                               Current_State = 'Idle'
+
+   link a_P2 R4 a_R
+
+   generate objP1:StartP(The_Test_Number) to a_P2
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 29
+
+#-------------------------------------------------------------------------
+# Test 30
+#-------------------------------------------------------------------------
+ 
+   The_Test_Number = The_Test_Number + 1
+
+   Temp = 3
+
+   a_P3 = create Object_P with Reference_P               = 21              &\
+                               Result_P                  = 0               &\
+                               number_of_received_events = 0               &\
+                               latest_test               = The_Test_Number &\
+                               Value_To_Add              = 10              &\
+                               Current_State             = 'Idle'
+
+   a_S = create Object_S with Value_To_Add  = 3               &\
+                              latest_test   = The_Test_Number &\
+                              Result_S      = 0               &\
+                              Current_State = 'Idle'
+ 
+   link a_P3 R4 a_S
+
+   generate objP1:StartP(The_Test_Number) to a_P3
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 30
+
+#-------------------------------------------------------------------------
+# Test 31
+#-------------------------------------------------------------------------
+
+   The_Test_Number = The_Test_Number + 1
+
+   # Increment this value for each new test
+   Test = 1
+
+   Identity = 100 + Test
+
+   NewMCSA = create Multiple_Creation_States with idMCS         = Identity          &\
+                                                  ResultA       = 0                 &\
+                                                  Current_State = 'Creation_stateA'
+
+   generate objMCS3:Creation_Complete (Test) to NewMCSA
+
+
+   Identity = 200 + Test
+   NewMCSB = create Multiple_Creation_States with idMCS         = Identity          &\
+                                                  ResultA       = 0                 &\
+                                                  Current_State = 'Creation_stateB'
+
+   generate objMCS3:Creation_Complete (Test) to NewMCSB
+
+   # Create a new instance to verify the tests
+   newMCS = create Multiple_Creation_States with idMCS          = Test   &\
+                                                  ResultA       = 0      &\
+                                                  Current_State = 'Idle'
+
+   # Initiate the test
+   generate objMCS4:Perform_Verification(Test, The_Test_Number) to newMCS
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 31
+
+#-------------------------------------------------------------------------
+# Test 32
+#-------------------------------------------------------------------------
+
+   # Increment this value for each new test
+   Test = 1
+
+   The_Test_Number = The_Test_Number + 1
+
+   # Create an instance to perform the test against
+   newETS = create EventToSelf with idETS         = Test   &\
+                                    NewResult     = 0      &\
+                                    OldResult     = 0      &\
+                                    Current_State = 'Idle'
+
+   # Initiate the test
+   generate ETS3:StartA(Test) to newETS
+
+   generate ETS5:VerifyEventToSelf(Test, The_Test_Number) to newETS
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 32
+
+#-------------------------------------------------------------------------
+# Test 33
+#-------------------------------------------------------------------------
+
+   # Increment this value for each new test
+   Test = 1
+
+   The_Test_Number = The_Test_Number + 1
+
+   # Create an instance
+   #   Identity = 100 + Test
+   #   newBTD = create BornToDie with idBTD = Identity & ResultA = 0
+
+   # Generate this instance
+   #   generate BTD4:CreateInstance(test) to newBTD
+
+   [] = BTD1:Into_Creation[Test, The_Test_Number]
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 33
+
+#-------------------------------------------------------------------------
+# Test 34
+#-------------------------------------------------------------------------
+
+   # Increment this value for each new test
+   The_Test_Number = The_Test_Number + 1
+
+   Test = 1
+
+   # Create an instance to perform the test against
+   newBTD = create BornToDie with idBTD         = Test   &\
+                                  ResultA       = 0      &\
+                                  Current_State = 'Idle'
+
+   # Initiate the test
+   generate BTD3:VerifyBornToDie(Test, The_Test_Number) to newBTD
+
+   Test_Counter = Test_Counter + 1
+
+# End Test 34
+
+#-------------------------------------------------------------------------
+# Test 35 - Although this is the last test in the scenario it should be 
+#           one of the first to be executed due to the rule that one ASL
+#           block shall run to completion before another starts
+#-------------------------------------------------------------------------
+
+  The_Test_Number = The_Test_Number + 1
+
+  [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0401", "Events", "Scenario", "Creation event"]
+
+  if Test_Counter != 33 then
+     [] = RPT3:Test_Failed["Events",  The_Test_Number, Test_Counter]
+  else
+     [] = RPT2:Test_Passed["Events",  The_Test_Number, Test_Counter]
+  endif
+
+# End Test 35
+
+#-------------------------------------------------------------------------
+# Increment this value for each new test
+#-------------------------------------------------------------------------
+
+   if my_test != UNDEFINED then
+      The_Test_Number = The_Test_Number + 1
+      my_test.Current_Test_Number = The_Test_Number
+   endif
+
+
+
+enddefine

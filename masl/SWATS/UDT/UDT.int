@@ -1,0 +1,171 @@
+domain UDT is
+  //! Used to define the granularity of Time
+  public type Time_Unit is enum (MICROSECOND = 1,
+                                 MILLISECOND = 2,
+                                 SECOND      = 3,
+                                 MINUTE      = 4,
+                                 HOUR        = 5,
+                                 DAY         = 6);
+
+  public type Simple_Enumeration_Type is enum (One,
+                                               Two,
+                                               Three,
+                                               Four,
+                                               Five);
+
+  public type Colour_Type is enum (Red,
+                                   Green,
+                                   Blue,
+                                   Yellow,
+                                   Cyan,
+                                   Magenta);
+
+  public type Temp_Type is enum (Freezing,
+                                 Cold,
+                                 Mild,
+                                 Warm,
+                                 Hot,
+                                 Boiling);
+
+  public type Subset_Zero_Of_Integer is integer; pragma type_range(-10,10);
+
+  //! Insert system defined integer'last
+  public type One_To_Maximum_Integer is integer; pragma type_range(1,32767);
+
+  public type Timer_ID is integer;
+
+  public service Check_The_Integers (Test        : in  integer,
+                                     Testing_For : in  string,
+                                     The_Requid  : in  string);
+
+  public service Create_Report_Data ();
+
+  public service Delete_Report_Data ();
+
+  public service Create_New_Test_Data_Object_And_Link_It (New_Set              : in  boolean,
+                                                          Previous_IH          : in  instance of Test_Data,
+                                                          This_Test_Number     : in  integer,
+                                                          Testing_For          : in  string,
+                                                          Final_Entry          : in  boolean,
+                                                          Returned_IH          : out instance of Test_Data,
+                                                          Returned_Test_Number : out integer);
+
+  //! Remove a set of reflexive objects.
+  public service Tidy_Up_Test_Data ();
+
+  //! As service 1, but predeclaring the local
+  //! variables rather than allowing first use to defined type.
+  public service Check_The_Predeclared_Integers (Test        : in  integer,
+                                                 Testing_For : in  string);
+
+  //! Returns the number of user defined types used and confims that the reported number is actually the number used.
+  public service Report_No_UDT_Used (Test        : in  integer,
+                                     Testing_For : in  string);
+
+  public service Create_An_Active_Object (This_Test   : in  integer,
+                                          Returned_IH : out instance of An_Active_Object);
+
+  public service Create_A_Timer_Enumeration (The_Timer_Enum   : in  Time_Unit,
+                                             The_Return_Value : out integer);
+
+  public service Check_The_Enumerators (Test              : in  integer,
+                                        First_Enum_Input  : in  Simple_Enumeration_Type,
+                                        Second_Enum_Input : in  Colour_Type,
+                                        Third_Enum_Input  : in  Temp_Type);
+
+  public service Check_Constraint (Test : in  integer);
+
+  terminator Report is
+    public service Start_Test (Test_Number     : in  integer,
+                               Requid          : in  string,
+                               Invoking_Domain : in  string,
+                               Invoking_Object : in  string,
+                               Purpose         : in  string);
+    pragma terminator_operation_number(1);
+
+    public service Test_Passed (Test_Object_Domain : in  string,
+                                Test_Number        : in  integer,
+                                Test_Value         : in  integer);
+    pragma terminator_operation_number(2);
+
+    public service Test_Failed (Failed_Domain_Object : in  string,
+                                Failed_Test_Number   : in  integer,
+                                Failed_Test_Value    : in  integer);
+    pragma terminator_operation_number(3);
+
+    public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+    pragma terminator_operation_number(4);
+
+    public service Test_Text (Test_Number : in  integer,
+                              Free_Text   : in  string);
+    pragma terminator_operation_number(5);
+
+    public service Domain_Test_Start (This_Domain_Name : in  string);
+    pragma terminator_operation_number(6);
+
+    public service Domain_Test_Finished (This_Domain_Name : in  string);
+    pragma terminator_operation_number(7);
+
+    public service Test_Real_Passed (Passed_Domain      : in  string,
+                                     Passed_Test_Number : in  integer,
+                                     Test_Result        : in  real);
+    pragma terminator_operation_number(8);
+
+    public service Specify_A_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+    pragma terminator_operation_number(9);
+
+  end terminator;
+  pragma key_letter ("RPT");
+
+
+  terminator Bridge_Too_Far is
+    public service I_H_Type_Across (Param1_IH     : in  instance of Object_Into_Bridge,
+                                    Success       : out boolean,
+                                    Success_Value : out integer);
+    pragma terminator_operation_number(1);
+
+    public service User_Defined_Types_Across (Param1         : in  Subset_Zero_Of_Integer,
+                                              Param2         : in  Simple_Enumeration_Type,
+                                              Success        : out boolean,
+                                              Success_Value  : out integer,
+                                              A_Return_Param : out One_To_Maximum_Integer);
+    pragma terminator_operation_number(2);
+
+    public service Get_Environment_Type (Type_Of_Environment : out integer);
+    pragma terminator_operation_number(3);
+
+    public service Local_Bridge (This_Test : in  integer);
+    pragma terminator_operation_number(4);
+
+    public service Timer_Enum_Across_Bridge (Test : in  integer);
+    pragma terminator_operation_number(5);
+
+  end terminator;
+  pragma key_letter ("BTF");
+
+
+  terminator Timer is
+    public service Set_Timer (Timer_ID       : in  Timer_ID,
+                              Time_Remaining : in  integer,
+                              Granularity    : in  Time_Unit,
+                              Event_ID       : in  event,
+                              Instance_ID    : in  instance);
+
+    public service Reset_Timer (Timer_ID : in  Timer_ID);
+
+    public service Set_Absolute_Timer (Timer_ID    : in  Timer_ID,
+                                       Actual_Date : in  timestamp,
+                                       Actual_Time : in  duration,
+                                       Event_ID    : in  event,
+                                       Instance_ID : in  instance);
+
+  end terminator;
+  pragma key_letter ("TIM");
+
+
+end domain;
+pragma number (19);
+pragma name ("User_Defined_Types");
+pragma kl ("UDT");
+pragma version (6);

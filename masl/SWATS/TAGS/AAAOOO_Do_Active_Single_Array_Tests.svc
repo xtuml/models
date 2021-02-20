@@ -1,0 +1,98 @@
+//! @@TAGS-01-0004
+public service TAGS::An_Active_Array_Of_One_Object.Do_Active_Single_Array_Tests () is
+#--------------------------------------------------------------------------
+# The array of 1 should be treated exactly the same way as an object tagged
+# SINGLETON.
+#--------------------------------------------------------------------------
+
+# Create first of the single active array objects.
+
+my_test = find-one Test_Data
+
+Test = my_test.Number
+This_Environment = my_test.Environment
+
+if This_Environment = 'WACA' then 
+   Supported = TRUE
+else
+   Supported = FALSE
+endif
+
+#--------------------------------------------------------------------------
+# Test 1 - Create first and only allowable instance of the object
+#          This will be an asynchronous test.
+#--------------------------------------------------------------------------
+
+   First_Single = create unique An_Active_Array_Of_One_Object with Result = 0 & Current_State = 'Idle'
+
+   Value_To_Add = 10
+   Expected_Result_Value = 10
+
+   generate AAAOOO1:Start(Test, Value_To_Add, "Create first object", Expected_Result_Value) to First_Single
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 - This will be a synchronous test.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Tagging", "Single Array Active Object", "Inhibit second instance"]
+
+   # Second_Single = create unique An_Active_Array_Of_One_Object with Result = 0 & Current_State = 'Idle'
+   # {Set_Of_Single_Array} = find-all An_Active_Array_Of_One_Object
+   # Number_Of_Single_Array = countof {Set_Of_Single_Array}
+   # Should only be 1, but reporter widget expects a zero in the Failure field for a pass.
+   # So if there are more than one instances found, this should be reported as an
+   # error.
+   # Failure_Value = Number_Of_Single_Array - 1
+   # [] = TAGS5::Report_Now[Test, "Inhibit second instance", Failure_Value, Supported]
+
+   [] = RPT4:Test_Unsupported[Test]
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Prove that the instance handle for the second instance is 
+#          UNDEFINED, or in ada's case, NULL.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Tagging", "Single Array Active Object", "Second instance is null"]
+
+   # if Second_Single = UNDEFINED then
+   #   Failure_Value = 0
+   # else
+   #   Failure_Value = 1
+   #   # It isn't supposed to be here, so get rid of it.
+   #   delete Second_Single
+   # endif
+   # [] = TAGS5::Report_Now[Test, "Second instance is null", Failure_Value, Supported]
+
+   [] = RPT4:Test_Unsupported[Test]
+
+   # Perform some synchronous tests as a result of this asynchronous service.
+
+   generate AAAOOO3:Lets_Test() to First_Single
+   
+
+   # Prove that the first legal instance can be deleted and a new one created in it's place.
+   # This processing will be done when the event is unqueued. It shall effectively delete
+   # First_Single instance, and create a new one and generate an event to the new instance
+   # to prove that it can execute its' state machine correctly.
+
+   # In the wrong hands, this could turn into a recursive call. If the Phoenix event was sent to
+   # the new instance in the state machine by the deleted state machine, there would be no return. 
+   # Ever.
+
+   generate AAAOOO4:Phoenix() to First_Single
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+
+my_test.Number = Test

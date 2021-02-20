@@ -1,0 +1,12 @@
+//! C insert to set attribute for I-SIM
+//! operation
+public service TAGS::Set_Environment (Input_Test_Data  : in  instance of Test_Data,
+                                      Output_Test_Data : out instance of Test_Data) is
+Local_Input = Input_Test_Data
+
+# Call terminator bridge
+[Environment_Variable] = ET2:Env_Number[]
+
+Local_Input.Number = Environment_Variable
+
+Output_Test_Data = Local_Input

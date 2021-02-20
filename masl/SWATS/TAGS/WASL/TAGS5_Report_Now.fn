@@ -1,0 +1,28 @@
+define function  TAGS5::Report_Now
+input \
+	Test_Number:Base_Integer_Type ,\
+	Testing_For:Base_Text_Type ,\
+	Failure:Base_Integer_Type ,\
+	It_Is_Supported:Boolean 
+output
+
+#$DESCRIPTION
+Test requirement Tag
+@@TAGS-01-0001
+#$END_DESCRIPTION
+
+
+if Failure = 0 then
+   [] = RPT2:Test_Passed[Testing_For, Test_Number, Failure]
+else
+
+   if It_Is_Supported then
+      [] = RPT3:Test_Failed[Testing_For, Test_Number, Failure]
+   else
+      [] = RPT4:Test_Unsupported[Test_Number]
+   endif
+
+endif
+
+
+enddefine

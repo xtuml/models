@@ -1,0 +1,289 @@
+//! This service shall prove that deletion of multiple instances from a
+//! set is correct.
+public service Creation_Deletion::Object_D.do_multiple_deletion_tests (Test_Number          : in  integer,
+                                                                       Returned_Test_Number : out integer) is
+#------------------------------------------------------------------------#
+# do multiple deletion tests
+#------------------------------------------------------------------------#
+
+   Test = Test_Number
+
+   # Preparation for instance deletion
+   count = 10
+
+   loop
+      find_and_delete_D = create Object_D with ReferenceD = count &\
+                                               IntegerA = count
+      count = count - 1
+      breakif count = 0
+   endloop
+
+#------------------------------------------------------------------------#
+# Test 1 - Fully specify both instances
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0532", "Creation Deletion", "objD multiple delete", "Fully specify both instances"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0122"]
+
+   # Delete two instances that meet the search criteria
+   {before_operation} = find-all Object_D
+
+   # Use for making sure that only two instances have actually been deleted.
+   what_we_want = countof {before_operation}
+   what_we_want = what_we_want - 2
+
+   has_failed = FALSE
+  
+   failure_code = 0
+
+   # Delete two instances where both attributes for both instances are specified.
+   delete Object_D where (ReferenceD = 1 & IntegerA = 1) | (ReferenceD = 2 & IntegerA = 2)
+
+   {after_operation} = find-all Object_D
+
+   # None have been deleted
+   if countof {before_operation} = countof {after_operation} then
+      has_failed = TRUE
+      failure_code = (-1)
+   else
+      # Try and find the instances directly
+      first_instance  = find-one Object_D where ReferenceD = 1 & IntegerA = 1
+      second_instance = find-one Object_D where ReferenceD = 2 & IntegerA = 2
+
+      if first_instance != UNDEFINED then
+         failure_code = (-2)
+         has_failed = TRUE
+      else
+
+         if second_instance != UNDEFINED then
+            failure_code = (-3)
+            has_failed = TRUE
+         else
+            # More or less than two instances have been deleted
+            if what_we_want != countof {after_operation} then
+               failure_code = (-4)
+               has_failed = TRUE
+            endif
+   
+         endif
+
+      endif
+
+   endif
+
+   if has_failed = TRUE then
+      [] = RPT3:Test_Failed["ObjD", Test, failure_code]
+   else
+      [] = RPT2:Test_Passed["ObjD", Test, failure_code]
+   endif
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0532", "Creation Deletion", "objD multiple delete", "Diff attributes diff instances"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0122"]
+
+   # Delete two instances that meet the search criteria
+   {before_operation} = find-all Object_D
+
+   # Use for making sure that only two instances have actually been deleted.
+   what_we_want = countof {before_operation}
+   what_we_want = what_we_want - 2
+
+   has_failed = FALSE
+
+   failure_code = 0
+
+   # Delete two instances where one attribute for both instances are specified.
+   delete Object_D where ReferenceD = 3 | IntegerA = 4
+
+   {after_operation} = find-all Object_D
+
+   # None have been deleted
+   if countof {before_operation} = countof {after_operation} then
+      has_failed = TRUE
+      failure_code = (-1)
+   else
+      # Try and find the instances directly
+      third_instance  = find-one Object_D where ReferenceD = 3 & IntegerA = 3
+      fourth_instance = find-one Object_D where ReferenceD = 4 & IntegerA = 4
+
+      if third_instance != UNDEFINED then
+         failure_code = (-2)
+         has_failed = TRUE
+      else
+
+         if fourth_instance != UNDEFINED then
+            failure_code = (-3)
+            has_failed = TRUE
+         else
+            what_we_got = countof {after_operation}
+
+            # More or less than two instances have been deleted
+            if what_we_want != what_we_got then
+               failure_code = (-4)
+               has_failed = TRUE
+            endif
+
+         endif
+
+      endif
+
+   endif
+
+   if has_failed = TRUE then
+      [] = RPT3:Test_Failed["ObjD", Test, failure_code]
+   else
+      [] = RPT2:Test_Passed["ObjD", Test, failure_code]
+   endif
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0532", "Creation Deletion", "objD multiple delete", "Same attribute diff instances"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0122"]
+
+   # Delete two instances that meet the search criteria
+   {before_operation} = find-all Object_D
+
+   # Use for making sure that only two instances have actually been deleted.
+   what_we_want = countof {before_operation}
+   what_we_want = what_we_want - 2
+
+   has_failed = FALSE
+
+   failure_code = 0
+
+   # Delete two instances where the same attribute for both instances are specified separately.
+   delete Object_D where ReferenceD = 5 | ReferenceD = 6
+
+   {after_operation} = find-all Object_D
+
+   # None have been deleted
+   if countof {before_operation} = countof {after_operation} then
+      has_failed = TRUE
+      failure_code = (-1)
+   else
+      # Try and find the instances directly
+      fifth_instance = find-one Object_D where ReferenceD = 5 & IntegerA = 5
+      sixth_instance = find-one Object_D where ReferenceD = 6 & IntegerA = 6
+
+      if fifth_instance != UNDEFINED then
+         failure_code = (-2)
+         has_failed = TRUE
+      else
+
+         if sixth_instance != UNDEFINED then
+            failure_code = (-3)
+            has_failed = TRUE
+         else
+            what_we_got = countof {after_operation}
+
+            # More or less than two instances have been deleted
+            if what_we_want != what_we_got then
+               failure_code = what_we_got - what_we_want
+               has_failed = TRUE
+            endif
+
+         endif
+
+      endif
+
+   endif
+
+   if has_failed = TRUE then
+      [] = RPT3:Test_Failed["ObjD", Test, failure_code]
+   else 
+      [] = RPT2:Test_Passed["ObjD", Test, failure_code]
+   endif
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4
+#------------------------------------------------------------------------#
+
+   # Deletion of set of instance handles is unsupported.
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "objD multiple delete", "Set of instance handles"]
+   [] = RPT4:Test_Unsupported[Test]
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5
+#------------------------------------------------------------------------#
+
+   # Deletion of all remaining instances.
+
+   Test = Test + 1
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0532", "Creation Deletion", "objD multiple delete", "All remaining instance handles"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0122"]
+   {before_operation} = find-all Object_D
+
+   # Use for making sure that all remaining instances have actually been deleted.
+   what_we_want = 0
+
+   has_failed = FALSE
+
+   failure_code = 0
+
+   # Delete all remaining instances where ReferenceD is less than 100, 
+   # should be all of them.
+   delete Object_D where ReferenceD < 100
+
+   {after_operation} = find-all Object_D
+
+   # None have been deleted
+   if countof {before_operation} = countof {after_operation} then
+      has_failed = TRUE
+      failure_code = (-1)
+   else
+      # Try and find any instance, doesn't matter what it's attributes are.
+      any_instance = find-one Object_D
+
+       # The instance is still defined.
+      if any_instance != UNDEFINED then
+         failure_code = (-2)
+         has_failed = TRUE
+      else
+         # An instance has been found.
+         if what_we_want != countof {after_operation} then
+            failure_code = (-3)
+            has_failed = TRUE
+         endif
+
+      endif
+
+   endif
+
+   if has_failed = TRUE then
+      [] = RPT3:Test_Failed["ObjD", Test, failure_code]
+   else
+      [] = RPT2:Test_Passed["ObjD", Test, failure_code]
+   endif
+
+# End Test 5
+
+#------------------------------------------------------------------------#
+
+Returned_Test_Number = Test 
+
+#Tests Complete
+

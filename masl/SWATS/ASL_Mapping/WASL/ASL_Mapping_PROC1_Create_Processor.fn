@@ -1,0 +1,65 @@
+define function  PROC1:Create_Processor
+input \
+	Test_Start:Base_Integer_Type ,\
+	Processor_Id_Local:Processor_Id_Type 
+output \
+	Final_Test:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+This_Test = Test_Start
+
+[my_timer_id_local] = Create_Timer[]
+
+my_processor = create Processor with Processor_Id = Processor_Id_Local &\
+   Background_Processing_Timer_Id = my_timer_id_local &\
+   Communications_Enabled = FALSE 
+
+[] = RPT1:Start_Test[This_Test, "Null Requid", "ASL_Mapping", "Active Object Service Perform Attribute assignment", "Assign all attributes"]
+
+my_object = find-one Processor where Processor_Id = Processor_Id_Local
+
+Failure_Code = 1
+
+if my_object != UNDEFINED then
+
+   if my_object.Background_Processing_Timer_Id = my_timer_id_local then
+
+      if my_object.Communications_Enabled = FALSE then
+
+         Failure_Code = 0
+
+      else
+
+         Failure_Code = -3
+
+      endif
+
+   else
+
+      Failure_Code = -2
+
+   endif
+
+   delete my_object
+
+else
+
+   Failure_Code = -1
+
+endif
+
+if Failure_Code = 0 then
+   [] = RPT2:Test_Passed["Attribute read", This_Test, Failure_Code]
+
+else
+   [] = RPT3:Test_Failed["Attribute read", This_Test, Failure_Code]
+endif
+
+This_Test = This_Test + 1
+
+Final_Test = This_Test
+
+enddefine

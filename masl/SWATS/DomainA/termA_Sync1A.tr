@@ -1,0 +1,21 @@
+public service DomainA::TerminatorA~>Sync1A (inputA  : in  integer,
+                                             inputB  : in  integer,
+                                             Test    : in  integer,
+                                             outputA : out integer,
+                                             outputB : out integer) is
+   if (inputA != 1)|(inputB != 2) then
+      #Input values are incorrect
+      outputA = 1
+      outputB = 2
+
+      [] = RPT5:Test_Text[Test,"Term1A stub called with incorrect IO values"]
+
+   else
+      #Input values are correct
+      outputA = 3
+      outputB = 4
+
+      [] = RPT5:Test_Text[Test,"Term1A stub called with correct IO values"]
+
+
+   endif

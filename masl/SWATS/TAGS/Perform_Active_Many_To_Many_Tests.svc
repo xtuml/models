@@ -1,0 +1,392 @@
+public service TAGS::Perform_Active_Many_To_Many_Tests () is
+my_test = find-one Test_Data
+
+Test = my_test.Number
+Failure_Value = 0
+
+Supported = TRUE
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   Left_One      = create unique Active_Tagged_Many_Left  with Attribute_One   = Test & Current_State = 'Idle'
+   Right_One     = create unique Active_Tagged_Many_Right with Attribute_Two   = Test & Current_State = 'Idle'
+   Assoc_One_One = create Active_Tagged_Single_Assoc with Attribute_Three = Test & Current_State = 'Idle'
+
+   link Left_One R5 Right_One using Assoc_One_One
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_One -> R5.Active_Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 1
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Active Relationships", "Create first three"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   generate ATML1:Go(Test) to Left_One
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   generate ATMR1:Go(Test) to Right_One
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4
+#--------------------------------------------------------------------------
+
+   generate ATSASSOC1:Go(Test) to Assoc_One_One
+
+   Test = Test + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5
+#--------------------------------------------------------------------------
+
+   Left_Two      = create unique Active_Tagged_Many_Left  with Attribute_One   = Test & Current_State = 'Idle'
+   Right_Two     = create unique Active_Tagged_Many_Right with Attribute_Two   = Test & Current_State = 'Idle'
+   Assoc_Two_Two = create  Active_Tagged_Single_Assoc with Attribute_Three = Test & Current_State = 'Idle'
+ 
+   link Left_Two R5 Right_Two using Assoc_Two_Two
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_Two -> R5.Active_Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 1
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Active Relationships", "Create second three"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+# Test 6 
+#--------------------------------------------------------------------------
+
+   generate ATML1:Go(Test) to Left_Two
+ 
+   Test = Test + 1
+
+# End Test 6
+
+#--------------------------------------------------------------------------
+# Test 7
+#--------------------------------------------------------------------------
+
+   generate ATMR1:Go(Test) to Right_Two
+
+   Test = Test + 1
+
+# End Test 7
+
+#--------------------------------------------------------------------------
+# Test 8 
+#--------------------------------------------------------------------------
+
+   generate ATSASSOC1:Go(Test) to Assoc_Two_Two
+
+   Test = Test + 1
+
+# End Test 8
+
+#--------------------------------------------------------------------------
+# Test 9 
+#--------------------------------------------------------------------------
+
+   Left_Three      = create unique Active_Tagged_Many_Left  with Attribute_One = Test & Current_State = 'Idle'
+   Right_Three     = create unique Active_Tagged_Many_Right with Attribute_Two = Test & Current_State = 'Idle'
+   Assoc_Three_Three = create Active_Tagged_Single_Assoc with Attribute_Three = Test & Current_State = 'Idle'
+
+   link Left_Three R5 Right_Three using Assoc_Three_Three
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_Three -> R5.Active_Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+   
+   Expected_Number = 1
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Active Relationships", "Create third three"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 9
+
+#--------------------------------------------------------------------------
+# Test 10
+#--------------------------------------------------------------------------
+
+   generate ATML1:Go(Test) to Left_Three
+
+   Test = Test + 1
+
+# Test 10
+
+#--------------------------------------------------------------------------
+# Test 11
+#--------------------------------------------------------------------------
+
+   generate ATMR1:Go(Test) to Right_Three
+
+   Test = Test + 1
+
+# End Test 11
+
+#--------------------------------------------------------------------------
+# Test 12
+#--------------------------------------------------------------------------
+
+   generate ATSASSOC1:Go(Test) to Assoc_Three_Three
+  
+   Test = Test + 1
+
+# End Test 12
+
+#--------------------------------------------------------------------------
+# Test 13
+#--------------------------------------------------------------------------
+
+   Assoc_One_Two = create Active_Tagged_Single_Assoc with Attribute_Three = Test  & Current_State = 'Idle'
+
+   link Left_One R5 Right_Two using Assoc_One_Two
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_One -> R5.Active_Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 2
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Active Relationships", "Link one to two via three"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 13
+
+#--------------------------------------------------------------------------
+# Test 14
+#--------------------------------------------------------------------------
+
+   generate ATSASSOC1:Go(Test) to Assoc_One_Two
+  
+   Test = Test + 1
+
+#--------------------------------------------------------------------------
+# Test 15
+#--------------------------------------------------------------------------
+
+   Assoc_One_Three = create Active_Tagged_Single_Assoc with Attribute_Three = Test & Current_State = 'Idle'
+
+   link Left_One R5 Right_Three using Assoc_One_Three
+
+   # navigate to prove link
+
+   {Set_Of_Right} = Left_One -> R5.Active_Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 3
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Active Relationships", "Link one to three "]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 15
+
+#--------------------------------------------------------------------------
+# Test 16
+#--------------------------------------------------------------------------
+
+   generate ATSASSOC1:Go(Test) to Assoc_One_Three
+
+   Test = Test + 1
+
+# End Test 16
+
+#--------------------------------------------------------------------------
+# Test 17
+#--------------------------------------------------------------------------
+
+   Assoc_Two_One = create Active_Tagged_Single_Assoc with Attribute_Three = Test & Current_State = 'Idle'
+
+   link Left_Two R5 Right_One using Assoc_Two_One
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_Two -> R5.Active_Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 2
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Active Relationships", "Link two to one"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+
+# End Test 17
+
+#--------------------------------------------------------------------------
+# Test 18
+#--------------------------------------------------------------------------
+
+   generate ATSASSOC1:Go(Test) to Assoc_Two_One
+  
+   Test = Test + 1
+
+# End Test 18
+
+#--------------------------------------------------------------------------
+# Test 19
+#--------------------------------------------------------------------------
+
+   Assoc_Two_Three = create Active_Tagged_Single_Assoc with Attribute_Three = Test & Current_State = 'Idle'
+
+   link Left_Two R5 Right_Three using Assoc_Two_Three
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_Two -> R5.Active_Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 3
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Active Relationships", "Link two to three"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 19
+
+#--------------------------------------------------------------------------
+# Test 20
+#--------------------------------------------------------------------------
+
+   generate ATSASSOC1:Go(Test) to Assoc_Two_Three
+
+   Test = Test + 1
+
+# End Test 20
+
+#--------------------------------------------------------------------------
+# Test 21
+#--------------------------------------------------------------------------
+
+   Assoc_Three_One = create Active_Tagged_Single_Assoc with Attribute_Three = Test & Current_State = 'Idle'
+
+   link Left_Three R5 Right_One using Assoc_Three_One
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_Three -> R5.Active_Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 2
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Active Relationships", "Link three to one"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 21
+
+#--------------------------------------------------------------------------
+# Test 22
+#--------------------------------------------------------------------------
+
+   generate ATSASSOC1:Go(Test) to Assoc_Three_One
+
+   Test = Test + 1
+
+# End Test 22
+
+#--------------------------------------------------------------------------
+# Test 23
+#--------------------------------------------------------------------------
+
+   Assoc_Three_Two = create Active_Tagged_Single_Assoc with Attribute_Three = Test & Current_State = 'Idle'
+
+   link Left_Three R5 Right_Two using Assoc_Three_Two
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_Three -> R5.Active_Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 3
+
+   Failure_Value = Number_In_Set - Expected_Number
+   
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Active Relationships", "Link three to two"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 23
+
+#--------------------------------------------------------------------------
+# Test 24
+#--------------------------------------------------------------------------
+
+   generate ATSASSOC1:Go(Test) to Assoc_Three_Two
+
+   Test = Test + 1
+
+# End Test 24
+
+#--------------------------------------------------------------------------
+
+my_test.Number = Test

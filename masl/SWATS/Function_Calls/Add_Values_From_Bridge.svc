@@ -1,0 +1,11 @@
+public service Function_Calls::Add_Values_From_Bridge (Test   : in  integer,
+                                                       Input1 : in  integer,
+                                                       Input2 : in  integer,
+                                                       Input3 : in  integer) is
+   The_Total = Input1 + Input2 + Input3
+   
+   if The_Total = 6 then
+      [] = RPT2:Test_Passed["Domain sync called from bridge", Test, The_Total]
+   else
+      [] = RPT3:Test_Failed["Domain sync called from bridge", Test, The_Total]
+   endif

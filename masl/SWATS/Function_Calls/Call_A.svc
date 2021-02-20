@@ -1,0 +1,19 @@
+public service Function_Calls::Call_A (Input_Value  : in  integer,
+                                       Output_Value : out integer) is
+[Host] = WAW1:What_Env[]
+
+temp = Input_Value
+temp = temp + 1
+
+   if Host = "ISIM" then
+      Total = 10
+   else
+      Total = 700
+   endif
+
+if temp >= Total then
+   Output_Value = temp
+else
+   Output_Value = temp
+   [Output_Value] = Function_Calls11::Call_B[temp]
+endif

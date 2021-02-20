@@ -1,0 +1,87 @@
+//! This Domain is for testing the timer features of the software architecture.
+domain TT is
+  public type Timer_ID is integer;
+
+  //! Used to define the granularity of Time
+  public type Time_Unit is enum (MICROSECOND = 1,
+                                 MILLISECOND = 2,
+                                 SECOND      = 3,
+                                 MINUTE      = 4,
+                                 HOUR        = 5,
+                                 DAY         = 6);
+
+  public service create_report_data ();
+
+  public service delete_report_data ();
+
+  terminator Report_Results is
+    public service Start_Test (Test_Number     : in  integer,
+                               Requid          : in  string,
+                               Invoking_Domain : in  string,
+                               Invoking_Object : in  string,
+                               Purpose         : in  string);
+    pragma terminator_operation_number(1);
+
+    public service Test_Passed (Test_Object_Domain : in  string,
+                                Test_Number        : in  integer,
+                                Test_Value         : in  integer);
+    pragma terminator_operation_number(2);
+
+    public service Test_Failed (Failed_Domain_Object : in  string,
+                                Failed_Test_Number   : in  integer,
+                                Failed_Test_Value    : in  integer);
+    pragma terminator_operation_number(3);
+
+    public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+    pragma terminator_operation_number(4);
+
+    public service Test_Text (Test_Number : in  integer,
+                              Free_Text   : in  string);
+    pragma terminator_operation_number(5);
+
+    public service Domain_Test_Start (This_Domain_Name : in  string);
+    pragma terminator_operation_number(6);
+
+    public service Domain_Test_Finished (This_Domain_Name : in  string);
+    pragma terminator_operation_number(7);
+
+    public service Specify_Requid (Requid_Test_Number : in  integer,
+                                   The_Requid_Itself  : in  string);
+    pragma terminator_operation_number(8);
+
+  end terminator;
+  pragma key_letter ("RPT");
+
+
+  terminator Timer is
+    public service Set_Timer (Timer_ID       : in  Timer_ID,
+                              Time_Remaining : in  integer,
+                              Granularity    : in  Time_Unit,
+                              Event_ID       : in  event,
+                              Instance_ID    : in  instance);
+
+    public service Reset_Timer (Timer_ID : in  Timer_ID);
+
+    public service Set_Absolute_Timer (Timer_ID    : in  Timer_ID,
+                                       Actual_Date : in  timestamp,
+                                       Actual_Time : in  duration,
+                                       Event_ID    : in  event,
+                                       Instance_ID : in  instance);
+
+  end terminator;
+  pragma key_letter ("TIM");
+
+
+  terminator Where_Are_We is
+    public service What_Env (Env_Text : out string);
+    pragma terminator_operation_number(1);
+
+  end terminator;
+  pragma key_letter ("WAW");
+
+
+end domain;
+pragma number (36);
+pragma name ("Test_Timers");
+pragma kl ("TT");
+pragma version (7);

@@ -1,0 +1,25 @@
+//! Send_To_Bridge
+private service SBONE::Send_To_Bridge () is
+my_test = find-one Test_Data
+
+Test = my_test.This_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1 - 
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"Null Requid", "Source Structure Bridge", "Scenario", "Send structure to SBTWO"]
+
+   {The_Source_Structure}   is Structure_Of_UDTs
+
+   Source_Value = 2
+
+   append [Source_Value] to {The_Source_Structure}
+
+   [] = ITGWO3:Test_Structure_In_Bridge [Test, {The_Source_Structure}]
+
+   Test = Test + 1
+
+# End Test 1
+
+my_test.This_Test_Number = Test

@@ -1,0 +1,19 @@
+public service ASL_Mapping::BIG_Object.Receive_Unfeasonableness (A_Big_Object       : in  instance of BIG_Object,
+                                                                 Current_Test       : in  integer,
+                                                                 Expected_Attribute : in  integer) is
+[] = RPT1:Start_Test [Current_Test, "1103-0000-01-0522", "ASL_Mapping","Big Object", "Receive big IH"]
+
+if A_Big_Object != UNDEFINED then
+
+   if A_Big_Object.One = Expected_Attribute and \
+      A_Big_Object.Forty = Expected_Attribute and  \
+      A_Big_Object.Eightyfour = Expected_Attribute then
+
+      [] = RPT2:Test_Passed ["Valid big IH", Current_Test, Expected_Attribute]
+   else
+       [] = RPT3:Test_Failed["Mismatching big attributes", Current_Test, A_Big_Object.One]
+   endif
+
+else
+   [] = RPT3:Test_Failed["Invalid big IH", Current_Test, -1]
+endif

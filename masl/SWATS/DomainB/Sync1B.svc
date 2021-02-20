@@ -1,0 +1,38 @@
+//! This synchronous service is invoked by a synchronous service in DomainA.
+public service DomainB::Sync1B (inputA  : in  integer,
+                                inputB  : in  integer,
+                                Test    : in  integer,
+                                outputA : out integer,
+                                outputB : out integer) is
+my_test = find-one Test_Data
+
+local_test = my_test.This_Test_Number
+
+[] = RPT1:Start_Test[local_test, "1241-0000-01-1110", "DomainB", "DSS 1", "sync service 1B called"]
+
+#Check that input parameters
+if (inputA != 1)|(inputB != 2) then
+
+   #Return incorrect values, because the input values where incorrect
+   outputA = 1
+   outputB = 2
+
+   [] = RPT3:Test_Failed["DSS 1B", local_test, -1]
+
+else
+
+   #Return correct values, because the input values where correct
+   outputA = 3
+   outputB = 4
+   #In DomainB indicate that a Sync service call was made
+   an_instanceB = find-one Object_B where idB = 1
+   an_instanceB.ResultB = 10
+
+   [] = RPT2:Test_Passed["DSS 1B", local_test, an_instanceB.ResultB]
+
+endif
+
+local_test = local_test + 1
+
+my_test.This_Test_Number = local_test
+

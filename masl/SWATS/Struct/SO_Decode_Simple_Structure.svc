@@ -1,0 +1,98 @@
+public service Struct::Structured_Object.Decode_Simple_Structure (Test             : in  integer,
+                                                                  A_Structure      : in  sequence of Simple_Structure_Type,
+                                                                  Instance_Handle  : in  instance of Structured_Object,
+                                                                  Final_Entry_Only : in  boolean) is
+ 
+[] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Structured Object Synch Service", "Decode simple data structures"]
+
+# How many in the set
+How_Many = countof {A_Structure}
+
+Count = 1
+
+# Look at the final entry in the list only.
+if Final_Entry_Only = TRUE then
+
+   for [the_integer, the_real, the_text, the_boolean, the_colour] in {A_Structure} do
+
+      local_integer = the_integer
+      local_real    = the_real
+      local_text    = the_text
+      local_boolean = the_boolean
+      local_colour  = the_colour
+
+      # Force a look at the penultimate entry in the set.
+      Termination_Condition = How_Many - 1
+
+      # Only look at the final entry
+      if Count = Termination_Condition then 
+
+         if local_integer = Instance_Handle.An_Integer and \
+            local_real    = Instance_Handle.A_Real     and \
+            local_text    = Instance_Handle.Some_Text  and \
+            local_boolean = Instance_Handle.A_Boolean  and \
+            local_colour  = Instance_Handle.A_Colour   then
+
+            [] = RPT2:Test_Passed[Instance_Handle.Some_Text, Test, Count]
+
+         else
+  
+            [] = RPT3:Test_Failed[Instance_Handle.Some_Text, Test, Count]
+
+         endif
+
+      endif
+
+      Count = Count + 1
+
+      # Don't want to read all the entries, just all but one of them.
+      # This so that we can append into the set again on the next iteration.
+
+      breakif Count = How_Many
+
+   endfor
+
+# Look at all entries
+else
+
+   Has_Passed = TRUE
+   Passed_Count = 0
+
+   for [the_integer, the_real, the_text, the_boolean, the_colour] in {A_Structure} do
+
+      local_integer = the_integer
+      local_real    = the_real
+      local_text    = the_text
+      local_boolean = the_boolean
+      local_colour  = the_colour
+
+      if local_integer = Instance_Handle.An_Integer and \
+         local_real    = Instance_Handle.A_Real     and \
+         local_text    = Instance_Handle.Some_Text  and \
+         local_boolean = Instance_Handle.A_Boolean  and \
+         local_colour  = Instance_Handle.A_Colour   then
+
+         Passed_Count = Passed_Count + 1
+
+      else
+
+         Has_Passed = FALSE
+         Passed_Count = Passed_Count - 1
+  
+       endif
+
+      Count = Count + 1
+
+   endfor
+
+   if Has_Passed = TRUE then
+
+      [] = RPT2:Test_Passed[Instance_Handle.Some_Text, Test, Passed_Count]
+
+   else
+
+      [] = RPT3:Test_Failed[Instance_Handle.Some_Text, Test, Passed_Count]
+
+   endif
+
+endif

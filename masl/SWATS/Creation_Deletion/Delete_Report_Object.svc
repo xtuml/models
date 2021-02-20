@@ -1,0 +1,18 @@
+public service Creation_Deletion::Delete_Report_Object () is
+
+This_Report = find-one Report_Data
+
+if This_Report != UNDEFINED then
+
+   This_Domain_Identifier = This_Report.Reported_Domain_Number
+
+else
+
+   This_Domain_Identifier = -1
+
+endif
+
+[] = RPT7:Domain_Test_Finished["Creation Deletion", This_Domain_Identifier]
+
+# Do not delete the Report_Data object, as there may be still events in
+# the queue.

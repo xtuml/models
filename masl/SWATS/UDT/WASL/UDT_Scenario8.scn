@@ -1,0 +1,27 @@
+define scenario  UDT_Scenario8
+input
+output
+
+#$DESCRIPTION
+Timer_Enum_Scenario
+#$END_DESCRIPTION
+
+my_test = find-one Final_Test_Data
+
+Test = my_test.Final_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = BTF5:Timer_Enum_Across_Bridge[Test]
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+
+my_test.Final_Test_Number = Test
+
+enddefine

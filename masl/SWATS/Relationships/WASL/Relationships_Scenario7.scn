@@ -1,0 +1,316 @@
+define scenario  Relationships_Scenario7
+input
+output
+
+#$DESCRIPTION
+Nav From Sets
+#$END_DESCRIPTION
+
+   my_test = find-one Test_Data
+   Test = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create a few instances
+#-------------------------------------------------------------------#
+
+   firstL  = create Far_Left with Left_Identifier = 1 & Left_Data = 1
+   secondL = create Far_Left with Left_Identifier = 2 & Left_Data = 2
+   thirdL  = create Far_Left with Left_Identifier = 3 & Left_Data = 3
+   fourthL = create Far_Left with Left_Identifier = 4 & Left_Data = 4
+   fifthL  = create Far_Left with Left_Identifier = 5 & Left_Data = 5
+
+   firstM  = create Middle with Middle_Identifier = 1 & Middle_Data = 1
+   secondM = create Middle with Middle_Identifier = 2 & Middle_Data = 2
+   thirdM  = create Middle with Middle_Identifier = 3 & Middle_Data = 3
+   fourthM = create Middle with Middle_Identifier = 4 & Middle_Data = 4
+   fifthM  = create Middle with Middle_Identifier = 5 & Middle_Data = 5
+
+   firstMR  = create Many_Right with Right_Identifier = 1 & Right_Data = 1
+   secondMR = create Many_Right with Right_Identifier = 2 & Right_Data = 2
+   thirdMR  = create Many_Right with Right_Identifier = 3 & Right_Data = 3
+   fourthMR = create Many_Right with Right_Identifier = 4 & Right_Data = 4
+   fifthMR  = create Many_Right with Right_Identifier = 5 & Right_Data = 5
+
+   firstMA  = create Many_Above with Above_Data = 1
+   secondMA = create Many_Above with Above_Data = 2
+   thirdMA  = create Many_Above with Above_Data = 3
+   fourthMA = create Many_Above with Above_Data = 4
+   fifthMA  = create Many_Above with Above_Data = 5
+
+   firstMFR  = create Many_Far_Right with MFR_Identifier = 1 and MFR_Data = 1
+   secondMFR = create Many_Far_Right with MFR_Identifier = 2 and MFR_Data = 2
+   thirdMFR  = create Many_Far_Right with MFR_Identifier = 3 and MFR_Data = 3
+   fourthMFR = create Many_Far_Right with MFR_Identifier = 4 and MFR_Data = 4
+   fifthMFR  = create Many_Far_Right with MFR_Identifier = 5 and MFR_Data = 5
+
+   firstMRA  = create Many_Right_Assoc with MRA_Data = 1 and MRA_Identifier = 1
+   secondMRA = create Many_Right_Assoc with MRA_Data = 2 and MRA_Identifier = 2
+   thirdMRA  = create Many_Right_Assoc with MRA_Data = 3 and MRA_Identifier = 3
+   fourthMRA = create Many_Right_Assoc with MRA_Data = 4 and MRA_Identifier = 4
+   fifthMRA  = create Many_Right_Assoc with MRA_Data = 5 and MRA_Identifier = 5
+
+#-------------------------------------------------------------------#
+# Link
+#-------------------------------------------------------------------#
+
+   link firstL  R6 firstM
+   link secondL R6 thirdM
+
+   link firstM  R7 firstMR
+   link firstM  R7 thirdMR
+   link thirdM  R7 fourthMR 
+
+   link firstMR  R8 firstMFR using firstMRA
+   link thirdMR  R8 firstMFR using secondMRA
+   link thirdMR  R8 thirdMFR using thirdMRA
+   link fourthMR R8 fourthMFR using fourthMRA
+
+   link firstMR R10 firstMA
+   link thirdMR R10 fourthMA
+   link thirdMR R10 fifthMA
+   link fourthMR R10 secondMA
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Chained nav from set"]
+
+   temp = 0
+   Total = 0
+
+   {SetMFR} = find-all Many_Far_Right
+
+   {SetMR} = {SetMFR} -> R8.Many_Right
+
+   {SetM} = {SetMFR} -> R8.Many_Right -> R7.Middle
+
+   if countof {SetMR} = 4 then
+
+      if countof {SetM} = 4 then
+
+         for InstM in {SetM} do
+            temp = InstM.Middle_Identifier
+            Total = Total + temp 
+         endfor
+
+         if Total = 6 then
+            [] = RPT2:Test_Passed["Chained nav from set", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, Total]
+         endif
+
+      else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Chained nav from set", Test, -30]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Chained nav from set"]
+
+   temp = 0
+   Total = 0
+
+   {SetMR} = firstM -> R7.Many_Right
+
+   {SetMFR} = firstM -> R7.Many_Right -> R8.Many_Far_Right
+
+   if countof {SetMR} = 2 then
+
+      if countof {SetMFR} = 3 then
+
+         for InstMFR in {SetMFR} do
+            temp = InstMFR.MFR_Identifier
+            Total = Total + temp 
+         endfor
+
+         if Total = 5 then
+            [] = RPT2:Test_Passed["Chained nav from set", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, Total]
+         endif
+
+      else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Chained nav from set", Test, -30]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Chained nav from set"]
+
+   temp = 0
+   Total = 0
+
+   {SetMR} = firstM -> R7.Many_Right
+
+   {SetMA} = firstM -> R7.Many_Right -> R10.Many_Above
+
+   if countof {SetMR} = 2 then
+
+      if countof {SetMA} = 3 then
+
+         for InstMA in {SetMA} do
+            temp = InstMA.Above_Data
+            Total = Total + temp
+         endfor
+
+         if Total = 10 then
+            [] = RPT2:Test_Passed["Chained nav from set", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, Total]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Chained nav from set", Test, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Chained nav from set", Test, -30]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Chained nav from set"]
+
+   temp = 0
+   Total = 0
+
+   {SetM} = find Middle where Middle_Identifier = 1 or Middle_Identifier = 3
+
+   {SetMR} = {SetM} -> R7.Many_Right
+
+   {SetMA} = {SetM} -> R7.Many_Right -> R10.Many_Above
+
+   if countof {SetMR} = 3 then
+
+      if countof {SetMA} = 4 then
+
+         for InstMA in {SetMA} do
+            temp = InstMA.Above_Data
+            Total = Total + temp
+         endfor
+
+         if Total = 12 then
+            [] = RPT2:Test_Passed["Chained nav from set", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, Total]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Chained nav from set", Test, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Chained nav from set", Test, -30]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Chained nav from set"]
+
+   temp = 0
+   Total = 0
+
+   {SetMA} = find-all Many_Above
+  
+   {SetMR} = {SetMA} -> R10.Many_Right
+
+   {SetM} = {SetMA} -> R10.Many_Right -> R7.Middle
+
+   if countof {SetMR} = 4 then
+
+      if countof {SetM} = 4 then
+
+         for InstM in {SetM} do
+            temp = InstM.Middle_Identifier
+            Total = Total + temp
+         endfor
+
+         if Total = 6 then
+            [] = RPT2:Test_Passed["Chained nav from set", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, Total]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Chained nav from set", Test, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Chained nav from set", Test, -30]
+   endif
+
+   Test = Test + 1
+
+   unassociate firstMR  R8 firstMFR  from firstMRA
+   unassociate thirdMR  R8 firstMFR  from secondMRA
+   unassociate thirdMR  R8 thirdMFR  from thirdMRA
+   unassociate fourthMR R8 fourthMFR from fourthMRA
+
+   unlink firstL  R6 firstM
+   unlink secondL R6 thirdM
+
+   unlink firstM  R7 firstMR
+   unlink firstM  R7 thirdMR
+   unlink thirdM  R7 fourthMR
+
+   unlink firstMR  R8 firstMFR
+   unlink thirdMR  R8 firstMFR
+   unlink thirdMR  R8 thirdMFR
+   unlink fourthMR R8 fourthMFR
+
+   unlink firstMR  R10 firstMA
+   unlink thirdMR  R10 fourthMA
+   unlink thirdMR  R10 fifthMA
+   unlink fourthMR R10 secondMA
+
+   delete firstL 
+   delete secondL
+   delete thirdL 
+   delete fourthL
+   delete fifthL 
+
+   delete firstM 
+   delete secondM
+   delete thirdM 
+   delete fourthM
+   delete fifthM 
+
+   delete firstMR  
+   delete secondMR 
+   delete thirdMR  
+   delete fourthMR 
+   delete fifthMR  
+
+   delete firstMA  
+   delete secondMA 
+   delete thirdMA  
+   delete fourthMA 
+   delete fifthMA  
+
+   delete firstMFR  
+   delete secondMFR 
+   delete thirdMFR  
+   delete fourthMFR 
+   delete fifthMFR  
+
+my_test.The_Test_Number = Test
+
+enddefine

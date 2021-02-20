@@ -1,0 +1,98 @@
+define function  RP4::Test_Description
+input \
+	Write_Test_Number:Base_Integer_Type ,\
+	Write_Requid:Base_Text_Type ,\
+	Write_Invoker_Domain_Name:Base_Text_Type ,\
+	Write_Object:Base_Text_Type ,\
+	Write_Test_Purpose:Base_Text_Type ,\
+	Write_Invoker_Domain_Number:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#match_found = FALSE
+
+the_domain = Write_Invoker_Domain_Name
+
+the_test_number = Write_Test_Number
+
+the_purpose = Write_Test_Purpose
+
+the_object = Write_Object
+
+the_requid = Write_Requid
+
+the_domain_number = Write_Invoker_Domain_Number
+
+The_Domain_Details = find-one Domain_Details where Domain_Number = the_domain_number
+
+
+Found_The_Test_Details = FALSE
+
+if The_Domain_Details != UNDEFINED then
+  
+   # Have we already got this Test Details?
+
+   {Set_Of_Already_Reported_Test_Details} = The_Domain_Details -> R8.Test_Details
+
+   for Each_Known_Test_Detail in {Set_Of_Already_Reported_Test_Details} do
+
+      if Each_Known_Test_Detail.The_Test_No = the_test_number then
+
+         Found_The_Test_Details = TRUE
+
+         # Got another test details for this test
+         [] = RP9::Test_Anomalous_Behaviour[the_test_number, "Duplicated test details received"]
+
+      endif
+
+   endfor
+
+
+   # Haven't already got this one
+   if Found_The_Test_Details = FALSE then
+
+
+      The_Test_Details = create Test_Details with \
+          Test_Purpose  = the_purpose &\
+          Tested_Object = the_object  &\
+          The_Test_No   = the_test_number &\
+          Result_Found  = FALSE
+
+      # Create new requirement identifier for test object and link it.
+
+      New_Requid_For_Test = create Requirement_Identifier_For_Test with requid = the_requid
+
+      link The_Domain_Details R8 The_Test_Details
+
+      link The_Test_Details R7 New_Requid_For_Test
+
+      # Stash the requirement identifier so it can be checked off against the specified
+      # requirements for this test run.
+
+      [] = RP10::Specify_Requid[the_domain_number, the_test_number, the_requid]
+
+
+      $INLINE
+       fprintf(stderr, " \n");
+       fprintf(stderr,"***************************************************************************\n");
+       fprintf(stderr, "Test Number           : %d\n", the_test_number);
+       fprintf(stderr, "Requirment identifier : %s\n", the_requid);
+       fprintf(stderr, "Domain                : %s\n", the_domain);
+       fprintf(stderr, "Invoker object        : %s\n", the_object);
+       fprintf(stderr, "Testing for           : %s\n", the_purpose);
+       fprintf(stderr, " \n");
+      $ENDINLINE
+
+   endif
+
+else
+
+   # Got another test details for this test
+   [] = RP7::Report_Run_Time_Error["No domain details reported"]
+
+endif
+
+enddefine

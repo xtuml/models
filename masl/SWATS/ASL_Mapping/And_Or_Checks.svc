@@ -1,0 +1,329 @@
+public service ASL_Mapping::And_Or_Checks (Test_No      : in  integer,
+                                           Returning_No : out integer) is
+#-------------------------------------------------------------------#
+#
+# Logical operators AND and OR within if statements
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#-------------------------------------------------------------------#
+
+Test = Test_No
+
+#-------------------------------------------------------------------#
+# Test 1 - Check if AND then with boolean values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if AND then"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+
+   Bool1 = TRUE
+   Bool2 = TRUE
+
+   if Bool1 and Bool2 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#-------------------------------------------------------------------#
+# Test 2 - Check if AND then with integer values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if AND then"]
+
+   Val1 = 10
+   Val2 = 20
+
+   if Val1 = 10 and Val2 = 20 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#-------------------------------------------------------------------#
+# Test 3 - Check if AND then with boolean values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if AND then"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0912"]
+
+   Bool1 = TRUE
+   Bool2 = FALSE
+
+   if Bool1 and not Bool2 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#-------------------------------------------------------------------#
+# Test 4 - Check if AND then else with integer values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if AND then"]
+
+   Val1 = 10
+   Val2 = 20
+
+   if Val1 = 10 and Val2 = 10 then
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   else
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#-------------------------------------------------------------------#
+# Test 5 - Check if OR then with boolean values
+#-------------------------------------------------------------------#
+
+    [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if OR then"]
+    [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+
+    Bool1 = TRUE
+    Bool2 = FALSE
+
+    if Bool1 or Bool2 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+
+#-------------------------------------------------------------------#
+# Test 6 - Check if OR then with boolean values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if OR then"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0912"]
+
+
+   Bool1 = TRUE
+   Bool2 = TRUE
+
+   if Bool1 or Bool2 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 6
+
+
+#-------------------------------------------------------------------#
+# Test 7 - Check if OR then with integer values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if OR then"]
+
+   Val1 = 10
+   Val2 = 20
+
+   if Val1 = 10 or Val2 = 10 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 7
+
+#-------------------------------------------------------------------#
+# Test 8 - Check if OR then with integer values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if OR then"]
+
+   Val1 = 10
+   Val2 = 20
+
+   if Val1 = 20 or Val2 = 20 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 8
+
+
+#-------------------------------------------------------------------#
+# Test 9 - Check if OR then else with boolean values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if OR then"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+
+   Bool1 = FALSE
+   Bool2 = FALSE
+
+   if Bool1 or Bool2 then
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   else
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 9
+
+#-------------------------------------------------------------------#
+# Test 10 - Check if & then with integer values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if logical AND then"]
+
+   Val1 = 10
+   Val2 = 20
+
+   if Val1 = 10 & Val2 = 20 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 10
+
+
+#-------------------------------------------------------------------#
+# Test 11 - Check if & then with boolean values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if logical AND then"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0912"]
+
+   Bool1 = TRUE
+   Bool2 = FALSE
+
+   if Bool1 & not Bool2 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 11
+
+#-------------------------------------------------------------------#
+# Test 12 - Check if & then else with boolean values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if logical AND then"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+
+   Bool1 = FALSE
+   Bool2 = FALSE
+
+   if Bool1 & Bool2 then
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   else
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 12
+
+#-------------------------------------------------------------------#
+# Test 13 - Check if | then with integer values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if logical OR then"]
+
+   Val1 = 10
+   Val2 = 20
+
+   if Val1 = 10 | Val2 = 10 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 13
+
+#-------------------------------------------------------------------#
+# Test 14 - Check if & then else with boolean values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if logical AND then"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0912"]
+
+   Bool1 = TRUE
+   Bool2 = FALSE
+
+   if not Bool1 & Bool2 then
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]     
+   else
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 14
+
+#-------------------------------------------------------------------#
+# Test 15 - Check if | then else with boolean values
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "Check AND and ORs in if statements", "Check if logical OR then"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0912"]
+
+   Bool1 = TRUE
+   Bool2 = FALSE
+
+   if not Bool1 | Bool2 then
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]     
+   else
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 15
+
+#-------------------------------------------------------------------#
+
+Returning_No = Test

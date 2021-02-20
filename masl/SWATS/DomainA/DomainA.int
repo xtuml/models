@@ -1,0 +1,149 @@
+//! For use in multiple domain builds
+domain DomainA is
+  public type Test_Enum_Type is enum (Sly,
+                                      Sandy,
+                                      Wes);
+
+  public service Create_Report_Object ();
+
+  public service Delete_Report_Object ();
+
+  public service Check_Enum (The_Input_Value  : in  Test_Enum_Type,
+                             The_Return_Value : out integer);
+
+  public service Check_Service_Params (Int_Input         : in  integer,
+                                       Real_Input        : in  real,
+                                       Text_Input        : in  string,
+                                       Bool_Input        : in  boolean,
+                                       The_Returning_Val : out integer);
+
+  terminator TerminatorA is
+    public service Sync1A (inputA  : in  integer,
+                           inputB  : in  integer,
+                           Test    : in  integer,
+                           outputA : out integer,
+                           outputB : out integer);
+    pragma terminator_operation_number(1);
+
+    public service Sync2A (inputA  : in  integer,
+                           inputB  : in  integer,
+                           Test    : in  integer,
+                           outputA : out integer,
+                           outputB : out integer);
+    pragma terminator_operation_number(2);
+
+    public service Sync3A (InputA  : in  integer,
+                           InputB  : in  integer,
+                           Test    : in  integer,
+                           OutputA : out integer,
+                           OutputB : out integer);
+    pragma terminator_operation_number(3);
+
+    public service Sync4A (InputA  : in  integer,
+                           InputB  : in  integer,
+                           Test    : in  integer,
+                           OutputA : out integer,
+                           OutputB : out integer);
+    pragma terminator_operation_number(4);
+
+    //! This terminator is project level defined and shall prove that two domains (A & B) can use a locally defined object within a $USE $ENDUSE section, where the local object has the same name in both domains.
+    public service Common_Named_Object_Usage (Test_Number_Parameter   : in  integer,
+                                              This_Test_Has_Failed    : out boolean,
+                                              This_Test_Failure_Value : out integer);
+    pragma terminator_operation_number(5);
+
+  end terminator;
+  pragma key_letter ("termA");
+
+
+  terminator Report is
+    public service Start_Test (Test_Number     : in  integer,
+                               Requid          : in  string,
+                               Invoking_Domain : in  string,
+                               Invoking_Object : in  string,
+                               Purpose         : in  string);
+    pragma terminator_operation_number(1);
+
+    public service Test_Passed (Test_Object_Domain : in  string,
+                                Test_Number        : in  integer,
+                                Test_Value         : in  integer);
+    pragma terminator_operation_number(2);
+
+    public service Test_Failed (Failed_Domain_Object : in  string,
+                                Failed_Test_Number   : in  integer,
+                                Failed_Test_Value    : in  integer);
+    pragma terminator_operation_number(3);
+
+    public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+    pragma terminator_operation_number(4);
+
+    public service Test_Text (Test_Number : in  integer,
+                              Free_Text   : in  string);
+    pragma terminator_operation_number(5);
+
+    public service Domain_Test_Start (This_Domain_Name : in  string);
+    pragma terminator_operation_number(6);
+
+    public service Domain_Test_Finished (This_Domain_Name : in  string);
+    pragma terminator_operation_number(7);
+
+    public service Specify_Requid (Requid_Test_Number : in  integer,
+                                   The_Requid_Itself  : in  string);
+    pragma terminator_operation_number(8);
+
+  end terminator;
+  pragma key_letter ("RPT");
+
+
+  //! Bridge that will allow navigation of a relationship in the target domain.
+  terminator Navigate is
+    public service Single_Bridge_Navigate (Test : in  integer);
+    pragma terminator_operation_number(1);
+
+    public service Shared_Bridge_Navigate (Test : in  integer);
+    pragma terminator_operation_number(2);
+
+    public service One_to_One_Navigate (Test : in  integer);
+    pragma terminator_operation_number(3);
+
+    public service One_to_Many_Navigate (Test : in  integer);
+    pragma terminator_operation_number(4);
+
+    public service Many_to_Many_Navigate (Test : in  integer);
+    pragma terminator_operation_number(5);
+
+    //! Use this bridge as a catch-all to
+    //! hoover up tests that require
+    //! a bridge in one form or another.
+    public service Misc_Calls (Test : in  integer);
+    pragma terminator_operation_number(6);
+
+    public service Enum_Test (Test       : in  integer,
+                              Enum_Input : in  Test_Enum_Type);
+    pragma terminator_operation_number(7);
+
+    //! Navigate from Domain to all other Domains
+    public service Big_Bridge_Navigation (Test       : in  integer,
+                                          Enum_Input : in  Test_Enum_Type);
+    pragma terminator_operation_number(8);
+
+    public service Pass_IH (Test   : in  integer,
+                            The_IH : in  instance of Object_A);
+    pragma terminator_operation_number(9);
+
+    public service Pass_Parameters (The_Int_Input  : in  integer,
+                                    The_Real_Input : in  real,
+                                    The_Text_Input : in  string,
+                                    The_Bool_Input : in  boolean,
+                                    The_Result     : out integer);
+    pragma terminator_operation_number(10);
+
+  end terminator;
+  pragma key_letter ("NAV");
+
+
+end domain;
+pragma number (4);
+pragma name ("DomainA");
+pragma kl ("DomainA");
+pragma version (12);

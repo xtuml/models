@@ -1,0 +1,36 @@
+public service TT::Unsupported.log_unsupported_tests () is
+the_test_scheduler = find-one Test_Scheduler
+
+test_number = the_test_scheduler.current_test_number + 1
+[] = RPT1:Start_Test[test_number, "1241-0000-01-0901", "Test Timers", "Unsupported Tests", "Support for Timers"]
+[] = RPT4:Test_Unsupported[test_number]
+
+test_number = test_number + 1
+[] = RPT1:Start_Test[test_number, "1241-0000-01-0902", "Test Timers", "Unsupported Tests", "Timers are serviced"]
+[] = RPT4:Test_Unsupported[test_number]
+
+test_number = test_number + 1
+[] = RPT1:Start_Test[test_number, "1241-0000-01-0907", "Test Timers", "Unsupported Tests", "Determine time remaining before expiry"]
+[] = RPT4:Test_Unsupported[test_number]
+
+test_number = test_number + 1
+[] = RPT1:Start_Test[test_number, "1241-0000-01-0917", "Test Timers", "Unsupported Tests", "No limit on number of Timers"]
+[] = RPT3:Test_Failed["No limit on number of Timers", test_number, 0]
+
+test_number = test_number + 1
+[] = RPT1:Start_Test[test_number, "1241-0000-01-0918", "Test Timers", "Unsupported Tests", "Timers shall not waste memory"]
+[] = RPT4:Test_Unsupported[test_number]
+
+test_number = test_number + 1
+[] = RPT1:Start_Test[test_number, "1241-0000-01-0919", "Test Timers", "Unsupported Tests", "Get current time"]
+[] = RPT4:Test_Unsupported[test_number]
+
+test_number = test_number + 1
+[] = RPT1:Start_Test[test_number, "1241-0000-01-0920", "Test Timers", "Unsupported Tests", "Int & Float values for 1241-0000-01-0919"]
+[] = RPT4:Test_Unsupported[test_number]
+
+test_number = test_number + 1
+[] = RPT1:Start_Test[test_number, "1241-0000-01-0921", "Test Timers", "Unsupported Tests", "Access 1241-0000-01-0920 from ASL"]
+[] = RPT4:Test_Unsupported[test_number]
+
+the_test_scheduler.current_test_number = test_number

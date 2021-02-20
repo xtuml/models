@@ -1,0 +1,59 @@
+define function  Struct2::Decode_Simple_Structure
+input \
+	Test:Base_Integer_Type ,\
+	Simple_Structure:Simple_Structure_Type ,\
+	Object_Instance_Handle:Structured_Object_IH 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+[] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Domain synch service", "Decode simple structure"]
+
+Count = 1
+
+# How many in the set
+
+How_Many = countof{Simple_Structure}
+
+for [the_integer, the_real, the_text, the_boolean, the_colour ] in {Simple_Structure} do
+
+
+   local_integer = the_integer
+   local_real    = the_real
+   local_text    = the_text
+   local_boolean = the_boolean
+   local_colour  = the_colour
+
+   # We are only interested in the final value in the set, otherwise
+   # there would be up to ten passes shown in the results file
+   # for this test.
+
+   if Count = How_Many then
+
+      # This is the position in the set that we are interested in
+
+      if local_integer = Object_Instance_Handle.An_Integer and \
+         local_real    = Object_Instance_Handle.A_Real     and \
+         local_text    = Object_Instance_Handle.Some_Text  and \
+         local_boolean = Object_Instance_Handle.A_Boolean  and \
+         local_colour  = Object_Instance_Handle.A_Colour   then
+
+         [] = RPT2:Test_Passed["Structures", Test, Count]
+
+       else
+         [] = RPT3:Test_Failed["Structures", Test, Count]
+       endif
+
+   endif
+
+
+   Count = Count + 1
+
+endfor
+
+
+
+
+enddefine

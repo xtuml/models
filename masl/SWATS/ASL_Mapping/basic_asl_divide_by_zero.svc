@@ -1,0 +1,220 @@
+public service ASL_Mapping::basic_asl_divide_by_zero (Test_Start : in  integer,
+                                                      Final_Test : out integer) is
+# -------------------------------------------------------------------------------------------
+#
+# The following operators shall be supported: +, -, /, *, ^, unary - 
+# 1103-0000-01-0814
+#
+# -------------------------------------------------------------------------------------------
+
+   Test = Test_Start
+
+   [Host] = WAW1:What_Env[]
+
+# -------------------------------------------------------------------------------------------
+# TEST 1 - Integer divide by zero tests
+# -------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "Basic ASL DBSS", "Divide by integer zero"]
+
+   int_zero      = 0
+   an_int_value  = 10
+   an_int_result = 0
+
+   if Host = "WACA" then
+      Supported = TRUE
+      an_int_result = (an_int_value / int_zero)
+   else
+      Supported = FALSE
+   endif
+
+   # The result of a divide by zero is the result is set to 'last.
+   # Since this is target dependant, a check for non-zero is the easiest option.
+
+   if Supported = TRUE then
+
+      if an_int_result != int_zero then 
+         [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+# -------------------------------------------------------------------------------------------
+# TEST 2 - Integer divide by zero tests
+# -------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "Basic ASL DBSS", "Negative divide by integer zero"]
+
+   int_zero      = 0
+   an_int_value  = -10
+   an_int_result = 0
+
+   if Host = "WACA" then
+      Supported = TRUE
+      an_int_result = (an_int_value / int_zero)
+   else
+      Supported = FALSE
+   endif
+
+   # The result of a divide by zero is the result is set to 'last.
+   # Since this is target dependant, a check for non-zero is the easiest option.
+
+   if Supported = TRUE then
+
+      if an_int_result != int_zero then 
+         [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+# -------------------------------------------------------------------------------------------
+# TEST 3 - Integer divide by zero tests
+# -------------------------------------------------------------------------------------------      
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "Basic ASL DBSS", "Zero divided by integer zero"]
+
+   int_zero      = 0
+   an_int_value  = 0
+   an_int_result = 0
+
+   if Host = "WACA" then
+      Supported = TRUE
+      an_int_result = (an_int_value / int_zero)
+   else
+      Supported = FALSE
+   endif
+
+   if Supported = TRUE then
+
+      if an_int_result = int_zero then 
+         [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported [Test]
+   endif  
+
+   Test = Test + 1
+
+# End Test 3
+
+# -------------------------------------------------------------------------------------------
+# TEST 4 - Real divide by zero tests
+# -------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "Basic ASL DBSS", "Divide by real zero"]
+   
+   real_zero        = 0.0
+   a_real_value     = 10.0
+   a_real_result    = 0.0
+
+   if Host = "WACA" then
+      Supported = TRUE
+      a_real_result = (a_real_value / real_zero)
+   else
+      Supported = FALSE
+   endif
+
+   if Supported = TRUE then
+
+      if a_real_result != real_zero then 
+         [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+# -------------------------------------------------------------------------------------------
+# TEST 5 - Real divide by zero tests
+# -------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "basic asl DBSS", "Negative divide by real zero"]
+
+   real_zero        = 0.0
+   a_real_value     = -10.0
+   a_real_result    = 0.0
+
+   if Host = "WACA" then
+      Supported = TRUE
+      a_real_result = (a_real_value / real_zero)
+   else
+      Supported = FALSE
+   endif
+
+   if Supported = TRUE then
+
+      if a_real_result != real_zero then 
+         [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+# -------------------------------------------------------------------------------------------
+# TEST 6 - Real divide by zero tests
+# -------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "Basic ASL DBSS", "Zero divided by real zero"]
+
+   real_zero        = 0.0
+   a_real_value     = 0.0
+   a_real_result    = 0.0
+
+   if Host = "WACA" then
+      Supported = TRUE
+      a_real_result = (a_real_value / real_zero)
+   else
+      Supported = FALSE
+   endif
+
+   if Supported = TRUE then
+
+      if a_real_result = real_zero then 
+         [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+   Test = Test + 1
+
+# End Test 6
+
+# ------------------------------------------------------------------------------
+
+Final_Test = Test

@@ -8,7 +8,9 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 # USAGE
 print_usage () { 
     echo "Usage:"
-    echo "        regression_test [-o <output directory>]";
+    echo "        regression_test [-o <output directory>] [-r]";
+    echo "";
+    echo "  - Specify the '-r' flag to force exit and relaunch of BridgePoint before export.";
 }
 
 abort () {
@@ -19,14 +21,19 @@ abort () {
 trap abort SIGINT SIGTERM
 
 # input variables
-BPINSTALL="/build/buildmt/roundtrip/BridgePoint"
+if [[ "" == "$BPINSTALL" ]]; then
+    BPINSTALL="/build/buildmt/roundtrip/BridgePoint"
+fi
 OUT_DIR=
+RELAUNCH=
 
 # parse arguments
 DIRECTIVE=
 for arg in $@; do
     if [[ $arg == "-o" ]]; then                     # set the directive
         DIRECTIVE=$arg
+    elif [[ $arg == "-r" ]]; then                   # specify to restart BP before export
+        RELAUNCH=$arg
     elif [[ $DIRECTIVE == "-o" && $OUT_DIR == "" ]]; then           # only can set the output directory once
         OUT_DIR=$arg
     else
@@ -41,7 +48,7 @@ if [[ $OUT_DIR == "" ]]; then OUT_DIR=.; fi
 # set up workspace
 export WORKSPACE="/tmp/importwork"
 if [[ -d $WORKSPACE ]]; then
-	rm -rf $WORKSPACE
+    rm -rf $WORKSPACE
 fi
 
 export BPHOME=$BPINSTALL
@@ -68,10 +75,10 @@ while read TEST; do
                 CMD="$CMD$DIR/${projects[$i]} "
                 i=$[$i +1]
             done
-            $BPINSTALL/tools/mc/bin/masl_round_trip $CMD -o $OUT_DIR/$COUNTER
+            $BPINSTALL/tools/mc/bin/masl_round_trip $CMD -o $OUT_DIR/$COUNTER $RELAUNCH -c
         else
             # run round trip for a domain
-            $BPINSTALL/tools/mc/bin/masl_round_trip -d $DIR/$TEST -o $OUT_DIR/$COUNTER
+            $BPINSTALL/tools/mc/bin/masl_round_trip -d $DIR/$TEST -o $OUT_DIR/$COUNTER $RELAUNCH -c
         fi
     fi
     COUNTER=$[$COUNTER +1]
@@ -80,5 +87,5 @@ done
 # shut down eclipse
 $BPINSTALL/tools/mc/bin/CLI.sh Launch -exit
 
-find $OUT_DIR -name "diff_*" -exec ls -l {} \; | sort
-find $OUT_DIR -name "diff_*" -exec ls -l {} \; | wc -l
+find $OUT_DIR -name "diff_*" -exec wc -l {} \; | sort -n -t '/' +1
+find $OUT_DIR -name "diff_*" -exec wc -l {} \; | wc -l

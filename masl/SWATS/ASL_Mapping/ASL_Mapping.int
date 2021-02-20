@@ -1,0 +1,104 @@
+//! This domain deals with the basic ASL process modelling. It does not require the creation of instances, relationships or event mechanisms. It does require and use domain & object based functions.
+domain ASL_Mapping is
+  public type Processor_Id_Type is enum (TCA,
+                                         CCA);
+
+  //! This function test basic ASL operations on base types and enumerated types.
+  public service basic_asl_enumeration (Test_Start : in  integer,
+                                        Final_Test : out integer);
+
+  public service basic_asl_divide_by_zero (Test_Start : in  integer,
+                                           Final_Test : out integer);
+
+  public service Create_Report_Data ();
+
+  public service Delete_Report_Data ();
+
+  public service Test_Unfeasibly_Large_Object (Start_Test_Number  : in  integer,
+                                               Finish_Test_Number : out integer);
+
+  public service Test_Large_Numbers (Start_Test_Number  : in  integer,
+                                     Finish_Test_Number : out integer);
+
+  public service Perform_Attribute_Assignment (Test_Start : in  integer,
+                                               Final_Test : out integer);
+
+  public service Create_Processor (Test_Start         : in  integer,
+                                   Processor_Id_Local : in  Processor_Id_Type,
+                                   Final_Test         : out integer);
+
+  public service Check_Parameters (Test               : in  integer,
+                                   The_Subtract_Param : in  integer,
+                                   Returning_No       : out integer);
+
+  public service Check_Base_Types (Test         : in  integer,
+                                   Returning_No : out integer);
+
+  public service Check_Defaults (Test         : in  integer,
+                                 Returning_No : out integer);
+
+  public service And_Or_Checks (Test_No      : in  integer,
+                                Returning_No : out integer);
+
+  public service Comment_Checks (Test_No      : in  integer,
+                                 Returning_No : out integer);
+
+  public service Check_Continuation (Test_No      : in  integer,
+                                     Returning_No : out integer);
+
+  public service Check_Identifiers (Test_No      : in  integer,
+                                    Returning_No : out integer);
+
+  //! Terminator stub for report domain
+  terminator Report_Result is
+    public service Start_Test (Test_Number     : in  integer,
+                               Requid          : in  string,
+                               Invoking_Domain : in  string,
+                               Invoking_Object : in  string,
+                               Purpose         : in  string);
+    pragma terminator_operation_number(1);
+
+    public service Test_Passed (Test_Object_Domain : in  string,
+                                Test_Number        : in  integer,
+                                Test_Value         : in  integer);
+    pragma terminator_operation_number(2);
+
+    public service Test_Failed (Failed_Domain_Object : in  string,
+                                Failed_Test_Number   : in  integer,
+                                Failed_Test_Value    : in  integer);
+    pragma terminator_operation_number(3);
+
+    public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+    pragma terminator_operation_number(4);
+
+    public service Test_Text (Test_Number : in  integer,
+                              Free_Text   : in  string);
+    pragma terminator_operation_number(5);
+
+    public service Domain_Test_Start (This_Domain_Name : in  string);
+    pragma terminator_operation_number(6);
+
+    public service Domain_Test_Finished (This_Domain_Name : in  string);
+    pragma terminator_operation_number(7);
+
+    public service Specify_Requid (Requid_Test_Number : in  integer,
+                                   The_Requid_Itself  : in  string);
+    pragma terminator_operation_number(8);
+
+  end terminator;
+  pragma key_letter ("RPT");
+
+
+  terminator Where_Are_We is
+    public service What_Env (Env_Text : out string);
+    pragma terminator_operation_number(1);
+
+  end terminator;
+  pragma key_letter ("WAW");
+
+
+end domain;
+pragma number (2);
+pragma name ("ASL_Mapping");
+pragma kl ("ASL_Mapping");
+pragma version (19);

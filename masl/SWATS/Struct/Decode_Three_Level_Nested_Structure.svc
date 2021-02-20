@@ -1,0 +1,115 @@
+public service Struct::Decode_Three_Level_Nested_Structure (Test                      : in  integer,
+                                                            Three_Level_Nest          : in  sequence of First_Nested_Structure_Type,
+                                                            Two_Level_Nest            : in  sequence of Second_Nested_Structure_Type,
+                                                            One_Level_Nest            : in  sequence of Third_Nested_Structure_Type,
+                                                            Given_First_Level_Number  : in  integer,
+                                                            How_Many_In_First         : in  integer,
+                                                            Given_Second_Level_Number : in  integer,
+                                                            How_Many_In_Second        : in  integer,
+                                                            Given_Third_Level_Number  : in  integer,
+                                                            How_Many_In_Third         : in  integer,
+                                                            Given_Third_Level_Colour  : in  Colour_Type) is
+
+[] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Nested structures", "Three levels of nest"]
+
+Test_Has_Passed   = FALSE
+OK_To_Proceed = FALSE
+Failure_Code  = 0
+
+How_Many = countof{One_Level_Nest}
+
+# First compare the contents of the parameter One_Level_Nest to known datum
+
+for [number, colour] in {One_Level_Nest} do
+
+   if colour   = Given_Third_Level_Colour &\
+      number   = Given_Third_Level_Number &\
+      How_Many = How_Many_In_Third  then
+      
+      # The datum and the simple non-nested structure match
+      OK_To_Proceed = TRUE
+
+   else
+      OK_To_Proceed = FALSE
+      Failure_Code  = -1
+   endif
+
+endfor
+
+# Simple structure matches the given data, precautionary check.
+if OK_To_Proceed then
+
+   #Since no equivalence check for structures exists in WACA, let's ... off road
+
+   # Bear in mind that One_Level_Nest has now been destructively read and
+   # no longer exists. 
+
+   # Decode the whole nine yards.
+
+   # Relying on the calling routine to specify the full structure and also
+   # provide all the count information means that each non-structure entry 
+   # in a set must contain the same data as the previous structure.
+
+   How_Many_First = countof{Three_Level_Nest}
+
+   if How_Many_First = How_Many_In_First then
+
+      # Read from top level set
+      for [{Second_Level}, First_Level_Number ] in {Three_Level_Nest} do
+
+         How_Many_Second = countof{Second_Level}
+
+         if First_Level_Number = Given_First_Level_Number &\
+            How_Many_Second    = How_Many_In_Second then
+
+            # Read from second level intermediary set
+            for [{Third_Level}, Second_Level_Number] in {Second_Level} do
+
+               How_Many_Third = countof{Third_Level}
+
+               if Second_Level_Number = Given_Second_Level_Number &\
+                  How_Many_Third      = How_Many_In_Third then
+
+                  # Read from bottom level third set
+                  for [Third_Level_Number, Third_Level_Colour] in {Third_Level} do
+
+                     if Third_Level_Number = Given_Third_Level_Number &\
+                        Third_Level_Colour = Given_Third_Level_Colour then
+
+                        Test_Has_Passed  = TRUE
+                        Failure_Code = 0
+  
+                     else
+                        Test_Has_Passed = FALSE
+                        Failure_Has_Code = -5
+                     endif
+
+                  endfor
+
+               else
+                  Test_Has_Passed = FALSE
+                  Failure_Code = -4
+               endif
+
+            endfor
+
+         else
+            Test_Has_Passed = FALSE
+            Failure_Code = -3
+         endif
+
+      endfor
+
+   else
+      Failure_Code = -2
+      Test_Has_Passed = FALSE
+   endif
+
+endif
+
+
+if Test_Has_Passed then
+   [] = RPT2:Test_Passed["Three levels of nest", Test, 0]
+else
+   [] = RPT3:Test_Failed["Three levels of nest", Test, Failure_Code]
+endif

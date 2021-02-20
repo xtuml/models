@@ -1,0 +1,72 @@
+public service Relationships::Object_B.Create_Relationships (Test : in  integer) is
+#-------------------------------------------------------------------#
+#
+# Create relationships
+#
+# The architecture shall provide a mechanism to allow creation of a
+# simple relationship link between two object instances
+# 1241-0000-01-603
+#
+# The architecture shall provide operations which, given a starting 
+# instance handle and a relationship specification, return a single
+# handle of the related instances
+# 1241-0000-01-0701
+#
+# The architectureshall support a translation of the ASL link 
+# statement to map to the mechanism that allows creation of a 
+# relationship link between two object instances
+# 1241-0000-01-1202
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+[] = RPT1:Start_Test     [Test, "1241-0000-01-0603", "Relationships", "objB", "Create relationships"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+
+
+Has_Failed = TRUE
+
+# Find the desired instances for Object_A
+firstA = find-one Object_A where idA = 1
+thirdA = find-one Object_A where idA = 3
+
+# Find the desired instances for Object_B 
+firstB  = find-one Object_B where idB = 1
+fourthB = find-one Object_B where idB = 4
+
+# Find the desired instances for Object_M
+secondM = find-one Object_M where idM = 2
+thirdM  = find-one Object_M where idM = 3
+
+# Create normal 1:1 relationships
+link firstA R1 firstB
+link thirdA R1 fourthB
+link fourthB R18 thirdM  
+
+# Create a couple of instances to prove the relationships
+# For coding purposes, it is necessary to overspecify
+# the relationship.
+
+InstA = firstB -> R1.Object_A
+InstB = thirdA -> R1.Object_B 
+
+# Now check that the navigations can be performed
+if InstA != UNDEFINED & InstB != UNDEFINED then
+   Has_Failed = FALSE
+endif
+
+#-------------------------------------------------------------------#
+# Test complete
+#-------------------------------------------------------------------#
+
+if Has_Failed then
+   [] = RPT3:Test_Failed["objB", Test, -1]
+else
+   [] = RPT2:Test_Passed["objB", Test, 0]
+endif
+
+#-------------------------------------------------------------------#

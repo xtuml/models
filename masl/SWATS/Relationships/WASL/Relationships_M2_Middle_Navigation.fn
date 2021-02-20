@@ -1,0 +1,1176 @@
+define function  M2:Middle_Navigation
+input \
+	Iteration:Base_Integer_Type ,\
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------#
+#
+# Normal navigation
+#
+# The architecture shall implement simple 1:M relationships
+# 1241-0000-01-0602
+#
+# The architecture shall implement associative 1-M:M relationships
+# 1241-0000-01-0610
+#
+# The architecture shall provide a mechanism to allow the creation of
+# associative relationship link between two object instances and an
+# associative instance
+# 1241-0000-01-0611
+#
+# The architecture shall provide a mechanism to allow the deletion of
+# an associative link between an associative object and the link 
+# between two objects
+# 1241-0000-01-0612
+#
+# The architecture shall provide a mechanism to allow the deletion of
+# a link between two objects in an associative relationship
+# 1241-0000-01-0613
+#
+# The architecture shall provide operations which, given a starting 
+# instance handle and a relationshipspecification, return a single 
+# handle of the related instance
+# 1241-0000-01-0701
+#
+# The architecture shall provide operations which, given a starting 
+# instance handle and a relationship specification , return a set of
+# handles of the related instances
+# 1241-0000-01-0702
+#
+# The architecture shall provide operations which, given a starting 
+# instance handle and a relationship specification, return a set of 
+# handles of the related instances
+# 1241-0000-01-0703 **** NOT SUPPORTED BY WACA ****
+#
+# The architecture shall support chains of navigations expressed in 
+# ASL
+# 1241-0000-01-0704
+#
+# The architecture shall support navigations to associative objects
+# expressed in ASL
+# 1241-0000-01-0706
+#
+# The architecture shall support navigations from singly associative
+# objects expressed in ASL
+# 1241-0000-01-0707
+#
+# The architecture shall support a translation of the ASL link 
+# statment to map to the mechanism that allows creation of a 
+# relationship link between two object instances
+# 1241-0000-01-1202
+#
+# The architecture shall support a translation of the ASL unassociate
+# statment to map to the mechanism that allows the deletion of an 
+# associative link between an associative object and the link between
+# two objects
+# 1241-0000-01-1203
+#
+# The architecture shall support a translation of the ASL unlink
+# statement to map to the mechanism that allow the deletion of a 
+# link between two objects in a relationship
+# 1241-0000-01-1204
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+
+One_Left    = find-one Far_Left   where Left_Identifier   = 1
+One_Middle  = find-one Middle     where Middle_Identifier = 1
+One_Right   = find-one Many_Right where Right_Identifier  = 1
+Two_Right   = find-one Many_Right where Right_Identifier  = 2
+Three_Right = find-one Many_Right where Right_Identifier  = 3
+
+One_MRA = find-one Many_Right_Assoc where MRA_Identifier  = 1
+Two_MRA = find-one Many_Right_Assoc where MRA_Identifier  = 2
+
+One_MFR = find-one Many_Far_Right where MFR_Identifier = 1
+Two_MFR = find-one Many_Far_Right where MFR_Identifier = 2
+
+
+Has_Failed = FALSE
+
+#--------------------------------------------------------------------------------------------#
+# Test 1 - Call a routine in a tight loop that will perform a navigation from an instance in 
+#          a set to a set.
+#          Repeat this call many times to monitor the release of memory when the local  
+#          objects go out of scope.
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 1 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0621", "Relationships", "Set Navigation", "Navigate in many to many loop"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0611"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1203"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1204"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      How_Many_Far_Right_To_Make = 3
+      Loop_Counter = 0
+
+      {Set_Right} = find-all Many_Right
+
+      for InstRight in {Set_Right} do
+
+         Counter = 0
+   
+         loop
+
+            The_ID = Counter + 10
+            FarRight = create Many_Far_Right with MFR_Identifier = The_ID & MFR_Data = 0
+
+            The_Assoc = create Many_Right_Assoc with MRA_Data = The_ID
+
+            link InstRight R8 FarRight using The_Assoc
+
+            Counter = Counter + 1
+            breakif Counter = How_Many_Far_Right_To_Make
+
+         endloop
+
+      endfor
+
+      break_condition = 501
+
+      Loop_Index = 1
+
+      loop
+         # Call the memory leak test many times. Monitor the memory useage in NT Task Manager
+         [] = Relationships4::Memory_Leak_Test_Many_To_Many[]
+  
+         Loop_Index = Loop_Index + 1
+         breakif Loop_Index = break_condition
+      endloop
+
+      # Now the test is completed unlink and delete the instances  
+ 
+      for InstRight in {Set_Right} do
+
+         {SetAssoc} = InstRight -> R8.Many_Right_Assoc
+
+         for InstAssoc in {SetAssoc} do
+   
+            InstMFR   = InstAssoc -> R8.Many_Far_Right
+
+            if InstMFR.MFR_Identifier > 9 then      
+               unassociate InstRight R8 InstMFR from InstAssoc
+               unlink InstRight R8 InstMFR
+            endif
+
+         endfor
+
+      endfor
+
+      {SetMFR} = find-all Many_Far_Right
+
+      The_ID = 10
+
+      loop
+ 
+         for InstMFR in {SetMFR} do
+
+            if InstMFR.MFR_Identifier = The_ID then
+               delete InstMFR
+            endif
+
+         endfor
+
+         The_ID = The_ID + 1
+         breakif The_ID = 14
+
+      endloop
+
+      {SetMRA} = find-all Many_Right_Assoc
+      The_ID = 10
+
+      loop
+ 
+         for InstMRA in {SetMRA} do
+
+            if InstMRA.MRA_Data = The_ID then
+               delete InstMRA
+             endif
+
+         endfor
+
+         The_ID = The_ID + 1
+         breakif The_ID = 14
+
+      endloop  
+
+      {SetMFR} = find Many_Far_Right where MFR_Identifier > 9
+      {SetMRA} = find Many_Right_Assoc where MRA_Data > 9
+
+      if countof{SetMFR} != 0 then
+         [] = RPT5:Test_Text[Test, "MFR Not Empty"]
+      endif
+
+      if countof{SetMRA} != 0 then
+         [] = RPT5:Test_Text[Test, "MRA Not Empty"]
+      endif
+   
+      [] = RPT5:Test_Text[Test, "M  M Memory leak test complete"]
+
+      {Set_Right} = find-all Many_Far_Right 
+
+      Final_Right_Value = 0
+
+      for This_Local_Right in {Set_Right} do
+         Final_Right_Value = Final_Right_Value + This_Local_Right.MFR_Data
+      endfor
+
+      if Final_Right_Value != 0 then
+         [] = RPT2:Test_Passed ["Navigate in MM loop", Test, Final_Right_Value]
+      else
+         [] = RPT3:Test_Failed ["Navigate in MM loop", Test, Final_Right_Value]
+      endif
+
+   endif
+
+# End Test 1
+
+#-------------------------------------------------------------------------------------#
+# Test 2 -  Navigate from far left to many to right
+#-------------------------------------------------------------------------------------#
+   
+   if Iteration = 2 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0601", "Relationships", "Set Navigation", "Navigate to a set via a chain"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0702"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0704"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      {SetRight} = One_Left -> R6.Middle -> R7.Many_Right
+
+      if countof{SetRight} != 3 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         Val1 = -20
+         Val2 = -30
+         Val3 = -40
+
+         for InstRight in {SetRight} do
+      
+            if InstRight.Right_Identifier = 1 then
+               Val1 = InstRight.Right_Identifier
+            endif
+
+            if InstRight.Right_Identifier = 2 then
+               Val2 = InstRight.Right_Identifier
+            endif
+
+            if InstRight.Right_Identifier = 3 then
+               Val3 = InstRight.Right_Identifier
+            endif
+
+         endfor
+
+         if Val1 = 1 then
+
+            if Val2 = 2 then
+
+               if Val3 !=3 then
+                  Has_Failed = TRUE
+                  Failure_Code = Val3
+               endif
+
+            else
+               Has_Failed = TRUE
+               Failure_Code = Val2
+            endif
+
+         else
+            Has_Failed = TRUE
+            Failure_Code = Val1
+         endif
+
+      endif
+
+      if Has_Failed then
+         [] = RPT3:Test_Failed["Set navigation", Test, Failure_Code]
+      else
+         [] = RPT2:Test_Passed["Set navigation", Test, 0]
+      endif
+
+   endif
+
+# End Test 2
+
+#--------------------------------------------------------------------------------------------#
+# Test 3 - Call a routine in a tight loop that will perform a navigation from a single 
+#          instance to a set.
+#          Repeat this call many times to monitor the release of memory when the local 
+#          objects go out of scope.
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 3 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0621", "Relationships", "Set Navigation", "Navigate one to many in loop"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0603"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1203"]
+
+      # Create many objects for this navigation test.
+
+      break_condition = 10
+      outer_loop_counter = 0
+
+      loop
+
+         The_ID = outer_loop_counter + 10
+         New_Left    = create Far_Left   with Left_Identifier   = The_ID & Left_Data = 0
+         New_Middle  = create Middle     with Middle_Identifier = The_ID & Middle_Data = 0
+
+         link New_Left R6 New_Middle
+
+         inner_break_condition = 10
+         inner_loop_counter = 0
+
+         loop
+            The_Inner_ID = inner_loop_counter + 10
+            New_Right   = create Many_Right with Right_Identifier  = The_Inner_ID & Right_Data = 0 
+            link New_Middle R7 New_Right
+
+            inner_loop_counter = inner_loop_counter + 1
+            breakif inner_loop_counter = inner_break_condition
+         endloop
+
+         outer_loop_counter = outer_loop_counter + 1
+         breakif outer_loop_counter = break_condition
+
+      endloop
+
+      break_condition = 501
+
+      Loop_Index = 1
+
+      loop
+
+         # Call the memory leak test many times. Monitor the memory useage in NT Task Manager
+         [] = Relationships3::Memory_Leak_Test_One_To_Many[]
+
+         Local_Left_Data = 0
+
+         Loop_Index = Loop_Index + 1
+
+         {Set_Of_Left} = find-all Far_Left
+         for Local_Left in {Set_Of_Left} do
+            Local_Left_Data = Local_Left_Data + Local_Left.Left_Data
+         endfor
+
+         breakif Loop_Index = break_condition
+
+      endloop
+
+      # Delete all of the instances created in this test
+      {SetM} = find Middle where Middle_Identifier > 9
+
+      for InstM in {SetM} do
+
+         InstL = InstM -> R6.Far_Left
+         unlink InstL R6 InstM
+         delete InstL
+
+         {SetMR} = InstM -> R7.Many_Right
+
+         for InstMR in {SetMR} do
+            unlink InstMR R7 InstM
+            delete InstMR
+         endfor
+      
+         delete InstM
+
+      endfor
+
+
+      {SetMR} = find Many_Right where Right_Identifier > 9
+      {SetM}  = find Middle where Middle_Identifier > 9
+      {SetFL} = find Far_Left where Left_Identifier > 9
+
+      if countof {SetMR} != 0 then
+         [] = RPT5:Test_Text[Test, "MR Not Empty"]
+      endif
+
+      if countof {SetM} != 0 then
+         [] = RPT5:Test_Text[Test, "M Not Empty"]
+      endif
+
+      if countof {SetFL} != 0 then
+         [] = RPT5:Test_Text[Test, "FL Not Empty"]
+      endif
+
+      [] = RPT5:Test_Text[Test, "1 M Memory leak test complete"]
+
+      {Set_Of_Left} = find-all Far_Left
+
+      Final_Left_Value = 0
+
+      for Local_Left in {Set_Of_Left} do
+         Final_Left_Value = Final_Left_Value + Local_Left.Left_Data
+      endfor
+
+      if Final_Left_Value != 0 then
+         [] = RPT2:Test_Passed ["Navigate in loop", Test, Final_Left_Value]
+      else
+         [] = RPT3:Test_Failed ["Navigate in loop", Test, Final_Left_Value]
+      endif
+
+   endif
+
+# End Test 3
+
+#--------------------------------------------------------------------------------------------#
+# Test 4 - Navigate from a single instance in the Middle Object to a set in the Many
+#          Right object then navigate from the Many Right Object to the Many Above object
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 4 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "Set Navigation", "Single Instance to Single Instance M to MR to MA"]
+
+      [] = RPT4:Test_Unsupported [Test]
+
+      One_Above      =   create Many_Above with Above_Data = 1
+      link One_Above R10 One_Right
+
+     {SetMA} = One_Middle -> R7.Many_Right -> R10.Many_Above
+
+      NoInSet = countof {SetMA}
+
+      if NoInSet = 1 then
+
+         for Inst in {SetMA} do
+            if Inst.Above_Data = 1 then
+               [] = RPT2:Test_Passed ["Single Instance to Single Instance M to MR to MA", Test, Inst.Above_Data]
+            else
+              [] = RPT3:Test_Failed ["Single Instance to Single Instance M to MR to MA", Test, Inst.Above_Data]
+            endif
+         endfor
+
+      else
+        [] = RPT3:Test_Failed ["Single Instance to Single Instance M to MR to MA", Test, NoInSet]
+      endif
+
+   endif
+
+
+# End Test 4
+
+#--------------------------------------------------------------------------------------------#
+# Test 5 - Same as the previous test except navigating to a set in Many Above as opposed to a 
+#          single instance
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 5 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "Set Navigation", "Single Instance to Set M to MR to MA"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0603"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0702"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      Three_Above   = create Many_Above with Above_Data        = 3   
+
+      link Three_Above  R10 Three_Right
+
+      {SetMA} = One_Middle -> R7.Many_Right -> R10.Many_Above
+
+      NoInSet = countof {SetMA}
+
+      if NoInSet = 2 then
+         [] = RPT2:Test_Passed ["Single Instance to Set M to MR to MA", Test, NoInSet]
+      else
+         [] = RPT3:Test_Failed ["Single Instance to Set M to MR to MA", Test, NoInSet]
+      endif
+
+   endif 
+
+# End Test 5
+
+#--------------------------------------------------------------------------------------------#
+# Test 6 - Add a new instance in Many Above object and link it to One_Right. 
+#          Navigate from a single instance in the Middle Object to Many Right object then to 
+#           Many Above object returning a set
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 6 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "Set Navigation", "Single to Set M to MR to MA"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0603"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0702"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      Two_Above       =   create Many_Above with Above_Data = 2  
+      link Two_Above  R10 One_Right
+
+      {SetMA} = One_Middle -> R7.Many_Right ->R10.Many_Above
+
+      NoInSet = countof {SetMA}
+
+      if NoInSet = 3 then
+         [] = RPT2:Test_Passed ["Single to Set M to MR to MA", Test, NoInSet]
+      else
+         [] = RPT3:Test_Failed ["Single to Set M to MR to MA", Test, NoInSet]
+      endif
+
+   endif
+
+# End Test 6
+
+#--------------------------------------------------------------------------------------------#
+# Test 7 - Add new link from Two_Above to Three_Right, Many Above object has three instances 
+#          but four links. Navigate from Middle to Many Above through Many Right object
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 7 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "Set Navigation", "Single at M to Set at MA through RA"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0603"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0702"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      Two_Above = find-one Many_Above where Above_Data = 2
+
+      link Two_Above R10 Three_Right
+
+      {SetMA} = One_Middle -> R7.Many_Right -> R10.Many_Above
+
+      NoInSet = countof {SetMA}
+
+      if NoInSet = 4 then
+         [] = RPT2:Test_Passed ["Single at M to Set at MA through RA", Test, NoInSet]
+      else
+         [] = RPT3:Test_Failed ["Single at M to Set at MA through RA", Test, NoInSet]
+      endif
+
+   endif
+
+# End Test 7
+
+#--------------------------------------------------------------------------------------------#
+# Test 8 - Navigate from a single instance in Middle object to a set in the Many Right  
+#          object. Navigate from the third instance of Many Right object to Many above object
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 8 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0702", "Relationships", "Set Navigation", "M1 to MR then MR3 to MA"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      {SetMR} = One_Middle -> R7.Many_Right
+
+      if countof {SetMR} != 3 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         InstFound = FALSE
+
+         for InstMR in {SetMR} do
+
+            if InstMR.Right_Identifier = 3 then
+               InstFound = TRUE
+               {SetMA}   = InstMR -> R10.Many_Above
+            
+               if countof{SetMA} = 2 then
+                  Val1 = -30
+                  Val2 = -40
+
+                  for InstMA in {SetMA} do
+
+                     if InstMA.Above_Data = 2 then
+                        Val1 = InstMA.Above_Data
+                     endif
+
+                     if InstMA.Above_Data = 3 then
+                        Val2 = InstMA.Above_Data
+                     endif
+
+                  endfor
+
+                  if Val1 = 2 then
+
+                     if Val2 != 3 then
+                        Has_Failed   = TRUE
+                        Failure_Code = Val2
+                     endif
+  
+                  else
+                     Has_Failed   = TRUE
+                     Failure_Code = Val1
+                  endif
+
+               else
+                  Has_Failed   = TRUE
+                  Failure_Code = -50
+               endif
+
+            endif
+
+         endfor
+
+         if not Has_Failed then
+
+            if not InstFound then
+               [] = RPT3:Test_Failed ["Instance not found", Test, -20]      
+            else
+               [] = RPT2:Test_Passed ["M1 to MR then MR3 to MA", Test, 0]
+            endif
+
+         else
+            [] = RPT3:Test_Failed ["Navigation Failed", Test, Failure_Code]
+         endif
+
+      endif
+
+   endif
+
+# End Test 8
+
+#--------------------------------------------------------------------------------------------#
+# Test 9 - Navigate directly from Many Right object to Many Above object
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 9 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0702", "Relationships", "Set Navigation", "Many Right to Many Above"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0603"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      Fourth_Right = create Many_Right with Right_Identifier  = 4 & Right_Data = 0
+      Fourth_Above = create Many_Above with Above_Data = 4
+
+      link Fourth_Above  R10 Fourth_Right
+
+      {SetMA} = Fourth_Right -> R10.Many_Above
+
+      if countof {SetMA} = 1 then
+
+         for InstMA in {SetMA} do
+
+            if InstMA.Above_Data = 4 then
+               [] = RPT2:Test_Passed ["Many Right to Many Above", Test, 0]
+            else
+               [] = RPT3:Test_Failed ["Wrong instance found", Test, -10]
+            endif
+
+         endfor
+
+      else
+         [] = RPT3:Test_Failed ["Empty set in Many Above object", Test, -20]      
+      endif
+
+   endif
+
+# End Test 9
+
+#--------------------------------------------------------------------------------------------#
+# Test 10 - Navigate from a single instance in Many Right object to Middle object
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 10 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "Set Navigation", "Many Right to Middle"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstM = Two_Right -> R7.Middle
+
+      if InstM.Middle_Identifier = 1 then
+         [] = RPT2:Test_Passed ["Many Right to Middle", Test, 0]
+      else
+         [] = RPT3:Test_Failed ["Wrong instance in Middle", Test, InstM.Middle_Identifier]
+      endif
+
+   endif
+
+# End Test 10
+
+#--------------------------------------------------------------------------------------------#
+# Test 11 - Navigate from the many right accociative object to the many right object
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 11 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0707", "Relationships", "Set Navigation", "Navigate from associative object to Many Right"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0610"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstMR= One_MRA -> R8.Many_Right   
+
+      if InstMR.Right_Identifier = 1 then
+         [] = RPT2:Test_Passed ["Associative object to Many Right", Test, 0]
+      else
+         [] = RPT3:Test_Failed ["Wrong instance in Many Right", Test, InstMR.Right_Identifier]
+      endif
+
+   endif
+
+# End Test 11
+
+#--------------------------------------------------------------------------------------------#
+# Test 12 - Navigate from the many right accociative object to the many far right object
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 12 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0707", "Relationships", "Set Navigation", "Assoc object to Many Far Right"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0610"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstMFR = Two_MRA -> R8.Many_Far_Right   
+
+      if InstMFR.MFR_Identifier = 2 then
+         [] = RPT2:Test_Passed ["Associative object to Many Right", Test, 0]
+      else
+         [] = RPT3:Test_Failed ["Wrong instance found", Test, InstMFR.MFR_Identifier]
+      endif
+
+   endif
+
+# End Test 12
+
+#--------------------------------------------------------------------------------------------#
+# Test 13 - Test to make sure that the architecture does not restrict the number of instances
+#           for a single object
+#           Create 10000 instances as this is many times the maximum number of instances for
+#           a single instance that is currently being implemented
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 13 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0619", "Relationships", "Set Navigation", "Create many instances"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+
+
+      # Set about creating 10000 instances of the Middle object
+      Count = 0
+
+      loop
+         The_ID = Count + 100
+         newMiddleInst = create Middle with Middle_Identifier = The_ID
+         Count = Count + 1
+         breakif Count = 10000
+
+      endloop
+
+      [] = RPT5:Test_Text[Test, "Instances created"]
+
+      {SetM} = find Middle where Middle_Identifier >= 100
+
+      No_Inst = countof {SetM}
+
+      for InstM in {SetM} do
+         delete InstM
+      endfor
+
+      [] = RPT5:Test_Text[Test, "Instances deleted"]
+
+      if No_Inst = 10000 then
+         [] = RPT2:Test_Passed ["All instances created", Test, 0]
+      else
+         [] = RPT3:Test_Failed ["Instances incorrectly created", Test, No_Inst]
+      endif
+
+   endif
+
+# End Test 13
+
+#--------------------------------------------------------------------------------------------#
+# Test 14 - Test that architecture does not restrict the total number of instances
+#           There are 40 plus objects in the relationships domain each object is going to be
+#           populated with 10000 instances making 400000 plus instances.
+#--------------------------------------------------------------------------------------------#
+
+   if Iteration = 14 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0619", "Relationships", "Set Navigation", "Create many instances"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+
+      Count = 0
+
+      loop
+         The_ID = Count + 100
+
+         newA          = create Object_A         with idA               = The_ID
+         newB          = create Object_B         with idB               = The_ID
+         newC          = create Object_C         with idC               = The_ID
+         newD          = create Object_D         with idD               = The_ID
+         newDO         = create Object_DO        with idDO              = The_ID
+         newE          = create Object_E         with idE               = The_ID
+         newF          = create Object_F         with idF               = The_ID
+         newEF         = create Object_EF        with idEF              = The_ID
+         newG          = create Object_G         with idG               = The_ID         
+         newH          = create Object_H         with idH               = The_ID
+         newI          = create Object_I         with IDI               = The_ID
+         newK          = create Object_K         with idK               = The_ID
+         newL          = create Object_L         with idL               = The_ID
+         newO          = create Object_O         with idO               = The_ID
+         newP          = create Object_P         with idP               = The_ID 
+         newQ          = create Object_Q         with idQ               = The_ID
+         newR          = create Object_R         with idR               = The_ID
+         newLO         = create Left_Object      with idLO              = The_ID
+         newMO         = create Middle_Object    with idMO              = The_ID
+         newRO         = create Right_Object     with idRO              = The_ID
+         newMRAssoc    = create MR_Assoc         with idMR              = The_ID
+         newLeftMany   = create Left_Many        with idLM              = The_ID
+         newRightMany  = create Right_Many       with idRM              = The_ID
+         newLMRMAssoc  = create LMRM_Assoc       with idLMRM            = The_ID
+         newBottomMany = create Bottom_Many      with idBM              = The_ID
+         newSL1        = create Sub_L1           with idSL1             = The_ID
+         newSL2        = create Sub_L2           with idSL2             = The_ID
+         newSL3        = create Sub_L3           with idSL3             = The_ID
+         newSSL1       = create Sub_Sub_L1       with idSSL1            = The_ID 
+         newSSL2       = create Sub_Sub_L2       with idSSL2            = The_ID 
+         newSSL3       = create Sub_Sub_L3       with idSSL3            = The_ID 
+         newSSL4       = create Sub_Sub_L4       with idSSL4            = The_ID 
+         newSSL5       = create Sub_Sub_L5       with idSSL5            = The_ID 
+         newSSL6       = create Sub_Sub_L6       with idSSL6            = The_ID 
+         newSSL7       = create Sub_Sub_L7       with idSSL7            = The_ID 
+         newSSL8       = create Sub_Sub_L8       with idSSL8            = The_ID 
+         newSSL9       = create Sub_Sub_L9       with idSSL9            = The_ID 
+         newSSL10      = create Sub_Sub_L10      with idSSL10           = The_ID 
+         newSSL11      = create Sub_Sub_L11      with idSSL11           = The_ID 
+         newSSSL1      = create Sub_Sub_Sub_L1   with idSSSL1           = The_ID 
+         newSSSL2      = create Sub_Sub_Sub_L2   with idSSSL2           = The_ID 
+         newFL         = create Far_Left         with Left_Identifier   = The_ID
+         newMiddleInst = create Middle           with Middle_Identifier = The_ID
+         newMR         = create Many_Right       with Right_Identifier  = The_ID
+         newMA         = create Many_Above       with Above_Data        = The_ID
+         newMRA        = create Many_Right_Assoc with MRA_Identifier    = The_ID
+         newMFR        = create Many_Far_Right   with MFR_Identifier    = The_ID
+
+         Count = Count + 1
+         breakif Count = 10000
+
+      endloop
+
+      [] = RPT5:Test_Text[Test, "Instances created"]
+      
+      {SetA}          = find Object_A         where idA               >= 100
+      {SetB}          = find Object_B         where idB               >= 100
+      {SetC}          = find Object_C         where idC               >= 100
+      {SetD}          = find Object_D         where idD               >= 100
+      {SetDO}         = find Object_DO        where idDO              >= 100
+      {SetE}          = find Object_E         where idE               >= 100
+      {SetF}          = find Object_F         where idF               >= 100
+      {SetEF}         = find Object_EF        where idEF              >= 100
+      {SetG}          = find Object_G         where idG               >= 100  
+      {SetH}          = find Object_H         where idH               >= 100
+      {SetI}          = find Object_I         where IDI               >= 100
+      {SetK}          = find Object_K         where idK               >= 100
+      {SetL}          = find Object_L         where idL               >= 100
+      {SetO}          = find Object_O         where idO               >= 100
+      {SetP}          = find Object_P         where idP               >= 100
+      {SetQ}          = find Object_Q         where idQ               >= 100
+      {SetR}          = find Object_R         where idR               >= 100
+      {SetLO}         = find Left_Object      where idLO              >= 100
+      {SetMO}         = find Middle_Object    where idMO              >= 100
+      {SetRO}         = find Right_Object     where idRO              >= 100
+      {SetMRAssoc}    = find MR_Assoc         where idMR              >= 100
+      {SetLeftMany}   = find Left_Many        where idLM              >= 100
+      {SetRightMany}  = find Right_Many       where idRM              >= 100
+      {SetLMRMAssoc}  = find LMRM_Assoc       where idLMRM            >= 100
+      {SetBottomMany} = find Bottom_Many      where idBM              >= 100
+      {SetSL1}        = find Sub_L1           where idSL1             >= 100
+      {SetSL2}        = find Sub_L2           where idSL2             >= 100
+      {SetSL3}        = find Sub_L3           where idSL3             >= 100
+      {SetSSL1}       = find Sub_Sub_L1       where idSSL1            >= 100
+      {SetSSL2}       = find Sub_Sub_L2       where idSSL2            >= 100
+      {SetSSL3}       = find Sub_Sub_L3       where idSSL3            >= 100
+      {SetSSL4}       = find Sub_Sub_L4       where idSSL4            >= 100
+      {SetSSL5}       = find Sub_Sub_L5       where idSSL5            >= 100
+      {SetSSL6}       = find Sub_Sub_L6       where idSSL6            >= 100
+      {SetSSL7}       = find Sub_Sub_L7       where idSSL7            >= 100
+      {SetSSL8}       = find Sub_Sub_L8       where idSSL8            >= 100
+      {SetSSL9}       = find Sub_Sub_L9       where idSSL9            >= 100
+      {SetSSL10}      = find Sub_Sub_L10      where idSSL10           >= 100
+      {SetSSL11}      = find Sub_Sub_L11      where idSSL11           >= 100
+      {SetSSSL1}      = find Sub_Sub_Sub_L1   where idSSSL1           >= 100
+      {SetSSSL2}      = find Sub_Sub_Sub_L2   where idSSSL2           >= 100
+      {SetFL}         = find Far_Left         where Left_Identifier   >= 100
+      {SetMiddleInst} = find Middle           where Middle_Identifier >= 100
+      {SetMR}         = find Many_Right       where Right_Identifier  >= 100
+      {SetMA}         = find Many_Above       where Above_Data        >= 100
+      {SetMRA}        = find Many_Right_Assoc where MRA_Identifier    >= 100
+      {SetMFR}        = find Many_Far_Right   where MFR_Identifier    >= 100
+
+      The_Grand_Total = countof {SetA}
+      The_Grand_Total = The_Grand_Total + countof {SetB}
+      The_Grand_Total = The_Grand_Total + countof {SetC}
+      The_Grand_Total = The_Grand_Total + countof {SetD}
+      The_Grand_Total = The_Grand_Total + countof {SetDO}
+      The_Grand_Total = The_Grand_Total + countof {SetE}
+      The_Grand_Total = The_Grand_Total + countof {SetEF}
+      The_Grand_Total = The_Grand_Total + countof {SetG}
+      The_Grand_Total = The_Grand_Total + countof {SetH}
+      The_Grand_Total = The_Grand_Total + countof {SetI}
+      The_Grand_Total = The_Grand_Total + countof {SetK}
+      The_Grand_Total = The_Grand_Total + countof {SetL}
+      The_Grand_Total = The_Grand_Total + countof {SetO}
+      The_Grand_Total = The_Grand_Total + countof {SetP}
+      The_Grand_Total = The_Grand_Total + countof {SetQ}
+      The_Grand_Total = The_Grand_Total + countof {SetR}
+      The_Grand_Total = The_Grand_Total + countof {SetLO}
+      The_Grand_Total = The_Grand_Total + countof {SetMO}
+      The_Grand_Total = The_Grand_Total + countof {SetRO}
+      The_Grand_Total = The_Grand_Total + countof {SetMRAssoc}
+      The_Grand_Total = The_Grand_Total + countof {SetLeftMany}
+      The_Grand_Total = The_Grand_Total + countof {SetRightMany}
+      The_Grand_Total = The_Grand_Total + countof {SetLMRMAssoc}
+      The_Grand_Total = The_Grand_Total + countof {SetBottomMany}
+      The_Grand_Total = The_Grand_Total + countof {SetSL1}
+      The_Grand_Total = The_Grand_Total + countof {SetSL2}
+      The_Grand_Total = The_Grand_Total + countof {SetSL3}
+      The_Grand_Total = The_Grand_Total + countof {SetSSL1}
+      The_Grand_Total = The_Grand_Total + countof {SetSSL2}
+      The_Grand_Total = The_Grand_Total + countof {SetSSL3}
+      The_Grand_Total = The_Grand_Total + countof {SetSSL4}
+      The_Grand_Total = The_Grand_Total + countof {SetSSL5}
+      The_Grand_Total = The_Grand_Total + countof {SetSSL6}
+      The_Grand_Total = The_Grand_Total + countof {SetSSL7}
+      The_Grand_Total = The_Grand_Total + countof {SetSSL8}
+      The_Grand_Total = The_Grand_Total + countof {SetSSL9}
+      The_Grand_Total = The_Grand_Total + countof {SetSSL10}
+      The_Grand_Total = The_Grand_Total + countof {SetSSL11}
+      The_Grand_Total = The_Grand_Total + countof {SetSSSL1}
+      The_Grand_Total = The_Grand_Total + countof {SetSSSL2}
+      The_Grand_Total = The_Grand_Total + countof {SetFL}
+      The_Grand_Total = The_Grand_Total + countof {SetMiddleInst}
+      The_Grand_Total = The_Grand_Total + countof {SetMR}
+      The_Grand_Total = The_Grand_Total + countof {SetMA}
+      The_Grand_Total = The_Grand_Total + countof {SetMRA}
+      The_Grand_Total = The_Grand_Total + countof {SetMFR}
+
+      if The_Grand_Total = 460000 then
+         [] = RPT2:Test_Passed ["All instances created", Test, 0]
+      else
+         [] = RPT3:Test_Failed ["Instances incorrectly created", Test, The_Grand_Total]
+      endif
+
+      [] = RPT5:Test_Text[Test, "Deleting instances"]      
+
+      for InstA in {SetA} do
+         delete InstA
+      endfor
+
+      for InstB in {SetB} do
+         delete InstB
+      endfor
+
+      for InstC in {SetC} do
+         delete InstC
+      endfor
+
+      for InstD in {SetD} do
+         delete InstD
+      endfor
+
+      for InstDO in {SetDO} do
+         delete InstDO
+      endfor
+
+      for InstE in {SetE} do
+         delete InstE
+      endfor
+
+      for InstEF in {SetEF} do
+         delete InstEF
+      endfor
+
+      for InstF in {SetF} do
+         delete InstF
+      endfor
+
+      for InstG in {SetG} do
+         delete InstG
+      endfor
+
+      for InstH in {SetH} do
+         delete InstH
+      endfor
+
+      for InstI in {SetI} do
+         delete InstI
+      endfor
+
+      for InstK in {SetK} do
+         delete InstK
+      endfor
+
+      for InstL1 in {SetL} do
+         delete InstL1
+      endfor
+
+      for InstO in {SetO} do
+         delete InstO
+      endfor
+
+      for InstP in {SetP} do
+         delete InstP
+      endfor
+
+      for InstQ in {SetQ} do
+         delete InstQ
+      endfor
+
+      for InstR in {SetR} do
+         delete InstR
+      endfor
+
+      for InstLO in {SetLO} do
+         delete InstLO
+      endfor
+
+      for InstRO in {SetRO} do
+         delete InstRO
+      endfor
+
+      for InstMO in {SetMO} do
+         delete InstMO
+      endfor
+
+      for InstMRAssoc in {SetMRAssoc} do
+         delete InstMRAssoc
+      endfor
+
+      for InstLeftMany in {SetLeftMany} do
+         delete InstLeftMany
+      endfor
+
+      for InstRightMany in {SetRightMany} do
+         delete InstRightMany
+      endfor
+
+      for InstLMRMAssoc in {SetLMRMAssoc} do
+         delete InstLMRMAssoc
+      endfor
+
+      for InstBottomMany in {SetBottomMany} do
+         delete InstBottomMany
+      endfor
+
+      for InstSL1 in {SetSL1} do
+         delete InstSL1
+      endfor
+
+      for InstSL2 in {SetSL2} do
+         delete InstSL2
+      endfor
+
+      for InstSL3 in {SetSL3} do
+         delete InstSL3
+      endfor
+
+      for InstSSL1 in {SetSSL1} do
+         delete InstSSL1
+      endfor
+
+      for InstSSL2 in {SetSSL2} do
+         delete InstSSL2
+      endfor
+
+      for InstSSL3 in {SetSSL3} do
+         delete InstSSL3
+      endfor
+
+      for InstSSL4 in {SetSSL4} do
+         delete InstSSL4
+      endfor
+
+      for InstSSL5 in {SetSSL5} do
+         delete InstSSL5
+      endfor
+
+      for InstSSL6 in {SetSSL6} do
+         delete InstSSL6
+      endfor
+
+      for InstSSL7 in {SetSSL7} do
+         delete InstSSL7
+      endfor
+
+      for InstSSL8 in {SetSSL8} do
+         delete InstSSL8
+      endfor
+
+      for InstSSL9 in {SetSSL9} do
+         delete InstSSL9
+      endfor
+
+      for InstSSL10 in {SetSSL10} do
+         delete InstSSL10
+      endfor
+
+      for InstSSL11 in {SetSSL11} do
+         delete InstSSL11
+      endfor
+
+      for InstSSSL1 in {SetSSSL1} do
+         delete InstSSSL1
+      endfor
+
+      for InstSSSL2 in {SetSSSL2} do
+         delete InstSSSL2
+      endfor
+
+      for InstFarLeft in {SetFL} do
+         delete InstFarLeft
+      endfor
+
+      for InstMiddleInst in {SetMiddleInst} do
+         delete InstMiddleInst
+      endfor
+
+      for InstMR in {SetMR} do
+         delete InstMR
+      endfor
+
+      for InstMA in {SetMA} do
+         delete InstMA
+      endfor
+
+      for InstMRA in {SetMRA} do
+         delete InstMRA
+      endfor
+
+      for InstMFR in {SetMFR} do
+         delete InstMFR
+      endfor
+
+      [] = RPT5:Test_Text[Test, "Instances Deleted"] 
+
+   endif
+
+enddefine

@@ -1,0 +1,13 @@
+public service Function_Calls::Receive_Enumeration (Test_Number : in  integer,
+                                                    The_Colour  : in  Colour_Type,
+                                                    Testing_For : in  string) is
+   [] = RPT1:Start_Test[Test_Number, "1241-0000-01-0804", "Function Calls", "Receive enumeration", Testing_For]
+   [] = RPT8:Specify_Requid[Test_Number, "1103-0000-01-1011"]
+
+   Target_Colour of Colour_Type = 'Red'
+
+   if The_Colour = Target_Colour then
+      [] = RPT2:Test_Passed[Testing_For, Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed[Testing_For, Test_Number, -1]
+   endif

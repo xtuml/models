@@ -1,0 +1,132 @@
+public service ASL_Mapping::Test_Large_Numbers (Start_Test_Number  : in  integer,
+                                                Finish_Test_Number : out integer) is
+This_Test_Number = Start_Test_Number
+
+[Host] = WAW1:What_Env[]
+if Host = "WACA" then
+   WACA = TRUE
+else
+   WACA = FALSE
+endif
+
+# Commented out code indicates that these ASL instructions will cause the WACA not to generate this file,
+# as an assingment of an out of range value will result in a Fatal Error during code generation.
+
+# It is conceivable that WACA could be required to actually limit the maximum and minimum values
+# to be within the correct range. This does NOT happen currently. If this changes, and WACA is
+# required to limit any range, the commented out code should be re-instated.
+
+# Maximum permissable value
+System_Maximum = 2147483647
+
+# Minimum permissable value
+System_Minimum = -2147483648
+
+#Illegal maximum value
+#Overflow_System_Maximum = 2147483648
+Overflow_System_Maximum = System_Maximum
+
+# Illegal minimum value
+#Underflow_System_Minimum = -2147483649
+Underflow_System_Minimum = System_Minimum
+
+
+# ------------------------------------------------------------------------------------------------------------
+# Test 1 - Integer Overflow Underflow
+# ------------------------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "Null Requid", "ASL Mapping", "Integer Overflow Underflow", "Test max"]
+
+   if System_Maximum = 2147483647 then
+      [] = RPT2:Test_Passed["Integer max", This_Test_Number, System_Maximum]
+   else
+      [] = RPT3:Test_Failed["Integer max", This_Test_Number, System_Maximum]
+   endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 1
+
+# ------------------------------------------------------------------------------------------------------------
+# Test 2 - Integer Overflow Underflow
+# ------------------------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "Null Requid", "ASL Mapping", "Integer Overflow Underflow", "Test min"]
+
+   if System_Minimum = -2147483648 then
+      [] = RPT2:Test_Passed["Integer max", This_Test_Number, System_Minimum]
+   else
+      [] = RPT3:Test_Failed["Integer max", This_Test_Number, System_Minimum]
+   endif
+ 
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 2
+
+# ------------------------------------------------------------------------------------------------------------
+# Test 3 - Integer Overflow Underflow
+# ------------------------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "Null Requid", "ASL Mapping", "Integer Overflow Underflow", "Test constrained to max"]
+
+   # WACA should limit the Overflow_System_Maximum value to the system defined max, 
+   # since this value is outside of the defined integer range.
+
+   # Compare it to the unmodified maximum legal value System_Maximum
+
+   # if WACA then
+
+   if Overflow_System_Maximum = System_Maximum then
+      [] = RPT2:Test_Passed["Integer constrained to max", This_Test_Number, Overflow_System_Maximum]
+   else
+      [] = RPT3:Test_Failed["Integer constrained to max", This_Test_Number, Overflow_System_Maximum]
+   endif
+
+   # else
+      # ISIM does no limiting, and allows a bigger range anyway.
+      # If this bit ever got tested by WACA (and it shouldn't), this test would pass as both the
+      # operands would have been modified by WACA during code generation. This will be proved later.
+   #   if Overflow_System_Maximum = 2147483648 then
+   #      [] = RPT2:Test_Passed["Integer constrained to max", This_Test_Number, Overflow_System_Maximum]
+   #   else
+   #      [] = RPT3:Test_Failed["Integer constrained to max", This_Test_Number, Overflow_System_Maximum]
+   #   endif
+
+   #endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 3
+
+# ------------------------------------------------------------------------------------------------------------
+# Test 4 - Integer Overflow Underflow
+# ------------------------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "Null Requid", "ASL Mapping", "Integer Overflow Underflow", "Test constrained to min"]
+
+   # WACA should limit this value to the system defined min, since this value is outside of the defined integer range.
+
+   # if WACA then
+      if Underflow_System_Minimum = System_Minimum then
+         [] = RPT2:Test_Passed["Integer constrained to min", This_Test_Number, Underflow_System_Minimum]
+      else
+         [] = RPT3:Test_Failed["Integer constrained to min", This_Test_Number, Underflow_System_Minimum]
+      endif
+
+   # else
+      # ISIM does no limiting, and allows a bigger range anyway.
+   #   if Underflow_System_Minimum = -2147483649 then
+   #      [] = RPT2:Test_Passed["Integer constrained to min", This_Test_Number, Underflow_System_Minimum]
+   #   else
+   #      [] = RPT3:Test_Failed["Integer constrained to min", This_Test_Number, Underflow_System_Minimum]
+   #   endif
+
+   #endif
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 4
+
+# ------------------------------------------------------------------------------------------------------------
+
+Finish_Test_Number = This_Test_Number

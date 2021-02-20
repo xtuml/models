@@ -1,0 +1,54 @@
+define function  ASL_Mapping15::Check_Identifiers
+input \
+	Test_No:Base_Integer_Type 
+output \
+	Returning_No:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+   Test = Test_No
+
+#-------------------------------------------------------------------#
+# Test 1 - Check that identifying attributes are picked up
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0131", "ASL Mapping", "Check identifiers", "Check identifying attributes"]
+
+   LeftObject  = create Left          with idL  = 1
+   RightObject = create Right         with idR  = 1
+   ARObject    = create Another_Right with idAR = 1
+   LRObject    = create LeftRight     with idL  = 1 &\
+                                           idR  = 1
+   
+   if LRObject.idL = 1 then
+
+      if LRObject.idR = 1 then   
+         [] = RPT2:Test_Passed["Identifying Attribute", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Identifying Attribute", Test, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Identifying Attribute", Test, -10]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Test 2 - Check that non-identifying attributes are ignored
+#          N.B. This test can only be confirmed by inspection
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0131", "ASL Mapping", "Check identifiers", "Check identifying attributes"]
+   [] = RPT5:Test_Text [Test, "Confirmed on inspection"]
+   [] = RPT2:Test_Passed["Non-Identifying Attribute", Test, 0]
+
+   Test = Test + 1
+
+# End Test 2
+
+Returning_No = Test
+
+enddefine

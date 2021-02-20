@@ -1,0 +1,241 @@
+public service TAGS::Perform_Passive_Many_To_Many_Tests () is
+
+my_test = find-one Test_Data
+
+Test = my_test.Number
+Failure_Value = 0
+
+Supported = TRUE
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   Left_One      = create unique Tagged_Many_Left  with Attribute_One   = Test
+   Right_One     = create unique Tagged_Many_Right with Attribute_Two   = Test
+   Assoc_One_One = create Tagged_Single_Assoc with Attribute_Three = Test
+
+   link Left_One R3 Right_One using Assoc_One_One
+
+   # navigate to prove link
+
+   {Set_Of_Right} = Left_One -> R3.Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 1
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Passive Relationships", "Create first three"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   Left_Two      = create unique Tagged_Many_Left  with Attribute_One   = Test
+   Right_Two     = create unique Tagged_Many_Right with Attribute_Two   = Test
+   Assoc_Two_Two = create Tagged_Single_Assoc with Attribute_Three = Test
+
+   link Left_Two R3 Right_Two using Assoc_Two_Two
+
+   # navigate to prove link
+
+   {Set_Of_Right} = Left_Two -> R3.Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 1
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Passive Relationships", "Create second three"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   Left_Three      = create unique Tagged_Many_Left  with Attribute_One   = Test
+   Right_Three     = create unique Tagged_Many_Right with Attribute_Two   = Test
+   Assoc_Three_Three = create Tagged_Single_Assoc with Attribute_Three = Test
+
+   link Left_Three R3 Right_Three using Assoc_Three_Three
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_Three -> R3.Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 1
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Passive Relationships", "Create third three"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4
+#--------------------------------------------------------------------------
+
+   Assoc_One_Two = create Tagged_Single_Assoc with Attribute_Three = Test
+
+   link Left_One R3 Right_Two using Assoc_One_Two
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_One -> R3.Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 2
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Passive Relationships", "Link one to two via three"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5
+#--------------------------------------------------------------------------
+
+   Assoc_One_Three = create Tagged_Single_Assoc with Attribute_Three = Test
+
+   link Left_One R3 Right_Three using Assoc_One_Three
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_One -> R3.Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 3
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Passive Relationships", "Link one to three "]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+# Test 6 
+#--------------------------------------------------------------------------
+
+   Assoc_Two_One = create Tagged_Single_Assoc with Attribute_Three = Test
+
+   link Left_Two R3 Right_One using Assoc_Two_One
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_Two -> R3.Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 2
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Passive Relationships", "Link two to one"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+  
+   Test = Test + 1
+
+# End Test 6 
+
+#--------------------------------------------------------------------------
+# Test 7
+#--------------------------------------------------------------------------
+
+   Assoc_Two_Three = create Tagged_Single_Assoc with Attribute_Three = Test
+
+   link Left_Two R3 Right_Three using Assoc_Two_Three
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_Two -> R3.Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 3
+
+   Failure_Value = Number_In_Set - Expected_Number
+   
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Passive Relationships", "Link two to three"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 7
+
+#--------------------------------------------------------------------------
+# Test 8 
+#--------------------------------------------------------------------------
+
+   Assoc_Three_One = create Tagged_Single_Assoc with Attribute_Three = Test
+
+   link Left_Three R3 Right_One using Assoc_Three_One
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_Three -> R3.Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 2
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Passive Relationships", "Link three to one"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+#--------------------------------------------------------------------------
+# Test 9 
+#--------------------------------------------------------------------------
+
+   Assoc_Three_Two = create Tagged_Single_Assoc with Attribute_Three = Test
+
+   link Left_Three R3 Right_Two using Assoc_Three_Two
+
+   # navigate to prove link
+   {Set_Of_Right} = Left_Three -> R3.Tagged_Many_Right
+
+   Number_In_Set = countof {Set_Of_Right}
+
+   Expected_Number = 3
+
+   Failure_Value = Number_In_Set - Expected_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "M to M Passive Relationships", "Link three to two"]
+
+   [] = TAGS5::Report_Now[Test, "Create all three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+#--------------------------------------------------------------------------
+
+my_test.Number = Test

@@ -1,0 +1,163 @@
+//! Perform_Passive_Array_Tests
+private service TAGS::Perform_Passive_Array_Tests () is
+# Separate requirement tag test
+# @@TAGS-01-0012
+my_test = find-one Test_Data
+
+if my_test.Environment = 'WACA' then
+   This_Is_WACA = TRUE
+else
+   This_Is_WACA = FALSE
+endif
+
+Test = my_test.Number
+Last_Test = 0
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [Last_Test] = TAGS8::Perform_Passive_Array_of_1_Object_Tests[Test,This_Is_WACA]
+
+   Test = Last_Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [Last_Test] = TAGS7::Perform_Passive_Array_of_3_Objects_Tests[Test,This_Is_WACA]
+
+   Test = Last_Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Create three passive data objects for Just Multiple
+#--------------------------------------------------------------------------
+
+   JM1 = create Just_Multiple with idJM = 1
+   JM2 = create Just_Multiple with idJM = 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "TAGGING",  "Multiple object", "Create two"]
+
+   # Return count of A_Passive_Array_Of_Three_Objects
+   {set_of_objects} = find-all Just_Multiple
+
+   total_count = countof {set_of_objects}
+
+   if total_count = 2 then
+      [] = RPT2:Test_Passed["Created two", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Failed to create two", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "TAGGING", "Multiple object", "Delete one"]
+
+   # Delete 1 of passive objects
+
+   delete JM2
+
+   {set_of_objects} = find-all Just_Multiple
+   
+   total_count = countof {set_of_objects}
+
+   if total_count = 1 then
+      [] = RPT2:Test_Passed["Delete one", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Failed to delete one", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Create extra passive object, total of three
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "TAGGING", "Multiple object", "Add one"]
+
+   replacement_object = create Just_Multiple with idJM = 3
+
+   # Return count of A_Passive_Array_Of_Three_Objects
+   {set_of_objects} = find-all Just_Multiple
+
+   total_count = countof {set_of_objects}
+
+   if total_count = 2 then
+      [] = RPT2:Test_Passed["Add one", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Failed to add one", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 5 - Attempt to delete all objects
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "TAGGING", "Passive Array 3 UNIQUE object", "Delete all objects"]
+
+   # Return count of A_Passive_Array_Of_Three_Objects
+
+   {set_of_objects} = find-all Just_Multiple
+   total_count = countof {set_of_objects}
+
+   if total_count = 2 then
+      # Delete all objects
+      for each_object in {set_of_objects} do
+         delete each_object
+      endfor
+
+      {set_of_objects} = find-all Just_Multiple
+      total_count = countof {set_of_objects}
+
+      if total_count = 0 then
+         new_object = create Just_Multiple with idJM = 1
+
+         # Check that it is defined
+         if new_object != UNDEFINED then
+            {set_of_objects} = find-all Just_Multiple
+            total_count = countof {set_of_objects}
+
+            # and only one now exists
+            if total_count = 1 then 
+
+               delete new_object
+
+               [] = RPT2:Test_Passed["Deleted all", Test, 0]
+            else
+               [] = RPT3:Test_Failed["Failed to delete all", Test, -10]
+            endif
+
+         else
+            [] = RPT3:Test_Failed["Failed to delete all", Test, -20]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Failed to delete all", Test, -30]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Failed to delete all", Test, -40]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+
+my_test.Number = Test

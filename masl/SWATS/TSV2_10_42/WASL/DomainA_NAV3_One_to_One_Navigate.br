@@ -1,0 +1,58 @@
+define bridge  DomainA:NAV3:One_to_One_Navigate
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+#------------------------------------------------------------------------#
+# Perform a navigation in THIS domain
+#------------------------------------------------------------------------#
+
+   Bridge_Test_Passed = FALSE
+   Passed_Value       = 0
+   Failure_Value      = -1
+
+   My_Report = find-one Report_Data
+
+   if My_Report = UNDEFINED then
+      $USE RP
+         [] = RP7::Report_Run_Time_Error["Calling domain has not created Report_Data"]
+      $ENDUSE
+
+   else
+      This_Domain_Number = My_Report.Reported_Domain_Number
+   
+      left_side = find-one One_To_One_Left_Side where otols_id = Test
+
+      if left_side != UNDEFINED then
+         a_right_side = left_side -> R1.One_To_One_Right_Side
+
+         if a_right_side.otors_id = Test then
+            Bridge_Test_Passed = TRUE
+            Passed_Value = a_right_side.otors_id
+         endif
+
+      else
+         Failure_Value = -2
+      endif
+
+      $USE RP
+
+         [] = RP4::Test_Description[Test, "1241-0000-01-1102", "Domain_A", "Bridge", "local one to one nav", This_Domain_Number]
+         [] = RP10::Specify_Requid[This_Domain_Number, Test, "1103-0000-01-1021"]
+
+         if Bridge_Test_Passed = TRUE then
+            [] = RP1::Test_Passed["Bridge", Test, Passed_Value, This_Domain_Number]
+         else
+            [] = RP2::Test_Failed["Bridge", Test, Failure_Value, This_Domain_Number]
+         endif
+
+      $ENDUSE
+
+   endif
+
+enddefine

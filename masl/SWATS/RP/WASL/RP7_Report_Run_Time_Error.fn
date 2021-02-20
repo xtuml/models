@@ -1,0 +1,39 @@
+define function  RP7::Report_Run_Time_Error
+input \
+	Detail:Base_Text_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+the_detail = Detail
+
+
+
+$INLINE
+ fprintf(stderr, "\n");
+ fprintf(stderr,"======================= RUN TIME ERROR ENCOUNTERED =======================\n");
+ fprintf(stderr, "\n");
+ fprintf(stderr, "Report : %s\n", the_detail);
+ fprintf(stderr, " \n");
+ fprintf(stderr,"======================= ************************** =======================\n");
+ fprintf(stderr, "\n");
+$ENDINLINE
+
+
+#$ADA_INLINE
+# with Ada.Text_IO;
+# Ada.Text_IO.New_Line(1);
+# Ada.Text_IO.Put_Line("======================= RUN TIME ERROR ENCOUNTERED =======================");
+# Ada.Text_IO.New_Line(1);
+# Ada.Text_IO.Put_Line("Report : "  & the_detail );
+# Ada.Text_IO.New_Line(1);
+# Ada.Text_IO.Put_Line("======================= ************************** =======================");
+# Ada.Text_IO.New_Line(1);
+
+#$END_ADAINLINE
+
+
+
+enddefine

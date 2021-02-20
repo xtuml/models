@@ -1,0 +1,16 @@
+public service RP::A_Test_That_Is_Unsupported.Not_Done_It_Yet (Invoker_Domain_IH : in  instance of Domain_Details) is
+The_Unsupported_Instance = Invoker_Domain_IH -> R3.A_Test_That_Is_Unsupported
+
+if The_Unsupported_Instance != UNDEFINED then
+
+   local_increment = The_Unsupported_Instance.Unsupported_Counter
+
+   local_increment = local_increment + 1
+
+   The_Unsupported_Instance.Unsupported_Counter = local_increment
+
+else
+
+   [] = RP7::Report_Run_Time_Error["Can not find an unsupported instance associated with this domain"]
+ 
+endif

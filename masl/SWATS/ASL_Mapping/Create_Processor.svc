@@ -1,0 +1,72 @@
+public service ASL_Mapping::Create_Processor (Test_Start         : in  integer,
+                                              Processor_Id_Local : in  Processor_Id_Type,
+                                              Final_Test         : out integer) is
+#-----------------------------------------------------------------------
+# The ASL timer function <Create_Timer> shall be supported
+# 1103-0000-01-1111
+#
+# The ASL <create ... with> statment to create an instance of an object
+# with attributes shall be supported
+# 1103-0000-0511
+#
+# Writing to object attributes shall be supported
+# 1103-0000-01-0521
+#
+# Reading object attribute values shall be supported
+# 1103-0000-01-0522
+#-----------------------------------------------------------------------
+
+This_Test = Test_Start
+
+[] = RPT1:Start_Test[This_Test, "1103-0000-01-0511", "ASL_Mapping", "Active Domain Service Perform Attribute assignment", "Assign all attributes"]
+[] = RPT8:Specify_Requid[This_Test, "1103-0000-01-1111"]
+[] = RPT8:Specify_Requid[This_Test, "1103-0000-01-0521"]
+[] = RPT8:Specify_Requid[This_Test, "1103-0000-01-0522"]
+
+[my_timer_id_local] = Create_Timer[]
+
+my_processor = create Processor with Processor_Id = Processor_Id_Local &\
+   Background_Processing_Timer_Id = my_timer_id_local &\
+   Communications_Enabled = FALSE 
+
+my_object = find-one Processor where Processor_Id = Processor_Id_Local
+
+Failure_Code = 1
+
+if my_object != UNDEFINED then
+
+   if my_object.Background_Processing_Timer_Id = my_timer_id_local then
+
+      if my_object.Communications_Enabled = FALSE then
+
+         Failure_Code = 0
+
+      else
+
+         Failure_Code = -30
+
+      endif
+
+   else
+
+      Failure_Code = -20
+
+   endif
+
+   delete my_object
+
+else
+
+   Failure_Code = -10
+
+endif
+
+if Failure_Code = 0 then
+   [] = RPT2:Test_Passed["Attribute read", This_Test, Failure_Code]
+else
+   [] = RPT3:Test_Failed["Attribute read", This_Test, Failure_Code]
+endif
+
+This_Test = This_Test + 1
+
+Final_Test = This_Test

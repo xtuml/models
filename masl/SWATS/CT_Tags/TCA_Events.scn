@@ -1,0 +1,268 @@
+//! TCA_Events
+private service CT_Tags::TCA_Events () is
+my_test = find-one Test_Data
+
+Test = my_test.Current_Test_Number
+
+LocalCount = 0
+
+instResult = find-one Results where idRes = 1
+
+firstGS = create Global_Super with idGS          = 1     &\
+                                   GSRef         = 0     &\
+                                   CCAFlag       = FALSE &\
+                                   TCAFlag       = FALSE &\
+                                   GlobalFlag    = FALSE &\
+                                   Current_State = 'Idle'
+
+firstGSC = create Global_SubC with idGSC         = 1     &\ 
+                                   Current_State = 'Idle'
+
+firstTSA = create TCA_SubA with idTSA         = 1     &\
+                                Current_State = 'Idle'
+
+firstTD = create TCA_D with idTD          = 1     &\
+                            TDPassed      = FALSE &\
+                            TDLinked      = FALSE &\
+                            Current_State = 'Idle'
+
+firstTE = create TCA_E with idTE          = 1     &\
+                            TERef         = 0     &\
+                            TELinked      = FALSE &\
+                            TEPassed      = FALSE &\
+                            Current_State = 'Idle'
+
+firstTS = create TCA_Super with  idTS          = 1     &\
+                                 TCAFlag       = FALSE &\
+                                 TSRef         = 0     &\
+                                 Current_State = 'Idle'
+
+firstTSD = create TCA_SubD with idTSD         = 1     &\
+                                TSDRef        = 0     &\
+                                Current_State = 'Idle'
+
+firstGSF = create Global_SubF with idGSF         = 1     &\
+                                   GlobalFlag    = FALSE &\ 
+                                   Current_State = 'Idle'
+
+firstTCAA = create TCA_A with idTA          = 1 &\
+                              Current_State = 'Idle'
+
+#-----------------------------------------------------------------------------------
+# Test 25 - Generate event to TDA object D
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen event to TCA object"]
+
+   generate ObjTD1:Fired (Test) to firstTD
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 25
+
+#-----------------------------------------------------------------------------------
+# Test 26 - Link Global super type to TCA sub type
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Link Global Super to TCA Sub"]
+
+   generate ObjTD2:Link_SuperSub (Test) to firstTD
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 26
+
+#-----------------------------------------------------------------------------------
+# Test 27 - Test Polymorphic event delivery
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen event to Global super"]
+
+   generate GS1:Poly_Fired(Test) to firstGS
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 27
+
+#-----------------------------------------------------------------------------------
+# Test 28 - Unlink Global supertype from TCA subtype
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Unlink Global Super TCA Sub"]
+
+   generate TSA1:Unlink_SuperSub(Test) to firstTSA
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 28
+
+#-----------------------------------------------------------------------------------
+# Test 29 - Link Global supertype to Global subtype
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Link Glob Super to Glob Sub"]
+
+   generate GSC4:Link_SuperSub(Test) to firstGSC
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 29
+
+#-----------------------------------------------------------------------------------
+# Test 30 - Polymorphic event delivery from Global super to global sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen event to Global super"]
+
+   generate GS1:Poly_Fired(Test) to firstGS
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 30
+
+#-----------------------------------------------------------------------------------
+# Test 31 - Unlink Global supertype from Global subtype
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Unlink Glob Super to Glob Sub"]
+
+   generate GSC1:Unlink_SuperSub(Test) to firstGSC
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 31
+
+#-----------------------------------------------------------------------------------
+# Test 32 - Generate event to TCA Sub E
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen event to TCA Sub E"]
+
+   generate ObjTE1:Fired(Test) to firstTE
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 32
+
+
+#-----------------------------------------------------------------------------------
+# Test 33 - Link TCA Super to TCA Sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Link TCA Super to TCA Sub"]
+
+   generate ObjTE2:Link_SuperSub(Test) to firstTE
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 33
+
+#-----------------------------------------------------------------------------------
+# Test 34 - Test Polymorphic event delivery from TCA Super to TCA Sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen event to TCA Super"]
+
+   generate TS1:Fired(Test) to firstTS
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 34
+
+#-----------------------------------------------------------------------------------
+# Test 35 - Unlink
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Unlink TCA Super from TCA Sub"]
+
+   generate TSD2:Unlink_SuperSub(Test) to firstTSD
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 35
+
+#-----------------------------------------------------------------------------------
+# Test 36 - Link TCA Super to Global Sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Link TCA Super to TCA Sub"]
+
+   generate TCAA1:Link_To_Global(Test) to firstTCAA
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 36
+
+#-----------------------------------------------------------------------------------
+# Test 37 - Test Polymorphic event delivery from TCA Super to Global Sub
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Gen event to TCA Super"]
+
+   generate TS1:Fired(Test) to firstTS
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 37
+
+#-----------------------------------------------------------------------------------
+# Test 38 - Unlink
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Unlink TCA Super from TCA Sub"]
+
+   generate TCAA2:Unlink_From_Global(Test) to firstTCAA
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 38
+
+#-----------------------------------------------------------------------------------
+# Test 39 - Delete all TCA instance
+#-----------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "TCA CCA Tagging", "Scenario", "Delete TCA instances"]
+
+   generate TSA2:Delete_Instances (Test) to firstTSA
+
+   Test = Test + 1
+
+   LocalCount = LocalCount + 1
+
+# End Test 39
+
+#-----------------------------------------------------------------------------------
+
+temp = instResult.TCATotal
+temp = temp + LocalCount
+instResult.TCATotal = temp
+
+my_test.Current_Test_Number = Test

@@ -1,0 +1,62 @@
+public service ASL_Mapping::Object_LOGIC.Perform_Attribute_Assignment (Test_Start : in  integer,
+                                                                       Final_Test : out integer) is
+This_Test = Test_Start
+
+[] = RPT1:Start_Test[This_Test, "1103-0000-01-0511", "ASL_Mapping", "Passive Object Service Perform Attribute assignment", "Assign all attributes"]
+[] = RPT8:Specify_Requid[This_Test, "1103-0000-01-0522"]
+
+my_object = create Object_LOGIC with IntegerAttr = This_Test &\
+    TextAttr = "Hello" &\
+    BooleanAttr = FALSE &\
+    EnumerationAttr = 'Frank' &\
+    ReferenceLOGIC = This_Test 
+
+my_object = find-one Object_LOGIC where ReferenceLOGIC = This_Test
+
+Failure_Code = 1
+
+if my_object != UNDEFINED then
+
+   if my_object.TextAttr = "Hello" then
+
+      if my_object.BooleanAttr = FALSE then
+
+         if my_object.EnumerationAttr = 'Frank' then
+
+            Failure_Code = 0
+   
+         else
+
+            Failure_Code = -40
+
+         endif
+
+      else
+
+         Failure_Code = -30
+
+      endif
+
+   else
+
+      Failure_Code = -20
+
+   endif
+
+   delete my_object
+
+else
+
+   Failure_Code = -10
+
+endif
+
+if Failure_Code = 0 then
+   [] = RPT2:Test_Passed["Attribute read", This_Test, Failure_Code]
+else
+   [] = RPT3:Test_Failed["Attribute read", This_Test, Failure_Code]
+endif
+
+This_Test = This_Test + 1
+
+Final_Test = This_Test

@@ -1,0 +1,17 @@
+//! Test requirement Tag
+//! @@TAGS-01-0001
+public service TAGS::Report_Now (Test_Number     : in  integer,
+                                 Testing_For     : in  string,
+                                 Failure         : in  integer,
+                                 It_Is_Supported : in  boolean) is
+if Failure = 0 then
+   [] = RPT2:Test_Passed[Testing_For, Test_Number, Failure]
+else
+
+   if It_Is_Supported then
+      [] = RPT3:Test_Failed[Testing_For, Test_Number, Failure]
+   else
+      [] = RPT4:Test_Unsupported[Test_Number]
+   endif
+
+endif

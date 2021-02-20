@@ -1,0 +1,78 @@
+define function  objE1:Create_Relationships
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------#
+#
+# Create relationships
+#
+# The architecture shall provide a mechainsm to allow creation of a 
+# simple relationship link between two object instances 
+# 1241-0000-01-0603
+#
+# The architecture shall provide a mechanism to allow creation of a 
+# associative relationship link between two object instances and an 
+# associative instance
+# 1241-0000-01-0611
+#
+# The architectureshall support a translation of the ASL link 
+# statement to map to the mechanism that allows creation of a 
+# relationship link between two object instances
+# 1241-0000-01-1202
+#
+#-------------------------------------------------------------------#
+
+[] = RPT1:Start_Test[Test, "1241-0000-01-0603", "Relationships", "objE", "Find instances ObjE F and EF"]
+[] = RPT8:Specify_Requid[Test,"1241-0000-01-0611"]
+[] = RPT8:Specify_Requid[Test,"1241-0000-01-1202"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0612"]
+
+# Find the desired instances for Object_E
+firstE  = find-one Object_E where idE = 1
+thirdE  = find-one Object_E where idE = 3
+fifthE  = find-one Object_E where idE = 5
+
+# Find the desired instances for Object_F
+firstF  = find-one Object_F where idF = 1
+fourthF = find-one Object_F where idF = 4
+
+# Find the desired instances for Object_EF
+firstEF  = find-one Object_EF where idEF = 1
+secondEF = find-one Object_EF where idEF = 2
+thirdEF  = find-one Object_EF where idEF = 3
+fourthEF = find-one Object_EF where idEF = 4
+
+# Create Mc:Mc relationships
+link firstE R5 firstF  using fourthEF
+link firstE R5 fourthF using thirdEF
+link thirdE R5 fourthF using secondEF
+link fifthE R5 fourthF using firstEF
+
+#-------------------------------------------------------------------#
+# Test that the creation and linking has been successfull
+#-------------------------------------------------------------------#
+
+{SetF}  = firstE -> R5.Object_F
+{SetEF} = firstE -> R5.Object_EF
+
+if countof {SetF} != 0 then
+
+   if countof {SetEF} != 0 then
+      [] = RPT2:Test_Passed["ObjE", Test, 0]
+   else
+      [] = RPT3:Test_Failed["ObjE", Test, -2]
+   endif
+
+else
+   [] = RPT3:Test_Failed["ObjE", Test, -1]
+endif
+
+#-------------------------------------------------------------------#
+
+
+enddefine

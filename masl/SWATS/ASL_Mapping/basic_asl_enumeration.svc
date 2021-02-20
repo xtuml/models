@@ -1,0 +1,291 @@
+//! This function test basic ASL operations on base types and enumerated types.
+public service ASL_Mapping::basic_asl_enumeration (Test_Start : in  integer,
+                                                   Final_Test : out integer) is
+# -------------------------------------------------------------------------------------------
+#
+# The ASL <switch> statement shall be supported
+# 1103-0000-01-0411
+#
+# The ASL shall support user defined types
+# 1103-0000-01-0312
+#
+# -------------------------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------------------------
+# TEST 1 - Check to ensure that local variables are correctly assigned
+# -------------------------------------------------------------------------------------------
+
+   Test = Test_Start
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0311", "ASL Mapping", "Basic ASL DBSS",  "Local variable assignment"]
+
+   Has_Failed = FALSE
+
+   an_int = 1
+   a_real = 2.3
+
+   # Check that 32 characters can handled
+   some_alpha_text   = "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEF"
+   lower_case_text   = "abcdefghijklmnopqrstuvwxyzabcdef"
+   some_numeric_text = "12345678901234567890123456789012"
+
+   # Check that all characters are permitted.
+   an_asterisk    = "*"
+   an_at          = "@"
+   a_minus        = "-"
+   an_equals      = "="
+   a_plus         = "+"
+   an_underscore  = "_"
+   a_slash        = "/"
+   a_question     = "?"
+   a_fullstop     = "."
+   a_comma        = ","
+   an_ampersand   = "&"
+   left_bracket   = "("
+   right_bracket  = ")"
+
+   a_colon        = ":"
+   a_tilda        = "~"
+   a_pipe         = "|"
+   an_exclamation = "!"
+   a_single_quote = "'"
+   a_left_tick    = "`"
+   a_power_operator       = "^"
+   a_left_square_bracket  = "["
+   a_rigt_square_bracket  = "]"
+   a_left_curly_bracket   = "{"
+   a_right_curley_bracket = "}"
+   a_hash = "#"
+
+   #{
+     The following are not permitted : 
+
+     a_backslash    = "\"
+     a_percent      = "%"
+     a_semi_colon   = ";"
+
+   }#
+
+   a_bool     = FALSE
+   other_int  = an_int
+   other_real = a_real
+   other_text = some_alpha_text
+   other_bool = a_bool
+
+   if an_int = other_int then
+ 
+      if a_real = other_real then
+
+         if a_bool = other_bool then
+
+            if some_alpha_text != other_text then
+               Has_Failed   = TRUE
+               Failure_Code = -10
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -40
+   endif
+
+   if Has_Failed then
+      [] = RPT3:Test_Failed["Basic ASL", Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+# -------------------------------------------------------------------------------------------
+# TEST 2 - Check that enumerated types are being used correctly
+# -------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0312", "ASL Mapping", "Basic ASL DBSS", "Enumerated Types"]
+
+   Has_Failed = FALSE
+
+   an_enum of Enum = 'John'
+
+   switch an_enum
+
+      case 'John'
+         Has_Failed = FALSE
+
+      case 'Richard'
+         Has_Failed   = TRUE
+         Failure_Code = -10
+
+      default
+         Has_Failed   = TRUE
+         Failure_Code = -20
+
+   endswitch
+
+   if Has_Failed then
+      [] = RPT3:Test_Failed["Basic ASL", Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+# -------------------------------------------------------------------------------------------
+# TEST 3 - Check that enumerated types are being used correctly
+# -------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0312", "ASL Mapping", "Basic ASL DBSS", "Enumerated Types"]
+
+   Has_Failed = FALSE
+
+   an_enum of Enum = 'Richard'
+
+   switch an_enum
+
+      case 'John'
+         Has_Failed   = TRUE
+         Failure_Code = -10
+
+      case 'Richard'
+         Has_Failed = FALSE
+   
+      default
+         Has_Failed   = TRUE
+         Failure_Code = -20
+
+   endswitch
+
+   if Has_Failed then
+      [] = RPT3:Test_Failed["Basic ASL", Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   endif
+
+   Test = Test + 1
+   
+# End Test 3
+
+# -------------------------------------------------------------------------------------------
+# TEST 4 enumerated types
+# -------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0312", "ASL Mapping", "Basic ASL DBSS", "Enumerated Types"]
+
+   Has_Failed = FALSE
+
+   an_enum of Enum = 'Goran'
+
+   switch an_enum
+
+      case 'John'
+         Has_Failed   = TRUE
+         Failure_Code = -10
+
+      case 'Richard'
+         Has_Failed   = TRUE
+         Failure_Code = -20
+
+      default
+         Has_Failed = FALSE
+
+   endswitch
+
+   if Has_Failed then
+      [] = RPT3:Test_Failed["Basic ASL", Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+# -------------------------------------------------------------------------------------------
+# Test 5 - Simple structure assignment
+# -------------------------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "ASL Mapping", "Basic ASL DBSS","Simple structure"]
+
+   Has_Failed   = FALSE
+   Failure_Code = -10
+
+   {Simple_Structure} is Simple_Structure_Type
+
+   Control_Integer      = 10
+   Control_Real         = 10.0
+   Control_String       = "Ten"
+   Control_Boolean      = TRUE
+   Control_Enum of Enum = 'Richard'
+
+   Control_Instance_Handle = find-one Object_IF
+
+   append [Control_Integer, Control_Real, Control_String, \ 
+           Control_Boolean, Control_Enum] to \
+           {Simple_Structure}
+
+   # Perform a test when unpacking the structure.
+   # Note that instance handles may not be compared.
+
+   for [Local_Integer, Local_Real, Local_String, Local_Boolean, Local_Enum] in {Simple_Structure} do
+
+      if Local_Integer = Control_Integer then 
+
+         if Local_Real = Control_Real    then
+
+            if Local_String = Control_String  then
+
+               if Local_Boolean = Control_Boolean then
+
+                  if Local_Enum != Control_Enum    then
+                     Has_Failed   = TRUE
+                     Failure_Code = -10
+                  endif
+
+               else
+                  Has_Failed   = TRUE
+                  Failure_Code = -20
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = -30
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -40
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -50
+      endif
+
+   endfor
+   
+   if not Has_Failed then
+      [] = RPT2:Test_Passed["Simple structure", Test,  0]
+   else
+      [] = RPT3:Test_Failed["Simple_Structure", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#-------------------------------------------------------------------------------
+
+Final_Test = Test

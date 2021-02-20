@@ -1,0 +1,42 @@
+define function  RP2::Test_Failed
+input \
+	Failed_Domain:Base_Text_Type ,\
+	the_test_no:Base_Integer_Type ,\
+	the_test_value:Base_Integer_Type ,\
+	Failed_Domain_Number:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+the_test = the_test_no
+the_val = the_test_value
+
+the_domain = Failed_Domain
+
+the_domain_number = Failed_Domain_Number
+
+[] = DD2:A_Test_Has_Failed[the_test, the_domain_number, the_val, the_domain]
+
+$INLINE
+fprintf(stderr, "Test Number %d has **** FAILED **** with %d\n",
+        the_test, the_val);
+$ENDINLINE
+
+#$ADA_INLINE
+# with Ada.Text_IO;
+#
+# -- Ada.Text_IO.New_Line(1);
+# -- Ada.Text_IO.Put_Line("Object " & the_domain & 
+# --                    " Test Number " & integer'image(integer(the_test)) & 
+# --                    " has **** FAILED **** with " & integer'image(integer(the_val)));
+# -- Ada.Text_IO.New_Line(1);
+#$END_ADAINLINE
+
+
+
+
+
+
+enddefine

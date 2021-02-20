@@ -1,0 +1,173 @@
+public service ASL_Mapping::Object_LOOP.do_loop_tests (an_instanceLOOP : in  instance of Object_LOOP,
+                                                       Test_Start      : in  integer,
+                                                       Final_Test      : out integer) is
+#------------------------------------------------------------------------#
+#
+# LOOP statement
+#
+# The ASL <loop> statement shall be supported
+# 1103-0000-01-0441
+#
+# The ASL <break> statement shall be supported
+# 1103-0000-01-0451
+#
+# The ASL <break ... if> statement shall be supported
+# 1103-0000-01-0452
+#
+#------------------------------------------------------------------------#
+
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+#Test 1 - LOOP with BREAKIF
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objLOOP", "Loop with BREAKIF"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0452"]
+
+   # Increment the attribute ResultA for an instance of Object_LOOP 5 times
+   Count = 0
+
+   loop
+      Count = Count + 1
+      an_instanceLOOP.ResultA = Count
+      breakif Count = 5
+   endloop
+
+   # Check the results
+   if Count != 5 then
+      [] = RPT3:Test_Failed["objLOOP", Test, Count]
+   else
+      an_instanceLOOP.ResultA = 10
+      [] = RPT2:Test_Passed["objLOOP", Test, an_instanceLOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - LOOP with BREAK, break after other ASL statements
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objLOOP", "BREAK after other statement"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0451"]
+
+   # Increment the attribute ResultA for an instance of Object_LOOP once
+   Count = 0
+   
+   loop
+      Count = Count + 1
+      an_instanceLOOP.ResultA = Count
+      break
+   endloop
+
+   # Check the results
+   if Count != 1 then
+      [] = RPT3:Test_Failed["objLOOP", Test, Count]
+   else
+      an_instanceLOOP.ResultA = 20
+      [] = RPT2:Test_Passed["objLOOP", Test, an_instanceLOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - LOOP with BREAK, break before other ASL statements
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objLOOP", "BREAK before other statements"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0451"]
+
+   # Attribute ResultA is NOT AFFECTED
+   Count = 0
+
+   loop
+      break
+      Count = Count + 1
+      an_instanceLOOP.ResultA = Count
+   endloop
+
+   # Until this point value written into ResultA should be 20
+   if (Count != 0 | an_instanceLOOP.ResultA != 20) then
+      [] = RPT3:Test_Failed["objLOOP", Test, Count]
+   else
+      an_instanceLOOP.ResultA = 30
+      [] = RPT2:Test_Passed["objLOOP", Test, an_instanceLOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4 - LOOP with BREAKIF inside another ASL statement
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objLOOP", "BREAK inside statement"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0452"]
+
+   # Increment the attribute ResultA for an instance of Object_LOOP 4 times
+   Count = 0
+
+   loop
+      Count = Count + 1
+      an_instanceLOOP.ResultA = Count  
+
+      if Count != 3 then
+         breakif Count > 2
+      endif
+
+   endloop
+
+   # Check the results
+   if Count != 4 then
+      [] = RPT3:Test_Failed["objLOOP", Test, Count]
+   else
+      an_instanceLOOP.ResultA = 40
+      [] = RPT2:Test_Passed["objLOOP", Test, an_instanceLOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5 - LOOP with BREAK inside another ASL statement
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objLOOP", "Inside ASL statement"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0451"]
+ 
+   # Increment the attribute ResultA for an instance of Object_LOOP 3 times
+   Count = 0
+
+   loop
+      Count = Count + 1
+      an_instanceLOOP.ResultA = Count
+
+      if Count = 3 then
+         break
+      endif
+
+   endloop
+
+   # Check the results
+   if Count != 3 then
+      [] = RPT3:Test_Failed["objLOOP", Test, Count]
+   else
+      an_instanceLOOP.ResultA = 50
+      [] = RPT2:Test_Passed["objLOOP", Test, an_instanceLOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#------------------------------------------------------------------------#
+# Test complete
+#------------------------------------------------------------------------#
+
+Final_Test = Test

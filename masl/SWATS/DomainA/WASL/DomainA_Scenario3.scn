@@ -1,0 +1,57 @@
+define scenario  DomainA_Scenario3
+input
+output
+
+#$DESCRIPTION
+Sync to event
+#$END_DESCRIPTION
+
+#-------------------------------------------------------------------
+# Sync service invocation to an event
+#-------------------------------------------------------------------
+
+   my_test = find-one Test_Data
+   Test    = my_test.This_Test_Number
+
+   has_failed = FALSE
+
+   # Initiate the test
+   an_instanceA = find-one Object_A where idA = 2
+
+   if an_instanceA != NULL then
+      generate objA6:StartB(Test) to an_instanceA
+   else
+      # Null instance detected.
+      [] = RPT5:Test_Text[Test, "DomainA setup scenario not run"]
+   endif
+
+   Test = Test + 1
+
+   inputA = 1
+   inputB = 2
+
+#-------------------------------------------------------------------
+# Test 1
+#-------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-1110", "DomainA", "Domain A to B", "synch 4 service call"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1103"]
+
+   [outputA, outputB] = termA4:Sync4A[inputA, inputB, Test]
+
+   if outputA = 3 and outputB = 4 then
+      [] = RPT2:Test_Passed["DomainA", Test, outputB]
+   else
+      [] = RPT3:Test_Failed["DomainA", Test, outputA]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#-------------------------------------------------------------------
+
+   my_test.This_Test_Number = Test
+
+
+enddefine

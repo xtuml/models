@@ -1,0 +1,336 @@
+//! As service 1, but predeclaring the local
+//! variables rather than allowing first use to defined type.
+public service UDT::Check_The_Predeclared_Integers (Test        : in  integer,
+                                                    Testing_For : in  string) is
+# type subset_1_of_integer is          integer range      1 .. 10
+# type subset_minus_1_of_integer is    integer range    -10 .. -1
+# type subset_zero_of_integer is       integer range    -10 .. 10
+# type one_to_maximum_integer is       integer range      1 .. 32767
+# type zero_to_maximum_integer is      integer range      0 .. 32767
+# type minus_one_to_maximum_integer is integer range     -1 .. 32767
+# type minimum_to_minus_one_integer is integer range -32768 .. -1
+# type minimum_to_zero_integer is      integer range -32768 .. 0
+# type minimum_to_maximum_integer is   integer range -32768 .. 32767
+
+#Local_Integer1  : Subset_1_Of_Integer
+#Local_Integer3 : Subset_Minus_1_Of_Integer
+#Local_Integer5  : Subset_Zero_Of_Integer
+#Local_Integer7 : One_To_Maximum_Integer
+#Local_Integer9  : Minimum_To_Minus_One_Integer
+#Local_Integer11  : Minimum_To_Maximum_Integer
+
+
+[] = RPT1:Start_Test[Test, "Null Requid", "User Defined Types", "Predeclared Integer assignment", Testing_For]
+
+
+# Set up some negative numbers. I-SIM doesn't like assigning a magic 
+# negative number to an attribute. 
+
+# These are defined by I-SIM as of base type.
+
+Minus_Ten    = -10
+Minus_Max    = -32768
+Minus_One    = -1
+Plus_One     =  1
+Plus_Ten     =  10
+Plus_Max     =  32767
+Big_Fat_Zero =  0
+
+Test_Has_Passed  = FALSE
+Failure_Code = Big_Fat_Zero
+
+#--------------------------------------------------------------------------
+# Test 15
+#--------------------------------------------------------------------------
+
+   if Test = 15 then
+
+      # This test shall prove that I_SIM allows root data types to be used for
+      # User Defined Types, and in fact totally ignores data typing.
+
+      # Also note that the local data objects are UDT type, and reused by each
+      # assingment. This will cause problems for WACA as first use for a local
+      # object should defined it as being the same type as the attribute that
+      # is being copied into it. Subsequent copies should cause grief.
+
+      # This test has been modified to use unique local data and results identifiers.
+      # Non-unique data (ie. reused local objects) has been shown to cause a constraint 
+      # error exception to be generated in ADA. This is not a surprise.
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Plus_One
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_Max
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+
+      The_Object2.First_Integer  = Plus_One
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Minus_Ten
+      The_Object2.Fourth_Integer = Plus_One
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # 1 + 1 in range 1..10 result 2 in range
+      Local_Integer1 = The_Object1.Second_Integer  
+      Local_Integer2 = The_Object1.First_Integer
+      Result_Integer12 = Local_Integer1 + Local_Integer2
+      Result_Object.First_Integer  =  Result_Integer12
+
+      # -10 - -1 in range -10 .. -1 result -9 inside range
+      Local_Integer3 = The_Object1.Second_Integer  
+      Local_Integer4 = The_Object2.Second_Integer
+      Result_Integer34 = Local_Integer3 - Local_Integer4
+      Result_Object.Second_Integer  =  Result_Integer34
+
+      # -10 - -10 in range -10 .. 10 result 0 inside range
+      Local_Integer5 = The_Object1.Third_Integer  
+      Local_Integer6 = The_Object2.Third_Integer
+      Result_Integer56 = Local_Integer5 - Local_Integer6
+      Result_Object.Third_Integer  =  Result_Integer56
+
+      # 32767 - 1 in range 1..32767 result 32766 inside range
+      Local_Integer7 = The_Object1.Fourth_Integer  
+      Local_Integer8 = The_Object2.Fourth_Integer
+      Result_Integer78 = Local_Integer7 - Local_Integer8
+      Result_Object.Fourth_Integer  =  Result_Integer78
+
+      # -32768 - -1 in range -32768 .. -1 result -32767 inside range
+      Local_Integer9 = The_Object1.Fifth_Integer  
+      Local_Integer10 = The_Object2.Fifth_Integer
+      Result_Integer910 = Local_Integer9 - Local_Integer10
+      Result_Object.Fifth_Integer  =  Result_Integer910
+
+      # -32768 + 32767 in range -32768 .. 32767 result -1 inside range
+      Local_Integer11 = The_Object1.Sixth_Integer  
+      Local_Integer12 = The_Object2.Sixth_Integer
+      Result_Integer1112 = Local_Integer11 + Local_Integer12
+      Result_Object.Sixth_Integer  =  Result_Integer1112
+
+      # Non unique binary operands
+      if Result_Integer12 = Result_Object.First_Integer  &\
+         Result_Integer34 = Result_Object.Second_Integer &\
+         Result_Integer56 = Result_Object.Third_Integer  &\
+         Result_Integer78 = Result_Object.Fourth_Integer &\
+         Result_Integer910 = Result_Object.Fifth_Integer  &\
+         Result_Integer1112 = Result_Object.Sixth_Integer then
+
+          Test_Has_Passed = TRUE
+
+      else
+        Failure_Code = -1
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 15
+
+#--------------------------------------------------------------------------
+# Test 16
+#--------------------------------------------------------------------------
+
+   if Test = 16 then
+
+      # This test proves that individual local data objects must be used for different data
+      # types.
+
+      # This test is the same as test 5, with one important difference. The local
+      # data objects are not reused, thus first use should specify them as 
+      # of the attribute's type, and no conflict should arise.
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Plus_One
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_Max
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+
+      The_Object2.First_Integer  = Plus_One
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Minus_Ten
+      The_Object2.Fourth_Integer = Plus_One
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # 1 + 1 in range 1..10 result 2 in range
+      Local_Integer61 = The_Object1.First_Integer  
+      Local_Integer62 = The_Object2.First_Integer
+      Result_Integer612 = Local_Integer61 + Local_Integer62
+      Result_Object.First_Integer = Result_Integer612
+
+      # -10 - -1 in range -10 .. -1 result -9 inside range
+      Local_Integer64 = The_Object1.Second_Integer  
+      Local_Integer65 = The_Object2.Second_Integer
+      Result_Integer645 = Local_Integer64 - Local_Integer65
+      Result_Object.Second_Integer = Result_Integer645
+
+      # -10 - -10 in range -10 .. 10 result 0 inside range
+      Local_Integer67 = The_Object1.Third_Integer  
+      Local_Integer68 = The_Object2.Third_Integer
+      Result_Integer678 = Local_Integer67 - Local_Integer68
+      Result_Object.Third_Integer  =  Result_Integer678
+
+      # 32767 - 1 in range 1..32767 result 32766 inside range
+      Local_Integer610 = The_Object1.Fourth_Integer  
+      Local_Integer611 = The_Object2.Fourth_Integer
+      Result_Integer61011 = Local_Integer610 - Local_Integer611
+      Result_Object.Fourth_Integer  =  Result_Integer61011
+
+      # -32768 - -1 in range -32768 .. -1 result -32767 inside range
+      Local_Integer613 = The_Object1.Fifth_Integer  
+      Local_Integer614= The_Object2.Fifth_Integer
+      Result_Integer61314 = Local_Integer613 - Local_Integer614
+      Result_Object.Fifth_Integer  =  Result_Integer61314
+
+      # -32768 + 32767 in range -32768 .. 32767 result -1 inside range
+      Local_Integer616 = The_Object1.Sixth_Integer  
+      Local_Integer617 = The_Object2.Sixth_Integer
+      Result_Integer61617 = Local_Integer616 + Local_Integer617
+      Result_Object.Sixth_Integer  =  Result_Integer61617
+
+      # Unique result_integer's and binary operands
+
+      if Result_Integer612   = Result_Object.First_Integer  &\
+         Result_Integer645   = Result_Object.Second_Integer &\
+         Result_Integer678   = Result_Object.Third_Integer  &\
+         Result_Integer61011 = Result_Object.Fourth_Integer &\
+         Result_Integer61314 = Result_Object.Fifth_Integer  &\
+         Result_Integer61617 = Result_Object.Sixth_Integer then
+
+         Test_Has_Passed = TRUE
+      else
+         Failure_Code = -1
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 16
+
+#--------------------------------------------------------------------------
+# Test 17
+#--------------------------------------------------------------------------
+
+   if Test = 17 then
+
+      # This test proves that individual local data objects must be used for different data
+      # types.
+
+      # Add max values to minimum values.
+
+      # This test shall cause some attributes to go out of range on assignment
+      # to the results object attributes.
+
+      # Ada will raise a constraint error under these conditions.
+
+      # It highlights an important distinction between I-SIM and WACA. 
+      # UDT ARE TOTALLY UNSUPPORTED IN I-SIM, and trying to test for them here
+      # will give erroneous results.
+
+      # ADA will not allow this test to procede without exceptions being generated. Therefore
+      # these tests have been commented out for the moment.
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Minus_Ten
+
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_One
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+
+      The_Object2.First_Integer  = Plus_Ten
+  
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Plus_Ten
+      The_Object2.Fourth_Integer = Plus_Max
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # REUSE local_integer5 predeclared as subset_zero_of_integer and assign an attribute of
+      # The_Object_1.First_Integer (which is of type Subset_1_Of_Integer)
+
+      # and local_integer_2 defined from first use as Subset_1_Of_Integer
+
+      # Adding the two should make Result_Integer_3 of type subset_zero_of_integer
+
+      # Assignment of The_Object1.First_Integer to Local_Integer5 should cause the Code Gen 
+      # to issue a warning.
+
+      # -10 + 10 in range -10 .. 10 result 0 inside range
+      Local_Integer5 = The_Object1.First_Integer  
+      Local_Integer2 = The_Object2.First_Integer
+      Result_Integer3 = Local_Integer5 + Local_Integer2
+      Result_Object.First_Integer  =  Result_Integer3
+
+      if Result_Integer3 = Big_Fat_Zero then 
+         Test_Has_Passed = TRUE
+      else
+         Test_Has_Passed = FALSE
+         Failure_Code = Result_Integer3
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 17
+
+#--------------------------------------------------------------------------
+# Report the results.
+#--------------------------------------------------------------------------
+
+if Test_Has_Passed then
+
+   if Result_Object = UNDEFINED then
+      [] = RPT2:Test_Passed[Testing_For, Test, Failure_Code]
+   else
+      # This should cause problems for WACA, as the results attributes
+      # are all of different types.
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.First_Integer]
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.Second_Integer]
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.Third_Integer]
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.Fourth_Integer]
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.Fifth_Integer]
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.Sixth_Integer]
+   endif
+
+else
+
+   if Failure_Code = Big_Fat_Zero then
+      [] = RPT4:Test_Unsupported[Test]
+   else
+      [] = RPT3:Test_Failed[Testing_For, Test, Failure_Code]
+   endif
+
+endif
+
+if Result_Object != UNDEFINED then
+   delete Result_Object
+endif

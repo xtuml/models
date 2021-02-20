@@ -1,0 +1,152 @@
+public service Relationships::Object_B.Delete_Relationships (Test : in  integer) is
+# -------------------------------------------------------------------#
+#
+# Delete all relationships
+#
+# The architecture shall provide a mapping from the ASL delete 
+# instance statement to the deletion mechanism
+# 1241-0000-01-0121
+#
+# The architecture shall provide a mechanism to allow deletion of a 
+# simple relationship link between two object instances
+# 1241-0000-01-0604
+#
+# The architecture shall support a translation of the ASL unlink
+# statement to map to the mechanism that allow the deletion of a 
+# link between two objects in a relationship
+# 1241-0000-01-1204
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+# -------------------------------------------------------------------#
+
+Has_Failed = TRUE
+
+[] = RPT1:Start_Test [Test, "1241-0000-01-0604", "Relationships", "objB", "Delete all relationships"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-1204"]
+[] = RPT8:Specify_Requid[Test, "1103-0000-01-0621"]
+
+# Find the desired instances of Object_A
+firstA  = find-one Object_A where idA = 1
+secondA = find-one Object_A where idA = 2
+thirdA  = find-one Object_A where idA = 3
+fourthA = find-one Object_A where idA = 4
+fifthA  = find-one Object_A where idA = 5 
+
+# Find the desired instances of Object_B
+firstB  = find-one Object_B where idB = 1
+secondB = find-one Object_B where idB = 2
+thirdB  = find-one Object_B where idB = 3
+fourthB = find-one Object_B where idB = 4
+fifthB  = find-one Object_B where idB = 5
+
+# Find the desired instances of Object_M
+firstM  = find-one Object_M where idM = 1
+secondM = find-one Object_M where idM = 2
+thirdM  = find-one Object_M where idM = 3
+fourthM = find-one Object_M where idM = 4
+fifthM  = find-one Object_M where idM = 5
+
+# Delete all relationships
+unlink firstA  R1  firstB
+unlink thirdA  R1  fourthB
+
+unlink fourthB R18 thirdM
+
+# Explicitly check that all instances have been unlinked
+# correctly.
+
+InstB1 = firstA -> R1.Object_B
+InstB2 = thirdA -> R1.Object_B
+
+InstM1 = firstB -> R18.Object_M
+InstM2 = fourthB -> R18.Object_M
+
+# Attempt to perform some illegal navigations
+
+if InstB1 = UNDEFINED then
+
+   if InstB2 = UNDEFINED then
+
+      if InstM1 = UNDEFINED then
+
+         if InstM2 = UNDEFINED then
+
+            delete Object_A where idA = 1 
+            delete Object_A where idA = 2
+            delete Object_A where idA = 3
+            delete Object_A where idA = 4
+            delete Object_A where idA = 5
+
+#            delete firstA
+#            delete secondA
+#            delete thirdA
+#            delete fourthA
+#            delete fifthA
+
+            delete firstB
+            delete secondB
+            delete thirdB
+            delete fourthB
+            delete fifthB
+
+            delete firstM
+            delete secondM
+            delete thirdM
+            delete fourthM
+            delete fifthM
+
+            {SetA} = find-all Object_A
+            {SetB} = find-all Object_B
+            {SetM} = find-all Object_M
+
+            if countof {SetA} = 0 then
+
+               if countof {SetB} = 0 then
+
+                  if countof {SetM} = 0 then
+                     Has_Failed = FALSE
+                  else
+                     Has_Failed   = TRUE
+                     Failure_Code = -10
+                  endif
+
+               else
+                  Has_Failed   = TRUE
+                  Failure_Code = -20
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = -30
+            endif
+
+         else
+            Failure_Code = -40
+         endif
+
+         Failure_Code = -50
+      endif
+
+      Failure_Code = -60
+   endif
+
+  Failure_Code = -70
+
+endif
+
+#-------------------------------------------------------------------#
+# Test complete
+#-------------------------------------------------------------------#
+
+if Has_Failed then
+   [] = RPT3:Test_Failed["objB", Test, Failure_Code]
+else
+   [] = RPT2:Test_Passed["objB", Test, 0]
+endif
+
+#-------------------------------------------------------------------#

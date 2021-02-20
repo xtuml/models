@@ -1,0 +1,133 @@
+public service ASL_Mapping::Check_Base_Types (Test         : in  integer,
+                                              Returning_No : out integer) is
+#------------------------------------------------------------------
+# The architecture should be able to support Real, Integer, Boolean
+# and Text base types. This test assigns appropriates values to 
+# variables and then reads them back to make sure that these values
+# have been correctly assigned
+#------------------------------------------------------------------
+
+   Local_Test = Test
+
+   The_Real_Type    = 23.12345
+   The_Integer_Type = 12345
+   The_String_Type  = "The Cat Sat On The Mat"
+   The_Boolean_Type = TRUE
+
+   objDV = create Default_Vals with The_Integer     = 0     &\
+                                    The_Real        = 0.0   &\
+                                    The_Text        = " "    &\
+                                    The_Boolean     = FALSE
+
+   objDV.The_Real    = The_Real_Type
+   objDV.The_Integer = The_Integer_Type
+   objDV.The_Text    = The_String_Type
+   objDV.The_Boolean = The_Boolean_Type
+
+   [] = RPT1:Start_Test[Local_Test, "1241-0000-01-0105", "ASL Mapping", "Check Base types", "Check that base types are correct"]
+   [] = RPT8:Specify_Requid[Local_Test, "1241-0000-01-0106"]
+   [] = RPT8:Specify_Requid[Local_Test, "1241-0000-01-0107"]
+   [] = RPT8:Specify_Requid[Local_Test, "1241-0000-01-0110"]
+
+   if objDV.The_Real = 23.12345 then
+
+      if objDV.The_Integer = 12345 then
+
+         if objDV.The_Text = "The Cat Sat On The Mat" then
+
+            if objDV.The_Boolean then
+               [] = RPT2:Test_Passed["Basic ASL", Local_Test, 0]
+            else
+               [] = RPT3:Test_Failed["Basic ASL", Local_Test, -10]
+            endif
+
+         else
+            [] = RPT3:Test_Failed["Basic ASL", Local_Test, -30]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Basic ASL", Local_Test, -40]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Local_Test, -50]
+   endif
+
+   Local_Test = Local_Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------
+# Test 2 - Test the Time Of Day attribute
+#------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Local_Test, "1241-0000-01-0108", "ASL Mapping", "Check Base types", "Check Time Of Day Attribute"]
+   [] = RPT5:Test_Text [Local_Test, "Time Of Day attribute is"]
+   [] = RPT5:Test_Text [Local_Test, "unsupported by the WACA"]
+
+   [] = RPT4:Test_Unsupported[Local_Test]
+
+   Local_Test = Local_Test + 1
+
+#------------------------------------------------------------------
+# Test 3 - 
+#------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Local_Test, "Null Requid", "ASL Mapping", "Check Base types", "Check Attribute comparison"]
+
+   instA = create ObjectA with The_Int1 = 1 & The_Int2 = 2
+   instB = create ObjectB with The_IntB1 = 1 & The_IntB2 = 2
+
+   if instA.The_Int1 = instB.The_IntB1 then
+      [] = RPT2:Test_Passed["Comp", Local_Test, 0]
+   else
+      [] = RPT3:Test_Failed["Comp", Local_Test, -10]
+   endif
+
+   Local_Test = Local_Test + 1
+
+#------------------------------------------------------------------
+# Test 4 - 
+#------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Local_Test, "Null Requid", "ASL Mapping", "Check Base types", "Check Attribute comparison"]
+
+   if instA.The_Int1 != instA.The_Int2 then
+      [] = RPT2:Test_Passed["Comp", Local_Test, 0]
+   else
+      [] = RPT3:Test_Failed["Comp", Local_Test, -10]
+   endif
+
+   Local_Test = Local_Test + 1
+
+#------------------------------------------------------------------
+# Test 4 - 
+#------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Local_Test, "Null Requid", "ASL Mapping", "Check Base types", "Check Attribute comparison"]
+
+   if instA.The_Int1 != instA.The_Int2 then
+      [] = RPT2:Test_Passed["Comp", Local_Test, 0]
+   else
+      [] = RPT3:Test_Failed["Comp", Local_Test, -10]
+   endif
+
+   Local_Test = Local_Test + 1
+
+#------------------------------------------------------------------
+# Test 5 - 
+#------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Local_Test, "Null Requid", "ASL Mapping", "Check Base types", "Check Attribute comparison"]
+
+   if instA.The_Int2 = instB.The_IntB2 then
+      [] = RPT2:Test_Passed["Comp", Local_Test, 0]
+   else
+      [] = RPT3:Test_Failed["Comp", Local_Test, -10]
+   endif
+
+   Local_Test = Local_Test + 1
+
+# End Test 2
+
+Returning_No = Local_Test

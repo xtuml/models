@@ -1,0 +1,149 @@
+public service Relationships::Object_E.Delete_Relationships (Test : in  integer) is
+#-------------------------------------------------------------------#
+#
+# Delete all relationships
+#
+# The architectre shall provide a mechanism to allow deletion of a 
+# simple relationship link between two object instance
+# 1241-0000-01-0604
+#
+# The architecture shall provide a mechanism to allow the deletion of 
+# an associative link between an associative object and the link 
+# between two objects
+# 1241-0000-01-0612
+#
+# The architecture shall provide a mechanism to allow the deletion 
+# of a link between two objects in a associative relationship
+# 1241-0000-01-0613
+#
+# The architecture shall support a translation of the ASL unassociate
+# statment to map to the mechanism that allows the deletion of an 
+# associative link between an associative object and the link between
+# two objects
+# 1241-0000-01-1203
+#
+# The architecture shall support a translation of the ASL unlink
+# statement to map to the mechanism that allow the deletion of a 
+# link between two objects in a relationship
+# 1241-0000-01-1204
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+# Set the variable defaults
+Has_Failed   = FALSE
+Failure_Code = 0
+
+[] = RPT1:Start_Test[Test, "1241-0000-01-0613", "Relationships", "ObjE", "Delete relationships"]
+[] = RPT8:Specify_Requid[Test,"1241-0000-01-0604"]
+[] = RPT8:Specify_Requid[Test,"1241-0000-01-0612"]
+[] = RPT8:Specify_Requid[Test,"1241-0000-01-1203"]
+[] = RPT8:Specify_Requid[Test,"1241-0000-01-1204"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0622"]
+
+
+
+CurrentID = 1
+
+loop
+
+   InstE = find-one Object_E where idE = CurrentID
+   breakif InstE = UNDEFINED
+
+   {setAssoc} = InstE -> R5.Object_EF
+   
+   for instAssoc in {setAssoc} do
+      InstF = instAssoc -> R5.Object_F   
+      unassociate InstE R5 InstF from instAssoc
+      unlink InstE R5 InstF
+      delete instAssoc
+   endfor
+
+   delete InstE
+
+   CurrentID = CurrentID + 1
+
+endloop
+
+
+# Find the desired instances for Object_E
+#firstE  = find-one Object_E where idE = 1
+#thirdE  = find-one Object_E where idE = 3
+#fifthE  = find-one Object_E where idE = 5
+
+# Find the desired instances for Object_F
+#firstF  = find-one Object_F where idF = 1
+#fourthF = find-one Object_F where idF = 4
+
+# Find the desired instances for Object_EF
+#firstEF  = find-one Object_EF where idEF = 1
+#secondEF = find-one Object_EF where idEF = 2
+#thirdEF  = find-one Object_EF where idEF = 3
+#fourthEF = find-one Object_EF where idEF = 4
+#fifthEF  = find-one Object_EF where idEF = 5
+
+# Delete relationships
+#unassociate firstE R5 firstF  from fourthEF
+#unassociate firstE R5 fourthF from thirdEF
+#unassociate thirdE R5 fourthF from secondEF
+#unassociate fifthE R5 fourthF from firstEF
+
+#unlink firstE R5 firstF
+#unlink firstE R5 fourthF
+#unlink thirdE R5 fourthF
+#unlink fifthE R5 fourthF
+
+{SetE}  = find-all Object_E
+{SetEF} = find-all Object_EF
+{SetF}  = find-all Object_F
+
+for InstE in {SetE} do
+   delete InstE
+endfor
+
+for InstEF in {SetEF} do
+   delete InstEF
+endfor
+
+for InstF in {SetF} do
+   delete InstF
+endfor
+
+{SetE}  = find-all Object_E
+{SetEF} = find-all Object_EF
+{SetF}  = find-all Object_F
+
+if countof {SetE} = 0 then
+
+   if countof {SetEF} = 0 then
+
+      if countof {SetF} != 0 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -20
+   endif
+
+else
+   Has_Failed   = TRUE
+   Failure_Code = -30
+endif
+
+
+#-------------------------------------------------------------------#
+
+if Has_Failed then
+   [] = RPT3:Test_Failed["objE", Test, Failure_Code]
+else
+   [] = RPT2:Test_Passed["ObjE", Test, 0]
+endif
+
+#-------------------------------------------------------------------#

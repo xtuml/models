@@ -17,7 +17,7 @@ INSERT INTO SM_EVTDI
 	"ba5eda7a-def5-0000-0000-000000000004",
 	'',
 	"aa168d2a-3415-4b8e-b628-fa027a14781e",
-	"00000000-0000-0000-0000-000000000000");
+	"80a6a0ff-9d1b-4c2b-8b5d-381076a8d76f");
 INSERT INTO SM_EVTDI
 	VALUES ("b3fc060b-02aa-40b0-a53d-f3c3db7c1781",
 	"caf8c641-9090-4c34-b231-2d8e4bc36a50",
@@ -27,6 +27,24 @@ INSERT INTO SM_EVTDI
 	'',
 	"aa168d2a-3415-4b8e-b628-fa027a14781e",
 	"9567e1a2-5137-4e0c-b236-d522822df3c6");
+INSERT INTO SM_EVTDI
+	VALUES ("48467852-6e11-4c25-aaf4-46e6e2380de1",
+	"caf8c641-9090-4c34-b231-2d8e4bc36a50",
+	'guard_timer_duration',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	"aa168d2a-3415-4b8e-b628-fa027a14781e",
+	"b3fc060b-02aa-40b0-a53d-f3c3db7c1781");
+INSERT INTO SM_EVTDI
+	VALUES ("80a6a0ff-9d1b-4c2b-8b5d-381076a8d76f",
+	"caf8c641-9090-4c34-b231-2d8e4bc36a50",
+	'test_suite_name',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	"aa168d2a-3415-4b8e-b628-fa027a14781e",
+	"00000000-0000-0000-0000-000000000000");
 INSERT INTO SM_LEVT
 	VALUES ("aa168d2a-3415-4b8e-b628-fa027a14781e",
 	"caf8c641-9090-4c34-b231-2d8e4bc36a50",
@@ -354,9 +372,10 @@ INSERT INTO SM_ACT
 	VALUES ("79ec34e2-d51b-4b51-96a8-4b577c70bde5",
 	"caf8c641-9090-4c34-b231-2d8e4bc36a50",
 	1,
-	'self.test_suite_name = ""; // Add this back when the interface supports it.
+	'self.test_suite_name = param.test_suite_name;
 self.test_suite_version = param.test_suite_version;
 self.variation_count = param.variation_count;
+self.guard_timer_duration = param.guard_timer_duration;
 
 if ( self.variation_count > 0 )
 
@@ -417,9 +436,12 @@ else
   // Start the test case.
   generate SEQ_TESTCASE1:setup() to test_case;
 
-  // Start a guard timer that prevents us from waiting forever on the test bench.
-  create event instance pop of SEQ_BUCKET2 to self;
-  self.guard_timer = TIM::timer_start( microseconds:self.guard_timer_duration, event_inst:pop );
+  // If the test bench requested one, start a guard timer that prevents 
+  // us from waiting forever for each test case to complete.
+  if ( self.guard_timer_duration > 0 )
+    create event instance pop of SEQ_BUCKET2 to self;
+    self.guard_timer = TIM::timer_start( microseconds:self.guard_timer_duration, event_inst:pop );
+  end if;
   
 end if;
 
@@ -691,8 +713,8 @@ INSERT INTO DIM_ND
 	25.000000,
 	"d49c6c03-c947-4dac-8994-c5be36662622");
 INSERT INTO DIM_GE
-	VALUES (4246.000000,
-	3321.000000,
+	VALUES (4248.000000,
+	3261.000000,
 	"d49c6c03-c947-4dac-8994-c5be36662622",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -1509,8 +1531,8 @@ INSERT INTO DIM_ND
 	40.000000,
 	"9b02f7d7-f1b1-4680-a0e8-7469d23cb254");
 INSERT INTO DIM_GE
-	VALUES (4117.000000,
-	3510.000000,
+	VALUES (4093.000000,
+	3476.000000,
 	"9b02f7d7-f1b1-4680-a0e8-7469d23cb254",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE
@@ -1622,8 +1644,8 @@ INSERT INTO DIM_ND
 	40.000000,
 	"95c6973c-c793-4fb0-a5d8-44aa73142f08");
 INSERT INTO DIM_GE
-	VALUES (4402.000000,
-	3394.000000,
+	VALUES (4419.000000,
+	3392.000000,
 	"95c6973c-c793-4fb0-a5d8-44aa73142f08",
 	"00000000-0000-0000-0000-000000000000");
 INSERT INTO DIM_ELE

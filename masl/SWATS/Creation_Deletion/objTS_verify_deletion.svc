@@ -1,0 +1,26 @@
+public service Creation_Deletion::Termination_State.verify_deletion (Test : in  integer) is
+#------------------------------------------------------------------------#
+# Verify instance deletion
+#------------------------------------------------------------------------#
+
+# Set the fault flag, set to TRUE if a fault has been identified
+
+#------------------------------------------------------------------------#
+# Test 1
+#------------------------------------------------------------------------#
+
+   # Attempt to find the deleted instance
+   an_instanceTS = find-one Termination_State where ReferenceTS = Test
+
+   # Check that the instance was deleted
+   if an_instanceTS != UNDEFINED then		         	    
+      [] = RPT3:Test_Failed["objTS", Test, -1]
+   else     
+      [] = RPT2:Test_Passed["objTS", Test, 0]
+   endif
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+
+# Test complete

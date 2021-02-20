@@ -1,0 +1,818 @@
+public service Find_and_Sets::Find_Many.do_find_many (Test_Number     : in  integer,
+                                                      an_instanceFM   : in  instance of Find_Many,
+                                                      Returned_Number : out integer) is
+#------------------------------------------------------------------------#
+# Find many instances
+
+Local_Test = Test_Number
+
+#------------------------------------------------------------------------#
+# Test 1 - Find where, no instances returned
+#          Object to which the operation was performed contains no 
+#          instances
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0541", "Find and Sets", "objFM", "find-many on no instances"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1210"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-0124"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   {setB} = find Object_B where idB > 0
+
+   # Check that the set contains no instances
+   if countof {setB} != 0 then
+      [] = RPT3:Test_Failed["objFM", Local_Test, -1]
+      Has_Failed = TRUE
+   else
+      temp = an_instanceFM.ResultFM + 10
+      an_instanceFM.ResultFM = temp
+
+      [] = RPT2:Test_Passed["objFM", Local_Test, temp]
+   endif
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - Find where, using a single condition, no instances returned
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0541", "Find and Sets", "objFM", "single condition find on no instances"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1210"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-0124"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   {setA} = find Object_A where idA > 20
+
+   # Check that the set contains no instances
+   if countof {setA} != 0 then
+      [] = RPT3:Test_Failed["objFM", Local_Test, -2]
+      Has_Failed = TRUE
+   else
+      temp = an_instanceFM.ResultFM + 10
+      an_instanceFM.ResultFM = temp
+      [] = RPT2:Test_Passed["objFM", Local_Test, temp]
+   endif
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - Find where, only one condition is fulfilled, no instance
+#          returned (AND)
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0541", "Find and Sets", "objFM", "find on one condition no instances"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1210"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-0124"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   {setA} = find Object_A where idA = 2 & IntegerA = 666
+
+   # Check that the set contains no instances
+   if countof {setA} != 0 then
+      [] = RPT3:Test_Failed["objFM", Local_Test, -3]
+      Has_Failed = TRUE
+   else
+      temp = an_instanceFM.ResultFM + 10
+      an_instanceFM.ResultFM = temp
+      [] = RPT2:Test_Passed["objFM", Local_Test, temp]
+   endif
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4 - find where, using a single condition, some instances returned
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0541", "Find and Sets", "objFM", "single condition some instances"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1210"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-0124"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   {setA} = find Object_A where idA < 4
+
+   # Check that the set contains some instances and that it contains the
+   # correct instances
+   if countof {setA} != 3 then
+      [] = RPT3:Test_Failed["objFM", Local_Test, -4]
+      Has_Failed = TRUE
+   else
+      # Check each instance that is returned
+      countA = 0
+      countB = 0
+      countC = 0
+
+      for each_instanceA in {setA} do
+
+         if each_instanceA.idA = 1 then
+            countA = countA + 1
+         else
+
+            if each_instanceA.idA = 2 then
+               countB = countB + 1
+            else
+   
+               if each_instanceA.idA = 3 then
+                  countC = countC + 1
+               else
+                  [] = RPT3:Test_Failed["objFM", Local_Test, -5]
+                  Has_Failed = TRUE
+               endif
+
+            endif
+
+         endif
+
+      endfor
+
+      # Check counter values
+      if (countA != 1)|(countB != 1)|(countC != 1) then
+         [] = RPT3:Test_Failed["objFM", Local_Test, -6]
+         Has_Failed = TRUE
+      else
+         temp = an_instanceFM.ResultFM + 10
+         an_instanceFM.ResultFM = temp
+      endif
+
+      if !Has_Failed then
+         [] = RPT2:Test_Passed["objFM", Local_Test, temp]
+      endif
+
+   endif
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5 - find where, multiple conditions are fulfilled, some instances 
+#          returned
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0541", "Find and Sets", "objFM","on some instances"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1210"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-0124"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   {setA} = find Object_A where idA = 4 | idA > 8
+
+   # Check that the set contains some instances and that it contains the
+   # correct instances
+
+   if countof {setA} != 3 then
+      [] = RPT3:Test_Failed["obj", Local_Test, -7]
+      Has_Failed = TRUE
+   else
+      # Check each instance that is returned
+      countA = 0
+      countB = 0
+      countC = 0
+
+      for each_instanceA in {setA} do
+
+         if each_instanceA.idA = 4 then
+            countA = countA + 1
+         else
+
+            if each_instanceA.idA = 9 then
+               countB = countB + 1
+
+            else
+
+               if each_instanceA.idA = 10 then
+                  countC = countC + 1
+               else
+                  [] = RPT3:Test_Failed["objFM", Local_Test, -8]
+                  Has_Failed = TRUE
+               endif
+
+            endif
+
+         endif
+
+      endfor
+
+      # Check counter values
+      if (countA != 1)|(countB != 1)|(countC != 1) then
+         [] = RPT3:Test_Failed["objFM", Local_Test, -9]
+         Has_Failed = TRUE
+      else
+         temp = an_instanceFM.ResultFM + 10
+         an_instanceFM.ResultFM = temp
+      endif
+
+      if !Has_Failed then
+         [] = RPT2:Test_Passed["objFM", Local_Test, temp]
+      endif
+
+   endif
+
+# End Test 5
+
+#------------------------------------------------------------------------#
+# Test 6 - find where, multiple conditions are fulfilled, some instances 
+#          returned
+#          Specified criteria would hit the same instance several times
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0541", "Find and Sets", "objFM", "find where multiple conditions are fulfilled"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1210"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-0124"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   {setA} = find Object_A where idA = 1 | idA < 4 | idA = 3
+
+   # Check that the set contains some instances and that it contains the
+   # correct instances
+   if countof {setA} != 3 then
+      [] = RPT3:Test_Failed["objFM", Local_Test, -10]
+      Has_Failed = TRUE
+   else
+      # Check each instance that is returned
+      countA = 0
+      countB = 0
+      countC = 0
+      for each_instanceA in {setA} do
+
+         if each_instanceA.idA = 1 then
+            countA = countA + 1
+         else
+
+            if each_instanceA.idA = 2 then
+               countB = countB + 1
+            else
+
+               if each_instanceA.idA = 3 then
+                  countC = countC + 1
+               else
+                  [] = RPT3:Test_Failed["objFM", Local_Test,-11]
+                  Has_Failed = TRUE
+               endif
+
+            endif
+
+         endif
+
+      endfor
+
+      # Check counter values
+      if (countA != 1)|(countB != 1)|(countC != 1) then
+         [] = RPT3:Test_Failed["objFM", Local_Test, -12]
+         Has_Failed = TRUE
+      else
+         temp = an_instanceFM.ResultFM + 10
+        an_instanceFM.ResultFM = temp
+      endif
+
+      if !Has_Failed then
+         [] = RPT2:Test_Passed["objFM", Local_Test,0]
+      endif
+
+   endif
+
+# End Test 6
+
+#------------------------------------------------------------------------#
+# Test 7 - find-all, no instances returned
+#          Object to which the operation was performed contains no 
+#          instances
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0543", "Find and Sets", "objFM","on no instances"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1211"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-0124"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   {setB} = find-all Object_B
+
+   # Check that the set contains no instances
+   if countof {setB} != 0 then
+      [] = RPT3:Test_Failed["objFM", Local_Test,-13]
+      Has_Failed = TRUE
+   else
+      temp = an_instanceFM.ResultFM + 10
+      an_instanceFM.ResultFM = temp
+      [] = RPT2:Test_Passed["objFM", Local_Test,temp]
+   endif
+
+# End Test 7
+
+#------------------------------------------------------------------------#
+# Local_Test 8 - find-all, some instances returned
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0543", "Find and Sets", "objFM","on some instances"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1211"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   {setA} = find-all Object_A
+
+   # Check that the set contains no instances
+   if countof {setA} != 10 then
+      [] = RPT3:Test_Failed["objFM", Local_Test, -14]
+      Has_Failed = TRUE
+   else
+      temp = an_instanceFM.ResultFM + 10
+      an_instanceFM.ResultFM = temp
+      [] = RPT2:Test_Passed["objFM", Local_Test, temp]
+   endif
+
+# End Test 8
+
+#------------------------------------------------------------------------#
+# Test 9
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0543", "Find and Sets", "objFM","Repeat Find All"]
+
+   count = 5
+
+   loop
+
+      theInt = 100 + count
+
+      tempInstanceA = create Object_A with idA      = theInt &\
+                                      IntegerA = theInt
+      count = count - 1
+      breakif count = 0
+
+   endloop
+
+   {setAA} = find-all Object_A
+
+   if countof {setAA} = 15 then
+
+      count = 5
+
+      loop
+
+         theInt = 200 + count
+
+         tempInstanceA = create Object_A with idA      = theInt &\
+                                         IntegerA = theInt
+         count = count - 1
+         breakif count = 0
+
+      endloop
+
+      {setAB} = find-all Object_A
+
+      if countof {setAB} = 20 then
+
+         [] = RPT2:Test_Passed["objA", Local_Test, 0]
+
+      else
+
+         [] = RPT3:Test_Failed["objA", Local_Test, -10]
+
+      endif
+
+   else
+
+      [] = RPT3:Test_Failed["objA", Local_Test, -20]
+
+   endif
+
+#------------------------------------------------------------------------#
+# Test 10
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0543", "Find and Sets", "objFM","Repeat Find All"]
+
+   count = 5
+
+   loop
+
+      theInt = 300 + count
+
+      tempInstanceA = create Object_A with idA      = theInt &\
+                                      IntegerA = theInt
+      count = count - 1
+      breakif count = 0
+
+   endloop
+
+   {setAC} = find-all Object_A
+
+   if countof {setAC} = 25 then
+
+      count = 5
+
+      loop
+
+         theInt = 400 + count
+
+         tempInstanceA = create Object_A with idA      = theInt &\
+                                         IntegerA = theInt
+         count = count - 1
+         breakif count = 0
+
+      endloop
+
+      {setAC} = find-all Object_A
+
+      if countof {setAC} = 30 then
+
+         count = 5
+
+         loop
+
+            theInt = 500 + count
+
+            tempInstanceA = create Object_A with idA      = theInt &\
+                                                  IntegerA = theInt
+            count = count - 1
+            breakif count = 0
+
+         endloop
+
+         {setAC} = find-all Object_A
+
+         if countof {setAC} = 35 then
+
+            [] = RPT2:Test_Passed["objA", Local_Test, 0]
+
+         else
+
+            [] = RPT3:Test_Failed["objA", Local_Test, -10]
+
+         endif
+
+      else
+
+         [] = RPT3:Test_Failed["objA", Local_Test, -20]
+
+      endif
+
+   else
+
+      [] = RPT3:Test_Failed["objA", Local_Test, -30]
+
+   endif
+
+#------------------------------------------------------------------------#
+# Test 11
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0543", "Find and Sets", "objFM","Repeat Find All"]
+
+
+   count = 5
+
+   loop
+
+      instAO = create Assoc_Obj with idAO = count
+
+      count = count - 1
+      breakif count = 0
+
+   endloop
+
+   {setAO} = find-all Assoc_Obj
+
+   if countof {setAO} = 5 then
+
+      count = 5
+
+      loop
+
+         theInt = count + 5
+         instAO = create Assoc_Obj with idAO = theInt
+
+         count = count - 1
+         breakif count = 0
+
+      endloop
+
+      {setAO} = find-all Assoc_Obj
+
+      if countof {setAO} = 10 then
+  
+         count = 5
+
+         loop
+
+            theInt = count + 5
+            instAO = create Assoc_Obj with idAO = theInt
+   
+            count = count - 1
+            breakif count = 0
+
+         endloop
+
+         {setAO} = find-all Assoc_Obj
+
+         if countof {setAO} = 15 then
+
+            [] = RPT2:Test_Passed["objAO", Local_Test, 0]
+
+         else
+
+            [] = RPT3:Test_Failed["objAO", Local_Test, -10]
+
+         endif
+
+      else
+
+         [] = RPT3:Test_Failed["objAO", Local_Test, -20]
+
+      endif
+
+   else
+
+      [] = RPT3:Test_Failed["objAO", Local_Test, -30]
+
+   endif
+
+
+#------------------------------------------------------------------------#
+# Test 12
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0543", "Find and Sets", "objFM","Find All in service"]
+
+
+      count = 0
+
+      loop
+
+         theInt = 100 + count
+         instAO = create Assoc_Obj with idAO = theInt
+ 
+         count = count + 1
+         breakif count = 5
+
+      endloop
+
+      [noInst] = Find_and_Sets6::FindAllTest[]
+      [noInst] = Find_and_Sets6::FindAllTest[]
+      [noInst] = Find_and_Sets6::FindAllTest[]
+
+      if noInst = 20 then
+         [] = RPT2:Test_Passed["objAO", Local_Test, 0]
+      else
+         [] = RPT3:Test_Failed["objAO", Local_Test, noInst]
+      endif
+
+   {setToDel} = find Object_A where idA >= 100
+   delete {setToDel}
+
+
+
+
+
+
+#------------------------------------------------------------------------#
+# Test 13 - find-all, inclusive expressions,
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0541", "Find and Sets", "objFM", "inclusive and conditions"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1210"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-0124"]
+
+   Has_Failed = FALSE
+
+   {setA} = find Object_A where idA > 1 & idA < 4
+
+   countof_set_A = countof{setA}
+
+   if countof_set_A = 2 then
+      [] = RPT2:Test_Passed["objFM", Local_Test, countof_set_A]
+   else
+      [] = RPT3:Test_Failed["objFM", Local_Test, countof_set_A]
+   endif
+
+# End Test 9
+
+#------------------------------------------------------------------------#
+# Local_Test 10 - find-all, inclusive expressions,
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0541", "Find and Sets", "objFM", "inclusive or conditions"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1210"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-0124"]
+
+   Has_Failed = FALSE
+
+   {setA} = find Object_A where idA > 1 | idA < 4
+
+   countof_set_A = countof{setA}
+
+   if countof_set_A = 10 then
+      [] = RPT2:Test_Passed["objFM", Local_Test, countof_set_A]
+   else
+      [] = RPT3:Test_Failed["objFM", Local_Test, countof_set_A]
+   endif
+
+# End Test 10
+
+#------------------------------------------------------------------------#
+# Local_Test 11 - find-all, exclusive expressions, no instances returned 
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0541", "Find and Sets", "objFM", "exclusive and conditions"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1210"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-0124"]
+
+   Has_Failed = FALSE
+
+   {setA} = find Object_A where idA > 4 & idA < 2
+
+   countof_set_A = countof{setA}
+
+   if countof_set_A = 0 then
+      [] = RPT2:Test_Passed["objFM", Local_Test, countof_set_A]
+   else
+      [] = RPT3:Test_Failed["objFM", Local_Test, countof_set_A]
+   endif
+
+# End Test 11
+
+#------------------------------------------------------------------------#
+# Local_Test 12 - find-all, ordered conditions
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0541", "Find and Sets", "objFM","ordered conditions"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-1210"]
+   [] = RPT8:Specify_Requid [Local_Test, "1241-0000-01-0124"]
+
+   Has_Failed = FALSE
+
+   {setA} = find Object_A where idA = 2 | idA > 4
+
+   countof_set_A = countof{setA}
+
+   if countof_set_A = 7 then
+      [] = RPT2:Test_Passed["objFM", Local_Test, countof_set_A]
+   else
+      [] = RPT3:Test_Failed["objFM", Local_Test, countof_set_A]
+   endif
+
+# End Test 12
+
+#------------------------------------------------------------------------#
+# Local_Test 13 - Check that there is no limit on the number of instances
+#                 a set variable can hold.
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1241-0000-01-0125", "Find and Sets", "objFM","ordered conditions"]
+   [] = RPT8:Specify_Requid[Local_Test, "1241-0000-01-0119"]
+   [] = RPT8:Specify_Requid[Local_Test, "1241-0000-01-0122"]
+   [] = RPT8:Specify_Requid[Local_Test, "1241-0000-01-0126"]
+
+   [] = RPT5:Test_Text [Local_Test, "More instances than ever required"]
+
+   # Create LOTS of instances of Object_B
+   Cnt = 1000000
+
+   loop
+
+      NewInstB = create Object_B with idB = Cnt
+      Cnt = Cnt + 1
+      breakif Cnt = 2000000
+
+   endloop
+
+   {setOfNewInstB} = find Object_B where idB >= 1000000
+
+   NoInSet = countof{setOfNewInstB}
+
+   if NoInSet = 1000000 then
+      [] = RPT2:Test_Passed["objFM", Local_Test, NoInSet]
+   else
+      [] = RPT3:Test_Failed["objFM", Local_Test, NoInSet]
+   endif   
+
+# End Test 13
+
+#------------------------------------------------------------------------#
+# Local_Test 14 - Create LOTS more instance for a couple of other objetcs
+#                 and make sure that all instances can be found.
+#------------------------------------------------------------------------#
+  
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1241-0000-01-0125", "Find and Sets", "objFM","ordered conditions"]
+   [] = RPT8:Specify_Requid[Local_Test, "1241-0000-01-0119"]
+   [] = RPT8:Specify_Requid[Local_Test, "1241-0000-01-0122"]
+   [] = RPT8:Specify_Requid[Local_Test, "1241-0000-01-0126"]
+
+   [] = RPT5:Test_Text [Local_Test, "More instances than ever required"]
+
+   # Create LOTS of instances of Object_A
+   Cnt = 0
+
+   loop
+
+      NewInstA = create Object_A with IntegerA = Cnt &\
+                                      idA      = 100
+      Cnt = Cnt + 1
+      breakif Cnt = 100000
+
+   endloop
+
+   # Create LOTS of instances of Object_E
+   Cnt = 0
+
+   loop
+
+      NewInstE = create Object_E with IntegerA = Cnt &\
+                                      idE      = 100
+      Cnt = Cnt + 1
+      breakif Cnt = 100000
+
+   endloop
+
+   {setOfNewInstB} = find Object_B where idB >= 1000000
+   {setOfNewInstA} = find Object_A where idA = 100
+   {setOfNewInstE} = find Object_E where idE = 100
+
+   NoInSetA = countof{setOfNewInstA}
+   NoInSetB = countof{setOfNewInstB}
+   NoInSetE = countof{setOfNewInstE}
+
+   if NoInSetA = 100000 then
+
+      if NoInSetB = 1000000 then
+
+         if NoInSetE = 100000 then
+            [] = RPT2:Test_Passed["objFM", Local_Test, NoInSetE]
+         else
+            [] = RPT3:Test_Failed["objFM", Local_Test, NoInSetE]
+         endif   
+
+      else
+         [] = RPT3:Test_Failed["objFM", Local_Test, NoInSetB]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objFM", Local_Test, NoInSetA]
+   endif
+
+   delete {setOfNewInstB}
+   delete {setOfNewInstA}
+   delete {setOfNewInstE}
+
+# End Test 14
+
+#------------------------------------------------------------------------#
+# Local_Test 15 - find
+#------------------------------------------------------------------------#
+
+   [Local_Test] = Find_and_Sets1::Increment[Local_Test]
+
+   [] = RPT1:Start_Test[Local_Test, "1103-0000-01-0542", "Find and Sets", "objFM","Find without where"]
+
+   [] = RPT5:Test_Text[Local_Test, "Find without Where is unsupported"]
+   [] = RPT4:Test_Unsupported[Local_Test]
+
+# End Test 14
+
+#------------------------------------------------------------------------#
+Returned_Number = Local_Test
+#------------------------------------------------------------------------#

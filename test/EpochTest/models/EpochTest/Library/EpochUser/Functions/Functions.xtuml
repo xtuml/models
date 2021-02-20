@@ -1,0 +1,417 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	"43a51b71-02de-494b-83f2-ec07c5b339f4",
+	'Functions',
+	'',
+	0);
+INSERT INTO S_SYNC
+	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
+	"00000000-0000-0000-0000-000000000000",
+	'test_epoch_time',
+	'',
+	'passed = true;
+// benchmark measurements before testing requirements
+d = TIM::current_date();
+LOG::LogInfo( message:"The date today is (yyyy, MM, dd, hh, mm, ss) UTC:" );
+LOG::LogInteger( message: TIM::get_year( date:d ) );
+LOG::LogInteger( message: TIM::get_month( date:d ) );
+LOG::LogInteger( message: TIM::get_day( date:d ) );
+LOG::LogInteger( message: TIM::get_hour( date:d ) );
+LOG::LogInteger( message: TIM::get_minute( date:d ) );
+LOG::LogInteger( message: TIM::get_second( date:d ) );
+
+t0 = TIM::current_clock();
+LOG::LogTime( message: "is t0 TIM::current_clock value (default epoch).", t:t0 );
+s0 = TIM::timestamp_to_string( timestamp:t0 );
+LOG::LogInfo( message: s0 + " is long integer string of current timestamp." );
+LOG::LogInfo( message: "1576800000000000 is the 2020 microseconds since default 1970 epoch." );
+
+s = TIM::timestamp_format( timestamp:t0, format:"yyyy/MM/dd HH:mm:ss" );
+LOG::LogInfo( message:"current time timestamp_format output, formatted as yyyy/MM/dd HH:mm:ss: " + s );
+
+LOG::LogInfo( message:"" );
+
+// TA2 set_epoch
+LOG::LogInfo( message:"TA2 set_epoch" );
+d0 = TIM::current_date();
+d0_day = TIM::get_day( date:d0 );
+d0_hour = TIM::get_hour( date:d0 );
+d0_minute = TIM::get_minute( date:d0 );
+d0_month = TIM::get_month( date:d0 );
+d0_second = TIM::get_second( date:d0 );
+d0_year = TIM::get_year( date:d0 );
+// Set epoch to 1930.  There are 2838240000000000 microseconds between 1930 and 2020.
+TIM::set_epoch( year:1930, month:1, day:1 );
+d1 = TIM::current_date();
+// TA2.a Ensure that setting the epoch backward does not change the return value of get_date.
+if ( ( d0_day != TIM::get_day( date:d1 ) ) or
+     ( d0_hour != TIM::get_hour( date:d1 ) ) or  
+     ( d0_minute != TIM::get_minute( date:d1 ) ) or  
+     ( d0_month != TIM::get_month( date:d1 ) ) or  
+     ( d0_year != TIM::get_year( date:d1 ) )
+   )
+  passed = false;
+  LOG::LogFailure(message: "Set epoch backward failure." );
+  LOG::LogInfo( message:"d0 year month day hour minute second" );
+  LOG::LogInteger( message: d0_year);
+  LOG::LogInteger( message: d0_month);
+  LOG::LogInteger( message: d0_day);
+  LOG::LogInteger( message: d0_hour);
+  LOG::LogInteger( message: d0_minute);
+  LOG::LogInteger( message: d0_second);
+  LOG::LogInfo( message:"d1 year month day hour minute second" );
+  LOG::LogInteger( message: TIM::get_year( date:d1 ));
+  LOG::LogInteger( message: TIM::get_month( date:d1 ));
+  LOG::LogInteger( message: TIM::get_day( date:d1 ));
+  LOG::LogInteger( message: TIM::get_hour( date:d1 ));
+  LOG::LogInteger( message: TIM::get_minute( date:d1 ));
+  LOG::LogInteger( message: TIM::get_second( date:d1 ));
+end if;
+t1930 = TIM::current_clock();
+s1930 = TIM::timestamp_to_string( timestamp:t1930 );
+LOG::LogTime( message: "is t1930 TIM::current_clock value (epoch 1930).", t:t1930 );
+LOG::LogInfo( message:s1930 + " is current microseconds since 1930 and should be larger than next..." );
+LOG::LogInfo( message:"2838240000000000" );
+if ( t1930 < t0 )
+  passed = false;
+  LOG::LogFailure(message: "Bad timestamp (or < comparison) after setting epoch backward to 1930." );
+end if;
+TIM::set_epoch( day:1, month:1, year:2020 );
+t2020 = TIM::current_clock();
+s2020 = TIM::timestamp_to_string( timestamp:t2020 );
+LOG::LogTime( message: "is t2020 TIM::current_clock value (epoch 2020).", t:t2020 );
+LOG::LogInfo( message:s2020 + " is current microseconds since 2020 and should be smaller than next..." );
+if ( t2020 > t0 )
+  passed = false;
+  LOG::LogFailure(message: "Bad timestamp (or > comparison) after setting epoch forward to 2020." );
+end if;
+d2 = TIM::current_date();
+d2_day = TIM::get_day( date:d2 );
+d2_hour = TIM::get_hour( date:d2 );
+d2_minute = TIM::get_minute( date:d2 );
+d2_month = TIM::get_month( date:d2 );
+d2_second = TIM::get_second( date:d2 );
+d2_year = TIM::get_year( date:d2 );
+// TA2.b Ensure that setting the epoch forward does not change the return value of get_date.
+if ( ( d0_day != d2_day ) or
+     ( d0_hour != d2_hour ) or  
+     ( d0_minute != d2_minute ) or  
+     ( d0_month != d2_month ) or  
+     ( d0_year != d2_year )
+   )
+  passed = false;
+  LOG::LogFailure(message: "Set epoch forward failure." );
+  LOG::LogInfo( message:"d0 year month day hour minute second" );
+  LOG::LogInteger( message: d0_year);
+  LOG::LogInteger( message: d0_month);
+  LOG::LogInteger( message: d0_day);
+  LOG::LogInteger( message: d0_hour);
+  LOG::LogInteger( message: d0_minute);
+  LOG::LogInteger( message: d0_second);
+  LOG::LogInfo( message:"d2 year month day hour minute second" );
+  LOG::LogInteger( message: d2_year);
+  LOG::LogInteger( message: d2_month);
+  LOG::LogInteger( message: d2_day);
+  LOG::LogInteger( message: d2_hour);
+  LOG::LogInteger( message: d2_minute);
+  LOG::LogInteger( message: d2_second);
+end if;
+
+// TA3 getting current time(stamp) time
+LOG::LogInfo( message:"TA3 getting current time(stamp) time" );
+t1 = TIM::current_clock();
+LOG::LogTime( message: "is t1 TIM::current_clock value (epoch 2020) read after t2020.", t:t1 );
+if ( t1 < t2020 )
+  passed = false;
+  LOG::LogFailure(message: "Bad timestamp (or > comparison) between t2020 and t1." );
+end if;
+
+t2 = TIM::current_seconds();
+LOG::LogTime( message: "is t2 TIM::current_seconds value (expect t2 to match t1 in first digits).", t:t2 );
+microseconds_per_second = 1000000;
+if ( ( t2 - ( t1 / microseconds_per_second ) ) > 1 )
+  passed = false;
+  LOG::LogFailure( message:"TIM::current_seconds failure." );
+  LOG::LogTime( message:" was time given in microseconds.", t:t1 );
+  LOG::LogTime( message:" is time given in seconds.", t:t2 );
+end if;
+
+// TA4 format
+LOG::LogInfo( message:"TA4 format" );
+formatted_time_string = TIM::timestamp_format( timestamp:t1, format:"yyyy/MM/dd HH:mm:ss" );
+LOG::LogInfo( message:"t1 (current epoch 2020) timestamp_format output, formatted as yyyy/MM/dd HH:mm:ss: " + formatted_time_string );
+formatted_time_string = TIM::timestamp_format( timestamp:t1, format:"MM-dd-yyyy" );
+LOG::LogInfo( message:"t1 (current epoch 2020) timestamp_format output, formatted as MM-dd-yyyy: " + formatted_time_string );
+
+timestamp0_string = TIM::timestamp_to_string( timestamp:t0 );
+LOG::LogInfo( message:"t0 timestamp_to_string output: " + timestamp0_string );
+timestamp1_string = TIM::timestamp_to_string( timestamp:t1 );
+LOG::LogInfo( message:"t1 timestamp_to_string output: " + timestamp1_string );
+
+// TA5 comparison of timestamps
+// t0 is a large long integer.  t1 is smaller.
+LOG::LogInfo( message:"TA5 comparison of timestamps" );
+t = TIM::current_clock();
+tsame = t;
+tplus1 = t + 1;
+tminus1 = t - 1;
+if ( t < tplus1 )
+  LOG::LogInfo( message:"t < tplus1" );
+else
+  LOG::LogInfo( message:"fail t < tplus1" ); passed = false;
+end if;
+if ( t <= tplus1 )
+  LOG::LogInfo( message:"t <= tplus1" );
+else
+  LOG::LogInfo( message:"fail t <= tplus1" ); passed = false;
+end if;
+if ( t > tminus1 )
+  LOG::LogInfo( message:"t > tminus1" );
+else
+  LOG::LogInfo( message:"fail t > tminus1" ); passed = false;
+end if;
+if ( t >= tminus1 )
+  LOG::LogInfo( message:"t >= tminus1" );
+else
+  LOG::LogInfo( message:"fail t >= tminus1" ); passed = false;
+end if;
+if ( t == tsame )
+  LOG::LogInfo( message:"t == tsame" );
+else
+  LOG::LogInfo( message:"fail t == tsame" ); passed = false;
+end if;
+if ( t != tsame )
+  LOG::LogInfo( message:"fail t != tsame" ); passed = false;
+else
+  LOG::LogInfo( message:"t != tsame" );
+end if;
+
+if (t1 < t0) or (t1 > t0) or (t1 <= t0) or (t1 >= t0) or (t1 != t0) or (t1 == t0)
+else
+  LOG::LogFailure( message:"TIM timestamp comparison failure" ); passed = false;
+end if;
+if ( t0 < t1 )
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 < t1) failure" ); passed = false;
+end if;
+if ( t1 > t0 )
+  LOG::LogFailure( message:"TIM timestamp comparison (t1 > t0) failure" ); passed = false;
+end if;
+if ( t0 <= t1 )
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 <= t1) failure" ); passed = false;
+end if;
+if ( t1 >= t0 )
+  LOG::LogFailure( message:"TIM timestamp comparison (t1 >= t0) failure" ); passed = false;
+end if;
+if ( t0 == t1 )
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 == t1) failure" ); passed = false;
+end if;
+if ( t0 != t0 )
+  LOG::LogFailure( message:"TIM timestamp comparison (t0 != t0) failure" ); passed = false;
+end if;
+
+// TA6 subtraction
+LOG::LogInfo( message:"TA6 subtraction" );
+timestamp_minus_timestamp = t0 - t1;
+if ( timestamp_minus_timestamp != 0 )
+  if ( timestamp_minus_timestamp >= t0 )
+    passed = false;
+    LOG::LogFailure( message:"TIM timestamp subtract timestamp failure!" );
+    LOG::LogTime( message:" is time given before epoch set (default 1970).", t:t0 );
+    LOG::LogTime( message:" is time given after epoch set (forward to 2020).", t:t1 );
+  end if;
+end if;
+
+// TA7 addition
+LOG::LogInfo( message:"TA7 addition" );
+timestamp_plus_duration = t1 + 1;
+if ( timestamp_plus_duration == t1 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp add duration failure" );
+end if;
+
+// TA8 subtracting duration
+LOG::LogInfo( message:"TA8 subtracting duration" );
+timestamp_minus_duration = t1 - 1;
+if ( timestamp_minus_duration == t1 )
+  passed = false;
+  LOG::LogFailure( message:"TIM timestamp subtract duration failure" );
+end if;
+
+// TA9 time-of-day
+LOG::LogInfo( message:"TA9 time-of-day" );
+time_since_midnight = TIM::time_of_day( timeval:t1 );
+LOG::LogTime( message:"is microsecond time since midnight of t1.", t: time_since_midnight );
+LOG::LogTime( message:"hours.", t: ((time_since_midnight / 1000) / 1000) / 3600 );
+LOG::LogTime( message:"minutes.", t: (((time_since_midnight / 1000) / 1000) % 3600) / 60 );
+LOG::LogTime( message:"seconds.", t: ((((time_since_midnight / 1000) / 1000) % 3600) % 60) % 60 );
+LOG::LogTime( message:"subseconds.", t: time_since_midnight % 1000000 );
+
+// TA10 this model
+// TA11 setting and advancing time
+LOG::LogInfo( message:"TA11 setting time" );
+t2020feb2 = TIM::set_time( year:2020, month:2, day:2, hour:2, minute:2, second:2, microsecond:2);
+d2020feb2 = TIM::current_date();
+if (
+     ( TIM::get_day( date:d2020feb2 ) != 2 ) or
+     ( TIM::get_month( date:d2020feb2 ) != 2 ) or  
+     ( TIM::get_year( date:d2020feb2 ) != 2020 )
+   )
+  passed = false;
+  LOG::LogFailure( message: "TIM::set_time failure reading back the current_date." );
+  LOG::LogTime( message: "is returned time value.", t: t2020feb2 );
+  s = TIM::timestamp_format( timestamp:t2020feb2, format:"yyyy/MM/dd HH:mm:ss" );
+  LOG::LogInfo( message: s + " is returned string timestamp." );
+end if; 
+tset = TIM::current_clock();
+LOG::LogTime( message: "is current_clock after being set to.", t: tset );
+LOG::LogInfo( message: "2858522000002 is expected value." );
+
+tplus10 = TIM::set_time( year:2030, month:10, day:10, hour:10, minute:10, second:10, microsecond:10);
+dplus10 = TIM::current_date();
+if (
+     ( TIM::get_day( date:dplus10 ) != 10 ) or
+     ( TIM::get_month( date:dplus10 ) != 10 ) or  
+     ( TIM::get_year( date:dplus10 ) != 2030 )
+   )
+  passed = false;
+  LOG::LogFailure( message: "TIM::set_time forward failure." );
+  LOG::LogTime( message: "is returned time value.", t: tplus10 );
+  s = TIM::timestamp_format( timestamp:tplus10, format:"yyyy/MM/dd HH:mm:ss" );
+  LOG::LogInfo( message: s + " is returned string timestamp." );
+end if; 
+tset = TIM::current_clock();
+LOG::LogTime( message: "is current_clock after being set to.", t: tset );
+LOG::LogInfo( message: "316260610000010 is expected value." );
+
+tminus10 = TIM::set_time( year:d2_year - 10, month:d2_month, day:d2_day, hour:d2_hour, minute:0, second:0, microsecond:234567);
+dminus10 = TIM::current_date();
+if ( TIM::get_year( date:dminus10 ) != ( d2_year - 10 ) )
+  passed = false;
+  LOG::LogFailure( message: "TIM::set_time backward failure." );
+  LOG::LogTime( message: "is returned time value.", t: tminus10 );
+end if; 
+
+LOG::LogInfo( message:"TA11 advancing time" );
+today = TIM::current_date();
+today_minutes = TIM::get_minute( date:today );
+adjusted_today_minutes = today_minutes - 30; // <-- -30
+if ( adjusted_today_minutes < 0 )
+  adjusted_today_minutes = 0 - today_minutes; // <-- 0 ???
+end if;
+// two_days_of_microseconds = 2 * 24 * 60 * 60 * 1000000; <-- resolves to integer value of 1000146
+// Verifier is adding instead of multiplying?
+// Putting in calculated number exceeds integer, so use 30 minute offset.
+// Again, calculate, because the multiply was adding: 30 * 60 * 1000000 --> 1000090
+t4 = TIM::advance_time( microseconds: 1800000000 );
+advanced = TIM::current_date();
+advanced_minutes = TIM::get_minute( date:advanced );
+if ( advanced_minutes != 30 ) // Hardcoded, because of failure to calculate adjusted_today_minutes.
+  passed = false;
+  LOG::LogFailure( message: "TIM::advance_time failure." );
+  LOG::LogTime( message: "is returned time value.", t: t4 );
+end if;
+
+if ( passed )
+  LOG::LogInfo( message:"test passed" );
+else
+  LOG::LogInfo( message:"test failed" );
+end if;
+	
+LOG::LogInfo( message:"End of real time Panda requirement tests." );
+LOG::LogInfo( message:"=========================================" );
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("b53438c9-fb94-42c9-b025-52ebd53721ee",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("be6d206b-9281-49b4-8c73-29a45ea4f7e0",
+	"00000000-0000-0000-0000-000000000000",
+	'advance_time_5_seconds',
+	'',
+	'ts = TIM::advance_time( microseconds:5000000 );
+LOG::LogInfo( message:"Advanced time by 5 seconds to:  " + TIM::timestamp_format( timestamp:ts, format:"hh:mm:ss" ) );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("be6d206b-9281-49b4-8c73-29a45ea4f7e0",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("bc778e3c-e730-46ba-9e15-de72c0dddf88",
+	"00000000-0000-0000-0000-000000000000",
+	'launch_rocket',
+	'',
+	'create object instance rocket of rocket;
+rocket.name = "FalconHeavyDragon";
+t = TIM::current_clock();
+LOG::LogTime( t:t, message:" is time of launch." );
+s = TIM::timestamp_format( timestamp:t, format:"yyyy/MM/dd hh:mm:ss" );
+LOG::LogInfo( message:"Launch " + rocket.name + " at " + s );
+generate rocket1:go() to rocket;',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("bc778e3c-e730-46ba-9e15-de72c0dddf88",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ea04ea18-9323-42e6-8b2d-cdaac4243aa1",
+	"00000000-0000-0000-0000-000000000000",
+	'testEpochUser',
+	'',
+	'create object instance baby of MME;
+LOG::LogInfo( message:"Birthday before epoch set: " + baby.myString );
+TIM::set_epoch( day:21, month:6, year:2111 );
+create object instance epochBaby of MME;
+LOG::LogInfo( message:"Birthday after epoch set: " + epochBaby.myString );',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0);
+INSERT INTO PE_PE
+	VALUES ("ea04ea18-9323-42e6-8b2d-cdaac4243aa1",
+	1,
+	"335cce5c-4a87-414a-9cf5-29925e9dd979",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("335cce5c-4a87-414a-9cf5-29925e9dd979",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"9e468b99-6235-49e8-b4c3-26287a2f7f96",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("9e468b99-6235-49e8-b4c3-26287a2f7f96",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'EpochUser',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'../EpochUser.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("43a51b71-02de-494b-83f2-ec07c5b339f4",
+	'EpochTest',
+	1,
+	'../../../EpochTest.xtuml');

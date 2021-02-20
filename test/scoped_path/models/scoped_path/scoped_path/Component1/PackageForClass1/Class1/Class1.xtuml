@@ -1,0 +1,272 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("91273e65-5bff-48ef-a105-1d49dd5c85bb",
+	'Class1',
+	1,
+	'Class1',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("d590ca60-4f00-4c41-98a8-f4dcd01be5bd",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb",
+	'testEnumAccess',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'
+systemLevel = scoped_path::scoped_path::color::black; 
+systemLevel = scoped_path::color::black;
+
+datatypesLevel = scoped_path::scoped_path::Datatypes::color::black;
+datatypesLevel = scoped_path::Datatypes::color::black;
+datatypesLevel = Datatypes::color::black;   
+
+
+
+functionLevel = scoped_path::scoped_path::Functions::color::black;
+functionLevel = scoped_path::Functions::color::black;
+
+systemLevelConstant = scoped_path::scoped_path::colorConst::black;
+systemLevelConstant = scoped_path::colorConst::black;
+
+datatypesLevelConstant = Datatypes::colorConst::black;
+systemLevelConstant = datatypesLevelConstant;
+
+functionLevelConstant = scoped_path::scoped_path::Functions::colorConst::black;
+
+
+
+
+
+componentLevel = Component1::PackageForClass1::color::black;
+componentLevel = scoped_path::Component1::PackageForClass1::color::black;
+componentLevel = scoped_path::scoped_path::Component1::PackageForClass1::color::black;
+componentLevelConstant = Component1::PackageForClass1::colorConst::black;
+componentLevelConstant = scoped_path::Component1::PackageForClass1::colorConst::black;
+componentLevelConstant = scoped_path::scoped_path::Component1::PackageForClass1::colorConst::black;
+
+//Test to assure the tempory types in this body are assigned correctly
+self.ThisComponentLevelEnum = componentLevel;
+self.DatatypesLevelEnum = datatypesLevel;
+self.FunctionLevelEnum = functionLevel;
+self.SystemLevelEnum = systemLevel;
+self.ThisComponentLevelConstant = componentLevelConstant;
+self.DatatypesLevelConstant = datatypesLevelConstant;
+self.FunctionLevelConstant = functionLevelConstant;
+self.SystemLevelConstant = systemLevelConstant;
+
+systemLevelConstant = datatypesLevelConstant;
+datatypesLevelConstant = systemLevelConstant;
+functionLevelConstant = datatypesLevelConstant;
+
+// Test for error:
+// Here are some error cases to assure the types are not assignable to each 
+// other. These, when comment is removed, should each show that datatype 
+// already exists as a different type
+//systemLevel = datatypesLevel;
+//datatypesLevel = systemLevel;
+//functionLevel = datatypesLevel;
+//datatypesLevel = conponentLevel;
+
+
+',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0);
+INSERT INTO O_NBATTR
+	VALUES ("aba217f6-edcc-48db-9aa4-c97880ec73f5",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_BATTR
+	VALUES ("aba217f6-edcc-48db-9aa4-c97880ec73f5",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_ATTR
+	VALUES ("aba217f6-edcc-48db-9aa4-c97880ec73f5",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb",
+	"00000000-0000-0000-0000-000000000000",
+	'SystemLevelEnum',
+	'',
+	'',
+	'SystemLevelEnum',
+	0,
+	"61d62f0b-10ab-4fc7-9797-3b906dd53d71",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("61d62f0b-10ab-4fc7-9797-3b906dd53d71",
+	"00000000-0000-0000-0000-000000000000",
+	'color',
+	'OWNER:enum3',
+	'',
+	'../../../scoped_path.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("ac118c14-1038-4306-9681-e1cd8cc7d9f1",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_BATTR
+	VALUES ("ac118c14-1038-4306-9681-e1cd8cc7d9f1",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_ATTR
+	VALUES ("ac118c14-1038-4306-9681-e1cd8cc7d9f1",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb",
+	"aba217f6-edcc-48db-9aa4-c97880ec73f5",
+	'DatatypesLevelEnum',
+	'',
+	'',
+	'DatatypesLevelEnum',
+	0,
+	"6cea7d89-283c-45a4-a016-57c7e6019412",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("6cea7d89-283c-45a4-a016-57c7e6019412",
+	"00000000-0000-0000-0000-000000000000",
+	'color',
+	'OWNER:enum3',
+	'',
+	'../../../Datatypes/Datatypes.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("d12dd892-3acc-4d2b-a03a-2ac06d4a96ad",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_BATTR
+	VALUES ("d12dd892-3acc-4d2b-a03a-2ac06d4a96ad",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_ATTR
+	VALUES ("d12dd892-3acc-4d2b-a03a-2ac06d4a96ad",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb",
+	"ac118c14-1038-4306-9681-e1cd8cc7d9f1",
+	'FunctionLevelEnum',
+	'',
+	'',
+	'FunctionLevelEnum',
+	0,
+	"cf084517-c4d9-40dd-b7cc-57afaf461bcc",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("cf084517-c4d9-40dd-b7cc-57afaf461bcc",
+	"00000000-0000-0000-0000-000000000000",
+	'color',
+	'OWNER:enum3',
+	'',
+	'../../../Functions/Functions.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("e6ecc8f2-3c66-4d9b-b4f3-1aeddbc94acb",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_BATTR
+	VALUES ("e6ecc8f2-3c66-4d9b-b4f3-1aeddbc94acb",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_ATTR
+	VALUES ("e6ecc8f2-3c66-4d9b-b4f3-1aeddbc94acb",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb",
+	"d12dd892-3acc-4d2b-a03a-2ac06d4a96ad",
+	'ThisComponentLevelEnum',
+	'',
+	'',
+	'ThisComponentLevelEnum',
+	0,
+	"641c5ef6-1a5f-4b7f-9224-3a01a94bdc08",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("641c5ef6-1a5f-4b7f-9224-3a01a94bdc08",
+	"00000000-0000-0000-0000-000000000000",
+	'color',
+	'OWNER:enum3',
+	'',
+	'../PackageForClass1.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("39401573-09ea-4185-9a87-cbd83be907bc",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_BATTR
+	VALUES ("39401573-09ea-4185-9a87-cbd83be907bc",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_ATTR
+	VALUES ("39401573-09ea-4185-9a87-cbd83be907bc",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb",
+	"e6ecc8f2-3c66-4d9b-b4f3-1aeddbc94acb",
+	'SystemLevelConstant',
+	'',
+	'',
+	'SystemLevelConstant',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("85bf173d-7916-4888-8efe-b84a1ad749ab",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_BATTR
+	VALUES ("85bf173d-7916-4888-8efe-b84a1ad749ab",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_ATTR
+	VALUES ("85bf173d-7916-4888-8efe-b84a1ad749ab",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb",
+	"39401573-09ea-4185-9a87-cbd83be907bc",
+	'DatatypesLevelConstant',
+	'',
+	'',
+	'DatatypesLevelConstant',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("16f8ea17-6592-436f-8724-5b2a3efacb57",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_BATTR
+	VALUES ("16f8ea17-6592-436f-8724-5b2a3efacb57",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_ATTR
+	VALUES ("16f8ea17-6592-436f-8724-5b2a3efacb57",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb",
+	"85bf173d-7916-4888-8efe-b84a1ad749ab",
+	'FunctionLevelConstant',
+	'',
+	'',
+	'FunctionLevelConstant',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("584c0df4-03b1-427e-a7c7-2b4ea70ebaa5",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_BATTR
+	VALUES ("584c0df4-03b1-427e-a7c7-2b4ea70ebaa5",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_ATTR
+	VALUES ("584c0df4-03b1-427e-a7c7-2b4ea70ebaa5",
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb",
+	"16f8ea17-6592-436f-8724-5b2a3efacb57",
+	'ThisComponentLevelConstant',
+	'',
+	'',
+	'ThisComponentLevelConstant',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_ID
+	VALUES (1,
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO O_ID
+	VALUES (2,
+	"91273e65-5bff-48ef-a105-1d49dd5c85bb");
+INSERT INTO PE_PE
+	VALUES ("91273e65-5bff-48ef-a105-1d49dd5c85bb",
+	1,
+	"18ebf8f1-391b-4366-a2ec-ac25988833e1",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("18ebf8f1-391b-4366-a2ec-ac25988833e1",
+	"00000000-0000-0000-0000-000000000000",
+	"6367f35c-0765-4330-9756-ed0e7269f376",
+	'PackageForClass1',
+	'',
+	0,
+	'../PackageForClass1.xtuml');

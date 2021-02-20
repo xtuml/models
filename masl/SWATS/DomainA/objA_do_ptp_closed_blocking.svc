@@ -1,0 +1,24 @@
+public service DomainA::Object_A.do_ptp_closed_blocking () is
+# create an instance to use for the test
+newA = create unique Object_A with ResultA = 0
+
+an_int = 1
+a_real = 2.0
+a_text = "three"
+
+#[a_status] = APTP2:Aptp_close_blocking_service[an_int,a_real,a_text] on newA
+
+# Not supported by SWA.
+
+Test = 8
+
+#if a_status = 10 then
+#  [] = RPTR1:REPORT_RESULT["DomainA","objA",Test,"do_ptp_closed_blocking","PASSED",a_status]
+#else
+#  [] = RPTR1:REPORT_RESULT["DomainA","objA",Test,"do_ptp_closed_blocking","FAILED",a_status]
+#endif
+
+#[] = RPTR1:REPORT_RESULT["DomainA","objA",Test,"do_ptp_closed_blocking","Unsupported",-1]
+
+[] = RPT4:Test_Unsupported[Test]
+

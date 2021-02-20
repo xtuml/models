@@ -1,0 +1,230 @@
+public service Find_and_Sets::Find_Single.do_find_one (Test            : in  integer,
+                                                       an_instanceFSI  : in  instance of Find_Single,
+                                                       Returned_Number : out integer) is
+#------------------------------------------------------------------------#
+# Find-one
+#------------------------------------------------------------------------#
+
+Test_Number = Test
+
+#------------------------------------------------------------------------#
+# Test 1 - FIND-ONE, no instance is returned
+#          The object to which the 'FIND' is being performed contains no 
+#          instances
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test [Test_Number, "1103-0000-01-0544", "Find and Sets", "objFSI find one", "on no instances"]
+   [] = RPT8:Specify_Requid [Test_Number, "1241-0000-01-1206"]
+
+   # Perform the test
+   an_instanceB = find-one Object_B
+
+   # Check that no instance is returned
+   if an_instanceB != UNDEFINED then
+      [] = RPT3:Test_Failed["objFSI find one", Test_Number,-1]
+   else
+
+      if an_instanceFSI = UNDEFINED then
+         [] = RPT3:Test_Failed["objFSI", Test_Number, -2]
+      else
+         temp = an_instanceFSI.ResultFSI + 10
+         an_instanceFSI.ResultFSI = temp
+         [] = RPT2:Test_Passed["objFSI find one", Test_Number, temp]
+      endif
+
+   endif
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - FIND-ONE WHERE, no instance is returned
+#          The object to which the 'FIND' is being performed contains no 
+#          instances
+#------------------------------------------------------------------------#
+
+   [Test_Number] = Find_and_Sets1::Increment[Test_Number]
+
+   [] = RPT1:Start_Test [Test_Number, "1103-0000-01-0545", "Find and Sets", "objFSI find one", "on no instances"]
+   [] = RPT8:Specify_Requid [Test_Number, "1241-0000-01-1207"]
+
+   # Perform the test
+   an_instanceB = find-one Object_B where idB = 1
+
+   # Check that no instance is returned
+   if an_instanceB != UNDEFINED then
+      [] = RPT3:Test_Failed["objFSI find one", Test_Number,-3]
+   else
+
+      if an_instanceFSI = UNDEFINED then
+         [] = RPT3:Test_Failed["objFSI", Test_Number, -4]
+      else
+         temp = an_instanceFSI.ResultFSI + 10
+         an_instanceFSI.ResultFSI = temp
+         [] = RPT2:Test_Passed["objFSI find one", Test_Number,temp]
+      endif
+
+   endif
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - FIND-ONE WHERE <single condition>, no instance returned
+#------------------------------------------------------------------------#
+
+   [Test_Number] = Find_and_Sets1::Increment[Test_Number]
+
+   [] = RPT1:Start_Test [Test_Number, "1103-0000-01-0545", "Find and Sets", "objFSI find one", "on no instances"]
+   [] = RPT8:Specify_Requid [Test_Number, "1241-0000-01-1207"]
+
+   # Perform the test
+   an_instanceA = find-one Object_A where IntegerA = 666
+
+   # Check that no instance is returned
+   if an_instanceA != UNDEFINED then
+      [] = RPT3:Test_Failed["objFSI find one", Test_Number,-3]
+   else
+      temp = an_instanceFSI.ResultFSI + 10
+      an_instanceFSI.ResultFSI = temp
+      [] = RPT2:Test_Passed["objFSI find one", Test_Number, temp]
+   endif
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4 - FIND-ONE WHERE <multiple conditions>, no instance returned
+#------------------------------------------------------------------------#
+
+   [Test_Number] = Find_and_Sets1::Increment[Test_Number]
+
+   [] = RPT1:Start_Test [Test_Number, "1103-0000-01-0545", "Find and Sets", "objFSI find one", "on no instances"]
+   [] = RPT8:Specify_Requid [Test_Number, "1241-0000-01-1207"]
+
+   # Perform the test
+   an_instanceA = find-one Object_A where IntegerA = 666 & idA = 1
+
+   # Check that no instance is returned
+   if an_instanceA != UNDEFINED then
+      [] = RPT3:Test_Failed["objFSI find one", Test_Number, -4]
+   else
+      temp = an_instanceFSI.ResultFSI + 10
+      an_instanceFSI.ResultFSI = temp
+      [] = RPT2:Test_Passed["objFSI find one", Test_Number, temp]
+   endif
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5 - FIND-ONE, an instance is returned
+#------------------------------------------------------------------------#
+
+   [Test_Number] = Find_and_Sets1::Increment[Test_Number]
+
+   [] = RPT1:Start_Test [Test_Number, "1103-0000-01-0544", "Find and Sets", "objFSI find one", "one instance"]
+   [] = RPT8:Specify_Requid [Test_Number, "1241-0000-01-1206"]
+
+   # Perform the test
+   an_instanceA = find-one Object_A
+
+   # Check that an instance is returned
+   if an_instanceA = UNDEFINED then
+      [] = RPT3:Test_Failed["objFSI find one", Test_Number, -5]
+   else
+      temp = an_instanceFSI.ResultFSI + 10
+      an_instanceFSI.ResultFSI = temp
+      [] = RPT2:Test_Passed["objFSI find one", Test_Number, temp]
+   endif
+
+# End Test 5
+
+#------------------------------------------------------------------------#
+# Test 6 - FIND-ONE WHERE <single condition>, an instance is returned
+#------------------------------------------------------------------------#
+
+   [Test_Number] = Find_and_Sets1::Increment[Test_Number]
+
+   [] = RPT1:Start_Test [Test_Number, "1103-0000-01-0545", "Find and Sets", "objFSI find one", "one instance"]
+   [] = RPT8:Specify_Requid [Test_Number, "1241-0000-01-1207"]
+
+   # Perform the test
+   an_instanceA = find-one Object_A where idA = 1
+
+   # Check that an instance is returned
+   if (an_instanceA != UNDEFINED)then
+
+      if (an_instanceA.idA != 1) then
+         [] = RPT3:Test_Failed["objFSI find one", Test_Number, -6]
+      else
+         temp = an_instanceFSI.ResultFSI + 10
+         an_instanceFSI.ResultFSI = temp
+         [] = RPT2:Test_Passed["objFSI find one", Test_Number, temp]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objFSI find one", Test_Number, -7]
+   endif
+
+# End Test 6
+
+#------------------------------------------------------------------------#
+# Test 7 - FIND-ONE WHERE <both conditions are fulfilled>, an instance is 
+#          returned
+#------------------------------------------------------------------------#
+
+   [Test_Number] = Find_and_Sets1::Increment[Test_Number]
+
+   [] = RPT1:Start_Test [Test_Number, "1103-0000-01-0545", "Find and Sets", "objFSI find one", "one instance"]
+   [] = RPT8:Specify_Requid [Test_Number, "1241-0000-01-1207"]
+
+   # Perform the test
+   an_instanceA = find-one Object_A where idA = 1 | idA = 2
+
+   # Check that an instance is returned
+   if (an_instanceA != UNDEFINED)then
+
+      if (an_instanceA.idA > 2) then
+         [] = RPT3:Test_Failed["objFSI find one", Test_Number, -8]
+      else
+         temp = an_instanceFSI.ResultFSI + 10
+         an_instanceFSI.ResultFSI = temp
+         [] = RPT2:Test_Passed["objFSI find one", Test_Number, temp]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objFSI find one", Test_Number, -9]
+   endif
+
+# End Test 7
+
+#------------------------------------------------------------------------#
+# Test 8 - FIND-ONE WHERE <only one conditions fulfilled>, an instance is 
+#          returned
+#------------------------------------------------------------------------#
+
+   [Test_Number] = Find_and_Sets1::Increment[Test_Number]
+
+   [] = RPT1:Start_Test [Test_Number, "1103-0000-01-0545", "Find and Sets", "objFSI find one", "one instance"]
+   [] = RPT8:Specify_Requid [Test_Number, "1241-0000-01-1207"]
+
+   # Perform the test
+   an_instanceA = find-one Object_A where idA = 3 | idA = 666
+
+   # Check that an instance is returned
+   if (an_instanceA != UNDEFINED)then
+
+      if(an_instanceA.idA != 3) then
+         [] = RPT3:Test_Failed["objFSI find one", Test_Number, -10]
+      else
+         temp = an_instanceFSI.ResultFSI + 10
+         an_instanceFSI.ResultFSI = temp
+         [] = RPT2:Test_Passed["objFSI find one", Test_Number, temp]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objFSI find one", Test_Number, -11]
+   endif
+
+# End Test 8
+
+#------------------------------------------------------------------------#
+
+Returned_Number = Test_Number

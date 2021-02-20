@@ -1,0 +1,29 @@
+//! Local scenario for SBTWO standalone test
+private service SBTWO::Local_scenario_for_SBTWO_standalone_test () is
+#--------------------------------------------------------------------------
+# In the abscence of the calling SBONE domain in a multi domain build,
+# this scenario mat be run in stand-alone mode.
+#--------------------------------------------------------------------------
+
+   Result = FALSE
+
+   {Received_Structure} is Source_Structure_Type
+
+   Test       = 1
+   An_Integer = 0
+   A_Real     = 0.0
+   Some_Text  = "Fred"
+   A_Boolean  = FALSE
+
+   A_Colour of Colour_Type = 'Red'
+
+   append [An_Integer, A_Real, Some_Text, A_Boolean, A_Colour] to {Received_Structure}
+
+   [Result] = SBTWO1::Receive_The_Structure[Test, {Received_Structure}, An_Integer, A_Real, Some_Text, A_Colour, A_Boolean, 1]
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["local call", Test, 0]
+   else
+      [] = RPT3:Test_Failed ["Local call", Test, -1]
+   endif
+

@@ -1,0 +1,15 @@
+//! Cause transition into creation state, for subsequent deletion
+public service Events::BornToDie.Into_Creation (Test        : in  integer,
+                                                Test_Number : in  integer) is
+
+
+#Create an instance
+Identity = 100 + Test
+newBTD = create BornToDie with idBTD = Identity & \
+                               ResultA = 0 & \
+                               Current_State = 'Creation_state'
+
+#Generate this instance
+generate BTD5:DeleteInstance(Test, Test_Number) to newBTD
+
+#------------------------------------------------------------------------#

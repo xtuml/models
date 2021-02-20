@@ -1,0 +1,14 @@
+
+$EXTERNAL, 7
+# Customer pays for fuel for Pump 2
+
+pump = find-one PUMP where Pump_Number = 2
+
+current_pending_transaction = pump->R9
+
+if current_pending_transaction != UNDEFINED then
+	current_transaction = current_pending_transaction->R4
+	generate TRN2:Payment_Received() to current_transaction
+endif
+
+$ENDEXTERNAL

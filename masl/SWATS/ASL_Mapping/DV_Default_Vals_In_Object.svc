@@ -1,0 +1,69 @@
+public service ASL_Mapping::Default_Vals.Default_Vals_In_Object (Test         : in  integer,
+                                                                 Returning_No : out integer) is
+[] = RPT1:Start_Test[Test, "1241-0000-01-0115", "ASL Mapping", "Check defaults vals in object", "Check defaults vals in object"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0114"]
+
+Set_Vals   = FALSE
+Has_Failed = FALSE
+
+[Host] = WAW1:What_Env[]
+
+InstDV = create Default_Vals
+
+if Set_Vals then
+   InstDV.The_Integer = 10
+   InstDV.The_Real    = 10.0
+   InstDV.The_Text    = "Value Set"
+   InstDV.The_Boolean = TRUE
+endif
+
+   if not Set_Vals then
+
+      if InstDV.The_Integer = 0 then
+
+         if InstDV.The_Real = 0.0 then
+
+            if not InstDV.The_Boolean then
+
+               if Host = "WACA" then 
+
+                  if InstDV.The_Text != "                                " then
+                     Has_Failed   = TRUE
+                     Failure_Code = -10
+                  endif
+
+               else
+
+                   if InstDV.The_Text != "" then
+                     Has_Failed   = TRUE
+                     Failure_Code = -10
+                  endif                 
+
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = -20
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -30
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -40
+      endif
+
+   endif
+
+#-------------------------------------------------------------------#
+
+   if not Has_Failed then
+      [] = RPT2:Test_Passed["DV", Test, 0]
+   else
+      [] = RPT3:Test_Failed["DV", Test, Failure_Code]
+   endif
+
+Returning_No = Test + 1

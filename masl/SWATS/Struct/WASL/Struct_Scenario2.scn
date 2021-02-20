@@ -1,0 +1,491 @@
+define scenario  Struct_Scenario2
+input
+output
+
+#$DESCRIPTION
+Complex Structure Scenario
+#$END_DESCRIPTION
+
+My_Test_Data = find-one Test_Data
+
+Test = My_Test_Data.The_Test_Number
+
+Zero = 0
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Complex Scenario", "Create empty structure"]
+
+   {Outer_Set} is Complex_UDT_Structure_Type
+
+   Nought = countof {Outer_Set}
+
+   if Nought = Zero then
+      [] = RPT2:Test_Passed["Create empty structure", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Create empty structure", Test, Nought]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 - Add some data into the set.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Complex Scenario", "Add data into structure"]
+
+   local_integer       = 10
+   local_real          = 10.0
+   local_basic_integer = 101
+
+   local_colour of Colour_Type = 'Red'
+
+   {Inner_Set} is UDT_Structure_Type
+
+   append [local_integer, local_real] to {Inner_Set}
+
+   append [local_integer, local_real, {Inner_Set}, local_basic_integer, local_colour] to {Outer_Set}
+
+   number_in_inner_set = countof {Inner_Set}
+   number_in_outer_set = countof {Outer_Set}
+
+   if number_in_inner_set = 1 then
+
+      if number_in_outer_set = 1 then 
+         [] = RPT2:Test_Passed["Add data into structure", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Add data into structure", Test, number_in_outer_set]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Add data into structure", Test, number_in_inner_set]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Add a second entry into both sets
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Complex Scenario", "Add more data into inner and outer structures"]
+
+   local_integer       = 20
+   local_real          = 20.0
+   local_basic_integer = 201
+
+   local_colour of Colour_Type = 'Blue'
+
+   append [local_integer, local_real] to {Inner_Set}
+   append [local_integer, local_real, {Inner_Set}, local_basic_integer, local_colour] to {Outer_Set}
+
+   number_in_inner_set = countof {Inner_Set}
+   number_in_outer_set = countof {Outer_Set}
+
+   if number_in_inner_set = 2 then
+  
+      if number_in_outer_set = 2 then 
+         [] = RPT2:Test_Passed["Add more data into structure", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Add more data into structure", Test, number_in_outer_set]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Add more data into structure", Test, number_in_inner_set]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+#  Test 4 - Add a new inner set into position 3 of the outer set.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Complex Scenario", "Add new inner structure into outer structure"]
+
+   local_integer       = 30
+   local_real          = 30.0
+   local_basic_integer = 301
+   local_colour of Colour_Type = 'Green'
+
+   {New_Inner_Set} is UDT_Structure_Type
+
+   append [local_integer, local_real] to {New_Inner_Set}
+   append [local_integer, local_real, {New_Inner_Set}, local_basic_integer, local_colour] to {Outer_Set}
+
+   number_in_inner_set = countof {New_Inner_Set}
+   number_in_outer_set = countof {Outer_Set}
+
+   if number_in_inner_set = 1 then
+
+      if number_in_outer_set = 3 then 
+         [] = RPT2:Test_Passed["Add more data into structure", Test, 0]
+      else
+         [] = RPT3:Test_Failed["Add more data into structure", Test, number_in_outer_set]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Add more data into structure", Test, number_in_inner_set]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5 - Decode all sets of structures
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Complex Scenario", "Decode structures"]
+
+   {decoded_inner_structure} is UDT_Structure_Type
+
+   number_in_both_structures = 0
+   total_value = 0
+
+   number_in_outer_set = countof {Outer_Set}
+
+   number_in_both_structures = number_in_outer_set
+
+   for [this_integer, this_real, {decoded_inner_structure}, this_basic_integer, this_colour] in {Outer_Set} do
+      total_value               = total_value + this_integer
+      number_in_inner_set       = countof {decoded_inner_structure}
+      number_in_both_structures = number_in_inner_set + number_in_both_structures
+
+      for [this_inner_integer, this_inner_real] in {decoded_inner_structure} do
+         total_value = total_value + this_inner_integer
+      endfor
+
+   endfor
+
+   if total_value = 130 then
+      [] = RPT2:Test_Passed["Decode structures", Test, number_in_both_structures]
+   else
+      [] = RPT3:Test_Failed["Decode structures", Test, number_in_both_structures]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+# Test 6 - Since we are no longer labouring under the destructive read 
+#          restrictions, it would be prudent to check that all structures 
+#          are still current in all sets.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Complex Scenario", "And again"]
+
+   {empty_decoded_inner_structure} is UDT_Structure_Type
+
+   number_in_both_structures = 0
+   total_value               = 0
+   number_in_outer_set       = countof {Outer_Set}
+   number_in_both_structures = number_in_outer_set
+
+   for [this_integer, this_real, {empty_decoded_inner_structure}, this_basic_integer, this_colour] in {Outer_Set} do
+      total_value               = total_value + this_integer
+      number_in_inner_set       = countof {empty_decoded_inner_structure}
+      number_in_both_structures = number_in_inner_set + number_in_both_structures
+
+      for [this_inner_integer, this_inner_real] in {empty_decoded_inner_structure} do
+         total_value = total_value + this_inner_integer
+      endfor
+
+   endfor
+
+   if total_value = 130 then
+      [] = RPT2:Test_Passed["And again", Test, number_in_both_structures]
+   else
+      [] = RPT3:Test_Failed["And again", Test, number_in_both_structures]
+   endif
+
+   Test = Test + 1
+
+# End Test 6
+
+#--------------------------------------------------------------------------
+# Test 7 - Having established how sets of structures are contained in a set 
+#          of structures, examine how the data is held, deep or shallow 
+#          copy. To achieve this, the test shall add on entry the the inner 
+#          & outer sets to check how that addition has affected the other 
+#          sets in the outer set that point to it.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Complex Scenario", "Deep or shallow copy"]
+
+   local_integer       = 40
+   local_real          = 40.0
+   local_basic_integer = 401
+
+   local_colour of Colour_Type = 'Red'
+
+   append [local_integer, local_real] to {Inner_Set}
+
+   append [local_integer, local_real, {Inner_Set}, local_basic_integer, local_colour] to {Outer_Set}
+
+   # Having added a third entry onto the inner and and a fourth to the outer set, 
+   # have a look to see if the earlier entries in the outer set point to the latest version 
+   # of the inner set, ie. outer_set(1).{inner_set} = inner_set(4). If this is the case then 
+   # we have a shallow copy, otherwise if outer_set(1).{inner_set] = inner_set(1) then we have a deep copy.
+
+   # A deep copy is what is required here.
+   {fresh_decoded_inner_structure} is UDT_Structure_Type
+
+   A_Counter    = 0
+   Passed_Count = 0
+ 
+   {fresh_decoded_inner_structure} is UDT_Structure_Type
+
+   for [this_integer, this_real, {fresh_decoded_inner_structure}, this_basic_integer, this_colour] in {Outer_Set} do
+      A_Counter          = A_Counter + 1
+      Number_In_This_Set = countof{fresh_decoded_inner_structure}
+
+      if A_Counter = 1 and Number_In_This_Set = 1 then
+         Passed_Count = Passed_Count + 1        
+      else
+
+         if A_Counter = 2 and Number_In_This_Set = 2 then
+            Passed_Count = Passed_Count + 1        
+         else
+
+            if A_Counter = 3 and Number_In_This_Set = 1 then
+               Passed_Count = Passed_Count + 1        
+            else
+
+               if A_Counter = 4 and Number_In_This_Set = 3 then
+                  Passed_Count = Passed_Count + 1        
+               endif
+
+            endif
+
+         endif
+
+      endif
+
+   endfor
+
+   number_in_outer_set = countof {Outer_Set}
+
+   # This test has proved that first structure of the outer set of structures contains the inner set(a)  
+   # with 1 structure and that the second structure of the outer set contains the inner set(a) with two 
+   # structures, the third structure of the outer set contains a new inner set(b) with one structure and 
+   # finally, the fourth structure of the outer set contains the inner set (a) now with three structures.
+   # Exactly as it was set up.
+
+   # A shallow copy would have shown that the first structure in the outer set had an 
+   # inner structure with three structures.
+
+   if Passed_Count = number_in_outer_set then
+      [] = RPT2:Test_Passed["DEEP copy", Test, 0]
+   else
+      [] = RPT3:Test_Failed["SHALLOW copy", Test, Passed_Count]
+   endif
+
+   Test = Test + 1
+
+# End Test 7
+
+#--------------------------------------------------------------------------
+# Test 8 - Having proved that each outer set contains the requisite number 
+#          of inner sets, now show that the inner set is actually the inner
+#          set we expected to see.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Complex Scenario", "Compare contents of inner and outer structures"]
+
+   {another_fresh_decoded_inner_structure} is UDT_Structure_Type
+
+   A_Counter = 0
+   Total_Number_Of_Inner_Structures = 0
+
+   Inner_Count  = 0
+   Passed_Count = 0
+
+   for [this_integer, this_real, {another_fresh_decoded_inner_structure}, this_basic_integer, this_colour] in {Outer_Set} do
+      Inner_Count = 0
+      A_Counter   = A_Counter + 1
+
+      Number_In_This_Set = countof {another_fresh_decoded_inner_structure}
+
+      Total_Number_Of_Inner_Structures =Total_Number_Of_Inner_Structures + Number_In_This_Set
+
+      for [inner_integer, inner_real] in {another_fresh_decoded_inner_structure} do
+         Inner_Count = Inner_Count + 1
+
+         if A_Counter = 1 and Number_In_This_Set = 1 then
+
+            if Inner_Count = 1 and (inner_integer = 10 and inner_real = 10.0) then
+               Passed_Count = Passed_Count + 1        
+            endif
+
+         else
+
+            if A_Counter = 2 and Number_In_This_Set = 2 then
+
+               if (Inner_Count = 1 and (inner_integer = 10 and inner_real = 10.0)) or \ 
+                  (Inner_Count = 2 and (inner_integer = 20 and inner_real = 20.0)) then
+
+                  Passed_Count = Passed_Count + 1        
+ 
+               endif
+   
+            else
+
+               if A_Counter = 3 and Number_In_This_Set = 1 then
+
+                  if Inner_Count = 1 and (inner_integer = 30 and inner_real = 30.0) then 
+                     Passed_Count = Passed_Count + 1        
+                  endif
+
+               else
+
+                  if A_Counter = 4 and Number_In_This_Set = 3 then
+
+                     if (Inner_Count = 1 and (inner_integer = 10 and inner_real = 10.0)) or \ 
+                        (Inner_Count = 2 and (inner_integer = 20 and inner_real = 20.0)) or \
+                        (Inner_Count = 3 and (inner_integer = 40 and inner_real = 40.0)) then
+
+                        Passed_Count = Passed_Count + 1        
+                     endif
+
+                  endif
+
+               endif
+
+            endif
+
+         endif
+
+      endfor
+
+   endfor
+
+   if Passed_Count = Total_Number_Of_Inner_Structures then
+      [] = RPT2:Test_Passed["DEEP copy", Test, Total_Number_Of_Inner_Structures]
+   else
+      [] = RPT3:Test_Failed["SHALLOW copy", Test, Passed_Count]
+   endif
+
+   Test = Test + 1
+
+# End Test 8
+
+#--------------------------------------------------------------------------
+# Test 9 - Show what happens when two outer structures point to the same 
+#          inner stucture.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Complex Scenario", "Compare contents of outer structures"]
+
+   {First_Outer_Set}  is Complex_UDT_Structure_Type
+   {Second_Outer_Set} is Complex_UDT_Structure_Type
+   {Common_Inner_Set} is UDT_Structure_Type
+
+   local_integer       = 10
+   local_real          = 10.0
+   local_basic_integer = 101
+   local_colour of Colour_Type = 'Red'
+
+   append [local_integer,local_real] to {Common_Inner_Set}
+
+   append [local_integer, local_real, {Common_Inner_Set}, local_basic_integer, local_colour] to {First_Outer_Set}
+   append [local_integer, local_real, {Common_Inner_Set}, local_basic_integer, local_colour] to {Second_Outer_Set}
+
+   # Now add a new structure to the common inner set
+   local_integer       = 20
+   local_real          = 20.0
+   local_basic_integer = 201
+
+   local_colour of Colour_Type = 'Blue'
+
+   append [local_integer,local_real] to {Common_Inner_Set}
+
+   # Add this new set of structures to the second outer set, but not the first.
+   append [local_integer, local_real, {Common_Inner_Set}, local_basic_integer, local_colour] to {Second_Outer_Set}
+
+   # Now add a new structure to the inner set
+   local_integer       = 30
+   local_real          = 30.0
+   local_basic_integer = 301
+
+   local_colour of Colour_Type = 'Green'
+
+   append [local_integer,local_real] to {Common_Inner_Set}
+
+   # Add this new set of structures to the first outer set, but not the second
+   append [local_integer, local_real, {Common_Inner_Set}, local_basic_integer, local_colour] to {First_Outer_Set}
+
+   # So, what we have is two outer sets of structures, both with a common first inner set, but different second inner
+   # structures.
+
+   {First_Inner_Set}  is UDT_Structure_Type
+
+   First_Total_Count = 0
+
+   for [this_integer, this_real, {First_Inner_Set}, this_basic_integer, this_colour] in {First_Outer_Set} do
+      First_Total_Count = First_Total_Count + this_integer
+
+      for [inner_integer, inner_real] in {First_Inner_Set} do
+         First_Total_Count = First_Total_Count + inner_integer
+      endfor
+
+   endfor
+
+   {Second_Inner_Set} is UDT_Structure_Type
+
+   Second_Total_Count = 0
+  
+   for [this_integer, this_real, {Second_Inner_Set}, this_basic_integer, this_colour] in {Second_Outer_Set} do
+      Second_Total_Count = Second_Total_Count + this_integer
+
+      for [inner_integer, inner_real] in {Second_Inner_Set} do
+         Second_Total_Count = Second_Total_Count + inner_integer
+      endfor
+
+   endfor
+
+   if First_Total_Count = 110 and Second_Total_Count = 70 then
+      [] = RPT2:Test_Passed["DEEP copy", Test, Total_Number_Of_Inner_Structures]
+   else
+      [] = RPT3:Test_Failed["SHALLOW copy", Test, First_Total_Count]
+   endif
+
+   Test = Test + 1
+
+# End Test 9
+
+#--------------------------------------------------------------------------
+# Test 10
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1212", "Structures", "Complex Scenario", "Append an empty structure"]
+
+   # Append an empty simple structures to a outer structure.
+   {Empty_Structure} is UDT_Structure_Type
+   {Outer_Structure} is Complex_UDT_Structure_Type
+
+   append [local_integer, local_real, {Empty_Structure}, local_basic_integer, local_colour] to {Outer_Structure}
+
+   Number_In_Outer_Structures   = countof {Outer_Structure}
+   Number_In_Empty_Structure    = countof {Empty_Structure}
+
+   if Number_In_Outer_Structures   =1 & Number_In_Empty_Structure    = 0 then
+      [] = RPT2:Test_Passed["Append empty structure to complex structure", Test, Number_In_Empty_Structure]
+   else
+      [] = RPT3:Test_Failed["Append empty structure to complex structure", Test, Number_In_Empty_Structure]
+   endif
+
+#--------------------------------------------------------------------------
+
+Test = Test + 1
+
+My_Test_Data.The_Test_Number = Test
+
+enddefine

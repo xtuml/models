@@ -1,0 +1,20 @@
+public service TAGS::Test_Data.Call_Tagged_Terminators (Two_Tags_Result : out boolean) is
+Output_From_One = 0
+Input_To_One    = 99
+
+Output_From_Two = 0
+Input_To_Two    = 99
+
+# Call Two tagged handcoded terminators in this bridge
+
+[Output_From_One] = TT2:A_Tagged_Dummy_Terminator_One[Input_To_One]
+
+[Output_From_Two] = TT4:A_Tagged_Dummy_Terminator_Two[Input_To_Two]
+
+if Output_From_One = Input_To_One or \
+   Output_From_Two = Input_To_Two then
+
+   Two_Tags_Result = FALSE
+else
+   Two_Tags_Result = TRUE
+endif

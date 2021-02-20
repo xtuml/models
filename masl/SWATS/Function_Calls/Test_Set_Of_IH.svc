@@ -1,0 +1,46 @@
+public service Function_Calls::Test_Set_Of_IH (Set_Of_IH        : in  sequence of Structure_For_IH,
+                                               Single           : in  boolean,
+                                               Testing_For_What : in  string) is
+my_test_data = find-one Test_Data
+Test_Number  = my_test_data.The_Test_Number
+
+# ---------------------------------------------------------------------------
+# Param1 is set of structures contiaining an instance handle for Object_A.
+# ---------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test_Number, "1241-0000-01-0807", " Function Calls", "Test IH set", Testing_For_What]
+   [] = RPT8:Specify_Requid[Test_Number, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test_Number, "1101-0000-01-0138"]
+
+   The_Attribute = 1
+  
+   How_Many = countof {Set_Of_IH}
+
+   if How_Many = 1 then
+
+      # Single IH, not a set.
+      for [Object_IH] in {Set_Of_IH} do
+         The_Attribute = Object_IH.ReferenceA 
+      endfor
+
+      if Single = TRUE then
+         [] = RPT2:Test_Passed["Single of IH received", Test_Number, The_Attribute]
+      else
+         [] = RPT3:Test_Failed["Single IH expected", Test_Number, -1]
+      endif
+
+   else
+
+      # Set of IH
+      if Single = FALSE then
+         [] = RPT2:Test_Passed["Set of IH received", Test_Number, How_Many]
+      else
+         [] = RPT3:Test_Failed["Set IH expected", Test_Number, -1]
+      endif
+
+   endif
+
+# ---------------------------------------------------------------------------
+
+Test_Number = Test_Number + 1
+my_test_data.The_Test_Number = Test_Number

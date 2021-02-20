@@ -1,0 +1,129 @@
+define bridge  DomainB:NAV5:Enum_Test
+input \
+	Test:Base_Integer_Type ,\
+	Enum_Input:Test_Enum_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+My_Report = find-one Report_Data
+
+if My_Report = UNDEFINED then
+
+   $USE RP
+      [] = RP7::Report_Run_Time_Error["Calling domain has not created Report_Data"]
+   $ENDUSE
+
+else
+
+   This_Domain_Number = My_Report.Reported_Domain_Number
+
+   switch Enum_Input
+      case 'Sly'
+         DomainB_Enum_Val of Test_Enum_Type = 'Sly'
+      case 'Sandy'      
+         DomainB_Enum_Val of Test_Enum_Type = 'Sandy'
+      case 'Wes'
+         DomainB_Enum_Val of Test_Enum_Type = 'Wes'
+   endswitch
+
+   [The_DomainB_Val] = DomainB7::Check_Enum[DomainB_Enum_Val]
+
+   $USE DomainA
+
+      switch Enum_Input
+         case 'Sly'
+            DomainA_Enum_Val of Test_Enum_Type = 'Sly'
+         case 'Sandy'
+            DomainA_Enum_Val of Test_Enum_Type = 'Sandy'
+         case 'Wes'
+            DomainA_Enum_Val of Test_Enum_Type = 'Wes'
+      endswitch
+
+      [The_DomainA_Val] = DomainA3::Check_Enum[DomainA_Enum_Val] 
+
+   $ENDUSE
+
+   $USE Creation_Deletion
+
+      switch Enum_Input
+         case 'Sly'
+            Creation_Deletion_Enum_Val of Test_Enum_Type = 'Sly'
+         case 'Sandy'
+            Creation_Deletion_Enum_Val of Test_Enum_Type = 'Sandy'
+         case 'Wes'
+            Creation_Deletion_Enum_Val of Test_Enum_Type = 'Wes'
+      endswitch
+
+      [The_Creation_Deletion_Val] = Creation_Deletion3::Check_Enum[Creation_Deletion_Enum_Val] 
+
+
+   $ENDUSE
+
+   $USE Find_and_Sets
+
+      switch Enum_Input
+         case 'Sly'
+            Find_and_Sets_Enum_Val of New_Enum_Type = 'Sly'
+         case 'Sandy'
+            Find_and_Sets_Enum_Val of New_Enum_Type = 'Sandy'
+         case 'Wes'
+            Find_and_Sets_Enum_Val of New_Enum_Type = 'Wes'
+      endswitch
+
+      [The_Find_and_Sets_Val] = Find_and_Sets4::Check_Enum[Find_and_Sets_Enum_Val]
+
+   $ENDUSE
+
+   $USE Function_Calls
+
+      switch Enum_Input
+         case 'Sly'
+            Function_Calls_Enum_Val of New_Enum_Type = 'Sly'
+         case 'Sandy'
+            Function_Calls_Enum_Val of New_Enum_Type = 'Sandy'
+         case 'Wes'
+            Function_Calls_Enum_Val of New_Enum_Type = 'Wes'
+      endswitch
+
+      [The_Function_Calls_Val] = Function_Calls7::Nav_Enum_Over_Bridge[Function_Calls_Enum_Val]
+
+   $ENDUSE
+
+   $USE RP
+
+      [] = RP4::Test_Description[Test, "1241-0000-01-1102", "Domain_B", "Bridge", "Check Enumeration across bridge", This_Domain_Number]
+      [] = RP10::Specify_Requid[This_Domain_Number, Test, "1241-0000-01-1107"]
+      if The_DomainA_Val = 12 then
+
+         if The_DomainB_Val = 22 then
+
+            if The_Creation_Deletion_Val = 32 then
+
+               if The_Find_and_Sets_Val = 42 then
+                  [] = RP1::Test_Passed["Bridge", Test, 42, This_Domain_Number]
+               else
+                  [] = RP2::Test_Failed["Bridge", Test, The_Find_and_Sets_Val, This_Domain_Number]
+               endif
+
+            else
+               [] = RP2::Test_Failed["Bridge", Test, The_Creation_Deletion_Val, This_Domain_Number]
+            endif
+
+         else
+            [] = RP2::Test_Failed["Bridge", Test, The_DomainB_Val, This_Domain_Number]
+         endif
+
+      else
+         [] = RP2::Test_Failed["Bridge", Test, The_DomainA_Val, This_Domain_Number]
+      endif
+
+   $ENDUSE
+
+ endif
+
+
+enddefine

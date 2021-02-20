@@ -1,0 +1,12 @@
+public service Function_Calls::Object_A.FunctionB (InputA  : in  integer,
+                                                   InputB  : in  integer,
+                                                   InputC  : in  integer,
+                                                   OutputA : out boolean) is
+   an_instance_A = find-one Object_A where ReferenceA = 2
+   if ((InputA != 10)|(InputB != 20)|(InputC != 30)) then
+      generate objA1:Fault() to an_instance_A
+   else
+      temp = an_instance_A.ResultA + 10
+      an_instance_A.ResultA = temp
+   endif
+   OutputA = TRUE

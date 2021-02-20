@@ -1,0 +1,157 @@
+define function  MO1:Create_Relationships
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-------------------------------------------------------------------#
+#
+# Create relationships
+#
+# The architecture shall implement simple 1:M relationships
+# 1241-0000-01-0602
+#
+# The architecture shall provide a mechanism to allow creation of a 
+# simple relationship link between two object instances
+# 1241-0000-01-0603
+#
+# The architecture shall implement associative 1-1:M relationships
+# 1241-0000-01-0609
+# 
+# The architecture shall provide a mechanism to allow creation of an
+# associative relationship link between two object instances and am
+# associative instance
+# 1241-0000-01-0611
+#
+# The architectureshall support a translation of the ASL link 
+# statement to map to the mechanism that allows creation of a 
+# relationship link between two object instances
+# 1241-0000-01-1202
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+[] = RPT1:Start_Test[Test, "1241-0000-01-0602", "Relationships", "MO", "Create relationships"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0603"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0611"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-1202"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0612"]
+
+Has_Failed  = FALSE
+
+# Find the desired instances for Left_Object
+firstLeft  = find-one Left_Object where idLO = 1
+secondLeft = find-one Left_Object where idLO = 2
+thirdLeft  = find-one Left_Object where idLO = 3
+
+# Find the desired instances for Middle_Object
+firstMiddle  = find-one Middle_Object where idMO = 1
+thirdMiddle  = find-one Middle_Object where idMO = 3
+fourthMiddle = find-one Middle_Object where idMO = 4
+fifthMiddle  = find-one Middle_Object where idMO = 5
+
+# Find the desired instances for Right_Object
+secondRight = find-one Right_Object where idRO = 2
+fourthRight = find-one Right_Object where idRO = 4
+fifthRight  = find-one Right_Object where idRO = 5
+
+# Find the desired instances for MR_Object
+firstMR = find-one MR_Assoc where idMR = 1
+secondMR = find-one MR_Assoc where idMR = 2
+thirdMR = find-one MR_Assoc where idMR = 3
+fifthMR = find-one MR_Assoc where idMR = 5
+
+# Create normal 1:Mc relationships
+link firstLeft R12 firstMiddle
+link firstLeft R12 thirdMiddle
+link secondLeft R12 fifthMiddle
+
+# Create associative Mc:1 relationships
+link firstMiddle R14 secondRight using firstMR
+link thirdMiddle R14 fourthRight using fifthMR
+link fifthMiddle R14 fourthRight using thirdMR
+
+# Create a couple of instances to prove the relationships
+# For coding purposes, it is necessary to overspecify
+# the relationship.
+
+LeftInstance   = firstMiddle -> R12.Left_Object
+{MiddleSet}    = secondLeft  -> R12.Middle_Object
+RightInstance  = firstMiddle -> R14.Right_Object
+InstAssoc      = firstMiddle -> R14.MR_Assoc
+
+# Now check that the navigations can be performed
+
+if LeftInstance = UNDEFINED then
+   Has_Failed   = TRUE
+   Failure_Code = -10
+else
+
+   if LeftInstance.idLO != 1 then
+      Has_Failed   = TRUE
+      Failure_Code = -20
+   endif
+
+endif
+
+if not Has_Failed then
+
+   if countof {MiddleSet} != 1 then
+      Has_Failed   = TRUE
+      Failure_Code = -30
+   endif
+
+endif
+
+if not Has_Failed then
+   if InstAssoc = UNDEFINED then
+      Has_Failed   = TRUE
+      Failure_Code = -40
+   else
+
+      if InstAssoc.idMR != 1 then
+         Has_Failed   = TRUE
+         Failure_Code = -50
+      endif
+
+   endif
+
+endif
+
+if not Has_Failed then
+   if RightInstance = UNDEFINED then
+      Has_Failed   = TRUE
+      Failure_Code = -60
+   else
+
+      if RightInstance.idRO != 2 then
+         Has_Failed = TRUE
+         Failure_Code = -70
+      endif
+
+   endif
+
+endif
+
+#-------------------------------------------------------------------#
+# Test complete
+#-------------------------------------------------------------------#
+
+   if not Has_Failed then
+      [] = RPT2:Test_Passed["MO", Test, 0]
+   else
+      [] = RPT3:Test_Failed["MO", Test, Failure_Code]
+   endif
+
+#-------------------------------------------------------------------#
+
+enddefine

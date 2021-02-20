@@ -1,0 +1,166 @@
+//! Mission statement? 
+//! You're having a laugh!
+domain Struct is
+  public type Simple_Structure_Type is structure
+    S_Integer : integer;
+    S_Real    : real;
+    S_Text    : string;
+    S_Boolean : boolean;
+    S_Colour  : Colour_Type;
+  end structure;
+
+  public type Type_Linked_Simple_Structure_Type is structure
+    TLS_Integer : integer;
+    TLS_Real    : real;
+    TLS_Text    : string;
+    TLS_Boolean : boolean;
+  end structure;
+
+  public type Name_and_Type_Linked_Simple_Structure_Type is structure
+    An_Integer : integer;
+    A_Real     : real;
+    Some_Text  : string;
+    A_Boolean  : boolean;
+  end structure;
+
+  public type First_Nested_Structure_Type is structure
+    Second_Nested_Structure : sequence of Second_Nested_Structure_Type;
+    First_Nested_Integer    : integer;
+  end structure;
+
+  public type Second_Nested_Structure_Type is structure
+    Third_Nested_Structure : sequence of Third_Nested_Structure_Type;
+    Third_Nested_Integer   : integer;
+  end structure;
+
+  public type Third_Nested_Structure_Type is structure
+    Third_Nested_Integer : integer;
+    The_Holy_Grail       : Colour_Type;
+  end structure;
+
+  public type Colour_Type is enum (Red,
+                                   Green,
+                                   Blue);
+
+  public type Structure_and_IH_Type is structure
+    A_Defined_IH : instance of Structured_Object;
+  end structure;
+
+  public type My_Simple_Structure is structure
+    Int_Value    : integer;
+    Colour_Value : Colour_Type;
+  end structure;
+
+  public type My_Second_Structure is structure
+    Int_Val    : integer;
+    Real_Val   : real;
+    String_Val : string;
+    Col_Val    : Colour_Type;
+  end structure;
+
+  public service Decode_Simple_Structure (Test                   : in  integer,
+                                          Simple_Structure       : in  sequence of Simple_Structure_Type,
+                                          Object_Instance_Handle : in  instance of Structured_Object);
+
+  public service Decode_Simple_TL_Structure (Test                   : in  integer,
+                                             Simple_Structure       : in  sequence of Type_Linked_Simple_Structure_Type,
+                                             Object_Instance_Handle : in  instance of Structured_Object);
+
+  public service Decode_Simple_NTL_Structure (Test                   : in  integer,
+                                              Simple_Structure       : in  sequence of Name_and_Type_Linked_Simple_Structure_Type,
+                                              Object_Instance_Handle : in  instance of Structured_Object);
+
+  public service Decode_Three_Level_Nested_Structure (Test                      : in  integer,
+                                                      Three_Level_Nest          : in  sequence of First_Nested_Structure_Type,
+                                                      Two_Level_Nest            : in  sequence of Second_Nested_Structure_Type,
+                                                      One_Level_Nest            : in  sequence of Third_Nested_Structure_Type,
+                                                      Given_First_Level_Number  : in  integer,
+                                                      How_Many_In_First         : in  integer,
+                                                      Given_Second_Level_Number : in  integer,
+                                                      How_Many_In_Second        : in  integer,
+                                                      Given_Third_Level_Number  : in  integer,
+                                                      How_Many_In_Third         : in  integer,
+                                                      Given_Third_Level_Colour  : in  Colour_Type);
+
+  public service Create_Report_Data ();
+
+  public service Delete_Report_Data ();
+
+  //! Receive a structure containing and IH as a component of that structure.
+  public service Receive_Structure_IH (This_Test_Number        : in  integer,
+                                       Input_Structure         : in  sequence of Structure_and_IH_Type,
+                                       Number_Of_Elements      : in  integer,
+                                       Unique_Identifier_Of_IH : in  integer,
+                                       Testing_For             : in  string);
+
+  public service Receive_Empty_Structure_IH (Test_Number      : in  integer,
+                                             Empty_Structure  : in  sequence of Structure_and_IH_Type,
+                                             Inserted_IH      : in  instance of Structured_Object,
+                                             Testing_For      : in  string,
+                                             Filled_Structure : out sequence of Structure_and_IH_Type);
+
+  public service Test_The_Structure (Test                 : in  integer,
+                                     Structure_Input      : in  sequence of My_Simple_Structure,
+                                     The_Return_Structure : out sequence of My_Simple_Structure);
+
+  public service Check_Returning_Structure (Integer_Input       : in  integer,
+                                            Real_Input          : in  real,
+                                            String_Input        : in  string,
+                                            UDT_Input           : in  Colour_Type,
+                                            Returning_Structure : out sequence of My_Second_Structure);
+
+  terminator Report is
+    public service Start_Test (Test_Number     : in  integer,
+                               Requid          : in  string,
+                               Invoking_Domain : in  string,
+                               Invoking_Object : in  string,
+                               Purpose         : in  string);
+    pragma terminator_operation_number(1);
+
+    public service Test_Passed (Test_Object_Domain : in  string,
+                                Test_Number        : in  integer,
+                                Test_Value         : in  integer);
+    pragma terminator_operation_number(2);
+
+    public service Test_Failed (Failed_Domain_Object : in  string,
+                                Failed_Test_Number   : in  integer,
+                                Failed_Test_Value    : in  integer);
+    pragma terminator_operation_number(3);
+
+    public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+    pragma terminator_operation_number(4);
+
+    public service Test_Text (Test_Number : in  integer,
+                              Free_Text   : in  string);
+    pragma terminator_operation_number(5);
+
+    public service Domain_Test_Start (This_Domain_Name : in  string);
+    pragma terminator_operation_number(6);
+
+    public service Domain_Test_Finished (This_Domain_Name : in  string);
+    pragma terminator_operation_number(7);
+
+    public service Specify_Requid (Requid_Test_Number : in  integer,
+                                   The_Requid_Itself  : in  string);
+    pragma terminator_operation_number(8);
+
+  end terminator;
+  pragma key_letter ("RPT");
+
+
+  terminator Env_Terminator is
+    public service Env_String (Env_Text : out string);
+    pragma terminator_operation_number(1);
+
+    public service Env_Number (Env_Integer : out integer);
+    pragma terminator_operation_number(2);
+
+  end terminator;
+  pragma key_letter ("ET");
+
+
+end domain;
+pragma number (13);
+pragma name ("Structures");
+pragma kl ("Struct");
+pragma version (6);

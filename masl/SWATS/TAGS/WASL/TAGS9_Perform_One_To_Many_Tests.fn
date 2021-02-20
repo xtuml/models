@@ -1,0 +1,257 @@
+define function  TAGS9::Perform_One_To_Many_Tests
+input
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+# @@TAGS-01-0002
+
+my_test = find-one Test_Data
+
+Test = my_test.Number
+
+Supported = FALSE
+
+if my_test.Environment = 'WACA' then
+   Supported = TRUE
+endif
+
+Single_Tag     = create unique Single_Tagged_Object with Attribute_One = Test
+First_Of_Many  = create unique Many_Tagged_Objects  with Attribute_Two = Test
+Second_Of_Many = create unique Many_Tagged_Objects  with Attribute_Two = Test
+Third_Of_Many  = create unique Many_Tagged_Objects  with Attribute_Two = Test
+
+
+link Single_Tag R1 First_Of_Many
+link Single_Tag R1 Second_Of_Many
+link Single_Tag R1 Third_Of_Many
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "1 to M Relationships", "Create three"]
+
+   {Set_Of_Many} = Single_Tag -> R1.Many_Tagged_Objects
+
+   How_Many = countof {Set_Of_Many}
+
+   Failure_Value = How_Many - 3
+
+   [] = TAGS5::Report_Now[Test, "Create three", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Tagging", "1 to M Relationships", "Create one more"]
+
+   # Create one more ih of Many_Tagged_Objects. 
+
+   #Fourth_Of_Many  = create unique Many_Tagged_Objects  with Attribute_Two = Test
+
+   #if Fourth_Of_Many = UNDEFINED then
+   #   Failure_Value = 0
+   #else
+   #   Failure_Value = 1
+   #   delete Fourth_Of_Many
+   #endif
+
+   #[] = TAGS5::Report_Now[Test, "Create one more", Failure_Value, Supported]
+
+   [] = RPT4:Test_Unsupported[Test]
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Unlink one of three, and check that the navigation now returns 
+#          two instances.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "1 to M Relationships", "Unlink one & navigate"]
+
+   # NB. Unlinked only, not deleted.
+   unlink First_Of_Many R1 Single_Tag
+
+   {Set_Of_Many} = Single_Tag -> R1.Many_Tagged_Objects
+
+   How_Many_Navigation = countof {Set_Of_Many}
+
+   Failure_Value = How_Many_Navigation - 2
+
+   [] = TAGS5::Report_Now[Test, "Unlink one & navigate", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4 - Unlink one of three, and check that the FIND-ALL still returns 
+#          three instances.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "1 to M Relationships", "Unlink & find-all "]
+
+   # NB. Unlinked only, not deleted.
+   {Find_Many} = find-all Many_Tagged_Objects
+
+   How_Many_Find = countof {Find_Many}
+   Failure_Value = How_Many_Find - 3
+
+   [] = TAGS5::Report_Now[Test, "Unlink & find-all", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5 - Just because First_Of_Many has been unlinked, there still should 
+#          be a restriction on the number created. So let's try it.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Tagging", "1 to M Relationships", "Create one more"]
+
+   #Fourth_Of_Many = create unique Many_Tagged_Objects  with Attribute_Two = Test
+
+   #if Fourth_Of_Many = UNDEFINED then
+   #   Failure_Value = 0
+   #else
+   #   Failure_Value = 1
+   #   delete Fourth_Of_Many
+   #endif
+
+   #[] = TAGS5::Report_Now[Test, "Create one more", Failure_Value, Supported]
+
+   [] = RPT4:Test_Unsupported[Test]
+
+   Test = Test + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+# Test 6 - Now delete First_Of_Many and FIND-ALL on set.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "1 to M Relationships", "Delete First instance & find"]
+
+   delete First_Of_Many
+   {Find_Many} = find-all Many_Tagged_Objects
+   How_Many_Find = countof {Find_Many}
+
+   Failure_Value = How_Many_Find - 2
+
+   [] = TAGS5::Report_Now[Test, "Delete First instance & find", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 6
+
+#--------------------------------------------------------------------------
+# Test 7 - Perform Navigation to set 
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "1 to M Relationships", "Delete First instance & Navigate"]
+
+   {Set_Of_Many} = Single_Tag -> R1.Many_Tagged_Objects
+
+   How_Many_Navigation = countof {Set_Of_Many}
+
+   Failure_Value = How_Many_Navigation - 2
+
+   [] = TAGS5::Report_Now[Test, "Delete First instance & navigate", Failure_Value, Supported]
+
+   Test = Test + 1
+
+# End Test 7
+
+#--------------------------------------------------------------------------
+# Test 8 - ...and then create a replacement.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "1 to M Relationships", "Replace deleted instance"]
+
+   Replacement_First_Of_Many = create unique Many_Tagged_Objects  with Attribute_Two = Test
+
+   if Replacement_First_Of_Many = UNDEFINED then
+      Failure_Value = 1
+   else
+      link Single_Tag R1 Replacement_First_Of_Many
+
+      {Find_Many} = find-all Many_Tagged_Objects
+ 
+      How_Many_Find = countof {Find_Many}
+
+      {Set_Of_Many} = Single_Tag -> R1.Many_Tagged_Objects
+
+      How_Many_Navigation = countof {Set_Of_Many}
+
+      # Magic number six arrived at :
+      # Two sets of three instances expected, hence six.
+      Failure_Value = (How_Many_Find + How_Many_Navigation) - 6
+   endif
+
+   [] = TAGS5::Report_Now[Test, "Replace deleted instance", Failure_Value, Supported]
+  
+   Test = Test + 1
+
+# End Test 8
+
+#--------------------------------------------------------------------------
+# Test 9 - Tidy up and finish.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "Tagging", "1 to M Relationships", "Unlink and delete all"]
+
+   for each_instance in {Set_Of_Many} do
+      # Make sure that each instance is currently linked to the single instance
+      # and then unlink it.
+
+      # This is a navigate from an instance to the single instance end of the one to many
+      # relationship.
+
+      # There is a formalised relationship between this instance and the single end.
+      # Get rid of it.
+      unlink Single_Tag R1 each_instance
+
+      delete each_instance
+   endfor
+
+   {Remaining} = Single_Tag -> R1.Many_Tagged_Objects
+
+   How_Many_Remaining = countof {Remaining}
+
+   if How_Many_Remaining = 0 then
+      delete Single_Tag
+   else
+      [] = RPT5:Test_Text[How_Many_Remaining, "Still left linked"]
+   endif
+
+   {Find_Many} = find-all Many_Tagged_Objects
+   {Find_Single} = find-all Single_Tagged_Object
+
+   How_Many_Find   = countof {Find_Many}
+   How_Single_Find = countof {Find_Single}
+
+   # Should be zero.
+   Failure_Value = How_Many_Find + How_Single_Find
+
+   [] = TAGS5::Report_Now[Test, "Unlink and delete all", Failure_Value, Supported]
+
+Test = Test + 1
+
+# End Test 9
+
+#--------------------------------------------------------------------------
+
+my_test.Number = Test
+
+
+enddefine

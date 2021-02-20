@@ -1,0 +1,175 @@
+//! Perform object service to test synchronous create operation.
+public service Creation_Deletion::Object_A.do_sync_create (Test_Number          : in  integer,
+                                                           Returned_Test_Number : out integer) is
+#------------------------------------------------------------------------#
+# Do Sync Create
+#
+# The ASL translator shall support the following base types for attributes
+# of objects, parameters and local variables:
+# Real, Integer, Boolean, Text, Instance Handles and set of instance 
+# handles
+# 1103-0000-01-0311
+#
+# The ASL <create ... with> statement to create an instance of an object
+# with attributes shall be supported
+# 1103-0000-01-0511
+#
+#------------------------------------------------------------------------#
+
+   # Set the Has_Failed flag, TRUE if a fault has been identified
+   Has_Failed = FALSE
+
+#------------------------------------------------------------------------#
+# Test 1 - Create, specifing all attributes
+#------------------------------------------------------------------------#
+
+   Test = Test_Number
+
+   # Invoke terminator to call report domain
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0511", "Creation Deletion", "objA", "Do_sync_create specifying all attibutes"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0101"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0109"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0118"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0311"]
+
+   # NB. Absolute time is not supported.
+   #     Neither is date.
+
+   # Perform creation
+   new_instanceA = create Object_A with ReferenceA = Test     &\
+                                        IntegerA   = 1        &\
+                                        TextA      = "Verify" &\
+                                        ColourA    = 'Red'
+
+   # Check that the instance contains the correct data
+   InstA = find-one Object_A where ReferenceA = Test
+
+   if InstA != UNDEFINED then 
+
+      if InstA.ReferenceA = Test then
+
+         if InstA.TextA = "Verify" then
+
+            if InstA.ColourA != 'Red' then
+               Has_Failed   = TRUE
+               Failure_Code = -10
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE  
+         Failure_Code = -30
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -40
+   endif
+
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objA", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objA", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - Create, specifing all attributes
+#------------------------------------------------------------------------#
+
+   # Invoke terminator to call report domain
+   [] = RPT1:Start_Test[Test, "Null Requid", "Creation Deletion", "objA", "Sync Create multi attribute write"]
+
+
+   # Fault_Flag = FALSE
+
+   # Perform creation
+   #   new_instanceA = create Object_A with ReferenceA = Test  &\
+   #                                        IntegerA = 1       &\
+   #                                        TextA = "Verify"   &\
+   #                                        ColourA = 'Red'
+
+   # Check that the instance contains the correct data
+   #   an_instanceA = find-one Object_A where ReferenceA = Test
+
+
+   # Multiple attribute write
+   #   xI = 2
+   #   xR = Test
+   #   xS = "Test 2 A"
+   #   xC = 'Green'   
+
+   #   an_instanceA.[ReferenceA, IntegerA, TextA, ColourA] = [xR, xI, xS, xC]
+   #   an_instanceA.[ReferenceA, IntegerA, TextA, ColourA] = [xR, xI, xS, 'Green']
+
+
+   #   aID = an_instanceA.ReferenceA
+   #   anI = an_instanceA.IntegerA
+   #   aS  = an_instanceA.TextA
+   #   aC  = an_instanceA.ColourA
+
+   #   if aID = Test then
+   #      if anI = 2 then
+   #         if aS = "Test 2 A" then
+   #            if aC != 'Green' then
+   #               Fault_Flag = TRUE
+   #            endif
+   #         else
+   #            Fault_Flag = TRUE
+   #         endif
+   #      else
+   #         Fault_Flag = TRUE
+   #      endif
+   #   else
+   #      Fault_Flag = TRUE
+   #   endif
+
+   #if !Fault_Flag then
+   #   [] = RPT2:Test_Passed["objA", Test, 0]
+   #else
+   #   [] = RPT3:Test_Failed["objA", Test, -20]
+   #endif
+
+   [] = RPT4:Test_Unsupported[Test]
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - Create, Only specifing the preferred identifier
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0511", "Creation Deletion", "objA", "Sync create specifying only preferred id"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0101"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0109"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0118"]
+
+   # Perform creation
+   new_instanceA = create Object_A with ReferenceA = Test
+
+   # Check that the instance contains the correct data
+   InstA = find-one Object_A where ReferenceA = Test
+
+   if InstA.ReferenceA != Test then
+      [] = RPT3:Test_Failed["objA", Test, -10]
+   else
+      [] = RPT2:Test_Passed["objA", Test, 0]
+   endif
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+
+Returned_Test_Number = Test
+

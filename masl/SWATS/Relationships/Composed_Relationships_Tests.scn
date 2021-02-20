@@ -1,0 +1,106 @@
+//! Composed Relationships Tests
+private service Relationships::Composed_Relationships_Tests () is
+#-------------------------------------------------------------------#
+#
+# Composed relationships tests
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create the object instances for Objects P, Q and R
+#-------------------------------------------------------------------#
+
+   Count = 0
+
+   loop
+
+      Count = Count + 1
+
+      #Object_P
+      newP  = create Object_P  with idP     = Count &\
+                                    ResultA = 0 
+
+      #Object_Q
+      newQ  = create Object_Q  with idQ = Count
+
+      #Object_R
+      newR  = create Object_R  with idR = Count
+
+      breakif Count = 5
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Test that the objects have been correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0620", "Relationships", "objP", "Object Instance Creation"]
+
+   {SetP} = find-all Object_P
+   {SetQ} = find-all Object_Q
+   {SetR} = find-all Object_R
+
+   if countof {SetP} = 5 then
+
+      if countof {SetQ} = 5 then
+
+         if countof {SetR} != 5 then
+            Has_Failed   = TRUE
+            Failure_Code = -10
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -30
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objP", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objP", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#   
+# Perform the navigations
+#-------------------------------------------------------------------#
+
+   Count = 1
+
+   loop
+
+      [] = objP1:ObjP_Navigation[Test]
+      Count = Count + 1
+      Test = Test + 1
+
+      breakif Count = 3
+
+   endloop
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test

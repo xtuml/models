@@ -1,0 +1,85 @@
+public service Relationships::Object_D.Create_Relationships (Test : in  integer) is
+#-------------------------------------------------------------------#
+#
+# Create relationships
+#
+# The architecture shall implement simple 1:M relationships
+# 1241-0000-01-0602
+#
+# The architecture shall provide a mechanism to allow creation of a 
+# simple relationship link between two object instances
+# 1241-0000-01-0603
+#
+# The architecture shall implement associative 1-1:M relationships
+# 1241-0000-01-0609
+#
+# The architecture shall provide operations which, given a starting 
+# instance handle and a relationship specification, return a single 
+# handle of the related instance
+# 1241-0000-01-0701
+#
+# The architecture shall provide operations which, given a starting 
+# instance handle and a relationship specification, return a set of 
+# handles of the related instance
+# 1241-0000-01-0702
+#
+# The architectureshall support a translation of the ASL link 
+# statement to map to the mechanism that allows creation of a 
+# relationship link between two object instances
+# 1241-0000-01-1202
+#
+#-------------------------------------------------------------------#
+ 
+[] = RPT1:Start_Test     [Test, "1241-0000-01-0603", "Relationship", "objD", "Create relationships"]
+[] = RPT8:Specify_Requid [Test, "1241-0000-01-0602"]
+[] = RPT8:Specify_Requid [Test, "1241-0000-01-0609"]
+[] = RPT8:Specify_Requid [Test, "1241-0000-01-1202"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0612"]
+
+# Find the desired instances for Object_C
+firstC  = find-one Object_C where idC = 1
+thirdC  = find-one Object_C where idC = 3
+fourthC = find-one Object_C where idC = 4
+fifthC  = find-one Object_C where idC = 5
+
+# Find the desired instances for Object_D
+firstD  = find-one Object_D where idD = 1
+fourthD = find-one Object_D where idD = 4
+
+# Find the desired instances for Object_O
+secondO = find-one Object_O where idO = 2
+thirdO  = find-one Object_O where idO = 3
+
+# Find the desired instances for Object_Do
+firstDO = find-one Object_DO where idDO = 1
+fifthDO = find-one Object_DO where idDO = 5
+
+# Create normal 1:Mc relationships
+link firstD  R3 firstC
+link firstD  R3 thirdC
+link fourthD R3 fourthC
+link fourthD R3 fifthC
+
+# Create associative 1:M relationships
+link firstD R19 secondO using firstDO
+link firstD R19 thirdO  using fifthDO
+
+#-------------------------------------------------------------------#
+# Perform a navigation to ensure that linking has been succesfull
+#-------------------------------------------------------------------#
+
+InstD  = firstC -> R3.Object_D
+{SetO} = firstD -> R19.Object_O
+
+if InstD.idD = 1 then
+   if countof {SetO} = 2 then
+      [] = RPT2:Test_Passed["objD", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objD", Test, -2]
+   endif
+else
+   [] = RPT3:Test_Failed["objD", Test, -1]
+endif
+
+#-------------------------------------------------------------------#

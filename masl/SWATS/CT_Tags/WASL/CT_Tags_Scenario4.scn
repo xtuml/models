@@ -1,0 +1,27 @@
+define scenario  CT_Tags_Scenario4
+input
+output
+
+#$DESCRIPTION
+Start_Domain_Tests
+#$END_DESCRIPTION
+
+my_test = create Test_Data with Current_Test_Number = 1
+
+old_report = find-one Report_Data
+
+if old_report != UNDEFINED then
+   delete old_report
+endif
+
+My_Report = create unique Report_Data with Reported_Domain_Number = 1
+
+My_Results = create unique Results with CCATotal   = 0     &\
+                                        TCATotal   = 0     &\
+                                        CCAFlag    = FALSE &\
+                                        TCAFlag    = FALSE &\
+                                        ResRef     = 0     &\
+                                        idRes      = 1
+
+[] = RPT6:Domain_Test_Start["CCU TCU Tagging"]
+enddefine

@@ -1,0 +1,102 @@
+public service ASL_Mapping::Comment_Checks (Test_No      : in  integer,
+                                            Returning_No : out integer) is
+#-------------------------------------------------------------------#
+#
+# Comment line checks
+#
+# Single and multiple line comments shall be supported
+# 1103-0000-01-1511
+#
+#-------------------------------------------------------------------#
+
+   Test = Test_No
+
+#-------------------------------------------------------------------#
+# Test 1 - Check that a single line of commented out ASL code is 
+#          not translated
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-1511", "ASL Mapping", "Comment Checks", "Check single line comment"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0110"]
+
+   Val1 = 10
+   Val2 = 20
+   
+   # Val1 = Val2
+
+   if Val1 = 10 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#-------------------------------------------------------------------#
+# Test 2 - Check that multiple lines of commented out ASL code are 
+#          not translated
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-1511", "ASL Mapping", "Comment Checks", "Check multi line comments"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0110"]
+   Val1 = 10
+   Val2 = 20
+
+   #{
+      Val1 = 30
+      Val2 = 40
+
+      Val1 = Val2
+
+   }#
+
+   if Val1 = 10 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+   
+# End Test 2
+
+#-------------------------------------------------------------------#
+# Test 3 - This test ensures that if a hash on its own does not 
+#           comment out the line following it
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objE", "Check single hash does not comment following line"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0110"]
+
+   Count = 0
+
+   #
+   Count = Count + 1
+      
+   if Count = 1 then
+      [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Basic ASL", Test, -10]
+   endif
+
+   Test = Test + 1
+   
+# End Test 3
+
+#-------------------------------------------------------------------#
+# Test 4 - Check long comments
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objE", "Check long comments"]
+
+   # This comment lins was long (DNS)
+      
+   [] = RPT2:Test_Passed["Basic ASL", Test, 0]
+
+   Test = Test + 1
+   
+# End Test 4
+
+Returning_No = Test

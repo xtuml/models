@@ -1,0 +1,25 @@
+//
+// UK Crown Copyright (c) 2019. All rights reserved.
+//
+
+public service GSC::TRANSACTION.Create_Transaction (Delivery_Time : in  duration,
+                                                    Delivery_Pump : in  integer,
+                                                    Delivery_Cost : in  currency_type) is
+# Create pending transaction waiting payment from customer
+
+new_transaction = create unique TRANSACTION with \
+	Delivery_Start_Time = Delivery_Time & \
+	Pump_Number = Delivery_Pump & \
+	Cost = Delivery_Cost & \
+	Transaction_Type = 'Pending' & \
+        Current_State = 'Created'
+
+new_pending_transaction = create PENDING_TRANSACTION with \
+	Transaction_Number = new_transaction.Transaction_Number
+
+link new_transaction R4 new_pending_transaction
+
+delivery_pump = find-one PUMP where Pump_Number = Delivery_Pump
+
+link new_transaction R10 delivery_pump
+link new_pending_transaction R9 delivery_pump

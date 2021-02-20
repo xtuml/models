@@ -1,0 +1,53 @@
+//! Receive a structure containing and IH as a component of that structure.
+public service Struct::Receive_Structure_IH (This_Test_Number        : in  integer,
+                                             Input_Structure         : in  sequence of Structure_and_IH_Type,
+                                             Number_Of_Elements      : in  integer,
+                                             Unique_Identifier_Of_IH : in  integer,
+                                             Testing_For             : in  string) is
+[] = RPT1:Start_Test[This_Test_Number,"1241-0000-01-1216", "Structures", "Structure and IH", Testing_For]
+[] = RPT8:Specify_Requid[This_Test_Number, "1101-0000-01-0140"]
+
+How_Many_In_Structure = countof {Input_Structure}
+
+if How_Many_In_Structure = Number_Of_Elements then
+
+   # We got as many as we were expecting. Now look and see that the latest
+   # one in the structure has the same unique attribute as the parameter.
+
+   # NB This would be real easy if 'find' operations where supported for sets,
+   #    but, tough luck, they aren't.
+
+   Result_Found = FALSE
+   Bean_Counter = 0
+   for [Dereferenced_IH] in {Input_Structure} do
+
+      if Dereferenced_IH != UNDEFINED then
+         Bean_Counter = Bean_Counter + 1
+      endif
+
+      # Found the one we are interested in. Should be the final element in the structure.
+      if Bean_Counter = Number_Of_Elements then
+
+         if Dereferenced_IH.Reference_SO = Unique_Identifier_Of_IH then
+            Result_Found = TRUE
+         endif
+
+         # Bail out of the loop. 
+         break
+ 
+      endif
+
+   endfor
+
+   if Result_Found then
+      [] = RPT2:Test_Passed[Testing_For, This_Test_Number, Unique_Identifier_Of_IH]
+   else
+      [] = RPT3:Test_Failed["Unmatched IH identifier ", This_Test_Number, Unique_Identifier_Of_IH]
+   endif
+
+else
+ 
+   [] = RPT3:Test_Failed["Inconsistent number of elements", This_Test_Number, How_Many_In_Structure]
+
+
+endif

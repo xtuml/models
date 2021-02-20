@@ -1,0 +1,166 @@
+define function  TAGS4::Perform_Passive_Singleton_Object_Tests
+input \
+	Test:Base_Integer_Type 
+output \
+	Returned_Test_Number:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#--------------------------------------------------------------------------
+# A_Passive_Static_Object should be tagged as SINGLETON.
+# ie. it should only be created once.
+#--------------------------------------------------------------------------
+
+Local_Test = Test
+
+Failure_Code = 0
+
+My_Test_Data = find-one Test_Data
+
+if My_Test_Data.Environment = 'WACA' then
+   Supported = TRUE
+else
+   Supported = FALSE
+endif
+
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Local_Test, "1241-0000-01-0128", "TAGGING", "Singleton passive object", "Create one singleton instance"]
+
+   The_Passive_Object = create A_Passive_Static_Object with  Unique_Identifier = 5 & Size = 1
+
+   # Further attempts to create an object of this sort should be met with
+   # complete indifference by WACA.
+
+   # Another_Passive_Object = create A_Passive_Static_Object with Unique_Identifier = 6 & Size = 2
+
+   if The_Passive_Object = UNDEFINED then
+      Failure_Code = -5
+   endif
+
+   [] = TAGS5::Report_Now[Test, "Create one singleton instance", Failure_Code, Supported]
+
+   Local_Test = Local_Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Local_Test, "Null Requid", "TAGGING", "Singleton passive object", "Create another singleton instance"]
+
+   #Another_Passive_Object = create A_Passive_Static_Object with Unique_Identifier = 6 & Size = 2
+
+   [] = RPT4:Test_Unsupported[Local_Test]
+
+   Local_Test = Local_Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Local_Test, "1241-0000-01-0128", "TAGGING", "Singleton passive object", "How many"]
+
+   # A SINGLETON object is still around from previous test.
+   # Check to see if the attempt to create another one has
+   # messed up the set information.
+
+   {Set_of_Singletons} = find-all A_Passive_Static_Object
+
+   How_Many = countof {Set_of_Singletons}
+
+   if How_Many != 1 then 
+      Failure_Code = How_Many
+   endif
+
+   [] = TAGS5::Report_Now[Local_Test, "How many", Failure_Code, Supported]
+
+   Local_Test = Local_Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Local_Test, "1241-0000-01-0128", "TAGGING", "Singleton passive object", "Delete passive object"]
+
+   # Now let's try and delete the object
+   delete The_Passive_Object
+
+   {Set_of_Singletons} = find-all A_Passive_Static_Object
+
+   How_Many = countof {Set_of_Singletons}
+
+   if How_Many != 0 then 
+      Failure_Code = How_Many
+   endif
+
+   [] = TAGS5::Report_Now[Local_Test, "Delete passive object", Failure_Code, Supported]
+
+   Local_Test = Local_Test + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Local_Test, "1241-0000-01-0128", "TAGGING", "Singleton passive object", "Create new passive object"]
+
+   # Having sucessfully deleted the passive static object
+   # let's make the attempt to create a new one
+   A_New_Passive_Object = create A_Passive_Static_Object with Unique_Identifier = 8 & Size = 3
+
+   if A_New_Passive_Object = UNDEFINED then
+      Failure_Code = -8
+   endif
+
+   [] = TAGS5::Report_Now[Local_Test, "Create new passive object", Failure_Code, Supported]
+
+   Local_Test = Local_Test + 1
+
+   Failure_Code = 0
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+# Test 6
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Local_Test, "Null Requid", "TAGGING", "Singleton passive object", "Delete all passive objects"]
+
+   # Tidy up here.
+   if A_New_Passive_Object != UNDEFINED then
+      delete A_New_Passive_Object
+   endif
+
+   if The_Passive_Object != UNDEFINED then
+      delete The_Passive_Object
+   endif
+
+   {Set_of_Singletons} = find-all A_Passive_Static_Object
+
+   How_Many = countof {Set_of_Singletons}
+
+   if How_Many != 0 then 
+      Failure_Code = How_Many
+   endif
+
+   [] = TAGS5::Report_Now[Local_Test, "Delete all passive objects", Failure_Code, Supported]
+
+# End Test 6
+
+#--------------------------------------------------------------------------
+
+Returned_Test_Number = Local_Test
+
+enddefine

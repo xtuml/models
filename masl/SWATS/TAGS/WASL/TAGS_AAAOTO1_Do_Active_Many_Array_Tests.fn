@@ -1,0 +1,138 @@
+define function  AAAOTO1:Do_Active_Many_Array_Tests
+input
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+#-----------------------------------------------------------------------------
+# The array of 1 should be treated exactly the same way as an object tagged
+# SINGLETON.
+#-----------------------------------------------------------------------------
+# @@TAGS-01-0005
+# Create first of the single active array objects.
+
+my_test = find-one Test_Data
+
+Test = my_test.Number
+This_Environment = my_test.Environment
+
+if This_Environment = 'WACA' then 
+   Supported = TRUE
+else
+   Supported = FALSE
+endif
+
+#-----------------------------------------------------------------------------
+# Test 1 - Create first, second & third instances of the object
+#          This will be an asynchronous test.
+#-----------------------------------------------------------------------------
+
+   First_Of_Three  = create unique An_Active_Array_Of_Three_Objects with Result = 0 & Current_State = 'Idle'
+   Second_Of_Three = create unique An_Active_Array_Of_Three_Objects with Result = 0 & Current_State = 'Idle'
+   Third_Of_Three  = create unique An_Active_Array_Of_Three_Objects with Result = 0 & Current_State = 'Idle'
+
+   Value_To_Add = 10
+   Expected_Result_Value = 10
+  
+   generate AAAOTO1:Start(Test, Value_To_Add, "Create first object", Expected_Result_Value) to First_Of_Three
+
+   Test = Test + 1
+
+# End Test 1
+#-----------------------------------------------------------------------------
+# Test 2
+#-----------------------------------------------------------------------------
+
+   generate AAAOTO1:Start(Test, Value_To_Add, "Create second object", Expected_Result_Value) to Second_Of_Three
+
+   Test = Test + 1
+
+# End Test 2
+
+#-----------------------------------------------------------------------------
+# Test 3
+#-----------------------------------------------------------------------------
+
+   generate AAAOTO1:Start(Test, Value_To_Add, "Create third object", Expected_Result_Value) to Third_Of_Three
+
+   Test = Test + 1
+
+# End Test 3
+
+#-----------------------------------------------------------------------------
+# Test 4 - This will be a synchronous test.
+#-----------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Tagging", "Multiple Array Active Object", "Inhibit fourth instance"]
+
+   # Fourth_Of_Three = create unique An_Active_Array_Of_Three_Objects with Result = 0 & Current_State = 'Idle'
+   # {Set_Of_Multiple_Array} = find-all An_Active_Array_Of_Three_Objects
+   # Number_Of_Multiple_Array = countof {Set_Of_Multiple_Array}
+   # Should only be 3, but reporter widget expects a zero in the Failure field for a pass.
+   # So if there are more than one instances found, this should be reported as an
+   # error.
+   # Failure_Value = Number_Of_Multiple_Array - 3
+   # [] = TAGS5::Report_Now[Test, "Inhibit fourth instance", Failure_Value, Supported]
+
+   [] = RPT4:Test_Unsupported[Test]
+
+   Test = Test + 1
+
+# End Test 4
+
+#-----------------------------------------------------------------------------
+# Test 5 - Prove that the instance handle for the second instance is UNDEFINED
+#          , or in ada's case, NULL.
+#-----------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "Tagging", "Multiple Array Active Object", "Fourth instance is null"]
+
+
+   # if Fourth_Of_Three = UNDEFINED then
+   #   Failure_Value = 0
+   # else
+   #   Failure_Value = 1
+   #   # It isn't supposed to be here, so get rid of it.
+   #   delete Fourth_Of_Three
+   # endif
+   # [] = TAGS5::Report_Now[Test, "Fourth instance is null", Failure_Value, Supported]
+
+   [] = RPT4:Test_Unsupported[Test]
+
+# End Test 5
+
+#-----------------------------------------------------------------------------
+# Test 6 - Perform some synchronous tests as a result of this asynchronous 
+#          service.
+#-----------------------------------------------------------------------------
+
+   generate AAAOTO4:Do_More() to First_Of_Three
+   generate AAAOTO4:Do_More() to Second_Of_Three
+   generate AAAOTO4:Do_More() to Third_Of_Three
+
+   # Prove that the first legal instance can be deleted and a new one created in it's place.
+   # This processing will be done when the event is unqueued. It shall effectively delete
+   # First_Of_Three instance, and create a new one and generate an event to the new instance
+   # to prove that it can execute its' state machine correctly.
+
+   # In the wrong hands, this could turn into a recursive call. If the Phoenix event was sent to
+   # the new instance in the state machine by the deleted state machine, there would be no return. 
+   # Ever.
+
+   generate AAAOTO3:Phoenix() to First_Of_Three
+   generate AAAOTO3:Phoenix() to Second_Of_Three
+   generate AAAOTO3:Phoenix() to Third_Of_Three
+ 
+   Test = Test + 1
+
+# End Test 6
+
+#-----------------------------------------------------------------------------
+# Finally increment the test number to show the next available number.
+#-----------------------------------------------------------------------------
+
+my_test.Number = Test
+
+enddefine

@@ -1,0 +1,133 @@
+public service TAGS::Perform_Active_Super_Sub_Tests () is
+my_test = find-one Test_Data
+
+this_test = my_test.Number
+
+supported = TRUE
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[this_test, "1241-0000-01-0128", "Tagged", "Active Super Sub types", "Active One Super Sub relationship"]
+
+   # Create one of one super type objects
+   Super1 = create unique Active_Tagged_Supertype with Supertype_Data = this_test
+
+   # create one of two sub type 1 objects
+   Index_For_Subtype = this_test + 1
+
+   # Increase index for test by one more than the test number so that the sub type, when it processes
+   # the polymorphically delivered event, will report a different test number. This is so that the report
+   # will be distinguished by the reporter domain as a separate test.
+
+   Sub1_1 = create Active_Tagged_Subtype_One with Subtype_One_Data = this_test & Test_No = Index_For_Subtype 
+
+   link Super1 R6 Sub1_1
+
+   # Navigate from the super to the sub, and compare the data attribute
+   view_of_sub1 = Super1 -> R6.Active_Tagged_Subtype_One
+
+   failure_value = view_of_sub1.Subtype_One_Data - Super1.Supertype_Data
+
+   [] = TAGS5::Report_Now[this_test, "Active One Super Sub relationship", failure_value, supported]
+
+   this_test = this_test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[this_test, "1241-0000-01-0128", "Tagged", "Active Super Sub types", "Other Super Sub relationship"]
+
+   Index_For_Subtype = this_test + 1
+  
+   # Create second of two sub type 1 objects
+   Sub1_2 = create Active_Tagged_Subtype_One with Subtype_One_Data = this_test & Test_No = Index_For_Subtype & Current_State = 'Idle'
+
+   # unlink first sub type from super type
+   unlink Super1 R6 Sub1_1
+
+   # Update super type data so that it matches new sub type.
+   Super1.Supertype_Data = this_test
+
+   # link second subtype to supertype
+   link Super1 R6 Sub1_2
+
+   # Navigate from the super to the sub, and compare the data attribute
+   view_of_sub1 = Super1 -> R6.Active_Tagged_Subtype_One
+
+   failure_value = view_of_sub1.Subtype_One_Data - Super1.Supertype_Data 
+
+   [] = TAGS5::Report_Now[this_test, "Other Super Sub relationship", failure_value, supported]
+
+   this_test = this_test + 1
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[this_test, "1241-0000-01-0128", "Tagged", "Active Super Sub types", "Migrate Super Sub relationship"]
+
+   Index_For_Subtype = this_test + 1
+
+   # Create sub type 2 object
+   Sub2 = create Active_Tagged_Subtype_Two with Subtype_Two_Data = this_test & Test_No = Index_For_Subtype & Current_State = 'Idle'
+
+   # unlink first sub type from super type
+   unlink Super1 R6 Sub1_2
+  
+   # Update super type data so that it matches new sub type.
+   Super1.Supertype_Data = this_test
+
+   # link second subtype to supertype
+   link Super1 R6 Sub2
+
+   # Navigate from the super to the sub, and compare the data attribute
+   view_of_sub2 = Super1 -> R6.Active_Tagged_Subtype_Two
+
+   failure_value = view_of_sub2.Subtype_Two_Data - Super1.Supertype_Data
+
+   [] = TAGS5::Report_Now[this_test, "Migrate Super Sub relationship", failure_value, supported]
+
+   this_test = this_test + 1
+
+# End Test 3
+
+
+#--------------------------------------------------------------------------
+# Test 4
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[this_test, "1241-0000-01-0128", "Tagged", "Active Super Sub types", "Migrate Super Sub relationship again"]
+
+   Index_For_Subtype = this_test + 1
+
+   # Create sub type 2 object
+   Sub3 = create Active_Tagged_Subtype_Three with Subtype_Three_Data = this_test & Test_No = Index_For_Subtype & Current_State = 'Idle'
+
+   # unlink first sub type from super type
+   unlink Super1 R6 Sub2
+
+   # Update super type data so that it matches new sub type.
+   Super1.Supertype_Data = this_test
+
+   # link second subtype to supertype
+   link Super1 R6 Sub3
+
+   # Navigate from the super to the sub, and compare the data attribute
+   view_of_sub3 = Super1 -> R6.Active_Tagged_Subtype_Three
+
+   failure_value = view_of_sub3.Subtype_Three_Data - Super1.Supertype_Data
+
+   [] = TAGS5::Report_Now[this_test, "Migrate Super Sub relationship", failure_value, supported]
+
+   this_test = this_test + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+
+my_test.Number = this_test

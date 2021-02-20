@@ -1,0 +1,128 @@
+public instance service OAIBTWO::I_Into_The_Great_Wide_Open.Across_The_Great_Divide (Test                  : in  integer,
+                                                                                     A_Structure_To_Send   : in  sequence of Source_Structure_Type,
+                                                                                     Control_Integer       : in  integer,
+                                                                                     Control_Real          : in  real,
+                                                                                     Control_String        : in  string,
+                                                                                     Control_Enum          : in  Colour_Type,
+                                                                                     Control_Boolean       : in  boolean,
+                                                                                     Elements_In_Structure : in  integer,
+                                                                                     Result                : out boolean,
+                                                                                     A_Structure_To_Return : out sequence of Source_Structure_Type) is
+## my_test = find-one Test_Data
+## 
+## # Receive a structure and the control data from this domain.
+## # Decode it, and create another structure locally and pass it back
+## # to the calling routine. In this case, the bridge and the calling routine 
+## # are in the same domain.
+## 
+## Local_Test = Test
+## 
+## Reporter = find-one Report_Data
+## if Reporter != UNDEFINED then
+## 
+##    Reporter_Number = Reporter.Reported_Domain_Number
+## 
+## else
+## 
+##    Reporter_Number = -1
+## 
+## endif
+## 
+## $USE RP
+## 
+## [] = RP4::Test_Description[Local_Test, "null requid", "Structure Bridge", "Pass back structure", "Decode received structure", Reporter_Number]
+## 
+## 
+## $ENDUSE
+## 
+##
+[] = RPT1:Start_Test[Test,"Null Requid", "OAIBTWO", "IITGWO1", "Decode received structure"]
+
+Has_Passed = FALSE
+Failure_Code = 0
+
+How_Many_Sets = countof{A_Structure_To_Send}
+
+
+if How_Many_Sets = Elements_In_Structure then
+
+   Count = 1
+
+   for [local_integer, local_real, local_string, local_boolean, local_colour] in {A_Structure_To_Send} do
+
+
+
+      # Look at the last entry only.
+      if Count = How_Many_Sets then 
+
+         # Copy the contents into a locally defined structure.
+         append [local_integer, local_real, local_string, local_boolean, local_colour] to {A_Structure_To_Return}
+
+
+         if local_integer = Control_Integer then
+
+            if local_real = Control_Real then
+
+               if local_string = Control_String then
+
+                  if local_colour = Control_Enum then
+
+                     if local_boolean = Control_Boolean then
+
+                        Has_Passed = TRUE
+
+                     else
+                        # Boolean incorrectly decoded
+                        Has_Passed = TRUE
+                        Failure_Code = -6
+                     endif
+
+                  else
+                     # Enumeration incorrectly decoded
+                     Has_Passed = FALSE
+                     Failure_Code = -5
+                  endif
+
+               else
+                  # String incorrectly decoded
+                  Has_Passed = FALSE
+                  Failure_Code = -4
+               endif
+
+            else
+               # Real incorrectly decoded
+               Has_Passed = FALSE
+               Failure_Code = -3
+            endif
+
+         else
+            # Integer incorrectly decoded
+            Has_Passed = FALSE
+            Failure_Code = -2
+         endif
+
+      else
+         # Not interested in this entry. Control data will only match up with the 
+         # last entry in the set.
+         Count        = Count + 1
+         Has_Passed   = FALSE
+         Failure_Code = 0
+      endif
+
+   # Loop around the entries in the set of structures.
+   endfor
+
+else
+   # Conflict in the number of sets found and the number
+   # specified by the source domain.
+   Has_Passed = FALSE
+   Failure_Code = -1
+endif
+
+if Has_Passed = FALSE then
+      [] = RPT3:Test_Failed["OAIBTWO Local Structure corrupted", Test, -1]
+else
+      [] = RPT2:Test_Passed["OAIBTWO Local Structure correctly received", Test, 0]
+endif
+
+Result = Has_Passed

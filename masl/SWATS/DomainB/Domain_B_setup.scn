@@ -1,0 +1,37 @@
+//! Domain B setup
+private service DomainB::Domain_B_setup () is
+my_test = create Test_Data with This_Test_Number = 1
+
+#Create several instances of Object_B
+count = 5
+loop
+   newB = create Object_B with idB = count &\
+                               ResultB = 0 &\
+                               Current_State  = 'Idle'
+
+   newC = create Object_C with idC = count & \
+                               a_number = count 
+
+   newD = create Object_D with idD = count & \
+                               D_Number = count
+
+   newCD = create Object_CD with a_name = "fred"
+
+   link newC R1 newD using newCD
+
+   count = count - 1
+   breakif count = 0
+endloop
+
+
+Super1 = create Domain_B_Object_Super with idSUPER_B = 1
+Sub_A1 = create Domain_B_Object_SubA with SubA_Attribute = 1 & A_Text = "Sub A1"
+Sub_B1 = create Domain_B_Object_SubB with SubB_Attribute = 1 & B_Text = "Sub B1"
+
+link Super1 R4 Sub_A1
+
+Super2 = create Domain_B_Object_Super with idSUPER_B = 2
+Sub_A2 = create Domain_B_Object_SubA with SubA_Attribute = 2 & A_Text = "Sub A2"
+Sub_B2 = create Domain_B_Object_SubB with SubB_Attribute = 2 & B_Text = "Sub B2"
+
+link Super2 R4 Sub_B2
