@@ -1,0 +1,41 @@
+$BUILD_SET_NAME Test_Depl
+$BUILD_SET_VERSION 0
+$PROJECT_KEY_LETTER Test_Depl
+$PROJECT_VERSION 0
+
+$START_BUILD_SET_TAGS
+$END_BUILD_SET_TAGS
+
+$START_SCENARIO_LIST
+Test_Depl.scn
+$END_SCENARIO_LIST
+
+$START_SCENARIOS
+Test_Depl,0,TestComponent::TermServ2,2,TestComponent::TermServ2_Scenario2.scn
+Test_Depl,0,TestComponent::TermServ1,1,TestComponent::TermServ1_Scenario1.scn
+Test_Depl,0,TestComponent::TermServ3,3,TestComponent::TermServ3_Scenario3.scn
+Test_Depl,0,TestOther::other,1,TestOther::other_Scenario1.scn
+$END_SCENARIOS
+
+$START_
+Test_Depl.hcf
+$END_
+
+$START_DOMAINS_IN_BUILD_SET
+Ref::Comp2,0,Ref::Comp2
+Test_Depl_Ref::TestComponent,0,Test_Depl_Ref::TestComponent
+Test_Depl_Ref::TestOther,0,Test_Depl_Ref::TestOther
+$END_DOMAINS_IN_BUILD_SET
+
+$START_BRIDGE_DATA_TYPES
+Test_Depl.brp
+$END_BRIDGE_DATA_TYPES
+
+$START_BRIDGES
+Comp2,0,Comp2_1_op.br,N
+TestComponent,0,TestComponent_1_op.br,Y
+$END_BRIDGES
+
+$START_
+Test_Depl.cpr
+$END_
