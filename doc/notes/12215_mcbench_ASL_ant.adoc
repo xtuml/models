@@ -1,0 +1,156 @@
+= Port mcbench to ASL
+
+xtUML Project Analysis Note
+
+== 1 Abstract
+
+This note provides analysis and requirements to port the functionality of
+the 'mcbench' (Model Compiler Benchmark) model to work as an ASL-idiom
+model.
+
+== 2 Introduction and Background
+
+=== 2.1 'mcbench'
+
+'mcbench' (Model Compiler Benchmark) is a test model and benchmark of
+model compiler performance.  It has existed for many years and grown and
+changed along with the feature set of BridgePoint.
+
+'mcbench' takes an approach of measuring the performance of fundamental
+model actions.  All models create instances of class, read and write
+attributes of those classes, traverse associations and generate events to
+state machines.  'mcbench' isolates these and other fundamental model
+actions and measures them.  The model contains something of a testbench
+with a framework around measuring the actions.
+
+The challenge of benchmarking such small, fundamental actions is that they
+are so small that measurement can take more time than the actions
+themselves.  Consider the __Observer Effect__ in physics which notes that
+the act of measuring a phenomenon can affect the behavior and thus the
+results.  'mcbench' employs a strategy of looping up and repeating the
+fundamental actions many times (perhaps millions of times) in order to
+factor out the measurement interference.
+
+=== 2.2 WASL Exporter and WACA
+
+As of 2021, BridgePoint supports ASL as an action language.  A model export
+utility called 'WASL Exporter' can export files compatible with an Ada model
+compiler called 'WACA' (Waterloo Auto-Coder and Architecture).
+
+It will be interesting to benchmark WACA.
+
+== 3 Requirements
+
+=== 3.1 Maintain 'mcbench' for OAL
+
+In this work, preserve 'mcbench' functionality in OAL form and MC-3020 as
+a target model compiler.
+
+=== 3.2 Build ASL 'mcbench'
+
+Build a version of 'mcbench' that employs ASL action language.
+
+=== 3.3 Obtain Results
+
+Run the benchmark models against MC-3020 and WACA.  Analyze results.
+
+== 4 Analysis
+
+* The 'mcbench' model exists as a publicly accessible xtUML model in a git
+  repository hosted in github <<dr-2>>.
+* The 'mcbench' model consists of 2 domain components and a system
+  wiring in a single Eclipse project.  This organization does not work
+  well with ASL-idiom models.
+* The package organization and naming are not compatible with the ASL
+  idiom.
+* 'mcbench' has C-specific constructs that will need to be replaced for Ada.
+* 'mcbench' employs 'External Entities' (EEs) which are not used in ASL
+  models.
+* 'mcbench' employs a hand-edit to get the print functions to work.  This
+  needs to be re-worked or re-done in Ada.
+
+=== 4.1 OAL-idiom and ASL-idiom Compatibility
+
+The 'mcbench' model could be reworked in its OAL form to be more compatible
+with the ASL-idiom approach.  This could be done while maintaining the
+functionality.  The benefit of doing this would be to "move it closer" to
+the ASL idiom before the port thus making the port easier.  An added
+benefit of performing this change first would be that the resulting pair
+of models would be easier to compare side-by-side.
+
+== 5 Work Required
+
+=== 5.1 Rework 'mcbench' as OAL.
+
+==== 5.1.1 Make edits.
+
+. Branch the xtuml/models repository.
+. Run 'mcbench'.  Record results.
+. Upgrade the 'mcbench' model data to the latest xtUML schema.
+. Address overflow issue with performance results.
+. Split 'mcbench' into three projects, one for each domain and one for the
+  deployment (component reference diagram).
+. Rename and reorganize packages to be consistent with ASL-idiom modeling.
+. Update interproject references to enable sharing of types and model
+  elements between the projects.
+
+==== 5.1.2 (Re)Test 'mcbench'.
+
+. After reworking 'mcbench', run the model to ensure that no functionality
+  was lost.  See similar results to what was seen before the changes.
+. Commit updated 'mcbench' to the repository and merge with the master
+  branch.
+
+=== 5.2 Create base ASL version of 'mcbenchASL'.
+
+. Branch the xtuml/models repository.
+. Make a copy of 'mcbench' to 'mcbenchASL' into the same folder.
+. Change the default action language everywhere to ASL.
+. Replace the wired component reference diagram system package with a Deployment.
+. Set up the WASL Exporter on each project.
+. Convert EEs to something appropriate (realized domains?).
+
+=== 5.3 Port OAL to ASL in 'mcbenchASL'.
+
+. Stepwise, replace each OAL action body with a compatible ASL activity.
+  (This represents the most work in this project.)
+. Make structural changes as necessary.
+. Track structural changes and feed back into the OAL version of 'mcbench'
+  to keep them as compatible as possible.
+. Provide marking as needed.
+. Get the WASL Exporter working and resolve issues.
+
+=== 5.4 Run both models.
+
+. Run 'mcbench' using MC-3020 on a specific target (Windows first).
+. Collect statistics.
+. Run 'mcbenchASL' using WACA on a specific target (Windows first).
+. Collect statistics.
+. Compare and contrast benchmark statistics.
+. Commit updated 'mcbenchASL' to xtuml/models and submit a pull request.
+
+== 6 Acceptance Test
+
+=== 6.1 Run 'mcbench' against MC-3020
+
+Generate C code using MC-3020.  Compile it.  Run it.
+
+=== 6.2 Run 'mcbenchASL' against WACA
+
+Export WASL.  Generate Ada code using WACA. Compile it.  Run it.
+
+=== 6.3 Compare Results
+
+Check the results of 6.1 and 6.2 against reality.  Explain any differences
+from what was expected.
+
+== 7 Document References
+
+. [[dr-1]] https://support.onefact.net/issues/12215[12215 - Port mcbench to ASL]
+. [[dr-2]] https://github.com/xtuml/models/tree/master/VandMC_testing/mctest/mcbench[xtuml/models mcbench model in git repository]
+
+---
+
+This work is licensed under the Creative Commons CC0 License
+
+---
