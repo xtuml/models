@@ -10,9 +10,8 @@
 #include "mcbenchmark_sys_types.h"
 #include "perf_funcs.h"
 #include "perf_funcs_CBENCHMARK_bridge.h"
-#include "DELTA_bridge.h"
-#include "ARCH_bridge.h"
 #include "TIM_bridge.h"
+#include "ARCH_bridge.h"
 #include "perf_testloop.h"
 #include "perf_funcs_classes.h"
 
@@ -75,6 +74,17 @@ perf_funcs_TESTLOOP_runtest( const i_t p_duration, const i_t p_testnum )
 /*
  * UML Domain Functions (Synchronous Services)
  */
+
+/*
+ * Domain Function:  header
+ */
+void
+perf_funcs_header()
+{
+  c_t s[ESCHER_SYS_MAX_STRING_LEN];
+  /* ASSIGN s = printf(                    model operation     count    dur(ms)  ops/s\n */
+  printf( "                    model operation     count    dur(ms)  ops/s\n" );
+}
 
 /*
  * Domain Function:  perftest
@@ -229,7 +239,7 @@ perf_funcs_report( const i_t p_count, const i_t p_duration, c_t p_message[ESCHER
   count = p_count;
   /* ASSIGN duration = PARAM.duration */
   duration = p_duration;
-  /* ASSIGN s = printf( %34s:  %10d %4d %10d\n, p_message, p_count, p_duration, ( p_count / p_duration ) * 1000  ); */
+  /* ASSIGN s = printf( %34s:  %10d %4d %10d\n, p_message, p_count, p_duration, ( p_count / p_duration ) * 100  ); */
   printf( "%34s:  %10d %4d %10d\n", p_message, p_count, p_duration, ( p_count / p_duration ) * 1000  );
 }
 
@@ -243,13 +253,13 @@ perf_funcs_setup()
   /* CREATE OBJECT INSTANCE benchmark OF BENCHMARK */
   benchmark = (perf_funcs_BENCHMARK *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_BENCHMARK_CLASS_NUMBER );
   /* ASSIGN benchmark.test_number = 0 */
-  ((perf_funcs_BENCHMARK *)xtUML_detect_empty_handle( benchmark, "BENCHMARK", "benchmark.test_number" ))->test_number = 0;
+  benchmark->test_number = 0;
   /* ASSIGN benchmark.duration = 1 */
-  ((perf_funcs_BENCHMARK *)xtUML_detect_empty_handle( benchmark, "BENCHMARK", "benchmark.duration" ))->duration = 1;
+  benchmark->duration = 1;
   /* CREATE OBJECT INSTANCE c OF CBENCH */
   c = (perf_funcs_CBENCH *) Escher_CreateInstance( perf_funcs_DOMAIN_ID, perf_funcs_CBENCH_CLASS_NUMBER );
   /* ASSIGN c.phase = 0 */
-  ((perf_funcs_CBENCH *)xtUML_detect_empty_handle( c, "CBENCH", "c.phase" ))->phase = 0;
+  c->phase = 0;
 }
 
 /*
@@ -265,6 +275,8 @@ perf_funcs_test()
   { Escher_xtUMLEvent_t * e = Escher_NewxtUMLEvent( benchmark, &perf_funcs_BENCHMARKevent1c );
     Escher_SendEvent( e );
   }
+  /* ::header(  ) */
+  perf_funcs_header();
 }
 
 /*
