@@ -1,0 +1,118 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("05cfd261-9ceb-4013-9b8d-8e3ffe2d61e2",
+	"00000000-0000-0000-0000-000000000000",
+	"20b8e847-3cd5-493a-aae2-24b081af82f0",
+	'scenarios',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("d83b842b-309a-4260-8279-52e7916bd05d",
+	112,
+	"05cfd261-9ceb-4013-9b8d-8e3ffe2d61e2",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'4.1.17',
+	'mcbenchfuncasl::perf_funcs::perf_funcs::scenarios');
+INSERT INTO DIM_DIA
+	VALUES ("d83b842b-309a-4260-8279-52e7916bd05d",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("2f0d2790-073b-4582-abbf-5f89568b1fc0",
+	"00000000-0000-0000-0000-000000000000",
+	'setup',
+	'',
+	'create object instance benchmark of BENCHMARK;
+benchmark.test_number = 0;   // test number counter
+benchmark.duration = 1;      // 1 second test duration
+
+create object instance c of CBENCH;
+c.phase = 0;
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	2,
+	0);
+INSERT INTO PE_PE
+	VALUES ("2f0d2790-073b-4582-abbf-5f89568b1fc0",
+	1,
+	"05cfd261-9ceb-4013-9b8d-8e3ffe2d61e2",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("e9442637-cfa8-47c7-924c-843665fde9e0",
+	"00000000-0000-0000-0000-000000000000",
+	'test',
+	'',
+	'select any benchmark from instances of BENCHMARK;
+generate BENCHMARK1:go() to benchmark;
+::header();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	2,
+	0);
+INSERT INTO PE_PE
+	VALUES ("e9442637-cfa8-47c7-924c-843665fde9e0",
+	1,
+	"05cfd261-9ceb-4013-9b8d-8e3ffe2d61e2",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("2974d752-4e5e-4d63-9c85-c9cf89855e8e",
+	"00000000-0000-0000-0000-000000000000",
+	'xit',
+	'',
+	'ARCH::shutdown();',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	2,
+	0);
+INSERT INTO PE_PE
+	VALUES ("2974d752-4e5e-4d63-9c85-c9cf89855e8e",
+	1,
+	"05cfd261-9ceb-4013-9b8d-8e3ffe2d61e2",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("05cfd261-9ceb-4013-9b8d-8e3ffe2d61e2",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"0138b1d2-a051-40a1-90dc-af3b5d949286",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("0138b1d2-a051-40a1-90dc-af3b5d949286",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'perf_funcs',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'',
+	'../perf_funcs.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("20b8e847-3cd5-493a-aae2-24b081af82f0",
+	'mcbenchfuncasl',
+	1,
+	'../../../mcbenchfuncasl.xtuml');
