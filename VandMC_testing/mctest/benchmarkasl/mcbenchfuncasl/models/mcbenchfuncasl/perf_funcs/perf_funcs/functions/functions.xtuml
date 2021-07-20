@@ -1,0 +1,353 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("79d68063-3d89-489a-9feb-ef1e1f0d0025",
+	"00000000-0000-0000-0000-000000000000",
+	"20b8e847-3cd5-493a-aae2-24b081af82f0",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("9b46ffd8-4be5-4e25-8e85-9ed8cbe9fb87",
+	112,
+	"79d68063-3d89-489a-9feb-ef1e1f0d0025",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'mcbenchfuncasl::perf_funcs::perf_funcs::functions');
+INSERT INTO DIM_DIA
+	VALUES ("9b46ffd8-4be5-4e25-8e85-9ed8cbe9fb87",
+	'',
+	1.000000,
+	4000.000000,
+	3000.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("e2e799b3-389a-4272-9502-1b3067ebf261",
+	"00000000-0000-0000-0000-000000000000",
+	'perftest',
+	'',
+	'testloop = true;  // Default to allow normal looping.
+if ( 6 == param.phase ) 
+  // We are done with the previous test.
+  select any benchmark from instances of BENCHMARK;
+  generate BENCHMARK2:stop() to benchmark;
+  
+elif ( 1 == param.testnum )
+  testloop = BENCHMARK::create_instance(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 2 == param.testnum )
+  testloop = BENCHMARK::delete_instance(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 3 == param.testnum )
+  testloop = BENCHMARK::delete_many(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 4 == param.testnum )
+  testloop = BENCHMARK::generate_and_dispatch_event(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 5 == param.testnum )
+  testloop = BENCHMARK::select_one_related(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 6 == param.testnum )
+  testloop = BENCHMARK::select_any_from(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 7 == param.testnum )
+  testloop = BENCHMARK::relate_one(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 8 == param.testnum )
+  testloop = BENCHMARK::relate_one_to_many(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 9 == param.testnum )
+  testloop = BENCHMARK::relate_one_using(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 10 == param.testnum )
+  testloop = BENCHMARK::cardinality_10000(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 11 == param.testnum )
+  testloop = BENCHMARK::cardinality_1000(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 12 == param.testnum )
+  testloop = BENCHMARK::cardinality_100(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 13 == param.testnum )
+  testloop = BENCHMARK::cardinality_10(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 14 == param.testnum )
+  testloop = BENCHMARK::select_any_where_10000(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 15 == param.testnum )
+  testloop = BENCHMARK::select_any_where_1000(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 16 == param.testnum )
+  testloop = BENCHMARK::select_any_where_100(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 17 == param.testnum )
+  testloop = BENCHMARK::select_any_where_10(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 18 == param.testnum )
+  testloop = BENCHMARK::read_attribute(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 19 == param.testnum )
+  testloop = BENCHMARK::write_attribute(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 20 == param.testnum )
+  testloop = BENCHMARK::bridge_void_void(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 21 == param.testnum )
+  testloop = BENCHMARK::bridge_void_integer(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 22 == param.testnum )
+  testloop = BENCHMARK::bridge_integer_integer(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 23 == param.testnum )
+  testloop = CBENCH::function_void_void(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 24 == param.testnum )
+  testloop = CBENCH::function_void_integer(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 25 == param.testnum )
+  testloop = CBENCH::function_integer_integer(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 26 == param.testnum )
+  testloop = CBENCH::read_struct_member(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 27 == param.testnum )
+  testloop = CBENCH::write_struct_member(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+elif ( 99 == param.testnum )
+  testloop = BENCHMARK::generate_event(
+     testnum:param.testnum,
+     phase:param.phase,
+     count:param.count,
+     duration:param.duration );
+else
+  ::xit();
+end if;
+
+return testloop;',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	2,
+	0);
+INSERT INTO S_SPARM
+	VALUES ("6bf43a1c-191f-4eda-aac7-d0f1980a72da",
+	"e2e799b3-389a-4272-9502-1b3067ebf261",
+	'testnum',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"3d497c5b-f023-4de7-8b56-f8be14ce27cf",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("3d497c5b-f023-4de7-8b56-f8be14ce27cf",
+	"e2e799b3-389a-4272-9502-1b3067ebf261",
+	'phase',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"07406e3f-bc40-4ff0-b7a7-3710b51ccb80",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("530b5c6f-0c08-46cb-9ef1-9061032193d7",
+	"e2e799b3-389a-4272-9502-1b3067ebf261",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("07406e3f-bc40-4ff0-b7a7-3710b51ccb80",
+	"e2e799b3-389a-4272-9502-1b3067ebf261",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"530b5c6f-0c08-46cb-9ef1-9061032193d7",
+	'');
+INSERT INTO PE_PE
+	VALUES ("e2e799b3-389a-4272-9502-1b3067ebf261",
+	1,
+	"79d68063-3d89-489a-9feb-ef1e1f0d0025",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("1dfa54a2-3ebf-4449-b710-fd4257950668",
+	"00000000-0000-0000-0000-000000000000",
+	'report',
+	'',
+	'message = param.message;
+count = param.count;
+duration = param.duration;
+s = "printf( %34s:  %10d %4d %10d\n, p_message, p_count, p_duration, ( p_count / p_duration ) * 1000  );";',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	2,
+	0);
+INSERT INTO S_SPARM
+	VALUES ("0b059d90-cc0f-490d-bb27-62255c37bbb1",
+	"1dfa54a2-3ebf-4449-b710-fd4257950668",
+	'message',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"311806a3-923b-4a70-9e8f-6011c673cc47",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("edce2581-a00c-4750-9b8c-ebc117db4796",
+	"1dfa54a2-3ebf-4449-b710-fd4257950668",
+	'count',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("311806a3-923b-4a70-9e8f-6011c673cc47",
+	"1dfa54a2-3ebf-4449-b710-fd4257950668",
+	'duration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"edce2581-a00c-4750-9b8c-ebc117db4796",
+	'');
+INSERT INTO PE_PE
+	VALUES ("1dfa54a2-3ebf-4449-b710-fd4257950668",
+	1,
+	"79d68063-3d89-489a-9feb-ef1e1f0d0025",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("be393034-cc6b-4054-8fd4-3f85d688f285",
+	"00000000-0000-0000-0000-000000000000",
+	'header',
+	'',
+	's = "printf(                    model operation     count    dur(ms)  ops/s\n";',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	2,
+	1);
+INSERT INTO PE_PE
+	VALUES ("be393034-cc6b-4054-8fd4-3f85d688f285",
+	1,
+	"79d68063-3d89-489a-9feb-ef1e1f0d0025",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("79d68063-3d89-489a-9feb-ef1e1f0d0025",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"0138b1d2-a051-40a1-90dc-af3b5d949286",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("0138b1d2-a051-40a1-90dc-af3b5d949286",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'perf_funcs',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'',
+	'../perf_funcs.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("20b8e847-3cd5-493a-aae2-24b081af82f0",
+	'mcbenchfuncasl',
+	1,
+	'../../../mcbenchfuncasl.xtuml');
