@@ -43,11 +43,19 @@ LOG::LogInfo( message:"- testing shared class instance" );
 // Invoke Bridge operation in shared package
 report = Report::UsageReport();
 LOG::LogInfo( message:"UsageReport in Comp2 returned: " + report );
+create object instance t of Thing;
+create object instance s of subThing;
+relate s to t across R1;
+t.deferredOp();
 // create instance of a shared class
 create object instance res1 of Resource;
 // generate event to shared class
 LOG::LogInfo( message:"Generating event to shared class instance in Comp2 - tick 3 times:" );
 generate Resource1:tick() to res1;
+create object instance t of Thing;
+create object instance s of subThing;
+relate s to t across R1;
+t.deferredOp();
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
