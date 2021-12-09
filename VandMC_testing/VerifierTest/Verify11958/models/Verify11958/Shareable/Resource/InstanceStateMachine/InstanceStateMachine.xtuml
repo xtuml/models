@@ -61,12 +61,14 @@ INSERT INTO SM_ACT
 	VALUES ("8c9beb9d-a96c-4a06-b448-4cb2d94c1c31",
 	"30a864e0-286a-4802-969c-df04af072e95",
 	1,
-	'LOG::LogInfo( message:"ticking away..." );
+	'LOG::LogInfo( message:"Shared state action: ticking away..." );
 self.ivalue = self.ivalue + 1;
 if ( self.ivalue < 3 )
   // delayed event within a shared package
   create event instance tk of Resource1:tick() to self;
   discard = TIM::timer_start( event_inst:tk, microseconds:1000000 );
+else
+  LOG::LogInfo( message:"Shared state action: stopping after 3 ticks." );
 end if;',
 	'Verifying state activity declared in shared package is executable.',
 	0);

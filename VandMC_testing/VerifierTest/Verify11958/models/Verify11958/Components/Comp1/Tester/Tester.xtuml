@@ -62,21 +62,29 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'Test',
 	'A function which exercises many aspects of Package Reference functionality.',
-	'// create instance of a shared class
+	'LOG::LogInfo( message:"Test function running in component Comp1" );
+LOG::LogInfo( message:"- testing shared class instance" );
+// create instance of a shared class
 create object instance res1 of Resource;
-// generate event to shared class
-generate Resource1:tick() to res1;
-// invoke a function in a shared package
-::sharedFunction();
 // Operation invocation on shared instance
+LOG::LogInfo( message:"Invoking operation on shared class instance - value should be 1" );
 res1.Increment();
 LOG::LogInteger( message:res1.ivalue );
 // Access derived attribute - should show double the previous value.
+LOG::LogInfo( message:"Derived attribute of shared class instance - value should be 2" );
 LOG::LogInteger( message:res1.derivedValue );
+// generate event to shared class
+LOG::LogInfo( message:"Generating event to shared class instance in Comp1 - tick 3 times:" );
+generate Resource1:tick() to res1;
 // Class-based operation invocation in shared package
+LOG::LogInfo( message:"Invoking class-based operation on shared class: create Thing instance:" );
 Thing::classOperation();
-// Invoke Bridge operation in shared package
-Report::UsageReport();
+// invoke a function in a shared package
+LOG::LogInfo( message:"Invoking function in shared package - event generation:" );
+::sharedFunction();// Invoke Bridge operation in shared package
+report = Report::UsageReport();
+LOG::LogInfo( message:"UsageReport in Comp1 returned: " + report );
+
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,

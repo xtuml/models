@@ -38,20 +38,24 @@ INSERT INTO S_SYNC
 	"00000000-0000-0000-0000-000000000000",
 	'Test2',
 	'A function which exercises many aspects of Package Reference functionality.',
-	'// Class-based operation invocation in shared package
-Thing::classOperation();
+	'LOG::LogInfo( message:"Test2 function running in component Comp2" );
+LOG::LogInfo( message:"- testing shared class instance" );
 // Invoke Bridge operation in shared package
-Report::UsageReport();
+report = Report::UsageReport();
+LOG::LogInfo( message:"UsageReport in Comp2 returned: " + report );
+create object instance t of Thing;
+create object instance s of subThing;
+relate s to t across R1;
+t.deferredOp();
 // create instance of a shared class
 create object instance res1 of Resource;
 // generate event to shared class
+LOG::LogInfo( message:"Generating event to shared class instance in Comp2 - tick 3 times:" );
 generate Resource1:tick() to res1;
-// invoke a function in a shared package
-::sharedFunction();
-// Operation invocation on shared instance
-res1.Increment();
-// Access derived attribute - should show double the previous value.
-LOG::LogInteger( message:res1.derivedValue );
+create object instance t of Thing;
+create object instance s of subThing;
+relate s to t across R1;
+t.deferredOp();
 ',
 	"ba5eda7a-def5-0000-0000-000000000000",
 	1,
