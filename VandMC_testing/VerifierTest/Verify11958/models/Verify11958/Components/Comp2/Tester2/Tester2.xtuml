@@ -1,0 +1,93 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("dc0c0e4e-73c4-4230-a45a-cb65d0cc993c",
+	"00000000-0000-0000-0000-000000000000",
+	"fbeb8ac2-4de9-4d1f-8d14-fd6913c608a5",
+	'Tester2',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("f6220c4c-e2d0-42e1-bb7a-e57de26475b3",
+	112,
+	"dc0c0e4e-73c4-4230-a45a-cb65d0cc993c",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	200,
+	150,
+	0,
+	'',
+	'Verify11958::Components::Comp2::Tester2');
+INSERT INTO DIM_DIA
+	VALUES ("f6220c4c-e2d0-42e1-bb7a-e57de26475b3",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("fd2a4c8c-8d87-444c-8059-90495edc0c75",
+	"00000000-0000-0000-0000-000000000000",
+	'Test2',
+	'A function which exercises many aspects of Package Reference functionality.',
+	'LOG::LogInfo( message:"Test2 function running in component Comp2" );
+LOG::LogInfo( message:"- testing shared class instance" );
+// Invoke Bridge operation in shared package
+report = Report::UsageReport();
+LOG::LogInfo( message:"UsageReport in Comp2 returned: " + report );
+create object instance t of Thing;
+create object instance s of subThing;
+relate s to t across R1;
+t.deferredOp();
+// create instance of a shared class
+create object instance res1 of Resource;
+// generate event to shared class
+LOG::LogInfo( message:"Generating event to shared class instance in Comp2 - tick 3 times:" );
+generate Resource1:tick() to res1;
+create object instance t of Thing;
+create object instance s of subThing;
+relate s to t across R1;
+t.deferredOp();
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	1);
+INSERT INTO PE_PE
+	VALUES ("fd2a4c8c-8d87-444c-8059-90495edc0c75",
+	1,
+	"dc0c0e4e-73c4-4230-a45a-cb65d0cc993c",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("dc0c0e4e-73c4-4230-a45a-cb65d0cc993c",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"b2de2bff-22ac-46c8-9aaf-761166b20013",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("b2de2bff-22ac-46c8-9aaf-761166b20013",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Comp2',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'',
+	'../Comp2.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("fbeb8ac2-4de9-4d1f-8d14-fd6913c608a5",
+	'Verify11958',
+	1,
+	'../../../Verify11958.xtuml');
