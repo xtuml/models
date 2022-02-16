@@ -1,0 +1,121 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("5d51ce41-bf71-4370-90c9-07cbe58606c5",
+	'InProgressReview',
+	1,
+	'InProgressReview',
+	'An instance represents that a review of payroll is in progress.',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("d9b4449d-1d2f-4121-9511-60e12179b0e1",
+	"5d51ce41-bf71-4370-90c9-07cbe58606c5",
+	'Initiate',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'select any dept from instances of Department;
+generate Department2:ServiceReviewRequest() to dept;
+create event instance rpt of InProgressReview1:report() to self;
+generate Department1:Report( response:rpt ) to dept;
+// Verify that within-component inst_ref just passes pointer.
+self.checkInstRef( ref:dept );',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	1);
+INSERT INTO O_TFR
+	VALUES ("e0084a97-4598-43a7-a6ef-b3ecc8815276",
+	"5d51ce41-bf71-4370-90c9-07cbe58606c5",
+	'checkInstRef',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'//. The reference here should be a pointer ( with associations ) NOT a copied instance replica.
+dept = param.ref;
+select any payment related by dept->EmployeePay[R100];
+if ( empty payment )
+  LOG::LogFailure( message:"Server: bad reference passed within component context" ); 
+end if;',
+	1,
+	'',
+	"d9b4449d-1d2f-4121-9511-60e12179b0e1",
+	0,
+	2);
+INSERT INTO O_TPARM
+	VALUES ("e261f51e-2e06-41db-9679-e69276f20c78",
+	"e0084a97-4598-43a7-a6ef-b3ecc8815276",
+	'ref',
+	"68d112cd-3d8a-4507-b32a-d498e8849afe",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("68d112cd-3d8a-4507-b32a-d498e8849afe",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Department>',
+	'',
+	'',
+	'../../../../HR/HR.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("c4956b56-4b6e-4ca0-a95e-90fcc9e18ebb",
+	"5d51ce41-bf71-4370-90c9-07cbe58606c5");
+INSERT INTO O_BATTR
+	VALUES ("c4956b56-4b6e-4ca0-a95e-90fcc9e18ebb",
+	"5d51ce41-bf71-4370-90c9-07cbe58606c5");
+INSERT INTO O_ATTR
+	VALUES ("c4956b56-4b6e-4ca0-a95e-90fcc9e18ebb",
+	"5d51ce41-bf71-4370-90c9-07cbe58606c5",
+	"00000000-0000-0000-0000-000000000000",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("05146d19-b090-45c3-9d6e-e8b367068d64",
+	"5d51ce41-bf71-4370-90c9-07cbe58606c5");
+INSERT INTO O_BATTR
+	VALUES ("05146d19-b090-45c3-9d6e-e8b367068d64",
+	"5d51ce41-bf71-4370-90c9-07cbe58606c5");
+INSERT INTO O_ATTR
+	VALUES ("05146d19-b090-45c3-9d6e-e8b367068d64",
+	"5d51ce41-bf71-4370-90c9-07cbe58606c5",
+	"c4956b56-4b6e-4ca0-a95e-90fcc9e18ebb",
+	'count',
+	'',
+	'',
+	'count',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"5d51ce41-bf71-4370-90c9-07cbe58606c5");
+INSERT INTO O_ID
+	VALUES (1,
+	"5d51ce41-bf71-4370-90c9-07cbe58606c5");
+INSERT INTO O_ID
+	VALUES (2,
+	"5d51ce41-bf71-4370-90c9-07cbe58606c5");
+INSERT INTO PE_PE
+	VALUES ("5d51ce41-bf71-4370-90c9-07cbe58606c5",
+	1,
+	"14066c30-0269-4ec1-b3be-63c08db9fdf8",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("14066c30-0269-4ec1-b3be-63c08db9fdf8",
+	"00000000-0000-0000-0000-000000000000",
+	"658541c5-0d63-4591-a49a-88998399991c",
+	'ServerApp',
+	'A simplistic model of a server providing client service.
+Both server and client share class definitions.',
+	0,
+	'../ServerApp.xtuml');
