@@ -1,0 +1,82 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("8d6c90d5-1ec9-4b77-a85e-143c25cde8d1",
+	"00000000-0000-0000-0000-000000000000",
+	"89eda208-065b-483e-86ce-4f5cfa7dd9ac",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("d6ae65cc-e1dc-4bf5-a41d-2f0f5ab267d9",
+	112,
+	"8d6c90d5-1ec9-4b77-a85e-143c25cde8d1",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'4.1.17',
+	'SharedClasses::Components::Client::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("d6ae65cc-e1dc-4bf5-a41d-2f0f5ab267d9",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("5f3f72e4-4b32-4575-9c0f-8dc593412f99",
+	"00000000-0000-0000-0000-000000000000",
+	'InitTest',
+	'',
+	'// Session state model will run the test scenario - request, review payments
+select any session from instances of Session;
+if ( empty session )
+  create object instance menu of PayrollMenu;
+  create object instance session of Session;
+end if;
+LOG::LogInfo( message:"Client initiating a review session" );
+generate Session1:RequestReview() to session; ',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	1);
+INSERT INTO PE_PE
+	VALUES ("5f3f72e4-4b32-4575-9c0f-8dc593412f99",
+	1,
+	"8d6c90d5-1ec9-4b77-a85e-143c25cde8d1",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("8d6c90d5-1ec9-4b77-a85e-143c25cde8d1",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"a538888c-847d-4547-a836-d4c0820162ef",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("a538888c-847d-4547-a836-d4c0820162ef",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Client',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'',
+	'../Client.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("89eda208-065b-483e-86ce-4f5cfa7dd9ac",
+	'SharedClasses',
+	1,
+	'../../../SharedClasses.xtuml');
