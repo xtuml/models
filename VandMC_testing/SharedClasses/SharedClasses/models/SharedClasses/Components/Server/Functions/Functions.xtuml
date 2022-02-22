@@ -1,0 +1,142 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("cb8ea5b3-bc95-4247-8a4c-22ecf1fe2fe4",
+	"00000000-0000-0000-0000-000000000000",
+	"89eda208-065b-483e-86ce-4f5cfa7dd9ac",
+	'Functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("e8a173d2-425a-4121-9f30-641097e8fa65",
+	112,
+	"cb8ea5b3-bc95-4247-8a4c-22ecf1fe2fe4",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'4.1.17',
+	'SharedClasses::Components::Server::Functions');
+INSERT INTO DIM_DIA
+	VALUES ("e8a173d2-425a-4121-9f30-641097e8fa65",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("e8dd85f9-2248-4fb1-bfd5-5c049c2a5d5f",
+	"00000000-0000-0000-0000-000000000000",
+	'Populate',
+	'',
+	'create object instance dept of Department;
+dept.Title = "Sales";
+LOG::LogInfo( message:"Server: Populating department: " + dept.Title );
+create object instance e of EmployeePay;
+e.Name = "Tom";
+e.Amount = 1000;
+relate e to dept across R100;
+create object instance e of EmployeePay;
+e.Name = "Dick";
+e.Amount = 2000;
+relate e to dept across R100;
+create object instance e of EmployeePay;
+e.Name = "Harry";
+e.Amount = 3000;
+relate e to dept across R100;
+
+// testing Interface Operation inst_ref_set parameter. 
+// Note: commented out where synchronous opoerations not supported
+/*
+create object instance dummy of Department;
+dummy.Title = "Dummy";
+select many depts from instances of Department;
+LOG::LogInfo( message:"Server: I/F op with param inst_ref_set" );
+Clnt::AllDepartments( depts:depts );
+delete object instance dummy;
+*/
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	1);
+INSERT INTO PE_PE
+	VALUES ("e8dd85f9-2248-4fb1-bfd5-5c049c2a5d5f",
+	1,
+	"cb8ea5b3-bc95-4247-8a4c-22ecf1fe2fe4",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("0648c166-f040-4c83-a389-54e7dff03f44",
+	"00000000-0000-0000-0000-000000000000",
+	'ServiceRequest',
+	'',
+	'select any dept from instances of Department;
+// invoke synchronous Interface operation with inst_ref parameter.
+// Note: uncomment the following if environment supports sync messaging
+//LOG::LogInfo( message:"Server: invoke I/F op with param inst_ref; boolean return" );
+//ack = Clnt::LoggedOn( dept:dept );
+ack = true; // allow test to proceed when sync messaging unsupported
+
+if ( ack )
+  select any ipr from instances of InProgressReview;
+  select many payments from instances of EmployeePay;
+  for each payment in payments
+  	// exercise state machine for instance of shared class.
+  	LOG::LogInfo( message:"Server: generate ''hold'' for payment: " + payment.Name );
+  	generate EmployeePay1:Hold() to payment;
+  	ipr.count = ipr.count + 1; // keep track of how many payments are under review.
+  end for;
+  // invoke Signal with inst_ref_set parameter.
+  LOG::LogInfo( message:"Server sending inst_ref_set of payments" );
+  send Clnt::DeptPayroll( payments:payments ); 
+end if;
+
+// signal with department as inst_ref parameter
+send Clnt::VerifyLogin( dept:dept );
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	2);
+INSERT INTO PE_PE
+	VALUES ("0648c166-f040-4c83-a389-54e7dff03f44",
+	1,
+	"cb8ea5b3-bc95-4247-8a4c-22ecf1fe2fe4",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("cb8ea5b3-bc95-4247-8a4c-22ecf1fe2fe4",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"1cafca5f-cc24-494c-b846-ab07a4d7597d",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("1cafca5f-cc24-494c-b846-ab07a4d7597d",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Server',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'',
+	'../Server.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("89eda208-065b-483e-86ce-4f5cfa7dd9ac",
+	'SharedClasses',
+	1,
+	'../../../SharedClasses.xtuml');
