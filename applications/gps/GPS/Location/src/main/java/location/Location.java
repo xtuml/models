@@ -14,8 +14,12 @@ import location.classes.GPS;
 import location.classes.GPSStateMachine;
 import location.classes.simulatedGPS;
 
+import org.xtuml.masl.util.Math;
+
 
 public class Location extends AbstractPersistentDomain implements PersistentDomain {
+
+    public Math Math;
 
     public Location() {
         this("Location");
@@ -23,7 +27,7 @@ public class Location extends AbstractPersistentDomain implements PersistentDoma
 
     public Location(String name) {
         super(name);
-        
+        Math = new Math(this);
         
     }
 
@@ -56,6 +60,8 @@ public class Location extends AbstractPersistentDomain implements PersistentDoma
         getApplication().getLogger().trace("SMT: Enter action: Location.sqrt");
         int _lineNumber = -1;
         try {
+            /* return Math::sqrt(x); */
+            _lineNumber = 3;
             return Math.sqrt(p_x);
         } catch (RuntimeException _e) {
             if (!(_e instanceof ActionException)) {

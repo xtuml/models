@@ -25,7 +25,7 @@ public class GPS_WatchUI extends UI {
     private static final int SIGNAL_NO_SET_TIME = 1;
     private static final int SIGNAL_NO_SET_INDICATOR = 2;
 
-    private static final String HOSTNAME = "localhost";
+    private static final String HOSTNAME = System.getProperty("ui.hostname", "localhost");
     private static final int PORT = 2003;
     private static final Duration LISTEN_PERIOD = new Duration(250, ChronoUnit.MILLIS);
 
