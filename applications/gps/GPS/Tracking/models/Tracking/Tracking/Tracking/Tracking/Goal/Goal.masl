@@ -4,7 +4,7 @@ goalSpec: instance of GoalSpec;
 goal: instance of Goal;
 session: instance of WorkoutSession;
 goalachievement: instance of GoalAchievement;
-begin;
+begin
   // Create and activate an instance of a goal specified by
   //   the goal specification, if it exists, identified by 
   //   the incoming parameter.
@@ -48,7 +48,8 @@ begin
     session := this->R11.is_currently_executing_within.WorkoutSession;
     this.startingPoint := session.accumulatedDistance;
   else
-    LOG::LogFailure( "Goal.calculateStart: Unknown Goal Span Type." );
+    //LOG::LogFailure( "Goal.calculateStart: Unknown Goal Span Type." );
+    console <<< "Goal.calculateStart: Unknown Goal Span Type.";
   end if;
 end service;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
@@ -76,7 +77,8 @@ begin
   elsif ( goalSpec.criteriaType = Pace ) then
     currentValue := session.getCurrentPace();
   else
-    LOG::LogFailure( "Goal.evaluateAchievement: Unknown Goal Criteria Type." );
+    //LOG::LogFailure( "Goal.evaluateAchievement: Unknown Goal Criteria Type." );
+    console <<< "Goal.evaluateAchievement: Unknown Goal Criteria Type.";
   end if;
    
   // Compare the current value against the criteria to calculate the return value.
@@ -126,7 +128,8 @@ begin
     workoutTimer := this->R11.is_currently_executing_within.WorkoutSession->R8.is_timed_by.WorkoutTimer;
     elapsedSpan := real(workoutTimer.time) - this.startingPoint;
   else
-    LOG::LogFailure( "Goal.evaluateCompletion: Unknown Goal Span Type." );
+    //LOG::LogFailure( "Goal.evaluateCompletion: Unknown Goal Span Type." );
+    console <<< "Goal.evaluateCompletion: Unknown Goal Span Type.";
   end if;
   
   // Compare the current value against the specified span to determine 

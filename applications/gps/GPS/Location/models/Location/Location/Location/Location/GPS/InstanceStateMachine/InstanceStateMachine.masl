@@ -1,7 +1,8 @@
 //! ACTIVITY BEGIN. '77ed88df-af92-4f7f-8b31-8a8618436d91' 'fe2328d4-2416-4a02-9b76-beb316347b06' DO NOT EDIT THIS LINE.
 state Location::GPS.idle () is
 begin
-  LOG::LogInfo( "Locating::GPS::Idle" );
+  //LOG::LogInfo( "Locating::GPS::Idle" );
+  console <<< "Locating::GPS::Idle";
 end state;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
 
@@ -36,7 +37,8 @@ begin
   simulatedGPS.initialize();
   simgps := find_one simulatedGPS();
   schedule this.timer generate GPS.tick() to this delay @PT0.000001S@ * simgps.updatePeriod delta @PT0.000001S@ * simgps.updatePeriod;
-  LOG::LogInfo( "Location listener registered.");  
+  //LOG::LogInfo( "Location listener registered.");  
+  console <<< "Location listener registered.";  
 
   generate GPS.registeringComplete() to this;
 end state;
@@ -47,7 +49,8 @@ state Location::GPS.unregistering () is
 begin
   // Deactivate the timer.
   cancel this.timer;
-  LOG::LogInfo("Location listener unregistered.");
+  //LOG::LogInfo("Location listener unregistered.");
+  console <<< "Location listener unregistered.";
   generate GPS.unregisterComplete() to this;
 end state;
 //! ACTIVITY END. DO NOT EDIT THIS LINE.
