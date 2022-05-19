@@ -1,0 +1,980 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	'Object_B',
+	3,
+	'objB',
+	' This object forms part of a 1c:1c and 1-(1c:1c) relationships.
+ 
+ All tests for the above relationships are controlled by this object.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("84d1b8a9-ca44-46d4-9aae-6871068bfe42",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	'Create_Relationships',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#-------------------------------------------------------------------#
+#
+# Create relationships
+#
+# The architecture shall provide a mechanism to allow creation of a
+# simple relationship link between two object instances
+# 1241-0000-01-603
+#
+# The architecture shall provide operations which, given a starting 
+# instance handle and a relationship specification, return a single
+# handle of the related instances
+# 1241-0000-01-0701
+#
+# The architectureshall support a translation of the ASL link 
+# statement to map to the mechanism that allows creation of a 
+# relationship link between two object instances
+# 1241-0000-01-1202
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+[] = RPT1:Start_Test     [Test, "1241-0000-01-0603", "Relationships", "objB", "Create relationships"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+
+
+Has_Failed = TRUE
+
+# Find the desired instances for Object_A
+firstA = find-one Object_A where idA = 1
+thirdA = find-one Object_A where idA = 3
+
+# Find the desired instances for Object_B 
+firstB  = find-one Object_B where idB = 1
+fourthB = find-one Object_B where idB = 4
+
+# Find the desired instances for Object_M
+secondM = find-one Object_M where idM = 2
+thirdM  = find-one Object_M where idM = 3
+
+# Create normal 1:1 relationships
+link firstA R1 firstB
+link thirdA R1 fourthB
+link fourthB R18 thirdM  
+
+# Create a couple of instances to prove the relationships
+# For coding purposes, it is necessary to overspecify
+# the relationship.
+
+InstA = firstB -> R1.Object_A
+InstB = thirdA -> R1.Object_B 
+
+# Now check that the navigations can be performed
+if InstA != UNDEFINED & InstB != UNDEFINED then
+   Has_Failed = FALSE
+endif
+
+#-------------------------------------------------------------------#
+# Test complete
+#-------------------------------------------------------------------#
+
+if Has_Failed then
+   [] = RPT3:Test_Failed["objB", Test, -1]
+else
+   [] = RPT2:Test_Passed["objB", Test, 0]
+endif
+
+#-------------------------------------------------------------------#',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("44edf256-8f59-4c1d-a36d-ff991d541e81",
+	"84d1b8a9-ca44-46d4-9aae-6871068bfe42",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("75f1dbd8-ebb3-46c4-8603-d30534625ba9",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	'ObjB_Navigation',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#-------------------------------------------------------------------#
+#
+# Normal navigation
+#
+# The architecture shall implement simple 1:1 relationships
+# 1241-0000-01-0601
+# 
+# Given a starting instance handle and a relationship specification
+# return a single handle of the related instance
+# 1241-0000-01-0701
+#
+# The architecture shall support chains of navigations
+# 1241-0000-10-0704
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+# Initialise the all variables
+
+Supported        = TRUE
+Has_Failed       = FALSE
+The_Result       = 0
+
+#-------------------------------------------------------------------#
+
+#Find the desired instances for Object_A
+firstA = find-one Object_A where idA = 1
+thirdA = find-one Object_A where idA = 3
+
+#Find the desired instances for Object_B
+firstB  = find-one Object_B where idB = 1
+fourthB = find-one Object_B where idB = 4
+fifthB  = find-one Object_B where idB = 5
+
+#Find the desired instances for Object_M
+secondM = find-one Object_M where idM = 2
+thirdM  = find-one Object_M where idM = 3
+
+[Host] = WAW1:What_Env[]
+
+#-------------------------------------------------------------------#
+# Test 1 - Navigate from first instance of Object_B to Object_A using 
+#          relationship number
+#-------------------------------------------------------------------#
+
+   if Iteration = 1 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "objB", "Navigate from Obj B to Obj A"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstA = firstB -> R1.Object_A
+
+      # Check the result of the navigation
+      if InstA = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstA.idA != 1 then
+            Has_Failed = TRUE
+            The_Result = InstA.idA
+         else
+            The_Result = InstA.idA
+         endif
+
+      endif
+
+   endif
+
+# End Test 1
+
+#-------------------------------------------------------------------#
+# Test 2 - Navigate from fourh instance of Object_B to Object_M using 
+#          relationship number
+#-------------------------------------------------------------------#
+
+   if Iteration = 2 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "objB", "Navigate from Obj B to Obj M"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstM = fourthB -> R18.Object_M
+
+      # Check the result of the navigation
+      if InstM = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstM.idM != 3 then
+            Has_Failed = TRUE
+            The_Result = InstM.idM
+         else
+            The_Result = InstM.idM
+         endif
+
+      endif
+
+   endif
+
+# End Test 2
+
+#-------------------------------------------------------------------#
+# Test 3 - Navigate from third instance of Object_A to Object_B using 
+#          relationship number
+#-------------------------------------------------------------------#
+
+   if Iteration = 3 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "objB", "Navigate from Obj A to Obj B"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstB = thirdA -> R1.Object_B
+
+      #Check the result of the navigation
+      if InstB = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstB.idB != 4 then
+            Has_Failed = TRUE
+            The_Result = InstB.idB
+         else
+            The_Result = InstB.idB
+         endif
+
+      endif
+
+   endif
+
+# End Test 3
+
+#-------------------------------------------------------------------#
+# Test 4 - Navigate from third instance of Object_M to Object_B using 
+#          relationship number
+#-------------------------------------------------------------------#
+
+   if Iteration = 4 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "objB", "Navigate from Obj M to Obj B"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstB = thirdM -> R18.Object_B
+
+      # Check the result of the navigation
+      if InstB = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstB.idB != 4 then
+            Has_Failed = TRUE
+            The_Result = InstB.idB
+         else
+            The_Result = InstB.idB
+         endif
+
+      endif
+
+   endif
+
+# End Test 4
+
+#-------------------------------------------------------------------#
+# Test 5 - Navigate from fourth instance of Object_B to Object_A 
+#          using relationship role. 
+#          This is not currently supported by the WACA
+#-------------------------------------------------------------------#
+
+   if Iteration = 5 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objB", "Relationship navigation with role"]
+
+      # Perform the navigation
+      InstA = fourthB -> R1."May_have_a".Object_A
+
+      # Check the result of the navigation. Role navigation is only
+      # supported with reflexive navigations. So should return an 
+      # undefined instance.
+
+      if Host = "ISIM" then
+         Supported = FALSE
+      else
+
+         if InstA = UNDEFINED then
+            Has_Failed = FALSE
+         else
+            Has_Failed = TRUE
+            The_Result = InstA.idA
+         endif
+
+      endif
+
+   endif
+
+# End Test 5
+
+#-------------------------------------------------------------------#
+# Test 6 - Attempt to perform a navigation on instance that is not 
+#          linked to another instance
+#-------------------------------------------------------------------#
+
+   if Iteration = 6 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objB", "Navigate non-linked relationship"]
+
+      # Fifth B is not currently linked to any instances of Object A.
+      # Perform the navigation
+      InstA = fifthB -> R1.Object_A
+
+      #Check the result of the navigation
+      if InstA != UNDEFINED then
+         Has_Failed = TRUE
+         The_Result = InstA.idA
+      endif
+ 
+   endif
+
+# End Test 6
+
+#-------------------------------------------------------------------#
+# Test 7 - Perform a chained navigation from the third instance of
+#          Object_A through Object_B and finish at Object_M
+#-------------------------------------------------------------------#
+
+   if Iteration = 7 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from A to B to M"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstM = thirdA -> R1.Object_B -> R18.Object_M  
+
+      # Check the result of the navigation
+      if InstM = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstM.idM != 3 then
+            Has_Failed = TRUE
+            The_Result = InstM.idM
+         else
+            The_Result = InstM.idM
+         endif
+
+      endif
+
+   endif
+
+# End Test 7
+
+#-------------------------------------------------------------------#
+# Test 8 - Perform a chained navigation starting at the first 
+#          instance of Object_A and returning back to Object_A via
+#          Object_B
+#-------------------------------------------------------------------#
+
+   if Iteration = 8 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from A to B to A"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstA = firstA -> R1.Object_B -> R1.Object_A
+
+      # Check the result of the navigation
+      if InstA = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstA.idA != 1 then
+            Has_Failed = TRUE
+            The_Result = InstA.idA
+         else
+            The_Result = InstA.idA
+         endif
+
+      endif
+
+   endif  
+
+# End Test 8 
+
+
+#-------------------------------------------------------------------#
+# Test 9 - Perform a chained navigation starting at the third 
+#          instance of Object_M and navigating to Object_A via
+#          Object_B
+#-------------------------------------------------------------------#
+   if Iteration = 9 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from M to B to A"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstA = thirdM -> R18.Object_B -> R1.Object_A
+
+      # Check the result of the navigation
+      if InstA = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstA.idA != 3 then
+            Has_Failed = TRUE
+            The_Result = InstA.idA
+         else
+            The_Result = InstA.idA
+         endif
+
+      endif
+
+   endif  
+
+# End Test 9
+
+#-------------------------------------------------------------------#
+# Test 10 - Perform a chained navigation starting at the third 
+#           instance of Object_M and returning back to Object_M via
+#           Object_B
+#-------------------------------------------------------------------#
+
+   if Iteration = 10 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from M to B to M"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstM = thirdM -> R18.Object_B -> R18.Object_M
+
+      # Check the result of the navigation
+      if InstM = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstM.idM != 3 then
+            Has_Failed = TRUE
+            The_Result = InstM.idM
+         else
+            The_Result = InstM.idM
+         endif
+
+      endif
+
+   endif  
+
+# End Test 10
+
+#-------------------------------------------------------------------#
+# Test 11 - Perform a chained navigation starting at the fourth 
+#           instance of Object_B and returning back to Object_B via
+#           Object_M
+#-------------------------------------------------------------------#
+
+   if Iteration = 11 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from B to M to B"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstB = fourthB -> R18.Object_M -> R18.Object_B
+
+      # Check the result of the navigation
+      if InstB = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstB.idB != 4 then
+            Has_Failed = TRUE
+            The_Result = InstB.idB
+         else
+            The_Result = InstB.idB
+         endif
+
+      endif
+
+   endif  
+
+# End Test 11
+
+#-------------------------------------------------------------------#
+# Test 12 - Perform a chained navigation starting at the fourth 
+#           instance of Object_B and returning back to Object_B via
+#           Object_A
+#-------------------------------------------------------------------#
+
+   if Iteration = 12 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "objB", "Navigate from B to A to B"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-0601"]
+      [] = RPT8:Specify_Requid [Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstB = fourthB -> R1.Object_A -> R1.Object_B
+
+      # Check the result of the navigation
+      if InstB = UNDEFINED then
+         Has_Failed = TRUE
+      else
+
+         if InstB.idB != 4 then
+            Has_Failed = TRUE
+            The_Result = InstB.idB
+         else
+            The_Result = InstB.idB
+         endif
+
+      endif
+
+   endif  
+
+# End Test 12
+
+#-------------------------------------------------------------------#
+# Test 13 - Attempt to navigate to Object_M from Object_B through a 
+#           link thats not yet been established
+#-------------------------------------------------------------------#
+
+   if Iteration = 13 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objB", "Navigate to M when not linked to B"]
+
+      InstM = firstB -> R18.Object_M
+
+      if InstM != UNDEFINED then
+         Has_Failed = TRUE
+         The_Result = InstM.idM
+      endif
+
+   endif
+
+# End Test 13
+
+#-------------------------------------------------------------------#
+# Test 14 - Attempt to navigate from Object_M to Object_B via a link
+#           that has not been established
+#-------------------------------------------------------------------#
+
+   if Iteration = 14 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "objB", "B to M while not linked"]
+
+      InstB = secondM -> R18.Object_B
+
+      if InstB != UNDEFINED then
+         Has_Failed = TRUE
+         The_Result = InstB.idB
+      endif
+
+   endif
+
+# End Test 14
+
+#-------------------------------------------------------------------#
+# Tests complete
+#-------------------------------------------------------------------#
+
+# If the test is supported
+if Supported = TRUE then
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objB", Test, The_Result]
+   else
+      [] = RPT3:Test_Failed["objB", Test, The_Result]
+   endif
+
+else
+   [] = RPT4:Test_Unsupported[Test]
+endif
+
+#-------------------------------------------------------------------#',
+	3,
+	'',
+	"84d1b8a9-ca44-46d4-9aae-6871068bfe42",
+	2,
+	2);
+INSERT INTO O_TPARM
+	VALUES ("27b180db-e073-42be-ba22-08446e5177c8",
+	"75f1dbd8-ebb3-46c4-8603-d30534625ba9",
+	'Iteration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("dea389a5-ab94-499b-9263-57fba7474f35",
+	"75f1dbd8-ebb3-46c4-8603-d30534625ba9",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"27b180db-e073-42be-ba22-08446e5177c8",
+	'');
+INSERT INTO O_TFR
+	VALUES ("08b28abf-a55b-4ae5-8fdf-74a91ffecbad",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	'Delete_Relationships',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'# -------------------------------------------------------------------#
+#
+# Delete all relationships
+#
+# The architecture shall provide a mapping from the ASL delete 
+# instance statement to the deletion mechanism
+# 1241-0000-01-0121
+#
+# The architecture shall provide a mechanism to allow deletion of a 
+# simple relationship link between two object instances
+# 1241-0000-01-0604
+#
+# The architecture shall support a translation of the ASL unlink
+# statement to map to the mechanism that allow the deletion of a 
+# link between two objects in a relationship
+# 1241-0000-01-1204
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+# -------------------------------------------------------------------#
+
+Has_Failed = TRUE
+
+[] = RPT1:Start_Test [Test, "1241-0000-01-0604", "Relationships", "objB", "Delete all relationships"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0121"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-1204"]
+[] = RPT8:Specify_Requid[Test, "1103-0000-01-0621"]
+
+# Find the desired instances of Object_A
+firstA  = find-one Object_A where idA = 1
+secondA = find-one Object_A where idA = 2
+thirdA  = find-one Object_A where idA = 3
+fourthA = find-one Object_A where idA = 4
+fifthA  = find-one Object_A where idA = 5 
+
+# Find the desired instances of Object_B
+firstB  = find-one Object_B where idB = 1
+secondB = find-one Object_B where idB = 2
+thirdB  = find-one Object_B where idB = 3
+fourthB = find-one Object_B where idB = 4
+fifthB  = find-one Object_B where idB = 5
+
+# Find the desired instances of Object_M
+firstM  = find-one Object_M where idM = 1
+secondM = find-one Object_M where idM = 2
+thirdM  = find-one Object_M where idM = 3
+fourthM = find-one Object_M where idM = 4
+fifthM  = find-one Object_M where idM = 5
+
+# Delete all relationships
+unlink firstA  R1  firstB
+unlink thirdA  R1  fourthB
+
+unlink fourthB R18 thirdM
+
+# Explicitly check that all instances have been unlinked
+# correctly.
+
+InstB1 = firstA -> R1.Object_B
+InstB2 = thirdA -> R1.Object_B
+
+InstM1 = firstB -> R18.Object_M
+InstM2 = fourthB -> R18.Object_M
+
+# Attempt to perform some illegal navigations
+
+if InstB1 = UNDEFINED then
+
+   if InstB2 = UNDEFINED then
+
+      if InstM1 = UNDEFINED then
+
+         if InstM2 = UNDEFINED then
+
+            delete Object_A where idA = 1 
+            delete Object_A where idA = 2
+            delete Object_A where idA = 3
+            delete Object_A where idA = 4
+            delete Object_A where idA = 5
+
+#            delete firstA
+#            delete secondA
+#            delete thirdA
+#            delete fourthA
+#            delete fifthA
+
+            delete firstB
+            delete secondB
+            delete thirdB
+            delete fourthB
+            delete fifthB
+
+            delete firstM
+            delete secondM
+            delete thirdM
+            delete fourthM
+            delete fifthM
+
+            {SetA} = find-all Object_A
+            {SetB} = find-all Object_B
+            {SetM} = find-all Object_M
+
+            if countof {SetA} = 0 then
+
+               if countof {SetB} = 0 then
+
+                  if countof {SetM} = 0 then
+                     Has_Failed = FALSE
+                  else
+                     Has_Failed   = TRUE
+                     Failure_Code = -10
+                  endif
+
+               else
+                  Has_Failed   = TRUE
+                  Failure_Code = -20
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = -30
+            endif
+
+         else
+            Failure_Code = -40
+         endif
+
+         Failure_Code = -50
+      endif
+
+      Failure_Code = -60
+   endif
+
+  Failure_Code = -70
+
+endif
+
+#-------------------------------------------------------------------#
+# Test complete
+#-------------------------------------------------------------------#
+
+if Has_Failed then
+   [] = RPT3:Test_Failed["objB", Test, Failure_Code]
+else
+   [] = RPT2:Test_Passed["objB", Test, 0]
+endif
+
+#-------------------------------------------------------------------#',
+	3,
+	'',
+	"75f1dbd8-ebb3-46c4-8603-d30534625ba9",
+	2,
+	3);
+INSERT INTO O_TPARM
+	VALUES ("efe1e790-b3ab-4764-b43d-ba8e658cdfa0",
+	"08b28abf-a55b-4ae5-8fdf-74a91ffecbad",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e10b0495-013a-4174-8fef-26b83449ada9",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea");
+INSERT INTO O_BATTR
+	VALUES ("e10b0495-013a-4174-8fef-26b83449ada9",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea");
+INSERT INTO O_ATTR
+	VALUES ("e10b0495-013a-4174-8fef-26b83449ada9",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	"00000000-0000-0000-0000-000000000000",
+	'idB',
+	' Preferred identifier.
+',
+	'',
+	'idB',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("746b2236-f8a2-4231-8f1e-2ab34bd89e1e",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea");
+INSERT INTO O_BATTR
+	VALUES ("746b2236-f8a2-4231-8f1e-2ab34bd89e1e",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea");
+INSERT INTO O_ATTR
+	VALUES ("746b2236-f8a2-4231-8f1e-2ab34bd89e1e",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	"8ef4aec5-1593-48e0-acb1-7bedc75c6ae3",
+	'ResultA',
+	' This attribute is manipulated to indicate that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("40c0395f-a099-4495-9964-8f375b8e19c4",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea");
+INSERT INTO O_BATTR
+	VALUES ("40c0395f-a099-4495-9964-8f375b8e19c4",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea");
+INSERT INTO O_ATTR
+	VALUES ("40c0395f-a099-4495-9964-8f375b8e19c4",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	"0371fad1-a8dc-45a3-bc1a-c4838d43945e",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	"7c208acb-d6d8-4293-8f87-0ed4815fd5ef",
+	0,
+	"e9e6658d-196f-4087-8657-85cf31f54e45",
+	"1d9ecf0e-e9d9-4838-ae27-4989db38bc28",
+	"6a0bb950-321c-4f40-888e-b8300eb86347",
+	"23e001fa-026b-410e-b8d9-7986d007d91d",
+	"0371fad1-a8dc-45a3-bc1a-c4838d43945e",
+	"580ebb77-fd4f-477a-a133-5db9e1c7d588",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Object_M',
+	'idM',
+	'R18.''Has_a''');
+INSERT INTO R_RGO_PROXY
+	VALUES ("cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	"1d9ecf0e-e9d9-4838-ae27-4989db38bc28",
+	"6a0bb950-321c-4f40-888e-b8300eb86347",
+	'../Relationships.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("e9e6658d-196f-4087-8657-85cf31f54e45",
+	"7c208acb-d6d8-4293-8f87-0ed4815fd5ef",
+	0,
+	"1d9ecf0e-e9d9-4838-ae27-4989db38bc28",
+	"23e001fa-026b-410e-b8d9-7986d007d91d",
+	'../Relationships.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("0371fad1-a8dc-45a3-bc1a-c4838d43945e",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	"e9e6658d-196f-4087-8657-85cf31f54e45",
+	"7c208acb-d6d8-4293-8f87-0ed4815fd5ef",
+	0,
+	'idM');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("e9e6658d-196f-4087-8657-85cf31f54e45",
+	"7c208acb-d6d8-4293-8f87-0ed4815fd5ef",
+	'../Object_M/Object_M.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("0371fad1-a8dc-45a3-bc1a-c4838d43945e",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	"746b2236-f8a2-4231-8f1e-2ab34bd89e1e",
+	'idM',
+	'',
+	'',
+	'idM',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	"ea2d7faf-82a9-4449-9ad6-18bedf36d804",
+	0,
+	"666896a7-b9d0-4f75-8efd-3017264b65fa",
+	"b3e10fcb-d9d7-44a7-99e1-77ae89dc9550",
+	"70d4e69b-09e2-442d-95b0-9855732a21d5",
+	"3c3dc59a-2390-4643-a384-c160484d1d34",
+	"8ef4aec5-1593-48e0-acb1-7bedc75c6ae3",
+	"7ea3d45f-1ba3-4fae-b5e7-1820af2120de",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Object_A',
+	'idA',
+	'R1.''May_have_a''');
+INSERT INTO R_RGO_PROXY
+	VALUES ("cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	"b3e10fcb-d9d7-44a7-99e1-77ae89dc9550",
+	"70d4e69b-09e2-442d-95b0-9855732a21d5",
+	'../Relationships.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("666896a7-b9d0-4f75-8efd-3017264b65fa",
+	"ea2d7faf-82a9-4449-9ad6-18bedf36d804",
+	0,
+	"b3e10fcb-d9d7-44a7-99e1-77ae89dc9550",
+	"3c3dc59a-2390-4643-a384-c160484d1d34",
+	'../Relationships.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("8ef4aec5-1593-48e0-acb1-7bedc75c6ae3",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	"666896a7-b9d0-4f75-8efd-3017264b65fa",
+	"ea2d7faf-82a9-4449-9ad6-18bedf36d804",
+	0,
+	'idA');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("666896a7-b9d0-4f75-8efd-3017264b65fa",
+	"ea2d7faf-82a9-4449-9ad6-18bedf36d804",
+	'../Object_A/Object_A.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("8ef4aec5-1593-48e0-acb1-7bedc75c6ae3",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	"e10b0495-013a-4174-8fef-26b83449ada9",
+	'idA',
+	'',
+	'',
+	'idA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea");
+INSERT INTO O_OIDA
+	VALUES ("e10b0495-013a-4174-8fef-26b83449ada9",
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	0,
+	'idB');
+INSERT INTO O_ID
+	VALUES (1,
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea");
+INSERT INTO O_ID
+	VALUES (2,
+	"cdbf6632-4d78-41a5-b450-f3cfdfa72fea");
+INSERT INTO PE_PE
+	VALUES ("cdbf6632-4d78-41a5-b450-f3cfdfa72fea",
+	1,
+	"16257054-8ea8-4071-b5d9-53a2093e0029",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("16257054-8ea8-4071-b5d9-53a2093e0029",
+	"00000000-0000-0000-0000-000000000000",
+	"fb793f65-d0e6-45fe-a7e0-5e290ea2fa31",
+	'Relationships',
+	'',
+	0,
+	'../Relationships.xtuml');

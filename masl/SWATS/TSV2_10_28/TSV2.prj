@@ -1,0 +1,98 @@
+project TSV2 is
+  domain CT_Tags is
+    terminator Report_Results is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name : in  string);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+    terminator Navigate_TCA is
+      public service Navigate_TCA (TCA_IH     : in  instance of TCA_CP,
+                                   Return_Val : out integer); pragma tca ("");
+
+      public service Create_And_Link_TCA (TCA_IH : in  instance of TCA_CP,
+                                          Result : out integer); pragma tca ("");
+
+      public service Unlink_TCA (TCA_IH     : in  instance of TCA_CP,
+                                 Return_Val : out integer); pragma tca ("");
+
+    end terminator;
+    pragma key_letter ("Nav_TCA");
+
+
+    terminator Navigate_Global is
+      public service Create_And_Link_Glob (Glob_IH    : in  instance of Global_CP,
+                                           Return_Val : out integer);
+
+      public service Navigate_Glob (Glob_IH    : in  instance of Global_CP,
+                                    Return_Val : out integer);
+
+      public service Unlink_Glob (Glob_IH    : in  instance of Global_CP,
+                                  Return_Val : out integer);
+
+    end terminator;
+    pragma key_letter ("Nav_Glob");
+
+
+    terminator Navigate_CCA is
+      public service Create_And_Link_CCA (CCA_IH     : in  instance of CCA_CP,
+                                          Return_Val : out integer); pragma cca ("");
+
+      public service Navigate_CCA (CCA_IH     : in  instance of CCA_CP,
+                                   Return_Val : out integer); pragma cca ("");
+
+      public service Unlink_CCA (CCA_IH     : in  instance of CCA_CP,
+                                 Return_Val : out integer); pragma cca ("");
+
+    end terminator;
+    pragma key_letter ("Nav_CCA");
+
+
+    terminator Add_One is
+      public service TCA_Add (Input_Int  : in  integer,
+                              Output_Int : out integer); pragma tca ("");
+
+      public service Global_Add (Input_Int  : in  integer,
+                                 Output_Int : out integer);
+
+      public service CCA_Add (Input_int  : in  integer,
+                              Output_Int : out integer); pragma cca ("");
+
+    end terminator;
+    pragma key_letter ("AO");
+
+
+  end domain;
+
+  domain RP is
+  end domain;
+
+  domain CP_Tags is
+  end domain;
+
+end project;

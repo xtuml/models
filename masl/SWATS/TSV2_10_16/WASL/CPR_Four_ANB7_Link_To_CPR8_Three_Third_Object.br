@@ -1,0 +1,61 @@
+define bridge  CPR_Four:ANB7:Link_To_CPR8_Three_Third_Object
+input \
+	Source_IH:An_Active_Object_IH 
+output \
+	The_Result:Boolean ,\
+	Linked_To:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+#Link an instance of Active object in CPR_Four to CPR_Three Third_Way
+
+Local_The_Result = FALSE
+The_Result = FALSE
+Linked_To = 0
+Local_Linked_To = 0
+
+
+
+
+$USE CPR_Three
+
+   {all_third} = find-all Third_Way
+
+   Local_Linked_To = countof {all_third}
+
+   $INLINE
+   fprintf (stderr, "CPR 8 Link called with %d\n", Local_Linked_To);
+   $ENDINLINE
+
+
+   a_third_object = find-one Third_Way
+
+   if a_third_object = UNDEFINED then
+
+      Local_The_Result = FALSE
+
+   else
+
+      link-counterpart Source_IH CPR8 a_third_object
+
+      Local_Linked_To = a_third_object.Empty_Promises
+
+      Local_The_Result = TRUE
+
+   $INLINE
+   fprintf (stderr, "Second CPR 8 Link called with %d\n", Local_Linked_To);
+   $ENDINLINE
+
+
+   endif
+
+$ENDUSE
+
+Linked_To = Local_Linked_To
+The_Result = Local_The_Result
+
+
+enddefine

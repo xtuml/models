@@ -1,0 +1,310 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("692a345e-bd36-4a61-8867-82a45ab23272",
+	'Object_LOOP',
+	4,
+	'objLOOP',
+	' This object verifies the ''LOOP'' statement.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("b3195d7b-e66b-49b3-a6ab-3e27acea6c63",
+	"692a345e-bd36-4a61-8867-82a45ab23272",
+	'do_loop_tests',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#------------------------------------------------------------------------#
+#
+# LOOP statement
+#
+# The ASL <loop> statement shall be supported
+# 1103-0000-01-0441
+#
+# The ASL <break> statement shall be supported
+# 1103-0000-01-0451
+#
+# The ASL <break ... if> statement shall be supported
+# 1103-0000-01-0452
+#
+#------------------------------------------------------------------------#
+
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+#Test 1 - LOOP with BREAKIF
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objLOOP", "Loop with BREAKIF"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0452"]
+
+   # Increment the attribute ResultA for an instance of Object_LOOP 5 times
+   Count = 0
+
+   loop
+      Count = Count + 1
+      an_instanceLOOP.ResultA = Count
+      breakif Count = 5
+   endloop
+
+   # Check the results
+   if Count != 5 then
+      [] = RPT3:Test_Failed["objLOOP", Test, Count]
+   else
+      an_instanceLOOP.ResultA = 10
+      [] = RPT2:Test_Passed["objLOOP", Test, an_instanceLOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - LOOP with BREAK, break after other ASL statements
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objLOOP", "BREAK after other statement"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0451"]
+
+   # Increment the attribute ResultA for an instance of Object_LOOP once
+   Count = 0
+   
+   loop
+      Count = Count + 1
+      an_instanceLOOP.ResultA = Count
+      break
+   endloop
+
+   # Check the results
+   if Count != 1 then
+      [] = RPT3:Test_Failed["objLOOP", Test, Count]
+   else
+      an_instanceLOOP.ResultA = 20
+      [] = RPT2:Test_Passed["objLOOP", Test, an_instanceLOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - LOOP with BREAK, break before other ASL statements
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objLOOP", "BREAK before other statements"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0451"]
+
+   # Attribute ResultA is NOT AFFECTED
+   Count = 0
+
+   loop
+      break
+      Count = Count + 1
+      an_instanceLOOP.ResultA = Count
+   endloop
+
+   # Until this point value written into ResultA should be 20
+   if (Count != 0 | an_instanceLOOP.ResultA != 20) then
+      [] = RPT3:Test_Failed["objLOOP", Test, Count]
+   else
+      an_instanceLOOP.ResultA = 30
+      [] = RPT2:Test_Passed["objLOOP", Test, an_instanceLOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4 - LOOP with BREAKIF inside another ASL statement
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objLOOP", "BREAK inside statement"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0452"]
+
+   # Increment the attribute ResultA for an instance of Object_LOOP 4 times
+   Count = 0
+
+   loop
+      Count = Count + 1
+      an_instanceLOOP.ResultA = Count  
+
+      if Count != 3 then
+         breakif Count > 2
+      endif
+
+   endloop
+
+   # Check the results
+   if Count != 4 then
+      [] = RPT3:Test_Failed["objLOOP", Test, Count]
+   else
+      an_instanceLOOP.ResultA = 40
+      [] = RPT2:Test_Passed["objLOOP", Test, an_instanceLOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5 - LOOP with BREAK inside another ASL statement
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objLOOP", "Inside ASL statement"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0451"]
+ 
+   # Increment the attribute ResultA for an instance of Object_LOOP 3 times
+   Count = 0
+
+   loop
+      Count = Count + 1
+      an_instanceLOOP.ResultA = Count
+
+      if Count = 3 then
+         break
+      endif
+
+   endloop
+
+   # Check the results
+   if Count != 3 then
+      [] = RPT3:Test_Failed["objLOOP", Test, Count]
+   else
+      an_instanceLOOP.ResultA = 50
+      [] = RPT2:Test_Passed["objLOOP", Test, an_instanceLOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#------------------------------------------------------------------------#
+# Test complete
+#------------------------------------------------------------------------#
+
+Final_Test = Test',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("6e550bab-95eb-472b-a24b-824690406a50",
+	"b3195d7b-e66b-49b3-a6ab-3e27acea6c63",
+	'an_instanceLOOP',
+	"9aefd152-00f1-4ef5-821c-be11a87fa83b",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("9aefd152-00f1-4ef5-821c-be11a87fa83b",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Object_LOOP>',
+	'',
+	'',
+	'../ASL_Mapping.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("3c3935e7-61ee-4566-b550-d1ff8737b4fc",
+	"b3195d7b-e66b-49b3-a6ab-3e27acea6c63",
+	'Test_Start',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"6e550bab-95eb-472b-a24b-824690406a50",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("6bf76692-ed77-4564-80e9-e3481b91b02a",
+	"b3195d7b-e66b-49b3-a6ab-3e27acea6c63",
+	'Final_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"3c3935e7-61ee-4566-b550-d1ff8737b4fc",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("23db5361-f0b6-4c55-bb19-9a5ff18bfc10",
+	"692a345e-bd36-4a61-8867-82a45ab23272");
+INSERT INTO O_BATTR
+	VALUES ("23db5361-f0b6-4c55-bb19-9a5ff18bfc10",
+	"692a345e-bd36-4a61-8867-82a45ab23272");
+INSERT INTO O_ATTR
+	VALUES ("23db5361-f0b6-4c55-bb19-9a5ff18bfc10",
+	"692a345e-bd36-4a61-8867-82a45ab23272",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceLOOP',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceLOOP',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("64c52972-e2f9-48fa-9909-9e8ef6ebc84c",
+	"692a345e-bd36-4a61-8867-82a45ab23272");
+INSERT INTO O_BATTR
+	VALUES ("64c52972-e2f9-48fa-9909-9e8ef6ebc84c",
+	"692a345e-bd36-4a61-8867-82a45ab23272");
+INSERT INTO O_ATTR
+	VALUES ("64c52972-e2f9-48fa-9909-9e8ef6ebc84c",
+	"692a345e-bd36-4a61-8867-82a45ab23272",
+	"23db5361-f0b6-4c55-bb19-9a5ff18bfc10",
+	'ResultA',
+	' This attribute is manipulated to indicated that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("bdabdfef-cc0b-4f38-829a-e8a748f84df6",
+	"692a345e-bd36-4a61-8867-82a45ab23272");
+INSERT INTO O_BATTR
+	VALUES ("bdabdfef-cc0b-4f38-829a-e8a748f84df6",
+	"692a345e-bd36-4a61-8867-82a45ab23272");
+INSERT INTO O_ATTR
+	VALUES ("bdabdfef-cc0b-4f38-829a-e8a748f84df6",
+	"692a345e-bd36-4a61-8867-82a45ab23272",
+	"64c52972-e2f9-48fa-9909-9e8ef6ebc84c",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"692a345e-bd36-4a61-8867-82a45ab23272");
+INSERT INTO O_OIDA
+	VALUES ("23db5361-f0b6-4c55-bb19-9a5ff18bfc10",
+	"692a345e-bd36-4a61-8867-82a45ab23272",
+	0,
+	'ReferenceLOOP');
+INSERT INTO O_ID
+	VALUES (1,
+	"692a345e-bd36-4a61-8867-82a45ab23272");
+INSERT INTO O_ID
+	VALUES (2,
+	"692a345e-bd36-4a61-8867-82a45ab23272");
+INSERT INTO PE_PE
+	VALUES ("692a345e-bd36-4a61-8867-82a45ab23272",
+	1,
+	"a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	'',
+	0,
+	'../ASL_Mapping.xtuml');

@@ -1,0 +1,28 @@
+define bridge  CT_Tags:Nav_Glob3:Unlink_Glob
+input \
+	Glob_IH:Global_CP_IH 
+output \
+	Return_Val:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+$USE CP_Tags
+
+   NewInst = Glob_IH -> CPR3.Global_CP
+
+   unlink-counterpart Glob_IH CPR3 NewInst
+
+   NewInst = Glob_IH -> CPR3.Global_CP
+
+$ENDUSE 
+
+   if NewInst = UNDEFINED then
+      Return_Val = 1
+   else
+      Return_Val = -10
+   endif
+
+enddefine

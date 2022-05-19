@@ -1,0 +1,32 @@
+define bridge  CT_Tags:Nav_Glob1:Create_And_Link_Glob
+input \
+	Glob_IH:Global_CP_IH 
+output \
+	Return_Val:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+$USE CP_Tags
+
+   # Call counterpart instance creation service in domain two.
+
+   [Dest] = CP_Tags3::Create_Global[]
+
+   link-counterpart Glob_IH CPR3 Dest
+
+$ENDUSE 
+
+
+   if Dest != UNDEFINED then
+      Return_Val = 1
+   else
+      Return_Val = -10
+   endif
+
+
+
+
+enddefine

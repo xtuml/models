@@ -1,0 +1,16 @@
+public service CPR_Four::A_Normal_Bridge~>Navigate_To_CPR_Three_Third_Object (The_IH              : in  instance of An_Active_Object,
+                                                                              Something_To_Return : out integer) is
+# Navigate from this instance to CPR_Three Third_Way object
+
+$USE CPR_Three
+
+   Third = The_IH -> CPR9.Third_Way
+
+   if Third != UNDEFINED then
+      Something_To_Return = Third.Tonys_Third_Way_ID
+   else
+      Something_To_Return = -1
+   endif
+
+$ENDUSE
+

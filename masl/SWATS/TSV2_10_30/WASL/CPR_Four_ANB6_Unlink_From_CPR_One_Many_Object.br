@@ -1,0 +1,51 @@
+define bridge  CPR_Four:ANB6:Unlink_From_CPR_One_Many_Object
+input \
+	Source_IH:An_Active_Object_IH 
+output \
+	Unlinked_OK:Boolean ,\
+	Unlinked_From:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+To_Unlink = 0
+Unlinked = FALSE
+
+$USE CPR_One
+
+   {Set_Of_Many} = Source_IH -> CPR10.Many_End_Of_CPR_Relationship
+
+   To_Unlink = countof {Set_Of_Many}
+
+   for An_Object in {Set_Of_Many} do
+
+      unlink-counterpart Source_IH CPR10 An_Object
+
+   endfor
+
+
+   # Navigate again to make sure that there are no linked instances
+
+   {New_Set_Of_Many} = Source_IH -> CPR10.Many_End_Of_CPR_Relationship
+
+   Any_Left = countof {New_Set_Of_Many}
+
+   if Any_Left = 0 then
+
+      Unlinked = TRUE
+
+   else
+
+      Unlinked = FALSE
+
+   endif
+
+$ENDUSE
+
+
+Unlinked_From = To_Unlink
+Unlinked_OK   = Unlinked
+
+enddefine

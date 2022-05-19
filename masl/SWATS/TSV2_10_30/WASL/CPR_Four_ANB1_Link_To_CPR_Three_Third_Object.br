@@ -1,0 +1,35 @@
+define bridge  CPR_Four:ANB1:Link_To_CPR_Three_Third_Object
+input \
+	An_Instance_To_Link:An_Active_Object_IH 
+output \
+	Linked_OK:Boolean 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+#Link an instance of Active object in CPR_Four to CPR_Three Third_Way
+
+$USE CPR_Three
+
+   a_third_object = find-one Third_Way
+
+   if a_third_object = UNDEFINED then
+
+      Linked_OK = FALSE
+
+   else
+
+      link-counterpart An_Instance_To_Link CPR9 a_third_object
+
+      Linked_OK = TRUE
+
+   endif
+
+$ENDUSE
+
+
+
+
+enddefine

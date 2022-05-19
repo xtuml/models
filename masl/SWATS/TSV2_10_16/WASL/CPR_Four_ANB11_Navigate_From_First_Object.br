@@ -1,0 +1,40 @@
+define bridge  CPR_Four:ANB11:Navigate_From_First_Object
+input \
+	Source_IH:First_Active_Object_IH 
+output \
+	Failed_To_Navigate:Boolean ,\
+	Attribute_Of_Navigated_Instance:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+# Attempt to navigate from this instance to a target instance in CPR_One
+
+The_Result = FALSE
+The_Attribute = -1
+
+$USE CPR_One
+
+   Target_IH = Source_IH -> CPR11.Many_End_Of_CPR_Relationship
+
+   if Target_IH = UNDEFINED then
+
+      The_Result    = TRUE
+      The_Attribute = 0
+
+   else
+
+      The_Result    = FALSE
+      The_Attribute = Target_IH.This_Instance_Number
+
+   endif
+
+$ENDUSE
+
+Failed_To_Navigate = The_Result
+Attribute_Of_Navigated_Instance = The_Attribute
+
+
+enddefine

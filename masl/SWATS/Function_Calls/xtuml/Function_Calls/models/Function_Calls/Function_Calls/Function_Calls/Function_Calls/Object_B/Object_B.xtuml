@@ -1,0 +1,223 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("f493a16f-7987-428b-be49-56307e06c61a",
+	'Object_B',
+	3,
+	'objB',
+	' This object verifies the complex function calls.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("0f215bf7-82dd-4316-989f-5ac058977331",
+	"f493a16f-7987-428b-be49-56307e06c61a",
+	'FunctionE',
+	' This function is used to call another function.
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'   if InputA = 1 then
+      tempA = 2
+      [IntegerA] = Function_Calls1::Domain_FunctionA[tempA]
+      OutputA = IntegerA
+   else
+      OutputA = 3
+   endif
+',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("9784ab66-09f2-4916-8cc6-f6b5de765468",
+	"0f215bf7-82dd-4316-989f-5ac058977331",
+	'InputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("f338b864-3017-4e78-8cec-c7c4bad34712",
+	"0f215bf7-82dd-4316-989f-5ac058977331",
+	'OutputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"9784ab66-09f2-4916-8cc6-f6b5de765468",
+	'');
+INSERT INTO O_TFR
+	VALUES ("73823139-ff8e-4397-ae85-c6fcc762c11c",
+	"f493a16f-7987-428b-be49-56307e06c61a",
+	'FunctionF',
+	' This function does not receive any input parameters.
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'   OutputA = 3
+',
+	3,
+	'',
+	"0f215bf7-82dd-4316-989f-5ac058977331",
+	2,
+	2);
+INSERT INTO O_TPARM
+	VALUES ("3b69e92b-8d7e-422a-ae3b-4ad31bb0fd16",
+	"73823139-ff8e-4397-ae85-c6fcc762c11c",
+	'OutputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("cfd131a3-6975-4f63-9208-d014f1955c0d",
+	"f493a16f-7987-428b-be49-56307e06c61a",
+	'FunctionG',
+	' This function receives an input parameter but does not return a parameter to the calling function.
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'   tempA = InputA
+   tempB = InputB
+   if tempA.ReferenceB != tempB then
+      generate objB1:Fault() to tempA
+   else
+      # tempC = tempA.ResultA + 10
+      tempC = 10
+      tempA.ResultA = tempC
+   endif
+',
+	3,
+	'',
+	"73823139-ff8e-4397-ae85-c6fcc762c11c",
+	2,
+	3);
+INSERT INTO O_TPARM
+	VALUES ("65890aa6-e732-487f-99f2-8e1f6f320edc",
+	"cfd131a3-6975-4f63-9208-d014f1955c0d",
+	'InputA',
+	"1b464120-2cee-41fe-9572-82a164df5c00",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("1b464120-2cee-41fe-9572-82a164df5c00",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Object_B>',
+	'',
+	'',
+	'../Function_Calls.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("005d06b6-9bac-4f84-8620-3dd684556402",
+	"cfd131a3-6975-4f63-9208-d014f1955c0d",
+	'InputB',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"65890aa6-e732-487f-99f2-8e1f6f320edc",
+	'');
+INSERT INTO O_TFR
+	VALUES ("c8113007-69ca-4b0b-b4f4-4b0d741b8899",
+	"f493a16f-7987-428b-be49-56307e06c61a",
+	'FunctionH',
+	' This function receives no parameters and returns no parameters.
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'   an_instance_B = find-one Object_B where ReferenceB = 9
+    # tempA = an_instance_B.ResultA + 10
+   tempA = 10
+   an_instance_B.ResultA = tempA
+',
+	3,
+	'',
+	"cfd131a3-6975-4f63-9208-d014f1955c0d",
+	2,
+	4);
+INSERT INTO O_NBATTR
+	VALUES ("f01d92ec-96ab-4118-b6f5-83eb876e0ab6",
+	"f493a16f-7987-428b-be49-56307e06c61a");
+INSERT INTO O_BATTR
+	VALUES ("f01d92ec-96ab-4118-b6f5-83eb876e0ab6",
+	"f493a16f-7987-428b-be49-56307e06c61a");
+INSERT INTO O_ATTR
+	VALUES ("f01d92ec-96ab-4118-b6f5-83eb876e0ab6",
+	"f493a16f-7987-428b-be49-56307e06c61a",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceB',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceB',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1b7f6f13-4b17-4a8c-8e52-6d844d269c73",
+	"f493a16f-7987-428b-be49-56307e06c61a");
+INSERT INTO O_BATTR
+	VALUES ("1b7f6f13-4b17-4a8c-8e52-6d844d269c73",
+	"f493a16f-7987-428b-be49-56307e06c61a");
+INSERT INTO O_ATTR
+	VALUES ("1b7f6f13-4b17-4a8c-8e52-6d844d269c73",
+	"f493a16f-7987-428b-be49-56307e06c61a",
+	"f01d92ec-96ab-4118-b6f5-83eb876e0ab6",
+	'ResultA',
+	' This attribute is manipulated to indicate that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("5de85d0a-1db5-4cb4-bfe5-2a71b66003e2",
+	"f493a16f-7987-428b-be49-56307e06c61a");
+INSERT INTO O_BATTR
+	VALUES ("5de85d0a-1db5-4cb4-bfe5-2a71b66003e2",
+	"f493a16f-7987-428b-be49-56307e06c61a");
+INSERT INTO O_ATTR
+	VALUES ("5de85d0a-1db5-4cb4-bfe5-2a71b66003e2",
+	"f493a16f-7987-428b-be49-56307e06c61a",
+	"1b7f6f13-4b17-4a8c-8e52-6d844d269c73",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"f493a16f-7987-428b-be49-56307e06c61a");
+INSERT INTO O_OIDA
+	VALUES ("f01d92ec-96ab-4118-b6f5-83eb876e0ab6",
+	"f493a16f-7987-428b-be49-56307e06c61a",
+	0,
+	'ReferenceB');
+INSERT INTO O_ID
+	VALUES (1,
+	"f493a16f-7987-428b-be49-56307e06c61a");
+INSERT INTO O_ID
+	VALUES (2,
+	"f493a16f-7987-428b-be49-56307e06c61a");
+INSERT INTO PE_PE
+	VALUES ("f493a16f-7987-428b-be49-56307e06c61a",
+	1,
+	"dca8fc41-0f99-4d26-8c9d-f7ee6615d788",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("dca8fc41-0f99-4d26-8c9d-f7ee6615d788",
+	"00000000-0000-0000-0000-000000000000",
+	"b52b4fed-0445-41e1-8e5b-971995c518cb",
+	'Function_Calls',
+	'',
+	0,
+	'../Function_Calls.xtuml');

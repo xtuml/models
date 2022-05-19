@@ -1,0 +1,372 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("54e79780-270f-4843-aa2f-9696b6e95abe",
+	'Nested_IF',
+	8,
+	'NstIF',
+	' This object verifies nested ''IF'' statements and multiple conditions that the statement must verify.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("281c5ecd-35fb-4c1e-9ad4-6724b5ea7f0c",
+	"54e79780-270f-4843-aa2f-9696b6e95abe",
+	'do_nested_if',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#------------------------------------------------------------------------#
+#
+# Nested IF statements, WITHOUT LOGICAL CONDITIONS
+#
+# The ASL <if ... else> statement shall be supported
+# 1103-0000-01-0422
+#
+# Logical conditions returning a Boolean data type of true or false shall
+# be supported
+# 1103-0000-01-0911
+#
+#------------------------------------------------------------------------#
+
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+# Test 1 - Nested IFs that don''t contain logic.
+#------------------------------------------------------------------------#
+
+  [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objNESTEDIF", "Do not contain logic"]
+
+   Has_Failed = FALSE
+
+   # Initialise temporary variables
+   tempA = 1
+   tempB = 2
+   tempC = 3
+   tempD = 4
+   tempE = 5
+
+   # Perform the test, 12 Nested IF statements
+   if tempA = 1 then 
+
+      if tempB > 1 then 
+
+         if tempC < 4 then 
+
+            if tempD <= 4 then 
+
+               if tempE >= 5 then 
+
+                  if tempA != 2 then 
+
+                     if tempB <= 3 then 
+
+                        if tempC >= 2 then 
+ 
+                           if tempD != 3 then 
+
+                              if tempE < 6 then 
+
+                                 if tempA > 0 then 
+
+                                    if tempB = 2 then 
+                                       an_instanceNESTED_IF.ResultA = 10
+                                    else
+                                       [] = RPT3:Test_Failed["objNESTEDIF", Test,-10]
+                                       Has_Failed = TRUE
+                                    endif
+                                 else
+                                    [] = RPT3:Test_Failed["objNESTEDIF", Test,-20]
+                                    Has_Failed = TRUE
+                                 endif
+                              else
+                                 [] = RPT3:Test_Failed["objNESTEDIF", Test,-30]
+                                 Has_Failed = TRUE
+                              endif
+                           else
+                              [] = RPT3:Test_Failed["objNESTEDIF", Test,-40]
+                              Has_Failed = TRUE
+                           endif
+                        else
+                           [] = RPT3:Test_Failed["objNESTEDIF", Test,-50]
+                           Has_Failed = TRUE
+                        endif
+                     else
+                        [] = RPT3:Test_Failed["objNESTEDIF", Test,-60]
+                        Has_Failed = TRUE
+                     endif
+                  else
+                     [] = RPT3:Test_Failed["objNESTEDIF", Test,-70]
+                     Has_Failed = TRUE
+                  endif
+               else
+                  [] = RPT3:Test_Failed["objNESTEDIF", Test,-80]
+                  Has_Failed = TRUE
+               endif
+            else
+               [] = RPT3:Test_Failed["objNESTEDIF", Test,-90]
+               Has_Failed = TRUE
+            endif
+         else
+            [] = RPT3:Test_Failed["objNESTEDIF", Test,-100]
+            Has_Failed = TRUE
+         endif
+      else
+         [] = RPT3:Test_Failed["objNESTEDIF", Test,-110]
+         Has_Failed = TRUE
+      endif
+   else
+      [] = RPT3:Test_Failed["objNESTEDIF", Test,-120]
+      Has_Failed = TRUE
+   endif
+
+   # Test complete
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDIF", Test,0]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - Nested IF statements, WITH LOGICAL CONDITIONS
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objNESTEDIF", "Contain logical and"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0913"]
+
+   Has_Failed = FALSE
+
+   # Initialise temporary variables
+   tempA = 1
+   tempB = 2
+   tempC = 3
+   tempD = 4
+   tempE = 5
+
+   # Perform the test
+   if ((tempA = 1) & (tempB != 1) & (tempC < 4) & (tempD > 3) & \
+      (tempE <= 5) & (tempA >= 1) & (tempB <= 3) & (tempC >= 1)) then 
+
+      if ((tempA = 1) & (tempB != 1) & (tempC < 4) & (tempD > 3) & \
+          (tempE <= 5) & (tempA >= 1) & (tempB <= 3) & (tempC >= 1)) then 
+      
+         an_instanceNESTED_IF.ResultA = 20
+      else
+         Has_Failed = TRUE
+         [] = RPT3:Test_Failed["objNESTEDIF", Test, -10]
+      endif
+
+   else
+      Has_Failed = TRUE
+      [] = RPT3:Test_Failed["objNESTEDIF", Test, -20]
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDIF", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - Nested IFs that contain logic, using |
+#------------------------------------------------------------------------#
+  
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objNESTEDIF", "Contain logical or"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0913"]
+
+   Has_Failed = FALSE
+
+   # Perform the test, 12 Nested IF statements
+   if ((tempA = 2) | (tempB != 2) | (tempC < 12) | (tempD > 3) | \
+      (tempE <= 5) | (tempA >= 7) | (tempB <= 1) | (tempC >= 2)) then 
+
+      if ((tempA = 1) | (tempB != 1) | (tempC < 4) | (tempD > 4) | \
+         (tempE <= 5) | (tempA >= 1) | (tempB <= 1) | (tempC >= 2)) then 
+
+         an_instanceNESTED_IF.ResultA = 30
+      else
+         [] = RPT3:Test_Failed["objNESTEDIF", Test,-10]
+         Has_Failed = TRUE
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objNESTEDIF", Test,-20]
+      Has_Failed = TRUE
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDIF", Test,0]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4 - Nested IFs that contain logic, mixed
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objNESTEDIF", "Contain logical mixed"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0911"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0913"]
+
+   Has_Failed = FALSE
+
+   # Perform the test, 12 Nested IF statements
+   if (((tempA = 1) & (tempB != 1)) | (tempC < 4) | (tempD > 3) | \
+      (tempE <= 5) | (tempA >= 1) | (tempB <= 1) | (tempC >= 2)) then 
+
+      if ((tempA = 1) | (((tempB != 1) & (tempC < 4)) | (tempD > 3)) | \
+         (tempE <= 5) | ((tempA >= 1) & (tempB <= 1) & (tempC >= 2))) then 
+
+         an_instanceNESTED_IF.ResultA = 40
+      else
+         [] = RPT3:Test_Failed["objNESTEDIF", Test,-10]
+         Has_Failed = TRUE
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objNESTEDIF", Test,-20]
+      Has_Failed = TRUE
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDIF", Test,0]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+
+Final_Test = Test
+',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("9f186057-891f-4156-9cd2-b0d3b8a5ce62",
+	"281c5ecd-35fb-4c1e-9ad4-6724b5ea7f0c",
+	'an_instanceNESTED_IF',
+	"1d3f5cbb-43cb-4921-8e34-90f7e91dcbfe",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("1d3f5cbb-43cb-4921-8e34-90f7e91dcbfe",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Nested_IF>',
+	'',
+	'',
+	'../ASL_Mapping.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("9f52d367-2f2c-4e92-8256-3f8f0252a469",
+	"281c5ecd-35fb-4c1e-9ad4-6724b5ea7f0c",
+	'Test_Start',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"9f186057-891f-4156-9cd2-b0d3b8a5ce62",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("be391a80-6970-4742-a48d-9fdfec91b742",
+	"281c5ecd-35fb-4c1e-9ad4-6724b5ea7f0c",
+	'Final_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"9f52d367-2f2c-4e92-8256-3f8f0252a469",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("825323dd-d599-40c8-9e2d-2a9162598601",
+	"54e79780-270f-4843-aa2f-9696b6e95abe");
+INSERT INTO O_BATTR
+	VALUES ("825323dd-d599-40c8-9e2d-2a9162598601",
+	"54e79780-270f-4843-aa2f-9696b6e95abe");
+INSERT INTO O_ATTR
+	VALUES ("825323dd-d599-40c8-9e2d-2a9162598601",
+	"54e79780-270f-4843-aa2f-9696b6e95abe",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceNstIF',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceNstIF',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("09bc766a-f363-4d0f-8101-1376b84084df",
+	"54e79780-270f-4843-aa2f-9696b6e95abe");
+INSERT INTO O_BATTR
+	VALUES ("09bc766a-f363-4d0f-8101-1376b84084df",
+	"54e79780-270f-4843-aa2f-9696b6e95abe");
+INSERT INTO O_ATTR
+	VALUES ("09bc766a-f363-4d0f-8101-1376b84084df",
+	"54e79780-270f-4843-aa2f-9696b6e95abe",
+	"825323dd-d599-40c8-9e2d-2a9162598601",
+	'ResultA',
+	' This attribute if manipulated to indicated that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("bbe73467-3d33-4f44-a2b5-45f35dc5824f",
+	"54e79780-270f-4843-aa2f-9696b6e95abe");
+INSERT INTO O_BATTR
+	VALUES ("bbe73467-3d33-4f44-a2b5-45f35dc5824f",
+	"54e79780-270f-4843-aa2f-9696b6e95abe");
+INSERT INTO O_ATTR
+	VALUES ("bbe73467-3d33-4f44-a2b5-45f35dc5824f",
+	"54e79780-270f-4843-aa2f-9696b6e95abe",
+	"09bc766a-f363-4d0f-8101-1376b84084df",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"54e79780-270f-4843-aa2f-9696b6e95abe");
+INSERT INTO O_OIDA
+	VALUES ("825323dd-d599-40c8-9e2d-2a9162598601",
+	"54e79780-270f-4843-aa2f-9696b6e95abe",
+	0,
+	'ReferenceNstIF');
+INSERT INTO O_ID
+	VALUES (1,
+	"54e79780-270f-4843-aa2f-9696b6e95abe");
+INSERT INTO O_ID
+	VALUES (2,
+	"54e79780-270f-4843-aa2f-9696b6e95abe");
+INSERT INTO PE_PE
+	VALUES ("54e79780-270f-4843-aa2f-9696b6e95abe",
+	1,
+	"a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	'',
+	0,
+	'../ASL_Mapping.xtuml');

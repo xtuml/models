@@ -1,0 +1,74 @@
+define bridge  DomainB:NAV4:Misc_Calls
+input \
+	Test:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+#------------------------------------------------------------------------#
+# Misc bridge.
+# Used for pulling any extra tests into one scenario called test.
+#------------------------------------------------------------------------#
+
+My_Report = find-one Report_Data
+
+if My_Report = UNDEFINED then
+
+   $USE RP
+      [] = RP7::Report_Run_Time_Error["Calling domain has not created Report_Data"]
+   $ENDUSE
+
+else
+
+   This_Domain_Number = My_Report.Reported_Domain_Number
+
+   Has_Passed = FALSE
+
+   Failure_Code = 0
+
+   $USE RP
+      [] = RP4::Test_Description[Test, "1241-0000-01-1102", "DomainB", "Bridge", "Super sub navigation", This_Domain_Number]
+   $ENDUSE
+
+   $USE DomainA
+      My_Super = find-one Domain_A_Object_Super where idSUPER = 1
+
+      if My_Super = UNDEFINED then
+         Failure_Code = -1
+      else
+         # Navigate to the sub type
+         The_Sub = My_Super -> R4.Domain_A_Object_SubA
+
+         if The_Sub = UNDEFINED then
+            Failure_Code = -1
+         else
+
+            if The_Sub.SubA_Attribute = 1 then
+               Has_Passed = TRUE
+            else
+               Failure_Code = -2
+            endif
+
+         endif
+ 
+      endif
+
+   $ENDUSE
+
+   $USE RP
+
+      if Has_Passed = FALSE then
+         [] = RP2::Test_Failed["Super sub navigation", Test, -1, This_Domain_Number]
+      else
+         [] = RP1::Test_Passed["Super sub navigation", Test,  0, This_Domain_Number]
+      endif
+
+   $ENDUSE
+
+endif
+
+
+enddefine

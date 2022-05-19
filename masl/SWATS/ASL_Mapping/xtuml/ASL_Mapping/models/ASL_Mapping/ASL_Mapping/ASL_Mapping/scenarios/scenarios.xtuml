@@ -1,0 +1,486 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("6e24e540-22cc-410b-996e-69f8d03f977e",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'scenarios',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("f1e1beef-1703-4b08-8f03-a8c73d8926b7",
+	112,
+	"6e24e540-22cc-410b-996e-69f8d03f977e",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'ASL_Mapping::ASL_Mapping::ASL_Mapping::scenarios');
+INSERT INTO DIM_DIA
+	VALUES ("f1e1beef-1703-4b08-8f03-a8c73d8926b7",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("1218f498-755d-44c6-bd98-7782cc71de28",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_ASL_Mapping_Tests',
+	' Perform ASL Mapping Tests
+',
+	'# ---------------------------------------------------------------------------
+# Peform IF tests
+# ---------------------------------------------------------------------------
+
+   Start_Test_Value = 1
+
+   [Start_Test_Value] = objIF1:do_if_test[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Perform FOR tests
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = objFOR1:do_for_test[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Perform LOOP tests
+# Create several instance of the Object_LOOP
+# ---------------------------------------------------------------------------
+
+   temp = 1
+   loop
+      newLOOP = create Object_LOOP with ReferenceLOOP = temp &\
+                                        ResultA       = 0 
+      temp = temp + 1
+      breakif temp > 5
+   endloop
+
+   # Invoke as an object based synch. serv.
+
+   # Start verification
+   an_instanceLOOP = find-one Object_LOOP
+
+   [Start_Test_Value] = objLOOP1:do_loop_tests[an_instanceLOOP, Start_Test_Value] 
+
+# ---------------------------------------------------------------------------
+# Perform SWITCH tests
+# ---------------------------------------------------------------------------
+
+  temp = 1
+
+   # Define ONE instance of Object_SWITCH
+   newSWITCH = create Object_SWITCH with ReferenceSWITCH = temp &\
+                                         IntegerAttr     = 1    &\
+                                         ResultA         = 0
+
+   # Define TWO instance of Object_SWITCH with IntegerAttr = 2
+   loop
+      newSWITCH = create Object_SWITCH with ReferenceSWITCH = temp &\
+                                            IntegerAttr    = 2     &\
+                                            ResultA        = 0
+      temp = temp + 1
+      breakif temp = 3
+   endloop
+
+   # Define THREE instance of Object_SWITCH with IntegerAttr = 3
+   loop
+      newSWITCH = create Object_SWITCH with ReferenceSWITCH = temp &\
+                                            IntegerAttr     = 3    &\
+                                            ResultA         = 0
+      temp = temp + 1
+      breakif temp = 6
+   endloop
+
+   # Define FOUR instance of Object_SWITCH with IntegerAttr = 4
+   # During TEST1 these instances of Object_SWITCH should not be affected.
+   loop
+      newSWITCH = create Object_SWITCH with ReferenceSWITCH = temp &\
+                                            IntegerAttr     = 4    &\
+                                            ResultA         = 0
+      temp = temp + 1
+      breakif temp = 10
+   endloop
+
+   [Start_Test_Value] = objSWITCH1:do_switch[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Perform ARITHMETIC/LOGIC tests
+# ---------------------------------------------------------------------------
+
+   # Define ONE instance of Object_LOGIC
+
+   # Date and Time attributes not supported by S/W architecture
+
+   #                                    TimeAttr = 14:45:34         &\
+   #                                    DateAttr = 1996.03.02       &\
+
+   an_instanceLOGIC = create Object_LOGIC with ReferenceLOGIC  = 1              &\
+                                               IntegerAttr     = 0              &\
+                                               EnumerationAttr = ''Richard''      &\
+                                               BooleanAttr     = TRUE           &\
+                                               ResultA         = 0              &\
+                                               TextAttr        = "Verification" &\
+                                               RealAttr        = 0.0
+
+   [Start_Test_Value] = objLOGIC1:do_arithmetic_and_logic[an_instanceLOGIC, Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Check that attribute assignment happens correctly in an object service
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = objLOGIC2:Perform_Attribute_Assignment[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# As above, but for an active object.
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = ASL_Mapping8::Create_Processor [Start_Test_Value,''CCA'']
+
+# ---------------------------------------------------------------------------
+# As above, but for an active object.
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = PROC1:Create_Processor [Start_Test_Value, ''TCA'']
+
+# ---------------------------------------------------------------------------
+# Perform NESTED tests
+# ---------------------------------------------------------------------------
+
+   # Create several instances of the Object_NESTED
+   temp = 1
+   loop
+      newNESTED = create Object_NESTED  with ReferenceNESTED = temp &\
+                                             ResultA         = 0    &\
+                                             ResultB         = 0
+      temp = temp + 1
+      # Tests performed on these instances would have pushed
+      # the final result out of range of defined base_integer_type
+      # range of +- 2000. So reduce number of instances to 4.
+      breakif temp > 5
+
+   endloop
+
+   [Start_Test_Value] = objNESTED1:do_nested_tests[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Perform NESTED IF tests
+# ---------------------------------------------------------------------------
+
+   # Nest IF statements, without logical conditions.
+   an_instanceNESTED_IF = create Nested_IF with ReferenceNstIF = 1 &\
+                                           ResultA             = 0 
+
+   # Start the test
+   [Start_Test_Value] = NstIF1:do_nested_if[an_instanceNESTED_IF, Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Perform NESTED FOR tests
+# ---------------------------------------------------------------------------
+
+   # Nest FOR statements.
+
+   Count = 1
+   loop
+      newNstFOR = create Nested_FOR with ReferenceNstFOR = Count &\
+                                         ResultA         = 0 
+      Count = Count + 1
+      breakif Count = 6
+   endloop
+
+   # Start the test
+   [Start_Test_Value] = NstFOR1:do_nested_for[Start_Test_Value] 
+
+# ---------------------------------------------------------------------------
+# Perform NESTED LOOP tests
+# ---------------------------------------------------------------------------
+
+   # Nest LOOP statements.
+
+   an_instanceNESTED_LOOP = create Nested_LOOP with ReferenceNstLOOP = 1 & \
+                                                    ResultA          = 0
+
+   # Start the test
+   [Start_Test_Value] = NstLOOP1:do_nested_loops[an_instanceNESTED_LOOP, Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Perform BASIC ASL tests
+# ---------------------------------------------------------------------------
+
+   # basic ASL operations by function call
+
+   # Start the test
+   [Start_Test_Value] = ASL_Mapping1::basic_asl_enumeration[Start_Test_Value]
+
+
+# ---------------------------------------------------------------------------
+# Divide by zero tests
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = ASL_Mapping2::basic_asl_divide_by_zero[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Overflow underflow tests
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = ASL_Mapping6::Test_Large_Numbers[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Check that attribute assignment happens correctly in a domain service
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = ASL_Mapping7::Perform_Attribute_Assignment[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Peramater order tests
+# ---------------------------------------------------------------------------
+
+   A_Small_Number = 1
+   [Start_Test_Value] = ASL_Mapping9::Check_Parameters[Start_Test_Value,A_Small_Number]
+
+# ---------------------------------------------------------------------------
+# Base types checks
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = ASL_Mapping10::Check_Base_Types[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Default values checks
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = ASL_Mapping11::Check_Defaults[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# AND and OR checks
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = ASL_Mapping12::And_Or_Checks[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+#  Comment checks
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = ASL_Mapping13::Comment_Checks[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Statment continuation checks
+# ---------------------------------------------------------------------------
+ 
+   [Start_Test_Value] = ASL_Mapping14::Check_Continuation[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Attribute default values checks
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = DV1:Default_Vals_In_Object[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Test identifying and non-identifying attributes
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = ASL_Mapping15::Check_Identifiers[Start_Test_Value]
+
+# ---------------------------------------------------------------------------
+# Test that Native C inserts work correctly
+# ---------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Start_Test_Value, "1103-0000-01-1211", "ASL Mapping", "Native inline code", "C Inline code"]
+   [] = RPT8:Specify_Requid[Start_Test_Value, "1101-0000-01-0109"]
+
+   [Host]= WAW1:What_Env[]
+
+   Test_Var = 0
+
+   $INLINE
+      Test_Var = 100;
+   $ENDINLINE   
+
+   if Host = "ISIM" then
+
+      if Test_Var = 100 then
+         [] = RPT2:Test_Passed["C Inline code", Start_Test_Value, 0]
+      else
+         [] = RPT3:Test_Failed["C Inline code", Start_Test_Value, Test_Var]
+      endif
+
+   else
+
+      if Test_Var = 0 then
+         [] = RPT2:Test_Passed["C Inline code", Start_Test_Value, 0]
+      else
+         [] = RPT3:Test_Failed["C Inline code", Start_Test_Value, Test_Var]
+      endif
+
+   endif
+
+   Start_Test_Value = Start_Test_Value + 1
+
+# ---------------------------------------------------------------------------
+# Test that native Ada code works correctly
+# ---------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Start_Test_Value, "1103-0000-01-1212", "ASL Mapping", "Native inline code", "Ada Inline code"]
+   [] = RPT8:Specify_Requid[Start_Test_Value, "1101-0000-01-0108"]
+
+   Test_Var = 0
+
+   #$ADA_INLINE
+   #   Test_Var := 100;
+   #$END_ADAINLINE
+
+    if Host = "ISIM" then
+
+      if Test_Var = 0 then
+         [] = RPT2:Test_Passed["C Inline code", Start_Test_Value, 0]
+      else
+         [] = RPT3:Test_Failed["C Inline code", Start_Test_Value, Test_Var]
+      endif
+
+   else
+
+      if Test_Var = 100 then
+         [] = RPT2:Test_Passed["Ada Inline code", Start_Test_Value, 0]
+      else
+         [] = RPT3:Test_Failed["Ada Inline code", Start_Test_Value, Test_Var]
+      endif
+
+   endif
+
+   Start_Test_Value = Start_Test_Value + 1
+
+# ---------------------------------------------------------------------------
+# Check that iteration over sets works correctly
+# ---------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Start_Test_Value, "1241-0000-01-1201", "ASL Mapping", "ASL Support", "Iteration over a set"]
+
+   objIf1  = create Object_IF with ReferenceIF = 100
+   objIf2  = create Object_IF with ReferenceIF = 101
+   objIf3  = create Object_IF with ReferenceIF = 102
+   objIf4  = create Object_IF with ReferenceIF = 103
+   objIf5  = create Object_IF with ReferenceIF = 104
+   objIf6  = create Object_IF with ReferenceIF = 105
+   objIf7  = create Object_IF with ReferenceIF = 106
+   objIf8  = create Object_IF with ReferenceIF = 107
+   objIf9  = create Object_IF with ReferenceIF = 108
+   objIf10 = create Object_IF with ReferenceIF = 109
+
+   {SetF} = find Object_IF where ReferenceIF >= 100
+
+   Total = countof {SetF}
+   Count = 0
+
+   for InstF in {SetF} do
+      Count = Count + 1
+   endfor
+
+   if Total = Count then
+      [] = RPT2:Test_Passed["Iteration over set", Start_Test_Value, 0]
+   else
+      [] = RPT3:Test_Failed["Iteration over set", Start_Test_Value, Count]
+   endif      
+
+   Start_Test_Value = Start_Test_Value + 1
+
+# ---------------------------------------------------------------------------
+# Create unique - This is proved by inspecting the relevant WACA generated 
+#                 code
+# ---------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Start_Test_Value, "1241-0000-01-1213", "ASL Mapping", "ASL Support", "Create Unique"]
+   [] = RPT5:Test_Text[Start_Test_Value, "Proved by inspection"]
+   [] = RPT2:Test_Passed["Create_Unique", Start_Test_Value, 0]
+
+   Start_Test_Value = Start_Test_Value + 1
+
+# ---------------------------------------------------------------------------
+# Perform tests on an unfeasibly large object
+# ---------------------------------------------------------------------------
+
+   [Start_Test_Value] = ASL_Mapping5::Test_Unfeasibly_Large_Object[Start_Test_Value]
+
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO PE_PE
+	VALUES ("1218f498-755d-44c6-bd98-7782cc71de28",
+	1,
+	"6e24e540-22cc-410b-996e-69f8d03f977e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("422548a2-c8d1-4f49-bba6-8d5de025a079",
+	"00000000-0000-0000-0000-000000000000",
+	'Start_ASL_Mapping_Tests',
+	' Start ASL Mapping Tests
+',
+	'[] = ASL_Mapping3::Create_Report_Data[]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	2);
+INSERT INTO PE_PE
+	VALUES ("422548a2-c8d1-4f49-bba6-8d5de025a079",
+	1,
+	"6e24e540-22cc-410b-996e-69f8d03f977e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("92cd2318-4a57-4fe2-82b3-f1ab4c2a1bf7",
+	"00000000-0000-0000-0000-000000000000",
+	'Finish_ASL_Mapping_Tests',
+	' Finish ASL Mapping Tests
+',
+	'# [] = ASL_Mapping4::Delete_Report_Data[]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO PE_PE
+	VALUES ("92cd2318-4a57-4fe2-82b3-f1ab4c2a1bf7",
+	1,
+	"6e24e540-22cc-410b-996e-69f8d03f977e",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("6e24e540-22cc-410b-996e-69f8d03f977e",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"71252b37-f904-4359-8dbf-2450e6897d06",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("71252b37-f904-4359-8dbf-2450e6897d06",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'ASL_Mapping',
+	' This domain deals with the basic ASL process modelling. It does not require the creation of instances, relationships or event mechanisms. It does require and use domain & object based functions.
+',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'ASL_Mapping',
+	'../ASL_Mapping.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	1,
+	'../../../ASL_Mapping.xtuml');

@@ -1,0 +1,1682 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	"2119c7e8-f189-471f-8242-057e62acd949",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("92b0c168-9569-4ec2-8674-8b000a397f76",
+	112,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'UDT::UDT::UDT::functions');
+INSERT INTO DIM_DIA
+	VALUES ("92b0c168-9569-4ec2-8674-8b000a397f76",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("38572315-5996-47fb-b8ba-552744f36399",
+	"00000000-0000-0000-0000-000000000000",
+	'Check_The_Integers',
+	'',
+	'# type subset_1_of_integer is          integer range      1 .. 10
+# type subset_minus_1_of_integer is    integer range    -10 .. -1
+# type subset_zero_of_integer is       integer range    -10 .. 10
+# type one_to_maximum_integer is       integer range      1 .. 32767
+# type zero_to_maximum_integer is      integer range      0 .. 32767
+# type minus_one_to_maximum_integer is integer range     -1 .. 32767
+# type minimum_to_minus_one_integer is integer range -32768 .. -1
+# type minimum_to_zero_integer is      integer range -32768 .. 0
+# type minimum_to_maximum_integer is   integer range -32768 .. 32767
+
+
+#First_Integer  is Subset_1_of_Integer
+#Second_Integer is Subset_minus_1_Of_Integer
+#Third_Integer  is Subset_Zero_of_Integer
+#Fourth_Integer is one_to_maximum_integer
+#Fifth_Integer  is minimum_to_minus_one_integer
+#Sixth_Integer  is minimum_to_maximum_integer
+
+   [] = RPT1:Start_Test[Test, The_Requid, "User Defined Types", "Integer assignment", Testing_For]
+
+   # Set up some negative numbers. I-SIM doesn''t like assigning a magic 
+   # negative number to an attribute. 
+
+   # These are defined by I-SIM as of base type.
+   Minus_Ten    = -10
+   Minus_Max    = -32768
+   Minus_One    = -1
+   Plus_One     =  1
+   Plus_Ten     =  10
+   Plus_Max     =  32767
+   Big_Fat_Zero =  0
+
+   Test_Has_Passed  = FALSE
+   Failure_Code = Big_Fat_Zero
+
+#--------------------------------------------------------------------------
+# Test 1 - This test shall prove that assignment using magic numbers is 
+#          handled correctly. 
+#          Note that these magic numbers are base type, and assinging them 
+#          to an attribute of UDT is what we are really looking at here.
+#--------------------------------------------------------------------------
+
+   if Test = 1 then
+
+      [] = RPT9:Specify_A_Requid[Test, "1103-0000-01-0311"]
+
+      The_Object = create Object_With_Integers with Unique_Identifier = Test
+
+      The_Object.First_Integer  = 1
+      The_Object.Second_Integer = Minus_Ten 
+      The_Object.Third_Integer  = 10
+      The_Object.Fourth_Integer = 1
+      The_Object.Fifth_Integer  = Minus_Max
+      The_Object.Sixth_Integer  = 0
+
+      if The_Object.First_Integer  = Plus_One   then
+      
+         if The_Object.Second_Integer = Minus_Ten  then
+
+            if The_Object.Third_Integer  = Plus_Ten   then
+
+               if The_Object.Fourth_Integer = Plus_One   then
+
+                  if The_Object.Fifth_Integer  = Minus_Max  then
+
+                     if The_Object.Sixth_Integer  = Big_Fat_Zero then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-60)
+                     endif
+
+                  else
+                     Failure_Code = (-50)
+                  endif
+
+               else
+                  Failure_Code = (-40)
+               endif
+
+            else
+               Failure_Code = (-30)
+            endif
+
+         else
+            Failure_Code = (-20)
+         endif
+
+      else
+          Failure_Code = (-10)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 - This test shall prove that assignment using magic numbers is 
+#          handled correctly. 
+#          Note that these magic numbers are base type, and assinging them 
+#          to an attribute of UDT is what we are really looking at here.
+#--------------------------------------------------------------------------
+
+   if Test = 2 then
+
+      [] = RPT9:Specify_A_Requid[Test, "1103-0000-01-0311"]
+
+      The_Object = create Object_With_Integers with Unique_Identifier = Test
+
+      The_Object.First_Integer  = Plus_One
+      The_Object.Second_Integer = Minus_Ten
+      The_Object.Third_Integer  = Plus_Ten
+      The_Object.Fourth_Integer = Plus_One
+      The_Object.Fifth_Integer  = Minus_Max
+      The_Object.Sixth_Integer  = Big_Fat_Zero
+
+      if (The_Object.First_Integer  = Plus_One) then
+
+         if (The_Object.Second_Integer = Minus_Ten) then
+
+            if (The_Object.Third_Integer  = Plus_Ten) then
+
+               if (The_Object.Fourth_Integer = Plus_One) then
+
+                  if (The_Object.Fifth_Integer  = Minus_Max) then
+
+                     if (The_Object.Sixth_Integer  = Big_Fat_Zero) then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-60)
+                     endif
+
+                  else
+                     Failure_Code = (-50)
+                  endif
+
+               else
+                  Failure_Code = (-40)
+               endif
+
+            else
+               Failure_Code = (-30)
+            endif
+
+         else
+            Failure_Code = (-20)
+         endif
+
+      else
+         Failure_Code = (-10)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - This test shall prove that assignment using data objects is 
+#          handled correctly.  Values set to minimum allowable for range.
+#--------------------------------------------------------------------------
+
+   if Test = 3 then
+
+      [] = RPT9:Specify_A_Requid[Test, "1103-0000-01-0311"]
+
+      The_Object = create Object_With_Integers with Unique_Identifier = Test
+
+      The_Object.First_Integer  = Plus_Ten
+      The_Object.Second_Integer = Minus_One
+      The_Object.Third_Integer  = Plus_Ten
+      The_Object.Fourth_Integer = Plus_Max
+      The_Object.Fifth_Integer  = Minus_One
+      The_Object.Sixth_Integer  = Plus_Max
+
+      if (The_Object.First_Integer  = Plus_Ten) then
+
+         if (The_Object.Second_Integer = Minus_One) then
+
+            if (The_Object.Third_Integer  = Plus_Ten) then
+
+               if (The_Object.Fourth_Integer = Plus_Max) then
+
+                  if (The_Object.Fifth_Integer  = Minus_One) then
+
+                     if (The_Object.Sixth_Integer  = Plus_Max) then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-60)
+                     endif
+
+                  else
+                     Failure_Code = (-50)
+                  endif
+
+               else
+                  Failure_Code = (-40)
+               endif
+
+            else
+               Failure_Code = (-30)
+            endif
+
+         else
+            Failure_Code = (-20)
+         endif
+
+      else
+          Failure_Code = (-10)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4 - This test shall prove that assignment using data objects is 
+#          handled correctly.  Values set to maximum allowable for range.
+#--------------------------------------------------------------------------
+
+   if Test = 4 then
+
+      [] = RPT9:Specify_A_Requid[Test, "1103-0000-01-0311"]
+
+      The_Object = create Object_With_Integers with Unique_Identifier = Test
+
+      The_Object.First_Integer  = Plus_One
+      The_Object.Second_Integer = Minus_Ten
+      The_Object.Third_Integer  = Minus_Ten
+      The_Object.Fourth_Integer = Plus_One
+      The_Object.Fifth_Integer  = Minus_Max
+      The_Object.Sixth_Integer  = Minus_Max
+
+      if (The_Object.First_Integer = Plus_One) then
+
+         if (The_Object.Second_Integer = Minus_Ten) then
+
+            if (The_Object.Third_Integer = Minus_Ten) then
+
+               if (The_Object.Fourth_Integer = Plus_One) then
+
+                  if (The_Object.Fifth_Integer = Minus_Max) then
+
+                     if (The_Object.Sixth_Integer = Minus_Max)  then
+                        Test_Has_Passed = TRUE
+                     else
+                        Failure_Code = (-60)
+                     endif
+
+                  else
+                     Failure_Code = (-50)
+                  endif
+
+               else
+                  Failure_Code = (-40)
+               endif
+
+            else
+               Failure_Code = (-30)
+            endif
+
+         else
+            Failure_Code = (-20)
+         endif
+
+      else
+         Failure_Code = (-10)
+      endif
+
+      delete The_Object
+
+   endif
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5 - This test shall prove that I_SIM allows root data types to be 
+#          used for User Defined Types, and in fact totally ignores data
+#          typing.
+#          Also note that the local data objects are UDT type, and reused 
+#          by each assingment. This will cause problems for WACA as first 
+#          use for a local object should defined it as being the same type 
+#          as the attribute that is being copied into it. Subsequent copies 
+#          should cause grief.
+#          This test has been modified to use unique local data and results 
+#          identifiers. Non-unique data (ie. reused local objects) has been 
+#          shown to cause a constraint error exception to be generated in 
+#          ADA. This is not a surprise.
+#--------------------------------------------------------------------------
+
+   if Test = 5 then
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Plus_One
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_Max
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+ 
+      The_Object2.First_Integer  = Plus_One
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Minus_Ten
+      The_Object2.Fourth_Integer = Plus_One
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # 1 + 1 in range 1..10 result 2 in range
+      Local_Integer1 = The_Object1.First_Integer  
+      Local_Integer2 = The_Object2.First_Integer
+      Result_Integer12 = Local_Integer1 + Local_Integer2
+      Result_Object.First_Integer  =  Result_Integer12
+
+      # -10 - -1 in range -10 .. -1 result -9 inside range
+      Local_Integer3 = The_Object1.Second_Integer  
+      Local_Integer4 = The_Object2.Second_Integer
+      Result_Integer34 = Local_Integer3 - Local_Integer4
+      Result_Object.Second_Integer  =  Result_Integer34
+
+      # -10 - -10 in range -10 .. 10 result 0 inside range
+      Local_Integer5 = The_Object1.Third_Integer  
+      Local_Integer6 = The_Object2.Third_Integer
+      Result_Integer56 = Local_Integer5 - Local_Integer6
+      Result_Object.Third_Integer  =  Result_Integer56
+  
+      # 32767 - 1 in range 1..32767 result 32766 inside range
+      Local_Integer7 = The_Object1.Fourth_Integer  
+      Local_Integer8 = The_Object2.Fourth_Integer
+      Result_Integer78 = Local_Integer7 - Local_Integer8
+      Result_Object.Fourth_Integer  =  Result_Integer78
+
+      # -32768 - -1 in range -32768 .. -1 result -32767 inside range
+      Local_Integer9 = The_Object1.Fifth_Integer  
+      Local_Integer10 = The_Object2.Fifth_Integer
+      Result_Integer910 = Local_Integer9 - Local_Integer10
+      Result_Object.Fifth_Integer  =  Result_Integer910
+ 
+      # -32768 + 32767 in range -32768 .. 32767 result -1 inside range
+      Local_Integer11 = The_Object1.Sixth_Integer  
+      Local_Integer12 = The_Object2.Sixth_Integer
+      Result_Integer1112 = Local_Integer11 + Local_Integer12
+      Result_Object.Sixth_Integer  =  Result_Integer1112
+  
+      # Non unique binary operands
+      if Result_Integer12 = Result_Object.First_Integer  &\
+         Result_Integer34 = Result_Object.Second_Integer &\
+         Result_Integer56 = Result_Object.Third_Integer  &\
+         Result_Integer78 = Result_Object.Fourth_Integer &\
+         Result_Integer910 = Result_Object.Fifth_Integer  &\
+         Result_Integer1112 = Result_Object.Sixth_Integer then
+
+         Test_Has_Passed = TRUE
+         Failure_Code    = 0
+      else
+         Failure_Code = -10
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+# Test 6 - This test proves that individual local data objects must be used 
+#          for different data types.
+#          This test is the same as test 5, with one important difference. 
+#          The local data objects are not reused, thus first use should  
+#          specify them as of the attribute''s type, and no conflict should 
+#          arise.
+#--------------------------------------------------------------------------
+
+   if Test = 6 then
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Plus_One
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_Max
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+
+      The_Object2.First_Integer  = Plus_One
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Minus_Ten
+      The_Object2.Fourth_Integer = Plus_One
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # 1 + 1 in range 1..10 result 2 in range
+      Local_Integer61 = The_Object1.First_Integer  
+      Local_Integer62 = The_Object2.First_Integer
+      Result_Integer612 = Local_Integer61 + Local_Integer62
+      Result_Object.First_Integer = Result_Integer612
+
+      # -10 - -1 in range -10 .. -1 result -9 inside range
+      Local_Integer64 = The_Object1.Second_Integer  
+      Local_Integer65 = The_Object2.Second_Integer
+      Result_Integer645 = Local_Integer64 - Local_Integer65
+      Result_Object.Second_Integer = Result_Integer645
+
+      # -10 - -10 in range -10 .. 10 result 0 inside range
+      Local_Integer67 = The_Object1.Third_Integer  
+      Local_Integer68 = The_Object2.Third_Integer
+      Result_Integer678 = Local_Integer67 - Local_Integer68
+      Result_Object.Third_Integer  =  Result_Integer678
+
+      # 32767 - 1 in range 1..32767 result 32766 inside range
+      Local_Integer610 = The_Object1.Fourth_Integer  
+      Local_Integer611 = The_Object2.Fourth_Integer
+      Result_Integer61011 = Local_Integer610 - Local_Integer611
+      Result_Object.Fourth_Integer  =  Result_Integer61011
+
+      # -32768 - -1 in range -32768 .. -1 result -32767 inside range
+      Local_Integer613 = The_Object1.Fifth_Integer  
+      Local_Integer614= The_Object2.Fifth_Integer
+      Result_Integer61314 = Local_Integer613 - Local_Integer614
+      Result_Object.Fifth_Integer  =  Result_Integer61314
+
+      # -32768 + 32767 in range -32768 .. 32767 result -1 inside range
+      Local_Integer616 = The_Object1.Sixth_Integer  
+      Local_Integer617 = The_Object2.Sixth_Integer
+      Result_Integer61617 = Local_Integer616 + Local_Integer617
+      Result_Object.Sixth_Integer  =  Result_Integer61617
+
+      # Unique result_integer''s and binary operands
+      if Result_Integer612 = Result_Object.First_Integer  &\
+         Result_Integer645 = Result_Object.Second_Integer &\
+         Result_Integer678 = Result_Object.Third_Integer  &\
+         Result_Integer61011 = Result_Object.Fourth_Integer &\
+         Result_Integer61314 = Result_Object.Fifth_Integer  &\
+         Result_Integer61617 = Result_Object.Sixth_Integer then
+
+         Test_Has_Passed = TRUE
+         Failure_Code    = 0
+      else
+         Failure_Code = -10
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 6
+
+#--------------------------------------------------------------------------
+# Test 7 - This test proves that individual local data objects must be used 
+#          for different datatypes.
+#
+#          Add max values to minimum values.
+#
+#          This test shall cause some attributes to go out of range on
+#          assignment to the results object attributes.
+#
+#          It is unclear what is to happen about this. 
+#
+#          It highlights an important distinction between I-SIM and WACA. 
+#          UDT ARE TOTALLY UNSUPPORTED IN I-SIM, and trying to test for 
+#          them here will give erroneous results.
+#
+#          ADA will not allow this test to procede without exceptions being
+#          generated. Therefore these tests have been commented out for the
+#          moment.
+#--------------------------------------------------------------------------
+
+   if Test = 7 then
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Plus_One
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_One
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+
+      The_Object2.First_Integer  = Plus_Ten
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Plus_Ten
+      The_Object2.Fourth_Integer = Plus_Max
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # REUSE local_integer1 and 2 with different types. Should cause the Code Gen to 
+      # issue a warning.
+  
+      # 1 + 10 in range 1 .. 10 result 11 outside range
+      #   Local_Integer1 = The_Object1.First_Integer  
+      #   Local_Integer2 = The_Object2.First_Integer
+      #   Result_Integer3 = Local_Integer1 + Local_Integer2
+      #   Result_Object.First_Integer  =  Result_Integer3
+
+      # -10 - 1 in rnage -10 .. -1 result -11 outide range
+      #   Local_Integer1 = The_Object1.Second_Integer  
+      #   Local_Integer2 = The_Object2.Second_Integer
+      #   Result_Integer3 = Local_Integer1 - Local_Integer2
+      #   Result_Object.Second_Integer  =  Result_Integer3
+
+      # -10 - 1 in rnage -10 .. -1 result -11 outide range
+      #   Local_Integer4 = The_Object1.Second_Integer  
+      #   Local_Integer5 = The_Object2.Second_Integer
+      #   Result_Integer6 = Local_Integer4 - Local_Integer5
+      #   Result_Object.Second_Integer  =  Result_Integer6
+
+      # -10 - 10 in range -10 .. 10 result -20 outside range
+      #   Local_Integer7 = The_Object1.Third_Integer  
+      #   Local_Integer8 = The_Object2.Third_Integer
+      #   Result_Integer9 = Local_Integer7 - Local_Integer8
+      #   Result_Object.Third_Integer  =  Result_Integer9
+
+      # 1 + 32767 in range 1 .. 32767 result 32768 outside range
+      #   Local_Integer10 = The_Object1.Fourth_Integer  
+      #   Local_Integer11 = The_Object2.Fourth_Integer
+      #   Result_Integer12 = Local_Integer10 + Local_Integer11
+      #   Result_Object.Fourth_Integer  =  Result_Integer12
+
+      # -32768 + -1 in range -32768 .. 0 result  -32769 outside range
+      #   Local_Integer13 = The_Object1.Fifth_Integer  
+      #   Local_Integer14= The_Object2.Fifth_Integer
+      #   Result_Integer15 = Local_Integer13 + Local_Integer14
+      #   Result_Object.Fifth_Integer  =  Result_Integer15
+
+      # -32768 - 32767 in range -32768 .. 32767 result 65535 outside range
+      #   Local_Integer16 = The_Object1.Sixth_Integer  
+      #   Local_Integer17 = The_Object2.Sixth_Integer
+      #   Result_Integer18 = Local_Integer16 + Local_Integer17
+      #   Result_Object.Sixth_Integer  =  Result_Integer18
+   
+      # Unique result_integer''s and binary operands
+
+      #   if Result_Integer3 = Result_Object.First_Integer  then 
+      # &\
+      #      Result_Integer6 = Result_Object.Second_Integer &\
+      #      Result_Integer9 = Result_Object.Third_Integer  &\
+      #      Result_Integer12 = Result_Object.Fourth_Integer &\
+      #      Result_Integer15 = Result_Object.Fifth_Integer  &\
+      #      Result_Integer18 = Result_Object.Sixth_Integer then
+
+      #      Test_Has_Passed = TRUE
+
+      #  else
+
+      #      Failure_Code = -1
+
+      #   endif
+
+
+    Failure_Code = 0
+
+       delete The_Object1
+       delete The_Object2
+
+    endif
+
+# End Test 7
+
+#--------------------------------------------------------------------------
+# End of tests
+#--------------------------------------------------------------------------
+
+   if Test_Has_Passed then
+      [] = RPT2:Test_Passed[Testing_For, Test, Failure_Code]
+   else
+
+      if Failure_Code = Big_Fat_Zero then
+         [] = RPT4:Test_Unsupported[Test]
+      else
+         [] = RPT3:Test_Failed[Testing_For, Test, Failure_Code]
+      endif
+
+   endif
+
+   if Result_Object != UNDEFINED then
+      delete Result_Object
+   endif
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO S_SPARM
+	VALUES ("836360a3-f8bd-4792-b89f-8fc4d96cdd42",
+	"38572315-5996-47fb-b8ba-552744f36399",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("2c540c03-2faf-44c3-8087-31e23e53dfea",
+	"38572315-5996-47fb-b8ba-552744f36399",
+	'Testing_For',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"836360a3-f8bd-4792-b89f-8fc4d96cdd42",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("f29bbf88-2e0f-4fdd-805d-821b6967e3c6",
+	"38572315-5996-47fb-b8ba-552744f36399",
+	'The_Requid',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"2c540c03-2faf-44c3-8087-31e23e53dfea",
+	'');
+INSERT INTO PE_PE
+	VALUES ("38572315-5996-47fb-b8ba-552744f36399",
+	1,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("8a50a0c9-2635-4613-8bea-7f5905ffe59b",
+	"00000000-0000-0000-0000-000000000000",
+	'Create_Report_Data',
+	'',
+	'# Find out of there already is one of these.
+# It is not inconceivable that a report object still exists from a previous run.
+# Report objects are not deleted at the end of a run, as certain events may
+# still be en-queued.
+
+old_report = find-one Report_Data
+
+if old_report != UNDEFINED then
+   delete old_report
+endif
+
+My_Report = create unique Report_Data with Reported_Domain_Number = 0
+
+[] = RPT6:Domain_Test_Start["User Defined Types"]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO PE_PE
+	VALUES ("8a50a0c9-2635-4613-8bea-7f5905ffe59b",
+	1,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("3cb04196-25e2-46d7-8d25-845a76f398f3",
+	"00000000-0000-0000-0000-000000000000",
+	'Delete_Report_Data',
+	'',
+	'[] = RPT7:Domain_Test_Finished["User Defined Types"]
+
+# Do not delete the Report_Data object, as there may be still events in
+# the queue.',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	4);
+INSERT INTO PE_PE
+	VALUES ("3cb04196-25e2-46d7-8d25-845a76f398f3",
+	1,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("038ecb8f-396e-4179-832e-ccb6da5eefa5",
+	"00000000-0000-0000-0000-000000000000",
+	'Create_New_Test_Data_Object_And_Link_It',
+	'',
+	'if New_Set = TRUE then
+
+   Returned_IH = create Test_Data with The_Test_Number = This_Test_Number & Testing_For_What = Testing_For
+
+   Returned_Test_Number = This_Test_Number + 1
+
+else
+
+   # Add new Test_Data object onto Previous_IH
+
+   local_Test_Data_IH = create Test_Data with The_Test_Number = This_Test_Number & \
+      Testing_For_What = Testing_For
+
+   link Previous_IH R1."Has_a" local_Test_Data_IH
+
+   if Final_Entry = TRUE then
+
+      # Final entry shall cause the return of the first set in the sequence.
+
+      loop
+
+         # Bail out of the operation will return an undefined IH
+         Local_Previous_IH = local_Test_Data_IH -> R1."Has_one".Test_Data
+
+         breakif Local_Previous_IH = UNDEFINED
+
+         local_Test_Data_IH = local_Test_Data_IH -> R1."Has_one".Test_Data
+
+      endloop
+
+   endif
+
+   Returned_IH = local_Test_Data_IH
+   Returned_Test_Number = This_Test_Number + 1
+
+endif
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	6);
+INSERT INTO S_SPARM
+	VALUES ("91887f75-d1ed-456a-8b31-91e407992af6",
+	"038ecb8f-396e-4179-832e-ccb6da5eefa5",
+	'New_Set',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("1f6c7773-d165-424e-961a-8b7a0f54cad6",
+	"038ecb8f-396e-4179-832e-ccb6da5eefa5",
+	'Previous_IH',
+	"e2a5335f-a6b8-4ea9-bc7e-61678e1054f2",
+	0,
+	'',
+	"91887f75-d1ed-456a-8b31-91e407992af6",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("e2a5335f-a6b8-4ea9-bc7e-61678e1054f2",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Test_Data>',
+	'',
+	'',
+	'../UDT/UDT.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("ba6872e4-d172-4d16-98ac-39434ae4896a",
+	"038ecb8f-396e-4179-832e-ccb6da5eefa5",
+	'This_Test_Number',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"1f6c7773-d165-424e-961a-8b7a0f54cad6",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("346d125d-5d50-4f8a-ad40-b072d776772c",
+	"038ecb8f-396e-4179-832e-ccb6da5eefa5",
+	'Testing_For',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"ba6872e4-d172-4d16-98ac-39434ae4896a",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("b7cade4c-e8a0-48ef-8c9b-d91609757fe1",
+	"038ecb8f-396e-4179-832e-ccb6da5eefa5",
+	'Final_Entry',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"346d125d-5d50-4f8a-ad40-b072d776772c",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("8b773f19-73d7-4fd9-ad19-1d7362a93be7",
+	"038ecb8f-396e-4179-832e-ccb6da5eefa5",
+	'Returned_IH',
+	"e2a5335f-a6b8-4ea9-bc7e-61678e1054f2",
+	1,
+	'',
+	"b7cade4c-e8a0-48ef-8c9b-d91609757fe1",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("b799a510-a58c-48f7-ae52-18a19bc90d98",
+	"038ecb8f-396e-4179-832e-ccb6da5eefa5",
+	'Returned_Test_Number',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"8b773f19-73d7-4fd9-ad19-1d7362a93be7",
+	'');
+INSERT INTO PE_PE
+	VALUES ("038ecb8f-396e-4179-832e-ccb6da5eefa5",
+	1,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ff0bcebe-ffcd-4458-8bde-0334fec49580",
+	"00000000-0000-0000-0000-000000000000",
+	'Tidy_Up_Test_Data',
+	' Remove a set of reflexive objects.
+',
+	'Final_Test = find-one Final_Test_Data
+
+Last_Test = 0
+
+loop
+
+   {All_Test_Data} = find-all Test_Data
+
+   number_in_set = countof {All_Test_Data}
+
+   breakif number_in_set = 0
+
+   for Single_Instance in {All_Test_Data} do
+
+      Next_Instance = Single_Instance -> R1."Has_a".Test_Data
+
+      if Next_Instance = UNDEFINED then
+
+         # we have reached the last entry, check to see if it is the first also
+
+         if number_in_set > 1 then
+            Previous_Entry = Single_Instance -> R1."Has_one".Test_Data
+#            unlink Previous_Entry R1."Has_a" Single_Instance
+            unlink Single_Instance R1."Has_one" Previous_Entry 
+         endif
+
+         if Last_Test <= Single_Instance.The_Test_Number then
+
+            Last_Test = Single_Instance.The_Test_Number
+
+         endif
+
+         delete Single_Instance
+
+     endif
+
+   endfor
+
+endloop
+
+if Final_Test.Final_Test_Number <= Last_Test then
+
+   Last_Test = Last_Test + 1
+
+   Final_Test.Final_Test_Number = Last_Test
+
+endif',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	7);
+INSERT INTO PE_PE
+	VALUES ("ff0bcebe-ffcd-4458-8bde-0334fec49580",
+	1,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("139be621-dfb9-462c-87f0-99c948b4d678",
+	"00000000-0000-0000-0000-000000000000",
+	'Check_The_Predeclared_Integers',
+	' As service 1, but predeclaring the local
+ variables rather than allowing first use to defined type.
+',
+	'# type subset_1_of_integer is          integer range      1 .. 10
+# type subset_minus_1_of_integer is    integer range    -10 .. -1
+# type subset_zero_of_integer is       integer range    -10 .. 10
+# type one_to_maximum_integer is       integer range      1 .. 32767
+# type zero_to_maximum_integer is      integer range      0 .. 32767
+# type minus_one_to_maximum_integer is integer range     -1 .. 32767
+# type minimum_to_minus_one_integer is integer range -32768 .. -1
+# type minimum_to_zero_integer is      integer range -32768 .. 0
+# type minimum_to_maximum_integer is   integer range -32768 .. 32767
+
+#Local_Integer1  : Subset_1_Of_Integer
+#Local_Integer3 : Subset_Minus_1_Of_Integer
+#Local_Integer5  : Subset_Zero_Of_Integer
+#Local_Integer7 : One_To_Maximum_Integer
+#Local_Integer9  : Minimum_To_Minus_One_Integer
+#Local_Integer11  : Minimum_To_Maximum_Integer
+
+
+[] = RPT1:Start_Test[Test, "Null Requid", "User Defined Types", "Predeclared Integer assignment", Testing_For]
+
+
+# Set up some negative numbers. I-SIM doesn''t like assigning a magic 
+# negative number to an attribute. 
+
+# These are defined by I-SIM as of base type.
+
+Minus_Ten    = -10
+Minus_Max    = -32768
+Minus_One    = -1
+Plus_One     =  1
+Plus_Ten     =  10
+Plus_Max     =  32767
+Big_Fat_Zero =  0
+
+Test_Has_Passed  = FALSE
+Failure_Code = Big_Fat_Zero
+
+#--------------------------------------------------------------------------
+# Test 15
+#--------------------------------------------------------------------------
+
+   if Test = 15 then
+
+      # This test shall prove that I_SIM allows root data types to be used for
+      # User Defined Types, and in fact totally ignores data typing.
+
+      # Also note that the local data objects are UDT type, and reused by each
+      # assingment. This will cause problems for WACA as first use for a local
+      # object should defined it as being the same type as the attribute that
+      # is being copied into it. Subsequent copies should cause grief.
+
+      # This test has been modified to use unique local data and results identifiers.
+      # Non-unique data (ie. reused local objects) has been shown to cause a constraint 
+      # error exception to be generated in ADA. This is not a surprise.
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Plus_One
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_Max
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+
+      The_Object2.First_Integer  = Plus_One
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Minus_Ten
+      The_Object2.Fourth_Integer = Plus_One
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # 1 + 1 in range 1..10 result 2 in range
+      Local_Integer1 = The_Object1.Second_Integer  
+      Local_Integer2 = The_Object1.First_Integer
+      Result_Integer12 = Local_Integer1 + Local_Integer2
+      Result_Object.First_Integer  =  Result_Integer12
+
+      # -10 - -1 in range -10 .. -1 result -9 inside range
+      Local_Integer3 = The_Object1.Second_Integer  
+      Local_Integer4 = The_Object2.Second_Integer
+      Result_Integer34 = Local_Integer3 - Local_Integer4
+      Result_Object.Second_Integer  =  Result_Integer34
+
+      # -10 - -10 in range -10 .. 10 result 0 inside range
+      Local_Integer5 = The_Object1.Third_Integer  
+      Local_Integer6 = The_Object2.Third_Integer
+      Result_Integer56 = Local_Integer5 - Local_Integer6
+      Result_Object.Third_Integer  =  Result_Integer56
+
+      # 32767 - 1 in range 1..32767 result 32766 inside range
+      Local_Integer7 = The_Object1.Fourth_Integer  
+      Local_Integer8 = The_Object2.Fourth_Integer
+      Result_Integer78 = Local_Integer7 - Local_Integer8
+      Result_Object.Fourth_Integer  =  Result_Integer78
+
+      # -32768 - -1 in range -32768 .. -1 result -32767 inside range
+      Local_Integer9 = The_Object1.Fifth_Integer  
+      Local_Integer10 = The_Object2.Fifth_Integer
+      Result_Integer910 = Local_Integer9 - Local_Integer10
+      Result_Object.Fifth_Integer  =  Result_Integer910
+
+      # -32768 + 32767 in range -32768 .. 32767 result -1 inside range
+      Local_Integer11 = The_Object1.Sixth_Integer  
+      Local_Integer12 = The_Object2.Sixth_Integer
+      Result_Integer1112 = Local_Integer11 + Local_Integer12
+      Result_Object.Sixth_Integer  =  Result_Integer1112
+
+      # Non unique binary operands
+      if Result_Integer12 = Result_Object.First_Integer  &\
+         Result_Integer34 = Result_Object.Second_Integer &\
+         Result_Integer56 = Result_Object.Third_Integer  &\
+         Result_Integer78 = Result_Object.Fourth_Integer &\
+         Result_Integer910 = Result_Object.Fifth_Integer  &\
+         Result_Integer1112 = Result_Object.Sixth_Integer then
+
+          Test_Has_Passed = TRUE
+
+      else
+        Failure_Code = -1
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 15
+
+#--------------------------------------------------------------------------
+# Test 16
+#--------------------------------------------------------------------------
+
+   if Test = 16 then
+
+      # This test proves that individual local data objects must be used for different data
+      # types.
+
+      # This test is the same as test 5, with one important difference. The local
+      # data objects are not reused, thus first use should specify them as 
+      # of the attribute''s type, and no conflict should arise.
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Plus_One
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_Max
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+
+      The_Object2.First_Integer  = Plus_One
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Minus_Ten
+      The_Object2.Fourth_Integer = Plus_One
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # 1 + 1 in range 1..10 result 2 in range
+      Local_Integer61 = The_Object1.First_Integer  
+      Local_Integer62 = The_Object2.First_Integer
+      Result_Integer612 = Local_Integer61 + Local_Integer62
+      Result_Object.First_Integer = Result_Integer612
+
+      # -10 - -1 in range -10 .. -1 result -9 inside range
+      Local_Integer64 = The_Object1.Second_Integer  
+      Local_Integer65 = The_Object2.Second_Integer
+      Result_Integer645 = Local_Integer64 - Local_Integer65
+      Result_Object.Second_Integer = Result_Integer645
+
+      # -10 - -10 in range -10 .. 10 result 0 inside range
+      Local_Integer67 = The_Object1.Third_Integer  
+      Local_Integer68 = The_Object2.Third_Integer
+      Result_Integer678 = Local_Integer67 - Local_Integer68
+      Result_Object.Third_Integer  =  Result_Integer678
+
+      # 32767 - 1 in range 1..32767 result 32766 inside range
+      Local_Integer610 = The_Object1.Fourth_Integer  
+      Local_Integer611 = The_Object2.Fourth_Integer
+      Result_Integer61011 = Local_Integer610 - Local_Integer611
+      Result_Object.Fourth_Integer  =  Result_Integer61011
+
+      # -32768 - -1 in range -32768 .. -1 result -32767 inside range
+      Local_Integer613 = The_Object1.Fifth_Integer  
+      Local_Integer614= The_Object2.Fifth_Integer
+      Result_Integer61314 = Local_Integer613 - Local_Integer614
+      Result_Object.Fifth_Integer  =  Result_Integer61314
+
+      # -32768 + 32767 in range -32768 .. 32767 result -1 inside range
+      Local_Integer616 = The_Object1.Sixth_Integer  
+      Local_Integer617 = The_Object2.Sixth_Integer
+      Result_Integer61617 = Local_Integer616 + Local_Integer617
+      Result_Object.Sixth_Integer  =  Result_Integer61617
+
+      # Unique result_integer''s and binary operands
+
+      if Result_Integer612   = Result_Object.First_Integer  &\
+         Result_Integer645   = Result_Object.Second_Integer &\
+         Result_Integer678   = Result_Object.Third_Integer  &\
+         Result_Integer61011 = Result_Object.Fourth_Integer &\
+         Result_Integer61314 = Result_Object.Fifth_Integer  &\
+         Result_Integer61617 = Result_Object.Sixth_Integer then
+
+         Test_Has_Passed = TRUE
+      else
+         Failure_Code = -1
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 16
+
+#--------------------------------------------------------------------------
+# Test 17
+#--------------------------------------------------------------------------
+
+   if Test = 17 then
+
+      # This test proves that individual local data objects must be used for different data
+      # types.
+
+      # Add max values to minimum values.
+
+      # This test shall cause some attributes to go out of range on assignment
+      # to the results object attributes.
+
+      # Ada will raise a constraint error under these conditions.
+
+      # It highlights an important distinction between I-SIM and WACA. 
+      # UDT ARE TOTALLY UNSUPPORTED IN I-SIM, and trying to test for them here
+      # will give erroneous results.
+
+      # ADA will not allow this test to procede without exceptions being generated. Therefore
+      # these tests have been commented out for the moment.
+
+      Other_Id  = Test + 1
+      Result_ID = Other_Id + 1
+
+      The_Object1 = create Object_With_Integers with Unique_Identifier = Test
+      The_Object2 = create Object_With_Integers with Unique_Identifier = Other_Id
+      Result_Object = create Object_With_Integers with Unique_Identifier = Other_Id
+
+      The_Object1.First_Integer  = Minus_Ten
+
+      The_Object1.Second_Integer = Minus_Ten
+      The_Object1.Third_Integer  = Minus_Ten
+      The_Object1.Fourth_Integer = Plus_One
+      The_Object1.Fifth_Integer  = Minus_Max
+      The_Object1.Sixth_Integer  = Minus_Max
+
+      The_Object2.First_Integer  = Plus_Ten
+  
+      The_Object2.Second_Integer = Minus_One
+      The_Object2.Third_Integer  = Plus_Ten
+      The_Object2.Fourth_Integer = Plus_Max
+      The_Object2.Fifth_Integer  = Minus_One
+      The_Object2.Sixth_Integer  = Plus_Max
+
+      # REUSE local_integer5 predeclared as subset_zero_of_integer and assign an attribute of
+      # The_Object_1.First_Integer (which is of type Subset_1_Of_Integer)
+
+      # and local_integer_2 defined from first use as Subset_1_Of_Integer
+
+      # Adding the two should make Result_Integer_3 of type subset_zero_of_integer
+
+      # Assignment of The_Object1.First_Integer to Local_Integer5 should cause the Code Gen 
+      # to issue a warning.
+
+      # -10 + 10 in range -10 .. 10 result 0 inside range
+      Local_Integer5 = The_Object1.First_Integer  
+      Local_Integer2 = The_Object2.First_Integer
+      Result_Integer3 = Local_Integer5 + Local_Integer2
+      Result_Object.First_Integer  =  Result_Integer3
+
+      if Result_Integer3 = Big_Fat_Zero then 
+         Test_Has_Passed = TRUE
+      else
+         Test_Has_Passed = FALSE
+         Failure_Code = Result_Integer3
+      endif
+
+      delete The_Object1
+      delete The_Object2
+
+   endif
+
+# End Test 17
+
+#--------------------------------------------------------------------------
+# Report the results.
+#--------------------------------------------------------------------------
+
+if Test_Has_Passed then
+
+   if Result_Object = UNDEFINED then
+      [] = RPT2:Test_Passed[Testing_For, Test, Failure_Code]
+   else
+      # This should cause problems for WACA, as the results attributes
+      # are all of different types.
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.First_Integer]
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.Second_Integer]
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.Third_Integer]
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.Fourth_Integer]
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.Fifth_Integer]
+      [] = RPT2:Test_Passed[Testing_For, Test, Result_Object.Sixth_Integer]
+   endif
+
+else
+
+   if Failure_Code = Big_Fat_Zero then
+      [] = RPT4:Test_Unsupported[Test]
+   else
+      [] = RPT3:Test_Failed[Testing_For, Test, Failure_Code]
+   endif
+
+endif
+
+if Result_Object != UNDEFINED then
+   delete Result_Object
+endif
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	2);
+INSERT INTO S_SPARM
+	VALUES ("037208b7-c6c9-45a1-8c72-27b4533dd9ce",
+	"139be621-dfb9-462c-87f0-99c948b4d678",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("abc78cfc-0f47-4912-821b-c13ff9236f1f",
+	"139be621-dfb9-462c-87f0-99c948b4d678",
+	'Testing_For',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"037208b7-c6c9-45a1-8c72-27b4533dd9ce",
+	'');
+INSERT INTO PE_PE
+	VALUES ("139be621-dfb9-462c-87f0-99c948b4d678",
+	1,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("96c67551-c79a-4c1f-9d77-c853fb22d414",
+	"00000000-0000-0000-0000-000000000000",
+	'Report_No_UDT_Used',
+	' Returns the number of user defined types used and confims that the reported number is actually the number used.
+',
+	'Reported_No_UDT = 0
+Expected_No_UDT = 0
+Test_Has_Passed = FALSE
+
+[] = RPT1:Start_Test[Test, "Null Requid", "User Defined Types", "Reported No UDTs", Testing_For]
+
+if Test = 15 then
+   [env] = BTF3:Get_Environment_Type[]
+
+   if env = 1 then
+      [] = RPT4:Test_Unsupported[Test]   
+   else
+
+      #$ADA_INLINE
+         #with Ada.Text_IO;
+         #
+         #with UDT_Domain_Types;
+         #Reported_No_UDT := UDT_Domain_Types.Types_And_Subtypes_Count;
+         #Ada.Text_IO.Put_Line("No UDTs in User_Defined_Types = " & integer''image(integer(Reported_No_UDT)));
+      #$END_ADAINLINE
+
+      $INLINE
+         fprintf(stderr,"Checking number of UDTs \n");
+      $ENDINLINE
+
+      Expected_No_UDT = 16
+
+      if Reported_No_UDT = Expected_No_UDT then
+         [] = RPT2:Test_Passed[Testing_For, Test, Reported_No_UDT]
+      else 
+         [] = RPT3:Test_Failed[Testing_For, Test, Expected_No_UDT]
+      endif
+
+   endif
+
+endif',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	5);
+INSERT INTO S_SPARM
+	VALUES ("915979ca-17c9-4e7b-b661-e7f07b35b6b2",
+	"96c67551-c79a-4c1f-9d77-c853fb22d414",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("fa18f064-ecb9-4174-b0b5-cdea702c7e19",
+	"96c67551-c79a-4c1f-9d77-c853fb22d414",
+	'Testing_For',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"915979ca-17c9-4e7b-b661-e7f07b35b6b2",
+	'');
+INSERT INTO PE_PE
+	VALUES ("96c67551-c79a-4c1f-9d77-c853fb22d414",
+	1,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("d9bae40b-ad61-4842-8e70-d212266511d1",
+	"00000000-0000-0000-0000-000000000000",
+	'Create_An_Active_Object',
+	'',
+	'Returned_IH = create An_Active_Object with The_Test_Number = This_Test & Why = ''Not_Tested'' & Current_State = ''Idle''
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	8);
+INSERT INTO S_SPARM
+	VALUES ("4afddb9b-6770-4b7d-9461-929f67c872ae",
+	"d9bae40b-ad61-4842-8e70-d212266511d1",
+	'This_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("8cf584d9-5ccf-4f3f-a726-8be9c17881ca",
+	"d9bae40b-ad61-4842-8e70-d212266511d1",
+	'Returned_IH',
+	"40a82f69-216c-4067-b0fe-b717c8010575",
+	1,
+	'',
+	"4afddb9b-6770-4b7d-9461-929f67c872ae",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("40a82f69-216c-4067-b0fe-b717c8010575",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<An_Active_Object>',
+	'',
+	'',
+	'../UDT/UDT.xtuml');
+INSERT INTO PE_PE
+	VALUES ("d9bae40b-ad61-4842-8e70-d212266511d1",
+	1,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b6d4d921-7ddb-4efc-8c36-c77afede695f",
+	"00000000-0000-0000-0000-000000000000",
+	'Create_A_Timer_Enumeration',
+	'',
+	'The_Return_Value = -1
+
+if The_Timer_Enum  = ''MILLISECOND'' then
+   The_Return_Value = 1
+endif   
+
+if The_Timer_Enum = ''SECOND'' then
+   The_Return_Value = 2  
+endif',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	9);
+INSERT INTO S_SPARM
+	VALUES ("342946fb-0247-449a-af0e-dae80b89a26f",
+	"b6d4d921-7ddb-4efc-8c36-c77afede695f",
+	'The_Timer_Enum',
+	"d85fc67e-0794-48b7-8bb0-3b269fd4d0de",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d85fc67e-0794-48b7-8bb0-3b269fd4d0de",
+	"00000000-0000-0000-0000-000000000000",
+	'Time_Unit',
+	' Used to define the granularity of Time
+',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("08dcc30f-015d-4e34-886e-d258a1ed1c27",
+	"b6d4d921-7ddb-4efc-8c36-c77afede695f",
+	'The_Return_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"342946fb-0247-449a-af0e-dae80b89a26f",
+	'');
+INSERT INTO PE_PE
+	VALUES ("b6d4d921-7ddb-4efc-8c36-c77afede695f",
+	1,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("198b6f25-a6f5-475f-9b19-f34e8152c580",
+	"00000000-0000-0000-0000-000000000000",
+	'Check_The_Enumerators',
+	'',
+	'#----------------------------------------------------------------------
+# Test 1 - Check to ensure that attributes for an object can accept
+#          enumerated user defined types
+#----------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0113", "User Defined Types", "Enumerator assignment", "Sub ranges of enumerators"]
+   [] = RPT9:Specify_A_Requid[Test, "1241-0000-01-1214"]
+
+   Defunct_Boy_Band = First_Enum_Input
+   Bad_Boy_Band     = Second_Enum_Input
+   Zero_Degrees     = Third_Enum_Input
+   
+   InstEnum = create Object_With_Enumerators with theID       = Test             &\
+                                                  First_Enum  = Defunct_Boy_Band &\
+                                                  Second_Enum = Bad_Boy_Band     &\
+                                                  Third_Enum  = Zero_Degrees
+
+   Has_Failed   = TRUE
+   Failure_Code = 0
+
+   if InstEnum.First_Enum = ''Five'' then
+
+      if InstEnum.Second_Enum = ''Blue'' then
+
+         if InstEnum.Third_Enum = ''Freezing'' then
+            Has_Failed = FALSE
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -10
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -30
+   endif
+
+   delete InstEnum
+
+   # Report the results.
+  
+   if not Has_Failed then
+      [] = RPT2:Test_Passed["Check Enumerators", Test, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["Check Enumerators", Test, Failure_Code]
+   endif
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	10);
+INSERT INTO S_SPARM
+	VALUES ("7268cff1-3a0b-48a4-92d2-265ed3c89216",
+	"198b6f25-a6f5-475f-9b19-f34e8152c580",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("082a7f0e-49dc-4298-b81e-5e85cca67252",
+	"198b6f25-a6f5-475f-9b19-f34e8152c580",
+	'First_Enum_Input',
+	"ab9eb7f1-598d-4e09-9e4a-d69cd67d335d",
+	0,
+	'',
+	"7268cff1-3a0b-48a4-92d2-265ed3c89216",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("ab9eb7f1-598d-4e09-9e4a-d69cd67d335d",
+	"00000000-0000-0000-0000-000000000000",
+	'Simple_Enumeration_Type',
+	'',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("bd65e849-0e3d-432e-81f5-75560fb056f2",
+	"198b6f25-a6f5-475f-9b19-f34e8152c580",
+	'Second_Enum_Input',
+	"db81cc1e-ff73-4eef-be4c-342281a530f4",
+	0,
+	'',
+	"082a7f0e-49dc-4298-b81e-5e85cca67252",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("db81cc1e-ff73-4eef-be4c-342281a530f4",
+	"00000000-0000-0000-0000-000000000000",
+	'Colour_Type',
+	'',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("f66c7ab5-0103-4636-a150-772c900f8b81",
+	"198b6f25-a6f5-475f-9b19-f34e8152c580",
+	'Third_Enum_Input',
+	"eb663966-ec3a-445a-96dc-06858bdae3df",
+	0,
+	'',
+	"bd65e849-0e3d-432e-81f5-75560fb056f2",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("eb663966-ec3a-445a-96dc-06858bdae3df",
+	"00000000-0000-0000-0000-000000000000",
+	'Temp_Type',
+	'',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO PE_PE
+	VALUES ("198b6f25-a6f5-475f-9b19-f34e8152c580",
+	1,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("a26401ef-4896-4357-929e-ceea06b42a3c",
+	"00000000-0000-0000-0000-000000000000",
+	'Check_Constraint',
+	'',
+	'# --------------------------------------------------------------------------------------
+# Check that when a switch statment uses a contrained type default is not required as
+# all elements of the constrained type should be accounted for
+# --------------------------------------------------------------------------------------
+
+[] = RPT1:Start_Test[Test, "Null Requid", "User Defined Types", "Check Constraint", "Check Constraint in Switch"]
+
+Has_Failed   = TRUE
+Failure_Code = -10
+Count = 0
+
+
+   The_Object = create Object_With_Integers with Unique_Identifier = Test
+
+   The_Object.First_Integer = 4
+
+switch The_Object.First_Integer
+
+   case 1
+      Count = 1
+
+   case 2
+      Count = 2
+
+   case 3
+      Count = 3
+
+   case 4
+      Count = 4
+      Has_Failed = FALSE
+
+   case 5
+      Count = 5
+
+   case 6
+      Count = 6
+
+   case 7
+      Count = 7
+
+   case 8
+      Count = 8
+
+   case 9
+      Count = 9
+
+   case 10
+      Count = 10
+
+endswitch
+
+delete The_Object
+
+if not Has_Failed then
+   [] = RPT2:Test_Passed["Check Constraint in Switch", Test, Count]
+else
+   [] = RPT3:Test_Failed["Check Constraint in Switch", Test, Count]
+endif
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	11);
+INSERT INTO S_SPARM
+	VALUES ("ccc1715f-f0c5-4bfd-b001-7950862b9a6a",
+	"a26401ef-4896-4357-929e-ceea06b42a3c",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("a26401ef-4896-4357-929e-ceea06b42a3c",
+	1,
+	"e286305f-b8da-42e3-8939-2fc9e78175bd",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("e286305f-b8da-42e3-8939-2fc9e78175bd",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"b9839f47-f314-4a56-b703-7bf939700a33",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("b9839f47-f314-4a56-b703-7bf939700a33",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'UDT',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'User_Defined_Types',
+	'../UDT.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("2119c7e8-f189-471f-8242-057e62acd949",
+	'UDT',
+	1,
+	'../../../UDT.xtuml');

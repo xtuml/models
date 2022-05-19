@@ -1,0 +1,44 @@
+define bridge  CPR_Two:S_OBJ_TWO6:Link_To_Object_One
+input \
+	The_IH:Object_Two_IH 
+output \
+	Object_One_Return_ID:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+$INLINE
+fprintf(stderr,"CPR_TWO link Object two to CPR_One Object_One ID ");
+$ENDINLINE
+
+
+$USE CPR_One
+
+   An_Object_One_IH = find-one Object_One
+
+   if An_Object_One_IH != UNDEFINED then
+
+      link-counterpart The_IH CPR1 An_Object_One_IH
+      link-counterpart The_IH CPR2 An_Object_One_IH
+
+      Local_Object_One_Return_ID = An_Object_One_IH.Object_One_Identifier
+
+   else
+
+
+      Local_Object_One_Return_ID = 0
+
+   endif
+
+$ENDUSE
+
+$INLINE
+fprintf(stderr,"is %d \n", Local_Object_One_Return_ID);
+$ENDINLINE
+
+
+Object_One_Return_ID = Local_Object_One_Return_ID
+
+enddefine

@@ -1,0 +1,27 @@
+define bridge  CPR_Two:NB2:Create_A_Many
+input \
+	Instance_Number:Base_Integer_Type 
+output \
+	This_Many_ID:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+# Call the target domain and cause the creation of an object instance to link to an instance in this domain.
+
+# Define some locals.
+Returned_Identifier = 0
+Input_Number        = Instance_Number
+
+$USE CPR_One
+
+   [Returned_Identifier] = CPR_One4::Create_One_Of_Many[Input_Number]
+
+$ENDUSE
+
+
+This_Many_ID = Returned_Identifier
+
+enddefine

@@ -1,0 +1,29 @@
+define bridge  CPR_Four:ANB3:Navigate_To_CPR_One_Many_Object
+input \
+	The_IH:An_Active_Object_IH 
+output \
+	How_Many_Found:Base_Integer_Type 
+
+#$DESCRIPTION
+Navigate to CPR One Many End object and return how many there
+are currently linked.
+#$END_DESCRIPTION
+
+
+
+# Navigate from this instance to CPR_One and see how many objects
+# are linked in.
+
+How_Many = 0
+
+$USE CPR_One
+
+   {Set_Of_Many} = The_IH -> CPR10.Many_End_Of_CPR_Relationship
+
+   How_Many = countof {Set_Of_Many}
+
+$ENDUSE
+
+How_Many_Found = How_Many
+
+enddefine

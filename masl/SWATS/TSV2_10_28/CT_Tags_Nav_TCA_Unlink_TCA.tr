@@ -1,0 +1,19 @@
+public service CT_Tags::Navigate_TCA~>Unlink_TCA (TCA_IH     : in  instance of TCA_CP,
+                                                  Return_Val : out integer) is
+$USE CP_Tags
+
+   NewInst = TCA_IH -> CPR1.TCA_CP
+
+   unlink-counterpart TCA_IH CPR1 NewInst
+
+   NewInst = TCA_IH -> CPR1.TCA_CP
+
+$ENDUSE 
+
+   if NewInst = UNDEFINED then
+      Return_Val = 1
+   else
+      Return_Val = -10
+   endif
+
+

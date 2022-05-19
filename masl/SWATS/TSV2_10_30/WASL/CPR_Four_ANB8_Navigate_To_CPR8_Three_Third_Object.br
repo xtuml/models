@@ -1,0 +1,41 @@
+define bridge  CPR_Four:ANB8:Navigate_To_CPR8_Three_Third_Object
+input \
+	Source_IH:An_Active_Object_IH 
+output \
+	Navigation_Result:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+# Navigate from this instance to CPR_Three Third_Way object
+
+Local_Value = -1
+Local_Value1 = -1
+Local_Value2 = -1
+
+$USE CPR_Three
+
+   Third = Source_IH -> CPR8.Third_Way
+
+   if Third != UNDEFINED then
+
+      Local_Value1 = Third.Tonys_Third_Way_ID
+      Local_Value2 = Third.Empty_Promises
+
+      Local_Value = Local_Value1 + Local_Value2
+
+   else
+
+      Local_Value = -1
+
+   endif
+
+$ENDUSE
+
+Navigation_Result = Local_Value
+
+
+
+enddefine

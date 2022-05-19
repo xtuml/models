@@ -1,0 +1,1072 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	"a542633e-604c-4486-989d-46d152510a33",
+	'scenarios',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("fa7f6d31-da07-44c5-9b33-1eb0218dc629",
+	112,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'TAGS::TAGS::TAGS::scenarios');
+INSERT INTO DIM_DIA
+	VALUES ("fa7f6d31-da07-44c5-9b33-1eb0218dc629",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("219077b1-1005-4a4d-affd-9693be1df6dd",
+	"00000000-0000-0000-0000-000000000000",
+	'Start_TAGGED_Tests',
+	' Start_TAGGED_Tests
+',
+	'[] = TAGS2::Create_Report_Data[]
+
+# Find the test details. If they already exist, it''s because an external
+# created them, and this must be an I-SIM environment.
+
+my_test = find-one Test_Data
+
+if my_test = UNDEFINED then
+
+   # Stick a ''C'' insert here to attempt to set an attribute.
+   Test_Details = create Test_Data with Number = 0 & Environment = ''WACA'' & Current_State = ''Idle''
+
+   # Use this function to set the test number to 1 using a ''C'' insert
+   # if it returns set, then this must be I-SIM else WACA.
+   [Test_Details] = TAGS6::Set_Environment[Test_Details]
+
+   if Test_Details.Number = 1 then
+      Test_Details.Environment = ''ISIM''
+   else
+      Test_Details.Number      = 1
+      Test_Details.Environment = ''WACA''
+   endif
+ 
+endif',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO PE_PE
+	VALUES ("219077b1-1005-4a4d-affd-9693be1df6dd",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("fbf7ff3a-0cd6-4c5f-ac8e-7516676833a6",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Passive_Static_Tests',
+	' Perform_Passive_Static_Tests
+',
+	'my_test = find-one Test_Data
+
+Test      = my_test.Number
+Last_Test = 0
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [Last_Test] = TAGS1::Perform_Unique_Passive_Singleton_Object_Tests[Test]
+
+   Test = Last_Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [Last_Test]  = TAGS4::Perform_Passive_Singleton_Object_Tests[Test]
+
+   Test = Last_Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+
+my_test.Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	2);
+INSERT INTO PE_PE
+	VALUES ("fbf7ff3a-0cd6-4c5f-ac8e-7516676833a6",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("bb60ef06-849e-476a-a308-a5a94bfc4323",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Active_Object_Tests',
+	' Perform_Active_Object_Tests
+',
+	'#--------------------------------------------------------------------------
+# This scenario should always be called last, and the Test value be updated 
+# with the next available test number.
+#--------------------------------------------------------------------------
+
+my_test = find-one Test_Data
+
+Test = my_test.Number
+
+Restart_Check_Object = TRUE
+Finish_Check_Object  = FALSE
+
+Find_It = TRUE
+Lose_It = FALSE
+
+# Create object for checking the results of the actions on the active object
+How_Was_It_For_You = create Check_On_Active_Object with Current_State = ''Idle''
+
+#--------------------------------------------------------------------------
+# Test 1 - Create an active object tagged as singleton.
+#--------------------------------------------------------------------------
+
+   Create_And_Delete_Active_Object = create unique An_Active_Object with Current_State = ''Idle''
+
+   delete Create_And_Delete_Active_Object
+
+   Expected_Result = 0
+
+   # Make sure that the active object has indeed gone.
+   generate CHECK1:Start(Test,                            \
+                         Create_And_Delete_Active_Object, \
+                         "Create and Delete active",      \
+                         Expected_Result,                 \
+                         Lose_It,                         \
+                         Restart_Check_Object) to How_Was_It_For_You   
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 - This test shall cause the active object to transition from Idle
+#          to Act and then back to Idle.
+#--------------------------------------------------------------------------
+
+   Base_Value_To_Start_With = 1
+   Expected_Result          = 101
+
+   First_Active_Object = create unique An_Active_Object with Result        = 0 &\ 
+                                                             Current_State = ''Idle''
+
+   generate AAO1:Start_Your_Engines(Base_Value_To_Start_With) to First_Active_Object
+
+   generate AAO2:Switch_Off() to First_Active_Object
+
+   generate CHECK1:Start(Test,                       \
+                         First_Active_Object,        \
+                         "Create and Delete active", \
+                         Expected_Result,            \
+                         Find_It,                    \
+                         Restart_Check_Object) to How_Was_It_For_You
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - This test shall cause the previously defined active object to
+#          transition from Idle to Act and then back to Idle.
+#--------------------------------------------------------------------------
+
+   Base_Value_To_Start_With = 2
+   Expected_Result          = 203
+
+   generate AAO1:Start_Your_Engines(Base_Value_To_Start_With) to First_Active_Object
+ 
+   generate AAO2:Switch_Off() to First_Active_Object
+
+   generate CHECK1:Start(Test,                             \
+                         First_Active_Object,              \
+                         "Create and Delete active again", \
+                         Expected_Result,                  \
+                         Find_It,                          \
+                         Restart_Check_Object) to How_Was_It_For_You
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4 - This test shall cause the previously defined active object to
+#          transition from Idle to Act and then to Terminate.
+#--------------------------------------------------------------------------
+
+   Base_Value_To_Start_With = 3
+   Expected_Result          = 216
+
+   generate AAO1:Start_Your_Engines(Base_Value_To_Start_With) to First_Active_Object
+
+   generate AAO3:Floor_It() to First_Active_Object
+
+   generate CHECK1:Start(Test,                             \
+                         First_Active_Object,              \
+                         "Create and Delete to Terminate", \
+                         Expected_Result,                  \
+                         Find_It,                          \
+                         Restart_Check_Object) to How_Was_It_For_You
+
+   Test = Test + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5
+#--------------------------------------------------------------------------
+
+   Expected_Result = 0
+
+   generate AAO4:Crash_It() to First_Active_Object
+
+   generate CHECK1:Start(Test,                  \
+                         First_Active_Object,   \
+                         "Terminate to Expire", \
+                         Expected_Result,       \
+                         Lose_It,               \
+                         Restart_Check_Object) to How_Was_It_For_You
+
+   Test = Test + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+
+my_test.Number = Test
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO PE_PE
+	VALUES ("bb60ef06-849e-476a-a308-a5a94bfc4323",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("3cf59200-efcd-4080-898f-85da56cc8d76",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Passive_Array_Tests',
+	' Perform_Passive_Array_Tests
+',
+	'# Separate requirement tag test
+# @@TAGS-01-0012
+my_test = find-one Test_Data
+
+if my_test.Environment = ''WACA'' then
+   This_Is_WACA = TRUE
+else
+   This_Is_WACA = FALSE
+endif
+
+Test = my_test.Number
+Last_Test = 0
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [Last_Test] = TAGS8::Perform_Passive_Array_of_1_Object_Tests[Test,This_Is_WACA]
+
+   Test = Last_Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [Last_Test] = TAGS7::Perform_Passive_Array_of_3_Objects_Tests[Test,This_Is_WACA]
+
+   Test = Last_Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Create three passive data objects for Just Multiple
+#--------------------------------------------------------------------------
+
+   JM1 = create Just_Multiple with idJM = 1
+   JM2 = create Just_Multiple with idJM = 1
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "TAGGING",  "Multiple object", "Create two"]
+
+   # Return count of A_Passive_Array_Of_Three_Objects
+   {set_of_objects} = find-all Just_Multiple
+
+   total_count = countof {set_of_objects}
+
+   if total_count = 2 then
+      [] = RPT2:Test_Passed["Created two", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Failed to create two", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "TAGGING", "Multiple object", "Delete one"]
+
+   # Delete 1 of passive objects
+
+   delete JM2
+
+   {set_of_objects} = find-all Just_Multiple
+   
+   total_count = countof {set_of_objects}
+
+   if total_count = 1 then
+      [] = RPT2:Test_Passed["Delete one", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Failed to delete one", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Create extra passive object, total of three
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "TAGGING", "Multiple object", "Add one"]
+
+   replacement_object = create Just_Multiple with idJM = 3
+
+   # Return count of A_Passive_Array_Of_Three_Objects
+   {set_of_objects} = find-all Just_Multiple
+
+   total_count = countof {set_of_objects}
+
+   if total_count = 2 then
+      [] = RPT2:Test_Passed["Add one", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Failed to add one", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 5 - Attempt to delete all objects
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0128", "TAGGING", "Passive Array 3 UNIQUE object", "Delete all objects"]
+
+   # Return count of A_Passive_Array_Of_Three_Objects
+
+   {set_of_objects} = find-all Just_Multiple
+   total_count = countof {set_of_objects}
+
+   if total_count = 2 then
+      # Delete all objects
+      for each_object in {set_of_objects} do
+         delete each_object
+      endfor
+
+      {set_of_objects} = find-all Just_Multiple
+      total_count = countof {set_of_objects}
+
+      if total_count = 0 then
+         new_object = create Just_Multiple with idJM = 1
+
+         # Check that it is defined
+         if new_object != UNDEFINED then
+            {set_of_objects} = find-all Just_Multiple
+            total_count = countof {set_of_objects}
+
+            # and only one now exists
+            if total_count = 1 then 
+
+               delete new_object
+
+               [] = RPT2:Test_Passed["Deleted all", Test, 0]
+            else
+               [] = RPT3:Test_Failed["Failed to delete all", Test, -10]
+            endif
+
+         else
+            [] = RPT3:Test_Failed["Failed to delete all", Test, -20]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Failed to delete all", Test, -30]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Failed to delete all", Test, -40]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+
+my_test.Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	4);
+INSERT INTO PE_PE
+	VALUES ("3cf59200-efcd-4080-898f-85da56cc8d76",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f814311a-526c-44bb-9cf1-fb642061bfc6",
+	"00000000-0000-0000-0000-000000000000",
+	'Finish_TAGGED_Tests',
+	' Finish_TAGGED_Tests
+',
+	'my_test = find-one Test_Data
+
+generate TD1:Tests_Are_Over() to my_test
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	5);
+INSERT INTO PE_PE
+	VALUES ("f814311a-526c-44bb-9cf1-fb642061bfc6",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("5ea0ea93-6e62-4900-b4f9-9e5de056af64",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Active_Array_Tests',
+	' Perform_Active_Array_Tests
+',
+	'[] = AAAOTO1:Do_Active_Many_Array_Tests[]
+
+[] = AAAOOO1:Do_Active_Single_Array_Tests[]
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	6);
+INSERT INTO PE_PE
+	VALUES ("5ea0ea93-6e62-4900-b4f9-9e5de056af64",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("d944be21-17b2-482f-8e4e-2b89206daebc",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Single_To_Many_Navigations',
+	' Perform_Single_To_Many_Navigations
+',
+	'[] = TAGS9::Perform_One_To_Many_Tests[]
+
+[] = TAGS10::Perform_Active_One_To_Many_Tests[]
+
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	7);
+INSERT INTO PE_PE
+	VALUES ("d944be21-17b2-482f-8e4e-2b89206daebc",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("33ffd382-19db-4464-af9c-71744b2c48ba",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Terminator_Tag_Tests',
+	' Perform_Terminator_Tag_Tests
+',
+	'# Perform calls to tagged terminator and untagged terminator
+
+My_Test = find-one Test_Data
+
+The_Test_Number = My_Test.Number
+
+Where_Are_We = My_Test.Environment
+
+#--------------------------------------------------------------------------
+# Test 1 - Call tagged local terminator
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-1111", "Tagging", "Terminators", "Tagged locally defined"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1101-0000-01-0112"]
+
+   Local_Input_Parameter = 1
+   Local_Output_Parameter = 0
+
+   [Local_Output_Parameter] = TT1:A_Tagged_Local_Terminator[Local_Input_Parameter]
+
+   if Where_Are_We = ''WACA'' then
+
+      if Local_Output_Parameter = Local_Input_Parameter then
+         [] = RPT3:Test_Failed["Tagged locally defined",The_Test_Number,  -1]
+      else
+         [] = RPT2:Test_Passed["Tagged locally defined",The_Test_Number,  0]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[The_Test_Number]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2 - Call tagged project terminator
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-1111", "Tagging", "Terminators", "Untagged local defined"]
+ 
+   Local_Input_Parameter = 1
+   Local_Output_Parameter = 0
+
+   [Local_Output_Parameter] = UT1:An_Untagged_Local_Terminator[Local_Input_Parameter]
+
+   if Where_Are_We = ''WACA'' then
+
+      if Local_Output_Parameter != Local_Input_Parameter then
+         [] = RPT3:Test_Failed["Untagged local defined",The_Test_Number,  Local_Output_Parameter]
+      else
+         [] = RPT2:Test_Passed["Untagged local defined",The_Test_Number,  0]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[The_Test_Number]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3 - Call local untagged terminator
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-1111", "Tagging", "Terminators", "Tagged project defined"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1101-0000-01-0112"]
+
+   Local_Input_Parameter = 1
+   Local_Output_Parameter = 0
+
+   [Local_Output_Parameter] = TT3:A_Tagged_Project_Terminator[Local_Input_Parameter]
+
+   if Where_Are_We = ''WACA'' then
+
+      if Local_Output_Parameter = Local_Input_Parameter then
+         [] = RPT3:Test_Failed["Tagged project defined",The_Test_Number,  Local_Output_Parameter]
+      else
+         [] = RPT2:Test_Passed["Tagged project defined",The_Test_Number,  0]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[The_Test_Number]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4 - Call untagged project terminator
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-1111", "Tagging", "Terminators", "Untagged project defined"]
+
+   Local_Input_Parameter = 1
+   Local_Output_Parameter = 0
+
+   [Local_Output_Parameter] = UT2:An_Untagged_Project_Terminator[Local_Input_Parameter]
+
+   if Where_Are_We = ''WACA'' then
+
+      if Local_Output_Parameter != Local_Input_Parameter then
+         [] = RPT3:Test_Failed["Untagged project defined",The_Test_Number,  -1]
+      else
+         [] = RPT2:Test_Passed["Untagged project defined",The_Test_Number,  0]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[The_Test_Number]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+# Test 5
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-1111", "Tagging", "Terminators", "Two tagged called from untagged terminator"]
+
+   This_Result = FALSE
+
+   [This_Result] = TD1:Call_Tagged_Terminators[]
+
+   if Where_Are_We = ''WACA'' then
+
+      if This_Result = FALSE then
+         [] = RPT3:Test_Failed["Two tagged called from untagged terminator",The_Test_Number,  -1]
+      else
+         [] = RPT2:Test_Passed["Two tagged called from untagged terminator",The_Test_Number,  0]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[The_Test_Number]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 5
+
+#--------------------------------------------------------------------------
+
+My_Test.Number = The_Test_Number',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	8);
+INSERT INTO PE_PE
+	VALUES ("33ffd382-19db-4464-af9c-71744b2c48ba",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b710b4bf-f7f5-4330-9f50-ff78e57c8efd",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Glitch_Recovery_Tests',
+	' Perform_Glitch_Recovery_Tests
+',
+	'My_Test = find-one Test_Data
+
+The_Test_Number = My_Test.Number
+
+Failure_Code = 0
+
+Test_Integer = 55
+Test_Boolean = TRUE
+Test_Real    = 1234.56
+Test_Environment = My_Test.Environment
+
+#--------------------------------------------------------------------------
+# Test 1 - Glitch Recovery Object must be tagged either Singleton or 
+#          Multiplicity.
+#          If it isn''t, the new object will not be created at the same
+#          memory location.
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0129", "Glitch Recovery", "Singleton", "Recreate at same location"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0130"]
+
+   First_Object = create Singleton_Glitch_Recovery with An_Integer  = Test_Integer &\
+                                                        A_Boolean   = Test_Boolean &\
+                                                        A_Real      = Test_Real    &\
+                                                        Environment = Test_Environment
+
+   if First_Object = UNDEFINED then
+      # Test has fallen at the first hurdle
+      Failure_Code = -1
+   else
+      delete First_Object
+
+      if Test_Environment = ''WACA'' then
+         # For Ada runs on host or Target, only create this object without
+         # specifying the attributes.
+         Second_Object = create Singleton_Glitch_Recovery
+      else
+         # This is for a ISIM run, obviously it should always pass.
+         Second_Object = create Singleton_Glitch_Recovery with An_Integer  = Test_Integer &\
+                                                               A_Boolean   = Test_Boolean &\
+                                                               A_Real      = Test_Real    &\
+                                                               Environment = Test_Environment
+      endif
+
+      if Second_Object.An_Integer = Test_Integer then
+
+         if Second_Object.A_Boolean = Test_Boolean then
+
+            if Second_Object.A_Real = Test_Real then
+
+               if Second_Object.Environment = Test_Environment then
+                  Failure_Code = 0
+               else
+                  Failure_Code = -2
+               endif
+
+            else
+               Failure_Code = -3
+            endif
+
+         else
+            Failure_Code = -4
+         endif
+
+      else
+         Failure_Code = -5
+      endif
+
+      delete Second_Object
+
+   endif
+
+   if Failure_Code = 0 then
+      [] = RPT2:Test_Passed["Singleton glitch",The_Test_Number, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["Singleton glitch",The_Test_Number, Failure_Code]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   int_one = 10
+   int_two = 20
+   int_three = 30
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0129", "Glitch Recovery", "Multiplicity", "Recreate different name at same location"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0130"]
+
+   # Create three objects tagged MULTIPLICITY.
+
+   Multi_First_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
+   Multi_Second_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
+   Multi_Third_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+
+   if Multi_First_Object = UNDEFINED then
+      # Test has fallen at the first hurdle
+      Failure_Code = -1
+   else
+      delete Multi_First_Object
+      delete Multi_Second_Object
+      delete Multi_Third_Object
+
+      # This is an attempt to simulate what will happen when the system restarts and glitch recovery
+      # is invoked. Since a system restart can not be simulated here without an enourmous
+      # amount of buggering around, the created objects are deleted, and three more created in their
+      # place. Naming is not important at this stage, though, for completeness the same name could 
+      # be used. For the purposes of this test, a different set of names shall be used.
+
+      if Test_Environment = ''WACA'' then
+         # For Ada runs on host or Target, only create this object without
+         # specifying the attributes.
+         Fourth_Object = create Multiplicity_Glitch_Recovery
+         Fifth_Object  = create Multiplicity_Glitch_Recovery
+         Sixth_Object  = create Multiplicity_Glitch_Recovery
+      else
+         Fourth_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
+         Fifth_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
+         Sixth_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+      endif
+
+      if Fourth_Object.An_Integer = int_one then
+
+         if Fifth_Object.An_Integer = int_two then
+
+            if Sixth_Object.An_Integer = int_three then
+               Failure_Code = 0
+            else
+               Failure_Code = -2
+            endif
+
+         else
+            Failure_Code = -3
+         endif
+
+      else
+         Failure_Code = -4
+      endif
+
+      delete Fourth_Object
+      delete Fifth_Object
+      delete Sixth_Object
+
+   endif
+
+   if Failure_Code = 0 then
+      [] = RPT2:Test_Passed["Multiplicity glitch",The_Test_Number, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["Multiplicity glitch",The_Test_Number, Failure_Code]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   int_one = 10
+   int_two = 20
+   int_three = 30
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0129", "Glitch Recovery", "Multiplicity", "Recreate same name at same location"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0130"]
+
+   # Create three objects tagged MULTIPLICITY.
+   Reuse_First_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
+   Reuse_Second_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
+   Reuse_Third_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+
+   if Reuse_First_Object = UNDEFINED then
+      # Test has fallen at the first hurdle
+      Failure_Code = -1
+   else
+      delete Reuse_First_Object
+      delete Reuse_Second_Object
+      delete Reuse_Third_Object
+
+      # Naming is not important at this stage, though, for completeness the same name could 
+      # be used. For the purposes of this test, the same set of names shall be used.
+      if Test_Environment = ''WACA'' then
+         # For Ada runs on host or Target, only create this object without
+         # specifying the attributes.
+         Reuse_First_Object = create Multiplicity_Glitch_Recovery
+         Reuse_Second_Object  = create Multiplicity_Glitch_Recovery
+         Reuse_Third_Object  = create Multiplicity_Glitch_Recovery
+      else
+         Reuse_First_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
+         Reuse_Second_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
+         Reuse_Third_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+      endif
+
+      if Reuse_First_Object.An_Integer = int_one then
+
+         if Reuse_Second_Object.An_Integer = int_two then
+
+            if Reuse_Third_Object.An_Integer = int_three then
+               Failure_Code = 0
+            else
+               Failure_Code = -2
+            endif
+
+         else
+            Failure_Code = -3
+         endif
+
+      else
+         Failure_Code = -4
+      endif
+
+      delete Reuse_First_Object
+      delete Reuse_Second_Object
+      delete Reuse_Third_Object
+
+   endif
+
+   if Failure_Code = 0 then
+      [] = RPT2:Test_Passed["Multiplicity glitch",The_Test_Number, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["Multiplicity glitch",The_Test_Number, Failure_Code]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+# Test 4
+#--------------------------------------------------------------------------
+
+   int_one = 10
+   int_two = 20
+
+   [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0129", "Glitch Recovery", "Multiplicity", "Single multiplicity object"]
+   [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0130"]
+
+   # Create three objects tagged MULTIPLICITY.
+   Multi_Single_First_Object  = create Multiplicity_Single_Glitch_Recovery_Object with Attribute_One  = int_one & Attribute_Two = int_two
+
+   if Multi_Single_First_Object = UNDEFINED then
+      # Test has fallen at the first hurdle
+      Failure_Code = -1
+   else
+      delete Multi_Single_First_Object
+
+      # This is an attempt to simulate what will happen when the system restarts and glitch recovery
+      # is invoked. Since a system restart can not be simulated here without an enormous
+      # amount of buggering around, the created objects are deleted, and another created in its
+      # place. Naming is not important at this stage, though, for completeness the same name could 
+      # be used. For the purposes of this test, a different set of names shall be used.
+
+      if Test_Environment = ''WACA'' then
+         # For Ada runs on host or Target, only create this object without
+         # specifying the attributes.
+         Multi_Single_Second_Object = create Multiplicity_Single_Glitch_Recovery_Object
+      else
+         Multi_Single_Second_Object = create Multiplicity_Single_Glitch_Recovery_Object with Attribute_One  = int_one & Attribute_Two = int_two
+      endif
+
+      if Multi_Single_Second_Object.Attribute_One = int_one then
+
+         if Multi_Single_Second_Object.Attribute_Two = int_two then
+            Failure_Code = 0
+         else
+            Failure_Code = -2
+         endif
+
+      else
+         Failure_Code = -3
+      endif
+
+      delete Multi_Single_Second_Object
+
+   endif
+
+   if Failure_Code = 0 then
+      [] = RPT2:Test_Passed["Multiplicity single glitch",The_Test_Number, Failure_Code]
+   else
+      [] = RPT3:Test_Failed["Multiplicity single glitch",The_Test_Number, Failure_Code]
+   endif
+
+   The_Test_Number = The_Test_Number + 1
+
+# End Test 4
+
+#--------------------------------------------------------------------------
+
+My_Test.Number = The_Test_Number',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	9);
+INSERT INTO PE_PE
+	VALUES ("b710b4bf-f7f5-4330-9f50-ff78e57c8efd",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("a3cd93f1-05f5-408f-8fcd-00540d8d0ca7",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Many_To_Many_Navigations',
+	' Perform_Many_To_Many_Navigations
+',
+	'[] = TAGS11::Perform_Passive_Many_To_Many_Tests[]
+
+[] = TAGS13::Perform_Active_Many_To_Many_Tests[]',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	10);
+INSERT INTO PE_PE
+	VALUES ("a3cd93f1-05f5-408f-8fcd-00540d8d0ca7",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("de8b8cee-9146-4cf0-8303-dced33149e33",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Super_Sub_Tests',
+	' Perform_Super_Sub_Tests
+',
+	'[] = TAGS12::Perform_Passive_Super_Sub_Tests[]
+[] = TAGS14::Perform_Active_Super_Sub_Tests[]',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	11);
+INSERT INTO PE_PE
+	VALUES ("de8b8cee-9146-4cf0-8303-dced33149e33",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("8c4ebf55-4228-4b84-81a1-3cb9507f3046",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Static_Tests',
+	' Perform_Static_Tests
+',
+	'[] = TAGS15::Perform_Static_Tests[]',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	12);
+INSERT INTO PE_PE
+	VALUES ("8c4ebf55-4228-4b84-81a1-3cb9507f3046",
+	1,
+	"9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("9428e903-226a-4b5b-94bd-dbded88bfb6d",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"41821df8-d5d8-41f7-80c7-9a848f200294",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("41821df8-d5d8-41f7-80c7-9a848f200294",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'TAGS',
+	' Bodges? We don need no stinkin bodges!
+',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Tagging',
+	'../TAGS.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("a542633e-604c-4486-989d-46d152510a33",
+	'TAGS',
+	1,
+	'../../../TAGS.xtuml');

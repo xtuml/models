@@ -1,0 +1,36 @@
+public service CPR_Two::Simple_Object_Two_Counterpart_CPR_Two~>Link_To_Object_To_Pass (The_IH                   : in  instance of Object_Two,
+                                                                                       Object_To_Pass_Return_ID : out integer) is
+$INLINE
+fprintf(stderr,"CPR_TWO link Object two to CPR_One Object_To_Pass ID ");
+$ENDINLINE
+
+Creation_ID = The_IH.Object_Two_Identifier
+
+$USE CPR_One
+
+   Object_To_Pass_IH = find-one Object_To_Pass_One
+
+   if Object_To_Pass_IH = UNDEFINED then
+
+      An_Int = Creation_ID
+      A_Real = 2.0
+      A_Bool = TRUE
+      A_String = "Created object to pass"
+
+      [Object_To_Pass_IH] = CPR_One3::Create_Object_To_Pass[An_Int, A_Real, A_Bool, A_String]
+
+   endif
+
+
+   link-counterpart The_IH CPR4 Object_To_Pass_IH
+
+   Local_Object_To_Pass_Return_ID = Object_To_Pass_IH.Object_To_Pass_One_ID
+
+$ENDUSE
+
+$INLINE
+fprintf(stderr,"is %d \n", Local_Object_To_Pass_Return_ID);
+$ENDINLINE
+
+
+Object_To_Pass_Return_ID = Local_Object_To_Pass_Return_ID

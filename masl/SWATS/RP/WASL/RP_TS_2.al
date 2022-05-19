@@ -159,7 +159,7 @@ else
 
    # No reported requirements found
 
-   [] = RP7::Report_Run_Time_Error["No requirements found"];
+   [] = RP7::Report_Run_Time_Error["No requirements found"]
 
    #$ADA_INLINE
       # Test_Suite_Text_IO.Dump_String("No requirements identifiers specified");

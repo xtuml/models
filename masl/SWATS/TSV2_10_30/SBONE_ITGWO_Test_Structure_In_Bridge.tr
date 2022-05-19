@@ -1,0 +1,25 @@
+public service SBONE::Into_The_Great_Wide_Open~>Test_Structure_In_Bridge (Test            : in  integer,
+                                                                          Input_Structure : in  sequence of Structure_Of_UDTs) is
+Reporter = find-one Report_Data
+
+if Reporter != UNDEFINED then
+   Reporter_Number = Reporter.Reported_Domain_Number
+else
+   Reporter_Number = -1
+endif
+
+for [int_from_struct] in {Input_Structure} do
+
+   the_result = (int_from_struct * 256) - 100
+
+endfor
+
+$USE RP
+
+   if the_result = 412 then
+      [] = RP1::Test_Passed ["Structure correctly read", Test, 0, Reporter_Number]
+   else
+      [] = RP2::Test_Failed ["Structure incorrectly read", Test, -10, Reporter_Number]
+   endif
+
+$ENDUSE

@@ -1,0 +1,140 @@
+public service CPR_Three::Simple_Third_Boundary_To_Object_Two~>Get_Object_Two (Domain_Two_Target_ID : in  integer,
+                                                                               Link_To_What         : in  Link_Type,
+                                                                               The_IH               : in  instance of Third_Way,
+                                                                               Object_One_ID        : out integer,
+                                                                               Object_To_Pass_ID    : out integer) is
+local_target = Domain_Two_Target_ID
+Return_ID = 0
+Other_Return_ID = 0
+
+$INLINE
+fprintf (stderr, "CPR_Three finding object two with id %d\n", local_target);
+$ENDINLINE
+
+One     of Link_Type = 'CPR_Three_Object_One'
+Pass    of Link_Type = 'CPR_Three_Object_To_Pass'
+Both    of Link_Type = 'CPR_Three_Both'
+Neither of Link_Type = 'CPR_Three_Neither'
+
+$USE CPR_Two
+
+target_object = find-one Object_Two where Object_Two_Identifier = local_target
+
+if target_object != UNDEFINED then
+
+
+   link-counterpart The_IH CPR6 target_object
+
+   # This is a bit silly as we already have the IH of the
+   # object in CPR_Two.
+   navigated_to = The_IH -> CPR6.Object_Two
+
+$ENDUSE 
+
+   # Let's see if we can navigate from the object 2 IH (navigated_to) to
+   # the linked object IH in CPR_One
+
+$USE CPR_One
+
+   if Link_To_What = Both or Link_To_What = One then
+
+      $INLINE
+      fprintf (stderr, "CPR_Three found Object two, trying link ");
+      $ENDINLINE
+
+      D_One_IH = navigated_to -> CPR1.Object_One
+
+      if D_One_IH = UNDEFINED then
+
+         # No link on CPR1, try CPR2
+
+         D_One_IH = navigated_to -> CPR2.Object_One
+
+         if D_One_IH = UNDEFINED then
+
+            Return_ID = 0
+            $INLINE
+            fprintf (stderr, " ** NO LINK FOUND **");
+            $ENDINLINE
+
+         else
+
+            Return_ID = D_One_IH.Object_One_Identifier
+            $INLINE
+            fprintf (stderr, "CPR2");
+            $ENDINLINE
+
+         endif
+
+      else
+
+        Return_ID = D_One_IH.Object_One_Identifier
+        $INLINE
+        fprintf (stderr, "CPR1");
+        $ENDINLINE
+
+      endif
+
+      $INLINE
+      fprintf (stderr, " to Object_One in CPR_One with ID %d\n", Return_ID);
+      $ENDINLINE
+      
+   else
+
+      Return_ID = 0 
+      $INLINE
+      fprintf (stderr, "No link attempted on CPR1 or CPR2 to CPR_One.Object_One\n");
+      $ENDINLINE
+
+   endif
+
+else
+
+   $INLINE
+   fprintf(stderr, "CPR_Three Navigation with CPR1 or CPR2 inhibited to Object_One by command\n");
+   $ENDINLINE
+
+endif
+
+# Now lets rock over to object Object_To_Pass_One in CPR_One using CPR4 and see if this is linked.
+
+if Link_To_What = Both or Link_To_What = Pass then
+
+   $INLINE
+   fprintf (stderr, "CPR_Three found Object two, trying link ");
+   $ENDINLINE
+
+   D_One_To_Pass_IH = navigated_to -> CPR4.Object_To_Pass_One
+
+   if D_One_To_Pass_IH = UNDEFINED then
+
+      Other_Return_ID = 0
+
+      $INLINE
+      fprintf (stderr, " ** NO LINK FOUND **");
+      $ENDINLINE
+
+   else
+
+      Other_Return_ID = D_One_To_Pass_IH.Object_To_Pass_One_ID
+
+      $INLINE
+      fprintf (stderr, "CPR4");
+      $ENDINLINE
+
+   endif
+ 
+   $INLINE
+   fprintf (stderr, " to Object_To_Pass_One in CPR_One with ID %d\n", Other_Return_ID);
+   $ENDINLINE
+
+else
+   $INLINE
+   fprintf(stderr, "CPR_Three Navigation with CPR4 inhibited to Object_To_Pass by command\n");
+   $ENDINLINE
+endif
+
+$ENDUSE 
+
+Object_One_ID = Return_ID
+Object_To_Pass_ID = Other_Return_ID

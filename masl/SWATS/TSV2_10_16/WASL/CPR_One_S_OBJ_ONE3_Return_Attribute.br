@@ -1,0 +1,65 @@
+define bridge  CPR_One:S_OBJ_ONE3:Return_Attribute
+input \
+	This_IH:Object_One_IH 
+output \
+	Success:Boolean ,\
+	Success_With:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+# Project specified PP terminator
+
+$INLINE
+
+fprintf(stderr, "PP ONE Project level terminator 3 using keyword this UNSUPPORTED in 4.0.0\n");
+
+$ENDINLINE
+
+Received_OK = FALSE
+RX_id = -1
+
+
+if This_IH != UNDEFINED then
+
+   Matching_Identifier = 10
+
+#Starting_IH.Object_One_Identifier
+
+   $USE CPR_Two
+
+      # This bridge should be an instance bridge, and therefor use the keyword 'this'
+      # to identify the source handle. However, this is not supported in WACA 4.0.   
+      # so a substitute instance handle parameter has been supplied to this simple bridge.
+
+
+      # Call counterpart instance creation service in domain two.
+
+      [destination_three] = CPR_Two1::Create_Object_Two[Matching_Identifier]
+     
+      link-counterpart This_IH CPR2 destination_three
+
+      destination_two = This_IH -> CPR2.Object_Two 
+
+      Destination_Attribute = destination_two.Object_Two_Identifier
+
+   $ENDUSE 
+
+
+      if destination_two != UNDEFINED and destination_three != UNDEFINED then
+
+         Received_OK = TRUE
+         RX_id = Destination_Attribute
+
+
+      endif
+
+endif
+
+Success_With = RX_id
+Success      = Received_OK
+
+
+enddefine

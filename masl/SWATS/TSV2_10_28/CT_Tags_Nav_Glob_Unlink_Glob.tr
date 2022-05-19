@@ -1,0 +1,17 @@
+public service CT_Tags::Navigate_Global~>Unlink_Glob (Glob_IH    : in  instance of Global_CP,
+                                                      Return_Val : out integer) is
+$USE CP_Tags
+
+   NewInst = Glob_IH -> CPR3.Global_CP
+
+   unlink-counterpart Glob_IH CPR3 NewInst
+
+   NewInst = Glob_IH -> CPR3.Global_CP
+
+$ENDUSE 
+
+   if NewInst = UNDEFINED then
+      Return_Val = 1
+   else
+      Return_Val = -10
+   endif

@@ -1,0 +1,26 @@
+public service Function_Calls::Report~>Domain_Test_Finished (This_Domain_Name : in  string) is
+local_text = This_Domain_Name
+
+My_Report = find-one Report_Data
+
+if My_Report = UNDEFINED then
+
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["DTF Calling domain has not created Report_Data"]
+
+   $ENDUSE
+
+else
+
+   local_domain_number = My_Report.Reported_Domain_Number
+
+endif
+
+
+$USE RP
+
+   [] = RP8::Domain_Tests_Have_Finished[local_text, local_domain_number]
+
+
+$ENDUSE

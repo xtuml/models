@@ -1,0 +1,226 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("acf002c9-87eb-40e6-aefa-2ab11e72bcf3",
+	'Object_SWITCH',
+	6,
+	'objSWITCH',
+	' This object verifies the ''SWITCH'' statement.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("f959f175-d7d3-455d-912f-12eac2748b81",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3",
+	'do_switch',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#------------------------------------------------------------------------#
+#
+# SWITCH Statement
+#
+# The ASL <switch> statement shall be supported
+# 1103-0000-01-0411
+#
+#------------------------------------------------------------------------#
+
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+# Test 1 - SWITCH statement without the default option
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "ASL Mapping", "objSWITCH", "SWITCH without default option"]
+   [] = RPT4:Test_Unsupported[Test]
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - SWITCH statement with the DEFAULT option
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0411", "ASL Mapping", "objSWITCH", "SWITCH with default option"]
+
+   {all_instance_of_SWITCH} = find-all Object_SWITCH
+   countA = 0
+   countB = 0
+   countC = 0
+   countD = 0
+   countE = 0
+
+   for each_instance in {all_instance_of_SWITCH} do
+
+      switch each_instance.IntegerAttr
+
+         case 1
+            temp = each_instance.ResultA + 10
+            each_instance.ResultA = temp
+            countA = countA + 1
+ 
+         case 2
+            temp = each_instance.ResultA + 11
+            each_instance.ResultA = temp
+            countB = countB + 1
+
+         case 3
+            temp = each_instance.ResultA + 12
+            each_instance.ResultA = temp
+            countC = countC + 1
+
+         default
+            temp = each_instance.ResultA + 9
+            each_instance.ResultA = temp
+            countD = countD + 1
+
+      endswitch
+
+      countE = countE + 1
+
+   endfor
+
+   # Verify count values
+   if (countA != 1)|(countB != 2)|(countC != 3)|(countD != 4)|\
+      (countE != 10) then
+
+      [] = RPT3:Test_Failed["objSWITCH", Test, -10]
+   else
+      [] = RPT2:Test_Passed["objSWITCH", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+
+Final_Test = Test
+
+',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("bd4746a9-254b-4184-b5bb-884955d075fb",
+	"f959f175-d7d3-455d-912f-12eac2748b81",
+	'Test_Start',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("10105ca7-e53b-46ea-8d8c-4dde5f85fbc1",
+	"f959f175-d7d3-455d-912f-12eac2748b81",
+	'Final_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"bd4746a9-254b-4184-b5bb-884955d075fb",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("47ba5482-4755-47ce-870e-f44730a2cbc0",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3");
+INSERT INTO O_BATTR
+	VALUES ("47ba5482-4755-47ce-870e-f44730a2cbc0",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3");
+INSERT INTO O_ATTR
+	VALUES ("47ba5482-4755-47ce-870e-f44730a2cbc0",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceSWITCH',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceSWITCH',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("7bfad234-16d8-47a3-b68a-e7581c3289ba",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3");
+INSERT INTO O_BATTR
+	VALUES ("7bfad234-16d8-47a3-b68a-e7581c3289ba",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3");
+INSERT INTO O_ATTR
+	VALUES ("7bfad234-16d8-47a3-b68a-e7581c3289ba",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3",
+	"47ba5482-4755-47ce-870e-f44730a2cbc0",
+	'ResultA',
+	' This attribute is manipulated to indicate that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("91c55b62-ae83-47c4-99a7-dfdd0567c6ff",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3");
+INSERT INTO O_BATTR
+	VALUES ("91c55b62-ae83-47c4-99a7-dfdd0567c6ff",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3");
+INSERT INTO O_ATTR
+	VALUES ("91c55b62-ae83-47c4-99a7-dfdd0567c6ff",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3",
+	"7bfad234-16d8-47a3-b68a-e7581c3289ba",
+	'IntegerAttr',
+	' Determines which case statement to execute.
+',
+	'',
+	'IntegerAttr',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("9d552fce-3a1a-41c7-8a4e-5c7d619e9849",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3");
+INSERT INTO O_BATTR
+	VALUES ("9d552fce-3a1a-41c7-8a4e-5c7d619e9849",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3");
+INSERT INTO O_ATTR
+	VALUES ("9d552fce-3a1a-41c7-8a4e-5c7d619e9849",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3",
+	"91c55b62-ae83-47c4-99a7-dfdd0567c6ff",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3");
+INSERT INTO O_OIDA
+	VALUES ("47ba5482-4755-47ce-870e-f44730a2cbc0",
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3",
+	0,
+	'ReferenceSWITCH');
+INSERT INTO O_ID
+	VALUES (1,
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3");
+INSERT INTO O_ID
+	VALUES (2,
+	"acf002c9-87eb-40e6-aefa-2ab11e72bcf3");
+INSERT INTO PE_PE
+	VALUES ("acf002c9-87eb-40e6-aefa-2ab11e72bcf3",
+	1,
+	"a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	'',
+	0,
+	'../ASL_Mapping.xtuml');

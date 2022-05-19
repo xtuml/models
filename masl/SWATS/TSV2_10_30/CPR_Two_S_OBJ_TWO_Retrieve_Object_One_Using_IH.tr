@@ -1,0 +1,49 @@
+public service CPR_Two::Simple_Object_Two_Counterpart_CPR_Two~>Retrieve_Object_One_Using_IH (Source_IH        : in  instance of Object_Two,
+                                                                                             First_Attribute  : out integer,
+                                                                                             Second_Attribute : out real,
+                                                                                             Third_Attribute  : out boolean,
+                                                                                             Fourth_Attribute : out string) is
+$INLINE
+fprintf (stderr, "Retrieve object one using IH called\n ");
+$ENDINLINE
+
+# Navigate up the counterpart relationship to retrieve the target object ih
+# Dereference the target IH and grab the attributes.
+
+First_Attribute  = 999
+Second_Attribute = 999.9
+Third_Attribute  = FALSE
+Fourth_Attribute = "UNTOUCHED"
+
+$USE CPR_One
+
+the_counterpart_IH = Source_IH -> CPR4.Object_To_Pass_One
+
+
+if the_counterpart_IH != UNDEFINED then
+
+   $INLINE
+      fprintf(stderr, "CPR TWO connected using IH\n ");
+   $ENDINLINE
+
+      First_Attribute  = the_counterpart_IH.OTP_Integer
+      Second_Attribute = the_counterpart_IH.OTP_Real
+      Third_Attribute  = the_counterpart_IH.OTP_Boolean
+      Fourth_Attribute = the_counterpart_IH.OTP_Text
+
+
+else
+
+   $INLINE
+      fprintf(stderr, "CPR TWO NOT connected using IH\n ");
+   $ENDINLINE
+
+   First_Attribute  = 0
+   Second_Attribute = 0.0
+   Third_Attribute  = FALSE
+   Fourth_Attribute = "FAILED"
+
+
+endif
+
+$ENDUSE 

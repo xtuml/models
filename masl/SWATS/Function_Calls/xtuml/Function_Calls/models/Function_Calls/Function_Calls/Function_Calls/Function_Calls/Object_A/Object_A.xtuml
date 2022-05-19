@@ -1,0 +1,377 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("539afe40-2223-4e81-bdeb-bac0c4380f5f",
+	'Object_A',
+	2,
+	'objA',
+	' This object verifies complex function calls.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("b269790d-9115-41ad-9637-877a96253e14",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f",
+	'FunctionA',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'   an_instance_A = find-one Object_A where ReferenceA = 1
+   if InputA != 0 then
+      generate objA1:Fault() to an_instance_A
+   else
+      temp = an_instance_A.ResultA + 10
+      an_instance_A.ResultA = temp
+   endif
+   OutputA = InputA + 10
+',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("94277c8d-5025-44ff-8637-be96a0df3eed",
+	"b269790d-9115-41ad-9637-877a96253e14",
+	'InputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("5b4fa160-b4e8-48ed-b0a7-0d3a441f74ba",
+	"b269790d-9115-41ad-9637-877a96253e14",
+	'OutputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"94277c8d-5025-44ff-8637-be96a0df3eed",
+	'');
+INSERT INTO O_TFR
+	VALUES ("e4293cef-630c-4ca5-a071-089123f089fb",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f",
+	'FunctionB',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'   an_instance_A = find-one Object_A where ReferenceA = 2
+   if ((InputA != 10)|(InputB != 20)|(InputC != 30)) then
+      generate objA1:Fault() to an_instance_A
+   else
+      temp = an_instance_A.ResultA + 10
+      an_instance_A.ResultA = temp
+   endif
+   OutputA = TRUE
+',
+	3,
+	'',
+	"b269790d-9115-41ad-9637-877a96253e14",
+	2,
+	2);
+INSERT INTO O_TPARM
+	VALUES ("ca528a16-b4f8-4664-9b26-a74cc0e53c0b",
+	"e4293cef-630c-4ca5-a071-089123f089fb",
+	'InputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("15418a28-a14a-41aa-a48a-c9ac55d644d2",
+	"e4293cef-630c-4ca5-a071-089123f089fb",
+	'InputB',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"ca528a16-b4f8-4664-9b26-a74cc0e53c0b",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("41bcd81d-cc6a-47e8-b2d9-a2519531bb8a",
+	"e4293cef-630c-4ca5-a071-089123f089fb",
+	'InputC',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"15418a28-a14a-41aa-a48a-c9ac55d644d2",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("a0b5c08d-5503-4ddb-8f0e-cc19ab916c2a",
+	"e4293cef-630c-4ca5-a071-089123f089fb",
+	'OutputA',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	"41bcd81d-cc6a-47e8-b2d9-a2519531bb8a",
+	'');
+INSERT INTO O_TFR
+	VALUES ("b0e04d6c-783d-49c1-9f5f-b462a628f680",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f",
+	'FunctionC',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'   an_instance_A = find-one Object_A where ReferenceA = 3
+   if (InputA != 10) then
+      generate objA1:Fault() to an_instance_A
+   else
+      temp = an_instance_A.ResultA + 10
+      an_instance_A.ResultA = temp
+   endif
+   OutputA = 10
+   OutputB = TRUE
+   OutputC = FALSE
+   OutputD = 30
+',
+	3,
+	'',
+	"e4293cef-630c-4ca5-a071-089123f089fb",
+	2,
+	3);
+INSERT INTO O_TPARM
+	VALUES ("402f989c-18eb-4159-8305-a09da045303b",
+	"b0e04d6c-783d-49c1-9f5f-b462a628f680",
+	'InputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("b4bb0f0c-f0d0-48d9-8aff-aaf78423dedf",
+	"b0e04d6c-783d-49c1-9f5f-b462a628f680",
+	'OutputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"402f989c-18eb-4159-8305-a09da045303b",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("a6df2523-6a74-4274-920e-937f0c7c2b1b",
+	"b0e04d6c-783d-49c1-9f5f-b462a628f680",
+	'OutputB',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	"b4bb0f0c-f0d0-48d9-8aff-aaf78423dedf",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("fe5b59ca-38b0-4e71-9117-cf5b8208864c",
+	"b0e04d6c-783d-49c1-9f5f-b462a628f680",
+	'OutputC',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	"a6df2523-6a74-4274-920e-937f0c7c2b1b",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("ffa3904f-4aa3-414e-9bf7-dbd13457f774",
+	"b0e04d6c-783d-49c1-9f5f-b462a628f680",
+	'OutputD',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"fe5b59ca-38b0-4e71-9117-cf5b8208864c",
+	'');
+INSERT INTO O_TFR
+	VALUES ("a0c0185c-99e5-467d-a2b8-ee18e4198b5e",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f",
+	'FunctionD',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'   an_instance_A = find-one Object_A where ReferenceA = 4
+   if ((InputA != 1)|(InputB != 2)|(InputC != 3)) then
+      generate objA1:Fault() to an_instance_A
+   else
+      temp = an_instance_A.ResultA + 10
+      an_instance_A.ResultA = temp
+   endif
+   OutputA = 1
+   OutputB = 2
+   OutputC = 3
+',
+	3,
+	'',
+	"b0e04d6c-783d-49c1-9f5f-b462a628f680",
+	2,
+	4);
+INSERT INTO O_TPARM
+	VALUES ("82ed40e0-9072-479a-9c68-651b6c297aa0",
+	"a0c0185c-99e5-467d-a2b8-ee18e4198b5e",
+	'InputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("17e6509f-061d-4b5f-bb57-ca7094c3af9f",
+	"a0c0185c-99e5-467d-a2b8-ee18e4198b5e",
+	'InputB',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"82ed40e0-9072-479a-9c68-651b6c297aa0",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("2c6dbcf6-6192-42fe-b946-4bbb696807f8",
+	"a0c0185c-99e5-467d-a2b8-ee18e4198b5e",
+	'InputC',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"17e6509f-061d-4b5f-bb57-ca7094c3af9f",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("4570d520-b40c-4832-8e40-7d4d68f4bff2",
+	"a0c0185c-99e5-467d-a2b8-ee18e4198b5e",
+	'OutputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"2c6dbcf6-6192-42fe-b946-4bbb696807f8",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("964ccc49-1271-44a3-b003-c961d4bbbde7",
+	"a0c0185c-99e5-467d-a2b8-ee18e4198b5e",
+	'OutputB',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"4570d520-b40c-4832-8e40-7d4d68f4bff2",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("16b916a6-467e-4314-a24d-806997011151",
+	"a0c0185c-99e5-467d-a2b8-ee18e4198b5e",
+	'OutputC',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"964ccc49-1271-44a3-b003-c961d4bbbde7",
+	'');
+INSERT INTO O_TFR
+	VALUES ("477bcbdf-ea0a-425b-9f2a-f2bba2082e48",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f",
+	'Call_To_Self',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'temp = The_Input_Value
+temp = temp + 1
+
+if temp = 2 then
+   The_Output_Value = temp
+else
+   [The_Output_Value] = objA5:Call_To_Self[temp]
+endif
+
+
+',
+	3,
+	'',
+	"a0c0185c-99e5-467d-a2b8-ee18e4198b5e",
+	2,
+	5);
+INSERT INTO O_TPARM
+	VALUES ("47a530b9-53d6-4c24-be74-f9ab2108b5e8",
+	"477bcbdf-ea0a-425b-9f2a-f2bba2082e48",
+	'The_Input_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("53f2d320-c899-467e-b578-8864c8fcc32f",
+	"477bcbdf-ea0a-425b-9f2a-f2bba2082e48",
+	'The_Output_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"47a530b9-53d6-4c24-be74-f9ab2108b5e8",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("7549ab72-4cfe-4491-aa91-41ba0843ccde",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f");
+INSERT INTO O_BATTR
+	VALUES ("7549ab72-4cfe-4491-aa91-41ba0843ccde",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f");
+INSERT INTO O_ATTR
+	VALUES ("7549ab72-4cfe-4491-aa91-41ba0843ccde",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceA',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("9bb754cc-e1a8-4426-832c-1afc7ac7e493",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f");
+INSERT INTO O_BATTR
+	VALUES ("9bb754cc-e1a8-4426-832c-1afc7ac7e493",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f");
+INSERT INTO O_ATTR
+	VALUES ("9bb754cc-e1a8-4426-832c-1afc7ac7e493",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f",
+	"7549ab72-4cfe-4491-aa91-41ba0843ccde",
+	'ResultA',
+	' This attribute is manipulated to indicate that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("7f067028-7911-45d7-8faa-4ec55d44b6e3",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f");
+INSERT INTO O_BATTR
+	VALUES ("7f067028-7911-45d7-8faa-4ec55d44b6e3",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f");
+INSERT INTO O_ATTR
+	VALUES ("7f067028-7911-45d7-8faa-4ec55d44b6e3",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f",
+	"9bb754cc-e1a8-4426-832c-1afc7ac7e493",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f");
+INSERT INTO O_OIDA
+	VALUES ("7549ab72-4cfe-4491-aa91-41ba0843ccde",
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f",
+	0,
+	'ReferenceA');
+INSERT INTO O_ID
+	VALUES (1,
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f");
+INSERT INTO O_ID
+	VALUES (2,
+	"539afe40-2223-4e81-bdeb-bac0c4380f5f");
+INSERT INTO PE_PE
+	VALUES ("539afe40-2223-4e81-bdeb-bac0c4380f5f",
+	1,
+	"dca8fc41-0f99-4d26-8c9d-f7ee6615d788",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("dca8fc41-0f99-4d26-8c9d-f7ee6615d788",
+	"00000000-0000-0000-0000-000000000000",
+	"b52b4fed-0445-41e1-8e5b-971995c518cb",
+	'Function_Calls',
+	'',
+	0,
+	'../Function_Calls.xtuml');

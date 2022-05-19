@@ -1,0 +1,229 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("12b4ece2-b797-493f-87f9-9949f8b3d4a9",
+	'Nested_LOOP',
+	10,
+	'NstLOOP',
+	' This object verifies nested ''LOOP'' statements.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("5bf283fb-1dd1-4043-8b2d-9c7a1d525299",
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9",
+	'do_nested_loops',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#------------------------------------------------------------------------#
+# Nested LOOP statements
+#------------------------------------------------------------------------#
+
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+# Test 1 - Nest Loop statements
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objNESTEDLOOP","Nest Loop statements"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0452"]
+
+   Has_Failed = FALSE
+
+   # Ensure the attribute ''ResultA'' is set to zero
+   if an_instanceNESTED_LOOP.ResultA != 0 then
+      an_instanceNESTED_LOOP.ResultA = 0
+   endif
+
+   # Perform the test
+   countA = 0
+   loop
+      countB = 0
+
+      loop
+         countC = 0
+
+         loop
+            countD = 0
+
+            loop
+               countE = 0
+      
+               loop
+                  countF = 0
+  
+                  loop
+                     temp = an_instanceNESTED_LOOP.ResultA + 1
+                     an_instanceNESTED_LOOP.ResultA = temp
+                     countF = countF + 1
+                     breakif countF = 5
+                  endloop
+      
+                  temp = an_instanceNESTED_LOOP.ResultA + 1
+                  an_instanceNESTED_LOOP.ResultA = temp
+                  countE = countE + 1
+                  breakif countE = 5
+               endloop
+   
+               temp = an_instanceNESTED_LOOP.ResultA + 1
+               an_instanceNESTED_LOOP.ResultA = temp
+               countD = countD + 1
+               breakif countD = 5
+            endloop
+   
+            temp = an_instanceNESTED_LOOP.ResultA + 1
+            an_instanceNESTED_LOOP.ResultA = temp
+            countC = countC + 1
+            breakif countC = 5
+         endloop
+
+         temp = an_instanceNESTED_LOOP.ResultA + 1
+         an_instanceNESTED_LOOP.ResultA = temp
+         countB = countB + 1
+         breakif countB = 5
+      endloop
+   
+      temp = an_instanceNESTED_LOOP.ResultA + 1
+      an_instanceNESTED_LOOP.ResultA = temp
+      countA = countA + 1
+      breakif countA = 5
+   endloop
+
+   # Check that the value of attribute ''ResultA'' is correct.
+   if an_instanceNESTED_LOOP.ResultA != 19530 then
+      [] = RPT3:Test_Failed["objNESTEDFOR",Test, an_instanceNESTED_LOOP.ResultA]
+      Has_Failed = TRUE
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDFOR",Test, an_instanceNESTED_LOOP.ResultA]
+   endif
+
+   Test = Test + 1
+
+   Final_Test = Test
+
+#------------------------------------------------------------------------#',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("2c93b86d-b6fb-4a0d-b433-f4bebff602e8",
+	"5bf283fb-1dd1-4043-8b2d-9c7a1d525299",
+	'an_instanceNESTED_LOOP',
+	"adc04415-c41e-48a4-9ca5-085c28273879",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("adc04415-c41e-48a4-9ca5-085c28273879",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Nested_LOOP>',
+	'',
+	'',
+	'../ASL_Mapping.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("6dc7c9d2-0359-4b04-98d6-88c10d4eb634",
+	"5bf283fb-1dd1-4043-8b2d-9c7a1d525299",
+	'Test_Start',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"2c93b86d-b6fb-4a0d-b433-f4bebff602e8",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("f15fb072-aa72-4306-af95-62598996985a",
+	"5bf283fb-1dd1-4043-8b2d-9c7a1d525299",
+	'Final_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"6dc7c9d2-0359-4b04-98d6-88c10d4eb634",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("fb056902-56c8-43e8-81bc-eecee9e76d42",
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9");
+INSERT INTO O_BATTR
+	VALUES ("fb056902-56c8-43e8-81bc-eecee9e76d42",
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9");
+INSERT INTO O_ATTR
+	VALUES ("fb056902-56c8-43e8-81bc-eecee9e76d42",
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceNstLOOP',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceNstLOOP',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("b77c9c28-eb80-4d2c-a189-9a6b8885f4bb",
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9");
+INSERT INTO O_BATTR
+	VALUES ("b77c9c28-eb80-4d2c-a189-9a6b8885f4bb",
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9");
+INSERT INTO O_ATTR
+	VALUES ("b77c9c28-eb80-4d2c-a189-9a6b8885f4bb",
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9",
+	"fb056902-56c8-43e8-81bc-eecee9e76d42",
+	'ResultA',
+	' This attribute is manipulated to indicate that th required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("8e86d6a8-763c-4688-9d61-e8e21ea2197e",
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9");
+INSERT INTO O_BATTR
+	VALUES ("8e86d6a8-763c-4688-9d61-e8e21ea2197e",
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9");
+INSERT INTO O_ATTR
+	VALUES ("8e86d6a8-763c-4688-9d61-e8e21ea2197e",
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9",
+	"b77c9c28-eb80-4d2c-a189-9a6b8885f4bb",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9");
+INSERT INTO O_OIDA
+	VALUES ("fb056902-56c8-43e8-81bc-eecee9e76d42",
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9",
+	0,
+	'ReferenceNstLOOP');
+INSERT INTO O_ID
+	VALUES (1,
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9");
+INSERT INTO O_ID
+	VALUES (2,
+	"12b4ece2-b797-493f-87f9-9949f8b3d4a9");
+INSERT INTO PE_PE
+	VALUES ("12b4ece2-b797-493f-87f9-9949f8b3d4a9",
+	1,
+	"a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	'',
+	0,
+	'../ASL_Mapping.xtuml');

@@ -1,0 +1,291 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("62c7d087-094c-4b4f-87bd-16cf26639207",
+	"00000000-0000-0000-0000-000000000000",
+	"c1883408-e134-401b-a932-c890353a3b1e",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("7067f3b0-813c-4ce5-9627-8a6f2a4e8ebd",
+	112,
+	"62c7d087-094c-4b4f-87bd-16cf26639207",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'Events::Events::Events::functions');
+INSERT INTO DIM_DIA
+	VALUES ("7067f3b0-813c-4ce5-9627-8a6f2a4e8ebd",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("1c2430d0-ebab-4c64-9377-b8c9cf9b6d87",
+	"00000000-0000-0000-0000-000000000000",
+	'Create_Report_Data',
+	'',
+	'# Find out of there already is one of these.
+# It is not inconceivable that a report object still exists from a previous run.
+# Report objects are not deleted at the end of a run, as certain events may
+# still be en-queued.
+
+old_report = find-one Report_Data
+
+if old_report != UNDEFINED then
+   delete old_report
+endif
+
+My_Report = create unique Report_Data with Reported_Domain_Number = 0
+
+[] = RPT6:Domain_Test_Start["Events"]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO PE_PE
+	VALUES ("1c2430d0-ebab-4c64-9377-b8c9cf9b6d87",
+	1,
+	"62c7d087-094c-4b4f-87bd-16cf26639207",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("4325e652-7ca5-430b-be89-fd0d881553e1",
+	"00000000-0000-0000-0000-000000000000",
+	'Delete_Report_Data',
+	'',
+	'[] = RPT7:Domain_Test_Finished["Events"]
+
+# Do not delete the Report_Data object, as there may be still events in
+# the queue.',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	2);
+INSERT INTO PE_PE
+	VALUES ("4325e652-7ca5-430b-be89-fd0d881553e1",
+	1,
+	"62c7d087-094c-4b4f-87bd-16cf26639207",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("97e1852d-b38d-40af-8464-3a472db22b52",
+	"00000000-0000-0000-0000-000000000000",
+	'Generate_From_Service',
+	'',
+	'[] = RPT1:Start_Test[Test_No, "1241-0000-01-0301", "Events", "Bridge", "Event from Bridge Function"]
+[] = RPT8:Specify_Requid[Test_No, "1103-0000-01-0711"]
+
+generate objX1:Check_ASL(Test_No, "Sync Service") to The_IH',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO S_SPARM
+	VALUES ("543e81cf-fb6f-4e65-9dbf-1b4f5fea934f",
+	"97e1852d-b38d-40af-8464-3a472db22b52",
+	'Test_No',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("8d128c08-502f-495d-a2fa-7a8bdcbe76f2",
+	"97e1852d-b38d-40af-8464-3a472db22b52",
+	'The_IH',
+	"5bfb990f-676b-4a1c-8631-6cb55118cb8c",
+	0,
+	'',
+	"543e81cf-fb6f-4e65-9dbf-1b4f5fea934f",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("5bfb990f-676b-4a1c-8631-6cb55118cb8c",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Object_X>',
+	'',
+	'',
+	'../Events/Events.xtuml');
+INSERT INTO PE_PE
+	VALUES ("97e1852d-b38d-40af-8464-3a472db22b52",
+	1,
+	"62c7d087-094c-4b4f-87bd-16cf26639207",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("200cb0cb-09dd-441a-85e9-71371b7e8fa6",
+	"00000000-0000-0000-0000-000000000000",
+	'Verify_Priority',
+	'',
+	'if Event_No = 6 then
+
+   if Ref_No = 60 then
+      [] = RPT2:Test_Passed["Event Priority", Test_No, 0]
+   else
+      [] = RPT3:Test_Failed["Event Priority", Test_No, Ref_No]
+   endif
+
+   my_test = find-one Test_Data
+   The_Test_Number = my_test.Current_Test_Number
+
+   [] = Events2::Delete_Report_Data[]
+
+   my_test = find-one Test_Data
+
+   if my_test != UNDEFINED then
+      delete my_test
+   endif
+
+endif',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	4);
+INSERT INTO S_SPARM
+	VALUES ("08fcce96-8764-4611-b1b8-edd81a4413f1",
+	"200cb0cb-09dd-441a-85e9-71371b7e8fa6",
+	'Ref_No',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("86fd1184-f71f-45a2-bd4e-b50e985ebfeb",
+	"200cb0cb-09dd-441a-85e9-71371b7e8fa6",
+	'Event_No',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"08fcce96-8764-4611-b1b8-edd81a4413f1",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("680e4e11-ca55-463b-8dbe-1acabc8bb3dc",
+	"200cb0cb-09dd-441a-85e9-71371b7e8fa6",
+	'Test_No',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"86fd1184-f71f-45a2-bd4e-b50e985ebfeb",
+	'');
+INSERT INTO PE_PE
+	VALUES ("200cb0cb-09dd-441a-85e9-71371b7e8fa6",
+	1,
+	"62c7d087-094c-4b4f-87bd-16cf26639207",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("421afa20-5c30-467d-b3bd-6863479d5daf",
+	"00000000-0000-0000-0000-000000000000",
+	'Dump_Text',
+	'',
+	'   $INLINE
+      fprintf(stderr,"%s\n", The_Text);
+   $ENDINLINE
+
+   #$ADA_INLINE
+   # with Test_Suite_Text_IO;
+   # 
+   #  Test_Suite_Text_IO.Dump_String(The_Text);
+   #
+   #$END_ADAINLINE',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	5);
+INSERT INTO S_SPARM
+	VALUES ("347f8567-a14b-48da-9726-7310176662d5",
+	"421afa20-5c30-467d-b3bd-6863479d5daf",
+	'The_Text',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO PE_PE
+	VALUES ("421afa20-5c30-467d-b3bd-6863479d5daf",
+	1,
+	"62c7d087-094c-4b4f-87bd-16cf26639207",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ab88f394-6fb0-413e-95c7-aed27fc199bd",
+	"00000000-0000-0000-0000-000000000000",
+	'Add_One',
+	'',
+	'temp = Input_Value
+temp = temp + 1
+
+Output_Value = temp',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	6);
+INSERT INTO S_SPARM
+	VALUES ("04d3f338-4d02-4d5a-be63-c0e40185b299",
+	"ab88f394-6fb0-413e-95c7-aed27fc199bd",
+	'Input_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("dad5b5c6-368a-47da-ae6b-2f74aec08994",
+	"ab88f394-6fb0-413e-95c7-aed27fc199bd",
+	'Output_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"04d3f338-4d02-4d5a-be63-c0e40185b299",
+	'');
+INSERT INTO PE_PE
+	VALUES ("ab88f394-6fb0-413e-95c7-aed27fc199bd",
+	1,
+	"62c7d087-094c-4b4f-87bd-16cf26639207",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("62c7d087-094c-4b4f-87bd-16cf26639207",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"09ccf605-394b-48bc-9b0c-bf2d20859720",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("09ccf605-394b-48bc-9b0c-bf2d20859720",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Events',
+	' Tests the various forms of event transmission, in particular polymorphic events and event data.
+',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Events',
+	'../Events.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("c1883408-e134-401b-a932-c890353a3b1e",
+	'Events',
+	1,
+	'../../../Events.xtuml');

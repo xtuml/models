@@ -1,0 +1,59 @@
+define bridge  CPR_One:S_OBJ_ONE2:Link_To_CPR2_Domain_Again
+input \
+	Starting_IH:Object_One_IH 
+output \
+	Success:Boolean ,\
+	Success_With:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+# Project specified PP terminator
+
+$INLINE
+
+fprintf(stderr, "PP ONE Project level terminator 2\n");
+
+$ENDINLINE
+
+Received_OK = FALSE
+RX_id = -1
+
+if Starting_IH != UNDEFINED then
+
+   Matching_Identifier = Starting_IH.Object_One_Identifier
+
+   $USE CPR_Two
+
+      # Call counterpart instance creation service in domain two.
+
+      [destination_three] = CPR_Two1::Create_Object_Two[Matching_Identifier]
+     
+      link-counterpart Starting_IH CPR2 destination_three
+
+      destination_two = Starting_IH -> CPR2.Object_Two 
+
+      Destination_Attribute = destination_two.Object_Two_Identifier
+
+
+   $ENDUSE 
+
+
+      if destination_two != UNDEFINED and destination_three != UNDEFINED then
+
+         Received_OK = TRUE
+         RX_id = Destination_Attribute
+
+
+      endif
+
+endif
+
+Success_With = RX_id
+Success      = Received_OK
+
+
+
+enddefine

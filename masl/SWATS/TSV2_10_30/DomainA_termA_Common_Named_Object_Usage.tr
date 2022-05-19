@@ -1,0 +1,66 @@
+public service DomainA::TerminatorA~>Common_Named_Object_Usage (Test_Number_Parameter   : in  integer,
+                                                                This_Test_Has_Failed    : out boolean,
+                                                                This_Test_Failure_Value : out integer) is
+# This test shall prove that an object in the other domain can be seen 
+# and read from, even though an object with the same name and attributes 
+# exists in this.
+
+# Luckily, every domain in the test suite has a Test_Data object with an
+# attribute known as This_Test_Number. So hijack it for the purposes of this test,
+# being careful not to corrupt it for later tests!
+
+my_test = find-one Test_Data
+
+Failure_Value = 0
+Has_Failed = FALSE
+
+# Quick test to prove that the common local object in this domain can be seen, 
+# and is accurate.
+
+if my_test = UNDEFINED then
+
+   Failure_Value = -1
+   Has_Failed = TRUE
+
+else
+
+   if Test_Number_Parameter != my_test.This_Test_Number then
+
+      Failure_Value = my_test.This_Test_Number
+ 
+      Has_Failed = TRUE
+
+   else
+
+      This_View_Of_Domain_B_Test_Number = 999
+
+      $USE DomainB
+
+         Domain_B_Test_Data = find-one Test_Data
+
+         if Domain_B_Test_Data != UNDEFINED then
+
+            # If the Test_Data object can not be seen from here or can be seen and is 
+            # something strange like 999, leave the default 
+            # domain version of the domainB test number at 999, thus the test will fail.
+
+            Has_Failed    = FALSE
+            Failure_Value = Domain_B_Test_Data.This_Test_Number
+
+         else
+
+            Has_Failed = TRUE
+            Failure_Value = -2
+
+         endif
+
+      $ENDUSE
+
+
+   endif
+
+endif
+
+This_Test_Has_Failed = Has_Failed
+This_Test_Failure_Value = Failure_Value
+

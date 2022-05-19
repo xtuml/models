@@ -1,0 +1,43 @@
+define bridge  CPR_Three:S_TB_One1:Get_Object_One
+input \
+	The_IH:Third_Way_IH 
+output \
+	Return_Value:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+#Navigate from this instance to another linked in domain one.
+
+Local_Return_Value = 0
+
+$USE CPR_One
+
+   destination_instance = The_IH -> CPR5.Object_One
+
+   if destination_instance != UNDEFINED then
+
+      Local_Return_Value = destination_instance.Object_One_Identifier
+
+   else
+
+      Local_Return_Value = 0
+
+   endif
+
+$ENDUSE
+
+
+$INLINE
+   fprintf (stderr, "CPR_Three navigated to object one with %d \n", Local_Return_Value);
+$ENDINLINE
+
+Return_Value = Local_Return_Value
+
+
+
+
+
+enddefine

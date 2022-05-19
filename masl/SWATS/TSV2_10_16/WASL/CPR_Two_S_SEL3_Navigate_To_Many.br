@@ -1,0 +1,57 @@
+define bridge  CPR_Two:S_SEL3:Navigate_To_Many
+input \
+	The_IH:Single_End_IH 
+output \
+	How_Many_Found:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+How_Many_Instances = 0
+
+$USE CPR_One
+
+   {Set_Of_Target_IH} = The_IH -> CPR3.Many_End_Of_CPR_Relationship
+
+   How_Many_Instances = countof {Set_Of_Target_IH}
+
+$INLINE
+fprintf(stderr,"CPR Two Navigate CPR link and found %d instances\n", How_Many_Instances);
+$ENDINLINE
+
+
+   # Thunder round a loop, ensuring that each instance has an
+   # incremental This_Instance_Number
+
+   Start_Value = 1
+
+   for individual in {Set_Of_Target_IH} do
+
+      if individual.This_Instance_Number = Start_Value then
+
+          # This should maintain the sequence of single increments.
+          Start_Value = Start_Value + 1
+
+      else
+
+
+$INLINE
+fprintf(stderr, "CPR Two Navigate Screwed up on instance %d\n", Start_Value);
+$ENDINLINE
+
+
+         How_Many_Instances = individual.This_Instance_Number 
+
+      endif
+
+   endfor
+
+$ENDUSE
+
+#Set the return value to the number of instances found.
+
+How_Many_Found = How_Many_Instances
+
+enddefine

@@ -1,0 +1,1240 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	'Middle_Object',
+	22,
+	'MO',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("a1d68714-2ce9-401e-adab-64349a5a137b",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	'Create_Relationships',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#-------------------------------------------------------------------#
+#
+# Create relationships
+#
+# The architecture shall implement simple 1:M relationships
+# 1241-0000-01-0602
+#
+# The architecture shall provide a mechanism to allow creation of a 
+# simple relationship link between two object instances
+# 1241-0000-01-0603
+#
+# The architecture shall implement associative 1-1:M relationships
+# 1241-0000-01-0609
+# 
+# The architecture shall provide a mechanism to allow creation of an
+# associative relationship link between two object instances and am
+# associative instance
+# 1241-0000-01-0611
+#
+# The architectureshall support a translation of the ASL link 
+# statement to map to the mechanism that allows creation of a 
+# relationship link between two object instances
+# 1241-0000-01-1202
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+[] = RPT1:Start_Test[Test, "1241-0000-01-0602", "Relationships", "MO", "Create relationships"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0603"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0611"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-1202"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0612"]
+
+Has_Failed  = FALSE
+
+# Find the desired instances for Left_Object
+firstLeft  = find-one Left_Object where idLO = 1
+secondLeft = find-one Left_Object where idLO = 2
+thirdLeft  = find-one Left_Object where idLO = 3
+
+# Find the desired instances for Middle_Object
+firstMiddle  = find-one Middle_Object where idMO = 1
+thirdMiddle  = find-one Middle_Object where idMO = 3
+fourthMiddle = find-one Middle_Object where idMO = 4
+fifthMiddle  = find-one Middle_Object where idMO = 5
+
+# Find the desired instances for Right_Object
+secondRight = find-one Right_Object where idRO = 2
+fourthRight = find-one Right_Object where idRO = 4
+fifthRight  = find-one Right_Object where idRO = 5
+
+# Find the desired instances for MR_Object
+firstMR = find-one MR_Assoc where idMR = 1
+secondMR = find-one MR_Assoc where idMR = 2
+thirdMR = find-one MR_Assoc where idMR = 3
+fifthMR = find-one MR_Assoc where idMR = 5
+
+# Create normal 1:Mc relationships
+link firstLeft R12 firstMiddle
+link firstLeft R12 thirdMiddle
+link secondLeft R12 fifthMiddle
+
+# Create associative Mc:1 relationships
+link firstMiddle R14 secondRight using firstMR
+link thirdMiddle R14 fourthRight using fifthMR
+link fifthMiddle R14 fourthRight using thirdMR
+
+# Create a couple of instances to prove the relationships
+# For coding purposes, it is necessary to overspecify
+# the relationship.
+
+LeftInstance   = firstMiddle -> R12.Left_Object
+{MiddleSet}    = secondLeft  -> R12.Middle_Object
+RightInstance  = firstMiddle -> R14.Right_Object
+InstAssoc      = firstMiddle -> R14.MR_Assoc
+
+# Now check that the navigations can be performed
+
+if LeftInstance = UNDEFINED then
+   Has_Failed   = TRUE
+   Failure_Code = -10
+else
+
+   if LeftInstance.idLO != 1 then
+      Has_Failed   = TRUE
+      Failure_Code = -20
+   endif
+
+endif
+
+if not Has_Failed then
+
+   if countof {MiddleSet} != 1 then
+      Has_Failed   = TRUE
+      Failure_Code = -30
+   endif
+
+endif
+
+if not Has_Failed then
+   if InstAssoc = UNDEFINED then
+      Has_Failed   = TRUE
+      Failure_Code = -40
+   else
+
+      if InstAssoc.idMR != 1 then
+         Has_Failed   = TRUE
+         Failure_Code = -50
+      endif
+
+   endif
+
+endif
+
+if not Has_Failed then
+   if RightInstance = UNDEFINED then
+      Has_Failed   = TRUE
+      Failure_Code = -60
+   else
+
+      if RightInstance.idRO != 2 then
+         Has_Failed = TRUE
+         Failure_Code = -70
+      endif
+
+   endif
+
+endif
+
+#-------------------------------------------------------------------#
+# Test complete
+#-------------------------------------------------------------------#
+
+   if not Has_Failed then
+      [] = RPT2:Test_Passed["MO", Test, 0]
+   else
+      [] = RPT3:Test_Failed["MO", Test, Failure_Code]
+   endif
+
+#-------------------------------------------------------------------#',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("f0b9f445-ca8b-4b6f-8495-47b8cea3062f",
+	"a1d68714-2ce9-401e-adab-64349a5a137b",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("363c1433-bc5c-43b4-b02e-dcc3b7d80642",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	'Middle_Object_Navigation',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#-------------------------------------------------------------------#
+#
+# Normal navigation
+# 
+# The architecture shall implement simple 1:M relationships
+# 1241-0000-01-0602
+#
+# The architecture shall implement associative 1-1:M relationships
+# 1241-0000-01-0609
+#
+# The architecture shall provide operations which, given a starting 
+# instance handle and a relationshipspecification, return a single 
+# handle of the related instance
+# 1241-0000-01-0701
+#
+# The architecture shall provide operations which, given a starting 
+# instance handle and a relationship specification , return a set of
+# handles of the related instances
+# 1241-0000-01-0702
+#
+# The architecture shall support chains of navigations expressed in 
+# ASL
+# 1241-0000-01-0704
+#
+# The architecture shall support navigations to associative objects
+# expressed in ASL
+# 1241-0000-01-0706
+#
+# The architecture shall support navigations from singly associative
+# objects expressed in ASL
+# 1241-0000-01-0707
+#
+# The architectureshall support a translation of the ASL link 
+# statement to map to the mechanism that allows creation of a 
+# relationship link between two object instances
+# 1241-0000-01-1202
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+# Initialise the fault flag
+Has_Failed       = FALSE
+Supported        = TRUE
+#-------------------------------------------------------------------#
+
+# Find the desired instances Left_Object
+firstLeft  = find-one Left_Object where idLO = 1
+secondLeft = find-one Left_Object where idLO = 2
+thirdLeft  = find-one Left_Object where idLO = 3
+
+# Find the desired instances Middle_Object
+firstMiddle  = find-one Middle_Object where idMO = 1
+thirdMiddle  = find-one Middle_Object where idMO = 3
+fourthMiddle = find-one Middle_Object where idMO = 4
+fifthMiddle  = find-one Middle_Object where idMO = 5
+
+# Find the desired instances Right_Object
+secondRight = find-one Right_Object where idRO = 2
+fourthRight = find-one Right_Object where idRO = 4
+fifthRight  = find-one Right_Object where idRO = 5
+
+# Find the desired instances Associative Object
+firstMR  = find-one MR_Assoc where idMR = 1
+secondMR = find-one MR_Assoc where idMR = 2
+
+#-------------------------------------------------------------------#
+# Test 1 - Navigate from Left to Middle using relationship number
+#-------------------------------------------------------------------#
+
+   if Iteration = 1 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0702", "Relationships", "MO", "Navigate from Left to Middle"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]  
+
+      # Perform the navigation
+      {SetMO} = firstLeft -> R12.Middle_Object
+
+      if countof {SetMO} = 0 then
+         Has_Failed = TRUE
+      else
+
+         Val1 = -10
+         Val2 = -20
+
+         for InstMO in {SetMO} do
+   
+            if InstMO.idMO = 1 then
+               Val1 = InstMO.idMO
+            endif
+
+            if InstMO.idMO = 3 then
+               Val2 = InstMO.idMO
+            endif
+
+         endfor
+
+         if Val1 = 1 then
+
+            if Val2 != 3 then
+               Has_Failed = TRUE
+               Failure_Code = Val2
+            endif
+
+         else
+            Has_Failed = TRUE
+            Failure_Code = Val1
+         endif 
+
+      endif
+
+   endif
+
+# End Test 1
+
+#-------------------------------------------------------------------#
+# Test 2 - Navigate From Middle To Left using relationship number
+#-------------------------------------------------------------------#
+
+   if Iteration = 2 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "MO", "Navigate From Middle To Left"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstLO = fifthMiddle -> R12.Left_Object
+
+      # Check the result of the navigation
+      if InstLO != UNDEFINED then
+
+         if InstLO.idLO != 2 then
+            Has_Failed   = TRUE
+            Failure_Code = -10
+         endif
+
+      endif
+
+   endif
+
+# End Test 2
+
+#-------------------------------------------------------------------#
+# Test 3 - Navigate from an instance of the middle object to an
+#          instance in the right object using relationship number
+#-------------------------------------------------------------------#
+
+   if Iteration = 3 then 
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0701", "Relationships", "MO", "Navigate From Middle To Right"]   
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      # Perform the navigation
+      InstRO = firstMiddle -> R14.Right_Object
+
+      # Check the result of the navigation
+      if InstRO != UNDEFINED then
+
+         if InstRO.idRO != 2 then
+            Has_Failed   = TRUE
+            Failure_Code = InstRO.idRO
+         endif
+
+      else
+         Has_Failed = TRUE
+         Failure_Code = -20
+      endif
+
+   endif
+ 
+# End Test 3
+
+#-------------------------------------------------------------------#
+# Test 4 - Navigate from an instance in the right object to a set in
+#          the middle object
+#-------------------------------------------------------------------#
+
+   if Iteration = 4 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0702", "Relationships", "MO", "Navigate From Right To Middle"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      # Perform the navigation
+      {SetMO} = fourthRight -> R14.Middle_Object
+
+      if countof {SetMO} = 0 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         Val1 = -20
+         Val2 = -30
+
+         for InstMO in {SetMO} do
+
+            if (InstMO.idMO = 3) then
+               Val1 = InstMO.idMO
+            endif
+
+            if InstMO.idMO = 5 then
+               Val2 = InstMO.idMO
+            endif
+
+         endfor
+
+         if Val1 = 3 then
+
+            if Val2 != 5 then
+               Has_Failed   = TRUE
+               Failure_Code = Val2
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val1
+         endif
+
+      endif
+
+   endif
+
+# End Test 4
+
+
+#-------------------------------------------------------------------#
+# Test 5 - Navigate to the associative object from the Middle Object
+#-------------------------------------------------------------------#
+
+   if Iteration = 5 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0706", "Relationships", "MO", "Nav from MO to Assoc"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstAssoc = firstMiddle -> R14.MR_Assoc
+
+      if InstAssoc != UNDEFINED then
+
+         if InstAssoc.idMR != 1 then
+            Has_Failed = TRUE
+            Failure_Code = InstAssoc.idMR
+         endif
+
+      endif
+
+   endif
+
+# End Test 5
+
+#-------------------------------------------------------------------#
+# Test 6 - Navigation from a set of instance handles as the source
+#-------------------------------------------------------------------#
+
+   if Iteration = 6 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0703", "Relationships", "MO", "Navigation from set of IH"]
+
+      [] = RPT5:Test_Text [Test, "Naviagation from sets unsupported"]
+
+      Supported = FALSE
+
+   endif
+
+# End Test 6
+
+#-------------------------------------------------------------------#
+# Test 7 - Attempt to perform a navigation on instance that is not 
+#          linked to another instance
+#-------------------------------------------------------------------#
+
+   if Iteration = 7 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "MO", "Nav non-linked rel M to L"]
+
+      # Fourth Middle is not currently linked to any instances of Left Object.
+
+      # Perform the navigation
+      InstLO = fourthMiddle -> R12.Left_Object
+
+      # Check the result of the navigation
+      if InstLO != UNDEFINED then
+         Has_Failed = TRUE
+      endif
+
+   endif
+
+# End Test 7
+
+#-------------------------------------------------------------------#
+# Test 8 - Attempt to perform a navigation on instance that is not 
+#          linked to another instance
+#-------------------------------------------------------------------#
+
+   if Iteration = 8 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "MO", "Nav non-linked rel M to R"]
+
+      # Create two new instances
+      bigMiddle = create Middle_Object with idMO = 1975
+      bigRight  = create Right_Object  with idRO = 2001
+
+      # Seventh Middle is not currently linked to any instances of Right Object.
+ 
+      # Perform the navigation
+      InstRO = bigMiddle -> R14.Right_Object
+
+      # Check the result of the navigation
+      if InstRO != UNDEFINED then
+         Failure_Code = InstRO.idRO
+         Has_Failed   = TRUE
+      endif
+
+   endif
+
+# End Test 8
+
+#-------------------------------------------------------------------#
+# Test 9 - Attempt to perform a navigation on instance that is not 
+#          linked to another instance
+#-------------------------------------------------------------------#
+
+   if Iteration = 9 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "MO", "Nav non-linked rel L to M"]
+
+      # Third Left is not currently linked to any instances of Middle Object.
+
+      # Perform the navigation
+      {SetMO} = thirdLeft -> R12.Middle_Object
+
+      if countof {SetMO} != 0 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif 
+
+   endif
+
+# End Test 9
+
+#-------------------------------------------------------------------#
+# Test 10 - Attempt to perform a navigation on instance that is not
+#           linked to another instance
+#-------------------------------------------------------------------#
+
+   if Iteration = 10 then
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "MO", "Nav non-linked rel R to M"]
+
+      # Fifth Right is not currently linked to any instances of Middle Object.
+
+      # Perform the navigation
+      {SetMO} = fifthRight -> R14.Middle_Object
+
+      if countof {SetMO} != 0 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+   endif
+
+# End Test 10
+
+#-------------------------------------------------------------------#
+# Test 11 - Navigate to the associative object from the Right Object
+#-------------------------------------------------------------------#
+
+   if Iteration = 11 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0706", "Relationships", "MO", "Nav from RO to Assoc"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      {SetAssoc} = fourthRight -> R14.MR_Assoc
+
+      No_In_Set = countof {SetAssoc}
+
+      if countof {SetAssoc} != 2 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+         
+         Val1 = -20
+         Val2 = -30
+
+         for InstAssoc in {SetAssoc} do
+
+            if InstAssoc.idMR = 3 then
+               Val1 = InstAssoc.idMR
+            endif
+
+            if InstAssoc.idMR = 5 then
+               Val2 = InstAssoc.idMR
+            endif
+
+         endfor
+
+         if Val1 = 3 then
+
+            if Val2 != 5 then
+               Has_Failed   = TRUE
+               Failure_Code = Val2
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val1
+         endif
+
+      endif
+
+   endif
+
+# End Test 11
+
+#-------------------------------------------------------------------#
+# Test 12 - Navigate to the associative object from a middle instance 
+#           that isn''t linked to the associated object
+#-------------------------------------------------------------------#
+
+   if Iteration = 12 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "MO", "Nav from RO to Assoc which isnt linked"]
+      {SetAssoc} = fifthRight -> R14.MR_Assoc
+
+      if countof {SetAssoc} != 0 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+   endif
+
+# End Test 12
+
+#-------------------------------------------------------------------#
+# Test 13 - Navigate to the associative object from a right instance 
+#           that isn''t linked to the associated object
+#-------------------------------------------------------------------#
+
+   if Iteration = 13 then
+
+      [] = RPT1:Start_Test[Test, "Null Requid", "Relationships", "MO", "Nav from MO to Assoc which isnt linked"]
+
+      InstAssoc = fourthMiddle -> R14.MR_Assoc
+
+      if InstAssoc != UNDEFINED then
+         Failure_Code = InstAssoc.idMR
+         Has_Failed   = TRUE
+      endif
+
+   endif
+
+# End Test 13
+
+#-------------------------------------------------------------------#
+# Test 14 - Navigate to the associative object from a middle instance 
+#           then to the right object
+#-------------------------------------------------------------------#
+
+   if Iteration = 14 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0706", "Relationships", "MO", "Navigate from middle to associative to right"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0704"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0707"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      InstRO = firstMiddle -> R14.MR_Assoc -> R14.Right_Object
+
+      if InstRO != UNDEFINED then
+
+         if InstRO.idRO != 2 then
+            Has_Failed = TRUE
+            Failure_Code = InstRO.idRO
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      endif
+
+   endif
+
+# End Test 14
+
+#-------------------------------------------------------------------#
+# Test 15 - Navigate to the associative object from a right instance 
+#           then to a set in the middle object
+#-------------------------------------------------------------------#
+
+   if Iteration = 15 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0706", "Relationships", "MO", "Navigate from right to associative to middle"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0704"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0707"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0632"]
+
+      {SetMO} = fourthRight -> R14.MR_Assoc -> R14.Middle_Object
+
+      if countof {SetMO} = 0 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         Val1 = -20
+         Val2 = -30
+
+         for InstMO in {SetMO} do
+
+            if InstMO.idMO = 3 then
+               Val1 = InstMO.idMO
+            endif
+
+            if InstMO.idMO = 5 then
+              Val2 = InstMO.idMO
+            endif
+
+         endfor
+
+         if Val1 = 3 then
+
+            if Val2 != 5 then
+               Has_Failed   = TRUE
+               Failure_Code = Val2
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = Val1
+         endif
+
+      endif
+
+   endif
+
+# End Test 15
+
+#-------------------------------------------------------------------#
+# Test 16 - Navigate from Left to Middle to Right
+#-------------------------------------------------------------------#
+
+   if Iteration = 16 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "MO", "Navigate from left to middle to right"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0702"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1202"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0611"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      link thirdLeft    R12 fourthMiddle
+      link fourthMiddle R14 fifthRight using secondMR
+   
+      {SetRO} = thirdLeft -> R12.Middle_Object -> R14.Right_Object
+
+      if countof {SetRO} != 1 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         for InstRO in {SetRO} do
+
+            if InstRO.idRO != 5 then
+               Has_Failed   = TRUE
+               Failure_Code = -20
+            endif
+
+         endfor
+
+      endif
+
+   endif
+
+# End Test 16
+
+#-------------------------------------------------------------------#
+# Test 17 - Navigate from Right to Middle to Left
+#-------------------------------------------------------------------#
+
+   if Iteration = 17 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "MO", "Navigate from Right to middle to left"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0702"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      {SetLO} = fifthRight -> R14.Middle_Object -> R12.Left_Object
+
+      if countof {SetLO} != 1  then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         for InstLO in {SetLO} do
+         
+            if InstLO.idLO != 3 then
+               Has_Failed   = TRUE
+               Failure_Code = InstLO.idLO
+            endif
+  
+         endfor
+
+      endif
+
+   endif
+
+# End Test 17
+
+#-------------------------------------------------------------------#
+# Test 18 - Navigate from second instance of right object to the 
+#           associative object to the middle object to the left 
+#           object
+#-------------------------------------------------------------------#
+
+   if Iteration = 18 then
+
+      [] = RPT1:Start_Test[Test, "1241-0000-01-0704", "Relationships", "MO", "RO to Assoc to MO to LO"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0602"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0609"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0702"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0706"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-0707"]
+      [] = RPT8:Specify_Requid[Test, "1241-0000-01-1205"]
+      [] = RPT8:Specify_Requid [Test, "1103-0000-01-0631"]
+
+      {SetLO} = secondRight -> R14.MR_Assoc -> R14.Middle_Object -> R12.Left_Object
+
+      if countof {SetLO} != 1 then
+         Has_Failed   = TRUE
+         Failure_Code = -10
+      else
+
+         for InstLO in {SetLO} do
+
+            if InstLO.idLO != 1 then
+               Has_Failed   = TRUE
+               Failure_Code = InstLO.idLO
+            endif
+
+         endfor
+
+      endif
+
+   endif
+
+# End Test 18
+
+#-------------------------------------------------------------------#
+# Tests complete
+#-------------------------------------------------------------------#
+
+   if Supported = TRUE then
+
+      if Has_Failed = FALSE then
+         [] = RPT2:Test_Passed["MO", Test, 0]
+      else
+         [] = RPT3:Test_Failed["MO", Test, Failure_Code]
+      endif
+   
+   else
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+#-------------------------------------------------------------------#
+',
+	3,
+	'',
+	"a1d68714-2ce9-401e-adab-64349a5a137b",
+	2,
+	2);
+INSERT INTO O_TPARM
+	VALUES ("5d14c8f0-0700-4cff-a7db-dfbc2897ab3a",
+	"363c1433-bc5c-43b4-b02e-dcc3b7d80642",
+	'Iteration',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("09b4c516-0529-497e-80c4-175f349666d5",
+	"363c1433-bc5c-43b4-b02e-dcc3b7d80642",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"5d14c8f0-0700-4cff-a7db-dfbc2897ab3a",
+	'');
+INSERT INTO O_TFR
+	VALUES ("cacef5fa-50ca-418e-928d-50dfda3f00b0",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	'Delete_Relationships',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#-------------------------------------------------------------------#
+#
+# Delete all relationships
+#
+# The architecture shall provide a mapping from the ASL delete 
+# instance statment to the deletion mechanism
+# 1241-0000-01-0121
+#
+# The architecture shall provide a mechanism to allow deletion of a 
+# simple relationship link between two object instances
+# 1241-0000-01-0604
+#
+# The architecture shall provide a mechanism to allow the deletion of 
+# an associative link between an associative object and the link an
+# between two objects
+# 1241-0000-01-0612
+#
+# The architecture shall provide a mechanism to allow the deletion of 
+# a link between two objects in an associative relationship
+# 1241-0000-01-0613
+#
+# The architecture shall support a translation of the ASL unassociate
+# statment to map to the mechanism that allows the deletion of an 
+# associative link between an associative object and the link between
+# two objects
+# 1241-0000-01-1203
+#
+# The architecture shall support a translation of the ASL unlink
+# statement to map to the mechanism that allow the deletion of a 
+# link between two objects in a relationship
+# 1241-0000-01-1204
+#
+# The architecture shall support a translation of the ASL navigate
+# statment to map to the mechanism that allows the traversal of
+# relationship links
+# 1241-0000-01-1205
+#
+#-------------------------------------------------------------------#
+
+Has_Failed = FALSE
+
+[] = RPT1:Start_Test[Test, "1241-0000-01-0604", "Relationships", "MO", "Delete all relationships"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0612"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0613"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-1203"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-1204"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0621"]
+[] = RPT8:Specify_Requid [Test, "1103-0000-01-0622"]
+# Find the desired instances 
+
+# Find the desired instances Left_Object
+firstLeft  = find-one Left_Object where idLO = 1
+secondLeft = find-one Left_Object where idLO = 2
+thirdLeft  = find-one Left_Object where idLO = 3
+
+# Find the desired instances Middle_Object
+firstMiddle  = find-one Middle_Object where idMO = 1
+thirdMiddle  = find-one Middle_Object where idMO = 3
+fourthMiddle = find-one Middle_Object where idMO = 4
+fifthMiddle  = find-one Middle_Object where idMO = 5
+bigMiddle    = find-one Middle_Object where idMO = 1975
+
+# Find the desired instances Right_Object
+secondRight = find-one Right_Object where idRO = 2
+fourthRight = find-one Right_Object where idRO = 4
+fifthRight  = find-one Right_Object where idRO = 5
+bigRight    = find-one Right_Object where idRO = 2001
+
+# Find the desired instances Associative_Object
+firstMR  = find-one MR_Assoc where idMR = 1
+secondMR = find-one MR_Assoc where idMR = 2
+thirdMR  = find-one MR_Assoc where idMR = 3
+fifthMR  = find-one MR_Assoc where idMR = 5
+   
+# Delete all relationships
+unlink firstLeft  R12 firstMiddle
+unlink firstLeft  R12 thirdMiddle
+
+# unlink secondLeft R12 firstMiddle
+unlink secondLeft R12 fifthMiddle
+unlink thirdLeft  R12 fourthMiddle
+
+unassociate firstMiddle  R14 secondRight from firstMR
+unassociate thirdMiddle  R14 fourthRight from fifthMR
+unassociate fifthMiddle  R14 fourthRight from thirdMR
+unassociate fourthMiddle R14 fifthRight from secondMR
+
+unlink firstMiddle  R14 secondRight
+unlink thirdMiddle  R14 fourthRight
+unlink fifthMiddle  R14 fourthRight
+unlink fourthMiddle R14 fifthRight
+
+# Explicitly check that all instances have been unlinked
+# correctly.
+
+{Set1M}    = firstLeft  -> R12.Middle_Object
+{Set2M}    = secondLeft -> R12.Middle_Object
+{Set3M}    = thirdLeft  -> R12.Middle_Object
+
+Inst1MRa = firstMiddle  -> R14.MR_Assoc
+Inst1MRb = fourthMiddle -> R14.MR_Assoc
+Inst5MRa = thirdMiddle  -> R14.MR_Assoc
+Inst5MRb = fifthMiddle  -> R14.MR_Assoc  
+
+Inst2R = firstMR -> R14.Right_Object
+Inst4R = fifthMR -> R14.Right_Object
+
+No_In_Set_1M = countof {Set1M}
+
+# Attempt to perform some illegal navigations
+
+if countof {Set1M}  = 0 then
+
+   if Inst1MRa = UNDEFINED then
+
+      if Inst4R != UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -20
+   endif
+
+else
+   Has_Failed   = TRUE
+   Failure_Code = -10
+endif
+
+if not Has_Failed then
+   {SetLO}  = find-all Left_Object
+   {SetMO}  = find-all Middle_Object
+   {SetRO}  = find-all Right_Object
+   {SetMRA} = find-all MR_Assoc
+
+   for InstLO in {SetLO} do
+      delete InstLO
+   endfor
+
+   for InstMO in {SetMO} do
+      delete InstMO
+   endfor
+
+
+   for InstRO in {SetRO} do
+      delete InstRO
+   endfor
+
+
+   for InstMRA in {SetMRA} do
+      delete InstMRA
+   endfor
+
+   {SetLO}  = find-all Left_Object
+   {SetMO}  = find-all Middle_Object
+   {SetRO}  = find-all Right_Object
+   {SetMRA} = find-all MR_Assoc
+
+   if countof {SetLO} = 0 then
+
+      if countof {SetMO} = 0 then
+
+         if countof {SetRO} = 0 then
+
+            if countof {SetMRA} != 0 then
+               Has_Failed   = TRUE
+               Failure_Code = -40
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -50
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -60
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -70
+   endif
+
+endif
+
+#-------------------------------------------------------------------#
+# Test complete
+#-------------------------------------------------------------------#
+
+   if Has_Failed then
+      [] = RPT3:Test_Failed["MO", Test, Failure_Code]
+   else
+      [] = RPT2:Test_Passed["MO", Test, 0]
+   endif
+
+#-------------------------------------------------------------------#',
+	3,
+	'',
+	"363c1433-bc5c-43b4-b02e-dcc3b7d80642",
+	2,
+	3);
+INSERT INTO O_TPARM
+	VALUES ("fb39becb-9903-47e3-8225-2297c39792ff",
+	"cacef5fa-50ca-418e-928d-50dfda3f00b0",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("9abaeb9b-bed7-4bb8-8753-e8f35d45f0d2",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3");
+INSERT INTO O_BATTR
+	VALUES ("9abaeb9b-bed7-4bb8-8753-e8f35d45f0d2",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3");
+INSERT INTO O_ATTR
+	VALUES ("9abaeb9b-bed7-4bb8-8753-e8f35d45f0d2",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	"00000000-0000-0000-0000-000000000000",
+	'idMO',
+	'',
+	'',
+	'idMO',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1e1be9ac-f56c-4f7a-98d7-bc04928e48d0",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3");
+INSERT INTO O_BATTR
+	VALUES ("1e1be9ac-f56c-4f7a-98d7-bc04928e48d0",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3");
+INSERT INTO O_ATTR
+	VALUES ("1e1be9ac-f56c-4f7a-98d7-bc04928e48d0",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	"246c5ee7-e802-4cd1-9c8a-ec663d2fcfc2",
+	'ResultA',
+	'',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("371a75cc-c648-451d-9178-0907319b8f0a",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3");
+INSERT INTO O_BATTR
+	VALUES ("371a75cc-c648-451d-9178-0907319b8f0a",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3");
+INSERT INTO O_ATTR
+	VALUES ("371a75cc-c648-451d-9178-0907319b8f0a",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	"1e1be9ac-f56c-4f7a-98d7-bc04928e48d0",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	"2b9ea0ae-2e1f-4971-84ec-5ccc934b2c29",
+	0,
+	"cc3ce4b6-7e1b-4d26-b184-b27e0eaa6541",
+	"d1873e76-6525-46aa-9f63-162313541a65",
+	"45947a96-eb70-42e4-9407-24454cce2ab7",
+	"b509f361-a438-4bbb-9af6-39e2a534ffd0",
+	"246c5ee7-e802-4cd1-9c8a-ec663d2fcfc2",
+	"181fee97-60fb-46cc-ad7c-0bc1c5f2ffda",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Left_Object',
+	'idLO',
+	'R12.''has''');
+INSERT INTO R_RGO_PROXY
+	VALUES ("1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	"d1873e76-6525-46aa-9f63-162313541a65",
+	"45947a96-eb70-42e4-9407-24454cce2ab7",
+	'../Relationships.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("cc3ce4b6-7e1b-4d26-b184-b27e0eaa6541",
+	"2b9ea0ae-2e1f-4971-84ec-5ccc934b2c29",
+	0,
+	"d1873e76-6525-46aa-9f63-162313541a65",
+	"b509f361-a438-4bbb-9af6-39e2a534ffd0",
+	'../Relationships.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("246c5ee7-e802-4cd1-9c8a-ec663d2fcfc2",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	"cc3ce4b6-7e1b-4d26-b184-b27e0eaa6541",
+	"2b9ea0ae-2e1f-4971-84ec-5ccc934b2c29",
+	0,
+	'idLO');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("cc3ce4b6-7e1b-4d26-b184-b27e0eaa6541",
+	"2b9ea0ae-2e1f-4971-84ec-5ccc934b2c29",
+	'../Left_Object/Left_Object.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("246c5ee7-e802-4cd1-9c8a-ec663d2fcfc2",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	"9abaeb9b-bed7-4bb8-8753-e8f35d45f0d2",
+	'idLO',
+	'',
+	'',
+	'idLO',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3");
+INSERT INTO O_OIDA
+	VALUES ("9abaeb9b-bed7-4bb8-8753-e8f35d45f0d2",
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	0,
+	'idMO');
+INSERT INTO O_ID
+	VALUES (1,
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3");
+INSERT INTO O_ID
+	VALUES (2,
+	"1c3c641d-526f-44d5-afaf-e0c44723a4d3");
+INSERT INTO PE_PE
+	VALUES ("1c3c641d-526f-44d5-afaf-e0c44723a4d3",
+	1,
+	"16257054-8ea8-4071-b5d9-53a2093e0029",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("16257054-8ea8-4071-b5d9-53a2093e0029",
+	"00000000-0000-0000-0000-000000000000",
+	"fb793f65-d0e6-45fe-a7e0-5e290ea2fa31",
+	'Relationships',
+	'',
+	0,
+	'../Relationships.xtuml');

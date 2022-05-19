@@ -1,0 +1,26 @@
+define bridge  CPR_Two:S_SEL2:Create_And_Link_A_New_Many
+input \
+	Many_Identifier:Base_Integer_Type ,\
+	The_IH:Single_End_IH 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+$USE CPR_One
+
+   [new_one] = CPR_One5::Create_One_Of_Many_IH [Many_Identifier]
+
+   link-counterpart The_IH CPR3 new_one
+
+$ENDUSE
+
+$INLINE
+fprintf(stderr, "CPR TWO create and link 1:M object in CPR one\n");
+$ENDINLINE
+
+
+
+enddefine

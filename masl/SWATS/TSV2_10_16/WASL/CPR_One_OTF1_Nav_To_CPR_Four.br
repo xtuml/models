@@ -1,0 +1,46 @@
+define bridge  CPR_One:OTF1:Nav_To_CPR_Four
+input \
+	Source_IH:Many_End_Of_CPR_Relationship_IH 
+output \
+	Returned_Value:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+Local_Return_Attribute = 0
+
+$USE CPR_Four
+
+   #Link should already have been made by the CPR_Four object instance
+
+   {Destination_IH} = Source_IH -> CPR11.First_Active_Object
+
+   how_many = countof {Destination_IH}
+
+$INLINE
+fprintf(stderr,"CPR_One has seen %d instances in CPR_Four\n", how_many);
+$ENDINLINE
+
+   for one_destination in {Destination_IH} do
+
+   if one_destination != UNDEFINED then
+
+      Local_Return_Attribute = one_destination.FAO_Attribute
+
+   else
+
+      Local_Return_Attribute = -999
+
+   endif
+
+   endfor
+
+$ENDUSE
+
+Returned_Value = Local_Return_Attribute
+
+
+
+enddefine

@@ -1,0 +1,51 @@
+define bridge  TEMPLATES:CI2:One_To_Many_Create_And_Link
+input \
+	First_ID:Base_Integer_Type ,\
+	Second_ID:Base_Integer_Type ,\
+	Input_IH:One_To_One_CPR_A_IH 
+output \
+	Test_Result:Base_Integer_Type 
+
+#$DESCRIPTION
+Terminator Contract
+@@XXX-00-0016
+#$END_DESCRIPTION
+
+
+
+Val1 = 0
+
+$USE CPRT
+
+   [FirstCPRC, SecondCPRC] = CPRT2::Create_CPRC[First_ID, Second_ID]
+
+   link-counterpart Input_IH CPR2 FirstCPRC
+   link-counterpart Input_IH CPR2 SecondCPRC
+
+   {Returned_Set} = Input_IH -> CPR2.One_To_Many_CPR_C
+
+   if countof {Returned_Set} = 2 then
+
+      for TmpInst in {Returned_Set} do
+ 
+         if TmpInst.idC = 2 then
+            Val1 = Val1 + 2
+         endif
+
+         if TmpInst.idC = 3 then
+            Val1 = Val1 + 3
+         endif
+   
+      endfor
+
+      Test_Result = Val1
+
+   else
+      Test_Result = -10
+   endif
+
+$ENDUSE
+
+
+
+enddefine

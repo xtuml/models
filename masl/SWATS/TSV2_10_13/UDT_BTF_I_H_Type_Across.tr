@@ -1,0 +1,33 @@
+public service UDT::Bridge_Too_Far~>I_H_Type_Across (Param1_IH     : in  instance of Object_Into_Bridge,
+                                                     Success       : out boolean,
+                                                     Success_Value : out integer) is
+# Attempt to break the architecture by forcing a range error.
+# This will only happen if the locally defined object inherits the 
+# type from the assignment.
+
+# Replacing the commented out line will force the 
+# raising of a constraint error for WACA 5.0.0 onwards.
+
+
+Success = FALSE
+
+Success_Value = -1
+
+Local_Result = Param1_IH.A_Number 
+
+# Comment out post WACA 5.0.0
+# Local_Result = Local_Result * Local_Result
+
+# Still alive, then the test passed
+
+if Param1_IH.Some_Enumeration = 'Four' then
+
+   Success = TRUE
+
+else
+
+   Success = FALSE
+
+endif
+
+Success_Value = Local_Result

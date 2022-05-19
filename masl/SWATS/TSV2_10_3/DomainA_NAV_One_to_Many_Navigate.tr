@@ -1,0 +1,54 @@
+public service DomainA::Navigate~>One_to_Many_Navigate (Test : in  integer) is
+#------------------------------------------------------------------------#
+# Perform a navigation in THIS domain
+#------------------------------------------------------------------------#
+
+My_Report = find-one Report_Data
+
+if My_Report = UNDEFINED then
+
+   $USE RP
+      [] = RP7::Report_Run_Time_Error["Calling domain has not created Report_Data"]
+   $ENDUSE
+
+else
+
+   This_Domain_Number = My_Report.Reported_Domain_Number
+
+   Bridge_Test_Passed = FALSE
+
+   $USE RP
+      [] = RP4::Test_Description[Test, "1241-0000-01-1102", "Domain_A", "Bridge", "local one to many nav", This_Domain_Number]
+      [] = RP10::Specify_Requid[This_Domain_Number, Test, "1103-0000-01-1021"]
+   $ENDUSE
+
+   # Only local variables and input parameters are in scope within a bridge
+   local_id = 0
+
+   left_side = find-one One_To_Many_Left_Side where otmls_id = Test
+
+   {a_set_of_right_sides} = left_side -> R2.One_To_Many_Right_Side
+
+   for a_right_side in {a_set_of_right_sides} do
+
+      if a_right_side.otmrs_id = Test then
+         Bridge_Test_Passed = TRUE
+
+         # Copy id to local variable
+         local_id = a_right_side.otmrs_id
+
+      endif
+
+   endfor
+
+   $USE RP
+
+      if Bridge_Test_Passed = TRUE then
+         [] = RP1::Test_Passed["Bridge", Test, local_id, This_Domain_Number]
+      else
+         [] = RP2::Test_Failed["Bridge", Test, local_id, This_Domain_Number]
+      endif
+
+   $ENDUSE
+
+endif

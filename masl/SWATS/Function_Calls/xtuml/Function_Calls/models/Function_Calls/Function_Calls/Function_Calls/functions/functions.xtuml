@@ -1,0 +1,708 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	"b52b4fed-0445-41e1-8e5b-971995c518cb",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("778e6ccc-e711-40d0-b844-dc4f2c8ce291",
+	112,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'Function_Calls::Function_Calls::Function_Calls::functions');
+INSERT INTO DIM_DIA
+	VALUES ("778e6ccc-e711-40d0-b844-dc4f2c8ce291",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("c428f7a3-3ec7-49be-8c06-e6945f3f795d",
+	"00000000-0000-0000-0000-000000000000",
+	'Domain_FunctionA',
+	' This function is accessible for the whole domain.
+',
+	'   if InputA = 1 then
+      OutputA = 1
+   else
+      OutputA = 2
+   endif
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO S_SPARM
+	VALUES ("d8efa2e1-212d-484f-b336-bbbda0c2c883",
+	"c428f7a3-3ec7-49be-8c06-e6945f3f795d",
+	'InputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("9b30cb41-a0c6-4cef-90de-c245219ff4f6",
+	"c428f7a3-3ec7-49be-8c06-e6945f3f795d",
+	'OutputA',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"d8efa2e1-212d-484f-b336-bbbda0c2c883",
+	'');
+INSERT INTO PE_PE
+	VALUES ("c428f7a3-3ec7-49be-8c06-e6945f3f795d",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("c42ef2d2-832f-4cba-b42f-82b4f11d4064",
+	"00000000-0000-0000-0000-000000000000",
+	'Create_Report_Data',
+	'',
+	'# Find out of there already is one of these.
+# It is not inconceivable that a report object still exists from a previous run.
+# Report objects are not deleted at the end of a run, as certain events may
+# still be en-queued.
+
+old_report = find-one Report_Data
+
+if old_report != UNDEFINED then
+   delete old_report
+endif
+
+My_Report = create unique Report_Data with Reported_Domain_Number = 0
+
+[] = RPT6:Domain_Test_Start["Function Calls"]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	2);
+INSERT INTO PE_PE
+	VALUES ("c42ef2d2-832f-4cba-b42f-82b4f11d4064",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("81579ab2-b3d0-483b-942c-0a059e4463bb",
+	"00000000-0000-0000-0000-000000000000",
+	'Delete_Report_Data',
+	'',
+	'
+[] = RPT5:Test_Text[0,"Test Finished"]
+
+[] = RPT7:Domain_Test_Finished["Function Calls"]
+
+# Do not delete the Report_Data object, as there may be still events in
+# the queue.',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO PE_PE
+	VALUES ("81579ab2-b3d0-483b-942c-0a059e4463bb",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("516cd750-8e1c-45db-8789-26bacbc20db7",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Service_In_Tight_Loop',
+	'',
+	'# ---------------------------------------------------------------------------
+# Start the test here, produce the pass/fail back in the scenario.
+# ---------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[This_Test_Number, "1241-0000-01-0805", "Function_Calls", "Perform Services in tight loop", Testing_For_What]
+   [] = RPT8:Specify_Requid[This_Test_Number, "1241-0000-01-1215"]
+   [] = RPT8:Specify_Requid[This_Test_Number, "1103-0000-01-1011"]
+
+   if A_Tight_Input_Parameter = UNDEFINED then
+      A_Tight_Return_Parameter = -1
+   else
+      A_Tight_Return_Parameter = A_Tight_Input_Parameter.Start_Value + A_Tight_Input_Parameter.Increment_Value
+   endif
+
+
+   
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	4);
+INSERT INTO S_SPARM
+	VALUES ("1186b3b2-58a8-4fa1-9c9a-136219644faa",
+	"516cd750-8e1c-45db-8789-26bacbc20db7",
+	'A_Tight_Input_Parameter',
+	"303afcb8-6f7c-410f-a37a-e49470495d7e",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("303afcb8-6f7c-410f-a37a-e49470495d7e",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<A_Tight_Object>',
+	'',
+	'',
+	'../Function_Calls/Function_Calls.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("62681567-0157-4822-acef-22c094e76e4c",
+	"516cd750-8e1c-45db-8789-26bacbc20db7",
+	'This_Test_Number',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"1186b3b2-58a8-4fa1-9c9a-136219644faa",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("5aace5cb-97d9-4a1e-80fb-461dd3a572ea",
+	"516cd750-8e1c-45db-8789-26bacbc20db7",
+	'Testing_For_What',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"62681567-0157-4822-acef-22c094e76e4c",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("0707561e-d288-41d5-97c4-df000b9bcb9e",
+	"516cd750-8e1c-45db-8789-26bacbc20db7",
+	'A_Tight_Return_Parameter',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"5aace5cb-97d9-4a1e-80fb-461dd3a572ea",
+	'');
+INSERT INTO PE_PE
+	VALUES ("516cd750-8e1c-45db-8789-26bacbc20db7",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("003a9e51-07c3-42b7-af21-012de75b8261",
+	"00000000-0000-0000-0000-000000000000",
+	'Test_Set_Of_IH',
+	'',
+	'my_test_data = find-one Test_Data
+Test_Number  = my_test_data.The_Test_Number
+
+# ---------------------------------------------------------------------------
+# Param1 is set of structures contiaining an instance handle for Object_A.
+# ---------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test_Number, "1241-0000-01-0807", " Function Calls", "Test IH set", Testing_For_What]
+   [] = RPT8:Specify_Requid[Test_Number, "1103-0000-01-1011"]
+   [] = RPT8:Specify_Requid[Test_Number, "1101-0000-01-0138"]
+
+   The_Attribute = 1
+  
+   How_Many = countof {Set_Of_IH}
+
+   if How_Many = 1 then
+
+      # Single IH, not a set.
+      for [Object_IH] in {Set_Of_IH} do
+         The_Attribute = Object_IH.ReferenceA 
+      endfor
+
+      if Single = TRUE then
+         [] = RPT2:Test_Passed["Single of IH received", Test_Number, The_Attribute]
+      else
+         [] = RPT3:Test_Failed["Single IH expected", Test_Number, -1]
+      endif
+
+   else
+
+      # Set of IH
+      if Single = FALSE then
+         [] = RPT2:Test_Passed["Set of IH received", Test_Number, How_Many]
+      else
+         [] = RPT3:Test_Failed["Set IH expected", Test_Number, -1]
+      endif
+
+   endif
+
+# ---------------------------------------------------------------------------
+
+Test_Number = Test_Number + 1
+my_test_data.The_Test_Number = Test_Number',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	5);
+INSERT INTO S_SPARM
+	VALUES ("6b59cb34-2beb-4d30-ac11-13fbab0959b2",
+	"003a9e51-07c3-42b7-af21-012de75b8261",
+	'Set_Of_IH',
+	"afaac218-2151-4b6e-b81d-5b0c8623e6bd",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("afaac218-2151-4b6e-b81d-5b0c8623e6bd",
+	"00000000-0000-0000-0000-000000000000",
+	'Structure_For_IH',
+	' This is unsupported at version 4.0.0.
+ The type should be typed IH for Object_A
+',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("a3383017-cdd9-4506-8ea5-a85a3513d636",
+	"003a9e51-07c3-42b7-af21-012de75b8261",
+	'Single',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"6b59cb34-2beb-4d30-ac11-13fbab0959b2",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("dbab68b3-99f5-4133-ac01-d93528622f2d",
+	"003a9e51-07c3-42b7-af21-012de75b8261",
+	'Testing_For_What',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"a3383017-cdd9-4506-8ea5-a85a3513d636",
+	'');
+INSERT INTO PE_PE
+	VALUES ("003a9e51-07c3-42b7-af21-012de75b8261",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("6a8a3bdd-dc41-4343-80e1-78a91ceb0cc7",
+	"00000000-0000-0000-0000-000000000000",
+	'Receive_Enumeration',
+	'',
+	'   [] = RPT1:Start_Test[Test_Number, "1241-0000-01-0804", "Function Calls", "Receive enumeration", Testing_For]
+   [] = RPT8:Specify_Requid[Test_Number, "1103-0000-01-1011"]
+
+   Target_Colour of Colour_Type = ''Red''
+
+   if The_Colour = Target_Colour then
+      [] = RPT2:Test_Passed[Testing_For, Test_Number, 0]
+   else
+      [] = RPT3:Test_Failed[Testing_For, Test_Number, -1]
+   endif
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	6);
+INSERT INTO S_SPARM
+	VALUES ("4eb04abb-fbed-45ee-92ff-910f2156bf75",
+	"6a8a3bdd-dc41-4343-80e1-78a91ceb0cc7",
+	'Test_Number',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("5a52323f-cb4a-4475-8003-42427b7c3ead",
+	"6a8a3bdd-dc41-4343-80e1-78a91ceb0cc7",
+	'The_Colour',
+	"763b98a9-51d9-4a9d-8d28-9562cd6209b8",
+	0,
+	'',
+	"4eb04abb-fbed-45ee-92ff-910f2156bf75",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("763b98a9-51d9-4a9d-8d28-9562cd6209b8",
+	"00000000-0000-0000-0000-000000000000",
+	'Colour_Type',
+	'',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("d9a2122a-315a-4793-a766-b6d3a5f96093",
+	"6a8a3bdd-dc41-4343-80e1-78a91ceb0cc7",
+	'Testing_For',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"5a52323f-cb4a-4475-8003-42427b7c3ead",
+	'');
+INSERT INTO PE_PE
+	VALUES ("6a8a3bdd-dc41-4343-80e1-78a91ceb0cc7",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("94ba1e18-41c0-40fe-b4a5-c0afbd8415c1",
+	"00000000-0000-0000-0000-000000000000",
+	'Nav_Enum_Over_Bridge',
+	'',
+	'switch The_Input_Value
+
+   case ''Sly''
+      The_Return_Value = ''Slys_Mum''
+   case ''Sandy''
+      The_Return_Value = ''Sandys_Mum''
+   case ''Wes''
+      The_Return_Value = ''Wes_Mum''
+   default
+      The_Return_Value = ''Nobodys_Mum''
+endswitch',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	7);
+INSERT INTO S_SPARM
+	VALUES ("ee0cff69-6ebc-4966-8992-6cd46511340c",
+	"94ba1e18-41c0-40fe-b4a5-c0afbd8415c1",
+	'The_Input_Value',
+	"eb8192b4-7c7b-442c-bb4f-4d3cfc129002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("eb8192b4-7c7b-442c-bb4f-4d3cfc129002",
+	"00000000-0000-0000-0000-000000000000",
+	'New_Enum_Type',
+	'',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("ecb1ff0d-d9a2-4a0d-814c-799c1fc7eef6",
+	"94ba1e18-41c0-40fe-b4a5-c0afbd8415c1",
+	'The_Return_Value',
+	"93162d7d-d7d3-47ff-b1b2-dbe01ba97180",
+	1,
+	'',
+	"ee0cff69-6ebc-4966-8992-6cd46511340c",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("93162d7d-d7d3-47ff-b1b2-dbe01ba97180",
+	"00000000-0000-0000-0000-000000000000",
+	'Return_Enum_Type',
+	'',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO PE_PE
+	VALUES ("94ba1e18-41c0-40fe-b4a5-c0afbd8415c1",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("e1f7f8ec-625d-4dc4-af93-3f7d8434e435",
+	"00000000-0000-0000-0000-000000000000",
+	'Call_To_Self',
+	'',
+	'[Host] = WAW1:What_Env[]
+
+temp = The_Input_Value
+temp = temp + 1
+
+if Host = "ISIM" then
+   Total = 5
+else
+   Total = 700
+endif
+
+if temp = Total then
+   The_Output_Value = temp
+else
+   The_Output_Value = temp
+   [The_Output_Value] = Function_Calls8::Call_To_Self[temp]
+endif
+
+
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	8);
+INSERT INTO S_SPARM
+	VALUES ("313d1386-d395-4273-ac11-20705093fa17",
+	"e1f7f8ec-625d-4dc4-af93-3f7d8434e435",
+	'The_Input_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("9d024585-32a0-48dd-aae0-a6a0e681d611",
+	"e1f7f8ec-625d-4dc4-af93-3f7d8434e435",
+	'The_Output_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"313d1386-d395-4273-ac11-20705093fa17",
+	'');
+INSERT INTO PE_PE
+	VALUES ("e1f7f8ec-625d-4dc4-af93-3f7d8434e435",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("597543aa-3397-4d09-b4c8-4f65c11be66b",
+	"00000000-0000-0000-0000-000000000000",
+	'Add_Values_From_Bridge',
+	'',
+	'   The_Total = Input1 + Input2 + Input3
+   
+   if The_Total = 6 then
+      [] = RPT2:Test_Passed["Domain sync called from bridge", Test, The_Total]
+   else
+      [] = RPT3:Test_Failed["Domain sync called from bridge", Test, The_Total]
+   endif',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	9);
+INSERT INTO S_SPARM
+	VALUES ("aa72a63a-0355-4090-8861-54d4f61862bd",
+	"597543aa-3397-4d09-b4c8-4f65c11be66b",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("23e0c08f-27a3-424b-8201-b01324951009",
+	"597543aa-3397-4d09-b4c8-4f65c11be66b",
+	'Input1',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"aa72a63a-0355-4090-8861-54d4f61862bd",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("912e1cb3-2c98-4a2d-a3e0-8fd4a0dd93f1",
+	"597543aa-3397-4d09-b4c8-4f65c11be66b",
+	'Input2',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"23e0c08f-27a3-424b-8201-b01324951009",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("9b68becd-152d-4f61-ad9c-5a0d2703ef6f",
+	"597543aa-3397-4d09-b4c8-4f65c11be66b",
+	'Input3',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"912e1cb3-2c98-4a2d-a3e0-8fd4a0dd93f1",
+	'');
+INSERT INTO PE_PE
+	VALUES ("597543aa-3397-4d09-b4c8-4f65c11be66b",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("e800f151-3015-4616-84ba-bebe053b7b3e",
+	"00000000-0000-0000-0000-000000000000",
+	'Call_A',
+	'',
+	'[Host] = WAW1:What_Env[]
+
+temp = Input_Value
+temp = temp + 1
+
+   if Host = "ISIM" then
+      Total = 10
+   else
+      Total = 700
+   endif
+
+if temp >= Total then
+   Output_Value = temp
+else
+   Output_Value = temp
+   [Output_Value] = Function_Calls11::Call_B[temp]
+endif',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	10);
+INSERT INTO S_SPARM
+	VALUES ("c898e805-3ca1-4f62-97bc-da4f5e41d23d",
+	"e800f151-3015-4616-84ba-bebe053b7b3e",
+	'Input_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("87d6da4c-a43e-43b3-a5ef-34c7acbce35d",
+	"e800f151-3015-4616-84ba-bebe053b7b3e",
+	'Output_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"c898e805-3ca1-4f62-97bc-da4f5e41d23d",
+	'');
+INSERT INTO PE_PE
+	VALUES ("e800f151-3015-4616-84ba-bebe053b7b3e",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("73b93761-2ad4-41dc-b359-2f5dac295463",
+	"00000000-0000-0000-0000-000000000000",
+	'Call_B',
+	'',
+	'temp = Input_Value
+temp = temp + 1
+
+   Output_Value = temp
+   [Output_Value] = Function_Calls10::Call_A[temp]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	11);
+INSERT INTO S_SPARM
+	VALUES ("62295cbb-32ff-4511-a7ef-8ed79a4b4c1a",
+	"73b93761-2ad4-41dc-b359-2f5dac295463",
+	'Input_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("177cb732-9901-407f-bf59-3fe4b308072d",
+	"73b93761-2ad4-41dc-b359-2f5dac295463",
+	'Output_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"62295cbb-32ff-4511-a7ef-8ed79a4b4c1a",
+	'');
+INSERT INTO PE_PE
+	VALUES ("73b93761-2ad4-41dc-b359-2f5dac295463",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("fabab220-47bf-4532-8e11-9ca06057710c",
+	"00000000-0000-0000-0000-000000000000",
+	'Test_IH_Params',
+	'',
+	'Inst_Of_C = find-one Object_C where idC = 100
+
+if Input_IH.idC = 100 then
+
+   if Input_IH.IntC = 200 then
+
+      if Input_IH.RealC = 99.9 then
+         Inst_Of_C.idC   = 1000
+         Inst_Of_C.IntC  = 2000
+         Inst_Of_C.RealC = 999.9
+
+         Return_IH = Inst_Of_C
+      endif
+
+   endif
+
+endif',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	12);
+INSERT INTO S_SPARM
+	VALUES ("0f621b8c-3661-40f3-82c9-31b7b7c1c964",
+	"fabab220-47bf-4532-8e11-9ca06057710c",
+	'Input_IH',
+	"2b879e4b-cd60-4066-8cab-60b54f1a9150",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("2b879e4b-cd60-4066-8cab-60b54f1a9150",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Object_C>',
+	'',
+	'',
+	'../Function_Calls/Function_Calls.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("d609289e-92ad-4478-b100-5ac237651a8c",
+	"fabab220-47bf-4532-8e11-9ca06057710c",
+	'Return_IH',
+	"2b879e4b-cd60-4066-8cab-60b54f1a9150",
+	1,
+	'',
+	"0f621b8c-3661-40f3-82c9-31b7b7c1c964",
+	'');
+INSERT INTO PE_PE
+	VALUES ("fabab220-47bf-4532-8e11-9ca06057710c",
+	1,
+	"6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("6e5b03c2-54dd-485b-80bb-4fa3d75aa142",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"aa26aed6-5d11-43d7-b8f9-84084b942dee",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("aa26aed6-5d11-43d7-b8f9-84084b942dee",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Function_Calls',
+	' Tests Domain, object and instance based functions.
+',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Function_Calls',
+	'../Function_Calls.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("b52b4fed-0445-41e1-8e5b-971995c518cb",
+	'Function_Calls',
+	1,
+	'../../../Function_Calls.xtuml');

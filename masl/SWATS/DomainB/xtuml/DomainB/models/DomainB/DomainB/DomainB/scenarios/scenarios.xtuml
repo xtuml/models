@@ -1,0 +1,204 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("9c29c239-a9b0-480e-ac1d-13248cdaeb35",
+	"00000000-0000-0000-0000-000000000000",
+	"016c8b61-2704-4c62-a807-6c66110eaaaf",
+	'scenarios',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("dad16202-e422-45bb-927a-133b32d42539",
+	112,
+	"9c29c239-a9b0-480e-ac1d-13248cdaeb35",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'DomainB::DomainB::DomainB::scenarios');
+INSERT INTO DIM_DIA
+	VALUES ("dad16202-e422-45bb-927a-133b32d42539",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("93776c15-2f58-432b-b968-0bdcbe21b6b8",
+	"00000000-0000-0000-0000-000000000000",
+	'Domain_B_setup',
+	' Domain B setup
+',
+	'my_test = create Test_Data with This_Test_Number = 1
+
+#Create several instances of Object_B
+count = 5
+loop
+   newB = create Object_B with idB = count &\
+                               ResultB = 0 &\
+                               Current_State  = ''Idle''
+
+   newC = create Object_C with idC = count & \
+                               a_number = count 
+
+   newD = create Object_D with idD = count & \
+                               D_Number = count
+
+   newCD = create Object_CD with a_name = "fred"
+
+   link newC R1 newD using newCD
+
+   count = count - 1
+   breakif count = 0
+endloop
+
+
+Super1 = create Domain_B_Object_Super with idSUPER_B = 1
+Sub_A1 = create Domain_B_Object_SubA with SubA_Attribute = 1 & A_Text = "Sub A1"
+Sub_B1 = create Domain_B_Object_SubB with SubB_Attribute = 1 & B_Text = "Sub B1"
+
+link Super1 R4 Sub_A1
+
+Super2 = create Domain_B_Object_Super with idSUPER_B = 2
+Sub_A2 = create Domain_B_Object_SubA with SubA_Attribute = 2 & A_Text = "Sub A2"
+Sub_B2 = create Domain_B_Object_SubB with SubB_Attribute = 2 & B_Text = "Sub B2"
+
+link Super2 R4 Sub_B2',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO PE_PE
+	VALUES ("93776c15-2f58-432b-b968-0bdcbe21b6b8",
+	1,
+	"9c29c239-a9b0-480e-ac1d-13248cdaeb35",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("bb5ebfc7-9c4d-462e-be5a-7f7d3473795f",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_domain_B_nav_tests',
+	' Perform domain B nav tests
+',
+	'#------------------------------------------------------------------------#
+# Call the domain based synch service directly for navigation of 
+# relationships in DomainA.
+#------------------------------------------------------------------------#
+
+[] = DomainB4::Perform_DomainA_Navigations[]
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	2);
+INSERT INTO PE_PE
+	VALUES ("bb5ebfc7-9c4d-462e-be5a-7f7d3473795f",
+	1,
+	"9c29c239-a9b0-480e-ac1d-13248cdaeb35",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f7f136cc-1c5d-4114-96c8-07946d6e0c65",
+	"00000000-0000-0000-0000-000000000000",
+	'Start_DomainB_Tests',
+	' Start DomainB Tests
+',
+	'[] = DomainB5::Create_Report_Data[]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO PE_PE
+	VALUES ("f7f136cc-1c5d-4114-96c8-07946d6e0c65",
+	1,
+	"9c29c239-a9b0-480e-ac1d-13248cdaeb35",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("4a3b54b4-d3f4-4b02-9a67-57c547f4bdc5",
+	"00000000-0000-0000-0000-000000000000",
+	'Finish_DomainB_Tests',
+	' Finish DomainB Tests
+',
+	'# [] = DomainB6::Delete_Report_Data[]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	4);
+INSERT INTO PE_PE
+	VALUES ("4a3b54b4-d3f4-4b02-9a67-57c547f4bdc5",
+	1,
+	"9c29c239-a9b0-480e-ac1d-13248cdaeb35",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("c9d8c2ef-abbe-43d2-9701-9c197ff82786",
+	"00000000-0000-0000-0000-000000000000",
+	'Check_Enumeration_Across_Domain_B',
+	' Check_Enumeration_Across_Domain_B
+',
+	'#------------------------------------------------------------------------#
+# Check that enumerated type are passed through bridges correctly
+#------------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.This_Test_Number
+
+   [] = NAV5:Enum_Test[Test, ''Sandy'']
+
+   Test = Test + 1
+
+   my_test.This_Test_Number = Test
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	5);
+INSERT INTO PE_PE
+	VALUES ("c9d8c2ef-abbe-43d2-9701-9c197ff82786",
+	1,
+	"9c29c239-a9b0-480e-ac1d-13248cdaeb35",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("9c29c239-a9b0-480e-ac1d-13248cdaeb35",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"9bd4f98b-f39f-402f-a1fe-bf56c2801196",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("9bd4f98b-f39f-402f-a1fe-bf56c2801196",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'DomainB',
+	' For use in multiple domain builds.
+',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'DomainB',
+	'../DomainB.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("016c8b61-2704-4c62-a807-6c66110eaaaf",
+	'DomainB',
+	1,
+	'../../../DomainB.xtuml');

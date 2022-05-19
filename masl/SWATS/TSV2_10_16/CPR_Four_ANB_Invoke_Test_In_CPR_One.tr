@@ -1,0 +1,14 @@
+public service CPR_Four::A_Normal_Bridge~>Invoke_Test_In_CPR_One (Destination_ID : in  integer,
+                                                                  Source_ID      : in  integer) is
+CPR_One_Object_ID = Source_ID
+CPR_Four_Object_ID =  Destination_ID 
+
+$INLINE
+fprintf(stderr,"Calling CPR_One to Kick off tests\n");
+$ENDINLINE
+
+$USE CPR_One
+
+   [] = MANY1:Kick_Off_CPR_Four_Tests [CPR_One_Object_ID, CPR_Four_Object_ID]
+
+$ENDUSE

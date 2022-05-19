@@ -1,0 +1,20 @@
+public service CT_Tags::Navigate_CCA~>Create_And_Link_CCA (CCA_IH     : in  instance of CCA_CP,
+                                                           Return_Val : out integer) is
+$USE CP_Tags
+
+   # Call counterpart instance creation service in domain two.
+
+   [Dest] = CP_Tags2::Create_CCA[]
+
+   link-counterpart CCA_IH CPR2 Dest
+
+$ENDUSE 
+
+
+   if Dest != UNDEFINED then
+      Return_Val = 1
+   else
+      Return_Val = -10
+   endif
+
+
