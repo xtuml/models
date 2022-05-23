@@ -1,0 +1,201 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("ae7ad9d8-11e4-4432-ad53-4ed656a21ab5",
+	'Default_Vals',
+	14,
+	'DV',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("607d4d6d-06c3-4c19-a7d2-7f9d732af273",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5",
+	'Default_Vals_In_Object',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'[] = RPT1:Start_Test[Test, "1241-0000-01-0115", "ASL Mapping", "Check defaults vals in object", "Check defaults vals in object"]
+[] = RPT8:Specify_Requid[Test, "1241-0000-01-0114"]
+
+Set_Vals   = FALSE
+Has_Failed = FALSE
+
+[Host] = WAW1:What_Env[]
+
+InstDV = create Default_Vals
+
+if Set_Vals then
+   InstDV.The_Integer = 10
+   InstDV.The_Real    = 10.0
+   InstDV.The_Text    = "Value Set"
+   InstDV.The_Boolean = TRUE
+endif
+
+   if not Set_Vals then
+
+      if InstDV.The_Integer = 0 then
+
+         if InstDV.The_Real = 0.0 then
+
+            if not InstDV.The_Boolean then
+
+               if Host = "WACA" then 
+
+                  if InstDV.The_Text != "                                " then
+                     Has_Failed   = TRUE
+                     Failure_Code = -10
+                  endif
+
+               else
+
+                   if InstDV.The_Text != "" then
+                     Has_Failed   = TRUE
+                     Failure_Code = -10
+                  endif                 
+
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = -20
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -30
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -40
+      endif
+
+   endif
+
+#-------------------------------------------------------------------#
+
+   if not Has_Failed then
+      [] = RPT2:Test_Passed["DV", Test, 0]
+   else
+      [] = RPT3:Test_Failed["DV", Test, Failure_Code]
+   endif
+
+Returning_No = Test + 1',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("08e7c542-421d-4002-a535-a6b1d13f91fd",
+	"607d4d6d-06c3-4c19-a7d2-7f9d732af273",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("fbe39524-a95d-48e2-81a5-bf03e7e71979",
+	"607d4d6d-06c3-4c19-a7d2-7f9d732af273",
+	'Returning_No',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"08e7c542-421d-4002-a535-a6b1d13f91fd",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("d9a532f7-d248-4255-a593-6f39344790e5",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5");
+INSERT INTO O_BATTR
+	VALUES ("d9a532f7-d248-4255-a593-6f39344790e5",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5");
+INSERT INTO O_ATTR
+	VALUES ("d9a532f7-d248-4255-a593-6f39344790e5",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5",
+	"00000000-0000-0000-0000-000000000000",
+	'The_Integer',
+	'',
+	'',
+	'The_Integer',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("b255d3bc-1d1f-4808-a918-af8e1c36ce62",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5");
+INSERT INTO O_BATTR
+	VALUES ("b255d3bc-1d1f-4808-a918-af8e1c36ce62",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5");
+INSERT INTO O_ATTR
+	VALUES ("b255d3bc-1d1f-4808-a918-af8e1c36ce62",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5",
+	"d9a532f7-d248-4255-a593-6f39344790e5",
+	'The_Real',
+	'',
+	'',
+	'The_Real',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("bb4440bb-ab2f-443b-98f4-c9e4abb70412",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5");
+INSERT INTO O_BATTR
+	VALUES ("bb4440bb-ab2f-443b-98f4-c9e4abb70412",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5");
+INSERT INTO O_ATTR
+	VALUES ("bb4440bb-ab2f-443b-98f4-c9e4abb70412",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5",
+	"b255d3bc-1d1f-4808-a918-af8e1c36ce62",
+	'The_Text',
+	'',
+	'',
+	'The_Text',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("5f96358c-bcd9-4b2f-baa6-a79275bbd980",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5");
+INSERT INTO O_BATTR
+	VALUES ("5f96358c-bcd9-4b2f-baa6-a79275bbd980",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5");
+INSERT INTO O_ATTR
+	VALUES ("5f96358c-bcd9-4b2f-baa6-a79275bbd980",
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5",
+	"bb4440bb-ab2f-443b-98f4-c9e4abb70412",
+	'The_Boolean',
+	'',
+	'',
+	'The_Boolean',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5");
+INSERT INTO O_ID
+	VALUES (1,
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5");
+INSERT INTO O_ID
+	VALUES (2,
+	"ae7ad9d8-11e4-4432-ad53-4ed656a21ab5");
+INSERT INTO PE_PE
+	VALUES ("ae7ad9d8-11e4-4432-ad53-4ed656a21ab5",
+	1,
+	"a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	'',
+	0,
+	'../ASL_Mapping.xtuml');

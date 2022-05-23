@@ -1,0 +1,32 @@
+define bridge  CT_Tags:Nav_TCA2:Create_And_Link_TCA
+input \
+	TCA_IH:TCA_CP_IH 
+output \
+	Result:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+$USE CP_Tags
+
+   # Call counterpart instance creation service in domain two.
+
+   [Dest] = CP_Tags1::Create_TCA[]
+
+   link-counterpart TCA_IH CPR1 Dest
+
+$ENDUSE 
+
+
+   if Dest != UNDEFINED then
+      Result = 1
+   else
+      Result = -10
+   endif
+
+
+
+
+enddefine

@@ -1,0 +1,14 @@
+public service CPR_Two::Simple_Single_End_Link~>Create_And_Link_A_New_Many (Many_Identifier : in  integer,
+                                                                            The_IH          : in  instance of Single_End) is
+$USE CPR_One
+
+   [new_one] = CPR_One5::Create_One_Of_Many_IH [Many_Identifier]
+
+   link-counterpart The_IH CPR3 new_one
+
+$ENDUSE
+
+$INLINE
+fprintf(stderr, "CPR TWO create and link 1:M object in CPR one\n");
+$ENDINLINE
+

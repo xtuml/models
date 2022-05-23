@@ -1,0 +1,28 @@
+public service CPR_Three::Simple_Third_Boundary_To_Object_Two~>Get_Single_Object (The_IH    : in  instance of Third_Way,
+                                                                                  Linked_To : out integer) is
+$INLINE
+fprintf(stderr,"CPR_Three Single to Multi Navigation\n");
+$ENDINLINE
+
+Local_Countup = 0
+
+$USE CPR_Two
+
+   The_Single_End_IH = find-one Single_End
+
+   link-counterpart The_IH CPR7 The_Single_End_IH
+
+   Single_IH = The_IH -> CPR7.Single_End
+
+$ENDUSE
+
+$USE CPR_One
+
+   {Set_Of_Multiples} = Single_IH -> CPR3.Many_End_Of_CPR_Relationship
+   Local_Countup     = countof {Set_Of_Multiples}
+
+$ENDUSE
+
+
+
+Linked_To = Local_Countup

@@ -1,0 +1,34 @@
+public service CPR_Two::Simple_Single_End_Link~>Link_A_Specified_Many (Instance_Number : in  integer,
+                                                                       The_IH          : in  instance of Single_End) is
+# FInd the specified instance in the target domain
+
+$INLINE
+fprintf(stderr, "CPR Two 1:M linked ");
+$ENDINLINE
+
+
+$USE CPR_One
+
+   Destination_IH = find-one Many_End_Of_CPR_Relationship where Unique_Identifier = Instance_Number
+
+   if Destination_IH = UNDEFINED then
+
+
+$INLINE
+fprintf(stderr, "UNSUCCESSFULLY\n");
+$ENDINLINE
+
+
+   else
+
+      link-counterpart The_IH CPR3 Destination_IH
+
+
+$INLINE
+fprintf(stderr, "successfully\n");
+$ENDINLINE
+
+
+   endif
+
+$ENDUSE

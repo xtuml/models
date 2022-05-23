@@ -1,0 +1,446 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("a3dbe2a9-4cae-47b0-834d-b45bf07ebeef",
+	'Object_NESTED',
+	5,
+	'objNESTED',
+	' This object verifies various nested statements.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("d4176ba6-2782-40db-8cee-cac135fffa2f",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef",
+	'do_nested_tests',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#------------------------------------------------------------------------#
+# Test 1 - This test verifies the mapping of nested ASL statements into 
+#          the application langauge.
+#
+#          The nature of the nested statements means that the LOOP 
+#          statement is encountered 5 times. The following paragraphs 
+#          indicate what data is written into attribute ''ResultB'' each 
+#          time the LOOP statement is encountered.
+#
+#          The instances affected the first time the LOOP statement is 
+#          encountered are 5, 4, and 3, hence the atttribute ''ResultB'' has 
+#          the value 1, 2 and 3 written into it.
+#
+#          The instances affected the second time the LOOP statement is 
+#          encountered are 2 and 1, hence the atttribute ''ResultB'' has the 
+#          value 1 and 2 written into it.
+#
+#          Thereafter the attribute ''ResultB'' is unaffected.
+#------------------------------------------------------------------------#
+
+   Test = Test_Start
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objNESTED", "Nested logic"]
+   Has_Failed = FALSE
+
+   #---------------------------------------------------------------------#
+   # Ensure that each instance of the attributes ResultA and ResultB are 
+   # set to zero
+   #---------------------------------------------------------------------#
+
+   {all_instances_of_NESTED} = find-all Object_NESTED
+   for each_instance in {all_instances_of_NESTED} do
+      each_instance.ResultA = 0
+      each_instance.ResultB = 0
+   endfor
+
+   #---------------------------------------------------------------------#
+   # FOR, IF, LOOP with BREAKIF affecting the LOOP statement.
+   #
+   # The FOR statement will cause the attribute ResultA for all instances 
+   # to be set to the value of countA.
+   #
+   # The LOOP statement will cause the attribute ResulB to be set to the 
+   # value of countB.
+   #---------------------------------------------------------------------#
+
+   countA = 0
+
+   for each_instance in {all_instances_of_NESTED} do
+
+      if each_instance.ResultA = 0 then
+         each_instance.ResultA = countA
+         countB = 1
+
+         loop
+            an_instance_of_NESTED = find-one Object_NESTED where ResultB = 0
+
+            if an_instance_of_NESTED != UNDEFINED then
+               an_instance_of_NESTED.ResultB = countB
+            endif
+
+            countB = countB + 1
+            breakif countB = 4
+
+         endloop
+
+         # Verify the BREAKIF statement.
+         if countB != 4 then
+            Has_Failed = TRUE
+         endif
+
+      endif
+
+      countA = countA + 1
+
+   endfor
+
+   # Verify that all instances in Object_NESTED where affected
+   if countA = 5 then
+
+      if not Has_Failed then
+         [] = RPT2:Test_Passed["objNESTED", Test, 0]
+      else
+         [] = RPT3:Test_Failed["objNESTED", Test, -10]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objNESTED", Test, -20]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - This test verifies the mapping of nested ASL statements into 
+#          the application language.
+#          The nature of the nested statements means that the LOOP 
+#          statement is encountered 5 times, Each time a value is written 
+#          into attribute ''ResultA''.
+#
+#          A value is written into a different instance of attribute 
+#          ''ResultB'' until the BREAK statement is encountered within the 
+#          LOOP statement, i.e. the LOOP will break after one pass.
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0441", "ASL Mapping", "objNESTED", "Loop breaks after one pass"]
+   Has_Failed = FALSE
+
+
+   #---------------------------------------------------------------------#
+   # Ensure that each instance of attributes ResultA and ResultB are set 
+   # to zero.
+   #---------------------------------------------------------------------#
+
+   {all_instances_of_NESTED} = find-all Object_NESTED
+   for each_instance in {all_instances_of_NESTED} do
+      each_instance.ResultA = 0
+      each_instance.ResultB = 0
+   endfor
+
+   #---------------------------------------------------------------------#
+   # FOR, IF, LOOP with BREAK affecting the LOOP statement
+   #
+   # The FOR statement will cause attribute ResultA for each instance to 
+   # be set to the value of countA.
+   #
+   # The LOOP statement will cause the attribute ResultB to be set to the
+   # value of countB.
+   # The BREAK statement ensures that only one instances is affected at
+   # one time.
+   #---------------------------------------------------------------------#
+
+   countA = 0
+   countC = 0
+   for each_instance in {all_instances_of_NESTED} do
+
+      if each_instance.ResultA = 0 then
+         each_instance.ResultA = countA
+         countB = 0
+
+         loop
+            an_instance_of_NESTED = find-one Object_NESTED where ResultB = 0
+
+            if an_instance_of_NESTED != UNDEFINED then
+               an_instance_of_NESTED.ResultB = countC
+            endif
+
+            countC = countC + 1
+            countB = countB + 1
+            break
+
+         endloop
+
+         if (countB != 1) then
+            Has_Failed = TRUE
+         endif
+
+      endif
+
+      countA = countA + 1
+
+   endfor
+
+   if countA = 5 then
+
+      if not Has_Failed then
+         [] = RPT2:Test_Passed["objNESTED", Test, 0]
+      else
+         [] = RPT3:Test_Failed["objNESTED", Test, -10]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objNESTED", Test, -20]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - These tests verify the mapping of nested ASL statements into 
+#          the application language.
+#
+#          During test 2 the attribute ''ResultB'' is incremented in steps 
+#          of 100 until it reaches its final value of 400.
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objNESTED", "Nested Logic"]
+
+   # Ensure that the attributes ResultA and ResultB are set to zero
+   {all_instance_of_NESTED} = find-all Object_NESTED
+   for each_instance in {all_instance_of_NESTED} do
+      each_instance.ResultA = 0
+      each_instance.ResultB = 0
+   endfor
+
+   # Check the number of instances in the set ''all_instance_of_NESTED''
+   countA = countof {all_instance_of_NESTED}
+   if countA != 5 then
+      [] = RPT3:Test_Failed["objNESTED", Test, -10]
+   else
+      [] = RPT2:Test_Passed["objNESTED", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objNESTED", "Nested Logic"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0432"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0441"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0451"]
+
+   # Affect only one instance
+   loop
+
+      for each_instance in {all_instance_of_NESTED} do
+         each_instance.ResultA = 100
+         break       
+         # This BREAK will cause the FOR to complete
+      endfor
+
+      countA = countA - 1
+      break          
+      # This BREAK will cause the LOOP to complete
+
+   endloop
+
+    if countA != 4 then
+      [] = RPT3:Test_Failed["objNESTED", Test, -10]
+   else
+      [] = RPT2:Test_Passed["objNESTED", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objNESTED", "Nested Logic"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0432"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0441"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0452"]
+
+   Has_Failed = FALSE
+
+   # Increment the attribute ResultB four times, for two instances of
+   # Object_NESTED.
+   countA = 1
+ 
+   for each_instance in {all_instance_of_NESTED} do
+      each_instance.ResultA = countA
+      countB = 0
+
+      loop
+         temp = each_instance.ResultB + 100
+         each_instance.ResultB = temp
+         countB = countB + 1
+         breakif countB = 4
+      endloop
+
+      # Check the value written to the attribute Test
+      if each_instance.ResultB != 400 then
+         [] = RPT3:Test_Failed["objNESTED", Test, -10]
+         Has_Failed = TRUE
+      endif
+
+      # Check that the attribute ResultB has only been incremented four times
+      if countB != 4 then
+         [] = RPT3:Test_Failed["objNESTED", Test, -20]
+         Has_Failed = TRUE
+      endif
+
+      countA = countA + 1
+      breakif countA = 3   
+      # Only affect 2 instances of Object_NESTED
+   endfor
+  
+   # Check that only two instances have been altered
+   if countA != 3 then
+      [] = RPT3:Test_Failed["objNESTED", Test, -30]
+      Has_Failed = TRUE
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTED", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#------------------------------------------------------------------------#
+
+Final_Test = Test',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("33f9700b-d699-42ee-835b-7f0efb81b8f1",
+	"d4176ba6-2782-40db-8cee-cac135fffa2f",
+	'Test_Start',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("09adc186-f274-4d8e-ba16-b5462070806a",
+	"d4176ba6-2782-40db-8cee-cac135fffa2f",
+	'Final_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"33f9700b-d699-42ee-835b-7f0efb81b8f1",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("2f62f79f-b370-4971-93f8-bed9703016a0",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef");
+INSERT INTO O_BATTR
+	VALUES ("2f62f79f-b370-4971-93f8-bed9703016a0",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef");
+INSERT INTO O_ATTR
+	VALUES ("2f62f79f-b370-4971-93f8-bed9703016a0",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceNESTED',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceNESTED',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("c95c26c1-349b-4af0-bbdd-5794571a3c01",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef");
+INSERT INTO O_BATTR
+	VALUES ("c95c26c1-349b-4af0-bbdd-5794571a3c01",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef");
+INSERT INTO O_ATTR
+	VALUES ("c95c26c1-349b-4af0-bbdd-5794571a3c01",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef",
+	"2f62f79f-b370-4971-93f8-bed9703016a0",
+	'ResultA',
+	' This attribute is manipulated to inducate that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("4aa9654e-1f8b-4b2b-b3af-3b46e06108e6",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef");
+INSERT INTO O_BATTR
+	VALUES ("4aa9654e-1f8b-4b2b-b3af-3b46e06108e6",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef");
+INSERT INTO O_ATTR
+	VALUES ("4aa9654e-1f8b-4b2b-b3af-3b46e06108e6",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef",
+	"c95c26c1-349b-4af0-bbdd-5794571a3c01",
+	'ResultB',
+	' This attribute is manipulated to indicate that the required operation was successful.
+',
+	'',
+	'ResultB',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("67d34352-f386-4118-b255-9c8d069e394f",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef");
+INSERT INTO O_BATTR
+	VALUES ("67d34352-f386-4118-b255-9c8d069e394f",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef");
+INSERT INTO O_ATTR
+	VALUES ("67d34352-f386-4118-b255-9c8d069e394f",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef",
+	"4aa9654e-1f8b-4b2b-b3af-3b46e06108e6",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef");
+INSERT INTO O_OIDA
+	VALUES ("2f62f79f-b370-4971-93f8-bed9703016a0",
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef",
+	0,
+	'ReferenceNESTED');
+INSERT INTO O_ID
+	VALUES (1,
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef");
+INSERT INTO O_ID
+	VALUES (2,
+	"a3dbe2a9-4cae-47b0-834d-b45bf07ebeef");
+INSERT INTO PE_PE
+	VALUES ("a3dbe2a9-4cae-47b0-834d-b45bf07ebeef",
+	1,
+	"a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	'',
+	0,
+	'../ASL_Mapping.xtuml');

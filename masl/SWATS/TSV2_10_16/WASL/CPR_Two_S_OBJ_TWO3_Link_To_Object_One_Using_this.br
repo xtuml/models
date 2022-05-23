@@ -1,0 +1,32 @@
+define bridge  CPR_Two:S_OBJ_TWO3:Link_To_Object_One_Using_this
+input \
+	Input_Param1:Base_Integer_Type 
+output \
+	Return_Param1:Boolean 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+$INLINE
+   fprintf(stderr,"CPR TWO counterpart. Linking this to target IH UNSUPPORTED\n");
+$ENDINLINE
+
+Link_Failed = TRUE
+
+Local_Search = Input_Param1
+
+# $USE CPR_One
+#   Target_IH = find-one Object_To_Pass_One where Object_To_Pass_One_ID = Local_Search 
+#   if Target_IH != UNDEFINED then
+#      link-counterpart this CPR4 Target_IH
+#      Link_Failed = FALSE
+#   else
+#      Link_Failed = TRUE
+#   endif
+# $ENDUSE 
+
+Return_Param1 = Link_Failed
+
+enddefine

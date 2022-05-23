@@ -1,0 +1,88 @@
+project TSV2 is
+  domain SIMP is
+    terminator InterfaceA is
+      public service MethodA1 (); pragma oaid_derived ("");
+
+    end terminator;
+    pragma key_letter ("INA");
+
+
+    terminator Report_Result is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name : in  string);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+    terminator InterfaceB is
+      public service MethodB1 (); pragma oaid_derived ("");
+
+    end terminator;
+    pragma key_letter ("INB");
+
+
+    terminator InterfaceC is
+      public service MethodC1 (param1 : in  integer,
+                               param2 : out boolean,
+                               param3 : out real); pragma oaid_derived ("");
+
+      public service MethodC2 (param1 : in  integer,
+                               param2 : out boolean,
+                               param3 : out real); pragma oaid_derived ("");
+
+    end terminator;
+    pragma key_letter ("INC");
+
+
+
+    terminator InterfaceZ is
+      public service MethodZ1 (); pragma oaid_derived ("");
+
+    end terminator;
+    pragma key_letter ("INZ");
+
+
+    terminator InterfaceD is
+      public service MethodD1 (param1 : in  TINDEnumerationD1,
+                               param2 : in  TINDEnumerationD4); pragma oaid_derived ("");
+
+      public service MethodD2 (param1 : in  TINDEnumerationD2,
+                               param2 : in  TINDEnumerationD2,
+                               param3 : in  TINDEnumerationD3,
+                               param4 : out TINDEnumerationD4,
+                               param5 : out TINDEnumerationD1); pragma oaid_derived ("");
+
+    end terminator;
+    pragma key_letter ("IND");
+
+
+  end domain;
+
+  domain RP is
+  end domain;
+
+end project;

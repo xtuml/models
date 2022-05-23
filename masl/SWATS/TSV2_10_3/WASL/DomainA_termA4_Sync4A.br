@@ -1,0 +1,31 @@
+define bridge  DomainA:termA4:Sync4A
+input \
+	InputA:Base_Integer_Type ,\
+	InputB:Base_Integer_Type ,\
+	Test:Base_Integer_Type 
+output \
+	OutputA:Base_Integer_Type ,\
+	OutputB:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+   $USE DomainB
+
+      if (InputA != 1)|(InputB != 2) then
+         # Input values are incorrect do not send an event to DomainB
+         OutputA = 1
+         OutputB = 2
+      else
+         # Input values are correct and send an event to DomainB
+         OutputA = 3
+         OutputB = 4
+         an_instanceB = find-one Object_B where idB = 2
+         generate objB1:event1_from_DomainA(3, 4, Test) to an_instanceB
+      endif
+
+   $ENDUSE
+
+enddefine

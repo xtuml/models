@@ -1,0 +1,37 @@
+public service CPR_Three::Simple_Third_Boundary_To_Domain_One~>Link_To_Object_One (The_IH    : in  instance of Third_Way,
+                                                                                   It_Linked : out boolean) is
+# Link to an Object_One instance in CPR_One Domain.
+
+It_Linked = FALSE
+Navigation_To_D2_Possible = FALSE
+
+Not_Interested = 0
+
+$USE CPR_One
+
+   {Set_Of_Object_One} = find-all Object_One
+
+   how_many = countof {Set_Of_Object_One}
+
+   $INLINE
+      fprintf(stderr,"CPR_Three found %d instances of Object_One in CPR_One\n", how_many);
+   $ENDINLINE
+
+   for An_Object in {Set_Of_Object_One} do
+
+      link-counterpart The_IH CPR5 An_Object 
+
+      # Is it possible to navigate to the linked counterpart 
+      # object in CPR_Two domain.
+
+      [Navigation_To_D2_Possible, Not_Interested] = CPR_One6::Link_One_To_Two[An_Object]
+
+      
+      It_Linked = Navigation_To_D2_Possible
+
+      # Bail out as there has been an object found and linked.
+      breakif Navigation_To_D2_Possible = TRUE
+
+   endfor
+
+$ENDUSE

@@ -1,0 +1,41 @@
+define bridge  TEMPLATES:CI3:Many_To_One_Create_And_Link
+input \
+	The_ID:Base_Integer_Type ,\
+	ThirdCPRA:One_To_One_CPR_A_IH ,\
+	FourthCPRA:One_To_One_CPR_A_IH 
+output \
+	Test_Result:Base_Integer_Type 
+
+#$DESCRIPTION
+Terminator Contract
+@@XXX-00-0016
+#$END_DESCRIPTION
+
+
+
+$USE CPRT
+
+   [InstCPRD] = CPRT3::Create_CPRD[The_ID]
+
+   link-counterpart InstCPRD CPR3 ThirdCPRA
+   link-counterpart InstCPRD CPR3 FourthCPRA
+
+   Returned_Inst = ThirdCPRA -> CPR3.One_To_Many_CPR_D
+
+   if Returned_Inst != UNDEFINED then
+
+      if Returned_Inst.idD = 4 then
+         Test_Result = 4
+      else
+         Test_Result = -20
+      endif
+
+   else
+      Test_Result = -10
+   endif
+
+$ENDUSE
+
+
+
+enddefine

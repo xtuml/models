@@ -1,0 +1,41 @@
+define bridge  TEMPLATES:CI1:One_To_One_Create_And_Link
+input \
+	Id_Value:Base_Integer_Type ,\
+	CPR_A_Inst:One_To_One_CPR_A_IH 
+output \
+	Test_Result:Base_Integer_Type 
+
+#$DESCRIPTION
+Terminator Contract
+@@XXX-00-0016
+#$END_DESCRIPTION
+
+
+
+Input_ID = Id_Value
+
+$USE CPRT
+
+   [InstCPRB] = CPRT1::Create_CPRB[Input_ID]
+
+   link-counterpart CPR_A_Inst CPR1 InstCPRB
+
+   Returned_Inst = CPR_A_Inst -> CPR1.One_To_One_CPR_B
+
+   if Returned_Inst != UNDEFINED then
+
+      if Returned_Inst.idB = 1 then
+         Test_Result = 1
+      else
+         Test_Result = -20
+      endif
+
+   else
+      Test_Result = -10
+   endif
+
+$ENDUSE
+
+
+
+enddefine

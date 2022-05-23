@@ -1,0 +1,278 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("4767009b-e501-4471-af16-dcd5cf752021",
+	"00000000-0000-0000-0000-000000000000",
+	"fb793f65-d0e6-45fe-a7e0-5e290ea2fa31",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("644bc7d0-b6d2-4384-8211-d27f6491f0c0",
+	112,
+	"4767009b-e501-4471-af16-dcd5cf752021",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'Relationships::Relationships::Relationships::functions');
+INSERT INTO DIM_DIA
+	VALUES ("644bc7d0-b6d2-4384-8211-d27f6491f0c0",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("0dd09f7b-6e9f-49ca-bede-1f10ef3c30d3",
+	"00000000-0000-0000-0000-000000000000",
+	'Create_Report_Data',
+	'',
+	'# Find out of there already is one of these.
+# It is not inconceivable that a report object still exists from a previous run.
+# Report objects are not deleted at the end of a run, as certain events may
+# still be en-queued.
+
+old_report = find-one Report_Data
+
+if old_report != UNDEFINED then
+   delete old_report
+endif
+
+My_Report = create unique Report_Data with Reported_Domain_Number = 0
+
+[] = RPT6:Domain_Test_Start["Relationships"]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO PE_PE
+	VALUES ("0dd09f7b-6e9f-49ca-bede-1f10ef3c30d3",
+	1,
+	"4767009b-e501-4471-af16-dcd5cf752021",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("d8ff40d8-0ede-4b1c-8ad7-7d82d42abf73",
+	"00000000-0000-0000-0000-000000000000",
+	'Delete_Report_Data',
+	'',
+	'[] = RPT7:Domain_Test_Finished["Relationships"]
+
+# Do not delete the Report_Data object, as there may be still events in
+# the queue.
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	2);
+INSERT INTO PE_PE
+	VALUES ("d8ff40d8-0ede-4b1c-8ad7-7d82d42abf73",
+	1,
+	"4767009b-e501-4471-af16-dcd5cf752021",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("2370a30c-3f1c-49a7-859a-f0244b940346",
+	"00000000-0000-0000-0000-000000000000",
+	'Memory_Leak_Test_One_To_Many',
+	'',
+	'{Set_Of_Middle} = find-all Middle
+
+for Individual_Middle in {Set_Of_Middle} do
+
+   {Set_Of_Right} = Individual_Middle ->R7.Many_Right
+
+   for Individual_Right in {Set_Of_Right} do
+
+      #Go from a right instance back through the middle to the left instance
+      Single_Left = Individual_Right -> R7.Middle -> R6.Far_Left
+
+      # Return back up the trail, from the left instance to the set of right
+      {Some_Right} = Single_Left ->R6.Middle ->R7.Many_Right
+
+      Right_Updater = countof {Some_Right}
+
+      Individual_Right.Right_Data = Right_Updater
+
+      Updater = Single_Left.Left_Data
+
+      Updater = Updater + 1
+
+      Single_Left.Left_Data = Updater
+
+   endfor
+
+endfor
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO PE_PE
+	VALUES ("2370a30c-3f1c-49a7-859a-f0244b940346",
+	1,
+	"4767009b-e501-4471-af16-dcd5cf752021",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("1d9c79ac-c934-40bc-b589-70ab3b6cd41e",
+	"00000000-0000-0000-0000-000000000000",
+	'Memory_Leak_Test_Many_To_Many',
+	'',
+	'{Set_Of_Far_Right} = find-all Many_Far_Right
+
+for Individual_Far_Right in {Set_Of_Far_Right} do
+
+   {Set_Of_Right} = Individual_Far_Right ->R8.Many_Right
+
+   for Individual_Right in {Set_Of_Right} do
+
+      # Go back over the link to the far right side
+      {Other_Side} = Individual_Right -> R8.Many_Far_Right
+
+      temp_value = countof {Other_Side}
+
+      # Update the right data with how many of the far right it is linked to
+      Individual_Right.Right_Data = temp_value
+
+   endfor
+
+   # Update the far right data with how many right it is linked to
+   temp_value = countof {Set_Of_Right}
+   Individual_Far_Right.MFR_Data = temp_value
+
+
+   # Navigate to assocative object for this far right object
+
+   {Set_Of_Assoc} = Individual_Far_Right -> R8.Many_Right_Assoc
+
+   for The_Assoc in {Set_Of_Assoc} do
+
+      # Navigate from the associated object through to the far left.
+      A_Left = The_Assoc -> R8.Many_Right -> R7.Middle -> R6.Far_Left
+      temp_value = A_Left.Left_Data
+      temp_value = temp_value + 1
+      A_Left.Left_Data = temp_value
+
+   endfor
+
+endfor
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	4);
+INSERT INTO PE_PE
+	VALUES ("1d9c79ac-c934-40bc-b589-70ab3b6cd41e",
+	1,
+	"4767009b-e501-4471-af16-dcd5cf752021",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("584b883e-efd7-4348-a3d1-4f3578057995",
+	"00000000-0000-0000-0000-000000000000",
+	'Get_Instance_State',
+	' Returns a message if the instance state is not as expected
+',
+	'the_instance_value = Input_Instance_Value
+expected_value = Input_Expected_Value
+instance_name = Free_Text
+
+if the_instance_value != expected_value then
+
+   $INLINE
+   fprintf(stderr, " \n");
+   fprintf(stderr, "UNEXPECTED INSTANCE VALUE FOR INSTANCE %s\n",instance_name);
+   fprintf(stderr, "Expected Value  %d  Actual Value  %d\n", expected_value, the_instance_value);
+   fprintf(stderr, " \n");
+   $ENDINLINE
+
+   #$ADA_INLINE
+   # with Ada.Text_IO;
+   #
+   # Ada.Text_IO.New_Line(1);
+   # Ada.Text_IO.Put_Line("UNEXPECTED VALUE FOR INSTANCE " & instance_name);
+   # Ada.Text_IO.Put_Line("Expected " & integer''image(integer(expected_value)) & "Actual " & integer''image(integer(the_instance_value)));   
+   # Ada.Text_IO.New_Line(1);
+   #
+   #$END_ADAINLINE
+endif',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	5);
+INSERT INTO S_SPARM
+	VALUES ("c798d8a8-4bfa-40ba-8df7-cd343952ff41",
+	"584b883e-efd7-4348-a3d1-4f3578057995",
+	'Input_Instance_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("ba691574-5550-40aa-9a07-1903c654322d",
+	"584b883e-efd7-4348-a3d1-4f3578057995",
+	'Input_Expected_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"c798d8a8-4bfa-40ba-8df7-cd343952ff41",
+	'');
+INSERT INTO S_SPARM
+	VALUES ("cdd558b8-315e-4d21-9e48-e29009b5666a",
+	"584b883e-efd7-4348-a3d1-4f3578057995",
+	'Free_Text',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"ba691574-5550-40aa-9a07-1903c654322d",
+	'');
+INSERT INTO PE_PE
+	VALUES ("584b883e-efd7-4348-a3d1-4f3578057995",
+	1,
+	"4767009b-e501-4471-af16-dcd5cf752021",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("4767009b-e501-4471-af16-dcd5cf752021",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"859df8fc-d774-4e8b-a603-e09bb52fd65f",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("859df8fc-d774-4e8b-a603-e09bb52fd65f",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Relationships',
+	' Tests Relationship manipulations.
+',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Relationships',
+	'../Relationships.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("fb793f65-d0e6-45fe-a7e0-5e290ea2fa31",
+	'Relationships',
+	1,
+	'../../../Relationships.xtuml');

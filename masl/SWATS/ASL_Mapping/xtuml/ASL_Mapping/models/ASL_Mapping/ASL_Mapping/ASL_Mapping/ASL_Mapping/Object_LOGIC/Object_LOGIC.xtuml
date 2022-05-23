@@ -1,0 +1,1634 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	'Object_LOGIC',
+	7,
+	'objLOGIC',
+	' This object verifies arithemetical and logical operations.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("e44aefd8-8e1d-4712-9eed-c53e6cb14a0e",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	'do_arithmetic_and_logic',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#------------------------------------------------------------------------#
+# Arithmetical calculations
+#
+# Assigning arithmetic calculations to a variable shall be supported
+# 1103-0000-01-0811
+#
+# Assigning arithmetic calculations to an attribute shall be supported
+# 1103-0000-01-0812
+#
+# Arithmetic operations shall be limited to the numeric base type Integer
+# and Real only
+# 1103-0000-01-0813
+#
+# The following operators shall be supported: +, -, /, *, ^, unary -
+# 1103-0000-01-0814
+#
+# The rules of precedence shall be defined by the Ada language and should
+# be clarified with brackets where necessary
+# 1103-0000-01-0815
+#
+#------------------------------------------------------------------------#
+
+   [Host] = WAW1:What_Env[]
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+# Test 1 - Arithmetical operation +
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0811", "ASL Mapping", "objLOGIC", "Arithmetical ADD operation"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0814"]
+
+   Temp = 1 + 2 + 3
+   an_instanceLOGIC.ResultA = Temp
+
+   if Temp != 6 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   else
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - Arithmetical operation -
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test,"1103-0000-01-0811", "ASL Mapping", "objLOGIC", "Arithmetical SUBTRACT operation"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0814"]
+
+   Temp = 10 - 3 - 4 - 1
+   an_instanceLOGIC.ResultA = Temp
+
+   if Temp != 2 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   else
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - Arithmetical DIVIDE operation
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0811", "ASL Mapping", "objLOGIC", "Arithmetical DIVIDE operation"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0814"]
+
+   Has_Failed = FALSE
+
+   Temp = 10 / 2
+   an_instanceLOGIC.ResultA = Temp
+
+   if Temp != 5 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+      Has_Failed = TRUE
+   endif
+
+   Temp = 16 / 4 / 2
+   an_instanceLOGIC.ResultA = Temp
+
+   if Temp != 2 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -20]
+      Has_Failed = TRUE
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4 - Arithmetical operation *
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0811", "ASL Mapping", "objLOGIC", "Arithmetical MULTIPLY operation "]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0814"]
+
+   Has_Failed = FALSE
+
+   Temp = 10 * 2
+   an_instanceLOGIC.ResultA = Temp
+
+   if Temp != 20 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+      Has_Failed = TRUE
+   endif
+
+   Temp = 10 * 2 * 5
+   an_instanceLOGIC.ResultA = Temp
+
+   if Temp != 100 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -20]
+      Has_Failed = TRUE
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5 - Arithmetical operation ^
+#          The following is not supported by ISIM
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "objLOGIC", "Arithmetical POWER operation 1"]
+
+   if Host = "ISIM" then
+      Supported = FALSE
+      Temp = 1
+   else
+      Supported = TRUE
+
+      #$ADA_INLINE
+      #   Temp := 2**10;
+      #$END_ADAINLINE
+   endif
+
+   an_instanceLOGIC.ResultA = Temp
+
+   if Supported = TRUE then
+
+      if Temp != 1024 then
+         [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+      else
+         [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+# ------------------------------------------------------------------------#
+# Test 6 - Arithmetical POWER operation 2
+#          The following is not supported by ISIM
+# ------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "objLOGIC", "Arithmetical POWER operation 2"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0815"]
+
+   if Host = "ISIM" then
+      Supported = FALSE
+      Temp = 1
+   else
+      Supported = TRUE
+
+      #$ADA_INLINE
+      #   Temp := (2**2)**2;
+      #$END_ADAINLINE
+   endif
+
+   if Supported = TRUE then
+      an_instanceLOGIC.ResultA = Temp
+     
+      if Temp != 16 then
+         [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+      else
+         [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+      endif
+
+   else   
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+   Test = Test + 1
+
+# End Test 6
+
+#------------------------------------------------------------------------#
+# Test 7 - Complex arithmetic operations 1
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "objLOGIC", "Complex arithmetic operations 1"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0815"]
+
+   Has_Failed = FALSE
+
+   # Complex logical operations
+
+   if Host = "ISIM" then
+      Supported = FALSE
+      Temp = 1
+   else
+      Supported = TRUE
+
+      #$ADA_INLINE
+      #   Temp := Application_Types.Base_Integer_Type((3 * 4) + 13)**2;
+      #$END_ADAINLINE
+
+   endif
+
+   if Supported = TRUE then
+      an_instanceLOGIC.ResultA = Temp
+   
+      if Temp != 625 then
+         [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+      else
+         [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+      endif
+
+   else   
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+   Test = Test + 1
+
+# End Test 7
+
+#------------------------------------------------------------------------#
+# Test 8 -Complex arithmetic operations 2
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "objLOGIC", "Complex arithmetic operations 2"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0815"]
+
+   if Host = "ISIM" then
+      Supported = FALSE
+      Temp = 1
+   else
+      Supported = TRUE
+
+      #$ADA_INLINE
+      #   Temp := 100 - Application_Types.Base_Integer_Type((50 - 46)/2) + 2**(2 + 3);
+      #$END_ADAINLINE
+
+   endif
+
+   if Supported = TRUE then
+      an_instanceLOGIC.ResultA = Temp
+
+      if Temp != 130 then
+         [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+      else
+         [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+      endif
+
+   else   
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+   Test = Test + 1
+
+# End Test 8
+
+#------------------------------------------------------------------------#
+# Test 9 - Evaluation order
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "objLOGIC", "Evaluation order"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0815"]
+
+   Has_Failed = FALSE
+
+   # Parenthical expressions
+   Temp = 3 * 3 * 3 + 4 + 13 - 2
+   an_instanceLOGIC.ResultA = Temp
+
+   if Temp != 42 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   else
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   endif
+
+   Test = Test + 1
+
+# End Test 9
+
+#------------------------------------------------------------------------#
+# Test 10 - Evaluation order 1
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "objLOGIC", "Evaluation order 1"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0815"]
+
+   Temp = 3 - 2 * 3 * 3 + 4 + 13 - 2
+   an_instanceLOGIC.ResultA = Temp
+
+   if Temp != 0 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   else
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 10
+
+#------------------------------------------------------------------------#
+# Test 11 - Evaluation order 2
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "objLOGIC", "Evaluation order 2"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0815"]
+
+   Temp = (3 - 2) * 3 * 3 + 4 + 13 - 2
+   an_instanceLOGIC.ResultA = Temp
+
+   if Temp != 24 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   else
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 11
+
+#------------------------------------------------------------------------#
+# Test 12 - Evaluation order 3
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0814", "ASL Mapping", "objLOGIC", "Evaluation order 3"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0815"]
+
+   Temp = ((3 - 2) + 3 - (4 - 2)) * 3
+   an_instanceLOGIC.ResultA = Temp
+ 
+   if Temp != 6 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   else
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 12
+
+#------------------------------------------------------------------------#
+# Test 13 - Arithmetic operations on an attrubute. 
+#           Arithmetic PLUS operation
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0812", "ASL Mapping", "objLOGIC", "Add operation on attribute"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0814"]
+
+   if Host = "WACA" then
+      #$ADA_INLINE
+      #
+      #   Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).IntegerAttr := 1 + 2 + 3;
+      #   Temp := Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).IntegerAttr;
+      #$END_ADAINLINE
+   else
+      Temp = 6
+   endif
+
+   #an_instanceLOGIC.IntegerAttr = 1 + 2 + 3
+
+   if Temp = 6 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 13
+    
+
+#------------------------------------------------------------------------#
+# Test 14 - Arithmetic operations on an attribute.
+#           Arithmetic - operation
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0812", "ASL Mapping", "objLOGIC", "Subtract operation on attribute"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0814"]
+
+   if Host = "WACA" then
+      #$ADA_INLINE
+      #
+      #   Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).IntegerAttr := 10 - 3 - 2 - 1;
+      #   Temp := Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).IntegerAttr;
+      #$END_ADAINLINE
+   else
+      Temp = 4
+   endif
+
+   if Temp = 4 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, Temp]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, Temp]
+   endif
+
+   Test = Test + 1
+
+# End Test 14
+
+#------------------------------------------------------------------------#
+# Test 15 - Arithmetic operations on an attribute.
+#           Arithmetic DEVIDE operation
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0812", "ASL Mapping", "objLOGIC", "DIVIDE operation on attribute"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0814"]
+
+   Has_Failed = FALSE
+
+   if Host = "WACA" then
+      #$ADA_INLINE
+      #
+      #   Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).RealAttr := 10.0 / 2.0;
+      #   Real_Temp := Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).RealAttr;
+      #$END_ADAINLINE
+   else
+      Real_Temp = 5.0
+   endif
+
+   if Real_Temp != 5.0 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   else
+
+      if Host = "WACA" then
+         #$ADA_INLINE
+         #
+         #   Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).RealAttr := 10.0 / 4.0;
+         #   Real_Temp := Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).RealAttr;
+         #$END_ADAINLINE
+      else
+         Real_Temp = 2.5
+      endif
+
+      if Real_Temp != 2.5 then
+         [] = RPT3:Test_Failed["objLOGIC", Test, -20]
+      else
+         [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+      endif
+
+   endif
+
+   Test = Test + 1
+
+# End Test 15
+
+#------------------------------------------------------------------------#
+# Test 16 - Arithmetic operations on an attribute.
+#           Arithmetic MULTIPLY operation
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0812", "ASL Mapping", "objLOGIC", "MULTIPLY operation on attribute "]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0814"]
+
+   if Host = "WACA" then
+      #$ADA_INLINE
+      #
+      #   Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).IntegerAttr := 10 * 2;
+      #   Temp := Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).IntegerAttr;
+      #$END_ADAINLINE
+   else
+      Temp = 20
+   endif
+
+   if Temp != 20 then
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   else
+
+      if Host = "WACA" then
+         #$ADA_INLINE
+         #
+         #   Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).IntegerAttr := 10 * 2 * 5;
+         #   Temp := Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).IntegerAttr;
+         #$END_ADAINLINE
+      else
+         Temp = 100
+      endif
+ 
+      if Temp != 100 then
+         [] = RPT3:Test_Failed["objLOGIC", Test, -20]
+      else
+         [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+      endif
+
+   endif
+
+   Test = Test + 1
+
+# End Test 16
+
+#------------------------------------------------------------------------#
+# Test 17 - Arithmetic operations on an attribute.
+#           Arithmetic POWER operation
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "ASL Mapping", "objLOGIC", "POWER operation on attribute"]
+
+   [] = RPT4:Test_Unsupported[Test]
+
+   Test = Test + 1
+
+# End Test 17
+
+#------------------------------------------------------------------------#
+# Test 18 - Arithmetic operations on an attribute.
+#           Arithmetic UNARY - operation
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0812", "ASL Mapping", "objLOGIC", "UNARY operation on attribute"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0814"]
+
+   if Host = "WACA" then
+      #$ADA_INLINE
+      #
+      #   Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).IntegerAttr := -10 - 5 + 3;
+      #   Temp := Root_Object.ASL_Mapping.objLOGIC.ASL_Mapping_objLOGIC_type(an_instanceLOGIC.all).IntegerAttr;
+      #$END_ADAINLINE
+
+      if Temp != -12 then
+         [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+      else
+         [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+      endif
+
+   else
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+#   an_instanceLOGIC.IntegerAttr = -10 - 5 + 3
+
+   Test = Test + 1
+
+# End Test 18
+
+#------------------------------------------------------------------------#
+# Logical conditions, Boolean and Integers
+#------------------------------------------------------------------------#
+
+#------------------------------------------------------------------------#
+# Test 19 - Boolean operators
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0911", "ASL Mapping", "objLOGIC", "Boolean operators"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0913"]
+
+   Has_Failed = FALSE
+
+   # Boolean operator !
+   # Other logical conditions =, !=
+
+   btemp = an_instanceLOGIC.BooleanAttr
+   
+   if btemp = TRUE then        
+
+      # Initial Boolean expression is TRUE
+      btempA = FALSE        
+
+      # Negate the Boolean expression, FALSE
+
+      an_instanceLOGIC.BooleanAttr = btempA
+
+      if btempA != FALSE then   
+         # Boolean expression should now be FALSE
+         [] = RPT3:Test_Failed["objLOGIC", Test, -15]
+         Has_Failed = TRUE
+      else
+         an_instanceLOGIC.ResultA = 10
+         [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -16]
+      Has_Failed = TRUE
+   endif
+
+   Test = Test + 1
+
+# End Test 19
+
+#------------------------------------------------------------------------#
+# Test 20 - Logical expressions 1
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0911", "ASL Mapping", "objLOGIC", "Logical expressions 1"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0913"]
+
+   # Initial data
+   tempA = 10
+   tempB = 3
+   tempC = 5
+
+   Has_Failed = FALSE
+
+   # Perform test
+   if ((tempA = 10) | (tempB = 77)) & (tempC != 112) then
+      an_instanceLOGIC.ResultA = 20
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -17]
+      Has_Failed = TRUE
+   endif
+
+   Test = Test +  1
+
+# End Test 20
+
+#------------------------------------------------------------------------#
+# Test 21 - Logical expressions 2
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0911", "ASL Mapping", "objLOGIC", "Logical expressions 2"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0913"]
+
+   Has_Failed = FALSE
+
+   # Perform test
+   if (tempA >= 10) & (tempB < 77) & (tempA >= tempC) then
+      an_instanceLOGIC.ResultA = 30
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -18]
+      Has_Failed = TRUE
+   endif
+
+   Test = Test + 1
+
+# End Test 21
+
+#------------------------------------------------------------------------#
+# Test 22 - Logical expressions 3
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0911", "ASL Mapping", "objLOGIC", "Logical expressions 3"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0913"]
+
+   Has_Failed = FALSE
+
+   # Perform test
+   if (tempA > tempB) & (tempB <= 3) & (tempC <= 6) then
+      an_instanceLOGIC.ResultA = 40
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -19]
+      Has_Failed = TRUE
+   endif
+
+   Test = Test + 1
+
+# End Test 22
+
+#------------------------------------------------------------------------#
+# Test 23 - REVERSE Logical expressions
+#           THE FOLLOWING CAUSES AN ASL COMPILER ERROR
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0911", "ASL Mapping", "objLOGIC", "REVERSE Logical expressions"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0913"]
+
+   Has_Failed = FALSE
+
+   # Perform test
+   Local_Boolean_Result = FALSE
+
+   if Host = "WACA" then
+      #$ADA_INLINE
+      #
+      #   Local_Boolean_Result := Boolean (99 > tempB);
+      #
+      #$END_ADAINLINE
+
+      if Local_Boolean_Result = TRUE then
+         an_instanceLOGIC.ResultA = 50
+         [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+      else
+         [] = RPT3:Test_Failed["objLOGIC", Test, -20]
+      endif
+
+   else
+
+      if (tempB < 99) then
+         an_instanceLOGIC.ResultA = 50
+         [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+      else
+         [] = RPT3:Test_Failed["objLOGIC", Test, -20]
+      endif
+
+   endif
+
+   Test = Test + 1
+
+# End Test 23
+
+#------------------------------------------------------------------------#
+#
+# These tests verify the logical conditions for the following data types:
+#
+#        Date
+#        Time
+#
+# The following operators are valid for both data types:
+#
+#        =, =>, <=, <, >
+#
+# Test 1 and 2, are built of nested IF statements, the final value written
+# into the attribute ''ResultA'' is 70.
+#
+# If the final value is not 70 then an error would have occured during
+# verification, the value of which indicating where the error occured.
+#------------------------------------------------------------------------#
+
+#------------------------------------------------------------------------#
+# Test 24
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "ASL Mapping", "objLOGIC","Date and Time operations"]
+
+   Has_Failed = FALSE
+
+
+   # Date attribute not supported in S/W architecture. So don''t test.
+
+   #Date
+   #if an_instanceLOGIC.DateAttr = 1996.03.02 then
+   #   an_instanceLOGIC.ResultA = 10
+   #   if an_instanceLOGIC.DateAttr >= 1996.03.02 then
+   #      an_instanceLOGIC.ResultA = 20
+   #      if an_instanceLOGIC.DateAttr >= 1996.03.01 then
+   #         an_instanceLOGIC.ResultA = 30
+   #         if an_instanceLOGIC.DateAttr <= 1996.03.02 then
+   #            an_instanceLOGIC.ResultA = 40
+   #            if an_instanceLOGIC.DateAttr <= 1996.03.03 then
+   #               an_instanceLOGIC.ResultA = 50
+   #               if an_instanceLOGIC.DateAttr < 1997.03.02 then
+   #                  an_instanceLOGIC.ResultA = 60
+   #                  if an_instanceLOGIC.DateAttr > 1996.01.03 then
+   #                     an_instanceLOGIC.ResultA = 70
+   #                  else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -21]
+   #   has_failed = TRUE
+   #                  endif
+   #               else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -22]
+   #   has_failed = TRUE
+   #               endif
+   #            else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -23]
+   #   has_failed = TRUE
+   #            endif
+   #         else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -24]
+   #   has_failed = TRUE
+   #         endif
+   #      else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -25]
+   #   has_failed = TRUE
+   #      endif
+   #   else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -26]
+   #   has_failed = TRUE
+   #   endif
+   #else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -27]
+   #   has_failed = TRUE
+   #endif
+
+   [] = RPT4:Test_Unsupported[Test]
+
+   Test = Test + 1
+
+# End Test 24
+
+#------------------------------------------------------------------------#
+# Test 25
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "ASL Mapping", "objLOGIC","Date and Time operations"]
+
+   Has_Failed = FALSE
+
+   # Time operations not supported by S/W architecture.
+
+   #Time
+   #if an_instanceLOGIC.TimeAttr = 14:45:34 then
+   #   an_instanceLOGIC.ResultA = 10
+   #   if an_instanceLOGIC.TimeAttr >= 14:45:34 then
+   #      an_instanceLOGIC.ResultA = 20
+   #      if an_instanceLOGIC.TimeAttr >= 14:45:33 then
+   #         an_instanceLOGIC.ResultA = 30
+   #         if an_instanceLOGIC.TimeAttr <= 14:45:34 then
+   #            an_instanceLOGIC.ResultA = 40
+   #            if an_instanceLOGIC.TimeAttr <= 14:45:35 then
+   #               an_instanceLOGIC.ResultA = 50
+   #               if an_instanceLOGIC.TimeAttr < 14:46:34 then
+   #                  an_instanceLOGIC.ResultA = 60
+   #                  if an_instanceLOGIC.TimeAttr > 13:45:34 then
+   #                     an_instanceLOGIC.ResultA = 70
+   #                  else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -28]
+   #   has_failed = TRUE
+   #                  endif
+   #               else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -29]
+   #   has_failed = TRUE
+   #               endif
+   #            else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -30]
+   #   has_failed = TRUE
+   #            endif
+   #         else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -31]
+   #   has_failed = TRUE
+   #         endif
+   #      else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -32]
+   #   has_failed = TRUE
+   #      endif
+   #   else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -33]
+   #   has_failed = TRUE
+   #   endif
+   #else
+   #   [] = RPT3:Test_Failed["objLOGIC", Test, -34]
+   #   has_failed = TRUE
+   #endif
+
+   [] = RPT4:Test_Unsupported[Test]
+
+   Test = Test + 1
+
+# End Test 25
+
+#------------------------------------------------------------------------#
+# These tests verify logical conditions for the following data types:
+#
+#        Text
+#        Enumeration
+#
+# The following operators are valid for the above data types:
+#
+#        =       Equality
+#        !=      Inequality
+#
+#------------------------------------------------------------------------#
+
+#------------------------------------------------------------------------#
+#Logical conditions, TEXT and ENUMERATION
+#------------------------------------------------------------------------#
+
+#------------------------------------------------------------------------#
+# Test 26 - Logical ops on Text
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "ASL Mapping", "objLOGIC","Logical ops on Text"]
+
+   Has_Failed = FALSE
+
+   # Perform the test
+   if an_instanceLOGIC.TextAttr = "Verification" then
+      an_instanceLOGIC.ResultA = 10
+ 
+      if an_instanceLOGIC.TextAttr != "Richard" then
+         an_instanceLOGIC.ResultA = 20
+      else
+         [] = RPT3:Test_Failed["objLOGIC", Test, -35]
+         Has_Failed = TRUE
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -36]
+      Has_Failed = TRUE
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 26
+
+#------------------------------------------------------------------------#
+# Test 27 - Logical ops on Enums
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "ASL Mapping", "objLOGIC","Logical ops on Enums"]
+
+   Has_Failed = FALSE
+
+   # Enumeration Perform the test
+   if an_instanceLOGIC.EnumerationAttr = ''Richard'' then
+      an_instanceLOGIC.ResultA = 30
+
+      if an_instanceLOGIC.EnumerationAttr != ''Goran'' then
+         an_instanceLOGIC.ResultA = 40
+      else
+         [] = RPT3:Test_Failed["objLOGIC", Test, -37]
+         Has_Failed = TRUE
+      endif
+
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -38]
+      Has_Failed = TRUE
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objLOGIC", Test, an_instanceLOGIC.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 27
+
+#------------------------------------------------------------------------#
+# Test 28 - Test logical operator !
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test NOT in symbol form"]
+
+   BoolVal1 = FALSE
+  
+   if !BoolVal1 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 28
+
+#------------------------------------------------------------------------#
+# Test 29 - Test logical operator NOT
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test NOT in keyword form"]
+
+   BoolVal1 = FALSE
+  
+   if not BoolVal1 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 29
+
+#------------------------------------------------------------------------#
+# Test 30 - Test logical operator =
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test EQUALS in symbol form"]
+
+   BoolVal1 = FALSE
+   BoolVal2 = FALSE  
+
+   if BoolVal1 = BoolVal1 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 30
+
+#------------------------------------------------------------------------#
+# Test 31 - Test logical operator EQUALS
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test EQUALS in keyword form"]
+
+   BoolVal1 = FALSE
+   BoolVal2 = FALSE  
+
+   if BoolVal1 equals BoolVal2 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 31
+
+
+#------------------------------------------------------------------------#
+# Test 32 - Test logical operator !=
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test NOT EQUALS in symbol form"]
+
+   BoolVal1 = FALSE
+   BoolVal2 = TRUE  
+
+   if BoolVal1 != BoolVal2 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 32
+
+#------------------------------------------------------------------------#
+# Test 33 - Test logical operator NOT-EQUALS
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test NOT-EQUALS in keyword form"]
+
+   BoolVal1 = FALSE
+   BoolVal2 = TRUE  
+
+   if BoolVal1 not-equals BoolVal2 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 33
+
+#------------------------------------------------------------------------#
+# Test 34 - Test logical operator <
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test LESS THAN in symbol form"]
+
+   Val1 = 10
+   Val2 = 20  
+
+   if Val1 < Val2 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 34
+
+#------------------------------------------------------------------------#
+# Test 35 - Test logical operator LESS-THAN
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test LESS-THAN in keyword form"]
+
+   Val1 = 10
+   Val2 = 20  
+
+   if Val1 less-than Val2 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 35
+
+#------------------------------------------------------------------------#
+# Test 36 - Test logical operator >
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test GREATER THAN in symbol form"]
+
+   Val1 = 10
+   Val2 = 20  
+
+   if Val2 > Val1 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 36
+
+#------------------------------------------------------------------------#
+# Test 37 - Test logical operator GREATER-THAN
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test GREATER-THAN in keyword form"]
+
+   Val1 = 10
+   Val2 = 20  
+
+   if Val2 greater-than Val1 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 37
+
+#------------------------------------------------------------------------#
+# Test 38 - Test logical operator <=
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test LESS THAN OR EQUAL TO in symbol form"]
+
+   Val1 = 10
+   Val2 = 10
+   Val3 = 20
+
+   if Val1 <= Val2 then
+
+      if Val1 <= Val3 then
+         [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+      else
+         [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+      endif
+  
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -20]
+   endif
+
+   Test = Test + 1
+
+# End Test 38
+
+#------------------------------------------------------------------------#
+# Test 39 - Test logical operator LESS-THAN-OR-EQUAL-TO
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test LESS-THAN-OR-EQUAL-TO in keyword form"]
+
+   Val1 = 10
+   Val2 = 10
+   Val3 = 20
+
+   if Val1 less-than-or-equal-to Val2 then
+
+      if Val1 less-than-or-equal-to Val3 then
+         [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+      else
+         [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+      endif
+  
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -20]
+   endif
+
+   Test = Test + 1
+
+# End Test 39
+
+#------------------------------------------------------------------------#
+# Test 40 - Test logical operator >=
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test GREATER THAN OR EQUAL TO in symbol form"]
+
+   Val1 = 10
+   Val2 = 10
+   Val3 = 20
+
+   if Val2 >= Val1 then
+
+      if Val3 >= Val1 then
+         [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+      else
+         [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+      endif
+  
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -20]
+   endif
+
+   Test = Test + 1
+
+# End Test 40
+
+#------------------------------------------------------------------------#
+# Test 41 - Test logical operator GREATER-THAN-OR-EQUAL-TO
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test GREATER-THAN-OR-EQUAL-TO in keyword form"]
+
+   Val1 = 10
+   Val2 = 10
+   Val3 = 20
+
+   if Val2 greater-than-or-equal-to Val1 then
+
+      if Val3 greater-than-or-equal-to Val1 then
+         [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+      else
+         [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+      endif
+  
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -20]
+   endif
+
+   Test = Test + 1
+
+# End Test 41
+
+#------------------------------------------------------------------------#
+# Test 42 - Test logical operator &
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test AND in symbol form"]
+
+   BoolVal1 = TRUE
+   BoolVal2 = TRUE  
+
+   if BoolVal1 & BoolVal2 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 42
+
+#------------------------------------------------------------------------#
+# Test 43 - Test logical operator AND
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test AND in keyword form"]
+
+   BoolVal1 = TRUE
+   BoolVal2 = TRUE  
+
+   if BoolVal1 and BoolVal2 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 43
+
+#------------------------------------------------------------------------#
+# Test 44 - Test logical operator |
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test OR in symbol form"]
+
+   BoolVal1 = TRUE
+   BoolVal2 = FALSE  
+
+   if BoolVal1 | BoolVal2 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 44
+
+#------------------------------------------------------------------------#
+# Test 45 - Test logical operator OR
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0913", "ASL Mapping", "objLOGIC","Test OR in keyword form"]
+
+   BoolVal1 = TRUE
+   BoolVal2 = FALSE  
+
+   if BoolVal1 or BoolVal2 then
+      [] = RPT2:Test_Passed["objLOGIC", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLOGIC", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 45
+
+#------------------------------------------------------------------------#
+
+Final_Test = Test',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("e4094124-7dc9-4edf-9720-52e37c11354c",
+	"e44aefd8-8e1d-4712-9eed-c53e6cb14a0e",
+	'an_instanceLOGIC',
+	"143373d0-cfa3-4476-b950-81dc636bd02a",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("143373d0-cfa3-4476-b950-81dc636bd02a",
+	"00000000-0000-0000-0000-000000000000",
+	'inst_ref<Object_LOGIC>',
+	'',
+	'',
+	'../ASL_Mapping.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("f4747fc0-c91d-458a-beed-39f67a5aa9aa",
+	"e44aefd8-8e1d-4712-9eed-c53e6cb14a0e",
+	'Test_Start',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"e4094124-7dc9-4edf-9720-52e37c11354c",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("ee8f7c42-5ec9-46f9-9819-b636ef595de1",
+	"e44aefd8-8e1d-4712-9eed-c53e6cb14a0e",
+	'Final_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"f4747fc0-c91d-458a-beed-39f67a5aa9aa",
+	'');
+INSERT INTO O_TFR
+	VALUES ("672b51bb-07fb-4d5c-bdb2-1f833ec32ed1",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	'Perform_Attribute_Assignment',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'This_Test = Test_Start
+
+[] = RPT1:Start_Test[This_Test, "1103-0000-01-0511", "ASL_Mapping", "Passive Object Service Perform Attribute assignment", "Assign all attributes"]
+[] = RPT8:Specify_Requid[This_Test, "1103-0000-01-0522"]
+
+my_object = create Object_LOGIC with IntegerAttr = This_Test &\
+    TextAttr = "Hello" &\
+    BooleanAttr = FALSE &\
+    EnumerationAttr = ''Frank'' &\
+    ReferenceLOGIC = This_Test 
+
+my_object = find-one Object_LOGIC where ReferenceLOGIC = This_Test
+
+Failure_Code = 1
+
+if my_object != UNDEFINED then
+
+   if my_object.TextAttr = "Hello" then
+
+      if my_object.BooleanAttr = FALSE then
+
+         if my_object.EnumerationAttr = ''Frank'' then
+
+            Failure_Code = 0
+   
+         else
+
+            Failure_Code = -40
+
+         endif
+
+      else
+
+         Failure_Code = -30
+
+      endif
+
+   else
+
+      Failure_Code = -20
+
+   endif
+
+   delete my_object
+
+else
+
+   Failure_Code = -10
+
+endif
+
+if Failure_Code = 0 then
+   [] = RPT2:Test_Passed["Attribute read", This_Test, Failure_Code]
+else
+   [] = RPT3:Test_Failed["Attribute read", This_Test, Failure_Code]
+endif
+
+This_Test = This_Test + 1
+
+Final_Test = This_Test',
+	3,
+	'',
+	"e44aefd8-8e1d-4712-9eed-c53e6cb14a0e",
+	2,
+	2);
+INSERT INTO O_TPARM
+	VALUES ("007839cb-3099-418e-918d-2e4433eb97b4",
+	"672b51bb-07fb-4d5c-bdb2-1f833ec32ed1",
+	'Test_Start',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("f7078de7-b719-441d-a161-3b58d49158c5",
+	"672b51bb-07fb-4d5c-bdb2-1f833ec32ed1",
+	'Final_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"007839cb-3099-418e-918d-2e4433eb97b4",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("8110239c-4d72-4375-8b7b-5ee38486ec9d",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_BATTR
+	VALUES ("8110239c-4d72-4375-8b7b-5ee38486ec9d",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_ATTR
+	VALUES ("8110239c-4d72-4375-8b7b-5ee38486ec9d",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	"00000000-0000-0000-0000-000000000000",
+	'IntegerAttr',
+	' An integer
+',
+	'',
+	'IntegerAttr',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("3ba46c5b-b809-4a64-b9eb-3cba08e373b5",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_BATTR
+	VALUES ("3ba46c5b-b809-4a64-b9eb-3cba08e373b5",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_ATTR
+	VALUES ("3ba46c5b-b809-4a64-b9eb-3cba08e373b5",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	"8110239c-4d72-4375-8b7b-5ee38486ec9d",
+	'TextAttr',
+	'',
+	'',
+	'TextAttr',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("6ae71da9-7098-401e-b79c-e9633911e7b1",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_BATTR
+	VALUES ("6ae71da9-7098-401e-b79c-e9633911e7b1",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_ATTR
+	VALUES ("6ae71da9-7098-401e-b79c-e9633911e7b1",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	"3ba46c5b-b809-4a64-b9eb-3cba08e373b5",
+	'EnumerationAttr',
+	'',
+	'',
+	'EnumerationAttr',
+	0,
+	"d946d593-dab6-4d03-9cac-de263c45c51f",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("d946d593-dab6-4d03-9cac-de263c45c51f",
+	"00000000-0000-0000-0000-000000000000",
+	'Enum',
+	' Enumerated attribute containing person''s names.
+',
+	'',
+	'../../types/types.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("59fd617a-34c7-479b-932b-f2ed21a08f63",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_BATTR
+	VALUES ("59fd617a-34c7-479b-932b-f2ed21a08f63",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_ATTR
+	VALUES ("59fd617a-34c7-479b-932b-f2ed21a08f63",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	"6ae71da9-7098-401e-b79c-e9633911e7b1",
+	'BooleanAttr',
+	'',
+	'',
+	'BooleanAttr',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("33a4b830-5415-4e45-847b-10b62ef27d89",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_BATTR
+	VALUES ("33a4b830-5415-4e45-847b-10b62ef27d89",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_ATTR
+	VALUES ("33a4b830-5415-4e45-847b-10b62ef27d89",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	"59fd617a-34c7-479b-932b-f2ed21a08f63",
+	'ResultA',
+	' This attribute is manipulated to indicate that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("31c8af62-d766-4bd5-a859-ed6b152231cf",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_BATTR
+	VALUES ("31c8af62-d766-4bd5-a859-ed6b152231cf",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_ATTR
+	VALUES ("31c8af62-d766-4bd5-a859-ed6b152231cf",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	"33a4b830-5415-4e45-847b-10b62ef27d89",
+	'ReferenceLOGIC',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceLOGIC',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("8db43316-b58b-4fa0-b504-a7da901d0e0d",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_BATTR
+	VALUES ("8db43316-b58b-4fa0-b504-a7da901d0e0d",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_ATTR
+	VALUES ("8db43316-b58b-4fa0-b504-a7da901d0e0d",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	"31c8af62-d766-4bd5-a859-ed6b152231cf",
+	'RealAttr',
+	'',
+	'',
+	'RealAttr',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000003",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("dc531073-4113-4120-b1a5-95fb59e66f91",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_BATTR
+	VALUES ("dc531073-4113-4120-b1a5-95fb59e66f91",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_ATTR
+	VALUES ("dc531073-4113-4120-b1a5-95fb59e66f91",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	"8db43316-b58b-4fa0-b504-a7da901d0e0d",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_OIDA
+	VALUES ("31c8af62-d766-4bd5-a859-ed6b152231cf",
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	0,
+	'ReferenceLOGIC');
+INSERT INTO O_ID
+	VALUES (1,
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO O_ID
+	VALUES (2,
+	"8ad6ed48-0944-42ac-94d8-1e958a4d271a");
+INSERT INTO PE_PE
+	VALUES ("8ad6ed48-0944-42ac-94d8-1e958a4d271a",
+	1,
+	"a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	'',
+	0,
+	'../ASL_Mapping.xtuml');

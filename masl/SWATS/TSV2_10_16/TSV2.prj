@@ -1,0 +1,355 @@
+project TSV2 is
+  domain CPR_One is
+    terminator Report is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name   : in  string,
+                                           This_Domain_Number : in  integer);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+    terminator Simple_Terminator is
+      public service Create_and_Link_CPR (This_IH      : in  instance of Object_One,
+                                          It_Worked    : out boolean,
+                                          Result_Value : out integer);
+
+      public service Navigate_CPR (The_Object_One_IH : in  instance of Object_One,
+                                   It_Worked         : out boolean,
+                                   Result_Value      : out integer);
+
+    end terminator;
+    pragma key_letter ("ST");
+
+
+    terminator Simple_CPR_In_Object_One is
+      public service Link_To_CPR2_Domain (This_IH      : in  instance of Object_One,
+                                          Success      : out boolean,
+                                          Success_With : out integer);
+
+      public service Link_To_CPR2_Domain_Again (Starting_IH  : in  instance of Object_One,
+                                                Success      : out boolean,
+                                                Success_With : out integer);
+
+      public service Return_Attribute (This_IH      : in  instance of Object_One,
+                                       Success      : out boolean,
+                                       Success_With : out integer);
+
+      public service Navigate_To_CPR_Two_Object_Two (This_IH             : in  instance of Object_One,
+                                                     Navigation_Possible : out boolean,
+                                                     To_Object_ID        : out integer);
+
+    end terminator;
+    pragma key_letter ("S_OBJ_ONE");
+
+
+    terminator One_To_Four is
+      public service Nav_To_CPR_Four (Source_IH      : in  instance of Many_End_Of_CPR_Relationship,
+                                      Returned_Value : out integer);
+
+    end terminator;
+    pragma key_letter ("OTF");
+
+
+  end domain;
+
+  domain CPR_Two is
+    terminator Report is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name   : in  string,
+                                           This_Domain_Number : in  integer);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+    terminator Normal_Bridge is
+      public service Create_Object_One (Create_Int  : in  integer,
+                                        Create_Real : in  real,
+                                        Create_Bool : in  boolean,
+                                        Create_Text : in  string,
+                                        Return_id   : out integer);
+
+      public service Create_A_Many (Instance_Number : in  integer,
+                                    This_Many_ID    : out integer);
+
+    end terminator;
+    pragma key_letter ("NB");
+
+
+    terminator Simple_Object_Two_Counterpart_CPR_Two is
+      public service Retrieve_Object_One_Using_this (First_Attribute  : out integer,
+                                                     Second_Attribute : out real,
+                                                     Third_Attribute  : out boolean,
+                                                     Fourth_Attribute : out string);
+
+      public service Link_To_Object_One_Using_IH (Input_Param1  : in  integer,
+                                                  Source_IH     : in  instance of Object_Two,
+                                                  Return_Param1 : out boolean);
+
+      public service Link_To_Object_One_Using_this (Input_Param1  : in  integer,
+                                                    Return_Param1 : out boolean);
+
+      public service Retrieve_Object_One_Using_IH (Source_IH        : in  instance of Object_Two,
+                                                   First_Attribute  : out integer,
+                                                   Second_Attribute : out real,
+                                                   Third_Attribute  : out boolean,
+                                                   Fourth_Attribute : out string);
+
+      public service Link_To_Object_To_Pass (The_IH                   : in  instance of Object_Two,
+                                             Object_To_Pass_Return_ID : out integer);
+
+      public service Link_To_Object_One (The_IH               : in  instance of Object_Two,
+                                         Object_One_Return_ID : out integer);
+
+    end terminator;
+    pragma key_letter ("S_OBJ_TWO");
+
+
+    terminator Simple_Single_End_Link is
+      public service Link_A_Specified_Many (Instance_Number : in  integer,
+                                            The_IH          : in  instance of Single_End);
+
+      public service Create_And_Link_A_New_Many (Many_Identifier : in  integer,
+                                                 The_IH          : in  instance of Single_End);
+
+      public service Navigate_To_Many (The_IH         : in  instance of Single_End,
+                                       How_Many_Found : out integer);
+
+      public service Find_And_Unlink_A_Many (Instance_Number_To_Unlink : in  integer,
+                                             The_IH                    : in  instance of Single_End);
+
+    end terminator;
+    pragma key_letter ("S_SEL");
+
+
+  end domain;
+
+  domain RP is
+  end domain;
+
+  domain CPR_Three is
+    terminator Domain_Two_Operations is
+      public service Create_Object_Two_Instance (Link_What : in  Link_Type,
+                                                 OK        : out boolean,
+                                                 Two_ID    : out integer,
+                                                 One_ID    : out integer,
+                                                 Pass_ID   : out integer);
+
+    end terminator;
+    pragma key_letter ("D_Two_Ops");
+
+
+    terminator Report is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name   : in  string,
+                                           This_Domain_Number : in  integer);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+    terminator Simple_Third_Boundary_To_Domain_One is
+      public service Get_Object_One (The_IH       : in  instance of Third_Way,
+                                     Return_Value : out integer);
+
+      public service Link_To_Object_One (The_IH    : in  instance of Third_Way,
+                                         It_Linked : out boolean);
+
+    end terminator;
+    pragma key_letter ("S_TB_One");
+
+
+    terminator Simple_Third_Boundary_To_Object_Two is
+      public service Get_Object_Two (Domain_Two_Target_ID : in  integer,
+                                     Link_To_What         : in  Link_Type,
+                                     The_IH               : in  instance of Third_Way,
+                                     Object_One_ID        : out integer,
+                                     Object_To_Pass_ID    : out integer);
+
+      public service Get_Single_Object (The_IH    : in  instance of Third_Way,
+                                        Linked_To : out integer);
+
+    end terminator;
+    pragma key_letter ("S_TB_Two");
+
+
+    terminator Local_Object_Bridge is
+      public service Link_First_To_Second (Primary_Object_IH   : in  instance of First_Object,
+                                           Secondary_Object_IH : in  instance of Second_Object,
+                                           Linked_OK           : out boolean,
+                                           Supported           : out boolean);
+
+      public service Navigate_First_To_Second (Primary_Object_IH   : in  instance of First_Object,
+                                               Secondary_Object_IH : out instance of Second_Object,
+                                               Supported           : out boolean);
+
+      public service Navigate_Second_To_First (Secondary_Object_IH : in  instance of Second_Object,
+                                               Primary_Object_IH   : out instance of First_Object,
+                                               Supported           : out boolean);
+
+      public service Unlink_First_From_Second (Primary_Object_IH   : in  instance of First_Object,
+                                               Secondary_Object_IH : in  instance of Second_Object,
+                                               Unlinked_OK         : out boolean,
+                                               Supported           : out boolean);
+
+    end terminator;
+    pragma key_letter ("LO_Bridge");
+
+
+  end domain;
+
+  domain CPR_Four is
+    terminator A_Normal_Bridge is
+      public service Link_To_CPR_Three_Third_Object (An_Instance_To_Link : in  instance of An_Active_Object,
+                                                     Linked_OK           : out boolean);
+
+      public service Link_To_CPR_One_Many_Object (The_IH              : in  instance of An_Active_Object,
+                                                  Something_To_Return : out boolean,
+                                                  Linked_To           : out integer);
+
+      //! Navigate to CPR One Many End object and return how many there
+      //! are currently linked.
+      public service Navigate_To_CPR_One_Many_Object (The_IH         : in  instance of An_Active_Object,
+                                                      How_Many_Found : out integer);
+
+      public service Navigate_To_CPR_Three_Third_Object (The_IH              : in  instance of An_Active_Object,
+                                                         Something_To_Return : out integer);
+
+      public service Unlink_From_CPR_Three_Third_Object (Source_IH   : in  instance of An_Active_Object,
+                                                         Unlinked_OK : out boolean);
+
+      public service Unlink_From_CPR_One_Many_Object (Source_IH     : in  instance of An_Active_Object,
+                                                      Unlinked_OK   : out boolean,
+                                                      Unlinked_From : out integer);
+
+      public service Link_To_CPR8_Three_Third_Object (Source_IH  : in  instance of An_Active_Object,
+                                                      The_Result : out boolean,
+                                                      Linked_To  : out integer);
+
+      public service Navigate_To_CPR8_Three_Third_Object (Source_IH         : in  instance of An_Active_Object,
+                                                          Navigation_Result : out integer);
+
+      public service Unlink_From_CPR8_Three_Third_Object (Source_IH : in  instance of An_Active_Object,
+                                                          Unlinked  : out boolean);
+
+      public service Link_First_Object (Source_IH           : in  instance of First_Active_Object,
+                                        Specified_Attribute : in  integer,
+                                        Linked_OK           : out boolean,
+                                        Linked_Attribute    : out integer);
+
+      public service Navigate_From_First_Object (Source_IH                       : in  instance of First_Active_Object,
+                                                 Failed_To_Navigate              : out boolean,
+                                                 Attribute_Of_Navigated_Instance : out integer);
+
+      public service Invoke_Test_In_CPR_One (Destination_ID : in  integer,
+                                             Source_ID      : in  integer);
+
+    end terminator;
+    pragma key_letter ("ANB");
+
+
+    terminator Report is
+      public service Start_Test (Test_Number     : in  integer,
+                                 Requid          : in  string,
+                                 Invoking_Domain : in  string,
+                                 Invoking_Object : in  string,
+                                 Purpose         : in  string);
+
+      public service Test_Passed (Test_Object_Domain : in  string,
+                                  Test_Number        : in  integer,
+                                  Test_Value         : in  integer);
+
+      public service Test_Failed (Failed_Domain_Object : in  string,
+                                  Failed_Test_Number   : in  integer,
+                                  Failed_Test_Value    : in  integer);
+
+      public service Test_Unsupported (Unsupported_Test_Number : in  integer);
+
+      public service Test_Text (Test_Number : in  integer,
+                                Free_Text   : in  string);
+
+      public service Domain_Test_Start (This_Domain_Name : in  string);
+
+      public service Domain_Test_Finished (This_Domain_Name   : in  string,
+                                           This_Domain_Number : in  integer);
+
+      public service Specify_Requid (Requid_Test_Number : in  integer,
+                                     The_Requid_Itself  : in  string);
+
+    end terminator;
+    pragma key_letter ("RPT");
+
+
+  end domain;
+
+end project;

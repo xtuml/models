@@ -1,0 +1,291 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("2706dfd8-ba16-4e6a-a68a-bdfc594bbd7e",
+	'I_Into_The_Great_Wide_Open',
+	3,
+	'IITGWO',
+	' Class realising Interface
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("9a4de9ec-b52d-4d39-9a34-4928a6be7156",
+	"2706dfd8-ba16-4e6a-a68a-bdfc594bbd7e",
+	'Across_The_Great_Divide',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'## my_test = find-one Test_Data
+## 
+## # Receive a structure and the control data from this domain.
+## # Decode it, and create another structure locally and pass it back
+## # to the calling routine. In this case, the bridge and the calling routine 
+## # are in the same domain.
+## 
+## Local_Test = Test
+## 
+## Reporter = find-one Report_Data
+## if Reporter != UNDEFINED then
+## 
+##    Reporter_Number = Reporter.Reported_Domain_Number
+## 
+## else
+## 
+##    Reporter_Number = -1
+## 
+## endif
+## 
+## $USE RP
+## 
+## [] = RP4::Test_Description[Local_Test, "null requid", "Structure Bridge", "Pass back structure", "Decode received structure", Reporter_Number]
+## 
+## 
+## $ENDUSE
+## 
+##
+[] = RPT1:Start_Test[Test,"Null Requid", "OAIBTWO", "IITGWO1", "Decode received structure"]
+
+Has_Passed = FALSE
+Failure_Code = 0
+
+How_Many_Sets = countof{A_Structure_To_Send}
+
+
+if How_Many_Sets = Elements_In_Structure then
+
+   Count = 1
+
+   for [local_integer, local_real, local_string, local_boolean, local_colour] in {A_Structure_To_Send} do
+
+
+
+      # Look at the last entry only.
+      if Count = How_Many_Sets then 
+
+         # Copy the contents into a locally defined structure.
+         append [local_integer, local_real, local_string, local_boolean, local_colour] to {A_Structure_To_Return}
+
+
+         if local_integer = Control_Integer then
+
+            if local_real = Control_Real then
+
+               if local_string = Control_String then
+
+                  if local_colour = Control_Enum then
+
+                     if local_boolean = Control_Boolean then
+
+                        Has_Passed = TRUE
+
+                     else
+                        # Boolean incorrectly decoded
+                        Has_Passed = TRUE
+                        Failure_Code = -6
+                     endif
+
+                  else
+                     # Enumeration incorrectly decoded
+                     Has_Passed = FALSE
+                     Failure_Code = -5
+                  endif
+
+               else
+                  # String incorrectly decoded
+                  Has_Passed = FALSE
+                  Failure_Code = -4
+               endif
+
+            else
+               # Real incorrectly decoded
+               Has_Passed = FALSE
+               Failure_Code = -3
+            endif
+
+         else
+            # Integer incorrectly decoded
+            Has_Passed = FALSE
+            Failure_Code = -2
+         endif
+
+      else
+         # Not interested in this entry. Control data will only match up with the 
+         # last entry in the set.
+         Count        = Count + 1
+         Has_Passed   = FALSE
+         Failure_Code = 0
+      endif
+
+   # Loop around the entries in the set of structures.
+   endfor
+
+else
+   # Conflict in the number of sets found and the number
+   # specified by the source domain.
+   Has_Passed = FALSE
+   Failure_Code = -1
+endif
+
+if Has_Passed = FALSE then
+      [] = RPT3:Test_Failed["OAIBTWO Local Structure corrupted", Test, -1]
+else
+      [] = RPT2:Test_Passed["OAIBTWO Local Structure correctly received", Test, 0]
+endif
+
+Result = Has_Passed
+',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("bce32b3c-6805-4d70-9c94-66362be05a94",
+	"9a4de9ec-b52d-4d39-9a34-4928a6be7156",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("1218c281-47e1-45a3-b321-a6ac987efc14",
+	"9a4de9ec-b52d-4d39-9a34-4928a6be7156",
+	'A_Structure_To_Send',
+	"6967fe5f-892a-4759-8be5-495154700823",
+	0,
+	'',
+	"bce32b3c-6805-4d70-9c94-66362be05a94",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("6967fe5f-892a-4759-8be5-495154700823",
+	"00000000-0000-0000-0000-000000000000",
+	'Source_Structure_Type',
+	'',
+	'',
+	'../../../Shared/Shared.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("2f7cfa1d-2e20-4087-b7f1-53c7cd02b6db",
+	"9a4de9ec-b52d-4d39-9a34-4928a6be7156",
+	'Control_Integer',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"1218c281-47e1-45a3-b321-a6ac987efc14",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("9b4ccfa7-6f6c-4ba4-9a30-dc24bfcc36f3",
+	"9a4de9ec-b52d-4d39-9a34-4928a6be7156",
+	'Control_Real',
+	"ba5eda7a-def5-0000-0000-000000000003",
+	0,
+	'',
+	"2f7cfa1d-2e20-4087-b7f1-53c7cd02b6db",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("b59d1e99-4757-48cc-b3b3-13eaae6fce52",
+	"9a4de9ec-b52d-4d39-9a34-4928a6be7156",
+	'Control_String',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"9b4ccfa7-6f6c-4ba4-9a30-dc24bfcc36f3",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("5e4b1ba4-a39a-4f4d-9283-5d7e3d198a37",
+	"9a4de9ec-b52d-4d39-9a34-4928a6be7156",
+	'Control_Enum',
+	"72c79f47-e1ba-4732-821c-6526dc377f13",
+	0,
+	'',
+	"b59d1e99-4757-48cc-b3b3-13eaae6fce52",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("72c79f47-e1ba-4732-821c-6526dc377f13",
+	"00000000-0000-0000-0000-000000000000",
+	'Colour_Type',
+	'',
+	'',
+	'../../../Shared/Shared.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("6ddbaeef-a00b-4c35-94b0-71583ef56325",
+	"9a4de9ec-b52d-4d39-9a34-4928a6be7156",
+	'Control_Boolean',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	0,
+	'',
+	"5e4b1ba4-a39a-4f4d-9283-5d7e3d198a37",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("b75eacfe-65fe-4ad3-a72d-66ba954a5db8",
+	"9a4de9ec-b52d-4d39-9a34-4928a6be7156",
+	'Elements_In_Structure',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"6ddbaeef-a00b-4c35-94b0-71583ef56325",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("43d713ac-4fb4-43c0-b051-fc9db4a1e794",
+	"9a4de9ec-b52d-4d39-9a34-4928a6be7156",
+	'Result',
+	"ba5eda7a-def5-0000-0000-000000000001",
+	1,
+	'',
+	"b75eacfe-65fe-4ad3-a72d-66ba954a5db8",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("24187b50-50b0-48fc-8c4e-a733b5277f76",
+	"9a4de9ec-b52d-4d39-9a34-4928a6be7156",
+	'A_Structure_To_Return',
+	"6967fe5f-892a-4759-8be5-495154700823",
+	1,
+	'',
+	"43d713ac-4fb4-43c0-b051-fc9db4a1e794",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("db032b4d-50ac-4d5c-a11d-5b669dac0789",
+	"2706dfd8-ba16-4e6a-a68a-bdfc594bbd7e");
+INSERT INTO O_BATTR
+	VALUES ("db032b4d-50ac-4d5c-a11d-5b669dac0789",
+	"2706dfd8-ba16-4e6a-a68a-bdfc594bbd7e");
+INSERT INTO O_ATTR
+	VALUES ("db032b4d-50ac-4d5c-a11d-5b669dac0789",
+	"2706dfd8-ba16-4e6a-a68a-bdfc594bbd7e",
+	"00000000-0000-0000-0000-000000000000",
+	'iitgwo_id',
+	'',
+	'',
+	'iitgwo_id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"2706dfd8-ba16-4e6a-a68a-bdfc594bbd7e");
+INSERT INTO O_OIDA
+	VALUES ("db032b4d-50ac-4d5c-a11d-5b669dac0789",
+	"2706dfd8-ba16-4e6a-a68a-bdfc594bbd7e",
+	0,
+	'iitgwo_id');
+INSERT INTO O_ID
+	VALUES (1,
+	"2706dfd8-ba16-4e6a-a68a-bdfc594bbd7e");
+INSERT INTO O_ID
+	VALUES (2,
+	"2706dfd8-ba16-4e6a-a68a-bdfc594bbd7e");
+INSERT INTO PE_PE
+	VALUES ("2706dfd8-ba16-4e6a-a68a-bdfc594bbd7e",
+	1,
+	"370bba31-3c77-40fc-9a6d-a6fb5ac6cd91",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("370bba31-3c77-40fc-9a6d-a6fb5ac6cd91",
+	"00000000-0000-0000-0000-000000000000",
+	"52c2ab41-d718-429f-a9a2-1ac77ce738a7",
+	'OAIBTWO',
+	'',
+	0,
+	'../OAIBTWO.xtuml');

@@ -1,0 +1,214 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("eee656aa-e8b7-4e50-a7de-9f868682b932",
+	'Nested_FOR',
+	9,
+	'NstFOR',
+	' This object verifies nested ''FOR'' statements.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("edeae69f-9d92-498e-acd5-313e808f1fd9",
+	"eee656aa-e8b7-4e50-a7de-9f868682b932",
+	'do_nested_for',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#------------------------------------------------------------------------#
+# Nested FOR statements
+#------------------------------------------------------------------------#
+
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+# Test 1 - Nested FOR statements
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objNESTEDFOR", "Nested FOR statements"]
+
+   Has_Failed = FALSE
+
+   # Create a set of instances to loop over
+   {all_instances} = find-all Nested_FOR
+   {all_instancesA} = find-all Nested_FOR
+   {all_instancesB} = find-all Nested_FOR
+   {all_instancesC} = find-all Nested_FOR
+   {all_instancesD} = find-all Nested_FOR
+   {all_instancesE} = find-all Nested_FOR
+   {all_instancesF} = find-all Nested_FOR
+
+   passA = 0
+   passB = 0
+   passC = 0
+   passD = 0
+   passE = 0
+   passF = 0
+  
+   # Perform the test
+   for each_instanceA in {all_instancesA} do
+      passA = passA + 1
+ 
+      for each_instanceB in {all_instancesB} do
+         passB = passB + 1
+
+         for each_instanceC in {all_instancesC} do
+            passC = passC + 1
+
+            for each_instanceD in {all_instancesD} do
+               passD = passD + 1
+
+               for each_instanceE in {all_instancesE} do
+                  passE = passE + 1
+
+                  for each_instanceF in {all_instancesF} do
+                     tempF = each_instanceF.ResultA + 1
+                     each_instanceF.ResultA = tempF
+                     passF = passF + 1
+                  endfor
+
+               endfor
+
+            endfor
+
+         endfor
+   
+      endfor
+
+   endfor
+
+
+   # Check that the attribute ''ResultA'' contains the correct value
+   for each_instance in {all_instances} do
+
+      if each_instance.ResultA != 3125 then
+         [] = RPT3:Test_Failed["objNESTEDFOR", Test,-1]
+         Has_Failed = TRUE
+      endif
+
+   endfor
+
+   # Check that the loop variables are still valid
+   if (each_instanceA = UNDEFINED)|(each_instanceB = UNDEFINED)|\
+      (each_instanceC = UNDEFINED)|(each_instanceD = UNDEFINED)|\
+      (each_instanceE = UNDEFINED)|(each_instanceF = UNDEFINED) then
+
+      [] = RPT3:Test_Failed["objNESTEDFOR", Test,-2]
+      Has_Failed = TRUE
+   endif
+
+   # Test complete
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objNESTEDFOR", Test,0]
+   endif
+
+   Test = Test + 1
+
+   Final_Test = Test',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("856be25b-2903-4b1a-a6bf-10e3e6b23f1b",
+	"edeae69f-9d92-498e-acd5-313e808f1fd9",
+	'Test_Start',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("c046e648-4e2c-45d5-b6c8-f881728d1910",
+	"edeae69f-9d92-498e-acd5-313e808f1fd9",
+	'Final_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"856be25b-2903-4b1a-a6bf-10e3e6b23f1b",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("8aca59a6-b523-460b-9953-6a324abf6f2c",
+	"eee656aa-e8b7-4e50-a7de-9f868682b932");
+INSERT INTO O_BATTR
+	VALUES ("8aca59a6-b523-460b-9953-6a324abf6f2c",
+	"eee656aa-e8b7-4e50-a7de-9f868682b932");
+INSERT INTO O_ATTR
+	VALUES ("8aca59a6-b523-460b-9953-6a324abf6f2c",
+	"eee656aa-e8b7-4e50-a7de-9f868682b932",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceNstFOR',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceNstFOR',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("9039fbd8-1908-45e7-a8aa-2026a8df4d98",
+	"eee656aa-e8b7-4e50-a7de-9f868682b932");
+INSERT INTO O_BATTR
+	VALUES ("9039fbd8-1908-45e7-a8aa-2026a8df4d98",
+	"eee656aa-e8b7-4e50-a7de-9f868682b932");
+INSERT INTO O_ATTR
+	VALUES ("9039fbd8-1908-45e7-a8aa-2026a8df4d98",
+	"eee656aa-e8b7-4e50-a7de-9f868682b932",
+	"8aca59a6-b523-460b-9953-6a324abf6f2c",
+	'ResultA',
+	' This attribute is manipulated to indicate that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("33526546-8b45-492f-8419-1fc9983511be",
+	"eee656aa-e8b7-4e50-a7de-9f868682b932");
+INSERT INTO O_BATTR
+	VALUES ("33526546-8b45-492f-8419-1fc9983511be",
+	"eee656aa-e8b7-4e50-a7de-9f868682b932");
+INSERT INTO O_ATTR
+	VALUES ("33526546-8b45-492f-8419-1fc9983511be",
+	"eee656aa-e8b7-4e50-a7de-9f868682b932",
+	"9039fbd8-1908-45e7-a8aa-2026a8df4d98",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"eee656aa-e8b7-4e50-a7de-9f868682b932");
+INSERT INTO O_OIDA
+	VALUES ("8aca59a6-b523-460b-9953-6a324abf6f2c",
+	"eee656aa-e8b7-4e50-a7de-9f868682b932",
+	0,
+	'ReferenceNstFOR');
+INSERT INTO O_ID
+	VALUES (1,
+	"eee656aa-e8b7-4e50-a7de-9f868682b932");
+INSERT INTO O_ID
+	VALUES (2,
+	"eee656aa-e8b7-4e50-a7de-9f868682b932");
+INSERT INTO PE_PE
+	VALUES ("eee656aa-e8b7-4e50-a7de-9f868682b932",
+	1,
+	"a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	'',
+	0,
+	'../ASL_Mapping.xtuml');

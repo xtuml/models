@@ -1,0 +1,16 @@
+public service CPR_Two::Normal_Bridge~>Create_A_Many (Instance_Number : in  integer,
+                                                      This_Many_ID    : out integer) is
+# Call the target domain and cause the creation of an object instance to link to an instance in this domain.
+
+# Define some locals.
+Returned_Identifier = 0
+Input_Number        = Instance_Number
+
+$USE CPR_One
+
+   [Returned_Identifier] = CPR_One4::Create_One_Of_Many[Input_Number]
+
+$ENDUSE
+
+
+This_Many_ID = Returned_Identifier

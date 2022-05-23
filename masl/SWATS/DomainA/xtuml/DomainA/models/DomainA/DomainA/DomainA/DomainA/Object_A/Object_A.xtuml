@@ -1,0 +1,153 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("9c4f654f-508f-4c29-bd89-d75896fa7698",
+	'Object_A',
+	2,
+	'objA',
+	' Object_A is used to invoke the series of tests as specified in the domain mission statement.
+ 
+ The tests are invoked through a series of events.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("664d226c-3686-4a32-ace9-ba255b4dbe7d",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698",
+	'do_ptp_open',
+	' This function invokes an open contract peer to peer bridge implementation.
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'# create an instance to use for the test
+newA = create unique Object_A with ResultA = 0
+
+an_int = 1
+a_real = 2.0
+a_text = "three"
+
+#[] = APTP1:Aptp_open_service[an_int,a_real,a_text] on newA',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TFR
+	VALUES ("86c1ff92-61d8-49bd-9b7d-847268913748",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698",
+	'do_ptp_closed_blocking',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'# create an instance to use for the test
+newA = create unique Object_A with ResultA = 0
+
+an_int = 1
+a_real = 2.0
+a_text = "three"
+
+#[a_status] = APTP2:Aptp_close_blocking_service[an_int,a_real,a_text] on newA
+
+# Not supported by SWA.
+
+Test = 8
+
+#if a_status = 10 then
+#  [] = RPTR1:REPORT_RESULT["DomainA","objA",Test,"do_ptp_closed_blocking","PASSED",a_status]
+#else
+#  [] = RPTR1:REPORT_RESULT["DomainA","objA",Test,"do_ptp_closed_blocking","FAILED",a_status]
+#endif
+
+#[] = RPTR1:REPORT_RESULT["DomainA","objA",Test,"do_ptp_closed_blocking","Unsupported",-1]
+
+[] = RPT4:Test_Unsupported[Test]
+
+',
+	3,
+	'',
+	"664d226c-3686-4a32-ace9-ba255b4dbe7d",
+	2,
+	2);
+INSERT INTO O_NBATTR
+	VALUES ("b56c6a6c-b198-4406-a406-e5e6f4daf7bd",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698");
+INSERT INTO O_BATTR
+	VALUES ("b56c6a6c-b198-4406-a406-e5e6f4daf7bd",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698");
+INSERT INTO O_ATTR
+	VALUES ("b56c6a6c-b198-4406-a406-e5e6f4daf7bd",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698",
+	"00000000-0000-0000-0000-000000000000",
+	'idA',
+	' Preferred indentifier.
+',
+	'',
+	'idA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("cf0e1a4d-4f4a-4041-926c-75ce671f1183",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698");
+INSERT INTO O_BATTR
+	VALUES ("cf0e1a4d-4f4a-4041-926c-75ce671f1183",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698");
+INSERT INTO O_ATTR
+	VALUES ("cf0e1a4d-4f4a-4041-926c-75ce671f1183",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698",
+	"b56c6a6c-b198-4406-a406-e5e6f4daf7bd",
+	'ResultA',
+	' This attribute is manipulated to indicate that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1195e566-223a-418b-b5f4-0002403c58fa",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698");
+INSERT INTO O_BATTR
+	VALUES ("1195e566-223a-418b-b5f4-0002403c58fa",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698");
+INSERT INTO O_ATTR
+	VALUES ("1195e566-223a-418b-b5f4-0002403c58fa",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698",
+	"cf0e1a4d-4f4a-4041-926c-75ce671f1183",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"9c4f654f-508f-4c29-bd89-d75896fa7698");
+INSERT INTO O_OIDA
+	VALUES ("b56c6a6c-b198-4406-a406-e5e6f4daf7bd",
+	"9c4f654f-508f-4c29-bd89-d75896fa7698",
+	0,
+	'idA');
+INSERT INTO O_ID
+	VALUES (1,
+	"9c4f654f-508f-4c29-bd89-d75896fa7698");
+INSERT INTO O_ID
+	VALUES (2,
+	"9c4f654f-508f-4c29-bd89-d75896fa7698");
+INSERT INTO PE_PE
+	VALUES ("9c4f654f-508f-4c29-bd89-d75896fa7698",
+	1,
+	"1e1c41f5-a071-40af-be1a-2d302f088b53",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("1e1c41f5-a071-40af-be1a-2d302f088b53",
+	"00000000-0000-0000-0000-000000000000",
+	"e54678e3-68f4-41f4-be3e-29c2c47b2204",
+	'DomainA',
+	'',
+	0,
+	'../DomainA.xtuml');

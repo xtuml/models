@@ -1,0 +1,317 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("6e48aaf8-bef7-4f25-921c-fbf81ef09d6c",
+	'Object_IF',
+	2,
+	'objIF',
+	' This object verifies the ''IF'' statement.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("4da67422-2116-412b-8d04-43c845c8886d",
+	"6e48aaf8-bef7-4f25-921c-fbf81ef09d6c",
+	'do_if_test',
+	' Object based function for performing ''if'' tests. Tests simple logical expressions on Integer local variables and requires instance creation, attribute assignment.
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#------------------------------------------------------------------------#
+# IF statement
+# The ASL <if> statement shall be supported
+# 1103-0000-01-0421
+#
+# The ASL <if ... else> statement shall be supported
+# 1101-0000-01-0422
+#------------------------------------------------------------------------#
+
+# create an instance to remember to test results
+newIF = create unique Object_IF with ResultA = 0 
+
+Test = Test_Start
+
+#------------------------------------------------------------------------#
+# Test 1 - Enter IF THEN stage of condition with an integer value
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping", "objIF", "IF test enter THEN stage"]
+   [] = RPT5:Test_Text [Test, "The_First_Comment"]
+   [] = RPT5:Test_Text [Test, "The_Second_Comment"]
+   # Initialise temporary variable
+   Temp = 1
+
+   # Perform the test
+   if Temp = 1 then
+      newIF.ResultA = 10
+      [] = RPT2:Test_Passed["objIF", Test, newIF.ResultA]
+   else
+      [] = RPT3:Test_Failed["objIF", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - Enter ELSE stage of condition
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping", "objIF", "IF test enter ELSE stage"]
+
+   # Initialise temporary variable
+   Temp = 1
+
+   # Perform the test
+   if Temp = 2 then
+      [] = RPT3:Test_Failed["objIF", Test, -10]
+   else
+      newIF.ResultA = 20
+
+      [] = RPT2:Test_Passed["objIF", Test, newIF.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - IF-THEN, enter THEN part
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0421", "ASL Mapping", "objIF", "IF test enter THEN part"]
+
+   Temp = 2
+
+   # Check temporary variables values
+   if Temp != 2 then
+      [] = RPT3:Test_Failed["objIF", Test, -10]
+   endif
+
+   # Perform the test
+   if Temp = 2 then
+      newIF.ResultA = 30
+      [] = RPT2:Test_Passed["objIF", Test, newIF.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4 - IF-THEN statement where condition is unfulfilled
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0421", "ASL Mapping","objIF", "If test condition unfulfilled"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0422"]
+
+   Temp = 2
+
+   # Perform the test
+   if Temp = 3 then
+      Temp = 4              
+      # This statement should not be entered
+   endif
+
+   # Check the results
+   if Temp  = 4 then
+      [] = RPT3:Test_Failed["objIF", Test, -10]
+   else
+      newIF.ResultA = 40
+      [] = RPT2:Test_Passed["objIF", Test, newIF.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Test 5 - Boolean test should enter IF THEN condition
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objIF", "Boolean tests TRUE 1"]
+
+   A = TRUE
+   B = TRUE
+
+   if A = B then
+      newIF.ResultA = 50
+      [] = RPT2:Test_Passed["Boolean A = B TRUE", Test, newIF.ResultA]
+   else
+      [] = RPT3:Test_Failed["Boolean A = B TRUE", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#------------------------------------------------------------------------#
+# Test 6 - Boolean test should enter IF THEN condition
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objIF", "Boolean tests TRUE 2"]
+
+   A = TRUE
+
+   if A then
+      newIF.ResultA = 60
+      [] = RPT2:Test_Passed["Boolean A TRUE", Test, newIF.ResultA]
+   else
+      [] = RPT3:Test_Failed["Boolean A TRUE", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 6
+
+#------------------------------------------------------------------------#
+# Test 7 - Boolen test should enter IF THEN condition
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objIF", "Boolean tests FALSE 1"]
+
+   A = TRUE
+   B = FALSE
+
+   if A != B then
+      newIF.ResultA = 70
+      [] = RPT2:Test_Passed["Boolean A != B FALSE", Test, newIF.ResultA]
+   else
+      [] = RPT3:Test_Failed["Boolean A != B FALSE", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# End Test 7
+
+#------------------------------------------------------------------------#
+# Test 8 - Should enter IF THEN Condition
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objIF", "Boolean tests FALSE 2"]
+
+   A = TRUE
+   B = FALSE
+
+   if !B then
+      newIF.ResultA = 80
+      [] = RPT2:Test_Passed["Boolean !B FALSE", Test, newIF.ResultA]
+   else
+      [] = RPT3:Test_Failed["Boolean !B FALSE", Test, -10]
+   endif
+
+   Test = Test + 1
+
+# Test 8
+
+#------------------------------------------------------------------------#
+# Test 9 - Boolean test should enter ELSE part of condition
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0422", "ASL Mapping","objIF", "Boolean tests FALSE 3"]
+
+   A = TRUE
+   B = FALSE
+
+   if !A then
+      [] = RPT3:Test_Failed["Boolean !A TRUE", Test, -10]
+   else
+      newIF.ResultA = 90
+      [] = RPT2:Test_Passed["Boolean !A TRUE", Test, newIF.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 9
+
+#------------------------------------------------------------------------#
+
+Final_Test = Test',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("d59a4f82-8829-4613-bed9-e0de1990ff87",
+	"4da67422-2116-412b-8d04-43c845c8886d",
+	'Test_Start',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("57bfabe6-4a4c-42af-a337-b611c585c63a",
+	"4da67422-2116-412b-8d04-43c845c8886d",
+	'Final_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"d59a4f82-8829-4613-bed9-e0de1990ff87",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("648eb847-6988-4a4c-bea0-15262224b22c",
+	"6e48aaf8-bef7-4f25-921c-fbf81ef09d6c");
+INSERT INTO O_BATTR
+	VALUES ("648eb847-6988-4a4c-bea0-15262224b22c",
+	"6e48aaf8-bef7-4f25-921c-fbf81ef09d6c");
+INSERT INTO O_ATTR
+	VALUES ("648eb847-6988-4a4c-bea0-15262224b22c",
+	"6e48aaf8-bef7-4f25-921c-fbf81ef09d6c",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceIF',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceIF',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("0e403c3f-323d-440e-b965-80b354ef7e07",
+	"6e48aaf8-bef7-4f25-921c-fbf81ef09d6c");
+INSERT INTO O_BATTR
+	VALUES ("0e403c3f-323d-440e-b965-80b354ef7e07",
+	"6e48aaf8-bef7-4f25-921c-fbf81ef09d6c");
+INSERT INTO O_ATTR
+	VALUES ("0e403c3f-323d-440e-b965-80b354ef7e07",
+	"6e48aaf8-bef7-4f25-921c-fbf81ef09d6c",
+	"648eb847-6988-4a4c-bea0-15262224b22c",
+	'ResultA',
+	' This attribute is manipulated to indicated that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"6e48aaf8-bef7-4f25-921c-fbf81ef09d6c");
+INSERT INTO O_OIDA
+	VALUES ("648eb847-6988-4a4c-bea0-15262224b22c",
+	"6e48aaf8-bef7-4f25-921c-fbf81ef09d6c",
+	0,
+	'ReferenceIF');
+INSERT INTO O_ID
+	VALUES (1,
+	"6e48aaf8-bef7-4f25-921c-fbf81ef09d6c");
+INSERT INTO O_ID
+	VALUES (2,
+	"6e48aaf8-bef7-4f25-921c-fbf81ef09d6c");
+INSERT INTO PE_PE
+	VALUES ("6e48aaf8-bef7-4f25-921c-fbf81ef09d6c",
+	1,
+	"a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	'',
+	0,
+	'../ASL_Mapping.xtuml');

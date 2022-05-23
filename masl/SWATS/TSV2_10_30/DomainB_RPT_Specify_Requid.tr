@@ -1,0 +1,29 @@
+public service DomainB::Report~>Specify_Requid (Requid_Test_Number : in  integer,
+                                                The_Requid_Itself  : in  string) is
+local_test_number = Requid_Test_Number
+local_requid_value = The_Requid_Itself
+
+# Find the reporter object for this domain, there will be only one.
+
+The_Reporter_Object = find-one Report_Data
+
+
+if The_Reporter_Object = UNDEFINED then
+
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["TP Calling domain has not created Report_Data"]
+
+   $ENDUSE
+
+else
+
+   Unique_Domain_ID =  The_Reporter_Object.Reported_Domain_Number
+ 
+   $USE RP
+
+   [] = RP10::Specify_Requid [Unique_Domain_ID, local_test_number, local_requid_value]
+
+   $ENDUSE
+
+endif

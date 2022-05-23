@@ -1,0 +1,141 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("76e32625-eccf-438d-b975-2d685d344f1f",
+	"00000000-0000-0000-0000-000000000000",
+	"52c2ab41-d718-429f-a9a2-1ac77ce738a7",
+	'scenarios',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("37365150-2843-4e8d-b6b9-c809600ccb2d",
+	112,
+	"76e32625-eccf-438d-b975-2d685d344f1f",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'OAIBTWO::OAIBTWO::OAIBTWO::scenarios');
+INSERT INTO DIM_DIA
+	VALUES ("37365150-2843-4e8d-b6b9-c809600ccb2d",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("f488af4d-4ef4-4292-9327-209fa811b557",
+	"00000000-0000-0000-0000-000000000000",
+	'Local_scenario_for_OAIBTWO_standalone_test',
+	' Local scenario for OAIBTWO standalone test
+',
+	'#--------------------------------------------------------------------------
+# In the abscence of the calling OAIBONE domain in a multi domain build,
+# this scenario mat be run in stand-alone mode.
+#--------------------------------------------------------------------------
+
+   Result = FALSE
+
+   {Received_Structure} is Source_Structure_Type
+
+   Test       = 1
+   An_Integer = 0
+   A_Real     = 0.0
+   Some_Text  = "Fred"
+   A_Boolean  = FALSE
+
+   A_Colour of Colour_Type = ''Red''
+
+   append [An_Integer, A_Real, Some_Text, A_Boolean, A_Colour] to {Received_Structure}
+
+   [Result] = OAIBTWO1::Receive_The_Structure[Test, {Received_Structure}, An_Integer, A_Real, Some_Text, A_Colour, A_Boolean, 1]
+
+   if Result = TRUE then
+      [] = RPT2:Test_Passed["OAIBTWO local call", Test, 0]
+   else
+      [] = RPT3:Test_Failed ["OAIBTWO local call", Test, -1]
+   endif
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO PE_PE
+	VALUES ("f488af4d-4ef4-4292-9327-209fa811b557",
+	1,
+	"76e32625-eccf-438d-b975-2d685d344f1f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("1f9b8db4-a91f-4702-9b43-f451a0dd58ae",
+	"00000000-0000-0000-0000-000000000000",
+	'Start_OAIBTWO_Tests',
+	' Start_OAIBTWO_Tests
+',
+	'[] = OAIBTWO4::Create_Report_Data[]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO PE_PE
+	VALUES ("1f9b8db4-a91f-4702-9b43-f451a0dd58ae",
+	1,
+	"76e32625-eccf-438d-b975-2d685d344f1f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("9de379cc-e531-4ecd-a219-e2ea2139e844",
+	"00000000-0000-0000-0000-000000000000",
+	'Finish_OAIBTWO_Tests',
+	' Finish_OAIBTWO_Tests
+',
+	'[] = OAIBTWO5::Delete_Report_Data[]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	4);
+INSERT INTO PE_PE
+	VALUES ("9de379cc-e531-4ecd-a219-e2ea2139e844",
+	1,
+	"76e32625-eccf-438d-b975-2d685d344f1f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("76e32625-eccf-438d-b975-2d685d344f1f",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"747f06d5-6cce-4df7-acd4-f7235b982e50",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("747f06d5-6cce-4df7-acd4-f7235b982e50",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'OAIBTWO',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Open Architecture Internal Bridge Domain Two',
+	'../OAIBTWO.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("52c2ab41-d718-429f-a9a2-1ac77ce738a7",
+	'OAIBTWO',
+	1,
+	'../../../OAIBTWO.xtuml');

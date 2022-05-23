@@ -1,0 +1,28 @@
+define bridge  CT_Tags:Nav_CCA3:Unlink_CCA
+input \
+	CCA_IH:CCA_CP_IH 
+output \
+	Return_Val:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+$USE CP_Tags
+
+   NewInst = CCA_IH -> CPR2.CCA_CP
+
+   unlink-counterpart CCA_IH CPR2 NewInst
+
+   NewInst = CCA_IH -> CPR2.CCA_CP
+
+$ENDUSE 
+
+   if NewInst = UNDEFINED then
+      Return_Val = 1
+   else
+      Return_Val = -10
+   endif
+
+enddefine

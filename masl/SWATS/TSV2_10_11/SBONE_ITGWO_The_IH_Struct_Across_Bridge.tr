@@ -1,0 +1,19 @@
+public service SBONE::Into_The_Great_Wide_Open~>The_IH_Struct_Across_Bridge (The_IHA           : in  instance of Very_Simple_Data_Object,
+                                                                             The_IHB           : in  instance of Very_Simple_Data_Object,
+                                                                             The_IHC           : in  instance of Very_Simple_Data_Object,
+                                                                             Decomposed_Struct : out sequence of VSD_Struct) is
+   {Returned_Structure} is IH_Struct
+
+   [{Returned_Structure}] = SBONE4::Append_IH_To_Struct[The_IHA]
+
+   [{Returned_Structure}] = SBONE4::Append_IH_To_Struct[The_IHB]
+
+   [{Returned_Structure}] = SBONE4::Append_IH_To_Struct[The_IHC]
+
+   for [A_Struct] in {Returned_Structure} do
+
+      append[A_Struct.Object_Reference_VSD,  \
+             A_Struct.Object_Simple_Integer, \
+             A_Struct.Object_Simple_Real] to {Decomposed_Struct}
+
+   endfor

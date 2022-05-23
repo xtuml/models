@@ -1,0 +1,122 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("7d44f90b-6d6f-4291-9465-78bb67958a09",
+	'Termination_State',
+	11,
+	'objTS',
+	' This object verifies the deletion of object instances.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("090d3558-1ae4-4011-8b12-e4d7726d7eae",
+	"7d44f90b-6d6f-4291-9465-78bb67958a09",
+	'verify_deletion',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#------------------------------------------------------------------------#
+# Verify instance deletion
+#------------------------------------------------------------------------#
+
+# Set the fault flag, set to TRUE if a fault has been identified
+
+#------------------------------------------------------------------------#
+# Test 1
+#------------------------------------------------------------------------#
+
+   # Attempt to find the deleted instance
+   an_instanceTS = find-one Termination_State where ReferenceTS = Test
+
+   # Check that the instance was deleted
+   if an_instanceTS != UNDEFINED then		         	    
+      [] = RPT3:Test_Failed["objTS", Test, -1]
+   else     
+      [] = RPT2:Test_Passed["objTS", Test, 0]
+   endif
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+
+# Test complete
+',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("ddc0571d-b90e-4dd4-82dd-d524eed5971d",
+	"090d3558-1ae4-4011-8b12-e4d7726d7eae",
+	'Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("fa903bf3-d69f-4259-a7aa-463284470275",
+	"7d44f90b-6d6f-4291-9465-78bb67958a09");
+INSERT INTO O_BATTR
+	VALUES ("fa903bf3-d69f-4259-a7aa-463284470275",
+	"7d44f90b-6d6f-4291-9465-78bb67958a09");
+INSERT INTO O_ATTR
+	VALUES ("fa903bf3-d69f-4259-a7aa-463284470275",
+	"7d44f90b-6d6f-4291-9465-78bb67958a09",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceTS',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceTS',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("868626cd-dba3-40ac-aaa0-07f4472a7988",
+	"7d44f90b-6d6f-4291-9465-78bb67958a09");
+INSERT INTO O_BATTR
+	VALUES ("868626cd-dba3-40ac-aaa0-07f4472a7988",
+	"7d44f90b-6d6f-4291-9465-78bb67958a09");
+INSERT INTO O_ATTR
+	VALUES ("868626cd-dba3-40ac-aaa0-07f4472a7988",
+	"7d44f90b-6d6f-4291-9465-78bb67958a09",
+	"fa903bf3-d69f-4259-a7aa-463284470275",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"7d44f90b-6d6f-4291-9465-78bb67958a09");
+INSERT INTO O_OIDA
+	VALUES ("fa903bf3-d69f-4259-a7aa-463284470275",
+	"7d44f90b-6d6f-4291-9465-78bb67958a09",
+	0,
+	'ReferenceTS');
+INSERT INTO O_ID
+	VALUES (1,
+	"7d44f90b-6d6f-4291-9465-78bb67958a09");
+INSERT INTO O_ID
+	VALUES (2,
+	"7d44f90b-6d6f-4291-9465-78bb67958a09");
+INSERT INTO PE_PE
+	VALUES ("7d44f90b-6d6f-4291-9465-78bb67958a09",
+	1,
+	"83c7b8f7-b697-4c39-b7ba-3c85ab0c6fae",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("83c7b8f7-b697-4c39-b7ba-3c85ab0c6fae",
+	"00000000-0000-0000-0000-000000000000",
+	"bc9320a4-8a49-4b7e-b7ee-fc2e8644db84",
+	'Creation_Deletion',
+	'',
+	0,
+	'../Creation_Deletion.xtuml');

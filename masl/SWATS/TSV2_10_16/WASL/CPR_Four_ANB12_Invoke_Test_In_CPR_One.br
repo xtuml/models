@@ -1,0 +1,26 @@
+define bridge  CPR_Four:ANB12:Invoke_Test_In_CPR_One
+input \
+	Destination_ID:Base_Integer_Type ,\
+	Source_ID:Base_Integer_Type 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+CPR_One_Object_ID = Source_ID
+CPR_Four_Object_ID =  Destination_ID 
+
+$INLINE
+fprintf(stderr,"Calling CPR_One to Kick off tests\n");
+$ENDINLINE
+
+$USE CPR_One
+
+   [] = MANY1:Kick_Off_CPR_Four_Tests [CPR_One_Object_ID, CPR_Four_Object_ID]
+
+$ENDUSE
+
+
+enddefine

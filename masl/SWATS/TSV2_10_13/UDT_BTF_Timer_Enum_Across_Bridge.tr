@@ -1,0 +1,40 @@
+public service UDT::Bridge_Too_Far~>Timer_Enum_Across_Bridge (Test : in  integer) is
+My_Report = find-one Report_Data
+
+if My_Report = UNDEFINED then
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["Calling domain has not created Report_Data"]
+
+   $ENDUSE
+
+
+else
+
+   This_Domain_Number = My_Report.Reported_Domain_Number
+
+   [The_First_Val] = UDT9::Create_A_Timer_Enumeration['MILLISECOND'] 
+
+   [The_Second_Val] = UDT9::Create_A_Timer_Enumeration['SECOND'] 
+
+   $USE RP
+
+      [] = RP4::Test_Description[Test, "Null Requid", "UDT", "Bridge", "Check Enumeration across bridge", This_Domain_Number]
+
+
+      if The_First_Val = 1 then
+         if The_Second_Val = 2 then
+            [] = RP1::Test_Passed["Bridge", Test, The_Second_Val, This_Domain_Number]
+         else
+            [] = RP1::Test_Passed["Bridge", Test, The_First_Val, This_Domain_Number]
+         endif
+      else
+ 
+         [] = RP2::Test_Failed["Bridge", Test, The_First_Val, This_Domain_Number]
+
+      endif
+
+   $ENDUSE
+
+
+ endif

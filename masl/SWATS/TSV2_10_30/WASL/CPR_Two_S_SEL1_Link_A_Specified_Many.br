@@ -1,0 +1,45 @@
+define bridge  CPR_Two:S_SEL1:Link_A_Specified_Many
+input \
+	Instance_Number:Base_Integer_Type ,\
+	The_IH:Single_End_IH 
+output
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+# FInd the specified instance in the target domain
+
+$INLINE
+fprintf(stderr, "CPR Two 1:M linked ");
+$ENDINLINE
+
+
+$USE CPR_One
+
+   Destination_IH = find-one Many_End_Of_CPR_Relationship where Unique_Identifier = Instance_Number
+
+   if Destination_IH = UNDEFINED then
+
+
+$INLINE
+fprintf(stderr, "UNSUCCESSFULLY\n");
+$ENDINLINE
+
+
+   else
+
+      link-counterpart The_IH CPR3 Destination_IH
+
+
+$INLINE
+fprintf(stderr, "successfully\n");
+$ENDINLINE
+
+
+   endif
+
+$ENDUSE
+
+enddefine

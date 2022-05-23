@@ -1,0 +1,31 @@
+define bridge  CPR_Four:ANB9:Unlink_From_CPR8_Three_Third_Object
+input \
+	Source_IH:An_Active_Object_IH 
+output \
+	Unlinked:Boolean 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+$USE CPR_Three
+
+   Can_We_Navigate = Source_IH -> CPR8.Third_Way
+
+   if Can_We_Navigate != UNDEFINED then
+
+      unlink-counterpart Source_IH CPR8 Can_We_Navigate
+
+      Unlinked = TRUE
+
+   else
+
+      Unlinked = FALSE
+
+   endif
+
+$ENDUSE
+
+
+enddefine

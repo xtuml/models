@@ -1,0 +1,24 @@
+define bridge  CT_Tags:Nav_TCA1:Navigate_TCA
+input \
+	TCA_IH:TCA_CP_IH 
+output \
+	Return_Val:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+$USE CP_Tags
+
+   NewInst = TCA_IH -> CPR1.TCA_CP
+
+$ENDUSE
+   
+   if NewInst != UNDEFINED then
+      Return_Val = 1
+   else
+      Return_Val = -10
+   endif
+
+enddefine

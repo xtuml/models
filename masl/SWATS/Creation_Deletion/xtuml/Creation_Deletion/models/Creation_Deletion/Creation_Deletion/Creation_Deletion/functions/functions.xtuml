@@ -1,0 +1,175 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("6fc41d19-9d62-449b-aa56-adabf467ee1b",
+	"00000000-0000-0000-0000-000000000000",
+	"bc9320a4-8a49-4b7e-b7ee-fc2e8644db84",
+	'functions',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("fab5d6d6-d263-40d2-bd38-6c120974407b",
+	112,
+	"6fc41d19-9d62-449b-aa56-adabf467ee1b",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'Creation_Deletion::Creation_Deletion::Creation_Deletion::functions');
+INSERT INTO DIM_DIA
+	VALUES ("fab5d6d6-d263-40d2-bd38-6c120974407b",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("58ecd64d-6e5c-42e3-887b-5dcb06dbe9f5",
+	"00000000-0000-0000-0000-000000000000",
+	'Create_Report_Object',
+	'',
+	'# Find out of there already is one of these.
+# It is not inconceivable that a report object still exists from a previous run.
+# Report objects are not deleted at the end of a run, as certain events may
+# still be en-queued.
+
+old_report = find-one Report_Data
+
+if old_report != UNDEFINED then
+   delete old_report
+endif
+
+My_Report = create unique Report_Data with Reported_Domain_Number = 0
+
+[] = RPT6:Domain_Test_Start["Creation Deletion"]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO PE_PE
+	VALUES ("58ecd64d-6e5c-42e3-887b-5dcb06dbe9f5",
+	1,
+	"6fc41d19-9d62-449b-aa56-adabf467ee1b",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("ea8813b9-0a77-45fe-a801-9d4dbfb08084",
+	"00000000-0000-0000-0000-000000000000",
+	'Delete_Report_Object',
+	'',
+	'
+This_Report = find-one Report_Data
+
+if This_Report != UNDEFINED then
+
+   This_Domain_Identifier = This_Report.Reported_Domain_Number
+
+else
+
+   This_Domain_Identifier = -1
+
+endif
+
+[] = RPT7:Domain_Test_Finished["Creation Deletion", This_Domain_Identifier]
+
+# Do not delete the Report_Data object, as there may be still events in
+# the queue.',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	2);
+INSERT INTO PE_PE
+	VALUES ("ea8813b9-0a77-45fe-a801-9d4dbfb08084",
+	1,
+	"6fc41d19-9d62-449b-aa56-adabf467ee1b",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("6b929ea3-6670-4ed8-a05b-548392609203",
+	"00000000-0000-0000-0000-000000000000",
+	'Check_Enum',
+	'',
+	'switch The_Input_Value
+
+   case ''Sly''
+      The_Return_Value = 31
+   case ''Sandy''
+      The_Return_Value = 32
+   case ''Wes''
+      The_Return_Value = 33
+   default
+      The_Return_Value = -31
+endswitch',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO S_SPARM
+	VALUES ("14263b14-03cd-4689-89d0-45adfdffb9a4",
+	"6b929ea3-6670-4ed8-a05b-548392609203",
+	'The_Input_Value',
+	"fb7fe90b-3101-40c5-8cb4-684f7cdf10e5",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("fb7fe90b-3101-40c5-8cb4-684f7cdf10e5",
+	"00000000-0000-0000-0000-000000000000",
+	'Test_Enum_Type',
+	'',
+	'',
+	'../../Shared/Shared.xtuml');
+INSERT INTO S_SPARM
+	VALUES ("7466b892-e7f9-49b5-922e-8aed33d20c20",
+	"6b929ea3-6670-4ed8-a05b-548392609203",
+	'The_Return_Value',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"14263b14-03cd-4689-89d0-45adfdffb9a4",
+	'');
+INSERT INTO PE_PE
+	VALUES ("6b929ea3-6670-4ed8-a05b-548392609203",
+	1,
+	"6fc41d19-9d62-449b-aa56-adabf467ee1b",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("6fc41d19-9d62-449b-aa56-adabf467ee1b",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"2082b45c-206e-4f77-88b3-367afafe97a2",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("2082b45c-206e-4f77-88b3-367afafe97a2",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Creation_Deletion',
+	' This domain deals with instance creation and deletion. It check both synchronous and asynchronous creation and deletion.
+',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Creation_Deletion',
+	'../Creation_Deletion.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("bc9320a4-8a49-4b7e-b7ee-fc2e8644db84",
+	'Creation_Deletion',
+	1,
+	'../../../Creation_Deletion.xtuml');

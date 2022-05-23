@@ -1,0 +1,189 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("2f9d18a3-e214-4dd3-8d07-342a15ce7ae3",
+	'Processor',
+	13,
+	'PROC',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("e9f562d8-9121-4415-98e0-1a160a54ac04",
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3",
+	'Create_Processor',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'This_Test = Test_Start
+
+[my_timer_id_local] = Create_Timer[]
+
+my_processor = create Processor with Processor_Id = Processor_Id_Local &\
+   Background_Processing_Timer_Id = my_timer_id_local &\
+   Communications_Enabled = FALSE 
+
+[] = RPT1:Start_Test[This_Test, "Null Requid", "ASL_Mapping", "Active Object Service Perform Attribute assignment", "Assign all attributes"]
+
+my_object = find-one Processor where Processor_Id = Processor_Id_Local
+
+Failure_Code = 1
+
+if my_object != UNDEFINED then
+
+   if my_object.Background_Processing_Timer_Id = my_timer_id_local then
+
+      if my_object.Communications_Enabled = FALSE then
+
+         Failure_Code = 0
+
+      else
+
+         Failure_Code = -3
+
+      endif
+
+   else
+
+      Failure_Code = -2
+
+   endif
+
+   delete my_object
+
+else
+
+   Failure_Code = -1
+
+endif
+
+if Failure_Code = 0 then
+   [] = RPT2:Test_Passed["Attribute read", This_Test, Failure_Code]
+
+else
+   [] = RPT3:Test_Failed["Attribute read", This_Test, Failure_Code]
+endif
+
+This_Test = This_Test + 1
+
+Final_Test = This_Test',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("ea899273-53c7-469a-97cf-9713bd87f1fb",
+	"e9f562d8-9121-4415-98e0-1a160a54ac04",
+	'Test_Start',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("0a6a253a-d18a-4aac-9c2f-bb6e6abdc547",
+	"e9f562d8-9121-4415-98e0-1a160a54ac04",
+	'Processor_Id_Local',
+	"3ba62cd6-fc7b-4bbd-9012-60c63c17cd30",
+	0,
+	'',
+	"ea899273-53c7-469a-97cf-9713bd87f1fb",
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("3ba62cd6-fc7b-4bbd-9012-60c63c17cd30",
+	"00000000-0000-0000-0000-000000000000",
+	'Processor_Id_Type',
+	'',
+	'',
+	'../../../Shared/Shared.xtuml');
+INSERT INTO O_TPARM
+	VALUES ("d7d32d30-e312-47f2-9446-c1981365314f",
+	"e9f562d8-9121-4415-98e0-1a160a54ac04",
+	'Final_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"0a6a253a-d18a-4aac-9c2f-bb6e6abdc547",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("53caaf13-a6f4-44c0-9fcf-e4be13c588a8",
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3");
+INSERT INTO O_BATTR
+	VALUES ("53caaf13-a6f4-44c0-9fcf-e4be13c588a8",
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3");
+INSERT INTO O_ATTR
+	VALUES ("53caaf13-a6f4-44c0-9fcf-e4be13c588a8",
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3",
+	"00000000-0000-0000-0000-000000000000",
+	'Processor_Id',
+	'',
+	'',
+	'Processor_Id',
+	0,
+	"3ba62cd6-fc7b-4bbd-9012-60c63c17cd30",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("e1005066-1eed-44d8-b06c-ceb042cb04c8",
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3");
+INSERT INTO O_BATTR
+	VALUES ("e1005066-1eed-44d8-b06c-ceb042cb04c8",
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3");
+INSERT INTO O_ATTR
+	VALUES ("e1005066-1eed-44d8-b06c-ceb042cb04c8",
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3",
+	"53caaf13-a6f4-44c0-9fcf-e4be13c588a8",
+	'Background_Processing_Timer_Id',
+	'',
+	'',
+	'Background_Processing_Timer_Id',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("74553650-e37f-4b54-8ac2-ae80e86e476b",
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3");
+INSERT INTO O_BATTR
+	VALUES ("74553650-e37f-4b54-8ac2-ae80e86e476b",
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3");
+INSERT INTO O_ATTR
+	VALUES ("74553650-e37f-4b54-8ac2-ae80e86e476b",
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3",
+	"e1005066-1eed-44d8-b06c-ceb042cb04c8",
+	'Communications_Enabled',
+	'',
+	'',
+	'Communications_Enabled',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000001",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3");
+INSERT INTO O_OIDA
+	VALUES ("53caaf13-a6f4-44c0-9fcf-e4be13c588a8",
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3",
+	0,
+	'Processor_Id');
+INSERT INTO O_ID
+	VALUES (1,
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3");
+INSERT INTO O_ID
+	VALUES (2,
+	"2f9d18a3-e214-4dd3-8d07-342a15ce7ae3");
+INSERT INTO PE_PE
+	VALUES ("2f9d18a3-e214-4dd3-8d07-342a15ce7ae3",
+	1,
+	"a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	'',
+	0,
+	'../ASL_Mapping.xtuml');

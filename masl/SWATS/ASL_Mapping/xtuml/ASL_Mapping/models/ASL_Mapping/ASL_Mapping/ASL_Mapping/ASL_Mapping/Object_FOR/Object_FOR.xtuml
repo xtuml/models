@@ -1,0 +1,359 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("b910ef6e-800d-4d89-84bb-306d9dfe05ab",
+	'Object_FOR',
+	3,
+	'objFOR',
+	' This object verifies the FOR statement.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("9297e7e0-66ec-4a51-bc77-0d8f02cb3568",
+	"b910ef6e-800d-4d89-84bb-306d9dfe05ab",
+	'do_for_test',
+	' Function to do the FOR tests.
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#------------------------------------------------------------------------#
+#
+# FOR Tests
+#
+# The ASL <for> loop statement shall be supported
+# 1103-0000-01-0431
+#
+# Break from and ASL <for> loop statement shall be supported
+# 1103-0000-01-0432
+#
+#------------------------------------------------------------------------#
+
+#------------------------------------------------------------------------#
+#Create several instances of the Object_FOR
+#------------------------------------------------------------------------#
+
+   Count = 1
+   Has_Failed = FALSE
+
+   loop
+      newFOR = create unique Object_FOR with ResultA = 0
+      Count = Count + 1
+      breakif Count > 5
+   endloop
+
+   Test = Test_Start
+
+#------------------------------------------------------------------------#
+# Test 1 - FOR instance count
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objFOR", "FOR instance count"]
+
+   Count = 0
+
+   {all_instances_of_FOR} = find-all Object_FOR
+
+   for each_instance in {all_instances_of_FOR} do
+      each_instance.ResultA = 10
+      Count = Count + 1
+   endfor
+
+   # Verify that the total number of instance affect was FIVE.
+   if  Count != 5 then
+      [] = RPT3:Test_Failed["objFOR", Test, Count]
+      Has_Failed = TRUE
+   else
+      [] = RPT2:Test_Passed["objFOR", Test, Count]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - FOR with BREAKIF
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objFOR", "FOR with BREAKIF"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0432"]
+
+   Count = 0
+
+   for each_instance in {all_instances_of_FOR} do
+      each_instance.ResultA = 20
+      Count = Count + 1
+      breakif Count = 2
+   endfor
+
+   # Verify that the total number of instance affect was TWO.
+   if  Count != 2 then
+      [] = RPT3:Test_Failed["objFOR", Test, Count]
+      Has_Failed = TRUE
+   else
+      [] = RPT2:Test_Passed["objFOR", Test, Count]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - FOR with BREAK, break after affecting one instance
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objFOR", "Break after once instance"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0432"]
+
+   Count = 0
+
+   for each_instance in {all_instances_of_FOR} do
+      each_instance.ResultA = 30
+      Count = Count + 1
+      break
+   endfor
+
+   # Verify that the total number of instance affect was ONE.
+   if  Count != 1 then
+      [] = RPT3:Test_Failed["objFOR", Test, Count]
+      Has_Failed = TRUE
+   else
+      [] = RPT2:Test_Passed["objFOR", Test, Count]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+# Test 4 - FOR with BREAK, break before affecting any instance
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objFOR", "FOR test break before affecting any instance"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0432"]
+
+   Count = 0
+
+   for each_instance in {all_instances_of_FOR} do
+      break
+      each_instance.ResultA = 40
+      Count = Count + 1
+   endfor
+
+   # Verify that the total number of instance affect was ZERO.
+   if  Count != 0 then
+      [] = RPT3:Test_Failed["objFOR", Test, Count]
+      Has_Failed = TRUE
+   else
+      [] = RPT2:Test_Passed["objFOR", Test, Count]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#------------------------------------------------------------------------#
+# Verify FOR with BREAK, break before affecting any instance
+# Test 4.1
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objFOR", "FOR test verify test"]
+
+   # Verify that the attribute Result1 does not equal 40.
+
+   Has_Failed = FALSE
+   last_failed_result = 0
+
+   for each_instance in {all_instances_of_FOR} do
+
+      if each_instance.ResultA = 40 then
+         Has_Failed = TRUE
+         last_failed_result = each_instance.ResultA
+      endif
+
+   endfor
+
+   if not Has_Failed then
+      [] = RPT2:Test_Passed["objFOR", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objFOR", Test, last_failed_result]
+   endif
+
+   Test = Test + 1
+
+# End Test 5
+
+#------------------------------------------------------------------------#
+# Test 6 - FOR with BREAKIF inside another logical statement
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objFOR", "BREAKIF inside a logical statement"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0432"]
+
+   Count = 0 
+
+   for each_instance in {all_instances_of_FOR} do
+
+      if Count != 3 then
+         breakif Count > 2
+      endif
+
+      each_instance.ResultA = 50
+      Count = Count + 1
+
+   endfor
+
+   # Verify that the total number of instance affect was FOUR.
+   if  Count != 4 then
+      [] = RPT3:Test_Failed["objFOR", Test, Count]
+      Has_Failed = TRUE
+   else
+      [] = RPT2:Test_Passed["ObjFOR", Test, Count]
+   endif
+
+   Test = Test + 1
+
+# End Test 6
+
+#------------------------------------------------------------------------#
+# Test 7 - FOR with BREAK inside another logical statement
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0431", "ASL Mapping", "objFOR", "BREAKIF inside another logical statement"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0432"]
+
+   Count = 0
+
+   for each_instance in {all_instances_of_FOR} do
+
+      if Count = 3 then
+         break
+      endif
+
+      each_instance.ResultA = 60
+      Count = Count + 1
+
+   endfor
+
+   # Verify that the total number of instance affect was THREE.
+   if  Count != 3 then
+      [] = RPT3:Test_Failed["objFOR", Test, Count]
+      Has_Failed = TRUE
+   else
+      [] = RPT2:Test_Passed["objFOR", Test, Count]
+   endif
+
+   Test = Test + 1
+
+# End Test 7
+
+#------------------------------------------------------------------------#
+# Test 8 - After a FOR loop check that the loop variable is still valid
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "ASL Mapping", "objFOR", "FOR loop check variable is still valid"]
+
+   # Check that the previously used loop variable is still valid
+   if each_instance = UNDEFINED then
+      [] = RPT3:Test_Failed["objFOR", Test, -1]
+      Has_Failed = TRUE
+   else
+      each_instance.ResultA = 70
+      [] = RPT2:Test_Passed["objFOR", Test, each_instance.ResultA]
+   endif
+
+   Test = Test + 1
+
+# End Test 8
+
+#------------------------------------------------------------------------#
+
+Final_Test = Test',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("02364fe9-0a3e-4749-9118-377bf3dc0669",
+	"9297e7e0-66ec-4a51-bc77-0d8f02cb3568",
+	'Test_Start',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("a72cd4c4-f29f-4d20-9f71-a862fbff86ac",
+	"9297e7e0-66ec-4a51-bc77-0d8f02cb3568",
+	'Final_Test',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"02364fe9-0a3e-4749-9118-377bf3dc0669",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("145eb383-7ab7-4029-a29a-fa126db7a473",
+	"b910ef6e-800d-4d89-84bb-306d9dfe05ab");
+INSERT INTO O_BATTR
+	VALUES ("145eb383-7ab7-4029-a29a-fa126db7a473",
+	"b910ef6e-800d-4d89-84bb-306d9dfe05ab");
+INSERT INTO O_ATTR
+	VALUES ("145eb383-7ab7-4029-a29a-fa126db7a473",
+	"b910ef6e-800d-4d89-84bb-306d9dfe05ab",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceFOR',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceFOR',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("f82838ef-451d-4240-b99e-56921f9fc68b",
+	"b910ef6e-800d-4d89-84bb-306d9dfe05ab");
+INSERT INTO O_BATTR
+	VALUES ("f82838ef-451d-4240-b99e-56921f9fc68b",
+	"b910ef6e-800d-4d89-84bb-306d9dfe05ab");
+INSERT INTO O_ATTR
+	VALUES ("f82838ef-451d-4240-b99e-56921f9fc68b",
+	"b910ef6e-800d-4d89-84bb-306d9dfe05ab",
+	"145eb383-7ab7-4029-a29a-fa126db7a473",
+	'ResultA',
+	' This attribute is manipulated to indicated that the required operation was successful.
+',
+	'',
+	'ResultA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"b910ef6e-800d-4d89-84bb-306d9dfe05ab");
+INSERT INTO O_OIDA
+	VALUES ("145eb383-7ab7-4029-a29a-fa126db7a473",
+	"b910ef6e-800d-4d89-84bb-306d9dfe05ab",
+	0,
+	'ReferenceFOR');
+INSERT INTO O_ID
+	VALUES (1,
+	"b910ef6e-800d-4d89-84bb-306d9dfe05ab");
+INSERT INTO O_ID
+	VALUES (2,
+	"b910ef6e-800d-4d89-84bb-306d9dfe05ab");
+INSERT INTO PE_PE
+	VALUES ("b910ef6e-800d-4d89-84bb-306d9dfe05ab",
+	1,
+	"a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("a86bde09-83ff-4e30-abee-fc538930deef",
+	"00000000-0000-0000-0000-000000000000",
+	"26283cc5-d920-43d3-9be8-8ae24a23f0f6",
+	'ASL_Mapping',
+	'',
+	0,
+	'../ASL_Mapping.xtuml');

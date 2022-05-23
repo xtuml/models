@@ -1,0 +1,52 @@
+public service CPR_One::Simple_CPR_In_Object_One~>Link_To_CPR2_Domain (This_IH      : in  instance of Object_One,
+                                                                       Success      : out boolean,
+                                                                       Success_With : out integer) is
+# Project specified PP terminator
+
+$INLINE
+
+fprintf(stderr, "PP ONE Project level terminator 1\n");
+
+$ENDINLINE
+
+Received_OK = FALSE
+
+if This_IH != UNDEFINED then
+
+   Matching_Identifier = This_IH.Object_One_Identifier
+
+   $USE CPR_Two
+
+      # Call counterpart instance creation service in domain two.
+
+      [destination_three] = CPR_Two1::Create_Object_Two[Matching_Identifier]
+
+      link-counterpart This_IH CPR1 destination_three
+
+      destination_two = This_IH -> CPR1.Object_Two
+
+
+   $ENDUSE 
+
+
+      if destination_two != UNDEFINED and destination_three != UNDEFINED then
+
+         Received_OK = TRUE
+         RX_id = 2
+
+      else
+
+         if destination_three != UNDEFINED then
+
+            Received_OK = TRUE
+            RX_id = 3
+
+         endif
+
+      endif
+
+endif
+
+Success_With = RX_id
+Success = Received_OK
+

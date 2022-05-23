@@ -1,0 +1,44 @@
+define bridge  CPR_Four:ANB2:Link_To_CPR_One_Many_Object
+input \
+	The_IH:An_Active_Object_IH 
+output \
+	Something_To_Return:Boolean ,\
+	Linked_To:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+# Link to a many object in CPR One
+
+Something_To_Return = FALSE
+
+Local_Counter = 0
+Linked_To     = 0
+
+$USE CPR_One
+
+   {Set_Of_Many} = find-all Many_End_Of_CPR_Relationship 
+
+   # Link in all of the many objects returned from the find operation.
+
+   for One_Of_Many in {Set_Of_Many} do
+
+      link-counterpart The_IH CPR10 One_Of_Many
+
+      Local_Counter = Local_Counter + 1
+
+   endfor
+  
+
+$ENDUSE
+
+
+if Local_Counter != 0 then
+   Something_To_Return = TRUE
+   Linked_To           = Local_Counter
+endif
+
+
+enddefine

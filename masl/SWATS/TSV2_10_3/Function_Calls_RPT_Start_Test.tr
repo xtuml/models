@@ -1,0 +1,37 @@
+public service Function_Calls::Report~>Start_Test (Test_Number     : in  integer,
+                                                   Requid          : in  string,
+                                                   Invoking_Domain : in  string,
+                                                   Invoking_Object : in  string,
+                                                   Purpose         : in  string) is
+local_test_number = Test_Number
+local_requid = Requid
+local_invoking_domain = Invoking_Domain
+local_invoking_object = Invoking_Object
+local_purpose = Purpose
+
+# Find the reporter object for this domain, there will be only one.
+
+The_Reporter_Object = find-one Report_Data
+
+
+if The_Reporter_Object = UNDEFINED then
+
+   $USE RP
+
+      [] = RP7::Report_Run_Time_Error["ST Calling domain has not created Report_Data"]
+
+   $ENDUSE
+
+else
+
+   Unique_Domain_ID =  The_Reporter_Object.Reported_Domain_Number
+
+   $USE RP
+  
+      [] = RP4::Test_Description[local_test_number, local_requid, local_invoking_domain, local_invoking_object, local_purpose, Unique_Domain_ID]
+
+   $ENDUSE
+
+
+endif
+

@@ -1,0 +1,65 @@
+define bridge  CPR_One:S_OBJ_ONE4:Navigate_To_CPR_Two_Object_Two
+input \
+	This_IH:Object_One_IH 
+output \
+	Navigation_Possible:Boolean ,\
+	To_Object_ID:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+# Navigate to an object instance linked to this instance in domain two.
+
+$INLINE
+fprintf (stderr, "CPR_One Object one to Object navigation attempted on ");
+$ENDINLINE
+
+
+$USE CPR_Two
+
+   An_Object_Two_IH = This_IH -> CPR1.Object_Two
+
+   if An_Object_Two_IH != UNDEFINED then
+
+      $INLINE
+      fprintf (stderr, "CPR1\n");
+      $ENDINLINE
+
+
+      Navigation_Possible = TRUE
+      To_Object_ID = An_Object_Two_IH.Object_Two_Identifier
+
+   else
+
+      An_Object_Two_IH = This_IH -> CPR2.Object_Two   
+
+      if An_Object_Two_IH != UNDEFINED then
+
+         $INLINE
+         fprintf (stderr, "CPR2\n");
+         $ENDINLINE
+
+         Navigation_Possible = TRUE
+         To_Object_ID = An_Object_Two_IH.Object_Two_Identifier
+
+      else
+
+         Navigation_Possible = FALSE
+         To_Object_ID = 0
+
+         $INLINE
+         fprintf (stderr, "*** NONE ***\n");
+         $ENDINLINE
+
+      endif
+
+   endif
+
+$ENDUSE
+
+   
+
+
+enddefine

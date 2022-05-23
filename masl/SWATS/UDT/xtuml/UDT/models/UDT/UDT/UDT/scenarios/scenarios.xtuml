@@ -1,0 +1,612 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("a643a956-13b2-4b0b-961b-7b464f8392c3",
+	"00000000-0000-0000-0000-000000000000",
+	"2119c7e8-f189-471f-8242-057e62acd949",
+	'scenarios',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("60579cde-c0e8-4172-bbe5-61adf33fcda0",
+	112,
+	"a643a956-13b2-4b0b-961b-7b464f8392c3",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'UDT::UDT::UDT::scenarios');
+INSERT INTO DIM_DIA
+	VALUES ("60579cde-c0e8-4172-bbe5-61adf33fcda0",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("2b6f9aae-a306-456a-a0c1-d6ea2f90634f",
+	"00000000-0000-0000-0000-000000000000",
+	'Integer_Number_Scenarios',
+	' Integer_Number_Scenarios
+',
+	'#--------------------------------------------------------------------------
+#Call domain based synchronous service
+#--------------------------------------------------------------------------
+
+# Create test data, stashed in a specially created object
+Test = 1
+
+New_Object = TRUE
+Final_Object = FALSE
+
+Dummy_TD = create Test_Data with The_Test_Number = 99 & Testing_For_What = "Nothing"
+
+A_Test_Data_IH = Dummy_TD
+
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, Dummy_TD,     Test, "Object data assignment", Final_Object]
+
+# Don''t need this beasty any more, it was only ever a dummy.
+delete Dummy_TD
+
+New_Object = FALSE
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Max value assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Min value assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Common local assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Unique local assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Unique local assignment", Final_Object]
+
+Final_Object = TRUE
+
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Min plus max", Final_Object]
+
+local_counter = 1
+
+if A_Test_Data_IH != UNDEFINED then
+  
+   [] = UDT1::Check_The_Integers[local_counter, A_Test_Data_IH.Testing_For_What, "1241-0000-01-0112"]
+
+   loop
+
+      breakif local_counter = Test
+      local_counter = local_counter + 1
+ 
+      A_Test_Data_IH = A_Test_Data_IH -> R1."Has_a".Test_Data   
+
+      if A_Test_Data_IH != UNDEFINED then
+
+         if local_counter = 7 then
+            [] = UDT1::Check_The_Integers[local_counter, A_Test_Data_IH.Testing_For_What, "Null Requid"]
+         else
+            [] = UDT1::Check_The_Integers[local_counter, A_Test_Data_IH.Testing_For_What, "1241-0000-01-0112"]
+         endif
+
+      else
+         # Oops
+         break
+      endif
+
+   endloop
+
+else
+   [] = RPT5:Test_Text[local_counter, "First Test Data object corrupt"]
+endif
+
+# Tidy up the test data objects starting at the final one
+
+[] = UDT7::Tidy_Up_Test_Data[]
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO PE_PE
+	VALUES ("2b6f9aae-a306-456a-a0c1-d6ea2f90634f",
+	1,
+	"a643a956-13b2-4b0b-961b-7b464f8392c3",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("00d648dc-74bc-4e58-af8f-b680b5dde2a2",
+	"00000000-0000-0000-0000-000000000000",
+	'Start_UDT_Tests',
+	' Start_UDT_Tests
+',
+	'[] = UDT3::Create_Report_Data[]
+
+This_Final_Test = create Final_Test_Data with Final_Test_Number = 0
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	2);
+INSERT INTO PE_PE
+	VALUES ("00d648dc-74bc-4e58-af8f-b680b5dde2a2",
+	1,
+	"a643a956-13b2-4b0b-961b-7b464f8392c3",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("fcc308dc-e152-4b42-aa70-d632d13a3271",
+	"00000000-0000-0000-0000-000000000000",
+	'Finish_UDT_Tests',
+	' Finish_UDT_Tests
+',
+	'[] = UDT4::Delete_Report_Data[]
+
+FTD_To_Delete = find-one Final_Test_Data
+
+if FTD_To_Delete != UNDEFINED then
+
+   delete FTD_To_Delete
+
+endif
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO PE_PE
+	VALUES ("fcc308dc-e152-4b42-aa70-d632d13a3271",
+	1,
+	"a643a956-13b2-4b0b-961b-7b464f8392c3",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("68e6d2e6-b32c-4536-9613-005aacf14f9e",
+	"00000000-0000-0000-0000-000000000000",
+	'Real_Numbers_Scenario',
+	' Real_Numbers_Scenario
+',
+	'#Call object based synchronous service
+
+my_final_test = find-one Final_Test_Data
+
+Test = my_final_test.Final_Test_Number
+
+New_Object   = TRUE
+Final_Object = FALSE
+
+Dummy_TD = create Test_Data with The_Test_Number = 99 & Testing_For_What = "Nothing"
+
+A_Test_Data_IH = Dummy_TD
+
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, Dummy_TD,     Test, "Object data assignment", Final_Object]
+
+# Don''t need this beasty any more, it was only ever a dummy.
+delete Dummy_TD
+
+New_Object = FALSE
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Max value assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Min value assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Common local assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Unique local assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Unique local assignment", Final_Object]
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Min plus max", Final_Object]
+
+Final_Object = TRUE
+
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Report Number Of UDTs", Final_Object]
+
+local_counter = 8
+
+if A_Test_Data_IH != UNDEFINED then
+  
+   [] = RL1:Check_The_Reals[local_counter, A_Test_Data_IH.Testing_For_What, "1241-0000-01-0111"]
+
+   loop
+
+      breakif local_counter = Test
+      local_counter = local_counter + 1
+ 
+      A_Test_Data_IH = A_Test_Data_IH -> R1."Has_a".Test_Data   
+
+      if A_Test_Data_IH != UNDEFINED then
+
+         if local_counter = 14 then
+            [] = RL1:Check_The_Reals[local_counter, A_Test_Data_IH.Testing_For_What, "Null Requid"]
+         endif
+
+         if local_counter != 14 and local_counter !=15 then
+            [] = RL1:Check_The_Reals[local_counter, A_Test_Data_IH.Testing_For_What,"1241-0000-01-0111"]
+         endif
+
+         if local_counter = 15 then
+            [] = UDT5::Report_No_UDT_Used[local_counter, A_Test_Data_IH.Testing_For_What]
+         endif
+
+      else
+         # Oops
+         break
+      endif
+
+   endloop
+
+else
+   [] = RPT5:Test_Text[local_counter, "First Test Data object corrupt"]
+endif
+
+# Tidy up the test data objects starting at the final one
+
+[] = UDT7::Tidy_Up_Test_Data[]
+
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	4);
+INSERT INTO PE_PE
+	VALUES ("68e6d2e6-b32c-4536-9613-005aacf14f9e",
+	1,
+	"a643a956-13b2-4b0b-961b-7b464f8392c3",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("e84cea54-c8fe-4186-b2df-1f620b84059f",
+	"00000000-0000-0000-0000-000000000000",
+	'Predeclared_Integer_Scenario',
+	' Predeclared_Integer_Scenario
+',
+	'#--------------------------------------------------------------------------
+# Call domain based synchronous service
+#--------------------------------------------------------------------------
+
+my_final_test = find-one Final_Test_Data
+
+Test = my_final_test.Final_Test_Number
+
+New_Object   = TRUE
+Final_Object = FALSE
+
+Dummy_TD = create Test_Data with The_Test_Number = 99 & Testing_For_What = "Nothing"
+
+A_Test_Data_IH = Dummy_TD
+
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, Dummy_TD,     Test, "Object data assignment", Final_Object]
+
+# Don''t need this beasty any more, it was only ever a dummy.
+delete Dummy_TD
+
+New_Object = FALSE
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Unique local assignment", Final_Object]
+
+Final_Object = TRUE
+
+[A_Test_Data_IH, Test] = UDT6::Create_New_Test_Data_Object_And_Link_It[New_Object, A_Test_Data_IH, Test, "Reuse predeclared local data", Final_Object]
+
+local_counter = 15
+
+if A_Test_Data_IH != UNDEFINED then
+  
+   [] = UDT2::Check_The_Predeclared_Integers[local_counter, A_Test_Data_IH.Testing_For_What]
+
+   loop
+
+      breakif local_counter = Test
+      local_counter = local_counter + 1
+ 
+      A_Test_Data_IH = A_Test_Data_IH -> R1."Has_a".Test_Data   
+
+      if A_Test_Data_IH != UNDEFINED then
+         [] = UDT2::Check_The_Predeclared_Integers[local_counter, A_Test_Data_IH.Testing_For_What]
+      else
+         # Oops
+         break
+      endif
+
+   endloop
+
+else
+   [] = RPT5:Test_Text[local_counter, "First Test Data object corrupt"]
+endif
+
+# Tidy up the test data objects starting at the final one
+
+[] = UDT7::Tidy_Up_Test_Data[]
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	5);
+INSERT INTO PE_PE
+	VALUES ("e84cea54-c8fe-4186-b2df-1f620b84059f",
+	1,
+	"a643a956-13b2-4b0b-961b-7b464f8392c3",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("815145ef-7c9f-4838-9f36-88190c18c954",
+	"00000000-0000-0000-0000-000000000000",
+	'Terminator_Type_Scenario',
+	' Terminator_Type_Scenario
+',
+	'
+#--------------------------------------------------------------------------
+# This scenario shall prove that a data object instance handle passed into
+# a terminator shall have its'' attribute types passed in correctly.
+#
+# The locally defined data objects in the terminator should not have any 
+# defined type assinged to them by the code generator, ie. they should be 
+# base types. 
+#
+# A secondary test has been defined where the data attributes of the object
+# are passed in directly. This too should prove that locally defined 
+# objects do not inherit the type of the attribute or object that they are 
+# being assigned. 
+#
+# Given the difference in the way I-SIM and WACA deal with UDT''s, the tests
+# will always pass in I-SIM, and cause a run-time error in WACA if ranges 
+# are exceeded.
+#
+# The thrust of the tests will be to force a range overflow in the UDT 
+# defined object in the terminator. If there are no UDT types associated 
+# with the local object in the terminator, then the test will pass, if the
+# object has inherited the type, then the test will crash spectacularly.
+#--------------------------------------------------------------------------
+
+my_test = find-one Final_Test_Data
+
+the_test_number = my_test.Final_Test_Number
+
+the_result = FALSE
+
+#--------------------------------------------------------------------------
+# Test 1 
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[the_test_number, "1103-0000-01-0311", "UDT", "Terminator typing", "Pass in object IH, decode types"]
+
+   the_IH = create unique Object_Into_Bridge with Current_State = ''Idle''
+
+   the_IH.A_Number = 10
+   the_IH.Some_Enumeration = ''Four''
+
+   # with 101, ''Four''
+
+   [the_result, result_value] = BTF1:I_H_Type_Across[the_IH]
+
+   if the_result = TRUE then 
+      [] = RPT2:Test_Passed["Decode IH", the_test_number, result_value]
+   else
+      [] = RPT3:Test_Failed["Decode IH", the_test_number, result_value]
+   endif
+
+   the_test_number = the_test_number + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[the_test_number, "1103-0000-01-0311", "UDT", "Terminator typing", "Pass in UDT data, decode types"]
+
+   [the_result, result_value, result_subtype] = BTF2:User_Defined_Types_Across[the_IH.A_Number, the_IH.Some_Enumeration]
+
+   if the_result = TRUE then
+      [] = RPT2:Test_Passed["Decode object", the_test_number, result_value]
+   else
+      [] = RPT3:Test_Failed["Decode object", the_test_number, result_value]
+   endif
+
+   the_test_number = the_test_number + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+# Test 3
+#--------------------------------------------------------------------------
+
+   generate OIB1:Start_To_Test(the_test_number) to the_IH
+
+# End Test 3
+
+#--------------------------------------------------------------------------
+
+   the_test_number = the_test_number + 1
+
+   my_test.Final_Test_Number = the_test_number',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	6);
+INSERT INTO PE_PE
+	VALUES ("815145ef-7c9f-4838-9f36-88190c18c954",
+	1,
+	"a643a956-13b2-4b0b-961b-7b464f8392c3",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b364f92d-ad52-4f22-9431-b562dd26fc4e",
+	"00000000-0000-0000-0000-000000000000",
+	'Events_UDT_Scenario',
+	' Events_UDT_Scenario
+',
+	'my_test = find-one Final_Test_Data
+
+This_Test_Number = my_test.Final_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   this_object = create An_Active_Object with The_Test_Number = This_Test_Number & Why = ''Not_Tested'' & Current_State = ''Idle''
+
+   generate AAO1:Go(''One'') to this_object
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+# Test 2
+#--------------------------------------------------------------------------
+
+   [] = BTF4:Local_Bridge[This_Test_Number]
+
+   This_Test_Number = This_Test_Number + 1
+
+# End Test 2
+
+#--------------------------------------------------------------------------
+
+my_test.Final_Test_Number = This_Test_Number
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	7);
+INSERT INTO PE_PE
+	VALUES ("b364f92d-ad52-4f22-9431-b562dd26fc4e",
+	1,
+	"a643a956-13b2-4b0b-961b-7b464f8392c3",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("4e2577dc-2627-42eb-af9c-f5321daf320e",
+	"00000000-0000-0000-0000-000000000000",
+	'Timer_Enum_Scenario',
+	' Timer_Enum_Scenario
+',
+	'my_test = find-one Final_Test_Data
+
+Test = my_test.Final_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = BTF5:Timer_Enum_Across_Bridge[Test]
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+
+my_test.Final_Test_Number = Test
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	8);
+INSERT INTO PE_PE
+	VALUES ("4e2577dc-2627-42eb-af9c-f5321daf320e",
+	1,
+	"a643a956-13b2-4b0b-961b-7b464f8392c3",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("bcf2364a-0cda-4a50-a878-48ce11884003",
+	"00000000-0000-0000-0000-000000000000",
+	'Enum_Scenario',
+	' Enum_Scenario
+',
+	'my_final_test = find-one Final_Test_Data
+
+Test = my_final_test.Final_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = UDT10::Check_The_Enumerators[Test, ''Five'', ''Blue'', ''Freezing'']
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+
+my_final_test.Final_Test_Number = Test 
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	9);
+INSERT INTO PE_PE
+	VALUES ("bcf2364a-0cda-4a50-a878-48ce11884003",
+	1,
+	"a643a956-13b2-4b0b-961b-7b464f8392c3",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("bf05d0c6-0ee0-4fa6-bc12-2f49f79362b7",
+	"00000000-0000-0000-0000-000000000000",
+	'Check_Constraint',
+	' Check_Constraint
+',
+	'my_final_test = find-one Final_Test_Data
+
+Test = my_final_test.Final_Test_Number
+
+#--------------------------------------------------------------------------
+# Test 1
+#--------------------------------------------------------------------------
+
+   [] = UDT11::Check_Constraint[Test]
+
+   Test = Test + 1
+
+# End Test 1
+
+#--------------------------------------------------------------------------
+
+my_final_test.Final_Test_Number = Test ',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	10);
+INSERT INTO PE_PE
+	VALUES ("bf05d0c6-0ee0-4fa6-bc12-2f49f79362b7",
+	1,
+	"a643a956-13b2-4b0b-961b-7b464f8392c3",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("a643a956-13b2-4b0b-961b-7b464f8392c3",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"b9839f47-f314-4a56-b703-7bf939700a33",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("b9839f47-f314-4a56-b703-7bf939700a33",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'UDT',
+	'',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'User_Defined_Types',
+	'../UDT.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("2119c7e8-f189-471f-8242-057e62acd949",
+	'UDT',
+	1,
+	'../../../UDT.xtuml');

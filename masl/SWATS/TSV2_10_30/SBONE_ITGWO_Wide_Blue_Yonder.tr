@@ -1,0 +1,28 @@
+public service SBONE::Into_The_Great_Wide_Open~>Wide_Blue_Yonder (Test                    : in  integer,
+                                                                  Simple_Source_Structure : in  sequence of Very_Simple_Structure_Type) is
+
+
+$USE SBTWO
+
+   {destination_simple_structure} is Very_Simple_Source_Structure_Type
+
+$ENDUSE
+
+
+for [local_simple_integer, local_simple_real] in {Simple_Source_Structure} do
+
+
+   $USE SBTWO
+
+      append [local_simple_integer, local_simple_real] to {destination_simple_structure}
+
+   $ENDUSE
+
+endfor
+
+
+$USE SBTWO
+
+   [] = SBTWO3::Receive_A_Very_Simple_Structure[Test, {destination_simple_structure}]
+
+$ENDUSE

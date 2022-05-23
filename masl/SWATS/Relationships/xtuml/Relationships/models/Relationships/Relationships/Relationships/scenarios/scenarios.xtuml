@@ -1,0 +1,1799 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	"fb793f65-d0e6-45fe-a7e0-5e290ea2fa31",
+	'scenarios',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("01d131f0-46ff-4176-942c-3e4b188d155b",
+	112,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'Relationships::Relationships::Relationships::scenarios');
+INSERT INTO DIM_DIA
+	VALUES ("01d131f0-46ff-4176-942c-3e4b188d155b",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("6b31aabe-3876-44db-b234-a4fb1273ab11",
+	"00000000-0000-0000-0000-000000000000",
+	'Start_Relationhip_Tests',
+	' Start_Relationhip_Tests
+',
+	'[] = Relationships1::Create_Report_Data[]
+new_test = create Test_Data with The_Test_Number = 1',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	2);
+INSERT INTO PE_PE
+	VALUES ("6b31aabe-3876-44db-b234-a4fb1273ab11",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("53e1dbf7-f136-41ce-903c-45137a41765b",
+	"00000000-0000-0000-0000-000000000000",
+	'Finish_Relationship_Tests',
+	' Finish_Relationship_Tests
+',
+	'
+[] = Relationships2::Delete_Report_Data[]
+
+my_test = find-one Test_Data
+
+if my_test != UNDEFINED then
+   delete my_test
+endif
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO PE_PE
+	VALUES ("53e1dbf7-f136-41ce-903c-45137a41765b",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("f643e2ec-6b57-4721-abc2-7f86e60529a9",
+	"00000000-0000-0000-0000-000000000000",
+	'Perform_Nav_to_Set',
+	' Perform Nav to Set
+',
+	'#-------------------------------------------------------------------#
+#
+# Perform navigation from a single instance to a set of instances via 
+# another single set.
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+
+   One_Left    = create Far_Left with Left_Identifier = 1 &\ 
+                                      Left_Data       = 0
+
+   One_Middle  = create Middle with Middle_Identifier = 1 &\
+                                    Middle_Data       = 0
+
+   One_Right   = create Many_Right with Right_Identifier = 1 &\
+                                        Right_Data       = 0
+
+   Two_Right   = create Many_Right with Right_Identifier  = 2 &\
+                                        Right_Data        = 0
+
+   Three_Right = create Many_Right with Right_Identifier  = 3 &\
+                                        Right_Data        = 0
+
+   One_MRA  = create Many_Right_Assoc with MRA_Identifier = 1 &\
+                                           MRA_Data       = 0
+
+   Two_MRA  = create Many_Right_Assoc with MRA_Identifier = 2 &\
+                                           MRA_Data = 0
+
+   One_MFR = create Many_Far_Right with MFR_Identifier = 1 &\
+                                        MFR_Data       = 0
+
+   Two_MFR = create Many_Far_Right with MFR_Identifier = 2 &\
+                                        MFR_Data       = 0
+
+#-------------------------------------------------------------------#
+# Test that the object instances have been correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "Middle", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetL}   = find-all Far_Left
+   {SetM}   = find-all Middle
+   {SetR}   = find-all Many_Right
+   {SetMRA} = find-all Many_Right_Assoc
+   {SetMFR} = find-all Many_Far_Right
+
+   if countof {SetL} = 1 then
+
+      if countof {SetM} = 1 then
+
+         if countof {SetR} = 3 then
+
+            if countof {SetMRA} = 2 then
+
+               if countof {SetMFR} != 2 then
+                  Has_Failed   = TRUE
+                  Failure_Code = countof {SetMRA}
+               endif
+
+            else
+               Has_Failed   = TRUE
+               Failure_Code = -20
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -30
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -40
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -50
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["Middle", Test, 0]
+   else
+      [] = RPT3:Test_Failed["Middle", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Create the relationships
+#-------------------------------------------------------------------#
+
+   [] = M1:Create_Relationships[Test]
+   Test=Test + 1
+
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+   
+   Count = 1
+  
+   loop
+      [] = M2:Middle_Navigation[Count, Test]
+      Test = Test + 1 
+      Count = Count + 1
+      breakif Count = 15
+   endloop
+
+#-------------------------------------------------------------------#
+# Delete the relationships
+#-------------------------------------------------------------------#
+
+   [] = M3:Delete_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+   my_test.The_Test_Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	5);
+INSERT INTO PE_PE
+	VALUES ("f643e2ec-6b57-4721-abc2-7f86e60529a9",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b52cf3d9-35bb-4a22-ae76-0251777893df",
+	"00000000-0000-0000-0000-000000000000",
+	'Middle_Object_Relationship_Tests',
+	' Middle Object Relationship Tests
+',
+	'#-------------------------------------------------------------------#
+#
+# Perform tests via scenario for the Middle_Object relationships
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create the instances
+#-------------------------------------------------------------------#
+
+   # Create Left_Object Instances
+   newLeft = create Left_Object with idLO = 1
+   newLeft = create Left_Object with idLO = 2
+   newLeft = create Left_Object with idLO = 3
+
+   # Create Middle_Object Instances
+   newMiddle = create Middle_Object with idMO    = 1 &\
+                                         ResultA = 0
+
+   newMiddle = create Middle_Object with idMO    = 3 &\
+                                         ResultA = 0 
+
+   newMiddle = create Middle_Object with idMO    = 4 &\
+                                         ResultA = 0 
+
+   newMiddle = create Middle_Object with idMO    = 5 &\
+                                         ResultA = 0 
+
+   # Create Right_Object Instances
+   newRight = create Right_Object with idRO = 2
+   newRight = create Right_Object with idRO = 4
+   newRight = create Right_Object with idRO = 5
+
+
+   # MR_Assoc
+   newMR = create MR_Assoc with idMR = 1
+   newMR = create MR_Assoc with idMR = 2
+   newMR = create MR_Assoc with idMR = 3
+   newMR = create MR_Assoc with idMR = 5
+
+#-------------------------------------------------------------------#
+# Test that the object instances have been correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "MO", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetL}   = find-all Left_Object
+   {SetM}   = find-all Middle_Object
+   {SetR}   = find-all Right_Object
+   {SetMRA} = find-all MR_Assoc
+
+   if countof {SetL} = 3 then
+
+      if countof {SetM} = 4 then
+
+         if countof {SetR} = 3 then
+
+            if countof {SetMRA} != 4 then
+               Has_Failed   = TRUE
+               Failure_Code = -10
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -40
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["MO", Test, 0]
+   else
+      [] = RPT3:Test_Failed["MO", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Create the relationships
+#-------------------------------------------------------------------#
+
+ # Initiate the test
+ [] = MO1:Create_Relationships[Test]
+ Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+
+   Count  = 1
+
+   loop
+
+      # Initiate the test
+      [] = MO2:Middle_Object_Navigation[Count, Test]
+
+      Test  = Test  + 1
+      Count = Count + 1
+      breakif Count = 19
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Delete the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = MO3:Delete_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	4);
+INSERT INTO PE_PE
+	VALUES ("b52cf3d9-35bb-4a22-ae76-0251777893df",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("6844c78b-4be5-41e8-9590-f1ea5640fae7",
+	"00000000-0000-0000-0000-000000000000",
+	'Test_Relationships_For_Left_Many',
+	' Test Relationships For Left Many
+',
+	'#-------------------------------------------------------------------#
+#
+# Perform tests via scenario for the Left_Many relationships
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create the instances
+#-------------------------------------------------------------------#
+
+   # Create Left_Many Instances
+   newLeftMany = create Left_Many with idLM    = 1 &\  
+                                       ResultA = 0 
+
+   newLeftMany = create Left_Many with idLM    = 2 &\ 
+                                       ResultA = 0 
+
+   newLeftMany = create Left_Many with idLM    = 3 &\
+                                       ResultA = 0
+
+   newLeftMany = create Left_Many with idLM    = 10 &\  
+                                       ResultA = 0 
+
+   newLeftMany = create Left_Many with idLM    = 11 &\ 
+                                       ResultA = 0 
+
+   newLeftMany = create Left_Many with idLM    = 12 &\
+                                       ResultA = 0
+
+   # Create Right_Many Instances
+   newRightMany = create Right_Many with idRM = 1
+   newRightMany = create Right_Many with idRM = 2
+   newRightMany = create Right_Many with idRM = 3
+   newRightMany = create Right_Many with idRM = 10
+   newRightMany = create Right_Many with idRM = 11
+   newRightMany = create Right_Many with idRM = 12
+
+   # Create Associative Instances
+   newLMRM = create LMRM_Assoc with idLMRM = 2
+   newLMRM = create LMRM_Assoc with idLMRM = 3
+   newLMRM = create LMRM_Assoc with idLMRM = 4
+   newLMRM = create LMRM_Assoc with idLMRM = 5
+   newLMRM = create LMRM_Assoc with idLMRM = 8
+   newLMRM = create LMRM_Assoc with idLMRM = 9
+   newLMRM = create LMRM_Assoc with idLMRM = 10
+   newLMRM = create LMRM_Assoc with idLMRM = 11
+   newLMRM = create LMRM_Assoc with idLMRM = 12
+
+
+   # Create Bottom_Many Instance
+   newBottomMany = create Bottom_Many with idBM = 1
+   newBottomMany = create Bottom_Many with idBM = 3
+   newBottomMany = create Bottom_Many with idBM = 4
+   newBottomMany = create Bottom_Many with idBM = 5
+   newBottomMany = create Bottom_Many with idBM = 10
+
+#-------------------------------------------------------------------#
+# Test that the instances have been correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objLM", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetLM}   = find-all Left_Many
+   {SetRM}   = find-all Right_Many
+   {SetLMRM} = find-all LMRM_Assoc
+   {SetBM}   = find-all Bottom_Many
+
+   if countof {SetLM} = 6 then
+
+      if countof {SetRM} = 6 then
+
+         if countof {SetLMRM} = 9 then
+
+            if countof {SetBM} != 5 then
+               Has_Failed   = TRUE
+               Failure_Code = -10
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -40
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objLM", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objLM", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Create the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objLM1:Create_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+
+   Count = 1
+
+   loop
+
+      # Initiate the test
+      [] = objLM2:Left_Many_Navigation[Count, Test]
+  
+      Test  = Test  + 1 
+      Count = Count + 1
+      breakif Count = 11
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Delete the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objLM3:Delete_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	6);
+INSERT INTO PE_PE
+	VALUES ("6844c78b-4be5-41e8-9590-f1ea5640fae7",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("43d98e5d-79c7-4178-b1cc-a78e340b72d6",
+	"00000000-0000-0000-0000-000000000000",
+	'One_to_One_Tests',
+	' One to One Tests
+',
+	'#-------------------------------------------------------------------#
+#
+# Perform relationships tests for 1c:1c navigation
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create a few instances of Objects A, B and M
+#-------------------------------------------------------------------#
+
+   Count = 5
+
+   loop
+
+      # Object_A
+      newA  = create Object_A  with idA = Count
+
+      # Object_B
+      newB  = create Object_B  with idB     = Count &\
+                                    ResultA = 0
+
+      # Object_M
+      newM  = create Object_M  with idM = Count
+
+      Count = Count - 1
+      breakif Count = 0
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Test that the objects have been correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objB", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetA} = find-all Object_A
+   {SetB} = find-all Object_B
+   {SetM} = find-all Object_M
+
+   if countof {SetA} = 5 then
+
+      if countof {SetB} = 5 then
+
+         if countof {SetM} != 5 then
+            Has_Failed   = TRUE
+            Failure_Code = -10
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -30
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objB", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objB", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Create the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objB1:Create_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+
+   Count = 1
+
+   loop
+
+      # Initiate the test
+      [] = objB2:ObjB_Navigation[Count, Test]
+
+      Count = Count + 1
+      Test  = Test  + 1
+
+      breakif Count = 15
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Delete the relationship tests
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objB3:Delete_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	8);
+INSERT INTO PE_PE
+	VALUES ("43d98e5d-79c7-4178-b1cc-a78e340b72d6",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("7258bcff-50bb-4432-af0a-236a09909425",
+	"00000000-0000-0000-0000-000000000000",
+	'One_to_Many_Assoc_Tests',
+	' One to Many Assoc Tests
+',
+	'#-------------------------------------------------------------------#
+#
+# Perform relationships tests for 1c:Mc navigation
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create a few instances of Objects C, D, DO and O
+#-------------------------------------------------------------------#
+
+   Count = 5
+
+   loop
+
+      # Object_C
+      newC  = create Object_C  with idC = Count
+
+      # Object_D
+      newD  = create Object_D  with idD         = Count &\
+                                    ResultA     = 0     &\
+                                    Colour_Of_D = ''Red''
+
+      # Object_O
+      newO  = create Object_O  with idO = Count
+
+      # Object_DO
+      newDO = create Object_DO with idDO = Count
+
+      Count = Count - 1
+ 
+      breakif Count = 0
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Create an object or two that already exist.
+#-------------------------------------------------------------------#
+
+   newD  = create Object_D  with idD         = 5       &\
+                                 ResultA     = 0       &\
+                                 Colour_Of_D = ''Black''
+
+   newD  = create Object_D  with idD         = 5     &\
+                                 ResultA     = 0     &\
+                                 Colour_Of_D = ''Red''
+
+#-------------------------------------------------------------------#
+# Test that all the objects have be correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objD", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetC}  = find-all Object_C
+   {SetD}  = find-all Object_D
+   {SetDO} = find-all Object_DO
+   {SetO}  = find-all Object_O
+
+   if countof {SetC} = 5 then
+
+      if countof {SetD} = 7 then
+
+         if countof {SetDO} = 5 then
+
+            if countof {SetO} != 5 then
+               Has_Failed   = TRUE
+               Failure_Code = -10
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -40
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objD", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objD", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Create the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objD1:Create_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+
+   Count  = 1
+
+   loop
+
+      # Initiate the test
+      [] = objD2:ObjD_Navigation[Count, Test]
+
+      Test   = Test   + 1
+      Count  = Count  + 1
+      breakif Count = 30
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Delete the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objD3:Delete_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Delete the unlinked instances
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objD4:Delete_Instances[Test]
+   Test = Test + 1
+
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	9);
+INSERT INTO PE_PE
+	VALUES ("7258bcff-50bb-4432-af0a-236a09909425",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("5eb9cd83-1403-4ca2-867e-180e3b69bfd9",
+	"00000000-0000-0000-0000-000000000000",
+	'Many_to_Many_Assoc_Tests',
+	' Many to Many Assoc Tests
+',
+	'#-------------------------------------------------------------------#
+#
+# Perform relationships tests for Mc:Mc navigation
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create a few instance of Objects E, F and EF
+#-------------------------------------------------------------------#
+
+   Count = 5
+
+   loop
+      # Object_E
+      newE  = create Object_E  with idE      = Count &\
+                                    ResultA  = 0
+
+      # Object_F
+      newF  = create Object_F  with idF = Count
+
+      # Object_EF
+      newEF = create Object_EF with idEF = Count
+
+      Count = Count - 1
+
+      breakif Count = 0
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Test that all the objects have be correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetE}  = find-all Object_E
+   {SetF}  = find-all Object_F
+   {SetEF} = find-all Object_EF
+
+   if countof {SetE} = 5 then
+
+      if countof {SetF} = 5 then
+
+         if countof {SetEF} != 5 then
+            Has_Failed   = TRUE
+            Failure_Code = -10
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -30
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objE", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objE", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Create the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objE1:Create_Relationships[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+
+   Count  = 1
+
+   loop
+
+      # Initiate the test
+      [] = objE2:ObjE_Navigation[Count,Test]
+
+      Test   = Test   + 1
+      Count  = Count  + 1
+      breakif Count = 23
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Delete the relationships
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objE3:Delete_Relationships[Test]
+   Test   = Test   + 1
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test
+
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	10);
+INSERT INTO PE_PE
+	VALUES ("5eb9cd83-1403-4ca2-867e-180e3b69bfd9",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("17a92f05-c63f-4b80-8d19-44d2d27cf227",
+	"00000000-0000-0000-0000-000000000000",
+	'Super_Sub_Tests',
+	' Super Sub Tests
+',
+	'#-------------------------------------------------------------------#
+#
+# Perform relationship tests via scenario for Super/sub type 
+# relationships
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test      = find-one Test_Data
+   Test         = my_test.The_Test_Number
+   Has_Failed   = FALSE
+   Failure_Code = 0
+#-------------------------------------------------------------------#
+# Create instances of objects
+#-------------------------------------------------------------------#
+
+   Count = 5
+
+   loop
+
+      # Object_H
+      newH  = create Object_H  with idH      = Count &\
+                                    ResultA  = 0
+
+      # Object_L
+      newL  = create Object_L  with idL = Count
+
+      # Object_I
+      newI  = create Object_I with IDI = Count
+
+      # Object_K
+      newK  = create Object_K with idK = Count
+
+      # Sub_L1
+      newSL1 = create Sub_L1 with idSL1 = Count
+
+      # Sub_L2
+      newSL2 = create Sub_L2 with idSL2 = Count
+
+      # Sub_L3
+      newSL4 = create Sub_L3 with idSL3 = Count
+
+      # Sub_Sub_L1
+      newSSL1 = create Sub_Sub_L1 with idSSL1 = Count
+
+      # Sub_Sub_L2
+      newSSL2 = create Sub_Sub_L2 with idSSL2 = Count
+
+      # Sub_Sub_L3
+      newSSL3 = create Sub_Sub_L3 with idSSL3 = Count
+
+      # Sub_Sub_L4
+      newSSL4 = create Sub_Sub_L4 with idSSL4 = Count
+
+      # Sub_Sub_L5
+      newSSL5 = create Sub_Sub_L5 with idSSL5 = Count
+
+      # Sub_Sub_L6
+      newSSL6 = create Sub_Sub_L6 with idSSL6 = Count
+
+      # Sub_Sub_L7
+      newSSL7 = create Sub_Sub_L7 with idSSL7 = Count
+
+      # Sub_Sub_L8
+      newSSL8 = create Sub_Sub_L8 with idSSL8 = Count
+
+      # Sub_Sub_L9
+      newSSL9 = create Sub_Sub_L9 with idSSL9 = Count
+
+      # Sub_Sub_L10
+      newSSL10 = create Sub_Sub_L10 with idSSL10 = Count
+
+      # Sub_Sub_L11
+      newSSL11 = create Sub_Sub_L11 with idSSL11 = Count
+
+      # Sub_Sub_Sub_L1
+      newSSSL1 = create Sub_Sub_Sub_L1 with idSSSL1 = Count
+
+      # Sub_Sub_Sub_L2
+      newSSSL2 = create Sub_Sub_Sub_L2 with idSSSL2 = Count
+
+      Count = Count - 1
+      breakif Count = 0
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Test that the object instances have been correctly created
+# Because there are so many objects test just a few
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objH", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetH} = find-all Object_H
+   {SetL} = find-all Object_L
+   {SetI} = find-all Object_I
+   {SetK} = find-all Object_K
+
+   if countof {SetH} = 5 then
+
+      if countof {SetL} = 5 then
+
+         if countof {SetI} = 5 then
+
+            if countof {SetK} != 5 then
+               Has_Failed   = TRUE
+               Failure_Code = -10
+            endif
+
+         else
+            Has_Failed   = TRUE
+            Failure_Code = -20
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -40
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objH", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objH", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+
+#-------------------------------------------------------------------#
+# Perform the Super/Sub type relationships
+#-------------------------------------------------------------------#
+
+   Count = 1
+
+   loop
+
+      [] = objH1:Super_Sub_Relationships[Count, Test]
+
+      Count  = Count + 1
+      Test   = Test  + 1
+      breakif Count = 14
+
+   endloop
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	11);
+INSERT INTO PE_PE
+	VALUES ("17a92f05-c63f-4b80-8d19-44d2d27cf227",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("a944efb3-3cbb-4879-b0bc-ada1f3dd43dc",
+	"00000000-0000-0000-0000-000000000000",
+	'Reflexive_Tests',
+	' Reflexive Tests
+',
+	'#-------------------------------------------------------------------#
+#
+# Perform Reflexive 1c:1c and Reflexive 1c:Mc tests
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test = my_test.The_Test_Number
+
+#-------------------------------------------------------------------#
+# Create the object instances
+#-------------------------------------------------------------------#
+
+   Count = 10
+
+   loop
+
+      # Object_G
+      newG  = create Object_G  with idG     = Count &\
+                                    ResultA = 0
+
+      Count = Count - 1
+      breakif Count = 0
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Test that all the objects have be correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objG", "Object Instance Creation"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0620"]
+
+   {SetG}  = find-all Object_G
+
+   if countof {SetG} = 10 then
+      [] = RPT2:Test_Passed["objG", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objG", Test, -10]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+# Reflexive 1c:1c tests
+#-------------------------------------------------------------------#
+
+   Count  = 1
+
+   loop
+
+      # Initiate the test
+      [] = objG2:One_To_One_Reflexive[Count, Test]
+
+      Count = Count + 1
+      Test  = Test  + 1
+      breakif Count = 23 
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Reflexive 1c:Mc tests
+#-------------------------------------------------------------------#
+
+   Count  = 1
+
+   loop
+  
+      # Initiate the test
+      [] = objG3:One_To_Many_Reflexive[Count, Test]
+
+      Count = Count + 1 
+      Test  = Test  + 1
+
+      breakif Count = 16
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Mc:Mc reflexive navigation
+#
+# Not currently supported by the WACA
+#-------------------------------------------------------------------#
+
+   # Initiate the test
+   [] = objG4:Many_To_Many_Reflexive[Test]
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	12);
+INSERT INTO PE_PE
+	VALUES ("a944efb3-3cbb-4879-b0bc-ada1f3dd43dc",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("64f10cd0-dc75-4fb3-b479-f1b0bf0dae58",
+	"00000000-0000-0000-0000-000000000000",
+	'Composed_Relationships_Tests',
+	' Composed Relationships Tests
+',
+	'#-------------------------------------------------------------------#
+#
+# Composed relationships tests
+# 
+# The architecture shall support the creation of new object instances
+# at application start and during execution
+# 1241-0000-01-0101
+#
+# The mapping shall be provided for the ASL create statment, 
+# including the extension which allows some or all atributes to be 
+# specified
+# 1241-0000-01-0102
+#
+# The architecture shall support the specification of initial 
+# relationship instance populations in scenario files
+# 1241-0000-01-0620
+#
+#-------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create the object instances for Objects P, Q and R
+#-------------------------------------------------------------------#
+
+   Count = 0
+
+   loop
+
+      Count = Count + 1
+
+      #Object_P
+      newP  = create Object_P  with idP     = Count &\
+                                    ResultA = 0 
+
+      #Object_Q
+      newQ  = create Object_Q  with idQ = Count
+
+      #Object_R
+      newR  = create Object_R  with idR = Count
+
+      breakif Count = 5
+
+   endloop
+
+#-------------------------------------------------------------------#
+# Test that the objects have been correctly created
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0620", "Relationships", "objP", "Object Instance Creation"]
+
+   {SetP} = find-all Object_P
+   {SetQ} = find-all Object_Q
+   {SetR} = find-all Object_R
+
+   if countof {SetP} = 5 then
+
+      if countof {SetQ} = 5 then
+
+         if countof {SetR} != 5 then
+            Has_Failed   = TRUE
+            Failure_Code = -10
+         endif
+
+      else
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      endif
+
+   else
+      Has_Failed   = TRUE
+      Failure_Code = -30
+   endif
+
+   if Has_Failed = FALSE then
+      [] = RPT2:Test_Passed["objP", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objP", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#   
+# Perform the navigations
+#-------------------------------------------------------------------#
+
+   Count = 1
+
+   loop
+
+      [] = objP1:ObjP_Navigation[Test]
+      Count = Count + 1
+      Test = Test + 1
+
+      breakif Count = 3
+
+   endloop
+
+#-------------------------------------------------------------------#
+
+my_test.The_Test_Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO PE_PE
+	VALUES ("64f10cd0-dc75-4fb3-b479-f1b0bf0dae58",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("3b63ce43-f960-4310-808f-cce8d5979343",
+	"00000000-0000-0000-0000-000000000000",
+	'Nav_From_Sets',
+	' Nav From Sets
+',
+	'   my_test = find-one Test_Data
+   Test = my_test.The_Test_Number
+
+   Has_Failed = FALSE
+
+#-------------------------------------------------------------------#
+# Create a few instances
+#-------------------------------------------------------------------#
+
+   firstL  = create Far_Left with Left_Identifier = 1 & Left_Data = 1
+   secondL = create Far_Left with Left_Identifier = 2 & Left_Data = 2
+   thirdL  = create Far_Left with Left_Identifier = 3 & Left_Data = 3
+   fourthL = create Far_Left with Left_Identifier = 4 & Left_Data = 4
+   fifthL  = create Far_Left with Left_Identifier = 5 & Left_Data = 5
+
+   firstM  = create Middle with Middle_Identifier = 1 & Middle_Data = 1
+   secondM = create Middle with Middle_Identifier = 2 & Middle_Data = 2
+   thirdM  = create Middle with Middle_Identifier = 3 & Middle_Data = 3
+   fourthM = create Middle with Middle_Identifier = 4 & Middle_Data = 4
+   fifthM  = create Middle with Middle_Identifier = 5 & Middle_Data = 5
+
+   firstMR  = create Many_Right with Right_Identifier = 1 & Right_Data = 1
+   secondMR = create Many_Right with Right_Identifier = 2 & Right_Data = 2
+   thirdMR  = create Many_Right with Right_Identifier = 3 & Right_Data = 3
+   fourthMR = create Many_Right with Right_Identifier = 4 & Right_Data = 4
+   fifthMR  = create Many_Right with Right_Identifier = 5 & Right_Data = 5
+
+   firstMA  = create Many_Above with Above_Data = 1
+   secondMA = create Many_Above with Above_Data = 2
+   thirdMA  = create Many_Above with Above_Data = 3
+   fourthMA = create Many_Above with Above_Data = 4
+   fifthMA  = create Many_Above with Above_Data = 5
+
+   firstMFR  = create Many_Far_Right with MFR_Identifier = 1 and MFR_Data = 1
+   secondMFR = create Many_Far_Right with MFR_Identifier = 2 and MFR_Data = 2
+   thirdMFR  = create Many_Far_Right with MFR_Identifier = 3 and MFR_Data = 3
+   fourthMFR = create Many_Far_Right with MFR_Identifier = 4 and MFR_Data = 4
+   fifthMFR  = create Many_Far_Right with MFR_Identifier = 5 and MFR_Data = 5
+
+   firstMRA  = create Many_Right_Assoc with MRA_Data = 1 and MRA_Identifier = 1
+   secondMRA = create Many_Right_Assoc with MRA_Data = 2 and MRA_Identifier = 2
+   thirdMRA  = create Many_Right_Assoc with MRA_Data = 3 and MRA_Identifier = 3
+   fourthMRA = create Many_Right_Assoc with MRA_Data = 4 and MRA_Identifier = 4
+   fifthMRA  = create Many_Right_Assoc with MRA_Data = 5 and MRA_Identifier = 5
+
+#-------------------------------------------------------------------#
+# Link
+#-------------------------------------------------------------------#
+
+   link firstL  R6 firstM
+   link secondL R6 thirdM
+
+   link firstM  R7 firstMR
+   link firstM  R7 thirdMR
+   link thirdM  R7 fourthMR 
+
+   link firstMR  R8 firstMFR using firstMRA
+   link thirdMR  R8 firstMFR using secondMRA
+   link thirdMR  R8 thirdMFR using thirdMRA
+   link fourthMR R8 fourthMFR using fourthMRA
+
+   link firstMR R10 firstMA
+   link thirdMR R10 fourthMA
+   link thirdMR R10 fifthMA
+   link fourthMR R10 secondMA
+#-------------------------------------------------------------------#
+# Perform the navigation tests
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Chained nav from set"]
+
+   temp = 0
+   Total = 0
+
+   {SetMFR} = find-all Many_Far_Right
+
+   {SetMR} = {SetMFR} -> R8.Many_Right
+
+   {SetM} = {SetMFR} -> R8.Many_Right -> R7.Middle
+
+   if countof {SetMR} = 4 then
+
+      if countof {SetM} = 4 then
+
+         for InstM in {SetM} do
+            temp = InstM.Middle_Identifier
+            Total = Total + temp 
+         endfor
+
+         if Total = 6 then
+            [] = RPT2:Test_Passed["Chained nav from set", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, Total]
+         endif
+
+      else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Chained nav from set", Test, -30]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Chained nav from set"]
+
+   temp = 0
+   Total = 0
+
+   {SetMR} = firstM -> R7.Many_Right
+
+   {SetMFR} = firstM -> R7.Many_Right -> R8.Many_Far_Right
+
+   if countof {SetMR} = 2 then
+
+      if countof {SetMFR} = 3 then
+
+         for InstMFR in {SetMFR} do
+            temp = InstMFR.MFR_Identifier
+            Total = Total + temp 
+         endfor
+
+         if Total = 5 then
+            [] = RPT2:Test_Passed["Chained nav from set", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, Total]
+         endif
+
+      else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Chained nav from set", Test, -30]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Chained nav from set"]
+
+   temp = 0
+   Total = 0
+
+   {SetMR} = firstM -> R7.Many_Right
+
+   {SetMA} = firstM -> R7.Many_Right -> R10.Many_Above
+
+   if countof {SetMR} = 2 then
+
+      if countof {SetMA} = 3 then
+
+         for InstMA in {SetMA} do
+            temp = InstMA.Above_Data
+            Total = Total + temp
+         endfor
+
+         if Total = 10 then
+            [] = RPT2:Test_Passed["Chained nav from set", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, Total]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Chained nav from set", Test, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Chained nav from set", Test, -30]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Chained nav from set"]
+
+   temp = 0
+   Total = 0
+
+   {SetM} = find Middle where Middle_Identifier = 1 or Middle_Identifier = 3
+
+   {SetMR} = {SetM} -> R7.Many_Right
+
+   {SetMA} = {SetM} -> R7.Many_Right -> R10.Many_Above
+
+   if countof {SetMR} = 3 then
+
+      if countof {SetMA} = 4 then
+
+         for InstMA in {SetMA} do
+            temp = InstMA.Above_Data
+            Total = Total + temp
+         endfor
+
+         if Total = 12 then
+            [] = RPT2:Test_Passed["Chained nav from set", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, Total]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Chained nav from set", Test, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Chained nav from set", Test, -30]
+   endif
+
+   Test = Test + 1
+
+#-------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-0101", "Relationships", "objE", "Chained nav from set"]
+
+   temp = 0
+   Total = 0
+
+   {SetMA} = find-all Many_Above
+  
+   {SetMR} = {SetMA} -> R10.Many_Right
+
+   {SetM} = {SetMA} -> R10.Many_Right -> R7.Middle
+
+   if countof {SetMR} = 4 then
+
+      if countof {SetM} = 4 then
+
+         for InstM in {SetM} do
+            temp = InstM.Middle_Identifier
+            Total = Total + temp
+         endfor
+
+         if Total = 6 then
+            [] = RPT2:Test_Passed["Chained nav from set", Test, 0]
+         else
+            [] = RPT3:Test_Failed["Chained nav from set", Test, Total]
+         endif
+
+      else
+         [] = RPT3:Test_Failed["Chained nav from set", Test, -20]
+      endif
+
+   else
+      [] = RPT3:Test_Failed["Chained nav from set", Test, -30]
+   endif
+
+   Test = Test + 1
+
+   unassociate firstMR  R8 firstMFR  from firstMRA
+   unassociate thirdMR  R8 firstMFR  from secondMRA
+   unassociate thirdMR  R8 thirdMFR  from thirdMRA
+   unassociate fourthMR R8 fourthMFR from fourthMRA
+
+   unlink firstL  R6 firstM
+   unlink secondL R6 thirdM
+
+   unlink firstM  R7 firstMR
+   unlink firstM  R7 thirdMR
+   unlink thirdM  R7 fourthMR
+
+   unlink firstMR  R8 firstMFR
+   unlink thirdMR  R8 firstMFR
+   unlink thirdMR  R8 thirdMFR
+   unlink fourthMR R8 fourthMFR
+
+   unlink firstMR  R10 firstMA
+   unlink thirdMR  R10 fourthMA
+   unlink thirdMR  R10 fifthMA
+   unlink fourthMR R10 secondMA
+
+   delete firstL 
+   delete secondL
+   delete thirdL 
+   delete fourthL
+   delete fifthL 
+
+   delete firstM 
+   delete secondM
+   delete thirdM 
+   delete fourthM
+   delete fifthM 
+
+   delete firstMR  
+   delete secondMR 
+   delete thirdMR  
+   delete fourthMR 
+   delete fifthMR  
+
+   delete firstMA  
+   delete secondMA 
+   delete thirdMA  
+   delete fourthMA 
+   delete fifthMA  
+
+   delete firstMFR  
+   delete secondMFR 
+   delete thirdMFR  
+   delete fourthMFR 
+   delete fifthMFR  
+
+my_test.The_Test_Number = Test
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	7);
+INSERT INTO PE_PE
+	VALUES ("3b63ce43-f960-4310-808f-cce8d5979343",
+	1,
+	"6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("6fc14326-1622-4ff5-adbd-a9c74d66a644",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"859df8fc-d774-4e8b-a603-e09bb52fd65f",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("859df8fc-d774-4e8b-a603-e09bb52fd65f",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Relationships',
+	' Tests Relationship manipulations.
+',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Relationships',
+	'../Relationships.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("fb793f65-d0e6-45fe-a7e0-5e290ea2fa31",
+	'Relationships',
+	1,
+	'../../../Relationships.xtuml');

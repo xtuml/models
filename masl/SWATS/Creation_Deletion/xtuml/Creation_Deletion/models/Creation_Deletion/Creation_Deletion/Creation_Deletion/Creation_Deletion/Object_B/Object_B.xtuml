@@ -1,0 +1,328 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("aaf53c5f-3173-46ac-b3d7-ddb05c34ff66",
+	'Object_B',
+	3,
+	'objB',
+	' Object_B is manipulated by object ''Instance Creation''.
+',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("46cb8949-e60f-44f3-81dc-758fb7ae3a09",
+	"aaf53c5f-3173-46ac-b3d7-ddb05c34ff66",
+	'do_sync_create_unique',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'#------------------------------------------------------------------------#
+# Create unique, without specifing preferred identifier
+#------------------------------------------------------------------------#
+
+   Test = Test_Number
+
+#------------------------------------------------------------------------#
+# Test 1
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0511", "Creation Deletion", "objB", "Create unique no preferred id"]
+   [] = RPT8:Specify_Requid[Test, "1103-0000-01-0311"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0101"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0118"]
+
+   Has_Failed = FALSE
+
+   Failure_Code = -1
+
+   # create two initial instances
+   count = 0
+   
+   loop
+     count = count + 1
+     new_B = create unique Object_B
+     breakif count >= 2
+   endloop
+
+   # Create a set of instances to check for uniqueness of the new instance
+   {beforeB} = find-all Object_B
+
+   # Perform creation
+   new_instanceB = create unique Object_B with IntegerA = Test 
+ 
+   # this will be the third instance
+
+   # Find the newly created instance
+   an_instanceB = find-one Object_B where IntegerA = Test
+
+   # Check that it was created and is unique
+   if an_instanceB = UNDEFINED then
+      Has_Failed   = TRUE
+      Failure_Code = -10 
+   else
+      # Check that its was created with the correct data
+      if an_instanceB.IntegerA != Test then
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      endif
+
+      # Check that the identifier is unique
+      for each_beforeB in {beforeB} do
+
+         if each_beforeB.ReferenceB = new_instanceB.ReferenceB then
+            Has_Failed   = TRUE
+            Failure_Code = -30
+         endif
+
+      endfor
+
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objB", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objB", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#------------------------------------------------------------------------#
+# Test 2 - Create unique, specifing the preferred identifier
+#          THIS TEST SHOULD CAUSE A COMPILE TIME ERROR, SINCE THE 
+#          PREFERRED IDENTIFIER HAS BEEN GIVEN IN THE ''CREATE UNIQUE''
+#          STATEMENT
+#------------------------------------------------------------------------#
+
+   Failure_Code = -1
+   Has_Failed   = FALSE
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0511", "Creation Deletion", "objB", "Create unique incorrectly specifying pref id"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0101"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0118"]
+
+   #Create a set of instances to check for uniqueness of the new instance
+   {beforeB} = find-all Object_B 
+
+   # There should be 3 instances in this set check that this is the case.
+   number_in_B = countof{beforeB}
+
+   if number_in_B !=3 then
+      Has_Failed   = TRUE
+      Failure_Code = -10
+   endif
+
+   # There is a possibility that this will create an instance with a 
+   # non-unique instance, so fix ReferenceB such that it shouldn''t
+   # have the same identifier as any future test.
+
+   # Obviously, we can''t guarantee this, but let''s have a damn good try.
+
+   Reference_B = Test * Test
+
+   # Perform creation
+   new_instanceB = create unique Object_B with ReferenceB = Reference_B &\
+                                               IntegerA   = Test
+
+   # Find the newly created instance
+   an_instanceB = find-one Object_B where IntegerA = Test
+
+   # Check that it was created and is unique
+   if an_instanceB = UNDEFINED then
+        Has_Failed   = TRUE
+        Failure_Code = -20
+   else
+
+      # Check that its was created with the correct data
+      if an_instanceB.IntegerA != Test then
+         Has_Failed   = TRUE
+         Failure_Code = -30
+      endif
+
+      #Check that the identifier is unique
+      for each_beforeB in {beforeB} do
+
+         if each_beforeB.ReferenceB = new_instanceB.ReferenceB then
+            Has_Failed   = TRUE
+            Failure_Code = -40
+         endif
+
+      endfor
+
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objB", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objB", Test, Failure_Code]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#------------------------------------------------------------------------#
+# Test 3 - Create two unique, check for unique id''s
+#------------------------------------------------------------------------#
+
+   [] = RPT1:Start_Test[Test, "1103-0000-01-0511", "Creation Deletion", "objB", "Create two unique no attributes"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0101"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0102"]
+   [] = RPT8:Specify_Requid[Test, "1101-0000-01-0118"]
+
+   Has_Failed   = FALSE
+   Failure_Code = -1
+
+   # Create a set of instances to check for uniqueness of the new instance
+   {beforeB} = find-all Object_B
+
+   # Perform creation
+   new_instanceB         = create unique Object_B
+   another_new_instanceB = create unique Object_B
+
+   # Check that it was created and is unique
+   if new_instanceB = UNDEFINED  then
+      Has_Failed   = TRUE
+      Failure_Code = -10
+   else
+
+      if another_new_instanceB = UNDEFINED then
+         Has_Failed   = TRUE
+         Failure_Code = -20
+      else
+
+         # Check that the identifier is unique
+
+         # Note that this isn''t always a failure of the I-OOA or
+         # WACA. A previous test had tried to specify the preferred
+         # identifier during a create unique. This is against the rule
+         # of SM OOA, but can be done. So if this fails here, have a look
+         # at the preferred identifier being the same in the earlier test.
+
+         for each_beforeB in {beforeB} do
+
+            if each_beforeB.ReferenceB = new_instanceB.ReferenceB then
+               Has_Failed   = TRUE
+               Failure_Code = -30
+            endif
+
+            if each_beforeB.ReferenceB = another_new_instanceB.ReferenceB then
+               Has_Failed   = TRUE
+               Failure_Code = -40
+            endif
+
+         endfor
+
+         # But of it fails here, it definately IS a problem.
+
+         if another_new_instanceB.ReferenceB = new_instanceB.ReferenceB then
+            Has_Failed   = TRUE
+            Failure_Code = -50
+         endif  
+
+      endif
+
+   endif
+
+   if !Has_Failed then
+      [] = RPT2:Test_Passed["objB", Test, 0]
+   else
+      [] = RPT3:Test_Failed["objB", Test, Failure_Code]
+   endif
+
+# End Test 3
+
+#------------------------------------------------------------------------#
+
+Returned_Test_Number = Test',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("6cd33b67-941a-4a53-b65b-b47103098e6e",
+	"46cb8949-e60f-44f3-81dc-758fb7ae3a09",
+	'Test_Number',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("e6eff6d1-c20e-4291-9cae-347c026262f3",
+	"46cb8949-e60f-44f3-81dc-758fb7ae3a09",
+	'Returned_Test_Number',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'',
+	"6cd33b67-941a-4a53-b65b-b47103098e6e",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("a2babf53-3808-4560-ac83-adf64c396fae",
+	"aaf53c5f-3173-46ac-b3d7-ddb05c34ff66");
+INSERT INTO O_BATTR
+	VALUES ("a2babf53-3808-4560-ac83-adf64c396fae",
+	"aaf53c5f-3173-46ac-b3d7-ddb05c34ff66");
+INSERT INTO O_ATTR
+	VALUES ("a2babf53-3808-4560-ac83-adf64c396fae",
+	"aaf53c5f-3173-46ac-b3d7-ddb05c34ff66",
+	"00000000-0000-0000-0000-000000000000",
+	'ReferenceB',
+	' Preferred identifier.
+',
+	'',
+	'ReferenceB',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("ea273722-d9f0-47a5-a3d2-a5348f7da9a7",
+	"aaf53c5f-3173-46ac-b3d7-ddb05c34ff66");
+INSERT INTO O_BATTR
+	VALUES ("ea273722-d9f0-47a5-a3d2-a5348f7da9a7",
+	"aaf53c5f-3173-46ac-b3d7-ddb05c34ff66");
+INSERT INTO O_ATTR
+	VALUES ("ea273722-d9f0-47a5-a3d2-a5348f7da9a7",
+	"aaf53c5f-3173-46ac-b3d7-ddb05c34ff66",
+	"a2babf53-3808-4560-ac83-adf64c396fae",
+	'IntegerA',
+	' An integer.
+',
+	'',
+	'IntegerA',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"aaf53c5f-3173-46ac-b3d7-ddb05c34ff66");
+INSERT INTO O_OIDA
+	VALUES ("a2babf53-3808-4560-ac83-adf64c396fae",
+	"aaf53c5f-3173-46ac-b3d7-ddb05c34ff66",
+	0,
+	'ReferenceB');
+INSERT INTO O_ID
+	VALUES (1,
+	"aaf53c5f-3173-46ac-b3d7-ddb05c34ff66");
+INSERT INTO O_ID
+	VALUES (2,
+	"aaf53c5f-3173-46ac-b3d7-ddb05c34ff66");
+INSERT INTO PE_PE
+	VALUES ("aaf53c5f-3173-46ac-b3d7-ddb05c34ff66",
+	1,
+	"83c7b8f7-b697-4c39-b7ba-3c85ab0c6fae",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("83c7b8f7-b697-4c39-b7ba-3c85ab0c6fae",
+	"00000000-0000-0000-0000-000000000000",
+	"bc9320a4-8a49-4b7e-b7ee-fc2e8644db84",
+	'Creation_Deletion',
+	'',
+	0,
+	'../Creation_Deletion.xtuml');

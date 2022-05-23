@@ -1,0 +1,19 @@
+public service CPR_Four::A_Normal_Bridge~>Unlink_From_CPR_Three_Third_Object (Source_IH   : in  instance of An_Active_Object,
+                                                                              Unlinked_OK : out boolean) is
+$USE CPR_Three
+
+   Can_We_Navigate = Source_IH -> CPR9.Third_Way
+
+   if Can_We_Navigate != UNDEFINED then
+
+      unlink-counterpart Source_IH CPR9 Can_We_Navigate
+
+      Unlinked_OK = TRUE
+
+   else
+
+      Unlinked_OK = FALSE
+
+   endif
+
+$ENDUSE

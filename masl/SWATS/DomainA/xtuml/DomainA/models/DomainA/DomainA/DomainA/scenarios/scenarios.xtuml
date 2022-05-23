@@ -1,0 +1,761 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	"e54678e3-68f4-41f4-be3e-29c2c47b2204",
+	'scenarios',
+	'',
+	0);
+INSERT INTO GD_MD
+	VALUES ("a4f4d121-d256-4278-83a4-7f5a818a676d",
+	112,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	108,
+	0,
+	0,
+	1,
+	1,
+	1,
+	12,
+	1,
+	0,
+	0,
+	0,
+	0,
+	0,
+	'',
+	'DomainA::DomainA::DomainA::scenarios');
+INSERT INTO DIM_DIA
+	VALUES ("a4f4d121-d256-4278-83a4-7f5a818a676d",
+	'',
+	1.000000,
+	0.000000,
+	0.000000,
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO S_SYNC
+	VALUES ("13891d80-5753-4839-8767-f80de4217a76",
+	"00000000-0000-0000-0000-000000000000",
+	'Domain_A_setup',
+	' Domain A setup
+',
+	'
+
+my_test = create Test_Data with This_Test_Number = 1
+
+#Create several instances of Object_A
+count = 5
+loop
+
+   newA = create Object_A with idA = count &\
+                               ResultA = 0 &\
+                               Current_State  = ''Idle''
+   count = count - 1
+   breakif count = 0
+endloop
+
+Super1 = create Domain_A_Object_Super with idSUPER = 1
+Sub_A1 = create Domain_A_Object_SubA with SubA_Attribute = 1 & A_Text = "Sub A1"
+Sub_B1 = create Domain_A_Object_SubB with SubB_Attribute = 1 & B_Text = "Sub B1"
+
+link Super1 R4 Sub_A1
+
+Super2 = create Domain_A_Object_Super with idSUPER = 2
+Sub_A2 = create Domain_A_Object_SubA with SubA_Attribute = 2 & A_Text = "Sub A2"
+Sub_B2 = create Domain_A_Object_SubB with SubB_Attribute = 2 & B_Text = "Sub B2"
+
+link Super2 R4 Sub_B2',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	1);
+INSERT INTO PE_PE
+	VALUES ("13891d80-5753-4839-8767-f80de4217a76",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("2c487eb5-749e-477a-b981-8c2b9e2c7dff",
+	"00000000-0000-0000-0000-000000000000",
+	'Sync_to_event',
+	' Sync to event
+',
+	'#-------------------------------------------------------------------
+# Sync service invocation to an event
+#-------------------------------------------------------------------
+
+   my_test = find-one Test_Data
+   Test    = my_test.This_Test_Number
+
+   has_failed = FALSE
+
+   # Initiate the test
+   an_instanceA = find-one Object_A where idA = 2
+
+   if an_instanceA != NULL then
+      generate objA6:StartB(Test) to an_instanceA
+   else
+      # Null instance detected.
+      [] = RPT5:Test_Text[Test, "DomainA setup scenario not run"]
+   endif
+
+   Test = Test + 1
+
+   inputA = 1
+   inputB = 2
+
+#-------------------------------------------------------------------
+# Test 1
+#-------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-1110", "DomainA", "Domain A to B", "synch 4 service call"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1103"]
+
+   [outputA, outputB] = termA4:Sync4A[inputA, inputB, Test]
+
+   if outputA = 3 and outputB = 4 then
+      [] = RPT2:Test_Passed["DomainA", Test, outputB]
+   else
+      [] = RPT3:Test_Failed["DomainA", Test, outputA]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#-------------------------------------------------------------------
+
+   my_test.This_Test_Number = Test
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	3);
+INSERT INTO PE_PE
+	VALUES ("2c487eb5-749e-477a-b981-8c2b9e2c7dff",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("5add31d1-7f47-4ccd-97e4-480a20bb795d",
+	"00000000-0000-0000-0000-000000000000",
+	'Sync_to_sync',
+	' Sync to sync
+',
+	'#-------------------------------------------------------------------
+#Sync service invocation to sync service
+#-------------------------------------------------------------------
+
+   my_test = find-one Test_Data
+
+   # Initiate the test
+   Test = my_test.This_Test_Number
+
+   has_failed = FALSE
+
+   inputA = 3
+   inputB = 4
+
+#-------------------------------------------------------------------
+# Test 1
+#-------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-1110", "DomainA", "Domain A to B", "synch 3 service call"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1101"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1104"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1105"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0810"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1103"]
+
+   [outputA, outputB] = termA3:Sync3A[inputA, inputB, Test]
+
+   if outputA = 5 and outputB = 6 then
+      [] = RPT2:Test_Passed["DomainA", Test, outputB]
+   else
+      [] = RPT3:Test_Failed["DomainA", Test, outputA]
+   endif
+
+   Test = Test + 1
+
+# End Test 1
+
+#-------------------------------------------------------------------
+# Test 2
+#-------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-1110", "DomainA", "Domain A to B", "synch 2 service call"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1101"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1104"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1105"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0810"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1103"]
+
+   [outputA, outputB] = termA2:Sync2A[inputA, inputB, Test]
+
+   if outputA = 5 and outputB = 6 then
+      [] = RPT2:Test_Passed["DomainA", Test, outputB]
+   else
+      [] = RPT3:Test_Failed["DomainA", Test, outputA]
+   endif
+
+   Test = Test + 1
+
+# End Test 2
+
+#-------------------------------------------------------------------
+# Test 3
+#-------------------------------------------------------------------
+
+   [] = RPT1:Start_Test[Test,"1241-0000-01-1110", "DomainA", "Domain A to B", "synch 1 service call"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1104"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1104"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1105"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-0810"]
+   [] = RPT8:Specify_Requid[Test, "1241-0000-01-1103"]
+
+   inputA = 1
+   inputB = 2
+
+   [outputA, outputB] = termA1:Sync1A[inputA, inputB, Test]
+
+   if outputA = 3 and outputB = 4 then
+      [] = RPT2:Test_Passed["DomainA", Test, outputB]
+   else
+      [] = RPT3:Test_Failed["DomainA", Test, outputA]
+   endif
+
+   Test = Test + 1
+
+# End Test 3
+
+#-------------------------------------------------------------------
+# Test 4
+#-------------------------------------------------------------------
+
+   an_instanceA = find-one Object_A where idA = 1
+ 
+   if an_instanceA != NULL then
+      generate objA3:StartA(Test) to an_instanceA
+   else
+      # Null instance detected.
+      [] = RPT5:Test_Text[Test, "Can not find object A domainA scenario2"]
+      [] = RPT4:Test_Unsupported[Test]
+   endif
+
+   Test = Test + 1
+
+# End Test 4
+
+#-------------------------------------------------------------------
+
+   my_test.This_Test_Number = Test
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	2);
+INSERT INTO PE_PE
+	VALUES ("5add31d1-7f47-4ccd-97e4-480a20bb795d",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("58a88b01-c904-42fb-bfbc-8db584e9a67e",
+	"00000000-0000-0000-0000-000000000000",
+	'single_bridge_test',
+	' single bridge test
+',
+	'#------------------------------------------------------------------------#
+# Call bridge service that will perform navigation in domain B
+#------------------------------------------------------------------------#
+
+my_test = find-one Test_Data
+Test    = my_test.This_Test_Number
+
+[] = NAV1:Single_Bridge_Navigate[Test]
+
+Test = Test + 1
+
+my_test.This_Test_Number = Test
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	4);
+INSERT INTO PE_PE
+	VALUES ("58a88b01-c904-42fb-bfbc-8db584e9a67e",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("66ecb9a1-1287-4156-a9a8-78253d9b6bfe",
+	"00000000-0000-0000-0000-000000000000",
+	'shared_bridge_test',
+	' shared bridge test
+',
+	'#------------------------------------------------------------------------#
+# Call shared bridge to perform navigation in domain B.
+#------------------------------------------------------------------------#
+
+my_test = find-one Test_Data
+Test    = my_test.This_Test_Number
+
+[] = NAV2:Shared_Bridge_Navigate[Test]
+
+Test = Test + 1
+
+my_test.This_Test_Number = Test
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	5);
+INSERT INTO PE_PE
+	VALUES ("66ecb9a1-1287-4156-a9a8-78253d9b6bfe",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("b6946f14-227c-4d71-ae7d-c7b72331337f",
+	"00000000-0000-0000-0000-000000000000",
+	'one_to_one_navigation',
+	' one_to_one_navigation
+',
+	'my_test = find-one Test_Data
+Test    = my_test.This_Test_Number
+
+#------------------------------------------------------------------------#
+# Create five instances of left and right parts of the one to one relationship.
+#------------------------------------------------------------------------#
+
+   Termination_Condition = Test + 5
+
+   loop_counter = Test
+
+   loop
+      left  = create One_To_One_Left_Side with otols_id  = loop_counter
+      right = create One_To_One_Right_Side with otors_id = loop_counter
+
+      link left R1 right
+
+      loop_counter = loop_counter + 1
+
+      breakif loop_counter = Termination_Condition
+
+   endloop
+
+   # Call bridge service to see if we can navigate from one side to the other
+
+   loop 
+      [] = NAV3:One_to_One_Navigate[Test]
+      Test = Test + 1
+      breakif Test = Termination_Condition
+   endloop
+
+#------------------------------------------------------------------------#
+
+my_test.This_Test_Number = Test
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	6);
+INSERT INTO PE_PE
+	VALUES ("b6946f14-227c-4d71-ae7d-c7b72331337f",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("33f178e8-612f-4ded-8475-556918159eda",
+	"00000000-0000-0000-0000-000000000000",
+	'one_to_many_navigation',
+	' one_to_many_navigation
+',
+	'my_test = find-one Test_Data
+
+#------------------------------------------------------------------------#
+# Create five instances of left part of the one to many relationship.
+#------------------------------------------------------------------------#
+
+   number_of_instances = 5
+
+   Test = my_test.This_Test_Number
+
+   loop_counter = Test
+
+   terminate_condition = number_of_instances + Test + 1
+
+   loop
+      left  = create One_To_Many_Left_Side with otmls_id = loop_counter
+
+      inner_loop_counter = loop_counter
+      break_condition    = loop_counter + 3
+
+      # Make three instances of the right side of the naviagtion to link to
+      # a single instance of the left
+      loop
+         right = create One_To_Many_Right_Side with otmrs_id = inner_loop_counter
+
+         link left R2 right
+
+         inner_loop_counter = inner_loop_counter + 1
+
+         breakif inner_loop_counter = break_condition
+ 
+      endloop
+
+      loop_counter = loop_counter + 1
+
+      breakif loop_counter = terminate_condition
+
+   endloop
+
+   # Call bridge service to see if we can navigate from one side to the other
+   loop 
+      [] = NAV4:One_to_Many_Navigate[Test]
+      Test = Test + 1
+      breakif Test = terminate_condition
+   endloop
+
+#------------------------------------------------------------------------#
+
+my_test.This_Test_Number = Test
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	7);
+INSERT INTO PE_PE
+	VALUES ("33f178e8-612f-4ded-8475-556918159eda",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("dbed2ebf-c9f7-451b-83cf-c9bfb65a7fcb",
+	"00000000-0000-0000-0000-000000000000",
+	'many_to_many_navigation',
+	' many_to_many_navigation
+',
+	'my_test = find-one Test_Data
+Test    = my_test.This_Test_Number
+
+#------------------------------------------------------------------------#
+# Create five instances of left and right parts of the many to many relationship.
+#------------------------------------------------------------------------#
+
+   number_of_tests = 5
+   loop_counter    = Test
+
+   terminate_condition = number_of_tests + Test + 1
+
+   loop
+      left  = create Many_To_Many_Left_Side with mtmls_id = loop_counter
+
+      inner_loop_counter = loop_counter
+      break_condition    = loop_counter + 3
+
+      # Make three instances of the right side of the navigation to link to
+      # a single instance of the left
+
+      loop
+         right = create Many_To_Many_Right_Side with mtmrs_id   = loop_counter
+         assoc = create Many_To_Many_Associative with mtma_data = loop_counter
+ 
+         link left R3 right using assoc
+
+         inner_loop_counter = inner_loop_counter + 1
+
+         breakif inner_loop_counter = break_condition
+
+      endloop
+
+      loop_counter = loop_counter + 1
+
+      breakif loop_counter = terminate_condition
+
+   endloop
+
+   # Call bridge service to see if we can navigate from one side to the other
+
+   loop 
+      [] = NAV5:Many_to_Many_Navigate[Test]
+      Test = Test + 1
+      breakif Test = terminate_condition
+   endloop
+
+#------------------------------------------------------------------------#
+
+my_test.This_Test_Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	8);
+INSERT INTO PE_PE
+	VALUES ("dbed2ebf-c9f7-451b-83cf-c9bfb65a7fcb",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("27d7e0aa-4267-4eaf-8c24-ed1882d037ef",
+	"00000000-0000-0000-0000-000000000000",
+	'invoke_misc_calls',
+	' invoke misc calls
+',
+	'
+my_test = find-one Test_Data
+Test    = my_test.This_Test_Number
+
+#------------------------------------------------------------------------#
+
+   [] = NAV6:Misc_Calls[Test]
+
+   Test        = Test + 1
+   local_fail  = FALSE
+   local_value = 0
+
+   my_test.This_Test_Number = Test
+
+   [] = RPT1:Start_Test[Test, "Null Requid", "DomainA", "Misc calls", "Common objects"]
+
+   # Domain B should have executed seven tests by now, so the next test shown in the TEST_DATA
+   # object should be 8, that is is this is an ISIM environment. However, if this is WACA then
+   # domain B will only have executed four tests so far.
+
+   [local_fail, local_value] = termA5:Common_Named_Object_Usage [Test]
+
+   if local_fail = TRUE then
+      [] = RPT3:Test_Failed["DomainA", Test, local_value]
+   else
+      [] = RPT2:Test_Passed["DomainA", Test, local_value]
+   endif
+
+#------------------------------------------------------------------------#
+
+Test = Test + 1
+my_test.This_Test_Number = Test
+
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	9);
+INSERT INTO PE_PE
+	VALUES ("27d7e0aa-4267-4eaf-8c24-ed1882d037ef",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("fc763f5d-6781-4d06-9f69-6a01b35849f8",
+	"00000000-0000-0000-0000-000000000000",
+	'Start_DomainA_Tests',
+	' Start DomainA Tests
+',
+	'[] = DomainA1::Create_Report_Object[]
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	10);
+INSERT INTO PE_PE
+	VALUES ("fc763f5d-6781-4d06-9f69-6a01b35849f8",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("340d29bb-3c50-4f3e-9010-d26f35818240",
+	"00000000-0000-0000-0000-000000000000",
+	'Finish_DomainA_Tests',
+	' Finish DomainA Tests
+',
+	'
+[] = DomainA2::Delete_Report_Object[]',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	11);
+INSERT INTO PE_PE
+	VALUES ("340d29bb-3c50-4f3e-9010-d26f35818240",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("d3a07787-c8b4-49d6-9749-283237683003",
+	"00000000-0000-0000-0000-000000000000",
+	'Enumeration_Across_Bridge_Check',
+	' Enumeration Across Bridge Check
+',
+	'#------------------------------------------------------------------------#
+# Pass an enumerated type through a bridge to see if it gets correctly
+# picked up
+#------------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.This_Test_Number
+
+   [] = NAV7:Enum_Test[Test, ''Sly'']
+
+   Test = Test + 1
+   my_test.This_Test_Number = Test
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	12);
+INSERT INTO PE_PE
+	VALUES ("d3a07787-c8b4-49d6-9749-283237683003",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("3eefe163-dc36-4205-8d52-25656f8873a2",
+	"00000000-0000-0000-0000-000000000000",
+	'Enumeration_Across_Lots_Of_Bridges',
+	' Enumeration_Across_Lots_Of_Bridges
+',
+	'# Call bridge service that will perform navigation in domain B
+
+my_test = find-one Test_Data
+
+Test = my_test.This_Test_Number
+
+[] = NAV8:Big_Bridge_Navigation[Test, ''Sandy'']
+
+Test = Test + 1
+
+my_test.This_Test_Number = Test
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	13);
+INSERT INTO PE_PE
+	VALUES ("3eefe163-dc36-4205-8d52-25656f8873a2",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("d2923e11-3d4a-40d1-aff9-38fc99eda38c",
+	"00000000-0000-0000-0000-000000000000",
+	'Passing_IH',
+	' Passing IH
+',
+	'#------------------------------------------------------------------------#
+# Pass an instance handle through a bridge to see if it gets correctly
+# picked up
+#------------------------------------------------------------------------#
+
+   my_test = find-one Test_Data
+   Test    = my_test.This_Test_Number
+
+   IH_To_Be_Passed = create Object_A with idA           = 100 &\
+                                          ResultA       = 100 &\ 
+                                          Current_State = ''Sync_service_invocation_to_event'' 
+
+   [] = NAV9:Pass_IH[Test, IH_To_Be_Passed]
+
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+   my_test.This_Test_Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	14);
+INSERT INTO PE_PE
+	VALUES ("d2923e11-3d4a-40d1-aff9-38fc99eda38c",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO S_SYNC
+	VALUES ("11139677-176b-48e7-aa87-275e4d63f159",
+	"00000000-0000-0000-0000-000000000000",
+	'Pass_Params',
+	' Pass_Params
+',
+	'   my_test = find-one Test_Data
+   Test    = my_test.This_Test_Number
+
+   [] = RPT1:Start_Test[Test, "1241-0000-01-1106", "DomainA", "Misc calls", "Param Passed through bridge"]
+
+   Local_Int = 999
+   Local_Real = 99.9
+   Local_Text = "Passed From Domain A"
+   Local_Bool = TRUE
+
+   [The_Result] = DomainA4::Check_Service_Params[Local_Int, Local_Real, Local_Text, Local_Bool]
+
+   if The_Result = 10 then
+      [] = RPT2:Test_Passed["Param Passed through bridge", Test, The_Result]
+   else
+      [] = RPT3:Test_Failed["Param Passed through bridge", Test, The_Result]
+   endif
+
+#------------------------------------------------------------------------#
+
+   Test = Test + 1
+   my_test.This_Test_Number = Test',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	3,
+	'',
+	2,
+	15);
+INSERT INTO PE_PE
+	VALUES ("11139677-176b-48e7-aa87-275e4d63f159",
+	1,
+	"8f8026b8-593d-489c-b525-6524dbb8253f",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("8f8026b8-593d-489c-b525-6524dbb8253f",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"bf73d69d-e0e7-413a-849b-ef004cd70cf0",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("bf73d69d-e0e7-413a-849b-ef004cd70cf0",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'DomainA',
+	' For use in multiple domain builds
+',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'DomainA',
+	'../DomainA.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("e54678e3-68f4-41f4-be3e-29c2c47b2204",
+	'DomainA',
+	1,
+	'../../../DomainA.xtuml');

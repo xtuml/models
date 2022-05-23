@@ -1,0 +1,69 @@
+define bridge  CPR_Three:D_Two_Ops1:Create_Object_Two_Instance
+input \
+	Link_What:Link_Type 
+output \
+	OK:Boolean ,\
+	Two_ID:Base_Integer_Type ,\
+	One_ID:Base_Integer_Type ,\
+	Pass_ID:Base_Integer_Type 
+
+#$DESCRIPTION
+#$END_DESCRIPTION
+
+
+
+$INLINE
+fprintf(stderr,"CPR Three Normal Bridge Call create object two in CPR_Two\n");
+$ENDINLINE
+
+Local_Returned_ID = 0
+OK = FALSE
+
+Two_ID  = 0
+One_ID  = 0
+Pass_ID = 0
+
+
+$USE CPR_Two
+
+   # User Defined Types are not multi domain
+
+   Local_Link_Option of CPR_Two_Link_Type = 'Neither'
+
+   Neither_Option of CPR_Two_Link_Type    = 'Neither'
+   Both_Option of CPR_Two_Link_Type       = 'Both_Objects'
+   One_Option of CPR_Two_Link_Type        = 'Object_One'
+   Pass_Option of CPR_Two_Link_Type       = 'Object_To_Pass'
+
+
+   if Link_What = 'CPR_Three_Object_One' then
+      Local_Link_Option = One_Option
+   else
+      if Link_What = 'CPR_Three_Object_To_Pass' then
+         Local_Link_Option = Pass_Option
+      else
+         if Link_What = 'CPR_Three_Both' then
+            Local_Link_Option = Both_Option
+         else
+            Local_Link_Option = Neither_Option
+         endif
+      endif
+   endif
+
+
+   [Two_ID, One_ID, Pass_ID] = CPR_Two7::Create_And_Link_Object_Two_To_Domain_One[Local_Link_Option]
+
+$ENDUSE
+
+# We should always get an object two ID value back. Whether or not we get back id's for the other
+# objects being an error condition, the calling routine must decide.
+
+if Two_ID  != 0 then 
+
+  OK = TRUE
+
+endif
+
+
+
+enddefine

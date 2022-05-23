@@ -1,0 +1,130 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("0145d9b7-9a14-4bfb-bbf4-13a632812a54",
+	'Test_Suite',
+	11,
+	'TS',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("7d7fb46f-7a21-4c32-8a2b-a2c14328ece5",
+	"0145d9b7-9a14-4bfb-bbf4-13a632812a54",
+	'Add_Requirement',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	0,
+	'# Specify a requirement identifier that must be met by this test suite
+
+Exists = find-one All_Requirements_In_Test_Suite where REQUID = New_Requid
+
+Me = find-one Test_Suite
+
+if Me != UNDEFINED then
+
+  [] = RP7::Report_Run_Time_Error["Test Suite not configured for requid capture"]
+
+else
+
+
+   if Exists != UNDEFINED then
+
+      [] = RP7::Report_Run_Time_Error["Requid already specified"]
+
+   else
+
+      The_New_Requirement_id = create unique All_Requirements_In_Test_Suite with REQUID = New_Requid &\
+         Requid_Test_Status = ''Not_Tested'' & Requid_Text = New_Requid_Text
+
+      link Me R11 The_New_Requirement_id
+
+   endif
+
+endif',
+	3,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	2,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("ab06bb18-b193-4c6f-8eb1-442833eff37d",
+	"7d7fb46f-7a21-4c32-8a2b-a2c14328ece5",
+	'New_Requid',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TPARM
+	VALUES ("9e489b4d-9075-461d-8c06-393cc066b39b",
+	"7d7fb46f-7a21-4c32-8a2b-a2c14328ece5",
+	'New_Requid_Text',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"ab06bb18-b193-4c6f-8eb1-442833eff37d",
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("d93f33f5-50a1-49ca-bacd-468caa08c74b",
+	"0145d9b7-9a14-4bfb-bbf4-13a632812a54");
+INSERT INTO O_BATTR
+	VALUES ("d93f33f5-50a1-49ca-bacd-468caa08c74b",
+	"0145d9b7-9a14-4bfb-bbf4-13a632812a54");
+INSERT INTO O_ATTR
+	VALUES ("d93f33f5-50a1-49ca-bacd-468caa08c74b",
+	"0145d9b7-9a14-4bfb-bbf4-13a632812a54",
+	"00000000-0000-0000-0000-000000000000",
+	'Unique_TS_Identifier',
+	'',
+	'',
+	'Unique_TS_Identifier',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("d5cf7b96-33e3-43c5-9640-af18787c9a9c",
+	"0145d9b7-9a14-4bfb-bbf4-13a632812a54");
+INSERT INTO O_BATTR
+	VALUES ("d5cf7b96-33e3-43c5-9640-af18787c9a9c",
+	"0145d9b7-9a14-4bfb-bbf4-13a632812a54");
+INSERT INTO O_ATTR
+	VALUES ("d5cf7b96-33e3-43c5-9640-af18787c9a9c",
+	"0145d9b7-9a14-4bfb-bbf4-13a632812a54",
+	"d93f33f5-50a1-49ca-bacd-468caa08c74b",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"0145d9b7-9a14-4bfb-bbf4-13a632812a54");
+INSERT INTO O_OIDA
+	VALUES ("d93f33f5-50a1-49ca-bacd-468caa08c74b",
+	"0145d9b7-9a14-4bfb-bbf4-13a632812a54",
+	0,
+	'Unique_TS_Identifier');
+INSERT INTO O_ID
+	VALUES (1,
+	"0145d9b7-9a14-4bfb-bbf4-13a632812a54");
+INSERT INTO O_ID
+	VALUES (2,
+	"0145d9b7-9a14-4bfb-bbf4-13a632812a54");
+INSERT INTO PE_PE
+	VALUES ("0145d9b7-9a14-4bfb-bbf4-13a632812a54",
+	1,
+	"9ad1f161-76d9-4b91-89b6-550ab27be095",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("9ad1f161-76d9-4b91-89b6-550ab27be095",
+	"00000000-0000-0000-0000-000000000000",
+	"4c08e6c8-a624-4053-85ee-05a06862b6c7",
+	'RP',
+	'',
+	0,
+	'../RP.xtuml');

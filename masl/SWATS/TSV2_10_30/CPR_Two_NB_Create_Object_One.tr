@@ -1,0 +1,28 @@
+public service CPR_Two::Normal_Bridge~>Create_Object_One (Create_Int  : in  integer,
+                                                          Create_Real : in  real,
+                                                          Create_Bool : in  boolean,
+                                                          Create_Text : in  string,
+                                                          Return_id   : out integer) is
+# Call creation service in CPR_One
+
+$INLINE
+   fprintf(stderr, "CPR Two Normal bridge. Call create in object 1\n");
+$ENDINLINE
+
+Local_id = 0
+
+$USE CPR_One
+
+   # Call a creation service in target domain
+
+   [Destination_IH] = CPR_One3::Create_Object_To_Pass[Create_Int, Create_Real, Create_Bool, Create_Text]
+
+   Local_id = Destination_IH.Object_To_Pass_One_ID
+
+$ENDUSE
+
+$INLINE
+   fprintf(stderr, "CPR Two Normal bridge.Return destination IH unique ID\n");
+$ENDINLINE
+
+Return_id = Local_id

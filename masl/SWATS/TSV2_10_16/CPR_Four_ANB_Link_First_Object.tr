@@ -1,0 +1,28 @@
+public service CPR_Four::A_Normal_Bridge~>Link_First_Object (Source_IH           : in  instance of First_Active_Object,
+                                                             Specified_Attribute : in  integer,
+                                                             Linked_OK           : out boolean,
+                                                             Linked_Attribute    : out integer) is
+# Create a target instance of the Many type object in CPR_One
+
+Local_Linked_OK = FALSE
+Local_Linked_Attribute = -1
+
+$USE CPR_One
+
+   [Created_IH] = CPR_One5::Create_One_Of_Many_IH[Specified_Attribute]
+
+   link-counterpart Source_IH CPR11 Created_IH
+
+   if Created_IH != UNDEFINED then
+      Local_Linked_OK = TRUE
+      Local_Linked_Attribute = Created_IH.This_Instance_Number
+
+   endif
+
+$ENDUSE
+
+Linked_OK = Local_Linked_OK
+Linked_Attribute = Local_Linked_Attribute
+
+  
+
