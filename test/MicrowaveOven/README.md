@@ -1,4 +1,25 @@
+# MicrowaveOven WASM example
+
+## Requirements
+
+- python3
+- pymc3020 (`pip install pymc3020`)
+- GNU Make
+- Emscripten
+
+## Build
+
+```bash
+cd src
+make
 ```
-emcc -o mo.js -pthread -sPROXY_TO_PTHREAD -sEXPORTED_RUNTIME_METHODS=ccall -sEXPORTED_FUNCTIONS=_MicrowaveOven_UI_cancel_cooking --pre-js pre.js *.c
-emcc -o mo.js -pthread -sPROXY_TO_PTHREAD *.c
-```
+
+## Run
+
+- From the main project folder:
+  ```bash
+  python gen/server.py
+  ```
+- In a browser navigate to `localhost:8000/src/mo.html`
+- Open the JS console to see xtUML trace
+
