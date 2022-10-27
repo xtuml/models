@@ -127,7 +127,9 @@ INSERT INTO SM_ACT
 	'assign self.is_secure = false;
 
 select one oven related by self->MO_O[R4];
-generate MO_O4:''cancel_cooking'' to oven;',
+generate MO_O4:''cancel_cooking'' to oven;
+
+UI::door_opened();',
 	'',
 	0);
 INSERT INTO SM_MOAH
@@ -141,7 +143,8 @@ INSERT INTO SM_ACT
 	VALUES ("d5fe992f-92fd-457c-b5df-c7122061420c",
 	"824a055a-5b2e-478b-b10e-4ab663d9c4fb",
 	1,
-	'assign self.is_secure = true;',
+	'assign self.is_secure = true;
+UI::door_closed();',
 	'',
 	0);
 INSERT INTO SM_TAH
@@ -189,7 +192,7 @@ INSERT INTO GD_MD
 	0,
 	0,
 	0,
-	'',
+	'4.1.17',
 	'MicrowaveOven::components::MicrowaveOven::Microwave Oven::Door::Instance State Machine');
 INSERT INTO GD_GE
 	VALUES ("d1c66d1d-6e82-4548-8e58-3a233e10af69",

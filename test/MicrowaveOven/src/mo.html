@@ -8,24 +8,25 @@
     <br>
     <span id="light_status">Light: xxx</span>
     <br>
-    <button>Power up</button>
-    <button>Power down</button>
+    <button onclick="sendSignal('MicrowaveOven::UI::increase_power')">Power up</button>
+    <button onclick="sendSignal('MicrowaveOven::UI::decrease_power')">Power down</button>
     <br>
-    <button>1</button>
-    <button>2</button>
-    <button>3</button>
+    <button onclick="sendSignal('MicrowaveOven::UI::close_door')">Close door</button>
+    <button onclick="sendSignal('MicrowaveOven::UI::open_door')">Open door</button>
     <br>
-    <button>4</button>
-    <button>5</button>
-    <button>6</button>
+    <input id="cooking_period" type="number">Cook time</input>
     <br>
-    <button>7</button>
-    <button>8</button>
-    <button>9</button>
+    <button onclick="sendSignal('MicrowaveOven::UI::specify_cooking_period', parseInt(document.getElementById('cooking_period').value) || 0); sendSignal('MicrowaveOven::UI::start_pressed')">Start</button>
+    <button onclick="sendSignal('MicrowaveOven::UI::cancel_pressed')">End</button>
     <br>
-    <button>Start</button>
-    <button>End</button>
-    <br>
+    <script>
+      self.addEventListener('MicrowaveOven::UI::door_opened', (evt) => {
+        document.getElementById('door_status').textContent = 'Door: open';
+      });
+      self.addEventListener('MicrowaveOven::UI::door_closed', (evt) => {
+        document.getElementById('door_status').textContent = 'Door: closed';
+      });
+    </script>
     <script async type="text/javascript" src="mo.js"></script>
   </body>
 </html>
