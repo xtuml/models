@@ -218,7 +218,7 @@ INSERT INTO GD_NCS
 	VALUES ("ea15c6c8-ffe9-41ed-9ff9-24597dfc542f");
 INSERT INTO DIM_ND
 	VALUES (193.000000,
-	85.000000,
+	109.000000,
 	"ea15c6c8-ffe9-41ed-9ff9-24597dfc542f");
 INSERT INTO DIM_GE
 	VALUES (312.000000,
@@ -2221,7 +2221,7 @@ Pacifica.Name = "Pacifica";
 relate Pacifica to USA across R1.''is adjacent to'';
 
 select many territories related by USA->Territory[R1.''is adjacent to''];
-if cardinality territories != 3
+if (cardinality territories != 3)
   test_failed = true;
 end if;
 for each t in territories
@@ -2248,14 +2248,14 @@ relate USA to Utah across R6.''contains'';
 create object instance California of State;
 California.Id = "CA";
 relate USA to California across R6.''contains'';
-create object instance Baja of State;
+create object instance Baja of State; 
 Baja.Id = "BC";
 relate Mexico to Baja across R6.''contains'';
 
 // test ''fan-out'' when symmetric association is embedded in relationship chain.
 LOG::LogInfo( message:"Test navigation across symmetric reflexive" );
 select many states related by Utah->Territory[R6.''is in'']->Territory[R1.''is adjacent to'']->State[R6.''contains''];
-if cardinality states != 2
+if (cardinality states != 2)
   test_failed = true;
 end if;
 for each state in states
@@ -2278,7 +2278,7 @@ for each territory in territories
   delete object instance territory;
 end for;
 
-if test_failed
+if (test_failed)
   LOG::LogFailure( message:"Test failed" );
 else
     LOG::LogSuccess( message:"Test passed" );
@@ -2335,7 +2335,7 @@ LOG::LogInfo( message:"Navigate via associative symmetric reflexive" );
 create object instance chk of Checkpoint;
 relate chk to b1 across R11.''guards'';
 select many states related by chk->Border[R11.''guards'']->State[R2.''borders''];
-if cardinality states != 2
+if (cardinality states != 2)
   test_failed = true;
 end if;
 
@@ -2347,7 +2347,7 @@ LOG::LogInfo( message:"AZ borders " + state.Id );
 
 LOG::LogInfo( message:"Check 4 states border AZ" );
 select many states related by AZ->State[R2.''borders''];
-if cardinality states != 4
+if (cardinality states != 4)
   test_failed = true;
 end if;
 for each state in states
@@ -2368,7 +2368,7 @@ hwy.isTollRoad = false;
 relate city1 to city2 across R13.''is reachable from'' using hwy;
 select many routes from instances of Route;
 select many cities related by routes->City[R13.''is reachable from''];
-if cardinality cities != 2
+if (cardinality cities != 2)
   test_failed = true;
 end if;
 LOG::LogInfo( message:"Both city names should appear just once" );
@@ -2377,7 +2377,7 @@ for each city in cities
 end for;
 LOG::LogInfo( message:"Check select.. where from associative instance: look for Ensenada" );
 select any city related by routes->City[R13.''is reachable from''] where selected.Name == "Ensenada";
-if city.Name != "Ensenada"
+if (city.Name != "Ensenada")
   test_failed = true;
 end if;
 LOG::LogInfo( message:city.Name );
@@ -2391,7 +2391,7 @@ wife.Name = "Jill";
 create object instance certificate of License;
 relate husband to wife across R12.''is married to'' using certificate;
 select many persons related by certificate->Spouse[R12.''is married to''];
-if cardinality persons != 2
+if (cardinality persons != 2)
   test_failed = true;
 end if;
 LOG::LogInfo( message:"Both spouse names should appear" );
@@ -2441,7 +2441,7 @@ for each city in cities
   delete object instance city;
 end for;
 
-if test_failed
+if (test_failed)
   LOG::LogFailure( message:"Test failed" );
 else
   LOG::LogSuccess( message:"Test passed" );
@@ -2480,7 +2480,7 @@ create object instance f2 of Friendship;
 relate Harry to Tom across R4.''knows'' using f2;
 // select should see both ''relates'', although different directions.
 select many buddies related by Tom->Person[R4.''knows''];
-if cardinality buddies != 2
+if (cardinality buddies != 2)
   test_failed = true;
 end if;
 LOG::LogInfo( message:"Tom knows both buddies" );
@@ -2491,7 +2491,7 @@ end for;
 create object instance f3 of Friendship;
 relate Dick to Harry across R4.''knows'' using f3;
 select many buddies related by Harry->Person[R4.''knows''];
-if cardinality buddies != 2
+if (cardinality buddies != 2)
   test_failed = true;
 end if;
 LOG::LogInfo( message:"Harry knows both buddies" );
@@ -2503,7 +2503,7 @@ unrelate Harry from Dick across R4.''knows'' using f3;
 delete object instance f3;
 LOG::LogInfo( message:"Harry unfriends Dick!" );
 select many buddies related by Harry->Person[R4.''knows''];
-if cardinality buddies != 1
+if (cardinality buddies != 1)
   test_failed = true;
 end if;
 LOG::LogInfo( message:"Harry no longer knows Dick" );
@@ -2511,7 +2511,7 @@ for each guy in buddies
   LOG::LogInfo( message:"Harry knows " + guy.Name );
 end for;
 select many buddies related by Dick->Person[R4.''knows''];
-if cardinality buddies != 1
+if (cardinality buddies != 1)
   test_failed = true;
 end if;
 for each guy in buddies
@@ -2530,7 +2530,7 @@ for each buddy in buddies
   delete object instance buddy;
 end for;
 
-if test_failed
+if (test_failed)
   LOG::LogFailure( message:"Test failed" );
 else
     LOG::LogSuccess( message:"Test passed" );
