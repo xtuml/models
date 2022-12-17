@@ -2380,7 +2380,21 @@ select any city related by routes->City[R13.''is reachable from''] where selecte
 if (city.Name != "Ensenada")
   test_failed = true;
 end if;
-LOG::LogInfo( message:city.Name );
+LOG::LogInfo( message:"Found: " + city.Name);
+create object instance city3 of City;
+
+// check selection across multiple associative relationships
+city3.Name = "Tecate";
+create object instance rte2 of Route;
+relate city3 to city1 across R13.''is reachable from'' using rte2;
+create object instance city4 of City;
+city4.Name = "San Diego";
+create object instance i5 of Route;
+relate city4 to city1 across R13.''is reachable from'' using i5;
+select many cities related by city1->City[R13.''is reachable from''];
+if (cardinality cities != 3)
+  test_failed = true;
+end if;
 
 // check navigation from single associative class of 1:1 association - ''many'' allowed
 LOG::LogInfo( message:"check both instances found from associative class on 1:1" );
@@ -2417,17 +2431,20 @@ for each state in states
   delete object instance state;
 end for;
 
+// this tests from associative ''any'' & ''any''..''where''
 select many certs from instances of License;
 for each cert in certs
   select any person related by cert->Spouse[R12.''is married to''];
   select any other related by cert->Spouse[R12.''is married to''] where selected.Name != person.Name;
   unrelate person from other across R12.''is married to'' using cert;
   delete object instance cert;
+  delete object instance person;
+  delete object instance other;
 end for;
 select many persons from instances of Spouse;
-for each person in persons
-  delete object instance person;
-end for;
+If (not_empty persons)
+  test_failed = true;
+end if;
 
 select many routes from instances of Route;
 for each route in routes
