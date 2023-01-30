@@ -117,7 +117,7 @@ domain UDT is
                                         Third_Enum_Input  : in  Temp_Type);
   pragma domain_operation_number (10);
 
-  public service Check_Constraint (Test : in  integer);
+  public service Check_Constrained_Type (Test : in  integer);
   pragma domain_operation_number (11);
 
   terminator Report is
@@ -438,4 +438,4 @@ end domain;
 pragma number (19);
 pragma name ("User_Defined_Types");
 pragma kl ("UDT");
-pragma version (6);
+pragma version (7);

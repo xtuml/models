@@ -97,7 +97,7 @@ domain TAGS is
   public service Perform_Active_Super_Sub_Tests ();
   pragma domain_operation_number (14);
 
-  public service Perform_Static_Tests ();
+  public service Perform_Tests_On_Static_Object ();
   pragma domain_operation_number (15);
 
   terminator Tagged_Terminator is
@@ -361,6 +361,8 @@ domain TAGS is
 
   object Check_On_Active_Object is
 
+    check_id : preferred integer;
+
 
     state Idle ();
     pragma state_number (1);
@@ -410,6 +412,8 @@ domain TAGS is
   pragma key_letter ("CHECK");
 
   object Test_Data is
+
+    td_id       : preferred integer;
 
     Number      : integer;
 
@@ -759,6 +763,8 @@ domain TAGS is
   //! This object shall define several attributes, each to be stored in non-initialised memory for so called "glitch recovery". This is a singleton object.
   object Singleton_Glitch_Recovery is
 
+    sgr_id      : preferred integer;
+
     An_Integer  : integer;
 
     A_Boolean   : boolean;
@@ -775,6 +781,8 @@ domain TAGS is
   pragma singleton ("");
 
   object Multiplicity_Glitch_Recovery is
+
+    mgr_id     : preferred integer;
 
     An_Integer : integer;
 
@@ -973,6 +981,8 @@ domain TAGS is
 
   object Multiplicity_Single_Glitch_Recovery_Object is
 
+    msgr_id       : preferred integer;
+
     Attribute_One : integer;
 
     Attribute_Two : integer;
@@ -987,7 +997,7 @@ domain TAGS is
   object A_Static_Object is
 
     //! @@TAGS-V01-0003
-    Unique_ID : integer;
+    Unique_ID : preferred integer;
 
 
   end object;
@@ -997,7 +1007,7 @@ domain TAGS is
 
   object A_Single_Static_Object is
 
-    Unique_ID : integer;
+    Unique_ID : preferred integer;
 
 
   end object;
@@ -1008,7 +1018,7 @@ domain TAGS is
 
   object A_Multiple_Static_Object is
 
-    Unique_ID : integer;
+    Unique_ID : preferred integer;
 
 
   end object;
@@ -1019,7 +1029,7 @@ domain TAGS is
 
   object Just_Multiple is
 
-    idJM : integer;
+    idJM : preferred integer;
 
 
   end object;
