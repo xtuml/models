@@ -21,10 +21,10 @@ Test_Environment = My_Test.Environment
    [] = RPT1:Start_Test[The_Test_Number, "1241-0000-01-0129", "Glitch Recovery", "Singleton", "Recreate at same location"]
    [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0130"]
 
-   First_Object = create Singleton_Glitch_Recovery with An_Integer  = Test_Integer &\
-                                                        A_Boolean   = Test_Boolean &\
-                                                        A_Real      = Test_Real    &\
-                                                        Environment = Test_Environment
+   First_Object = create unique Singleton_Glitch_Recovery with An_Integer  = Test_Integer &\
+                                                               A_Boolean   = Test_Boolean &\
+                                                               A_Real      = Test_Real    &\
+                                                               Environment = Test_Environment
 
    if First_Object = UNDEFINED then
       # Test has fallen at the first hurdle
@@ -35,13 +35,13 @@ Test_Environment = My_Test.Environment
       if Test_Environment = 'WACA' then
          # For Ada runs on host or Target, only create this object without
          # specifying the attributes.
-         Second_Object = create Singleton_Glitch_Recovery
+         Second_Object = create unique Singleton_Glitch_Recovery
       else
          # This is for a ISIM run, obviously it should always pass.
-         Second_Object = create Singleton_Glitch_Recovery with An_Integer  = Test_Integer &\
-                                                               A_Boolean   = Test_Boolean &\
-                                                               A_Real      = Test_Real    &\
-                                                               Environment = Test_Environment
+         Second_Object = create unique Singleton_Glitch_Recovery with An_Integer  = Test_Integer &\
+                                                                      A_Boolean   = Test_Boolean &\
+                                                                      A_Real      = Test_Real    &\
+                                                                      Environment = Test_Environment
       endif
 
       if Second_Object.An_Integer = Test_Integer then
@@ -95,9 +95,9 @@ Test_Environment = My_Test.Environment
 
    # Create three objects tagged MULTIPLICITY.
 
-   Multi_First_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
-   Multi_Second_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
-   Multi_Third_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+   Multi_First_Object  = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_one
+   Multi_Second_Object = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_two
+   Multi_Third_Object  = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_three
 
    if Multi_First_Object = UNDEFINED then
       # Test has fallen at the first hurdle
@@ -116,13 +116,13 @@ Test_Environment = My_Test.Environment
       if Test_Environment = 'WACA' then
          # For Ada runs on host or Target, only create this object without
          # specifying the attributes.
-         Fourth_Object = create Multiplicity_Glitch_Recovery
-         Fifth_Object  = create Multiplicity_Glitch_Recovery
-         Sixth_Object  = create Multiplicity_Glitch_Recovery
+         Fourth_Object = create unique Multiplicity_Glitch_Recovery
+         Fifth_Object  = create unique Multiplicity_Glitch_Recovery
+         Sixth_Object  = create unique Multiplicity_Glitch_Recovery
       else
-         Fourth_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
-         Fifth_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
-         Sixth_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+         Fourth_Object = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_one
+         Fifth_Object  = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_two
+         Sixth_Object  = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_three
       endif
 
       if Fourth_Object.An_Integer = int_one then
@@ -171,9 +171,9 @@ Test_Environment = My_Test.Environment
    [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0130"]
 
    # Create three objects tagged MULTIPLICITY.
-   Reuse_First_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
-   Reuse_Second_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
-   Reuse_Third_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+   Reuse_First_Object  = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_one
+   Reuse_Second_Object = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_two
+   Reuse_Third_Object  = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_three
 
    if Reuse_First_Object = UNDEFINED then
       # Test has fallen at the first hurdle
@@ -188,13 +188,13 @@ Test_Environment = My_Test.Environment
       if Test_Environment = 'WACA' then
          # For Ada runs on host or Target, only create this object without
          # specifying the attributes.
-         Reuse_First_Object = create Multiplicity_Glitch_Recovery
-         Reuse_Second_Object  = create Multiplicity_Glitch_Recovery
-         Reuse_Third_Object  = create Multiplicity_Glitch_Recovery
+         Reuse_First_Object = create unique Multiplicity_Glitch_Recovery
+         Reuse_Second_Object  = create unique Multiplicity_Glitch_Recovery
+         Reuse_Third_Object  = create unique Multiplicity_Glitch_Recovery
       else
-         Reuse_First_Object = create Multiplicity_Glitch_Recovery with An_Integer  = int_one
-         Reuse_Second_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_two
-         Reuse_Third_Object  = create Multiplicity_Glitch_Recovery with An_Integer  = int_three
+         Reuse_First_Object = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_one
+         Reuse_Second_Object  = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_two
+         Reuse_Third_Object  = create unique Multiplicity_Glitch_Recovery with An_Integer  = int_three
       endif
 
       if Reuse_First_Object.An_Integer = int_one then
@@ -242,7 +242,7 @@ Test_Environment = My_Test.Environment
    [] = RPT8:Specify_Requid[The_Test_Number, "1241-0000-01-0130"]
 
    # Create three objects tagged MULTIPLICITY.
-   Multi_Single_First_Object  = create Multiplicity_Single_Glitch_Recovery_Object with Attribute_One  = int_one & Attribute_Two = int_two
+   Multi_Single_First_Object  = create unique Multiplicity_Single_Glitch_Recovery_Object with Attribute_One  = int_one & Attribute_Two = int_two
 
    if Multi_Single_First_Object = UNDEFINED then
       # Test has fallen at the first hurdle
@@ -259,9 +259,9 @@ Test_Environment = My_Test.Environment
       if Test_Environment = 'WACA' then
          # For Ada runs on host or Target, only create this object without
          # specifying the attributes.
-         Multi_Single_Second_Object = create Multiplicity_Single_Glitch_Recovery_Object
+         Multi_Single_Second_Object = create unique Multiplicity_Single_Glitch_Recovery_Object
       else
-         Multi_Single_Second_Object = create Multiplicity_Single_Glitch_Recovery_Object with Attribute_One  = int_one & Attribute_Two = int_two
+         Multi_Single_Second_Object = create unique Multiplicity_Single_Glitch_Recovery_Object with Attribute_One  = int_one & Attribute_Two = int_two
       endif
 
       if Multi_Single_Second_Object.Attribute_One = int_one then
