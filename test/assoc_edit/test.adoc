@@ -9,6 +9,19 @@ This document outlines testing for the association editor.
 This document outlines a test plan to manually test the new association
 editor built to address <<dr-1,11554 Association Editor>>.
 
+The document has been edited to reflect work done on the editor as part 
+of issue <<dr-2,12548 Symmetric Reflexives>>, which addresses support for 
+symmetric reflexive associations.+
+In addition to support for symmetry, the opportunity was taken to streamline 
+editor interaction. Other than symmetric support, the revised editor provides 
+the same functionality, differing only in presentation details:
+* Associative choice is only presented for simple binary associations and only 
+when other classes are available.
+* Formalization is only available when sufficient identifiers are declared.
+* Associative class in a formalized ternary association cannot be re-assigned; the 
+class is displayed but is not editable. See <<dr-3, 11699 Associative classes>>
+* Identifier selection is only offered when formalization has been selected.
+
 .Test Matrix Dimensions
 |===
 | simple (SIMP)  | ternary (ASSOC) | super/subtype (SUPSUB) |
@@ -72,7 +85,9 @@ are identified and selected for test coverage.
 
 == 3 Test Procedures
 
-* Configure BridgePoint to require role phrases and formalization.
+* Optionally, Configure BridgePoint to require:
+. (a) role phrases 
+. (b) formalization.
 
 === 3.1 Simple Associations
 
@@ -80,25 +95,27 @@ For each of 3.1.1 through 3.1.6 perform the following:
 
 . Select 'Classes -> Association' from the palette and draw association from
   'part<N>' to 'form<N>'.
-. *See* pop-up association dialogue.
+. *See* pop-up association dialogue - or error warning!
 . *See* participant classes named along left and right sides of dialogue box.
-. *See* editable empty role phrase boxes.
+. *See* editable empty role phrase boxes - with error markers if (a).
 . *See* clickable conditionality and multiplicity buttons which toggle.
+. *See* Associative check box if other classes exist.
+. *See* Formalized check box if identifiers defined; if (b), checked and disabled.
 . Set role phrases with various legal alphanumeric strings.
 
 ==== 3.1.1 simple, create, binary, 0 identifier
 
-. *See* that association cannot be formalized, because there is no identifier.
+. *See* (b),that association cannot be formalized, because there is no identifier
+. *See* not (b), association dialogue; no Formalize check box option.
 . Click 'Cancel'.
 
 ==== 3.1.2 simple, create, binary, 1 identifier
-
 . *See* 'form<N>' as the formalizing class.
 . *See* 'part<N>' identifier pre-populated.
 . Click 'Finish'.
 . *See* complete formalized association.
 
-==== 3.1.3 simple, create, binary, each identifier
+==== 3.1.3 simple, create, binary, each identifier, with (b)
 
 . In the 'Formalized in' list, select 'form<N>'.
 . *See* the primary identifier of 'part<N>' listed in the selection box.
@@ -168,6 +185,7 @@ For each of 3.1.7 through 3.1.12 perform the following:
 
 ==== 3.1.11 simple, edit, reflexive, 0 identifier
 
+. *See* Symmetric checkbox displayed; check/uncheck to toggle display of second row of fields.
 . *See* 'partform' as the formalizing class.
 . *See* identifier pre-populated.
 . Click 'Finish'.
@@ -175,6 +193,7 @@ For each of 3.1.7 through 3.1.12 perform the following:
 
 ==== 3.1.12 simple, edit, reflexive, 1 identifier
 
+. *See* Symmetric checkbox displayed; check/uncheck to toggle display of second row of fields.
 . *See* options for formalizing end and selecting identifier.
 . Click 'Finish'.
 . *See* complete formalized association.
@@ -224,6 +243,7 @@ For each of 3.2.1 through 3.2.6 perform the following:
 
 ==== 3.2.5 ternary, create, reflexive, 1 identifier
 
+. *See* Symmetric checkbox displayed; check/uncheck to toggle display of second row of fields.
 . Choose 'assoc5' associative class.
 . *See* the primary identifiers of participating class ends in selection boxes.
 . Click 'Finish'.
@@ -231,6 +251,7 @@ For each of 3.2.1 through 3.2.6 perform the following:
 
 ==== 3.2.6 ternary, create, reflexive, 2 identifiers
 
+. *See* Symmetric checkbox displayed; check/uncheck to toggle display of second row of fields.
 . Choose 'assoc6' associative class.
 . *See* the primary identifiers of participating class ends in selection boxes.
 . Choose secondary identifier on 'oneother6'.
@@ -355,6 +376,9 @@ TBD - no formalization, formalization
 == 4 Document References
 
 . [[dr-1]] https://support.onefact.net/issues/11554[11554 - Association Editor]
+. [[dr-2]] https://support.onefact.net/issues/12548[12548 - Symmetric reflexives]
+. [[dr-3]] https://support.onefact.net/issues/11699[11699 - Associative classes]
+
 
 ---
 
