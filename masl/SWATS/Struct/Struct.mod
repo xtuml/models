@@ -5,6 +5,10 @@ domain Struct is
   object Report_Data;
   object Test_Data;
 
+  public type Colour_Type is enum (Red,
+                                   Green,
+                                   Blue);
+
   public type Simple_Structure_Type is structure
     S_Integer : integer;
     S_Real    : real;
@@ -27,9 +31,9 @@ domain Struct is
     A_Boolean  : boolean;
   end structure;
 
-  public type First_Nested_Structure_Type is structure
-    Second_Nested_Structure : sequence of Second_Nested_Structure_Type;
-    First_Nested_Integer    : integer;
+  public type Third_Nested_Structure_Type is structure
+    Third_Nested_Integer : integer;
+    The_Holy_Grail       : Colour_Type;
   end structure;
 
   public type Second_Nested_Structure_Type is structure
@@ -37,14 +41,10 @@ domain Struct is
     Third_Nested_Integer   : integer;
   end structure;
 
-  public type Third_Nested_Structure_Type is structure
-    Third_Nested_Integer : integer;
-    The_Holy_Grail       : Colour_Type;
+  public type First_Nested_Structure_Type is structure
+    Second_Nested_Structure : sequence of Second_Nested_Structure_Type;
+    First_Nested_Integer    : integer;
   end structure;
-
-  public type Colour_Type is enum (Red,
-                                   Green,
-                                   Blue);
 
   public type Structure_and_IH_Type is structure
     A_Defined_IH : instance of Structured_Object;
@@ -62,15 +62,15 @@ domain Struct is
     Col_Val    : Colour_Type;
   end structure;
 
+  private type UDT_Integer_Type is integer; pragma type_range(0,100);
+
+  private type UDT_Real_Type is real; pragma type_range(0.0,100.0);
+
   //! This structure shall contain user defined types.
   private type UDT_Structure_Type is structure
     An_Integer : UDT_Integer_Type;
     A_Real     : UDT_Real_Type;
   end structure;
-
-  private type UDT_Integer_Type is integer; pragma type_range(0,100);
-
-  private type UDT_Real_Type is real; pragma type_range(0.0,100.0);
 
   //! This structure shall contain a structure, a couple of user 
   //! defined types and a simple integer base type.
@@ -84,14 +84,14 @@ domain Struct is
     A_Colour        : Colour_Type;
   end structure;
 
+  private type Alternative_Colour_Type is enum (Red,
+                                                Pink,
+                                                Puce);
+
   private type Different_Structure_Type is structure
     Alternative_Colour : Alternative_Colour_Type;
     Extra_Member       : integer;
   end structure;
-
-  private type Alternative_Colour_Type is enum (Red,
-                                                Pink,
-                                                Puce);
 
   private type Multiple_Structures_Type is structure
     Initial_Structure     : sequence of First_Nested_Structure_Type;
