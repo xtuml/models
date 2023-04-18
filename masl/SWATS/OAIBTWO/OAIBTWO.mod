@@ -2,6 +2,10 @@ domain OAIBTWO is
   object I_Into_The_Great_Wide_Open;
   object Report_Data;
 
+  public type Colour_Type is enum (Red,
+                                   Green,
+                                   Blue);
+
   public type Source_Structure_Type is structure
     Source_Integer : integer;
     Source_Real    : real;
@@ -9,10 +13,6 @@ domain OAIBTWO is
     Source_Boolean : boolean;
     Source_Colour  : Colour_Type;
   end structure;
-
-  public type Colour_Type is enum (Red,
-                                   Green,
-                                   Blue);
 
   public type Very_Simple_Source_Structure_Type is structure
     Source_Simple_Integer : integer;
