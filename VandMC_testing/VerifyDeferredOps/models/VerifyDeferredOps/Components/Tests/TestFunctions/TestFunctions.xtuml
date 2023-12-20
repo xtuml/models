@@ -1,0 +1,67 @@
+-- BP 7.1.6 content: Package syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO EP_PKG
+	VALUES ("f6f13c5a-0eb2-4626-b4ba-8223d17ad906",
+	"00000000-0000-0000-0000-000000000000",
+	"fbba6316-8bfa-46df-a07f-41771070e145",
+	'TestFunctions',
+	'',
+	0);
+INSERT INTO S_SYNC
+	VALUES ("d1a75da3-de75-499b-8918-f1838615488f",
+	"00000000-0000-0000-0000-000000000000",
+	'testDeferred',
+	'',
+	'create object instance asuper of Superclass;
+create object instance asub of subA;
+relate asub to asuper across R1;
+
+create object instance bsuper of Superclass;
+create object instance bsub of subB;
+relate bsub to bsuper across R1;
+
+// invocation with parameter
+asuper.testdefer(p1:"asuper"); 
+bsuper.testdefer(p1:"bsuper");
+// expect return values - first is default from superclass
+LOG::LogInfo( message:"return value should be Superclass: " + asuper.deferfn() );
+LOG::LogInfo( message:"return value should be subB: " + bsuper.deferfn() );
+',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	0,
+	1);
+INSERT INTO PE_PE
+	VALUES ("d1a75da3-de75-499b-8918-f1838615488f",
+	1,
+	"f6f13c5a-0eb2-4626-b4ba-8223d17ad906",
+	"00000000-0000-0000-0000-000000000000",
+	1);
+INSERT INTO PE_PE
+	VALUES ("f6f13c5a-0eb2-4626-b4ba-8223d17ad906",
+	1,
+	"00000000-0000-0000-0000-000000000000",
+	"1742de3f-868f-4573-bdc7-ee3b16620dc8",
+	7);
+INSERT INTO C_C_PROXY
+	VALUES ("1742de3f-868f-4573-bdc7-ee3b16620dc8",
+	"00000000-0000-0000-0000-000000000000",
+	"00000000-0000-0000-0000-000000000000",
+	'Tests',
+	'A simple test of deferred operation support in Verifier.
+Two subtypes:
+A required operation that takes a parameter.
+An optional operation with a return value.
+One test function which invokes the deferred operations on the supertype.',
+	0,
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'',
+	'../Tests.xtuml');
+INSERT INTO S_SYS_PROXY
+	VALUES ("fbba6316-8bfa-46df-a07f-41771070e145",
+	'VerifyDeferredOps',
+	1,
+	'../../../VerifyDeferredOps.xtuml');
