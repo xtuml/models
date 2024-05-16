@@ -2,7 +2,7 @@
  * File:  TIM_bridge.c
  *
  * External Entity:  Time (TIM)
- *                            
+ *
  * Description:
  * This file provides an implementation of the time functionally
  * similar to the standard Shlaer-Mellor timer functionality.
@@ -17,8 +17,10 @@
  * prototype implementation.
  * Long integers are used to store time values thus limiting the
  * duration of timers and the system ticker to about 71 minutes.
- * The sample implementation uses the localtime, mktime, ftime
- * and time library routines.
+ * The sample implementation uses the localtime, mktime, time and
+ * clock_gettime library routines.
+ * The sample implementation will use ftime where clock_gettime
+ * is not supported.
  *
  * For this example implementation to work, TIM_init() must be
  * invoked at start-up (perhaps from UserInitializationCallout).
@@ -31,13 +33,39 @@
  *
  * (C) Copyright 1998-2011 Mentor Graphics Corporation.  All rights reserved.
  *-------------------------------------------------------------------*/
-
+#ifdef __GNUC__
+#include <features.h>
+#endif
+#if defined __USE_POSIX199309 || defined __USE_ISOC11
+#include <time.h>
 #include "sys_types.h"
-#include "TIM_bridge.h"
+static clockid_t clockid = 1;
+static struct timespec systyme;
+#define USEC_CONVERT 1000UL
+static Escher_uSec_t get_system_usec_time( void )
+{
+   Escher_uSec_t usec = 0;
+   if ( 0 == clock_gettime( clockid, &systyme ) )
+   {
+      usec = ( systyme.tv_sec * USEC_CONVERT * USEC_CONVERT )
+           + ( systyme.tv_nsec / USEC_CONVERT );
+   }
+   return usec;
+}
+#else
 #include <sys/timeb.h>
 #include <time.h>
-
+#include "sys_types.h"
+static struct timeb systyme;
 #define USEC_CONVERT 1000UL
+static Escher_uSec_t get_system_usec_time( void )
+{
+  ftime( &systyme );
+  return ( ( systyme.time * USEC_CONVERT ) + systyme.millitm ) * USEC_CONVERT;
+}
+#endif
+
+#include "TIM_bridge.h"
 
 /*---------------------------------------------------------------------
  * Timer "Object" Structure Declaration
@@ -65,7 +93,6 @@ static ETimer_time_t start_of_pause = 0;
 static bool paused = false;
 #endif
 static ETimer_time_t tinit = 0;
-static struct timeb systyme;
 #if ESCHER_SYS_MAX_XTUML_TIMERS > 0
 static ETimer_t swtimers[ ESCHER_SYS_MAX_XTUML_TIMERS ];  /* system.clr color */
 static ETimer_t * animate = 0, * inanimate = 0;
@@ -134,7 +161,7 @@ TIM_timer_remaining_time(
       USEC_CONVERT * ( ((ETimer_t *) ee_timer_inst_ref)->expiration - t ) :
       0UL;
   }
-  return ( t );  
+  return ( t );
 }
 
 /*=====================================================================
@@ -412,7 +439,7 @@ timer_insert_sorted(
     ETimer_time_t poptime = t->expiration;
     if ( poptime <= animate->expiration ) {          /* before head  */
       t->next = animate;
-      animate = t;         
+      animate = t;
     } else {                                         /* find bigger  */
       ETimer_t * prev = animate;
       ETimer_t * cursor;
@@ -519,8 +546,7 @@ static ETimer_time_t
 ETimer_msec_time( void )
 {
   ETimer_time_t t;
-  ftime( &systyme );
-  t = ( systyme.time * USEC_CONVERT ) + systyme.millitm;
+  t = get_system_usec_time() / USEC_CONVERT;
   return ( t - tinit );
 
 }
@@ -547,8 +573,7 @@ TIM_init( void )
     inanimate = &swtimers[ i ];
   }
 #endif   /* if ESCHER_SYS_MAX_XTUML_TIMERS > 0 */
-  ftime( &systyme );            /* Initialize the hardware ticker.   */
-  tinit = ( systyme.time * USEC_CONVERT ) + systyme.millitm;
+  tinit = get_system_usec_time() / USEC_CONVERT;
 }
 
 /*---------------------------------------------------------------------
